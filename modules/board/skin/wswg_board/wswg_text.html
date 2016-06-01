@@ -1,0 +1,16 @@
+<?
+include "../../lib.php";
+$result=mysql_query("select * from $board where id=$id");
+$row=mysql_fetch_array($result);
+$storycomment=$row[comment];
+?>
+<HTML>
+<HEAD>
+<TITLE>wysiwyg edit</TITLE>
+</HEAD>
+<BODY>
+<?
+echo $storycomment;
+?>
+</BODY>
+</HTML>

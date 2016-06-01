@@ -1,0 +1,42 @@
+{
+  "name": "sux",
+  "version": "1.0.0",
+  "description": "this is board for a People to need add's  Logger",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "init": "^0.1.2",
+    "npm": "^3.8.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-csslint": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-phplint": "0.0.8",
+    "install": "^0.8.1",
+    "npm": "^3.9.2"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/streamux/jsux.git"
+  },
+  "keywords": [
+    "sux"
+  ],
+  "author": "streamux",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/streamux/jsux/issues"
+  },
+  "homepage": "https://github.com/streamux/jsux#readme"
+}

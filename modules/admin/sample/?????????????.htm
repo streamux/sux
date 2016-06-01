@@ -1,0 +1,215 @@
+<?
+session_start();
+include "../lib.php";
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Untitled Document</title>
+<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
+<script src="inc/menu_link.js" language="javascript"></script>
+<script src="inc/flash_noline.js" language="javascript"></script>
+<link href="css/css.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+<table width="100%"  border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center"><table width="912"  border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="177" valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="2"></td>
+          </tr>
+          <tr>
+            <td><a href="http://www.streammx.com/" target="_blank"><img src="img/logo.gif" width="176" height="112"></a></td>
+          </tr>
+          <tr>
+            <td height="20"></td>
+          </tr>
+          <tr>
+            <td><a href="<? echo $yourhome; ?>" target="_blank"><img src="img/submenu_tt.gif" width="176" height="45"></a></td>
+          </tr>
+          <tr>
+            <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td><img src="img/submenu_box01.gif" width="176" height="6"></td>
+              </tr>
+              <tr>
+                <td height="5" align="center"style="background-image:url(img/submenu_box02.gif); background-repeat:repeat-y;"><img src="img/submenu_quicktt.gif" width="163" height="23">                  </td>
+              </tr>
+              <tr>
+                <td height="5" align="center"style="background-image:url(img/submenu_box02.gif); background-repeat:repeat-y;"><table width="84%"  border="0" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td height="4"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu13');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no01.gif" width="13" height="13" align="absmiddle"> 회원그룹목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu23');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no02.gif" width="13" height="13" align="absmiddle"> 게시판목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu31');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no03.gif" width="13" height="13" align="absmiddle"> 단체메일보내기</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu43');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no04.gif" width="13" height="13" align="absmiddle"> 설문조사목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu53');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no05.gif" width="13" height="13" align="absmiddle"> 팝업창목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu62');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no06.gif" width="13" height="13" align="absmiddle"> 일정관리페이지 </td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu73');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no07.gif" width="13" height="13" align="absmiddle"> 접속키워드목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu75');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no08.gif" width="13" height="13" align="absmiddle"> 페이지뷰목록</td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr onclick="javascript:onAdminLink('menu83');" onmouseover='this.style.backgroundColor="#F6F6F6"' onmouseout='this.style.backgroundColor=""'>
+                    <td height="25" align="left" style="CURSOR: hand;"><img src="img/icon_no09.gif" width="13" height="13" align="absmiddle"> DB백업 </td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#EFEFEF"></td>
+                  </tr>
+                  <tr>
+                    <td height="20" align="left"></td>
+                  </tr>
+				  <tr>
+                    <td height="1" bgcolor="#C3C3C3"></td>
+                  </tr>
+                  <tr>
+                    <td height="10" bgcolor="#F6F6F6"></td>
+                  </tr>
+                  <tr>
+                    <td height="20" align="center" bgcolor="#F6F6F6" class="txt_black_b_01">키워드 광고등록</td>
+                  </tr>
+                  <tr>
+                    <td height="20" align="center" bgcolor="#F6F6F6"><SELECT style="width:120px" onchange="window.open(this.value)" name=select2>
+                        <OPTION selected>- 바로가기 -</OPTION>
+                        <OPTION value="http://keywordshop.naver.com">네이버광고</OPTION>
+                        <OPTION value="http://bizshop.daum.net/bizshop/AdInfo?param=ps">다음광고</OPTION>
+                        <OPTION value="http://keywordshop.nate.com">네이트광고</OPTION>
+                        <OPTION value="http://sponsor.yahoo.co.kr/guide/sub1_3.php">야후광고</OPTION>
+                        <OPTION value="http://keywordshop.empas.com">엠파스광고</OPTION>
+                        <OPTION value="http://add.paran.com/home/info.php">파란닷컴광고</OPTION>
+						<OPTION value="http://www.overture.co.kr">오버추어</OPTION>
+                    </SELECT></td>
+                  </tr>
+                  <tr>
+                    <td height="5" bgcolor="#F6F6F6"></td>
+                  </tr>
+                  <tr>
+                    <td height="1" bgcolor="#C3C3C3"></td>
+                  </tr>
+				  
+                  <tr>
+                    <td height="15"></td>
+                  </tr>
+                </table></td>
+              </tr>
+              <tr>
+                <td><img src="img/submenu_box03.gif" width="176" height="6"></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td>
+        <td width="11"></td>
+        <td valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td height="2" bgcolor="#5D5E5D"></td>
+          </tr>
+          <tr>
+            <td><script  type="text/javascript"> 
+ setem = new setEmbed(); 
+ setem.init('flash','inc/menu.swf?fnum=<? echo $fmenu; ?>&fsubnum=<? echo $fsubmenu; ?>&','726','145'); 
+ setem.parameter('wmode','transparent');
+ setem.parameter('menu','false');
+ setem.show(); 
+</script></td>
+          </tr>
+          <tr>
+            <td height="32" valign="bottom"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td align="left">■&nbsp;<a href="main.php" target="_self">Home</a><? if($navi01) echo "&nbsp;&gt;&nbsp;$navi01"; if($navi02) echo "&nbsp;&gt;&nbsp;$navi02"; ?></td>
+              </tr>
+			  <tr>
+			    <td height="2"></td>
+			  </tr>
+            </table></td>
+          </tr>
+          <tr>
+            <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td><img src="img/contents_box01.gif" width="726" height="6"></td>
+              </tr>
+              <tr>
+                <td height="20" style="background-image:url(img/contents_box02.gif); background-repeat:repeat-y;"></td>
+              </tr>
+              <tr>
+                <td height="10" align="center" style="background-image:url(img/contents_box02.gif); background-repeat:repeat-y;"><table width="94%"  border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td height="20" align="left"></td>
+                  </tr>
+                </table></td>
+              </tr>
+              <tr>
+                <td height="10" align="center" style="background-image:url(img/contents_box02.gif); background-repeat:repeat-y;"></td>
+              </tr>
+              <tr>
+                <td><img src="img/contents_box03.gif" width="726" height="6"></td>
+              </tr>
+            </table></td>
+          </tr>
+        </table></td>
+      </tr>
+      <tr>
+        <td height="30"></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td width="6"><img src="img/copyright_box01.gif" width="6" height="82"></td>
+            <td align="center" valign="middle" style="background-image:url(img/copyright_box02.gif); background-repeat:repeat-x;"><a href="http://www.streammx.com/" target="_blank"><img src="img/logo_under.gif" width="88" height="40"></a></td>
+          </tr>
+        </table></td>
+        <td style="background-image:url(img/copyright_box02.gif); background-repeat:repeat-x;"></td>
+        <td align="right"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
+          <tr>
+            <td align="left" valign="middle" style="background-image:url(img/copyright_box02.gif); background-repeat:repeat-x;"><img src="img/copyright.gif" width="378" height="40"></td>
+            <td width="6" align="right"><img src="img/copyright_box03.gif" width="6" height="82"></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table>    </td>
+  </tr>
+</table>
+</body>
+</html>
