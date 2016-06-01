@@ -33,7 +33,7 @@
 				</div>  
 				<div class="box">
 					<table summary="접속로그현황 정보를 제공합니다.">
-						<caption><span class="blind">접속로그현황</span></caption>
+						<caption><span class="blind">접속로그현황</span></cap
 						<colgroup>
 							<col width="45%">
 							<col width="55%">
