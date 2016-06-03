@@ -25,7 +25,7 @@
 	<div class="container">	
 		<div class="articles ui-edgebox">
 			<div class="connect">
-				<h2 class="blind">접속로그현황</h2
+				<h2 class="blind">접속로그현황</h2>
 				<div class="tt">
 					<div class="imgbox">
 						<span>접속로그현황</span>  
