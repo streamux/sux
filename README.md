@@ -11,8 +11,6 @@ SUXBoard(SUX)는 어느정도 프로그래밍 지식을 가지고 있는 개발�
 <ul>
   <li>PHP version 5.3.0 or greater (But recommend PHP >= 5.5.0)</li>
   <li>MYSQL version 4.1 or greater (But recommend MYSQL >= 5.x)</li>
-  <li>XML Library</li>
-  <li>GD Library</li>
   <li>ICONV</li>
   <li>session.auto_start = Off (php.ini)</li>
 </ul>
