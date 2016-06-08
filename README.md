@@ -12,9 +12,6 @@ SUXBoard(SUX)는 제공된 가이드문서를 보고 누구나 쉽고, 편리하
   <li>session.auto_start = Off (php.ini)</li>
 </ul>
 
-<h2>Maintainers</h2>
-@streammx
-
 <h2>Support</h2>
 
 <ul>
