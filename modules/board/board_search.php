@@ -1,1 +1,0 @@
-<meta http-equiv='Refresh' content='0; URL=board_search_list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&search=<? echo $search; ?>&find=<? echo $find; ?>&passover=<? echo $passover; ?>&navi01=<? echo $navi01; ?>&navi02=<? echo $navi02; ?>&fmenu=<? echo $fmenu; ?>&fsubmenu=<? echo $fsubmenu; ?>'>

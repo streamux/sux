@@ -1,14 +1,14 @@
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_path}; ?>/css/layout.css">
 
 <div class="board-write" style="width:<? echo $width; ?>">
-	<form action="board.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
+	<form action="board.insert.php?id=<? echo ${id}; ?>&board=<? echo ${board}; ?>&board_grg=<? echo ${board_grg}; ?>&ljs_mod=<? echo ${ljs_mod}; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
-		<input type="hidden" name="ljs_mod" value="writer">
-		<p><span class="ui-label-width">이름</span><input type="text" name="m_name" maxlength="20" value="<? echo ${ljs_name}; ?>"></p>
-		<p><span class="ui-label-width">비번</span><input type="password" name="pass" maxlength="10" value="<? echo ${ljs_pass}; ?>"></p>
-		<p><span class="ui-label-width">제목</span><input type="text" name="storytitle" maxlength="50" value=""></p>
-		<p><span class="ui-label-width">이메일</span><input type="text" name="email" maxlength="28" value="">
+		<input type="hidden" name="ljs_mod" value="modify">
+		<p><span class="ui-label-width">이름</span><input type="text" name="m_name" maxlength="20" value="<? echo ${m_name}; ?>"></p>
+		<p><span class="ui-label-width">비밀번호</span><input type="text" name="pass" maxlength="10" value=""></p>
+		<p><span class="ui-label-width">제목</span><input type="text" name="storytitle" maxlength="50" value="<? echo ${storytitle}; ?>"></p>
+		<p><span class="ui-label-width">이메일</span><input type="text" name="email" maxlength="28" value="<? echo ${email}; ?>">
 <?
 		if ($setup == 'y'){
 			echo "<span class=\"color-red\">※e-mail은 필수입력 사항입니다.</span>";
@@ -23,7 +23,7 @@
 			<sapn><input name="type" type="radio" value="text" <? if($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</sapn>
 			<span>※ 형식을 선택해주세요.<sapn>
 		</p>
-		<textarea name="storycomment" cols="64" rows="14"></textarea>
+		<textarea name="storycomment" cols="64" rows="14"><? echo ${storycomment}; ?></textarea>
 	</div>
 	<div class="panel-footer">
 		<p class="ui-imgup">
@@ -43,7 +43,7 @@
 	</form>
 </div>
 
-<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.write.js"></script>
+<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.modify.js"></script>
 <script type="text/javascript">
-document.musimw.m_name.focus();
+document.musimw.pass.focus();
 </script>

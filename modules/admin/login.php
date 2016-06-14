@@ -45,12 +45,12 @@
 							<tbody>
 								<tr>
 									<td>아이디</td>
-									<td><input type="text" name="admin_id" maxlength="14" value="admin"class="input-id"></td>
+									<td><input type="text" name="user_id" maxlength="14" value=""class="input-id"></td>
 									<td rowspan="2"><input type="image" name="imagefield" src="tpl/images/admin_login_bt.gif" alt="로그인버튼" class="login-btn"></td>
 								</tr>
 								<tr>
 									<td>비밀번호</td>
-									<td><input type="password" name="admin_pass" maxlength="20"class="input-pwd"></td>								
+									<td><input type="password" name="user_pass" maxlength="20"class="input-pwd"></td>
 								</tr>
 							</tbody>
 						</table>						

@@ -2,9 +2,16 @@ jsux.fn = {
 
 	checkForm: function ( f ) {
 
-		var ap = f.admin_pwd.value.length;
+		var aname = f.admin_id.value.length,
+			apass = f.admin_pwd.value.length;
 
-		if ( ap < 1 ) {
+		if (aname < 1) {
+			trace("관리자 아이디를 입력하세요.");
+			f.admin_id.focus();
+			return (false);
+		}
+
+		if ( apass < 1 ) {
 			trace("관리자 비밀번호를 입력하세요.");
 			f.admin_pwd.focus();
 			return (false);
@@ -33,9 +40,9 @@ jsux.fn = {
 
 		var self = this,
 			params = {
+				admin_id: f.admin_id.value,
 				admin_pwd: f.admin_pwd.value,
-				admin_email: f.admin_email.value,
-				site_name: f.site_name.value,
+				admin_email: f.admin_email.value,				
 				yourhome: f.yourhome.value
 			};
 
@@ -63,7 +70,7 @@ jsux.fn = {
 			}
 		});
 
-		$("input[name=admin_pwd]").focus();
+		$("input[name=admin_name]").focus();
 	},
 	init: function() {
 		this.setEvent();

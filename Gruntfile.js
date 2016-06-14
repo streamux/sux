@@ -80,7 +80,8 @@ module.exports = function(grunt) {
 				'Gruntfile.js',
 				'common/js/*.js',
 				'common/js/app/*.js',
-				'modules/**/tpl/js/*.js'
+				'modules/**/tpl/js/*.js',
+				'modules/**/skin/**/js/*.js'
 			],
 			options: {				
 				// options here to override JSHint defaults
@@ -128,7 +129,9 @@ module.exports = function(grunt) {
 				}
 			},
 			src: [
-				'modules/**/*.php'
+				'modules/**/*.php',
+				'modules/board/skin/*.php',
+				'modules/board/skin/**/*.php'
 			]
 		},
 		watch: {

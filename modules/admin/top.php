@@ -2,7 +2,7 @@
 session_start();
 
 include "../lib.php";
-//include "admin_check.php";
+include "login.check.php";
 
 $page_type = $_REQUEST["pageType"];
 $page_type = $page_type ? $page_type : "main";

@@ -23,6 +23,7 @@ $ljs_hit=$row[hit];
 $grade=$row[grade];
 $automod1="yes";
 $chatip=$REMOTE_ADDR;
+
 session_register("member_table");
 session_register("ljs_memberid");
 session_register("ljs_pass1");
@@ -33,6 +34,7 @@ session_register("ljs_hit");
 session_register("grade");
 session_register("automod1");
 session_register("chatip");
+
 $result=mysql_query("select hit from $member_table where ljs_memberid='$ljs_memberid' ");
 $row=mysql_fetch_array($result);
 $hit=$row[hit]+1;

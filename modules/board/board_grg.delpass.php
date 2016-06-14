@@ -1,8 +1,10 @@
 <?
 session_start();
-include "lib.php";
+include "../lib.php";
 
-$result=mysql_query("select * from control_box where name='$board'");
+$board = $_REQUEST[board];
+
+$result=mysql_query("select * from $board_group where name='$board'");
 $row=mysql_fetch_array($result);
 $name=$row[name];
 $width=$row[width];
@@ -24,7 +26,11 @@ $rw_grade=$row[rw_grade];
 $re_grade=$row[re_grade];
 $log_key=$row[log_key];
 
-include "$include1"; // 상단 출력
-include "board_grg_delpass_b.php";
-include "$include3"; // 하단 출력
+$result = mysql_query("select name from $board where id=$id");
+$row = mysql_fetch_array($result);
+$m_name = $row[name];
+
+include "$include1";
+include "board_grg.delpass_in.php";
+include "$include3";
 ?>

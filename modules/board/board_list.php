@@ -15,7 +15,7 @@ $r_admin=$row[r_admin];
 $rw_admin=$row[rw_admin];
 $re_admin=$row[re_admin];
 $listnum=$row[listnum];
-$limit_word=$row[limit_word]; // 불량단어
+$limit_word=$row[limit_word];
 $tail=$row[tail];
 $download=$row[download];
 $setup=$row[setup];
@@ -27,9 +27,11 @@ $limit_choice = $row[limit_choice];
 
 if($limit_word){
 	$word_nums = split(",", $limit_word);
-	$nums_count = count($word_nums); // 배열 갯수 구함
+	$nums_count = count($word_nums);
+	
 	for($i=0; $i<$nums_count; $i++) {
 		$limit_str = $word_nums[$i];
+
 		if($limit_choice == title) {
 			$result2=mysql_query("delete from $board where title like '%$limit_str%' order by id desc");
 		}else if($limit_choice == comment) {
@@ -41,7 +43,7 @@ if($limit_word){
 }
 
 if($include1){
-	include "$include1"; // 상단 출력
+	include "$include1";
 }else{
 	echo "상단 파일경로를 입력해 해주세요! 예)파일명.php";
 }
@@ -51,7 +53,7 @@ if($include2){
 	echo " 스킨을 선택해주세요!";
 }
 if($include3){
-	include "$include3"; // 하단 출력
+	include "$include3";
 }else{
 	echo "하단 파일경로를 입력해 해주세요! 예)파일명.php";
 }
