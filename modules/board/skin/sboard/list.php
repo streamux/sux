@@ -70,18 +70,10 @@ if ($numrows2) {
 
 		if($filename){
 
-			if ($type=="image/gif"){
-				$imgname = "gif.gif";
-			}else if($type=="image/pjpeg"){
-				$imgname = "jpg.gif";
-			}else if($type=="image/x-png"){
-				$imgname = "png.gif";
-			}else if($type=="image/bmp"){
-				$imgname = "bmp.gif";
-			}else if($type=="application/x-zip-compressed"){ 
-				$imgname = "down.gif";
-			}else {
-				$imgname = "text.gif";
+			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
+				$imgname = "icon_img.png";
+			} else if ($type=="application/x-zip-compressed"){ 
+				$imgname = "icon_down.png";
 			}
 
 			echo "<img src=\"${skin_path}/img/${imgname}\">&nbsp;";
