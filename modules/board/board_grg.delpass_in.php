@@ -1,32 +1,11 @@
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-function musimd_check(f)
-{
-pass = f.pass.value.length;
-if ( pass < 1 ) {
-	alert("비밀번호를 입력하세요.");
-	f.pass.focus();
-	return (false);
-}
-return (true);
-}
-// --></SCRIPT>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+<form action="board_grg_del.php?board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&board=<? echo $board; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>" method="post" name="musimd" onSubmit="return musimd_check(this);">
+
+<table width="100%" cellspacing="0" cellpadding="0" border="0">
 	<tr>
-		<td height="2" bgcolor="D9D9D9"></td>
-	</tr>
-	<tr>
-		<td height="2"></td>
-	</tr>
-	<tr>
-		<td height="1" bgcolor="#F3F3F3"></td>
-	</tr>
-	<tr>
-		<td height="20"></td>
+		<td height="38"></td>
 	</tr>
 </table>
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
-<form action=board_del.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&ljs_mod=<? echo $ljs_mod; ?>&fmenu=<? echo $fmenu; ?>&fsubmenu=<? echo$fsubmenu; ?> method=post name=musimd onSubmit="return musimd_check(this);">
 	<tr>
 		<td height="60" align="center"><img src="m_skin/img/m_tt_del.gif" width="292" height="60"></td>
 	</tr>
@@ -64,12 +43,7 @@ return (true);
 												<td height="6"></td>
 											</tr>
 											<tr>
-												<td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-<?
-$result=mysql_query("select name from $board where id=$id");
-$row=mysql_fetch_array($result);
-$name=$row[name];
-?>						
+												<td><table width="100%"  border="0" cellspacing="0" cellpadding="0">						
 														<tr>
 															<td width="5"></td>
 															<td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -81,7 +55,7 @@ $name=$row[name];
 																	<tr>
 																		<td align="left">회사명</td>
 																		<td></td>
-																		<td><INPUT name=memberid type=text size=12 maxlength=14 value='<? echo $name; ?>'></td>
+																		<td><INPUT name="memberid" type="text" size="12" maxlength="14" value="<? echo $m_name; ?>"></td>
 																	</tr>
 																	<tr>
 																		<td height="6"></td>
@@ -91,7 +65,7 @@ $name=$row[name];
 																	<tr>
 																		<td align="left">비밀번호</td>
 																		<td></td>
-																		<td><INPUT type=password name=pass size=12 maxlength=14></td>
+																		<td><INPUT type="password" name="pass" size="12" maxlength="14"></td>
 																	</tr>
 																	<tr>
 																		<td height="8"></td>
@@ -144,8 +118,23 @@ $name=$row[name];
 				</tr>
 		</table></td>
 	</tr>
-</form>
 </table>
-<script>
+</form>
+
+<script type="text/javascript">
+
+function musimd_check(f) {
+
+	var pass = f.pass.value.length;
+
+	if ( pass < 1 ) {
+		alert("비밀번호를 입력하세요.");
+		f.pass.focus();
+		return (false);
+	}
+	return (true);
+}
+</script>
+<script type="text/javascript">
 document.musimd.pass.focus();
 </script>

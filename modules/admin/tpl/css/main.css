@@ -16,6 +16,7 @@
 
 /* container common */
 .container .articles{font-size:0.750em}
+.container .articles table{font-size:1em}
 .container .articles .tt span{font-size: 1.1875em;font-weight: bold}
 .container .articles .tt{text-align: left}
 .container .articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('../images/tt_box_01.gif') 0 0 no-repeat,url('../images/tt_box_03.gif') 100% 0 no-repeat,url('../images/tt_box_02.gif') 0 0 repeat-x;text-align:center}

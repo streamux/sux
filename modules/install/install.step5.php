@@ -1,7 +1,7 @@
 <?
+$admin_id		= trim($_POST['admin_id']);
 $admin_pwd	= trim($_POST['admin_pwd']);
 $admin_email	= trim($_POST['admin_email']);
-$admin_name	= trim($_POST['site_name']);
 $yourhome		= trim($_POST['yourhome']);
 
 $resultYN = "Y";
@@ -21,9 +21,9 @@ if(!$fp) {
 
 	$str = "";
 	$str .= "<?\n";
+	$str .= "\$admin_id		= '$admin_id';		// 관리자 아이디\n";
 	$str .= "\$admin_pwd	= '$admin_pwd';	// 관리자 패스워드\n";
-	$str .= "\$admin_email	= '$admin_email';	// 관리자 이메일\n";
-	$str .= "\$admin_name	= '$admin_name';	// 홈페이지명\n";
+	$str .= "\$admin_email	= '$admin_email';	// 관리자 이메일\n";	
 	$str .= "\$yourhome		= '$yourhome';		// 홈으로 가기\n";
 	$str .= "?>";
 

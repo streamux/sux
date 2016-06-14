@@ -1,0 +1,69 @@
+@charset "utf-8";
+
+/* streamux.com */
+
+/* Reset */
+html, body {width:100%;height:100%}
+html {overflow:auto}
+body,h1,h2,h3,h4,h5,button {margin:0;padding:0;font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;font-size:16px;color:#383d41}
+div,dl,dt,dd,ul,ol,li,table,thead,tbody,tr,td,th,form,fieldset,p{margin:0;padding:0}
+input{font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;color:#383d41}
+body {background-color:#FFF;word-break:break-all}
+
+img,fieldset,iframe {border:0 none}
+li {list-style:none}
+input,select,button {vertical-align:middle}
+img {vertical-align:top}
+i,em,address {font-style:normal}
+label,button {cursor:pointer}
+button {margin:0;padding:0}
+a {color:#222;text-decoration:none}
+a:hover {color:#390;text-decoration:underline}
+button {position:relative}
+button img {left:-3px;left:auto}
+html:first-child select {height:20px;padding-right:6px}
+option {padding-right:6px}
+hr {display:none}
+legend {width:0}
+table{border-collapse:collapse;border-spacing:0}
+input::-ms-clear {display:none}
+
+*, *:before, *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box}
+
+/* common */
+.show{display: block}
+.hide{display: none}
+.blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
+.warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000;font-size:1.000em}
+
+.ui-edgebox{background:url('../images/container_box1.png') 0 0 no-repeat,url('../images/container_box2.png') 100% 0 no-repeat,url('../images/container_box3.png') 100% 100% no-repeat,url('../images/container_box4.png') 0 100% no-repeat,url('../images/container_box_top.png') 0 0 repeat-x,url('../images/container_box_right.png') 100% 0 repeat-y,url('../images/container_box_bottom.png') 0 100% repeat-x,url('../images/container_box_left.png') 0 0 repeat-y}
+
+.ui-edgebox-2px{background: url('../images/admin_box_tl.png') no-repeat 0 0, url('../images/admin_box_tr.png') no-repeat 100% 0,url('../images/admin_box_bl.png') no-repeat 0 100%,url('../images/admin_box_br.png') no-repeat 100% 100%,url('../images/admin_box_line2px.png') 0 0 repeat-x,url('../images/admin_box_line2px.png') 100% 0 repeat-y,url('../images/admin_box_line2px.png') 0 100% repeat-x,url('../images/admin_box_line2px.png') 0 0 repeat-y
+}
+.ui-inlineblock{display: inline-block}
+.warn-color, .font-color{color:#FF0000}
+.font-weight-bold{font-weight:bold}
+
+/* install */
+.container {clear:both;position:relative;margin:0 auto;width:98%}
+.container .article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
+
+/* admin login box */
+.container .article-box .login{text-align: center}
+.container .article-box .login .title{display:block;margin-top:10;font-size:2.000em;color:#ff6600}
+.container .article-box .login .subtitle{display:block;font-size:0.875em}
+.container .article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;max-width:300px;background-color: #FFFFFF;text-align: center}
+.container .article-box .login .box .login-title {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
+.container .article-box .login .box .login-title span{width:150;font-size:15px;text-align: left}
+
+.container .article-box .login .box .login-body{margin:0 auto; width:92%;padding-top: 10px}
+.container .article-box .login .box .login-body table {width:100%}
+.container .article-box .login .box .login-body table td{height:26px;text-align: left;font-size: 0.750em}
+.container .article-box .login .box .login-body .ui-panel-id{padding-left:3px;width:130px;}
+.container .article-box .login .box .login-body .input-pwd{width:130px;text-align: left}
+.container .article-box .login .box .login-body .ui-img-btn{text-align: center}
+
+.container .article-box .login .notice{overflow:hidden;margin-top:20px;width:98%;border-top:1px solid #e3e3e3;font-size: 0.750em;}
+.container .article-box .login .notice dl{display:inline-block;padding:10px;width:46%;text-align: left;vertical-align: top;}
+.container .article-box .login .notice dl dt{height:22px;font-weight: bold}
+

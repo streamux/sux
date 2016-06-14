@@ -1,5 +1,5 @@
 <?
-include "lib.php";
+include "../lib.php";
 if($ch==y){ 
 $dbup = "update $board set opkey='$opkey' where id=$id ";
 $result=mysql_query($dbup);
