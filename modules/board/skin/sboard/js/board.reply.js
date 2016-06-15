@@ -38,3 +38,5 @@ function musimw_check(f) {
 	}
 	return (true);
 }
+
+document.musimw.name.focus();

@@ -26,15 +26,13 @@ if ($fileupname) {
 	</div>
 </div>
 
-<form action="board.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&ljs_mod=<? echo $ljs_mod; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);"> 
-
 <div class="board-write" style="width:<? echo $width; ?>">
 	<form action="board.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
 		<input type="hidden" name="ljs_mod" value="reply">
 		<p><span class="ui-label-width">이름</span><input type="text" name="ljs_name" maxlength="20" value="<? echo $ljs_name; ?>"></p>
-		<p><span class="ui-label-width">비밀번호</span><input type="text" name="pass" maxlength="10" value=""></p>
+		<p><span class="ui-label-width">비밀번호</span><input type="password" name="pass" maxlength="10" value=""></p>
 		<p><span class="ui-label-width">제목</span><input type="text" name="storytitle" maxlength="50"></p>
 		<p><span class="ui-label-width">이메일</span><input type="text" name="email" maxlength="28" value="<? echo $ljs_email; ?>">
 <?
@@ -48,8 +46,8 @@ if ($fileupname) {
 		<p>
 			<span class="ui-label-width">내용</span>
 			<span><input name="type" type="radio" value="html" <? if($admin_type == 'html') echo "checked"; ?>>HTML</span>
-			<sapn><input name="type" type="radio" value="text" <? if($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</sapn>
-			<span>※ 형식을 선택해주세요.<sapn>
+			<span><input name="type" type="radio" value="text" <? if($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</span>
+			<span>※ 형식을 선택해주세요.<span>
 		</p>
 		<textarea name="storycomment" cols="64" rows="14"></textarea>
 	</div>
@@ -72,7 +70,4 @@ if ($fileupname) {
 </div>
 
 <script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.reply.js"></script>
-<script  type="text/javascript">
-document.musimw.name.focus();
-</script>
-</form>
+

@@ -1,10 +1,10 @@
 <?
 /**
-	@테스트 용 
+	@테스트 용  
 	$tail = "y";
 	$setup = "y";
 	$_SESSION[grade] = 10;
- */
+*/
 
 $board = $_REQUEST[board];
 $board_grg = $_REQUEST[board_grg];
@@ -31,7 +31,7 @@ $m_name = htmlspecialchars($row[name]);
 $pass = $row[pass];
 $hit = $row[see];
 $storytitle = nl2br($row[title]);
-$storytitle = substr(htmlspecialchars($storytitle),0,50);
+$storytitle = htmlspecialchars($storytitle);
 $email = $row[email];
 $fileupname = $row[filename];
 $filesize = $row[filesize];
@@ -86,14 +86,14 @@ if ($tail == 'y') {
 			<dl>
 				<dt>댓글 0</dt>
 <? 
-	$result2=mysql_query("select * from $board_grg where storyid=$id order by id");
+	$result2 = mysql_query("select * from $board_grg where storyid=$id order by id");
 
-	while ($row2=mysql_fetch_array($result2)) {
+	while ($row2 = mysql_fetch_array($result2)) {
 
-		$day=$row2[date];
-		$nickname=htmlspecialchars($row2[nickname]);
-		$iyggrcomment= nl2br($row2[comment]);
-		$grgid=$row2[id];
+		$day = $row2[date];
+		$nickname = htmlspecialchars($row2[nickname]);
+		$iyggrcomment =  nl2br($row2[comment]);
+		$grgid = $row2[id];
 ?>
 				<dd>
 					<? echo "${nickname} | ${iyggrcomment} | ${day}"; ?> 
@@ -217,7 +217,7 @@ if ($numrows2) {
 
 			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
 				$imgname = "icon_img.png";
-			} else if ($type=="application/x-zip-compressed"){ 
+			} else if ($type =="application/x-zip-compressed"){ 
 				$imgname = "icon_down.png";
 			}
 
@@ -272,13 +272,13 @@ if ($numrows2) {
 		<? include "navi.php"; ?>
 	</div>
 	<div class="search ui-inlineblock">
-		<form action="board.search_list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<form action="board.search_list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
 			<select name=find>
 			<option value='title'>제 목</option>
 					<option value='name'>이 름</option>
 					<option value='comment'>내 용</option>
-				</select>&nbsp;
-			<input type=text name=search size=15>&nbsp;
+				</select>
+			<input type="text" name="search" size="15">
 			<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/img/btn_search.gif" width="51" height="23" border="0">
 		</form>
 	</div>	
@@ -291,7 +291,6 @@ if ($numrows2) {
 if ($setup == "y") {
 	if ($grade > 9){
 ?>
-
 <div class="board-adminsetup" style="width:<? echo ${width}; ?>">
 	<form action="board.opkey.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>" method="post"  name="musimso" onSubmit="return musimso_check(this);">
 	<table summary="관리자 설정옵션입니다.">
@@ -327,76 +326,9 @@ if ($setup == "y") {
 	</div>
 	</form>
 </div>
-
 <?
 	}
 }
 ?>
 
-<script type="text/javascript">
-
-function musimsgrg_check( f ) {
-
-	searcho = f.search.value.length;
-
-	if ( searcho < 1 ) {
-		alert("검색어를 입력하세요.");
-		f.search.focus();
-		return (false);
-	}
-	return (true);
-}
-
-function musimsl_check( f ) {
-
-	nameo = f.name.value.length;
-	passo = f.pass.value.length;
-	commento = f.comment.value.length;
-
-	if ( nameo < 1 ) {
-		alert("이름을 입력하세요.");
-		f.name.focus();
-		return (false);
-	}else if ( passo < 1 ) {
-		alert("비밀번호를 입력하세요.");
-		f.pass.focus();
-		return (false);
-	}else if ( commento < 1 ) {
-		alert("내용을 입력하세요.");
-		f.comment.focus();
-		return (false);
-	}
-	return (true);
-}
-
-function musimso_check( f ) {
-
-	var msgList = {
-		f:"진행완료을 선택하셨습니다.",
-		i:"진행중을 선택하셨습니다.",
-		c:"입금완료를 선택하셨습니다.",
-		n:"입금미완료를 선택하셨습니다.",
-		m:"메일발송을 선택하셨습니다.",
-		b:"초기화를 선택하셨습니다."
-	},
-	msg = "";
-
-	for (var i=0; f.opkey.length; i++) {
-
-		if (f.opkey[i].checked == true) {
-
-			var key = f.opkey[i].value;
-
-			if (key) {
-				msg = msgList[key];	
-			} else {
-				msg = msgList["b"];
-			}
-			
-			break;
-		}
-	}
-
-	alert(msg);
-}
-</script>
+<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.read.js"></script>

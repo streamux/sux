@@ -20,8 +20,8 @@
 		<p>
 			<span class="ui-label-width">내용</span>
 			<span><input name="type" type="radio" value="html" <? if($admin_type == 'html') echo "checked"; ?>>HTML</span>
-			<sapn><input name="type" type="radio" value="text" <? if($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</sapn>
-			<span>※ 형식을 선택해주세요.<sapn>
+			<span><input name="type" type="radio" value="text" <? if($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</span>
+			<span>※ 형식을 선택해주세요.<span>
 		</p>
 		<textarea name="storycomment" cols="64" rows="14"></textarea>
 	</div>
@@ -35,7 +35,7 @@
 			<input type="hidden" name="wallok" value="<? echo ${wallname}; ?>">
 			<input type="hidden" name="wallwd" value="<? echo ${wallkey}; ?>">			
 		</span>
-		<span class="ui-inlineblock">&nbsp;발강색 등록키를 입력해주세요.</span>
+		<span class="ui-inlineblock">발강색 등록키를 입력해주세요.</span>
 	</div>
 	<div class="buttons">
 		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/img/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/img/btn_cancel.gif" width="51" height="23" border="0"></a>
@@ -44,6 +44,3 @@
 </div>
 
 <script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.write.js"></script>
-<script type="text/javascript">
-document.musimw.m_name.focus();
-</script>

@@ -30,6 +30,7 @@ input::-ms-clear {display:none}
 
 *, *:before, *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box}
 
+textarea,input{font-size: 0.75em}
 
 .hide{display:none}
 .ui-inlineblock{display: inline-block}
@@ -45,21 +46,22 @@ input::-ms-clear {display:none}
 .board-list table tbody .author{padding-left:10px;text-align: left}
 .board-list table tbody .subject{padding-left:10px;text-align: left}
 .board-list table tbody .hit{text-align: center;}
-.board-list table tbody tr td{text-align: center;font-size:0.750em;line-height: 30px;}
+.board-list table tbody tr td{padding:5px 0 5px 0;text-align: center;font-size:0.750em;height:30px;line-height: 17px;vertical-align: middle}
 .board-list table tbody tr td span{position:relative;top:1px}
 .board-list table tbody tr td img{vertical-align: middle;}
-.board-list table tbody tr:last-child{border-bottom: 1px solid #D6D7D6}
+.board-list table tbody tr:last-child {border-bottom: 1px solid #D6D7D6}
 .board-list .navi{margin-top:10px;text-align: center;}
 .board-list .search{margin-top:20px}
+.board-list .search input[name=search]{width:120px}
 .board-list .buttons{float:right;margin-top:20px;width:118px;clear:both}
 .board-list .warn-subject{padding-left:10px;text-align: left}
 
 /* read */
 .board-read{border-top:2px solid #CE0000}
-.board-read .panel-heading{margin:0 auto;padding:15px 0 30px 10px;width:98%}
-.board-read .panel-heading h1{font-size: 1.250em}
-.board-read .panel-heading p{line-height: 15px;font-size: 0.8125em}
-.board-read .panel-body{margin:0 auto;padding: 10px 0 20px 10px;width:98%;min-height:100px;border:1px solid #D6D7D6;font-size: 0.8125em}
+.board-read .panel-heading{margin:0 auto;padding:15px 0 15px 10px;width:98%}
+.board-read .panel-heading h1{margin-bottom:7px;font-size: 1.250em;line-height:26px}
+.board-read .panel-heading p{line-height: 20px;font-size: 0.6875em;color:#aeaeae}
+.board-read .panel-body{margin:0 auto;padding: 10px 0 20px 10px;width:98%;min-height:100px;border:1px solid #ececec;font-size: 0.750em;line-height: 20px}
 .board-read .panel-buttons{margin: 20px 0 10px 0;text-align: right}
 
 .board-read .board-tail{margin-top:20px;}
@@ -68,30 +70,30 @@ input::-ms-clear {display:none}
 .board-read  .board-tail .panel-list dl dd:last-child{border-bottom:1px solid #D6D7D6;}
 .board-read  .board-tail .panel-write{margin-top:20px;padding-left:10px;}
 .board-read  .board-tail .panel-write .form-heading{line-height: 35px}
-.board-read  .board-tail .panel-write .form-heading span{font-size: 0.8750em}
+.board-read  .board-tail .panel-write .form-heading span{font-size: 0.8750em}\
 .board-read  .board-tail .panel-write .form-comment {padding-bottom: 10px}
-.board-read  .board-tail .panel-write .form-comment textarea{width:99%;min-height:165px;}
+.board-read  .board-tail .panel-write .form-comment textarea{width:99%;min-height:165px;line-height:20px}
 .board-read  .board-tail .panel-write .form-buttons {text-align: right}
 
 .board-adminsetup{margin-top:40px;padding-top:20px;border-top:1px solid #D6D7D6}
 .board-adminsetup table{margin:0 auto;width:96%;background-color: #efefef}
-.board-adminsetup table tr td{padding-left: 10px;line-height: 35px;font-size: 0.875em;border-bottom:1px dotted #D6D7D6}
-.board-adminsetup table tr td:last-childZ{border-bottom:none}
-.board-adminsetup .form-text-tip{margin:0 auto;margin-top:15px;width:96%;font-size: 0.875em;}
+.board-adminsetup table tr td{padding-left: 10px;line-height: 35px;font-size: 0.750em;border-bottom:1px dotted #D6D7D6}
+.board-adminsetup table tr td:last-child{border-bottom:none}
+.board-adminsetup .form-text-tip{margin:0 auto;margin-top:15px;width:96%;font-size: 0.750em;}
 .board-adminsetup .form-submit{margin:0 auto;margin-top:15px;width:96%;text-align: right}
 
 /* write & rewrite*/
-.board-write{border-top:2px solid #CE0000;font-size: 0.750em}
+.board-write{border-top:2px solid #CE0000}
 .board-write .ui-label-width{width:20%}
 .board-write .panel-heading{margin:0 auto;margin-top:20px;width:98%}
-.board-write .panel-heading span{display:inline-block}
+.board-write .panel-heading span{display:inline-block;height:22px;;font-size: 0.750em}
 .board-write .panel-heading input{width:80%}
 .board-write .panel-body{margin:0 auto;margin-top:35px;width:98%}
-.board-write .panel-body textarea{margin-top:5px;width:100%;}
-.board-write .panel-body span{display:inline-block;margin-top:5px;}
-.board-write .panel-footer{margin:0  auto;margin-top:20px;width:98%;}
+.board-write .panel-body textarea{margin-top:5px;width:100%;line-height: 22px}
+.board-write .panel-body span{display:inline-block;margin-top:5px;font-size: 0.750em}
+.board-write .panel-footer{margin:0  auto;margin-top:20px;width:98%;font-size: 0.750em}
 .board-write .panel-footer .ui-imgup{height:25px;}
-.board-write .panel-footer .ui-imgup input{width:85%}
+.board-write .panel-footer .ui-imgup input{width:75%}
 .board-write .panel-footer .ui-wallkey{margin-top:20px}
 .board-write .buttons{margin-top:20px;text-align: right;}
 

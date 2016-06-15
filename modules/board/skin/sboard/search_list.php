@@ -165,6 +165,7 @@ if ($numrows2) {
 
 
 <script type="text/javascript">
+
 	function musimsl_check(f) {
 
 		searcho = f.search.value.length;

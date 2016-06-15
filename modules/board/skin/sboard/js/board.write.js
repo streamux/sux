@@ -44,3 +44,5 @@ function musimw_check(f) {
 	}
 	return true;
 }
+
+document.musimw.m_name.focus();

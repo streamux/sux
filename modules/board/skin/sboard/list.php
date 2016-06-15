@@ -136,17 +136,4 @@ if ($numrows2) {
 	</div>
 </div>
 
-<script type="text/javascript">
-
-function musimsl_check(f) {
-
-	searcho = f.search.value.length;
-
-	if ( searcho < 1 ) {
-		alert("검색어를 입력하세요.");
-		f.search.focus();
-		return (false);
-	}
-	return (true);
-}
-</script>
+<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.list.js"></script>

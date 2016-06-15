@@ -36,10 +36,6 @@ function musimw_check(f) {
 		return (false);
 	}
 
-	if ( wall < 1 ) {
-		alert("붉은색 등록키를 입력하세요.");
-		f.wall.focus();
-		return false;
-	}
 	return (true);
 }
+document.musimw.pass.focus();

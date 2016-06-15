@@ -76,7 +76,7 @@ if (ereg('@',$email)) {
 	exit;
 }
 
-if (!$wall) {
+if (!$wall && $ljs_mod != "modify") {
 	echo ("	<script>
 				alert('프로그램 등록방지 키를 입력해주세요.');
 				history.go(-1);
