@@ -64,15 +64,17 @@ input::-ms-clear {display:none}
 .board-read .panel-buttons{margin: 20px 0 10px 0;text-align: right}
 
 .board-read .board-tail{margin-top:20px;}
-.board-read  .board-tail .panel-list dl dt{padding-left:10px;background-color: #f6f6f6;border-bottom:1px solid #D6D7D6;line-height:45px;font-size: 1.500em}
-.board-read  .board-tail .panel-list dl dd{padding-left:10px;border-bottom:1px dotted #D6D7D6;line-height:40px}
-.board-read  .board-tail .panel-list dl dd:last-child{border-bottom:1px solid #D6D7D6;}
-.board-read  .board-tail .panel-write{margin-top:20px;padding-left:10px;}
-.board-read  .board-tail .panel-write .form-heading{line-height: 35px}
-.board-read  .board-tail .panel-write .form-heading span{font-size: 1.0625em}\
-.board-read  .board-tail .panel-write .form-comment {padding-bottom: 10px}
-.board-read  .board-tail .panel-write .form-comment textarea{width:99%;min-height:165px;line-height:20px}
-.board-read  .board-tail .panel-write .form-buttons {padding:10px 0 10px 0;text-align: right}
+.board-read .board-tail .panel-list dl dt{padding-left:10px;background-color: #f6f6f6;border-bottom:1px solid #D6D7D6;line-height:45px;font-size: 1.500em}
+.board-read .board-tail .panel-list dl dd{padding-left:10px;border-bottom:1px dotted #D6D7D6;line-height:40px}
+.board-read .board-tail .panel-list dl dd:last-child{border-bottom:1px solid #D6D7D6;}
+.board-read .board-tail .panel-list .grgcomment{margin:0 20px 0 0}
+.board-read .board-tail .panel-list .date{margin-right:5px}
+.board-read .board-tail .panel-write{margin-top:20px;padding-left:10px;}
+.board-read .board-tail .panel-write .form-heading{line-height: 35px}
+.board-read .board-tail .panel-write .form-heading span{font-size: 1.0625em}\
+.board-read .board-tail .panel-write .form-comment {padding-bottom: 10px}
+.board-read .board-tail .panel-write .form-comment textarea{width:99%;min-height:165px;line-height:20px}
+.board-read .board-tail .panel-write .form-buttons {padding:10px 0 10px 0;text-align: right}
 
 .board-adminsetup{margin-top:40px;padding-top:20px;border-top:1px solid #D6D7D6}
 .board-adminsetup table{margin:0 auto;width:96%;background-color: #efefef}

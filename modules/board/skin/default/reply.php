@@ -31,7 +31,7 @@ if ($fileupname) {
 
 	<div class="panel-heading">
 		<input type="hidden" name="ljs_mod" value="reply">
-		<p><span class="ui-label-width">이름</span><input type="text" name="ljs_name" maxlength="20" value="<? echo $ljs_name; ?>"></p>
+		<p><span class="ui-label-width">이름</span><input type="text" name="m_name" maxlength="20" value="<? echo $ljs_name; ?>"></p>
 		<p><span class="ui-label-width">비밀번호</span><input type="password" name="pass" maxlength="10" value=""></p>
 		<p><span class="ui-label-width">제목</span><input type="text" name="storytitle" maxlength="50"></p>
 		<p><span class="ui-label-width">이메일</span><input type="text" name="email" maxlength="28" value="<? echo $ljs_email; ?>">

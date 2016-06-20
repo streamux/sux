@@ -86,7 +86,7 @@ if (!$wall && $ljs_mod != "modify") {
 
 if ($ljs_mod=="writer" && $wall) {
 
-	if ($wall == $wallok) { 		
+	if ($wall == $wallok) { 
 
 		if (is_uploaded_file($imgup_tmpname )) {
 			$mktime = mktime();
@@ -103,8 +103,7 @@ if ($ljs_mod=="writer" && $wall) {
 		$row = mysql_fetch_array($mysql_result);
 		$igroup = $row[id]+1; 
 
-		$dbinsert = "insert into $board values ('','$m_name','$pass','$storytitle','$storycomment','$email',now(),'$REMOTE_ADDR',0,'',$igroup,0,0,'$wallwd','$imgup_name','$imgup_size','$imgup_type','$type')";
-		$result=mysql_query($dbinsert);
+		$result = mysql_query("insert into $board values ('','$m_name','$pass','$storytitle','$storycomment','$email',now(),'$REMOTE_ADDR',0,'',$igroup,0,0,'$wallwd','$imgup_name','$imgup_size','$imgup_type','$type')");
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.list.php?board=$board&board_grg=$board_grg'>");
 	} else { 
@@ -135,7 +134,7 @@ if ($ljs_mod=="writer" && $wall) {
 
 		$result = mysql_query("insert into $board values ('','$m_name','$pass','$storytitle','$storycomment','$email',now(),'$REMOTE_ADDR',0,'',$row[igroup],$space,$ssunseot,'$wallwd','$imgup_name','$imgup_size','$imgup_type','$type')");
 		
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.list.php?board=$board&board_grg=$board_grg>");
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.list.php?board=$board&board_grg=$board_grg'>");
 	} else {
 		echo ("	<script>
 					alert('경고! 잘못된 등록키입니다.');

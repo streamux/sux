@@ -5,8 +5,9 @@
 <title>비밀번호 찾기</title>
 <meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
 <link rel="stylesheet" type="text/css" href="css/css.css">
-<SCRIPT LANGUAGE="JavaScript">
-<!--
+
+<script type="text/javascript">
+
 function contentc_check(f) {
 
 memberid = f.memberid.value.length;
@@ -53,7 +54,7 @@ function jmcheck() {
 	if(str == 6)
 		document.musimm.jumin2.focus();
 }
-// --></SCRIPT>
+</script>
 </head>
 
 <body>

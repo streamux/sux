@@ -98,7 +98,7 @@ if ($tail == 'y') {
 		$grgid = $row2[id];
 ?>
 				<dd>
-					<? echo "${nickname} | ${iyggrcomment} | ${day}"; ?> 
+					<? echo "${nickname} - <span class=\"grgcomment\">${iyggrcomment}</span><span class=\"date\">${day}</span>"; ?> 
 					<a href="board_grg.delpass.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>">[삭제]</a>
 				</dd>
 <?
