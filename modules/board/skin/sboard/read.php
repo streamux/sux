@@ -80,13 +80,15 @@ if ($fileupname) {
 
 <?
 if ($tail == 'y') {
+	$result2 = mysql_query("select * from $board_grg where storyid=$id order by id");
+	$numrow2 = mysql_num_rows($result2);
 ?>
 	<div class="board-tail" style="width:<? echo ${width}; ?>">
 		<div class="panel-list">
 			<dl>
-				<dt>댓글 0</dt>
+				<dt>댓글 <? echo $numrow2; ?></dt>
 <? 
-	$result2 = mysql_query("select * from $board_grg where storyid=$id order by id");
+	
 
 	while ($row2 = mysql_fetch_array($result2)) {
 
@@ -108,11 +110,10 @@ if ($tail == 'y') {
 			<form action="board_grg.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>&sid=<? echo $sid; ?>" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
 			<ul>		
 				<li class="form-heading">
-					<input type="hidden" name="iygmdgrg" value="y">
 					<span>이름</span>
-					<input type="text" name="name" size="10" maxlength="20" value="<? echo $ljs_nickname; ?>">&nbsp;
+					<input type="text" name="ljs_name" size="10" maxlength="20" value="<? echo $ljs_nickname; ?>">&nbsp;
 					<span>비밀번호</span>
-					<input type="password" name="pass" size="8" maxlength="8" value="<? echo $ljs_pass1; ?>">
+					<input type="password" name="ljs_pass" size="8" maxlength="8" value="<? echo $ljs_pass1; ?>">
 				</li>
 				<li class="form-comment">
 					<textarea name="comment" cols="64" rows="5"></textarea>
@@ -142,7 +143,7 @@ if ($tail == 'y') {
 </div>
 
 <?
-$limit =10; 
+$limit =3; 
 
 if (!$passover){
 	$passover = 0;
@@ -153,6 +154,9 @@ if ($ljs_mod == "s_mode"){
 }else{
 	$option = "";
 }
+
+$result0 = mysql_query("select * from $board");
+$numrows = mysql_num_rows($result0);
 
 $result = mysql_query("select * from $board $option order by igroup desc,ssunseo asc limit $passover,$limit");
 $numrows2 = mysql_num_rows($result);
@@ -298,7 +302,6 @@ if ($setup == "y") {
 			<tr>
 				<td>진행상황</td>
 				<td>
-					<input type="hidden" name="ch" value="y">
 					<input type="radio" name="opkey" value="f" checked> <span>진행완료</span>&nbsp;
 					<input type="radio" name="opkey" value="i"> <span>진행중</span>
 				</td>

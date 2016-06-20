@@ -18,9 +18,9 @@ if ($admin_pwd != $user_pass) {
 
 if ($msg) {
 	echo ("	<script>
-			alert('${msg}');
-			history.go(-1);
-		</script>");
+				alert('${msg}');
+				history.go(-1);
+			</script>");
 	exit;
 }
 

@@ -9,18 +9,16 @@
 .visual-slide .inner .item:nth-child(1){left:0;background-color: #2e75a5}
 .visual-slide .inner .item:nth-child(2){left:100%;background-color: #893f53}
 .visual-slide .inner .item:nth-child(3){left:-100%;background-color: #80489a}
-.visual-slide .inner .item .tt{display:block;padding-top:55px;font-size: 2.5em;color: #FFFFFF}
-.visual-slide .inner .item .stt{display:block;padding-top:3px;font-size: 0.875em;color:#FFFFFF;letter-spacing: 0.5em}
+.visual-slide .inner .item .tt{display:block;padding-top:55px;font-size: 3.5em;color: #FFFFFF}
+.visual-slide .inner .item .stt{display:block;padding-top:3px;font-size: 1.0625em;color:#FFFFFF;letter-spacing: 0.5em}
 
 .container .articles {margin-top:10px;padding:35px 5px 20px  7px;background-color:#fcfcfc}
 
 /* container common */
-.container .articles{font-size:0.750em}
-.container .articles table{font-size:1em}
 .container .articles .tt span{font-size: 1.1875em;font-weight: bold}
 .container .articles .tt{text-align: left}
 .container .articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('../images/tt_box_01.gif') 0 0 no-repeat,url('../images/tt_box_03.gif') 100% 0 no-repeat,url('../images/tt_box_02.gif') 0 0 repeat-x;text-align:center}
-.container .articles .p-graph span{font-size:0.9375em}
+.container .articles .p-graph span{font-size:0.0250em}
 
 /* connect */
 .container .articles .connect .box {overflow:hidden;width:100%;color: #000000; border:2px solid #b3bed0;text-align: left}

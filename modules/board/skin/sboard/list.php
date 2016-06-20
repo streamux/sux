@@ -1,9 +1,11 @@
 <?
-$limit=10;   
+$limit =3;   
 
 if (!$passover) {
 	 $passover=0;
 }
+$result0 = mysql_query("select * from $board");
+$numrows = mysql_num_rows($result0);
 
 $result = mysql_query("select * from $board order by igroup desc,ssunseo asc limit $passover,$limit");
 $numrows2 = mysql_num_rows($result);
@@ -42,9 +44,9 @@ if ($numrows2) {
 
 		if ($day == $today && $opkey){
 			$num =20;
-		}else if($day == $today || $opkey){
+		} else if ($day == $today || $opkey){
 			$num = 28;
-		}else{
+		} else {
 			$num = 34;
 		}
 		$title = trim($string, $num);
@@ -61,14 +63,14 @@ if ($numrows2) {
 			}
 		}
 
-		if($space) {
+		if ($space) {
 			$imgname = "icon_answer.gif";
 			echo "<img src=\"${skin_path}/img/${imgname}\">&nbsp";
 		}		
 
 		$imgname = "";
 
-		if($filename){
+		if ($filename){
 
 			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
 				$imgname = "icon_img.png";
@@ -79,16 +81,16 @@ if ($numrows2) {
 			echo "<img src=\"${skin_path}/img/${imgname}\">&nbsp;";
 		}
 
-		echo "<a href=board.read.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&ljs_mod=r_mode><span>${title}</span></a>";
+		echo "<a href=board.read.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&ljs_mod=r_mode><span>${title}</span></a>&nbsp;";
 
 		$grgresult=mysql_query("select id from $board_grg where storyid=$sid");
 		$grgnums=mysql_num_rows($grgresult);
 
-		if($grgnums) {
+		if ($grgnums) {
 			echo "(".$grgnums.")";
 		}
 
-		if($day == $today){
+		if ($day == $today){
 			echo "&nbsp;<img src=\"${skin_path}/img/new.gif\">";
 		}
 		
@@ -98,7 +100,7 @@ if ($numrows2) {
 								"c"=>"icon_cost.gif",
 								"m"=>"icon_mail.gif",
 								"n"=>"icon_no_cost.gif");
-			echo "&nbsp;<img src=\"${skin_path}/img/$img_list[$opkey]\">";
+			echo "<img src=\"${skin_path}/img/$img_list[$opkey]\">";
 		}
 ?>
 				</td>				
