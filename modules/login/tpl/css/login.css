@@ -1,0 +1,18 @@
+/* install */
+.container .article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
+
+/* admin login box */
+.container .article-box .login .title{display:block;margin-top:10;font-size:2.5625em;color:#ff6600}
+.container .article-box .login .subtitle{display:block;font-size:1.0625em}
+.container .article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;width:300px;background-color: #FFFFFF;text-align: center}
+.container .article-box .login .box .login-title {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
+.container .article-box .login .box .login-title span{width:150;font-size:1.250;text-align: left}
+
+.container .article-box .login .box .login-body{margin:0 auto; width:92%;padding-top: 10px}
+.container .article-box .login .box .login-body table {width:100%}
+.container .article-box .login .box .login-body table td{height:26px;text-align: left}
+.container .article-box .login .box .login-body .input-id {width:120px;text-align: left}
+.container .article-box .login .box .login-body .input-pwd {width:120px;text-align: left}
+.container .article-box .login .notice{overflow:hidden;margin-top:20px;border-top:1px solid #e3e3e3}
+.container .article-box .login .notice dl{float:left;padding:10px;width:45%;text-align: left}
+.container .article-box .login .notice dl dt{height:22px;font-weight: bold}

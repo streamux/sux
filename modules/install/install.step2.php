@@ -22,7 +22,7 @@
 	</div>
 	<div class="container">	
 		<form>	
-		<div class="article-box ui-box-edge">			
+		<div class="article-box ui-edgebox">			
 			<table summary="데이터베이스 정보를 입력해주세요." class="db_form">
 				<caption>
 					<span class="hide">데이터베이스 설정</span>

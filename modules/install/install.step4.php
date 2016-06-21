@@ -22,7 +22,7 @@
 	</div>
 	<div class="container">
 		<form>
-		<div class="article-box ui-box-edge">			
+		<div class="article-box ui-edgebox">			
 			<table summary="관리자 정보를 입력해주세요.">
 				<caption>
 					<span class="hide">관리자계정 설정</span>

@@ -46,7 +46,7 @@ function musimso_check( f ) {
 
 	for (var i=0; f.opkey.length; i++) {
 
-		if (f.opkey[i].checked == true) {
+		if (f.opkey[i].checked === true) {
 
 			var key = f.opkey[i].value;
 

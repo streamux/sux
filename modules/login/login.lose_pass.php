@@ -8,51 +8,53 @@
 
 <script type="text/javascript">
 
-function contentc_check(f) {
+	function contentc_check(f) {
 
-memberid = f.memberid.value.length;
+	memberid = f.memberid.value.length;
 
-if ( memberid < 1 ) {
-		alert("이름을 입력 하세요.");
-	f.memberid.focus();
-	return (false);
-}
-var jumin_check = "234567892345";
-var jumin_total = f.jumin1.value + f.jumin2.value;
-var juminid = 0;
+	if ( memberid < 1 ) {
+			alert("이름을 입력 하세요.");
+		f.memberid.focus();
+		return (false);
+	}
 
-if(jumin_total.length < 13){
-	alert("잘못된 주민등록번호입니다.");
-	f.jumin1.focus();
-	return false;
-}
+	var jumin_check = "234567892345";
+	var jumin_total = f.jumin1.value + f.jumin2.value;
+	var juminid = 0;
 
-for (var i=0; i<12; i++){
-	var ch1=jumin_check.substring(i,i+1);
-	var ch2=jumin_total.substring(i,i+1);
-	juminid = juminid + ch1 * ch2;
-}
-
-var check_field = (11 - (juminid % 11)) % 10;
-
-if (check_field != jumin_total.substring(12,13)){
-	alert("잘못된 주민등록번호입니다.");
-	f.jumin1.value="";
-	f.jumin2.value="";
+	if (jumin_total.length < 13){
+		alert("잘못된 주민등록번호입니다.");
 		f.jumin1.focus();
-	return false;
-}else if (jumin_total.substring(6,7) > 2 ||  jumin_total.substring(6,7) < 1){
-	alert("잘못된 주민등록번호입니다.");
-	f.jumin1.focus(); 
-	return false;
-}
+		return false;
+	}
+
+	for (var i=0; i<12; i++){
+		var ch1=jumin_check.substring(i,i+1);
+		var ch2=jumin_total.substring(i,i+1);
+		juminid = juminid + ch1 * ch2;
+	}
+
+	var check_field = (11 - (juminid % 11)) % 10;
+
+	if (check_field != jumin_total.substring(12,13)){
+		alert("잘못된 주민등록번호입니다.");
+		f.jumin1.value="";
+		f.jumin2.value="";
+			f.jumin1.focus();
+		return false;
+	} else if (jumin_total.substring(6,7) > 2 ||  jumin_total.substring(6,7) < 1){
+		alert("잘못된 주민등록번호입니다.");
+		f.jumin1.focus(); 
+		return false;
+	}
 	return (true);
 }
 
-function jmcheck() {
-	var str = document.musimm.jumin1.value.length;
-	if(str == 6)
-		document.musimm.jumin2.focus();
+	function jmcheck() {
+		var str = document.musimm.jumin1.value.length;
+		if(str == 6) {			
+			document.musimm.jumin2.focus();
+		}
 }
 </script>
 </head>
