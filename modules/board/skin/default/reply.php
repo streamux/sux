@@ -22,7 +22,7 @@ if ($fileupname) {
 		<p><? echo ${storycomment}; ?></p>
 	</div>
 	<div class="panel-buttons">
-		<a href="board.list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/img/btn_list.gif" width="51" height="23" border="0"></a>
+		<a href="board.list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>
 	</div>
 </div>
 
@@ -64,7 +64,7 @@ if ($fileupname) {
 		<span class="ui-inlineblock">&nbsp;발강색 등록키를 입력해주세요.</span>
 	</div>
 	<div class="buttons">
-		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/img/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/img/btn_cancel.gif" width="51" height="23" border="0"></a>
+		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>
 </div>

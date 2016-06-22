@@ -36,7 +36,6 @@ input::-ms-clear {display:none}
 .color-red{color:#FF0000}
 
 /* list & search*/
-.board-list .vertical-line{background:url('../img/verti_ttline.gif') 100% 100% no-repeat}
 .board-list table{border-collapse:collapse;border-spacing: 0;width:100%;}
 .board-list table thead th{height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:center;}
 .board-list .author{width:90px}

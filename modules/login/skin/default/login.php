@@ -55,7 +55,7 @@
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
 						</div><div class="panel-btn">
-							<input type="image" name="imagefield" src="skin/default/images/m_bt_login.gif" alt="로그인버튼" class="login-btn">
+							<input type="image" name="imagefield" src="skin/default/images/btn_login.gif" alt="로그인버튼" class="login-btn">
 						</div>					
 					</div>																	
 				</div>

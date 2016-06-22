@@ -60,7 +60,7 @@ if ($num) {
 	$_SESSION[automod1] = $automod1;
 	$_SESSION[chatip] = $chatip;
 
-	$targetURL = $_SERVER[HTTP_REFERER];
+	$targetURL = "login.php";
 
 	$result = mysql_query("select hit from $member where ljs_memberid='$ljs_memberid' ");
 	$row = mysql_fetch_array($result);
@@ -75,7 +75,7 @@ if ($num) {
 		echo ("<meta http-equiv='Refresh' content='0; URL=$targetURL'>");
 	}
 } else {
-	echo ("<meta http-equiv='Refresh' content='0; URL=login.an.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
+	echo ("<meta http-equiv='Refresh' content='0; URL=login.fail.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 }
 
 mysql_close();

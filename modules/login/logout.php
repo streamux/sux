@@ -14,7 +14,7 @@ unset($_SESSION[grade]);
 unset($_SESSION[chatip]);
 unset($_SESSION[admin_ok]);
 
-$targetURL = $_SERVER[HTTP_REFERER];
+$targetURL = "login.php";
 
 echo ("<meta http-equiv='Refresh' content='0; URL=$targetURL'>");
 ?>

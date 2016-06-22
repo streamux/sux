@@ -38,7 +38,7 @@
 		<span class="ui-inlineblock">발강색 등록키를 입력해주세요.</span>
 	</div>
 	<div class="buttons">
-		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/img/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/img/btn_cancel.gif" width="51" height="23" border="0"></a>
+		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>
 </div>
