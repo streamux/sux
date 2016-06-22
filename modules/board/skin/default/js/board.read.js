@@ -53,7 +53,7 @@ function musimso_check( f ) {
 			if (key) {
 				msg = msgList[key];	
 			} else {
-				msg = msgList["b"];
+				msg = msgList.b;
 			}			
 			break;
 		}

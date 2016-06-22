@@ -3,7 +3,7 @@ session_start();
 
 include "../lib.php";
 
-$ljs_member = $_POST[ljs_member];
+$member = $_POST[member];
 $memberid = $_POST[memberid];
 $pass = $_POST[pass];
 
@@ -24,7 +24,7 @@ if ($msg) {
 }
 
 $pass = substr(md5($pass),0,8);
-$queryy = "select * from $ljs_member where ".
+$queryy = "select * from $member where ".
 						 " ljs_memberid='$memberid' and ljs_pass1='$pass' ";
 
 $result = mysql_query($queryy);
@@ -48,7 +48,8 @@ if ($num) {
 	$automod1 = "yes";
 	$chatip = $REMOTE_ADDR;
 
-	$_SESSION[ljs_member] = $ljs_member;
+	
+	$_SESSION[ljs_member] = $member;
 	$_SESSION[ljs_memberid] = $ljs_memberid;
 	$_SESSION[ljs_pass1] = $ljs_pass1;
 	$_SESSION[ljs_name] = $ljs_name;
@@ -59,20 +60,23 @@ if ($num) {
 	$_SESSION[automod1] = $automod1;
 	$_SESSION[chatip] = $chatip;
 
-	$result = mysql_query("select hit from $ljs_member where ljs_memberid='$ljs_memberid' ");
+	$targetURL = $_SERVER[HTTP_REFERER];
+
+	$result = mysql_query("select hit from $member where ljs_memberid='$ljs_memberid' ");
 	$row = mysql_fetch_array($result);
 	$hit = $row[hit]+1;
-	$sql = mysql_query("update $ljs_member set hit=$hit where ljs_memberid='$ljs_memberid' ");
+	$sql = mysql_query("update $member set hit=$hit where ljs_memberid='$ljs_memberid' ");
 
 	if ($ljs_mod == "r_mode") {
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
 	} else if ($ljs_mod == "writer"){
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 	} else {
-		echo ("<meta http-equiv='Refresh' content='0; URL=$_SELF'>");
+		echo ("<meta http-equiv='Refresh' content='0; URL=$targetURL'>");
 	}
 } else {
 	echo ("<meta http-equiv='Refresh' content='0; URL=login.an.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 }
+
 mysql_close();
 ?>

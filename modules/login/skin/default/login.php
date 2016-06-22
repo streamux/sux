@@ -43,30 +43,30 @@
 					<div class="login-title">
 						<img src="skin/default/images/icon_01.gif" alt="">						
 						<span>회원그룹</span>
-						<select name="ljs_member" id="ljsMember">
+						<select name="member" id="ljsMember">
 							<!-- templete -->
 						</select>
 						<span class="link-searchinfo">로그인 아이디 | 비번찾기</span>
 					</div>
 					<div class="login-body">
-						<table summary="로그인을 할 수 있습니다.">
-							<caption class="hide">회원 로그인</caption>
-							<tbody>
-								<tr>
-									<td>아이디</td>
-									<td><input type="text" name="memberid" maxlength="14" value=""class="input-id"></td>
-									<td rowspan="2"><input type="image" name="imagefield" src="skin/default/images/btn_login.gif" alt="로그인버튼" class="login-btn"></td>
-								</tr>
-								<tr>
-									<td>비밀번호</td>
-									<td><input type="password" name="pass" maxlength="20"class="input-pwd"></td>
-								</tr>
-							</tbody>
-						</table>						
+						<div class="panel-info">
+							<ul>
+								<li><span class="ui-label">아이디</span><input type="text" name="memberid" maxlength="14" value=""class="input-id"></li>
+								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
+							</ul>							
+						</div><div class="panel-btn">
+							<input type="image" name="imagefield" src="skin/default/images/m_bt_login.gif" alt="로그인버튼" class="login-btn">
+						</div>					
 					</div>																	
 				</div>
 				<form>
-
+				<div class="panel-login-fail">
+					<ul>
+						<li><span>아이디와 비밀번호가 일치하지 않습니다.</span></li>
+						<li><span>아이디와 비밀번호를 정확하게 입력해주세요.</span></li>
+						<li>만일 회원가입을 하지 않고, 로그인을 하셨다면 회원가입을 먼저 해주세요.</li>
+					</ul>
+				</div>
 				<div class="notice">
 					<dl>
 						<dt>주의사항</dt>

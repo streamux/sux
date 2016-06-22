@@ -1,4 +1,6 @@
 <?
+session_start();
+
 include "../lib.php";
 
 $ljs_member = $_SESSION[ljs_member];
@@ -18,20 +20,10 @@ if (!$ljs_memberid  || !$ljs_pass1) {
 
 	include "skin/default/login.php";
 } else {
-
-	echo $ljs_name;
-	echo "&nbsp;";
-	echo "님";
-
 	$result = mysql_query("select * from $ljs_member where ljs_memberid='$ljs_memberid' ");
 	$row = mysql_fetch_array($result);
 	$hit = $row[hit];
-	$point2 = $row[point];
-	
-	echo "<font color=red>".number_format($point2)."&nbsp;원</font>";
-
-	echo $hit; 
-	echo "&nbsp;번째 방문";
+	$mypoint = number_format($row[point]);
 
 	include "skin/default/login.on.php";
 }
