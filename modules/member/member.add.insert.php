@@ -19,9 +19,9 @@ $job = $_POST['job'];
 $hobby = $_POST['hobby'];
 $path = $_POST['path'];
 $proposeid = $_POST['proposeid'];
-$writer = $_POST['writer'];
-$point = $_POST['point'];
-$grade = $_POST['grade'];
+$writer = "yes";
+$point = "100";
+$grade = "1";
 
 
 $dataObj = "";

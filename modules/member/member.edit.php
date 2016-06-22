@@ -1,10 +1,4 @@
-<?
-include "top.php";
-
-$table_name = $_REQUEST['table_name'];
-$memberid = $_REQUEST['memberid'];
-$id = $_REQUEST['id'];
-?>
+<? include "member.header.php"; ?>
 
 <div class="container">	
 		<div class="articles ui-edgebox">
@@ -16,7 +10,7 @@ $id = $_REQUEST['id'];
 					</div>
 				</div>
 				<div class="box">
-					<form>
+					<form type="post">
 					<dl>
 						<dt>기본정보입력</dt>
 						<dd>
@@ -136,66 +130,6 @@ $id = $_REQUEST['id'];
 									<input type="checkbox" name="hobby" value="기타" ><span>기타</span>
 								</td>
 							</tr>
-							<tr>
-								<td>가입경로</td>
-								<td>
-									<select name="path">
-										<option value="">선택하기</option>
-										<option value=네이버검색>키워드검색</option>
-										<option value=다음카페>네이버지식인</option>
-										<option value=다음카페>다음카페</option>
-										<option value=다음카페>학교소개</option>
-										<option value=주변소개>친구소개</option>
-										<option value=다음카페>차량광고</option>
-										<option value=기타>기타</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>추천아이디</td>
-								<td>
-									<input type="text" name="proposeid" size="12" maxlength="20" value="">
-								</td>
-							</tr>
-							<tr>
-								<td>가입날자</td>
-								<td id="date" class="view-type-textfield">
-									<!--
-									@ jquery templete
-									@ name	memberLabel_tmpl
-									-->	
-								</td>
-							</tr>
-							<tr>
-								<td>쓰기허용</td>
-								<td>
-									<select name="writer">
-										<option>yes</option>
-										<option>no</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>포인트</td>
-								<td>
-									<input type="text" name="point" size="6" maxlength="5" value="">
-								</td>
-							</tr>
-							<tr>
-								<td>레벨</td>
-								<td>
-									<input type="text" name="grade" size="3" maxlength="2" value="">
-								</td>
-							</tr>							
-							<tr>
-								<td>IP</td>
-								<td id="ip" class="view-type-textfield">
-									<!--
-									@ jquery templete
-									@ name	memberLabel_tmpl
-									-->		
-								</td>
-							</tr>
 						</tbody>
 					</table>
 					<input type="submit" name="submit" size="10" value="수 정">
@@ -209,7 +143,6 @@ $id = $_REQUEST['id'];
 <script type="jquery-templete" id="memberLabel_tmpl">
 	<span>${label}</span>
 </script>
-
 <script type="text/javascript" src="./tpl/js/member.edit.js"></script>
 
-<? include "bottom.php"; ?>
+<? include "member.footer.php"; ?>

@@ -1,12 +1,12 @@
-<? include "top.php"; ?>
+<? include "member.header.php"; ?>
 
 <div class="container">	
 		<div class="articles ui-edgebox">
 			<div class="member-edit">
-				<h2 class="blind">회원정보</h2>
+				<h2 class="blind">회원가입</h2>
 				<div class="tt">
 					<div class="imgbox">
-						<span>회원정보</span>
+						<span>회원가입</span>
 					</div>
 				</div>
 				<div class="box">
@@ -148,27 +148,6 @@
 									<input type="text" name="proposeid" size="12" ma="20" value="">
 								</td>
 							</tr>
-							<tr>
-								<td>쓰기허용</td>
-								<td>
-									<select name="writer">
-										<option>yes</option>
-										<option>no</option>
-									</select>
-								</td>
-							</tr>
-							<tr>
-								<td>포인트</td>
-								<td>
-									<input type="text" name="point" size="6" ma="5" value="">
-								</td>
-							</tr>
-							<tr>
-								<td>레벨</td>
-								<td>
-									<input type="text" name="grade" size="3" ma="2" value="">
-								</td>
-							</tr>	
 						</tbody>
 					</table>
 					<input type="submit" name="submit" size="10" value="확 인">
@@ -183,8 +162,6 @@
 <script type="jquery-templete" id="tableList_tmpl">
 	<option>${name}</option>
 </script>
-
 <script type="text/javascript" src="./tpl/js/member.add.js"></script>
 
-
-<? include "bottom.php"; ?>
+<? include "member.footer.php"; ?>

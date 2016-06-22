@@ -14,7 +14,7 @@ $msg = "신청 아이디 : ".$id."\n";
 
 if (strlen($id) < 4) {
 
-	$msg = "게시판 테이블 이름은 4글자 이상 사용해주세요.";
+	$msg = "게시판 테이블 이름은 4글자 이상 사용하세요.";
 
 	$json_data = array(	"msg"=>$msg);
 
@@ -25,7 +25,7 @@ if (strlen($id) < 4) {
 
 if ($id) {
 
-	$result = mysql_query("select name from $table_name where id='$id'");
+	$result = mysql_query("select name from $table_name where ljs_memberid='$id'");
 	$numrows = mysql_num_rows($result);
 
 	if ($numrows> 0) {
@@ -36,7 +36,7 @@ if ($id) {
 		$resultYN = "Y";
 	}
 }else{
-	$msg = "아이디를 넣고 중복체크를 하십시오.";
+	$msg = "아이디를 넣고 중복체크를 하세요.";
 	$resultYN = "N";
 }
 

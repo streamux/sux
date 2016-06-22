@@ -169,10 +169,7 @@ jsux.fn = {
 					job: f.job.value,
 					hobby: this.getCheckboxVal("hobby"),
 					path: f.path.value,
-					proposeid: f.proposeid.value,
-					writer: this.getSelectVal("writer"),
-					point: f.point.value,
-					grade: f.grade.value };
+					proposeid: f.proposeid.value };
 
 
 		jsux.getJSON("member.edit.update.php", params, function( e ) {

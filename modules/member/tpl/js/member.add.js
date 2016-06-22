@@ -138,10 +138,7 @@ jsux.fn = {
 					job: f.job.value,
 					hobby: this.getCheckboxVal("hobby"),
 					path: f.path.value,
-					proposeid: f.proposeid.value,
-					writer: this.getSelectVal("writer"),
-					point: f.point.value,
-					grade: f.grade.value };
+					proposeid: f.proposeid.value };
 
 		jsux.getJSON("member.add.insert.php", params, function( e ) {
 
@@ -176,7 +173,7 @@ jsux.fn = {
 			return;
 		}
 
-		jsux.getJSON("../members/member.searchid.json.php", params, function( e ) {
+		jsux.getJSON("member.searchid.json.php", params, function( e ) {
 
 			trace( e.msg );
 		});
@@ -187,7 +184,7 @@ jsux.fn = {
 		params = {	table_name: $("select[name=table_name]").val(),
 					companyname: $("input[name=companyname]").val()};
 
-		jsux.getJSON("../members/members.searchcorp.json.php", params, function( e ) {
+		jsux.getJSON("member.searchcorp.json.php", params, function( e ) {
 
 			trace( e.msg );
 		});
@@ -246,7 +243,6 @@ jsux.fn = {
 		});
 	},
 	init: function() {
-
 		this.setEvent();
 		this.setLayout();
 	}
