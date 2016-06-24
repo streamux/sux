@@ -1,22 +1,26 @@
 <?
 session_start();
-
 include "../lib.php";
 
-$ljs_member = $_SESSION[ljs_member];
-$ljs_memberid = $_SESSION[ljs_memberid];
-$ljs_pass1 = $_SESSION[ljs_pass1];
-$ljs_name = $_SESSION[ljs_name];
+$action = trim($_REQUEST['action']);
 
-if (!$ljs_memberid  || !$ljs_pass1) {
-	include "login.mgroup_list.php";
-	include "skin/default/login.php";
+$loginModel = new LoginModel();
+$loginView = new LoginView($loginModel);
+
+$query = array();
+$query['select'] = 'name';
+$query['from'] = $member_group;
+$query['orderBy'] = 'id asc';
+
+$loginModel->select($query);
+
+if (isset($action) && $action) {
+
+	$loginView->{$action}();
 } else {
-	$result = mysql_query("select * from $ljs_member where ljs_memberid='$ljs_memberid' ");
-	$row = mysql_fetch_array($result);
-	$hit = $row[hit];
-	$mypoint = number_format($row[point]);
-
-	include "skin/default/login.info.php";
+	echo ("	<script>
+				alert('login.php?action= 파라미터 값을 확인해주세요.\\n로그인 메인으로 이동합니다.');
+				location.href='login.php?action=login';
+			</script>");
 }
 ?>

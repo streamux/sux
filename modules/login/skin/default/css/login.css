@@ -9,7 +9,7 @@
 .container .article-box .login .box .login-title {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
 .container .article-box .login .box .login-title span{text-align: left;vertical-align: middle;}
 .container .article-box .login .box .login-title img{vertical-align: middle;}
-.container .article-box .login .box .login-title .link-searchinfo{margin-left: 15px}
+.container .article-box .login .box .login-title .link-searchinfo{float:right;line-height: 20px}
 .container .article-box .login .box .login-body{margin:0 auto; width:92%;text-align: left}
 .container .article-box .login .box .login-body input {width:110px;text-align: left}
 .container .article-box .login .box .login-body div{display:inline-block;margin-top:20px}

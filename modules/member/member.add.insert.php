@@ -60,6 +60,9 @@ if(!ereg('@',$email)) {
 			} 
 		}
 
+		$pwd1 = substr(md5($pwd1),0,8);
+		$pwd2 = substr(md5($pwd2),0,8);
+
 		$result = mysql_query("insert into $table_name values('','$memberid','$pwd1','$pwd2','$name','$jumin1','$jumin2','$email','$tel1','$tel2','$tel3','$hp1','$hp2','$hp3','$post1','$post2','$addres','$companyname','$ctel1','$ctel2','$ctel3','$fax1','$fax2','$fax3','$home','$recordnum','$job','$hobby','$path','$proposeid',now(),0,'$writer','$point','$grade','$_SERVER[REMOTE_ADDR]')");
 
 		if(!$result) {

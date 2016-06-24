@@ -43,7 +43,7 @@
 					<div class="login-body">
 						<div class="panel-info">
 							<ul>
-								<li><input type="hidden" name="member" value="<? echo ${member}; ?>"><span class="ui-label">아이디</span><span><? echo ${memberid}; ?></span><input type="hidden" name="memberid" value="<? echo ${memberid}; ?>"></li>
+								<li><input type="hidden" name="member" value="<? echo ${ljs_member}; ?>"><span class="ui-label">아이디</span><span><? echo ${ljs_memberid}; ?></span><input type="hidden" name="memberid" value="<? echo ${ljs_memberid}; ?>"></li>
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
 						</div><div class="panel-btn">

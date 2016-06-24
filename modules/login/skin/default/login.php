@@ -41,12 +41,14 @@
 				<form action="login.pass.php" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
 				<div class="box ui-edgebox-2px">
 					<div class="login-title">
-						<img src="skin/default/images/icon_01.gif" alt="">						
+						<img src="skin/default/images/icon_01.gif" title="">						
 						<span>회원그룹</span>
 						<select name="member" id="ljsMember">
 							<!-- templete -->
 						</select>
-						<span class="link-searchinfo">로그인 아이디 | 비번찾기</span>
+						<span class="link-searchinfo">
+							<a href="login.php?action=searchId">아이디</a> | <a href="login.php?action=searchPwd">비밀번호 찾기</a>	
+						</span>
 					</div>
 					<div class="login-body">
 						<div class="panel-info">
@@ -55,7 +57,7 @@
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
 						</div><div class="panel-btn">
-							<input type="image" name="imagefield" src="skin/default/images/btn_login.gif" alt="로그인버튼" class="login-btn">
+							<input type="image" name="imagefield" src="skin/default/images/btn_login.gif" title="로그인버튼" class="login-btn">
 						</div>					
 					</div>																	
 				</div>
@@ -88,7 +90,7 @@
 <div class="ui-panel-msg"></div>
 
 <script type="x-jquery-templete" id="ljsMember_tmpl">
-	<option>${label}</option>
+	<option>${name}</option>
 </script>
 
 <script type="text/javascript" src="skin/default/js/login.js"></script>

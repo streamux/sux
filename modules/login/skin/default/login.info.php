@@ -19,7 +19,7 @@
 		<div class="util"></div>
 		<div class="gnb-box">
 			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
+				<img class="logo" src="skin/default/images/logo.png" alt="streamxux 로고">	
 			</div>			
 			<div class="gnb">
 				
@@ -34,18 +34,18 @@
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 				<div class="box ui-edgebox-2px">
 					<div class="login-title">
-						<img src="tpl/images/icon_01.gif" alt="">
-						<span>회원정보수정 | <a href="login.leave.php?member=<? echo ${ljs_member}; ?>&memberid=<? echo ${ljs_memberid}; ?>">회원탈퇴</a></span>
+						<img src="skin/default/images/icon_01.gif" alt="">
+						<span>회원정보수정 | <a href="login.php?action=leave">회원탈퇴</a></span>
 					</div>
 					<div class="login-body">
 						<div class="panel-info">
 							<ul>
 								<li><span class="ui-label">이름</span><span class="ui-value">'<? echo ${ljs_name}; ?></span>' 님</li>
-								<li><span class="ui-label">적립포인트</span><span class="ui-value">'<? echo ${mypoint}; ?></span>' 포인트</li>
-								<li><span class="ui-label">방문횟수</span><span class="ui-value">'<? echo ${hit}; ?></span>'번째 방문</li>
+								<li><span class="ui-label">적립포인트</span><span class="ui-value">'<? echo ${ljs_point}; ?></span>' 포인트</li>
+								<li><span class="ui-label">방문횟수</span><span class="ui-value">'<? echo ${ljs_hit}; ?></span>' 번째 방문</li>
 							</ul>
 						</div><div class="panel-btn">
-							<a href="logout.php"><img src="skin/default/images/btn_logout.gif"></a>
+							<a href="login.php?action=logout"><img src="skin/default/images/btn_logout.gif"></a>
 						</div>
 					</div>																	
 				</div>
@@ -68,5 +68,3 @@
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-
-<script type="text/javascript" src="./tpl/js/login.js"></script>

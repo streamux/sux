@@ -34,7 +34,6 @@
 							</tr>
 							<tr>
 								<td><span>아</span>이디</td>
-
 								<td>
 									<input type="text" name="memberid" size="12" ma="12" value="">
 									<input type="button" name="checkID" value='중복체크'>
