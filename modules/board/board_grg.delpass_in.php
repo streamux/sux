@@ -1,140 +1,52 @@
-<form action="board_grg_del.php?board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&board=<? echo $board; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>" method="post" name="musimd" onSubmit="return musimd_check(this);">
+<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
+<script src="../../common/js/jquery.min.js"></script>
+<script src="../../common/js/jsux-1.0.0.min.js"></script>
+<script src="../../common/js/jsux.min.js"></script>
 
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
-	<tr>
-		<td height="38"></td>
-	</tr>
-</table>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td height="60" align="center"><img src="m_skin/img/m_tt_del.gif" width="292" height="60"></td>
-	</tr>
-	<tr>
-		<td height="20"></td>
-	</tr>
-	<tr>
-		<td align="center">
-			<table width="292" border="0" cellspacing="0" cellpadding="0">       
-					<tr>
-						<td colspan="5"><img src="m_skin/img/m_tt_box_01.gif" width="292" height="14"></td>
-					</tr>
-					<tr>
-						<td width="292"><table width="292" border="0" cellspacing="0" cellpadding="0">
-								<tr>
-									<td width="3" bgcolor="#DEDFDE"></td>
-									<td width="9"></td>
-									<td valign="top"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-											<tr>
-												<td><table width="100%" border="0" cellspacing="0" cellpadding="0">
-														<tr>
-															<td width="16"><img src="m_skin/img/icon_01.gif" width="16" height="14"></td>
-															<td><img src="m_skin/img/m_tt_box_tt_04.gif" width="79" height="14"></td>
-															<td align="right">&nbsp;</td>
-														</tr>
-												</table></td>
-											</tr>
-											<tr>
-												<td height="6"></td>
-											</tr>
-											<tr>
-												<td height="1" background="m_skin/img/m_pointline.gif"></td>
-											</tr>
-											<tr>
-												<td height="6"></td>
-											</tr>
-											<tr>
-												<td><table width="100%"  border="0" cellspacing="0" cellpadding="0">						
-														<tr>
-															<td width="5"></td>
-															<td><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-																	<tr>
-																		<td width="53" height="7"></td>
-																		<td width="10"></td>
-																		<td></td>
-																	</tr>
-																	<tr>
-																		<td align="left">회사명</td>
-																		<td></td>
-																		<td><INPUT name="memberid" type="text" size="12" maxlength="14" value="<? echo $m_name; ?>"></td>
-																	</tr>
-																	<tr>
-																		<td height="6"></td>
-																		<td></td>
-																		<td></td>
-																	</tr>
-																	<tr>
-																		<td align="left">비밀번호</td>
-																		<td></td>
-																		<td><INPUT type="password" name="pass" size="12" maxlength="14"></td>
-																	</tr>
-																	<tr>
-																		<td height="8"></td>
-																		<td></td>
-																		<td></td>
-																	</tr>
-															</table></td>
-															<td width="61"><input name="imageField" type="image" src="m_skin/img/m_bt_login.gif" width="61" height="57" border="0"></td>
-														</tr>
-												</table></td>
-											</tr>
-									</table></td>
-									<td width="9"></td>
-									<td width="3" bgcolor="#DEDFDE"></td>
-								</tr>
-						</table></td>
-					</tr>
-					<tr>
-						<td colspan="5"><img src="m_skin/img/m_tt_box_02.gif" width="292" height="14"></td>
-					</tr>        
-			</table></td>
-	</tr>
-	<tr>
-		<td height="20"></td>
-	</tr>
-	<tr>
-		<td align="center"><table width="100%"  border="0" cellpadding="0" cellspacing="0">
-				<tr>
-					<td height="1" colspan="5" bgcolor="#EAEAEA"></td>
-				</tr>
-				<tr>
-					<td height="9" colspan="5"></td>
-				</tr>
-				<tr>
-					<td width="3%" height="40"></td>
-					<td width="47%" align="left" valign="top"><b>주의사항</b><br>
-						비밀번호가 노출되지 않도록 세심한 주의를<br>
-						기울여 주세요. </td>
-					<td width="0%" bgcolor="#EAEAEA"></td>
-					<td width="3%"></td>
-					<td width="47%" align="left" valign="top"><b>서비스 이용안내</b><br>
-						서비스를 이용하시려면 먼저 로그인을<br>
-						해주세요. <a href='stipulation.php?fmenu=<? echo $fmenu; ?>&fsubmenu=<? echo $fsubmenu; ?>'>회원가입 바로가기</a> </td>
-				</tr>
-				<tr>
-					<td height="9" colspan="5"></td>
-				</tr>
-				<tr>
-					<td height="1" colspan="5" bgcolor="#EAEAEA"></td>
-				</tr>
-		</table></td>
-	</tr>
-</table>
-</form>
+<div class="container">		
+<div class="article-box ui-edgebox">			
+	<h2 class="blind">댓글삭제 비밀번호 인증</h2>		
+	<div class="login">
+		<span class="title">댓글삭제 비밀번호 인증</span>
+		<span class="subtitle">SUX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-<script type="text/javascript">
+		<form action="board_grg.del.php?board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&board=<? echo $board; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>" method="post" name="musimd" onSubmit="return jsux.fn.checkForm(this);">
+		<div class="box ui-edgebox-2px">
+			<div class="login-title">
+				<img src="tpl/images/icon_01.gif" alt="">
+				<span>로그인 아이디 | 비번찾기</span>
+			</div>
+			<div class="login-body">
+				<table summary="로그인을 할 수 있습니다.">
+					<caption class="hide">관리자 로그인</caption>
+					<tbody>
+						<tr>
+							<td>아이디</td>
+							<td class="ui-panel-id">
+								<? echo $m_name; ?><input type="hidden" name="memberid" value="<? echo $m_name; ?>">
+							</td>
+							<td rowspan="2" class="ui-img-btn"><input type="image" name="imagefield" src="tpl/images/admin_login_bt.gif" alt="로그인버튼" class="login-btn"></td>
+						</tr>
+						<tr>
+							<td>비밀번호</td>
+							<td><input type="password" name="pass" maxlength="14" class="input-pwd"></td>	
+						</tr>
+					</tbody>
+				</table>						
+			</div>																					
+		</div>
+		<form>
+		<div class="notice">			
+			<dl>
+				<dt>주의사항</dt>
+				<dd>비밀번호가 노출되지 않도록 세심한 주의를 기울여 주세요.</dd>
+			</dl>
+			<dl>
+				<dt>서비스 이용안내</dt>
+				<dd>서비스를 이용하시려면 먼저 로그인을 해주세요.</dd>
+			</dl>
+		</div>					
+	</div>	
+</div>	
 
-function musimd_check(f) {
-
-	var pass = f.pass.value.length;
-
-	if ( pass < 1 ) {
-		alert("비밀번호를 입력하세요.");
-		f.pass.focus();
-		return (false);
-	}
-	return (true);
-}
-</script>
-<script type="text/javascript">
-document.musimd.pass.focus();
-</script>
+<script type="text/javascript" src="tpl/js/login.js"></script>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SUX Board :: 아이디 찾기</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
+	<script src="../../common/js/jquery.min.js"></script>
+	<script src="../../common/js/jquery.tmpl.min.js"></script>
+	<script src="../../common/js/jsux-1.0.0.min.js"></script>
+	<script src="../../common/js/jsux.min.js"></script>
+	<script type="text/javascript">
+		var loginObj = loginObj || {};
+		loginObj.memberList = ${memberList};
+	</script>
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="skin/default/css/common.css">
+	<link rel="stylesheet" type="text/css" href="skin/default/css/login.search.css">
+</head>
+<body>
+<div id="wrap">
+	<div class="header">
+		<div class="util"></div>
+		<div class="gnb-box">
+			<div class="logo">
+				<img class="logo" src="skin/default/images/logo.png" alt="streamxux 로고">	
+			</div>
+		</div>	
+	</div>
+	<div class="container">		
+		<div class="article-box ui-edgebox">			
+			<h2 class="blind">아이디 찾기</h2>		
+			<div class="login">
+				<span class="title">아이디 찾기</span>
+				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
+
+				<form action="login.php?action=searchid" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
+				<div class="box ui-edgebox-2px">
+					<div class="login-title">
+						<img src="skin/default/images/icon_01.gif" title="">						
+						<span>회원그룹</span>
+						<select name="member" id="ljsMember">
+							<!-- templete -->
+						</select>
+						<span class="link-searchinfo">
+							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
+						</span>
+					</div>
+					<div class="login-body">
+						<div class="panel-info">
+							<ul>
+								<li><span class="ui-label">이름</span><input type="text" name="check_name" maxlength="14" value=""></li>
+								<li><span class="ui-label">E-Mail 주소</span><input type="text" name="check_email" maxlength="20"></li>
+							</ul>				
+						</div>
+						<div class="panel-btn">
+							<ul>
+								<li data-id="send">보내기</li>
+								<li data-id="cancel">취소</li>
+							</ul>							
+						</div>
+					</div>																	
+				</div>
+				</form>
+				<div class="panel-notice">
+					<ul>
+						<li><span>위 사항을 입력해 주세요.</span></li>
+						<li>기타 궁금한 사항이나 질문은 Q&amp;A 게시판을 이용해 주세요.</li>
+					</ul>
+				</div>		
+			</div>			
+		</div>		
+	</div>
+	<div class="footer">
+		@StreamUX Corp
+	</div>
+</div>
+<div class="ui-panel-msg"></div>
+
+<script type="x-jquery-templete" id="ljsMember_tmpl">
+	<option>${name}</option>
+</script>
+
+<script type="text/javascript" src="skin/default/js/login.searchid.js"></script>

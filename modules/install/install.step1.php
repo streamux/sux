@@ -21,7 +21,7 @@
 		</div>	
 	</div>
 	<div class="container">
-		<div class="article-box ui-box-edge">
+		<div class="article-box ui-edgebox">
 
 			<p>
 				<span class="terms">streamux에 대한 라이센스 명시입니다.</span>

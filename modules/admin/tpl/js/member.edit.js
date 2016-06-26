@@ -61,7 +61,7 @@ jsux.fn = {
 		params = {	table_name: $("select[name=table_name]").val(),
 					memberid: $("input[name=memberid]").val()};
 
-		jsux.getJSON("../search_id.php", params, function( e ) {
+		jsux.getJSON("../member/member.searchid.json.php", params, function( e ) {
 
 			trace( e.msg );
 		});
@@ -72,7 +72,7 @@ jsux.fn = {
 		params = {	table_name: $("select[name=table_name]").val(),
 					companyname: $("input[name=companyname]").val()};
 
-		jsux.getJSON("../search_companyname.php", params, function( e ) {
+		jsux.getJSON("../member/member.searchcorp.json.php", params, function( e ) {
 
 			trace( e.msg );
 		});

@@ -6,6 +6,7 @@ include "../lib.php";
 $ljs_mod = $_REQUEST[ljs_mod];
 $id = $_REQUEST[id];
 $board = $_REQUEST[board];
+$board_grg = $_REQUEST[board_grg];
 
 $result = mysql_query("select * from $board_group where name = '$board'");
 $row = mysql_fetch_array($result);

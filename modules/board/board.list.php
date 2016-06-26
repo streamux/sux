@@ -4,7 +4,7 @@ session_start();
 include "../lib.php";
 
 $board = $_REQUEST[board];
-$board_grg = $_REQUEST[board_grg];
+$board_grg = $board."_grg";
 $id = $_REQUEST[id];
 $igroup = $_REQUEST[igroup];
 $passover = $_REQUEST[passover];
