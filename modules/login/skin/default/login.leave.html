@@ -43,7 +43,7 @@
 					<div class="login-body">
 						<div class="panel-info">
 							<ul>
-								<li><input type="hidden" name="member" value="<? echo ${ljs_member}; ?>"><span class="ui-label">아이디</span><span><? echo ${ljs_memberid}; ?></span><input type="hidden" name="memberid" value="<? echo ${ljs_memberid}; ?>"></li>
+								<li><input type="hidden" name="member" value="${ljs_member}"><span class="ui-label">아이디</span><span>${ljs_memberid}</span><input type="hidden" name="memberid" value="${ljs_memberid}"></li>
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
 						</div><div class="panel-btn">
@@ -51,7 +51,7 @@
 						</div>					
 					</div>																	
 				</div>
-				<form>
+				</form>
 				<div class="panel-login-fail">
 					<ul>
 						<li><span>아이디와 비밀번호가 일치하지 않습니다.</span></li>

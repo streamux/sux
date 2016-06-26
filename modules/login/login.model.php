@@ -2,7 +2,7 @@
 
 class LoginModel extends BaseModel {
 
-	var $className = "login_model";
+	var $name = 'login_model';
 	var $dataList = NULL;
 	var $result = NULL;
 	var $jsonData = NULL;
@@ -18,12 +18,12 @@ class LoginModel extends BaseModel {
 		return $this->result;
 	}
 
-	function getVariable($result=NULL) {
+	function getVariables($result=NULL) {
 
 		if (isset($result)) {
 			$this->result = $result;
 		}
-		return parent::getVariable($this->result);
+		return parent::getVariables($this->result);
 	}
 
 	function getJson($result=NULL) {

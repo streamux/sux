@@ -1,7 +1,7 @@
 <?php
 class BaseController {
 
-	var $class_name = "base_controller";
+	var $name = "base_controller";
 	
 	function BaseController() {
 		
@@ -9,7 +9,7 @@ class BaseController {
 
 	function toString() {
 
-		return $this->class_name;
+		return $this->name;
 	}
 }
 ?>

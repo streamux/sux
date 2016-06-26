@@ -2,7 +2,8 @@
 
 class BaseModel {
 
-	var $className = "model";
+	var $name = 'model';
+	var $result = NULL;
 
 	function Model() {}
 
@@ -57,28 +58,36 @@ class BaseModel {
 
 	function select($query=NULL) {
 
-		return mysql_query($this->getSelectSql($query));
+		$this->result = mysql_query($this->getSelectSql($query));
+		return $this->result;
 	}
 
 	function insert($query=NULL) {
 
-		return mysql_query($this->getInsertSql($query));
+		$this->result = mysql_query($this->getInsertSql($query));
+		return $this->result;
 	}
 
 	function update($query=NULL) {
 
-		return mysql_query($this->getUpdateSql($query));
+		$this->result = mysql_query($this->getUpdateSql($query));
+		return $this->result ;
 	}
 
 	function delete($query=NULL) {
 
-		return mysql_query($this->getDeleteSql($query));
+		$this->result = mysql_query($this->getDeleteSql($query));
+		return $this->result;
 	}
 
-	function getVariable($result=NULL) {
+	function getVariables($result=NULL) {
+
+		if ($result) {
+			$this->result = $result;
+		}
 
 		$rows_data = array();
-		while($rows = mysql_fetch_array($result)) {
+		while($rows = mysql_fetch_array($this->result)) {
 
 			$fields = array();
 			foreach ($rows as $key => $value) {
@@ -94,10 +103,14 @@ class BaseModel {
 
 	function getJson($result=NULL) {
 
+		if ($result) {
+			$this->result = $result;
+		}
+
 		$rows_data = array();
 		$rows = NULL;
 
-		while($rows = mysql_fetch_array($result)) {
+		while($rows = mysql_fetch_array($this->result)) {
 
 			$fields = array();
 			foreach ($rows as $key => $value) {
@@ -114,14 +127,11 @@ class BaseModel {
 
 	function getRows() {
 
-		
-
-
 	}
 
 	function toString() {
 
-		return $this->className;
+		return $this->name;
 	}
 }
 ?>

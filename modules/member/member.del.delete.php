@@ -29,7 +29,7 @@ if ($numrows > 0) {
 
 echo 	"<script>
 			alert('$msg');
-			location.href='../login/logout.php';
+			location.href='../login/login.php?action=logout';
 		</script>";
 		
 mysql_close();

@@ -7,11 +7,7 @@
 	<script src="../../common/js/jquery.min.js"></script>
 	<script src="../../common/js/jquery.tmpl.min.js"></script>
 	<script src="../../common/js/jsux-1.0.0.min.js"></script>
-	<script src="../../common/js/jsux.min.js"></script>
-	<script type="text/javascript">
-		var loginObj = loginObj || {};
-		loginObj.memberList = <? echo ${strJson}; ?>;
-	</script>
+	<script src="../../common/js/jsux.min.js"></script>	
 	<!--[if (gte IE 6)&(lte IE 8)]>
 	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
 	<![endif]-->
@@ -47,7 +43,7 @@
 							<!-- templete -->
 						</select>
 						<span class="link-searchinfo">
-							<a href="login.php?action=searchId">아이디</a> | <a href="login.php?action=searchPwd">비밀번호 찾기</a>	
+							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
 						</span>
 					</div>
 					<div class="login-body">
@@ -61,7 +57,7 @@
 						</div>					
 					</div>																	
 				</div>
-				<form>
+				</form>
 				<div class="panel-login-fail">
 					<ul>
 						<li><span>아이디와 비밀번호가 일치하지 않습니다.</span></li>
@@ -69,18 +65,16 @@
 						<li>만일 회원가입을 하지 않고, 로그인을 하셨다면 회원가입을 먼저 해주세요.</li>
 					</ul>
 				</div>
-				<div class="notice">
+				<div class="panel-notice">
 					<dl>
 						<dt>주의사항</dt>
 						<dd>비밀번호가 노출되지 않도록 세심한 주의를 기울여 주세요.</dd>
-					</dl>
-					<dl>
+					</dl><dl>
 						<dt>서비스 이용안내</dt>
 						<dd>서비스를 이용하시려면 먼저 로그인을 해주세요.</dd>
 					</dl>
 				</div>					
-			</div>
-			
+			</div>			
 		</div>		
 	</div>
 	<div class="footer">
@@ -89,8 +83,13 @@
 </div>
 <div class="ui-panel-msg"></div>
 
+<script type="text/javascript">
+	var loginObj = loginObj || {};
+	loginObj.memberList = ${memberList};
+</script>
 <script type="x-jquery-templete" id="ljsMember_tmpl">
 	<option>${name}</option>
 </script>
-
 <script type="text/javascript" src="skin/default/js/login.js"></script>
+</body>
+</html>

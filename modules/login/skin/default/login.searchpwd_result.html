@@ -1,92 +1,84 @@
-<? include "lib.php"; ?>
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
 <head>
-<title>비밀번호 찾기</title>
-<meta http-equiv="Content-Type" content="text/html; charset=euc-kr">
-<link rel="stylesheet" type="text/css" href="css/css.css">
-
-<script type="text/javascript">
-
-function contentc_check(f) {
-
-	memberid = f.memberid.value.length;
-
-	if ( memberid < 1 ) {
-			alert("이름을 입력 하세요.");
-		f.memberid.focus();
-		return (false);
-	}
-
-	var jumin_check = "234567892345";
-	var jumin_total = f.jumin1.value + f.jumin2.value;
-	var juminid = 0;
-
-	if (jumin_total.length < 13){
-		alert("잘못된 주민등록번호입니다.");
-		f.jumin1.focus();
-		return false;
-	}
-
-	for (var i=0; i<12; i++){
-		var ch1=jumin_check.substring(i,i+1);
-		var ch2=jumin_total.substring(i,i+1);
-		juminid = juminid + ch1 * ch2;
-	}
-
-	var check_field = (11 - (juminid % 11)) % 10;
-
-	if (check_field != jumin_total.substring(12,13)){
-		alert("잘못된 주민등록번호입니다.");
-		f.jumin1.value="";
-		f.jumin2.value="";
-			f.jumin1.focus();
-		return false;
-	} else if (jumin_total.substring(6,7) > 2 ||  jumin_total.substring(6,7) < 1){
-		alert("잘못된 주민등록번호입니다.");
-		f.jumin1.focus(); 
-		return false;
-	}
-	return (true);
-}
-
-function jmcheck() {
-
-	var str = document.musimm.jumin1.value.length;
-	if(str == 6) {			
-		document.musimm.jumin2.focus();
-	}
-}
-
-</script>
+	<title>SUX Board :: 비밀번호 찾기 결과</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
+	<script src="../../common/js/jquery.min.js"></script>
+	<script src="../../common/js/jquery.tmpl.min.js"></script>
+	<script src="../../common/js/jsux-1.0.0.min.js"></script>
+	<script src="../../common/js/jsux.min.js"></script>
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="skin/default/css/common.css">
+	<link rel="stylesheet" type="text/css" href="skin/default/css/login.search.css">
 </head>
-
 <body>
-<table width="100%"  border="0" cellspacing="0" cellpadding="0">
-	<tr>
-		<td align="center" bgcolor="#EAEAEA">
-<?
-$query="select * from $member_table where ljs_memberid='$memberid' and jumin1='$jumin1' and jumin2='$jumin2'";
-$result=mysql_query($query);
+<div id="wrap">
+	<div class="header">
+		<div class="util"></div>
+		<div class="gnb-box">
+			<div class="logo">
+				<img class="logo" src="skin/default/images/logo.png" alt="streamxux 로고">	
+			</div>			
+			<div class="gnb">
+				
+			</div>
+		</div>	
+	</div>
+	<div class="container">		
+		<div class="article-box ui-edgebox">			
+			<h2 class="blind">비밀번호 찾기 결과</h2>		
+			<div class="login">
+				<span class="title">비밀번호 찾기 결과</span>
+				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-if (mysql_num_rows($result) > 0) {
+				<form action="login.php?action=searchid" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
+				<div class="box ui-edgebox-2px">
+					<div class="login-title">
+						<img src="skin/default/images/icon_01.gif" title="">						
+						<span class="ui-subtitle">조회 결과</span>
+						<span class="link-searchinfo">
+							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
+						</span>
+					</div>
+					<div class="login-body">
+						<div class="panel-info-result">
+							<ul>
+								<li>
+									<p>${check_name}님의 이메일 주소 '<span>${check_email}</span>' 으로 비밀번호가 발송되었습니다.</p>
+								</li>
+							</ul>				
+						</div>
+						<div class="panel-btn">
+							<ul>
+								<li data-id="confirm">확인</li>
+							</ul>							
+						</div>
+					</div>																	
+				</div>
+				</form>
+				<div class="panel-notice">
+					<ul>
+						<li>기타 궁금한 사항이나 질문은 Q&amp;A 게시판을 이용해 주세요.</li>
+					</ul>
+				</div>		
+			</div>			
+		</div>		
+	</div>
+	<div class="footer">
+		@StreamUX Corp
+	</div>
+</div>
+<div class="ui-panel-msg"></div>
+<script type="text/javascript" src="skin/default/js/login.search_result.js"></script>
+</body>
+</html>
 
-	$row=mysql_fetch_array($result);
-	$memberid=$row[ljs_memberid];
-	$name=$row[name];
 
-	// 임시비밀번호 생성 시작
-	for($i=1; $i<=8; $i++){ 
-		$numbers.=rand(0,9);
-	}
-
-	$password=substr(md5($numbers),0,8);
-	$pwd1=substr(md5($password),0,8);
-
-	$dbup = "update $member_table set ljs_pass1='$pwd1', ljs_pass2='$pwd1' where ljs_memberid='$memberid'";
-	$result1=mysql_query($dbup);
-	$email=$row[email];
-	$subject = "[스트림엠엑스]문의하신 내용의 답변입니다.";
+<!--
+$subject = "[스트림엠엑스]문의하신 내용의 답변입니다.";
 	$additional_headers = "From: $admin_name <$admin_email>\n";
 	$additional_headers .= "Reply-To : email@email.com\n";
 	$additional_headers .= "Content-Type: text/html;charset=EUC-KR\n";
@@ -216,85 +208,5 @@ if (mysql_num_rows($result) > 0) {
 	mail($admin_email, $subject, $contents, $additional_headers);
 	mail($email, $subject, $contents, $additional_headers);
 ?>
-			<table width="368"  border="0" cellspacing="0" cellpadding="0">
-					<tr>
-						<td height="58" valign="top" style="background-image:url(images/search_bg_01.gif); background-repeat:repeat-x;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-							<tr>
-								<td height="16" colspan="4"></td>
-							</tr>
-							<tr>
-								<td width="8" align="left"></td>
-								<td align="left"><img src="images/search_icon.gif" width="21" height="25"><img src="images/search_tt_pass.gif" width="103" height="25"></td>
-								<td align="right"><a href="mailto:<? echo $admin_email; ?>">관리자메일</a></td>
-								<td width="20"></td>
-							</tr>
-					</table></td>
-					</tr>
-					<tr>
-						<td height="170" align="center" bgcolor="#FFFFFF"><table width="90%" border="0" cellpadding="0" cellspacing="0">
-								<tr>
-									<td height="9"></td>
-								</tr>
-								<tr>
-									<td align="center"><table width="100%" border="0" cellpadding="0" cellspacing="0">
-										<tr align="left">
-											<td width="15"><img src="images/search_icon_01.gif" width="3" height="3"></td>
-											<td>회원님께서 가입시 등록한 이메일주소로 비밀번호가</td>
-										</tr>
-					<tr align="left">
-											<td width="15">&nbsp;</td>
-											<td>발송되었습니다.</td>
-										</tr>
-						 <tr>
-								<td height="9" colspan="2"></td>
-						</tr>
-										<tr align="left">
-											<td><img src="images/search_icon_01.gif" width="3" height="3"></td>
-											<td>발송된 메일주소 : <b><? echo $email; ?></b></td>
-										</tr>
-										<tr align="left">
-											<td>&nbsp;</td>
-											<td>만약 기존메일이 사용 할 수 없는 상태이시면  </td>
-										</tr>
-										<tr align="left">
-											<td>&nbsp;</td>
-											<td> 관리자메일로 문의해 주시기 바랍니다. </td>
-										</tr>
-								</table></td>
-								</tr>
-								<tr>
-									<td height="15"></td>
-								</tr>
-						</table></td>
-				</tr>
-					<tr>
-						<td height="38" valign="top" style="background-image:url(images/search_bg_02.gif); background-repeat:repeat-x;"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
-								<tr>
-									<td height="12"></td>
-							</tr>
-								<tr>
-									<td align="center"><table border="0" cellspacing="0" cellpadding="0">
-											<tr>
-												<td><a href="javascript:self.close();"><img src="images/search_bt_close.gif" width="54" height="17"></a></td>
-												<td width="10"></td>
-												<td><a href="../board/lose_id.php" target="_self"><img src="images/search_bt_id.gif" width="65" height="17" border="0"></a></td>
-										</tr>
-									</table></td>
-								</tr>
-						</table></td>
-					</tr>
-		</table></td></tr>
-</table>
-<?
-} else {
-	echo ("	<script>
-				alert('입력하신 정보와 일치하는 아이디가 존재하지 않습니다! 다시 입력해주세요.')
-				history.go(-1)
-			</script>");
-		exit;
-	}
-}
-?>
 
-</body>
-</html>
+-->

@@ -10,25 +10,40 @@ jsux.fn = {
 	},
 	checkForm: function( f ) {
 
-		var name = f.name.value.length,
-			email = f.email.value.length;
+		var nm = f.check_name.value.length,
+			em = f.check_email.value.length;
 
-		if ( name < 1) {
+		if ( nm < 1) {
 			trace("이름을 입력하세요.");
-			f.name.focus();
-			return (false);				
+			f.check_name.focus();
+			return false;				
 		}
 
-		if ( email < 1) {
-			trace("이메일을 입력하세요.");
-			f.email.focus();
+		if ( em < 1) {
+			trace("이메일 주소를 입력하세요.");
+			f.check_email.focus();
 			return (false);				
 		}
 		return (true);
 	},
+	setEvent: function() {
+
+		$(".panel-btn ul li").on("click",function(e) {
+
+			var form = $("form")[0],
+				key = $(this).data("id");
+
+			if (key == "send") {
+				$(form).submit();
+			} else if (key == "cancel") {
+				jsux.goURL("login.php?action=login");
+			}
+		});
+	},
 	init: function() {
 		this.dispSelectMemberList();
-		$("input[name=memberid]").focus();
+		this.setEvent();
+		$("input[name=check_name]").focus();
 	}
 };
 
