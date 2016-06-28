@@ -129,6 +129,8 @@ module.exports = function(grunt) {
 				}
 			},
 			src: [
+				'classes/**/*.php',
+				'config/*.php',
 				'modules/**/*.php',
 				'modules/board/skin/*.php',
 				'modules/board/skin/**/*.php'

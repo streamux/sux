@@ -1,37 +1,41 @@
-<?
+<?PHP
 
 class TemplateLoader {
 
-    protected $file;
-    protected $values = array();
+	protected $file;
+	protected $values = array();
+	protected $data = NULL;
 
-    private static $templateFile = null;
+	private static $templateFile = null;
 
-    function __construct($file) {
+	function __construct($file) {
 
-        $this->file = $file;
-    }
+		$this->file = $file;
+	}
 
-    function set($key, $value) {
+	function set($key, $value) {
 
-        $this->values[$key] = $value;
-    }
+		$this->values[$key] = $value;
+	}
 
-    function load() {
+	function load($op=NULL) {
 
-        if (!file_exists($this->file)) {
-            return 'Error loading template file ($this->file).';
-        }
+		if (!file_exists($this->file)) {
+			return 'Error loading template file ($this->file).';
+		}
 
-        ob_start();
-        include_once($this->file);
-        $data = ob_get_clean();
+		ob_start();
+		include_once($this->file);
+		$data = ob_get_clean();
 
-        foreach ($this->values as $key => $value) {
-            $data = str_replace('${'.$key.'}', $value, $data);
-        }
+		foreach ($this->values as $key => $value) {
+			$data = str_replace('${'.$key.'}', $value, $data);
+		}
 
-        echo $data;
-    }
+		if (strtolower($op) === 'hide') {
+			return $data;
+		}
+		echo $data;
+	}
 }
 ?>

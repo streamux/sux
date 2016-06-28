@@ -1,6 +1,6 @@
 <?php
 
-class BaseView {
+class BaseView extends Object {
 
 	var $name = 'base_view';
 	var $model = NULL;
@@ -17,11 +17,6 @@ class BaseView {
 	function display($className=NULL) {
 
 		echo '이 글이 보인다면 제 정의해서 사용하세요.';
-	}
-
-	function toString() {
-
-		return $this->name;
 	}
 }
 ?>

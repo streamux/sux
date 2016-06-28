@@ -1,15 +1,13 @@
 <?php
-class BaseController {
+
+class BaseController extends Object {
 
 	var $name = "base_controller";
+	var $model = NULL;
 	
-	function BaseController() {
+	function __construct($m=NULL) {
 		
-	}
-
-	function toString() {
-
-		return $this->name;
+		$this->model = $m;
 	}
 }
 ?>

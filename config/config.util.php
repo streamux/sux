@@ -1,6 +1,6 @@
 <?
 
-function trim($string, $num){
+function trimStr($string, $num){
 
 	$cut_string = $string; 
 	$cut = $num;

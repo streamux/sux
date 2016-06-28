@@ -1,11 +1,13 @@
 <?
 
-class BaseModel {
+class BaseModel extends Object {
 
 	var $name = 'model';
 	var $result = NULL;
+	var $rows_data;
+	var $hashmap_params = array();
 
-	function Model() {}
+	function __construct() {}
 
 	function getSelectSql($query=NULL) {
 
@@ -80,13 +82,13 @@ class BaseModel {
 		return $this->result;
 	}
 
-	function getVariables($result=NULL) {
+	function getRows($result=NULL) {
 
 		if ($result) {
 			$this->result = $result;
 		}
 
-		$rows_data = array();
+		$this->rows_data = array();
 		while($rows = mysql_fetch_array($this->result)) {
 
 			$fields = array();
@@ -96,9 +98,9 @@ class BaseModel {
 					$fields[$key]=$value;
 				}				
 			}
-			$rows_data[]=$fields;
+			$this->rows_data[]=$fields;
 		}
-		return $rows_data;
+		return $this->rows_data;
 	}
 
 	function getJson($result=NULL) {
@@ -107,9 +109,7 @@ class BaseModel {
 			$this->result = $result;
 		}
 
-		$rows_data = array();
-		$rows = NULL;
-
+		$this->rows_data = array();
 		while($rows = mysql_fetch_array($this->result)) {
 
 			$fields = array();
@@ -119,19 +119,25 @@ class BaseModel {
 					$fields[$key]=$value;
 				}				
 			}
-			$rows_data[]=$fields;
+			$this->rows_data[]=$fields;
 		}
 
-		return JsonEncoder::getInstance()->parse($rows_data);
+		return JsonEncoder::getInstance()->parse($this->rows_data);
 	}
 
-	function getRows() {
+	function getCount() {
 
+		return count($this->rows_data);
 	}
 
-	function toString() {
+	function setParam($key, $val) {
 
-		return $this->name;
+		$this->hashmap_params[$key] = $val;
+	}
+
+	function getParam($key) {
+
+		return $this->hashmap_params[$key];
 	}
 }
 ?>

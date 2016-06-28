@@ -1,38 +1,64 @@
-<?
+<?PHP
 
 class LoginModel extends BaseModel {
 
 	var $name = 'login_model';
-	var $dataList = NULL;
-	var $result = NULL;
-	var $jsonData = NULL;
 
-	function LoginModel() {
+	function _construct() {}
 
+	function memberGroup() {
+
+		$query = array();
+		$query['select'] = 'name';
+		$query['from'] = parent::getParam('memberGroup');
+		$query['orderBy'] = 'id asc';
+		parent::select($query);
 	}
 
-	function select($query) {
+	function logout($queryKey=NULL) {
 
-		$this->result = parent::select($query);
+		if ($queryKey === 'select') {
 
-		return $this->result;
-	}
+			$query = array();
+			$query['select'] = 'name';
+			$query['from'] = parent::getParam('memberGroup');
+			$query['orderBy'] = 'id asc';
+			parent::select($query);
 
-	function getVariables($result=NULL) {
+		} else if ($queryKey === 'update') {
 
-		if (isset($result)) {
-			$this->result = $result;
+			$query = array();
+			$query['update'] = 'name';
+			$query['from'] = parent::getParam('memberGroup');
+			$query['orderBy'] = 'id asc';
+			parent::update($query);
 		}
-		return parent::getVariables($this->result);
+		
 	}
 
-	function getJson($result=NULL) {
+	function searchid() {
 
-		if (isset($result)) {
-			$this->result = $result;
-		}
-		$this->jsonData = parent::getJson($this->result);
-		return $this->jsonData;
+		$member = parent::getParam('post')['member'];
+		$check_name = parent::getParam('post')['check_name'];
+
+		$query = array();
+		$query['select'] = 'ljs_memberid, email';
+		$query['from'] = $member;
+		$query['where'] = 'name=\''.$check_name.'\'';
+		parent::select($query);
+	}
+
+	function searchpwd() {
+
+		$member = parent::getParam('post')['member'];
+		$check_name = parent::getParam('post')['check_name'];
+		$check_email = parent::getParam('post')['check_email'];
+
+		$query = array();
+		$query['select'] = 'ljs_memberid, email, ljs_pass1';
+		$query['from'] = $member;
+		$query['where'] = 'name=\''.$check_name.'\'';
+		parent::select($query);
 	}
 }
 ?>
