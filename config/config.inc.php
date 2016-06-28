@@ -6,6 +6,7 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'BaseModel'=>'classes/base/base.model.php',
 	'BaseView'=>'classes/base/base.view.php',
 	'BaseController'=>'classes/base/base.controller.php',
+	'Context'=>'classes/context/context.class.php',
 	"Error"=>'classes/error/error.class.php',
 	"Object"=>'classes/object/object.class.php',
 	"TemplateLoader"=>'classes/template/template.loader.php'

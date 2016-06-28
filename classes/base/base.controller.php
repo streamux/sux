@@ -5,7 +5,7 @@ class BaseController extends Object {
 	var $name = "base_controller";
 	var $model = NULL;
 	
-	function __construct($m=NULL) {
+	function BaseController($m=NULL) {
 		
 		$this->model = $m;
 	}

@@ -55,7 +55,8 @@ class LogpassPanel extends BaseView {
 
 	function init() {
 
-		$post = $this->model->getParam('post');
+		$context = Context::getInstance();
+		$post = $context->getParam('post');
 
 		$member = trim($post['member']);
 		$memberid = trim($post['memberid']);
@@ -194,8 +195,9 @@ class SearchidPanel extends BaseView {
 
 	function init() {
 
-		$check_name = trim($this->model->getParam('post')['check_name']);
-		$check_email = trim($this->model->getParam('post')['check_email']);		
+		$context = Context::getInstance();
+		$check_name = trim($context->getParam('post')['check_name']);
+		$check_email = trim($context->getParam('post')['check_email']);		
 
 		if (isset($check_name) && $check_name){
 
@@ -236,12 +238,12 @@ class SearchpwdPanel extends BaseView {
 
 	function init() {
 
-		$check_name = $this->model->getParam('post')['check_name'];
-		$check_memberid = $this->model->getParam('post')['check_memberid'];
-		$check_email = $this->model->getParam('post')['check_email'];
-
-		$admin_name = $this->model->getParam('post')['adminEmail'];
-		$admin_email = $this->model->getParam('post')['adminName'];		
+		$context = Context::getInstance();
+		$check_name = $context->getParam('post')['check_name'];
+		$check_memberid = $context->getParam('post')['check_memberid'];
+		$check_email = $context->getParam('post')['check_email'];
+		$admin_name = $context->getParam('post')['adminEmail'];
+		$admin_email = $context->getParam('post')['adminName'];		
 
 		if(isset($check_memberid) && $check_memberid) {
 

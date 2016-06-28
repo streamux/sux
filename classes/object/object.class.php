@@ -4,7 +4,7 @@ class Object {
 
 	var $name = 'object';
 
-	function __construct($name=NULL) {
+	function Object($name=NULL) {
 
 		$this->name = $name;
 	}

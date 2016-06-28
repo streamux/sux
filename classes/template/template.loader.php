@@ -8,7 +8,7 @@ class TemplateLoader {
 
 	private static $templateFile = null;
 
-	function __construct($file) {
+	function TemplateLoader($file) {
 
 		$this->file = $file;
 	}

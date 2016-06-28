@@ -7,7 +7,7 @@ class BaseModel extends Object {
 	var $rows_data;
 	var $hashmap_params = array();
 
-	function __construct() {}
+	function BaseModel() {}
 
 	function getSelectSql($query=NULL) {
 
@@ -23,6 +23,8 @@ class BaseModel extends Object {
 
 		$where = $query['where'];
 		if ($where != '') {
+
+			$where = $this->getArrayToList($where, ' and ');
 			$where = ' WHERE ' . $where;
 		}
 
@@ -48,14 +50,53 @@ class BaseModel extends Object {
 
 	function getInsertSql($query=NULL) {
 
+		$tables = $query['tables'];
+		$priority = $query['priority'];
+		$values = $query['values'];
+
+		return 'INSERT $priority INTO $tableName (' . $values . ')';
 	}
 
 	function getUpdateSql($query=NULL) {
 
+		$priority = $query['priority'];
+		$tables = $query['tables'];
+		$columnList = $query['columnList'];
+		if ($columnList != '') {
+			$columnList = $this->getArrayToList($columnList, ',');
+		}
+
+		$where = $query['where'];	
+		if ($where != '') {
+			$where = $this->getArrayToList($where, ' and ');
+			$sql .= ' WHERE ' . $where;
+		}
+
+		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . $where;
 	}
 
 	function getDeleteSql($query=NULL) {
 		
+		$sql = 'DELETE ';
+		$sql .= $query['priority'];
+		$sql .= ' FROM ' . $query['from'];
+
+		$where = $query['where'];	
+		if ($where != '') {
+			$where = $this->getWhereList($where);
+			$sql .= ' WHERE ' . $where;
+		}
+
+		return $sql;
+	}
+
+	function getArrayToList($arr, $glue=',') {
+
+		if (is_array($arr)) {
+			$arr = implode($glue, $arr);
+		}
+
+		return $arr;
 	}
 
 	function select($query=NULL) {
@@ -82,7 +123,7 @@ class BaseModel extends Object {
 		return $this->result;
 	}
 
-	function getRows($result=NULL) {
+	function getRows($result=NULL, $ignore=NULL) {
 
 		if ($result) {
 			$this->result = $result;
@@ -94,50 +135,29 @@ class BaseModel extends Object {
 			$fields = array();
 			foreach ($rows as $key => $value) {
 
-				if (gettype($key) == 'string' && isset($value) && trim($value) !== '') {
+				if (isset($ignore) && ($ignore === TRUE ||  $ignore === 'true')) {
+					$flag = gettype($key) === 'string' && isset($value) && $value !== '';
+				} else {
+					$flag = gettype($key) === 'string';
+				}
+
+				if ($flag) {
 					$fields[$key]=$value;
 				}				
 			}
 			$this->rows_data[]=$fields;
 		}
-		return $this->rows_data;
+		return count($this->rows_data) > 0 ? $this->rows_data : $fields;
 	}
 
-	function getJson($result=NULL) {
+	function getJson($result=NULL, $ignore=NULL) {
 
-		if ($result) {
-			$this->result = $result;
-		}
-
-		$this->rows_data = array();
-		while($rows = mysql_fetch_array($this->result)) {
-
-			$fields = array();
-			foreach ($rows as $key => $value) {
-
-				if (gettype($key) == 'string') {
-					$fields[$key]=$value;
-				}				
-			}
-			$this->rows_data[]=$fields;
-		}
-
-		return JsonEncoder::getInstance()->parse($this->rows_data);
-	}
+		return JsonEncoder::getInstance()->parse($this->getRows($result, $ignore));
+	}	
 
 	function getCount() {
 
 		return count($this->rows_data);
-	}
-
-	function setParam($key, $val) {
-
-		$this->hashmap_params[$key] = $val;
-	}
-
-	function getParam($key) {
-
-		return $this->hashmap_params[$key];
 	}
 }
 ?>

@@ -1,8 +1,8 @@
 /*! Copyright (C) StreamUX <http://www.streamux.com> */
 /**!
  * @concat jsux.js 
- * project sux-board
- * date 17-03-2016
+ * project sux
+ * date 28-06-2016
  @brief jsux Common Javascript
  **/
 window.jsux = window.jsux || {};

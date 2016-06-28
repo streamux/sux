@@ -9,13 +9,14 @@ $login_model = new LoginModel();
 $login_controller = new LoginController($login_model);
 $login_views = new LoginView($login_model, $login_controller);
 
-if (isset($action) && $action) {
+if (isset($action) && $action) {	
 
-	$login_model->setParam('repuest', $_REQUEST);
-	$login_model->setParam('post', $_POST);
-	$login_model->setParam('memberGroup', $member_group);
-	$login_model->setParam('adminName', $admin_name);
-	$login_model->setParam('adminMail', $admin_email);
+	$context = Context::getInstance();
+	$context->setParam('repuest', $_REQUEST);
+	$context->setParam('post', $_POST);
+	$context->setParam('memberGroup', $member_group);
+	$context->setParam('adminName', $admin_name);
+	$context->setParam('adminMail', $admin_email);
 
 	$login_views->display($action);
 } else {

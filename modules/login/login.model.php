@@ -8,20 +8,23 @@ class LoginModel extends BaseModel {
 
 	function memberGroup() {
 
+		$context = Context::getInstance();
 		$query = array();
 		$query['select'] = 'name';
-		$query['from'] = parent::getParam('memberGroup');
+		$query['from'] = $context->getParam('memberGroup');
 		$query['orderBy'] = 'id asc';
 		parent::select($query);
 	}
 
 	function logout($queryKey=NULL) {
 
+		$context = Context::getInstance();
+
 		if ($queryKey === 'select') {
 
 			$query = array();
 			$query['select'] = 'name';
-			$query['from'] = parent::getParam('memberGroup');
+			$query['from'] = $context->getParam('memberGroup');
 			$query['orderBy'] = 'id asc';
 			parent::select($query);
 
@@ -29,17 +32,17 @@ class LoginModel extends BaseModel {
 
 			$query = array();
 			$query['update'] = 'name';
-			$query['from'] = parent::getParam('memberGroup');
+			$query['from'] = $context->getParam('memberGroup');
 			$query['orderBy'] = 'id asc';
 			parent::update($query);
-		}
-		
+		}		
 	}
 
 	function searchid() {
 
-		$member = parent::getParam('post')['member'];
-		$check_name = parent::getParam('post')['check_name'];
+		$context = Context::getInstance();
+		$member = $context->getParam('post')['member'];
+		$check_name = $context->getParam('post')['check_name'];
 
 		$query = array();
 		$query['select'] = 'ljs_memberid, email';
@@ -50,9 +53,10 @@ class LoginModel extends BaseModel {
 
 	function searchpwd() {
 
-		$member = parent::getParam('post')['member'];
-		$check_name = parent::getParam('post')['check_name'];
-		$check_email = parent::getParam('post')['check_email'];
+		$context = Context::getInstance();
+		$member = $context->getParam('post')['member'];
+		$check_name = $context->getParam('post')['check_name'];
+		$check_email = $context->getParam('post')['check_email'];
 
 		$query = array();
 		$query['select'] = 'ljs_memberid, email, ljs_pass1';
