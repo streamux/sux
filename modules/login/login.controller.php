@@ -4,34 +4,33 @@ class LoginController extends BaseController {
 
 	var $name = 'login_controlelr';
 
-	function setQuery($key) {
-
-		$this->{$key}();
-	}
-
-	function memberGroup() {
+	function BaseController($m=NULL) {
 		
-		$this->model->memberGroup();
+		$this->model = $m;
 	}
 
-	function logon() {}
-	function loginfo() {}
-	function logpass() {}
-	function logout() {
+	function select($values) {
 
-		
-	}
-	function fail() {}
-	function leave() {}
-	
-	function searchid() {
-
-		$this->model->searchid();
+		$handler = $values['handler'];
+		$this->model->{$handler}('select', $values);
 	}
 
-	function searchpwd() {
+	function insert($values) {
 
-		$this->model->searchpwd();
+		$handler = $values['handler'];
+		$this->model->{$handler}('insert', $values);
+	}
+
+	function update($values) {
+
+		$handler = $values['handler'];
+		$this->model->{$handler}('update', $values);
+	}
+
+	function delete($values) {
+
+		$handler = $values['handler'];
+		$this->model->{$handler}('delete', $values);
 	}
 }
 ?>

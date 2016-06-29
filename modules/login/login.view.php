@@ -16,6 +16,8 @@ class LoginView extends BaseView {
 class LoginPanel extends BaseView {
 
 	var $name = 'login_panel';
+	var $skin_path = 'modules/login/skin/default/login.html';
+	var $info_skin_path = 'modules/login/skin/default/login.info.html';
 
 	function init() {
 
@@ -31,17 +33,21 @@ class LoginPanel extends BaseView {
 
 	function dispLogon() {
 
-		$this->controller->setQuery('memberGroup');
+		new Mydb;
+
+		$values = array();
+		$values['handler'] = 'memberGroup';
+		$this->controller->select($values);
 		$strJson = $this->model->getJson();
 
-		$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.html');
+		$contents = new Template(_SUX_PATH_ . $this->skin_path);
 		$contents->set('memberList', $strJson);
 		$contents->load();
 	}
 
 	function dispLoginInfo() {
 
-		$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.info.html');
+		$contents = new Template(_SUX_PATH_ . $this->info_skin_path);
 		foreach ($_SESSION as $key => $value) {
 			$contents->set($key, $value);
 		}
@@ -75,50 +81,52 @@ class LogpassPanel extends BaseView {
 		}
 
 		$pass = substr(md5($pass),0,8);
-		$queryy = "select ljs_memberid, ljs_pass1, hit from $member where ljs_memberid='$memberid' ";
-		$result = mysql_query($queryy);
-		$num = mysql_num_rows($result);
 
-		if ($num) {
-			$row = mysql_fetch_array($result);
+		$values = array();
+		$values['handler'] = 'logpass';
+		$this->controller->select($values);
+		$num = $this->model->getCount();
+
+		if ($num > 0) {			
+			$row = $this->model->getRows();
 			$ljs_memberid = $row['ljs_memberid'];
 			$ljs_pass1 = $row['ljs_pass1'];
 			$ljs_name = $row['name'];
-			$ljs_conpanyname = $row['conpany'];
 
+			$ljs_conpanyname = $row['conpany'];
 			if ($ljs_conpanyname) {
 				$ljs_name = $ljs_conpanyname;
 			}
 
 			$ljs_email = $row['email'];
-			$ljs_writer = $row['writer'];
-			$ljs_hit = $row['hit'];
+			$ljs_writer = $row['writer'];			
 			$ljs_point = $row['point'];
 			$grade = $row['grade'];
 			$automod1 = "yes";
 			$chatip = $REMOTE_ADDR;
+			$ljs_hit = $row['hit']+1;
 
-			$result = mysql_query("select hit from $member where ljs_memberid='$ljs_memberid' ");
-			$row = mysql_fetch_array($result);
-			$hit = $row['hit']+1;
-			$sql = mysql_query("update $member set hit=$hit where ljs_memberid='$ljs_memberid' ");
+			$values = array();
+			$values['handler'] = 'logpass';
+			$values['hit'] = $ljs_hit;
+			$this->controller->update($values);
 
 			$_SESSION['ljs_member'] = $member;
 			$_SESSION['ljs_memberid'] = $ljs_memberid;
 			$_SESSION['ljs_pass1'] = $ljs_pass1;
 			$_SESSION['ljs_name'] = $ljs_name;
 			$_SESSION['ljs_email'] = $ljs_email;
-			$_SESSION['ljs_writer'] = $ljs_writer;
-			$_SESSION['ljs_hit'] = $hit;
+			$_SESSION['ljs_writer'] = $ljs_writer;			
 			$_SESSION['ljs_point'] = $ljs_point;
 			$_SESSION['grade'] = $grade;
 			$_SESSION['automod1'] = $automod1;
 			$_SESSION['chatip'] = $chatip;
+			$_SESSION['ljs_hit'] = $ljs_hit;			
 			
 			if ($ljs_mod == "r_mode") {
-				echo ("<meta http-equiv='Refresh' content='0; URL=board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
+				echo ("<meta http-equiv='Refresh' content='0; URL=../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
 			} else if ($ljs_mod == "writer"){
-				echo ("<meta http-equiv='Refresh' content='0; URL=board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
+				echo ("<meta http-equiv='Refresh' content='0; URL=../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 			} else {
 				echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
 			}
@@ -148,10 +156,8 @@ class LogoutPanel extends BaseView {
 		$xml_list[] = 'chatip';
 		$xml_list[] = 'admin_ok';
 
-		$i = 0;
-		while ( $i<count($xml_list)) {
+		for ($i=0; $i<count($xml_list); $i++) {
 			unset($_SESSION[$xml_list[$i]]);
-			$i++;
 		}
 		echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
 	}
@@ -160,17 +166,21 @@ class LogoutPanel extends BaseView {
 class FailPanel extends BaseView {
 
 	var $name = 'fail_panel';
+	var $skin_path = 'modules/login/skin/default/login.html';
+	var $footer_skin_path = 'modules/login/skin/default/login.fail.html';
 
 	function init() {
 
-		$this->controller->setQuery('memberGroup');
+		$values = array();
+		$values['handler'] = 'memberGroup';
+		$this->controller->select($values);
 		$strJson = $this->model->getJson();
 
-		$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.html');
+		$contents = new Template(_SUX_PATH_ . $this->skin_path);
 		$contents->set('memberList', $strJson);
 		$contents->load();
 
-		$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.fail.html');
+		$contents = new Template(_SUX_PATH_ . $this->footer_skin_path);
 		$contents->load();
 	}
 }
@@ -178,10 +188,11 @@ class FailPanel extends BaseView {
 class LeavePanel extends BaseView {
 
 	var $name = 'leave_panel';
+	var $skin_path = 'modules/login/skin/default/login.leave.html';
 
 	function init($param=NULL) {
 
-		$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.leave.html');
+		$contents = new Template(_SUX_PATH_ . $this->skin_path);
 		foreach ($_SESSION as $key => $value) {
 			$contents->set($key, $value);
 		}
@@ -192,6 +203,8 @@ class LeavePanel extends BaseView {
 class SearchidPanel extends BaseView {
 
 	var $name = 'earchid_panel';
+	var $skin_path = 'modules/login/skin/default/login.searchid.html';
+	var $result_skin_path = 'modules/login/skin/default/login.searchid_result.html';
 
 	function init() {
 
@@ -201,8 +214,10 @@ class SearchidPanel extends BaseView {
 
 		if (isset($check_name) && $check_name){
 
-			$this->controller->setQuery('searchid');	
-			$rows = $this->model->getRows()[0];
+			$values = array();
+			$values['handler'] = 'searchid';
+			$this->controller->select($values);
+			$rows = $this->model->getRows();
 
 			if (count($rows) > 0) {
 				$memberid = $rows['ljs_memberid'];
@@ -213,7 +228,7 @@ class SearchidPanel extends BaseView {
 					exit;
 				}
 
-				$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.searchid_result.html');
+				$contents = new Template(_SUX_PATH_ . $this->result_skin_path);
 				$contents->set('check_name', $check_name);
 				$contents->set('memberid', $memberid);
 				$contents->load();				
@@ -222,10 +237,12 @@ class SearchidPanel extends BaseView {
 				exit;
 			}	
 		} else {
-			$this->controller->setQuery('memberGroup');
+			$values = array();
+			$values['handler'] = 'memberGroup';
+			$this->controller->select($values);
 			$strJson = $this->model->getJson();
 
-			$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.searchid.html');
+			$contents = new Template(_SUX_PATH_ . $this->skin_path);
 			$contents->set('memberList', $strJson);
 			$contents->load();
 		}
@@ -235,6 +252,9 @@ class SearchidPanel extends BaseView {
 class SearchpwdPanel extends BaseView {
 
 	var $name = 'searchpwd_panel';
+	var $email_skin_path = 'modules/mail/member/member.searchpwd.html';
+	var $skin_path = 'modules/login/skin/default/login.searchpwd.html';
+	var $result_skin_path = 'modules/login/skin/default/login.searchpwd_result.html';
 
 	function init() {
 
@@ -247,11 +267,13 @@ class SearchpwdPanel extends BaseView {
 
 		if(isset($check_memberid) && $check_memberid) {
 
-			$this->controller->setQuery('searchpwd');
-			$rows = $this->model->getRows()[0];
+			$values = array();
+			$values['handler'] = 'searchpwd';
+			$this->controller->select($values);
+			$rows = $this->model->getRows();
 
 			if (count($rows) > 0) {
-				$memberid = $rows['ljs_memberid'];				
+				$memberid = $rows['ljs_memberid'];
 				$email = $rows['email'];
 				$password = $rows['ljs_pass1'];
 
@@ -265,19 +287,18 @@ class SearchpwdPanel extends BaseView {
 					exit;
 				}
 
-				$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.searchpwd_result.html');
+				$contents = new Template(_SUX_PATH_ . $this->result_skin_path);
 				$contents->set('check_name', $check_name);
 				$contents->set('memberid', $memberid);
 				$contents->set('check_email', $check_email);				
 				$contents->load();
 
-				$skin_path = _SUX_PATH_ . 'modules/mail/member/member.searchpwd.html';
-				if (!file_exists($skin_path)) {
+				if (!file_exists(_SUX_PATH_ . $email_skin_path)) {
 					Error::alert('이메일 스킨파일이 존재하지 않습니다.');
 					exit;
 				}
 
-				$mail_skin = new TemplateLoader($skin_path);
+				$mail_skin = new Template(_SUX_PATH_ . $this->skin_path);
 				$mail_skin->set('check_name', $check_name);
 				$mail_skin->set('memberid', $memberid);
 				$mail_skin->set('password', $password);
@@ -298,10 +319,12 @@ class SearchpwdPanel extends BaseView {
 			}
 		}else{
 
-			$this->controller->setQuery('memberGroup');
+			$values = array();
+			$values['handler'] = 'memberGroup';
+			$this->controller->select($values);
 			$strJson = $this->model->getJson();
 
-			$contents = new TemplateLoader(_SUX_PATH_ . 'modules/login/skin/default/login.searchpwd.html');
+			$contents = new Template(_SUX_PATH_ . $this->skin_path);
 			$contents->set('memberList', $strJson);
 			$contents->load();
 		}

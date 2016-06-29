@@ -4,7 +4,7 @@ class LoginModel extends BaseModel {
 
 	var $name = 'login_model';
 
-	function _construct() {}
+	function LoginModel() {}
 
 	function memberGroup() {
 
@@ -16,27 +16,28 @@ class LoginModel extends BaseModel {
 		parent::select($query);
 	}
 
-	function logout($queryKey=NULL) {
+	function logpass($type=NULL,$params=NULL) {
 
 		$context = Context::getInstance();
 
-		if ($queryKey === 'select') {
-
+		if ($type === 'select') {
 			$query = array();
-			$query['select'] = 'name';
-			$query['from'] = $context->getParam('memberGroup');
-			$query['orderBy'] = 'id asc';
+			$query['select'] = '*';
+			$query['from'] = $context->getParam('post')['member'];
+			$query['where'] = 'ljs_memberid=\'' . $context->getParam('post')['memberid'] . '\'';
 			parent::select($query);
 
-		} else if ($queryKey === 'update') {
-
+		} else if ($type === 'update') {
 			$query = array();
-			$query['update'] = 'name';
-			$query['from'] = $context->getParam('memberGroup');
-			$query['orderBy'] = 'id asc';
+			$query['tables'] = $context->getParam('post')['member'];
+			$query['columnList'] = array();
+			$query['columnList'][] = 'hit='.$params['hit'];
+			$query['where'] = 'ljs_memberid=\'' . $context->getParam('post')['memberid'] . '\'';
 			parent::update($query);
-		}		
+		}
 	}
+
+	function logout($type=NULL) {}
 
 	function searchid() {
 

@@ -1,6 +1,6 @@
 <?PHP
 
-class TemplateLoader {
+class Template {
 
 	protected $file;
 	protected $values = array();
@@ -8,7 +8,7 @@ class TemplateLoader {
 
 	private static $templateFile = null;
 
-	function TemplateLoader($file) {
+	function Template($file) {
 
 		$this->file = $file;
 	}
