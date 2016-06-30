@@ -16,7 +16,7 @@ class JsonEncoder {
 
 	public static function getInstance() {
 
-		if (!isset(self::$je_instance)) {
+		if (empty(self::$je_instance)) {
 			self::$je_instance = new self;
 		}
 

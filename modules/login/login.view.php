@@ -33,8 +33,6 @@ class LoginPanel extends BaseView {
 
 	function dispLogon() {
 
-		new Mydb;
-
 		$values = array();
 		$values['handler'] = 'memberGroup';
 		$this->controller->select($values);
