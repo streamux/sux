@@ -11,7 +11,7 @@ class LoginModel extends BaseModel {
 		$context = Context::getInstance();
 		$query = array();
 		$query['select'] = 'name';
-		$query['from'] = $context->getParam('memberGroup');
+		$query['from'] = $context->get('memberGroup');
 		$query['orderBy'] = 'id asc';
 		parent::select($query);
 	}
@@ -23,16 +23,16 @@ class LoginModel extends BaseModel {
 		if ($type === 'select') {
 			$query = array();
 			$query['select'] = '*';
-			$query['from'] = $context->getParam('post')['member'];
-			$query['where'] = 'ljs_memberid=\'' . $context->getParam('post')['memberid'] . '\'';
+			$query['from'] = $context->getPost('member');
+			$query['where'] = 'ljs_memberid=\'' . $context->getPost('memberid') . '\'';
 			parent::select($query);
 
 		} else if ($type === 'update') {
 			$query = array();
-			$query['tables'] = $context->getParam('post')['member'];
+			$query['tables'] = $context->getPost('member');
 			$query['columnList'] = array();
 			$query['columnList'][] = 'hit='.$params['hit'];
-			$query['where'] = 'ljs_memberid=\'' . $context->getParam('post')['memberid'] . '\'';
+			$query['where'] = 'ljs_memberid=\'' . $context->getPost('memberid') . '\'';
 			parent::update($query);
 		}
 	}
@@ -42,8 +42,8 @@ class LoginModel extends BaseModel {
 	function searchid() {
 
 		$context = Context::getInstance();
-		$member = $context->getParam('post')['member'];
-		$check_name = $context->getParam('post')['check_name'];
+		$member = $context->getPost('member');
+		$check_name = $context->getPost('check_name');
 
 		$query = array();
 		$query['select'] = 'ljs_memberid, email';
@@ -55,9 +55,9 @@ class LoginModel extends BaseModel {
 	function searchpwd() {
 
 		$context = Context::getInstance();
-		$member = $context->getParam('post')['member'];
-		$check_name = $context->getParam('post')['check_name'];
-		$check_email = $context->getParam('post')['check_email'];
+		$member = $context->getPost('member');
+		$check_name = $context->getPost('check_name');
+		$check_email = $context->getPost('check_email');
 
 		$query = array();
 		$query['select'] = 'ljs_memberid, email, ljs_pass1';

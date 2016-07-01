@@ -2,8 +2,16 @@
 
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 
+if (file_exists(_SUX_PATH_ . 'config/admin.inc.php')) {
+	require _SUX_PATH_ . 'config/admin.inc.php';
+} 
+
+if (file_exists(_SUX_PATH_ . 'config/tables.inc.php')) {
+	require _SUX_PATH_ . 'config/tables.inc.php';
+} 
+
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
-	'Mydb'=>'/config/mydb/mydb.class.php'
+	'JsonEncoder'=>'/classes/utils/jsonencoder.class.php'
 ), CASE_LOWER);
 
 $GLOBALS['__sux_autoload_file_map_directory'] = array('modules', 'classes');

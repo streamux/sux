@@ -7,9 +7,9 @@ class LoginView extends BaseView {
 	function display($className=NULL) {
 
 		$className = ucfirst($className) . "Panel";
-		$contents = new $className($this->model, $this->controller);
-		$contents->init();
-		$contents = NULL;
+		$view = new $className($this->model, $this->controller);
+		$view->init();
+		$view = NULL;
 	}
 }
 
@@ -21,8 +21,9 @@ class LoginPanel extends BaseView {
 
 	function init() {
 
-		$ljs_memberid = $_SESSION['ljs_memberid'];
-		$ljs_pass1 = $_SESSION['ljs_pass1'];
+		$context = Context::getInstance();
+		$ljs_memberid = $context->getSession('ljs_memberid');
+		$ljs_pass1 = $context->getSession('ljs_pass1');	
 
 		if (!$ljs_memberid  || !$ljs_pass1) {		
 			$this->dispLogon($param);	
@@ -33,6 +34,7 @@ class LoginPanel extends BaseView {
 
 	function dispLogon() {
 
+		$context = Context::getInstance();
 		$values = array();
 		$values['handler'] = 'memberGroup';
 		$this->controller->select($values);
@@ -45,8 +47,10 @@ class LoginPanel extends BaseView {
 
 	function dispLoginInfo() {
 
+		$context = Context::getInstance();
+		$session_list = $context->getSessionAll();
 		$contents = new Template(_SUX_PATH_ . $this->info_skin_path);
-		foreach ($_SESSION as $key => $value) {
+		foreach ($session_list as $key => $value) {
 			$contents->set($key, $value);
 		}
 		$contents->load();
@@ -60,11 +64,9 @@ class LogpassPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$post = $context->getParam('post');
-
-		$member = trim($post['member']);
-		$memberid = trim($post['memberid']);
-		$pass = trim($post['pass']);
+		$member = $context->getPost('member');
+		$memberid = $context->getPost('memberid');
+		$pass =$context->getPost('pass');
 
 		$msg = "";
 
@@ -102,7 +104,7 @@ class LogpassPanel extends BaseView {
 			$grade = $row['grade'];
 			$automod1 = "yes";
 			$chatip = $REMOTE_ADDR;
-			$ljs_hit = $row['hit']+1;
+			$ljs_hit = $row['hit'] + 1;
 
 			$values = array();
 			$values['handler'] = 'logpass';
@@ -207,8 +209,8 @@ class SearchidPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$check_name = trim($context->getParam('post')['check_name']);
-		$check_email = trim($context->getParam('post')['check_email']);		
+		$check_name = $context->getPost('check_name');
+		$check_email = $context->getPost('check_email');		
 
 		if (isset($check_name) && $check_name){
 
@@ -257,11 +259,11 @@ class SearchpwdPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$check_name = $context->getParam('post')['check_name'];
-		$check_memberid = $context->getParam('post')['check_memberid'];
-		$check_email = $context->getParam('post')['check_email'];
-		$admin_name = $context->getParam('post')['adminEmail'];
-		$admin_email = $context->getParam('post')['adminName'];		
+		$check_name = $context->getPost('check_name');
+		$check_memberid = $context->getPost('check_memberid');
+		$check_email = $context->getPost('check_email');
+		$admin_name = $context->getPost('adminEmail');
+		$admin_email = $context->getPost('adminName');		
 
 		if(isset($check_memberid) && $check_memberid) {
 

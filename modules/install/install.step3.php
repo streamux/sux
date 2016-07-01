@@ -7,7 +7,7 @@ $mysql_db 		= trim($_POST['mysql_db']);
 $resultYN = "Y";
 $msg = "";
 
-$file = "../../config/config.db.php";
+$file = "../../config/db.config.php";
 $fp = fopen($file, "w");
 
 if(!$fp) {

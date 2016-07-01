@@ -5,7 +5,7 @@
  * JsonEncoder class for sux
  *
  * @author StreamUX
- * @Location : ./modules/utils/JsonEncoder.class.php
+ * @Location : ./classes/utils/JsonEncoder.class.php
  */
 class JsonEncoder {
 

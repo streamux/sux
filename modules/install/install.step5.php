@@ -7,7 +7,7 @@ $yourhome		= trim($_POST['yourhome']);
 $resultYN = "Y";
 $msg = "";
 
-$file = "../../config/config.php";
+$file = "../../config/admin.inc.php";
 $fp = fopen($file, "w");
 
 if(!$fp) {
