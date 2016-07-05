@@ -1,8 +1,8 @@
 <?
-$mysql_host	= trim($_POST['mysql_host']);
-$mysql_user	= trim($_POST['mysql_user']);
-$mysql_pwd	= trim($_POST['mysql_pwd']);
-$mysql_db 		= trim($_POST['mysql_db']);
+$db_hostname	= trim($_POST['db_hostname']);
+$db_userid		= trim($_POST['db_userid']);
+$db_password	= trim($_POST['db_password']);
+$db_database 	= trim($_POST['db_database']);
 
 $resultYN = "Y";
 $msg = "";
@@ -17,12 +17,11 @@ if(!$fp) {
 
 	$str = "";
 	$str .= "<?\n";
-	$str .= "\$mysql_host = '$mysql_host';	// 서버이름(호스트명) \n";
-	$str .= "\$mysql_user = '$mysql_user';	// 사용자 계정 \n";
-	$str .= "\$mysql_pwd = '$mysql_pwd';	// 비밀번호 \n";
-	$str .= "\$mysql_db = '$mysql_db';	// 데이터베이스(DB명) \n";
-	$str .= "\$connect = @mysql_connect(\$mysql_host, \$mysql_user, \$mysql_pwd) or die('서버 연결에 실패 했습니다. 계정 또는 패스워드를 확인하세요.');\n@mysql_select_db(\$mysql_db, \$connect) or die('데이터베이스 연결에 실패 했습니다. 데이터베이스명을 확인하세요.');";
-	$str .= "\n?>";
+	$str .= "\$db_hostname = '$db_hostname';\n";
+	$str .= "\$db_userid = '$db_userid';\n";
+	$str .= "\$db_password = '$db_password';\n";
+	$str .= "\$db_database = '$db_database';\n";
+	$str .= "?>";
 
 	fwrite($fp, $str, strlen($str));
 	fclose($fp);

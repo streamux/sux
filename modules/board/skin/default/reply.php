@@ -10,7 +10,7 @@ if ($fileupname) {
 }
 ?>
 
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_path}; ?>/css/layout.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-read" style="width:<? echo $width; ?>">
 	<div class="panel-heading">
@@ -22,7 +22,7 @@ if ($fileupname) {
 		<p><? echo ${storycomment}; ?></p>
 	</div>
 	<div class="panel-buttons">
-		<a href="board.list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>
+		<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=list"><img src="<? echo ${skin_dir}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>
 	</div>
 </div>
 
@@ -64,10 +64,10 @@ if ($fileupname) {
 		<span class="ui-inlineblock">&nbsp;발강색 등록키를 입력해주세요.</span>
 	</div>
 	<div class="buttons">
-		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
+		<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_dir}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>
 </div>
 
-<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.reply.js"></script>
+<script type="text/javascript" src="<? echo ${skin_dir}; ?>/js/board.reply.js"></script>
 

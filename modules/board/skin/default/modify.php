@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_path}; ?>/css/layout.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-write" style="width:<? echo $width; ?>">
 	<form action="board.insert.php?id=<? echo ${id}; ?>&board=<? echo ${board}; ?>&board_grg=<? echo ${board_grg}; ?>&ljs_mod=<? echo ${ljs_mod}; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
@@ -31,9 +31,9 @@
 		</p>
 	</div>
 	<div class="buttons">
-		<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_path}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
+		<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<? echo ${skin_dir}; ?>/images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>
 </div>
 
-<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.modify.js"></script>
+<script type="text/javascript" src="<? echo ${skin_dir}; ?>/js/board.modify.js"></script>

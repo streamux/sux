@@ -5,171 +5,103 @@ class BaseModel extends Object {
 	var $name = 'model';
 	var $query_sql = '';
 	var $result = NULL;
-	var $rows_data = array();
 	var $hashmap_params = array();
+	var $db = NUll;
+	var $fetchArrayList = NULL;
+	var $rownum = 0;
 
-	function BaseModel() {}
+	function __construct() {
 
-	function getSelectSql($query=NULL) {
-
-		$select = $query['select'];
-		if ($select != '') {
-			$select = 'SELECT ' . $select;
-		}
-
-		$from = $query['from'];
-		if ($from != '') {
-			$from = ' FROM ' . $from;
-		}
-
-		$where = $query['where'];
-		if ($where != '') {
-
-			$where = $this->getArrayToList($where, ' and ');
-			$where = ' WHERE ' . $where;
-		}
-
-		$index_hint_list = $query->index_hint_list;
-
-		$groupBy = $query['groupBy'];
-		if ($groupBy != '') {
-			$groupBy = ' GROUP BY ' . $groupBy;
-		}
-
-		$orderBy = $query['orderBy'];
-		if ($orderBy != '') {
-			$orderBy = ' ORDER BY ' . $orderBy;
-		}
-
-		$limit = $query['limit'];
-		if ($limit != '') {
-			$limit = ' LIMIT ' . $limit;
-		}
-
-		return $select . ' ' . $from . ' ' . $where . ' ' . $index_hint_list . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
-	}
-
-	function getInsertSql($query=NULL) {
-
-		$tables = $query['tables'];
-		$priority = $query['priority'];
-		$keys = $query['keys'];
-		$values = $query['values'];
-
-		return 'INSERT ' . $priority . ' INTO ' . $tableName . ' (\'' . implode(',', $keys) . '\') VALUES (\'' . implode(',', $values) .'\')';
-	}
-
-	function getUpdateSql($query=NULL) {
-
-		$priority = $query['priority'];
-		$tables = $query['tables'];
-		$columnList = $query['columnList'];
-		if ($columnList != '') {
-			$columnList = $this->getArrayToList($columnList, ',');
-		}
-
-		$where = $query['where'];	
-		if ($where != '') {
-			$where = $this->getArrayToList($where, ' and ');
-			$where = ' WHERE ' . $where;
-		}
-
-		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . $where;
-	}
-
-	function getDeleteSql($query=NULL) {
-		
-		$sql = 'DELETE ';
-		$sql .= $query['priority'];
-		$sql .= ' FROM ' . $query['from'];
-
-		$where = $query['where'];	
-		if ($where != '') {
-			$where = $this->getWhereList($where);
-			$sql .= ' WHERE ' . $where;
-		}
-
-		return $sql;
-	}
-
-	function getArrayToList($arr, $glue=',') {
-
-		if (is_array($arr)) {
-			$arr = implode($glue, $arr);
-		}
-
-		return $arr;
-	}
+		$this->db = DB::getInstance();
+	}	
 
 	function select($query=NULL) {
 
-		$this->query_sql = $this->getSelectSql($query);
-		$this->result = $this->getQueryResult();		
+		$result = $this->db->select($query);
+		$this->setFetchArray();
+		$this->setNumRows();
+		return $result;
 	}	
 
 	function insert($query=NULL) {
-
-		$this->query_sql = $this->getInsertSql($query);
-		$this->result = $this->getQueryResult();
+		
+		$result = $this->db->insert($query);
+		return $result;
 	}
 
 	function update($query=NULL) {
 
-		$this->query_sql = $this->getUpdateSql($query);
-		$this->result = $this->getQueryResult();
+		$result = $this->db->update($query);
+		return $result;
 	}
 
 	function delete($query=NULL) {
 
-		$this->query_sql = $this->getDeleteSql($query);
-		$this->result = $this->getQueryResult();
+		$result = $this->db->delete($query);
+		return $result;
 	}
 
-	function getQueryResult() {
+	function setFetchArray() {
 
-		return mysql_query($this->query_sql);	
-	}
+		$this->fetchArrayList = array();
+		while($rows = $this->db->getFetchArray()) {
 
-	function getFetchArray() {
-
-		return mysql_fetch_array($this->result);
-	}
-
-	function getNumRows() {
-
-		return mysql_num_rows($this->result);
-	}
-
-	function getRows($ignore=TRUE) {
-
-		$this->rows_data = array();
-		$this->result = $this->getQueryResult();
-
-		while($rows = $this->getFetchArray()) {
 			$fields = array();
 			foreach ($rows as $key => $value) {
 
+				if (gettype($key) == 'string' && isset($value) && $value != '' ) {
+					$fields[$key]=$value;
+				} else if (gettype($key) == 'string'){
+					$fields[$key]=$value;
+				}
+				$fields[$key]=$value;	
+			}
+			$this->fetchArrayList[]=$fields;
+		}	
+	}
+
+	function getFetchArray($ignore=NULL) {
+
+		$rows_data = array();		
+		$i=0;
+
+		while ($i < count($this->fetchArrayList)) {
+
+			$fields = array();
+			$rows = $this->fetchArrayList[$i];
+			foreach ($rows as $key => $value) {
 				if (($ignore === 'true' || $ignore === TRUE) && gettype($key) == 'string' && isset($value) && $value != '' ) {
 					$fields[$key]=$value;
 				} else if (($ignore != 'true' || $ignore != TRUE) && gettype($key) == 'string'){
 					$fields[$key]=$value;
-				}		
+				}
 			}
-			$this->rows_data[]=$fields;
+			$rows_data[]=$fields;
+			$i++;
 		}
 
-		return count($this->rows_data) > 1 ? $this->rows_data : $this->rows_data[0];
+		return $rows_data;
+	}
+
+	function setNumRows() {
+
+		$this->rownum = $this->db->getNumRows();
+	}
+
+	function getNumRows() {
+
+		return $this->rownum;
+	}
+
+	function getRows($ignore=TRUE) {
+		
+		$rows = $this->getFetchArray($ignore);
+		return count($rows) > 1 ? $rows : $rows[0];
 	}
 
 	function getJson($ignore=TRUE) {
 
 		return JsonEncoder::getInstance()->parse($this->getRows($ignore));
-	}	
-
-	function getCount($ignore=TRUE) {
-
-		$this->result = $this->getQueryResult();
-		return $this->getNumRows();
 	}
 }
 ?>

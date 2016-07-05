@@ -21,10 +21,10 @@ if(!$fp) {
 
 	$str = "";
 	$str .= "<?\n";
-	$str .= "\$admin_id		= '$admin_id';		// 관리자 아이디\n";
-	$str .= "\$admin_pwd	= '$admin_pwd';	// 관리자 패스워드\n";
-	$str .= "\$admin_email	= '$admin_email';	// 관리자 이메일\n";	
-	$str .= "\$yourhome		= '$yourhome';		// 홈으로 가기\n";
+	$str .= "\$admin_id		= '$admin_id';\n";
+	$str .= "\$admin_pwd	= '$admin_pwd';\n";
+	$str .= "\$admin_email	= '$admin_email';\n";	
+	$str .= "\$yourhome		= '$yourhome';\n";
 	$str .= "?>";
 
 	fwrite($fp, "$str", strlen($str));

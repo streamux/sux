@@ -4,19 +4,22 @@ class LoginModel extends BaseModel {
 
 	var $name = 'login_model';
 
-	function LoginModel() {}
+	function __construct() {
 
-	function memberGroup() {
+		 parent::__construct();
+	}
+
+	function getMemberGroup() {
 
 		$context = Context::getInstance();
 		$query = array();
 		$query['select'] = 'name';
-		$query['from'] = $context->get('memberGroup');
-		$query['orderBy'] = 'id asc';
-		parent::select($query);
+		$query['from'] = $context->get('db_member_group');
+		$query['orderBy'] = 'id asc';	
+		parent::select($query);		
 	}
 
-	function logpass($type=NULL,$params=NULL) {
+	function getLogpass($type=NULL,$params=NULL) {
 
 		$context = Context::getInstance();
 
@@ -26,7 +29,7 @@ class LoginModel extends BaseModel {
 			$query['from'] = $context->getPost('member');
 			$query['where'] = 'ljs_memberid=\'' . $context->getPost('memberid') . '\'';
 			parent::select($query);
-
+			
 		} else if ($type === 'update') {
 			$query = array();
 			$query['tables'] = $context->getPost('member');
@@ -37,9 +40,9 @@ class LoginModel extends BaseModel {
 		}
 	}
 
-	function logout($type=NULL) {}
+	function getLogout($type=NULL) {}
 
-	function searchid() {
+	function getSearchid() {
 
 		$context = Context::getInstance();
 		$member = $context->getPost('member');
@@ -52,7 +55,7 @@ class LoginModel extends BaseModel {
 		parent::select($query);
 	}
 
-	function searchpwd() {
+	function getSearchpwd() {
 
 		$context = Context::getInstance();
 		$member = $context->getPost('member');

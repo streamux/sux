@@ -47,7 +47,7 @@ $result = mysql_query(	"create table $table_name".
 						"title varchar(120) not null,".
 						"comment text not null,".
 						"email varchar(30),".
-						"date date,".
+						"date timestamp,".
 						"ip varchar(30),".
 						"see int,".
 						"opkey char(1),".

@@ -17,8 +17,6 @@ $find = $_REQUEST[find];
 $search = $_REQUEST[search];
 $ljs_mod = $_REQUEST[ljs_mod];
 
-$skin_path = "skin/${include2}";
-
 $result0 = mysql_query("select see from $board where id=$id");
 $row0 = mysql_fetch_array($result0);
 $see = $row0[see]+1;
@@ -66,7 +64,7 @@ if ($fileupname) {
 }
 ?>
 
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_path}; ?>/css/layout.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-read" style="width:<? echo $width; ?>">
 	<div class="panel-heading">
@@ -133,12 +131,17 @@ if ($tail == 'y') {
 	<div class="panel-buttons">
 <?
 		if($ljs_mod=="s_mode") {
-			echo "<a href=\"board.search_list.php?board=$board&board_grg=$board_grg&find=$find&search=$search\"><img src=\"${skin_path}/images/btn_list.gif\" width=\"51\" height=\"23\" border=\"0\"></a>";
+?>
+
+			<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&find=<? echo ${find} ?>&search=<? echo ${search} ?>&action=searchlist"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0"></a>
+<?
 		}else{
-			echo "<a href=\"board.list.php?board=$board&board_grg=$board_grg\"><img src=\"${skin_path}/images/btn_list.gif\" width=\"51\" height=\"23\" border=\"0\"></a>";
+?>
+			<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
+<?
 		}		
 ?>
-		<a href="board.write.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>&nbsp;<a href="board.reply.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&ljs_mod=reply"><img src="<? echo ${skin_path}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.modify.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&ljs_mod=sujeong"><img src="<? echo ${skin_path}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.delpass.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
+		<a href="board.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&action=reply"><img src="<? echo ${skin_dir}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&action=modify"><img src="<? echo ${skin_dir}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=delpass"><img src="<? echo ${skin_dir}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
 	</div>
 </div>
 
@@ -212,7 +215,7 @@ if ($numrows2) {
 
 		if($space) {
 			$imgname = "icon_answer.gif";
-			echo "<img src=\"${skin_path}/images/${imgname}\">&nbsp";
+			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp";
 		}		
 
 		$imgname = "";
@@ -225,26 +228,26 @@ if ($numrows2) {
 				$imgname = "icon_down.png";
 			}
 
-			echo "<img src=\"${skin_path}/images/${imgname}\">&nbsp;";
+			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
 		}
 
-		if ($ljs_mod == "s_mode") {
+		if ($action == "search") {
 			$title = str_replace("$search","<span class=\"color-red\">$search</span>",$title);
 			$name = htmlspecialchars($name); 
 			$name = str_replace("$search","<span class=\"color-red\">$search</span>",$name);
 		}
 
-		echo "<a href=board.read.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&ljs_mod=$ljs_mod><span>${title}</span></a>";
+		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&action=read><span>${title}</span></a>";
 
-		$grgresult=mysql_query("select id from $board_grg where storyid=$sid");
-		$grgnums=mysql_num_rows($grgresult);
+		$grgresult = mysql_query("select id from $board_grg where storyid=$sid");
+		$grgnums = mysql_num_rows($grgresult);
 
-		if($grgnums) {
+		if ($grgnums) {
 			echo "(".$grgnums.")";
 		}
 
-		if($day == $today){
-			echo "&nbsp;<img src=\"${skin_path}/images/new.gif\">";
+		if ($day == $today){
+			echo "&nbsp;<img src=\"${skin_dir}/images/new.gif\">";
 		}
 		
 		if ($opkey) {
@@ -253,7 +256,8 @@ if ($numrows2) {
 								"c"=>"icon_cost.gif",
 								"m"=>"icon_mail.gif",
 								"n"=>"icon_no_cost.gif");
-			echo "&nbsp;<img src=\"${skin_path}/images/$img_list[$opkey]\">";
+
+			echo "&nbsp;<img src=\"${skin_dir}/images/$img_list[$opkey]\">";
 		}
 ?>
 				</td>				
@@ -276,18 +280,18 @@ if ($numrows2) {
 		<? include "navi.php"; ?>
 	</div>
 	<div class="search ui-inlineblock">
-		<form action="board.search_list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
+		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&actoin=searchlist" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
 			<select name=find>
-			<option value='title'>제 목</option>
-					<option value='name'>이 름</option>
-					<option value='comment'>내 용</option>
-				</select>
+				<option value='title'>제 목</option>
+				<option value='name'>이 름</option>
+				<option value='comment'>내 용</option>
+			</select>
 			<input type="text" name="search" size="15">
-			<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/images/btn_search.gif" width="51" height="23" border="0">
+			<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_search.gif" width="51" height="23" border="0">
 		</form>
 	</div>	
 	<div class="buttons ui-inlineblock">
-		<a href="board.list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.write.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&ljs_mod=<? echo writer; ?>"><img src="<? echo ${skin_path}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
+		<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=list"><img src="<? echo ${skin_dir}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>
 
@@ -334,4 +338,4 @@ if ($setup == "y") {
 }
 ?>
 
-<script type="text/javascript" src="<? echo ${skin_path}; ?>/js/board.read.js"></script>
+<script type="text/javascript" src="<? echo ${skin_dir}; ?>/js/board.read.js"></script>

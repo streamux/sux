@@ -5,8 +5,8 @@ session_start();
 
 include "../lib.php";
 
-$user_id = $_POST[user_id];
-$user_pass = $_POST[user_pass];
+$user_id = $_POST['user_id'];
+$user_pass = $_POST['user_pass'];
 
 $msg = "";
 
@@ -25,7 +25,7 @@ if ($msg) {
 }
 
 $admin_ok = md5($admin_id);
-$_SESSION[admin_ok] = $admin_ok;
+$_SESSION['admin_ok'] = $admin_ok;
 echo ("<meta http-equiv='Refresh' content='0; URL=main.php'>");
 
 mysql_close();

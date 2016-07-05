@@ -6,10 +6,13 @@ class LoginView extends BaseView {
 
 	function display($className=NULL) {
 
+		$oDB = DB::getInstance();
+
 		$className = ucfirst($className) . "Panel";
 		$view = new $className($this->model, $this->controller);
 		$view->init();
-		$view = NULL;
+
+		$oDB->close();
 	}
 }
 
@@ -35,11 +38,9 @@ class LoginPanel extends BaseView {
 	function dispLogon() {
 
 		$context = Context::getInstance();
-		$values = array();
-		$values['handler'] = 'memberGroup';
-		$this->controller->select($values);
+		$this->controller->select('getMemberGroup');
 		$strJson = $this->model->getJson();
-
+		
 		$contents = new Template(_SUX_PATH_ . $this->skin_path);
 		$contents->set('memberList', $strJson);
 		$contents->load();
@@ -77,15 +78,12 @@ class LogpassPanel extends BaseView {
 		} 
 
 		if ($msg) {
-			Error::alert($msg);
+			Error::alertToBack($msg);
 		}
 
 		$pass = substr(md5($pass),0,8);
-
-		$values = array();
-		$values['handler'] = 'logpass';
-		$this->controller->select($values);
-		$num = $this->model->getCount();
+		$this->controller->select('getLogpass');
+		$num = $this->model->getNumRows();
 
 		if ($num > 0) {			
 			$row = $this->model->getRows();
@@ -106,10 +104,8 @@ class LogpassPanel extends BaseView {
 			$chatip = $REMOTE_ADDR;
 			$ljs_hit = $row['hit'] + 1;
 
-			$values = array();
-			$values['handler'] = 'logpass';
 			$values['hit'] = $ljs_hit;
-			$this->controller->update($values);
+			$this->controller->update('getLogpass');
 
 			$_SESSION['ljs_member'] = $member;
 			$_SESSION['ljs_memberid'] = $ljs_memberid;
@@ -171,9 +167,7 @@ class FailPanel extends BaseView {
 
 	function init() {
 
-		$values = array();
-		$values['handler'] = 'memberGroup';
-		$this->controller->select($values);
+		$this->controller->select('getMemberGroup');
 		$strJson = $this->model->getJson();
 
 		$contents = new Template(_SUX_PATH_ . $this->skin_path);
@@ -214,9 +208,7 @@ class SearchidPanel extends BaseView {
 
 		if (isset($check_name) && $check_name){
 
-			$values = array();
-			$values['handler'] = 'searchid';
-			$this->controller->select($values);
+			$this->controller->select('getSearchid');
 			$rows = $this->model->getRows();
 
 			if (count($rows) > 0) {
@@ -224,7 +216,7 @@ class SearchidPanel extends BaseView {
 				$email = $rows['email'];
 
 				if (trim($email) !== $check_email) {
-					Error::alert('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
+					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
 
@@ -233,13 +225,11 @@ class SearchidPanel extends BaseView {
 				$contents->set('memberid', $memberid);
 				$contents->load();				
 			} else {
-				Error::alert('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
+				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
 				exit;
 			}	
 		} else {
-			$values = array();
-			$values['handler'] = 'memberGroup';
-			$this->controller->select($values);
+			$this->controller->select('getMemberGroup');
 			$strJson = $this->model->getJson();
 
 			$contents = new Template(_SUX_PATH_ . $this->skin_path);
@@ -267,9 +257,7 @@ class SearchpwdPanel extends BaseView {
 
 		if(isset($check_memberid) && $check_memberid) {
 
-			$values = array();
-			$values['handler'] = 'searchpwd';
-			$this->controller->select($values);
+			$this->controller->select('getSearchpwd');
 			$rows = $this->model->getRows();
 
 			if (count($rows) > 0) {
@@ -278,12 +266,12 @@ class SearchpwdPanel extends BaseView {
 				$password = $rows['ljs_pass1'];
 
 				if (trim($memberid) !== $check_memberid) {
-					Error::alert('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
+					Error::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
 					exit;
 				}
 
 				if (trim($email) !== $check_email) {
-					Error::alert('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
+					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
 					exit;
 				}
 
@@ -294,7 +282,7 @@ class SearchpwdPanel extends BaseView {
 				$contents->load();
 
 				if (!file_exists(_SUX_PATH_ . $email_skin_path)) {
-					Error::alert('이메일 스킨파일이 존재하지 않습니다.');
+					Error::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
 					exit;
 				}
 
@@ -314,14 +302,12 @@ class SearchpwdPanel extends BaseView {
 				mail($admin_email, $subject, $contents, $additional_headers);
 				mail($check_email, $subject, $contents, $additional_headers);
 			} else {
-				Error::alert('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
+				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
 				exit;
 			}
 		}else{
 
-			$values = array();
-			$values['handler'] = 'memberGroup';
-			$this->controller->select($values);
+			$this->controller->select('getMemberGroup');
 			$strJson = $this->model->getJson();
 
 			$contents = new Template(_SUX_PATH_ . $this->skin_path);

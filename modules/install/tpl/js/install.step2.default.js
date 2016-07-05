@@ -2,29 +2,29 @@ jsux.fn = {
 
 	checkForm: function( f ) {
 
-		var mhost = f.mysql_host.value.length,
-			muser = f.mysql_user.value.length,
-			mpwd = f.mysql_pwd.value.length,
-			mdb = f.mysql_db.value.length;
+		var mhost = f.db_hostname.value.length,
+			muser = f.db_userid.value.length,
+			mpwd = f.db_password.value.length,
+			mdb = f.db_database.value.length;
 
 		if ( mhost < 1 ) {
 			trace("호스트명을 입력하세요.");
-			f.mysql_host.focus();
+			f.db_hostname.focus();
 			return (false);
 		}
 		if ( muser < 1 ) {
 			trace("계정아이디을 입력하세요.");
-			f.mysql_user.focus();
+			f.db_userid.focus();
 			return (false);
 		}
 		if ( mpwd < 1 ) {
 			trace("계정비밀번호를 입력하세요.");
-			f.mysql_pwd.focus();
+			f.db_password.focus();
 			return (false);
 		}
 		if ( mdb < 1 ) {
 			trace("데이터베이스명을 입력하세요.");
-			f.mysql_db.focus();
+			f.db_database.focus();
 			return (false);
 		}
 		return (true);
@@ -33,10 +33,10 @@ jsux.fn = {
 
 		var self = this,
 			params = {
-				mysql_host: f.mysql_host.value,
-				mysql_user:f.mysql_user.value,
-				mysql_pwd:f.mysql_pwd.value,
-				mysql_db:f.mysql_db.value
+				db_hostname: f.db_hostname.value,
+				db_userid:f.db_userid.value,
+				db_password:f.db_password.value,
+				db_database:f.db_database.value
 			};
 
 		jsux.getJSON("install.step3.php", params, function( e ) {
@@ -62,7 +62,7 @@ jsux.fn = {
 			}
 		});
 
-		$("input[name=mysql_user]").focus();
+		$("input[name=db_userid]").focus();
 	},
 	init: function() {
 		this.setEvent();		

@@ -41,19 +41,19 @@
 				<tbody>
 					<tr>
 						<td><span>호</span>스트명</td>
-						<td><input type="text" name="mysql_host" value="localhost"></td>
+						<td><input type="text" name="db_hostname" value="localhost"></td>
 					</tr>
 					<tr>
 						<td><span>사</span>용자계정</td>
-						<td><input type="text" name="mysql_user"></td>
+						<td><input type="text" name="db_userid"></td>
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호</td>
-						<td><input type="password" name="mysql_pwd"></td>
+						<td><input type="password" name="db_password"></td>
 					</tr>
 					<tr>
 						<td><span>D</span>B명</td>
-						<td><input type="text" name="mysql_db"></td>
+						<td><input type="text" name="db_database"></td>
 					</tr>
 				</tbody>
 			</table>			

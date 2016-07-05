@@ -10,7 +10,7 @@ class Context {
 				
 	}
 
-	public static function getInstance() {
+	public static function &getInstance() {
 
 		if (empty(self::$aInstance)) {
 			self::$aInstance = new self;
@@ -22,6 +22,8 @@ class Context {
 	function init() {
 
 		$this->loadDBInfo();
+		$this->loadAdminInfo();
+		$this->loadTablesInfo();
 	}
 
 	function loadDBInfo() {
@@ -31,18 +33,16 @@ class Context {
 			include $config_file;
 		}
 
-		if (!isset($db_info)) {
-			$db_info = array();
-		}
+		$db_info_list = array(	'db_hostname',
+								'db_userid',
+								'db_password',
+								'db_database');
 
-		$db_info['db_hostname'] = $mysql_host;
-		unset($mysql_host);
-		$db_info['db_userid'] = $mysql_user;
-		unset($mysql_user);
-		$db_info['db_password'] = $mysql_pwd;
-		unset($mysql_pwd);
-		$db_info['db_database'] = $mysql_db;
-		unset($mysql_db);
+		$db_info = array();
+		for($i=0; $i<count($db_info_list); $i++) {
+			$db_info[$db_info_list[$i]] = ${$db_info_list[$i]};
+			unset(${$db_info_list[$i]});
+		}
 
 		$this->setDbInfo($db_info);
 	}
@@ -50,6 +50,53 @@ class Context {
 	function getConfigFile() {
 
 		return _SUX_PATH_ . 'config/db.config.php';
+	}
+
+	function loadAdminInfo() {
+
+		$admin_file = $this->getAdminFile();
+		if (is_readable($admin_file)) {
+			include $admin_file;
+		}
+
+		$admin_list = array(	'admin_id',
+								'admin_pwd',
+								'admin_email',
+								'yourhome');
+
+		$table_key_prefix = 'db_';
+		for ($i=0; $i<count($admin_list); $i++) {
+			$this->set($table_key_prefix . $admin_list[$i], ${$admin_list[$i]});
+			unset(${$admin_list[$i]});
+		}
+	}
+
+	function getAdminFile() {
+
+		return _SUX_PATH_ . 'config/admin.inc.php';
+	}
+
+	function loadTablesInfo() {
+
+		$tables_file = $this->getTablesFile();
+		if (is_readable($tables_file)) {
+			include $tables_file;
+		}
+
+		$table_list = array(	'popup','memo','board_group','member_group','question','questiont','questionc',
+							'dayman','post','connecter','connecter_real','connecter_real_all','connecter_all',
+							'connecter_site','pageview','calender');
+
+		$table_key_prefix = 'db_';
+		for($i=0; $i<count($table_list); $i++) {
+			$this->set($table_key_prefix . $table_list[$i], ${$table_list[$i]});
+			unset(${$table_list[$i]});
+		}
+	}
+
+	function getTablesFile() {
+
+		return _SUX_PATH_ . 'config/tables.inc.php';
 	}
 	
 	function getDBInfo() {
@@ -92,9 +139,19 @@ class Context {
 		return $_GET;
 	}
 
+	function getFiles() {
+
+		return $_FILES;
+	}
+
 	function getSession($key) {
 
 		return $_SESSION[$key];
+	}
+
+	function setSession($key, $value) {
+
+		$_SESSION[$key] = $value;
 	}
 
 	function getSessionAll() {
@@ -110,6 +167,15 @@ class Context {
 	function get($key) {
 
 		return $this->hashmap_params[$key];
+	}
+
+	function checkAdminPass() {
+
+		$is_logged = FALSE;
+		if (md5($this->get('db_admin_id')) == $this->getSession('admin_id')) {
+			$is_logged = TRUE;
+		}
+		return $is_logged;
 	}
 }
 ?>

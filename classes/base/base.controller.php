@@ -7,27 +7,32 @@ class BaseController extends Object {
 	
 	function BaseController($m=NULL) {
 		
-		$this->model = $m;
+		$result = $this->model = $m;
+		return $result;
 	}
 
 	function select($query=NULL) {
 
-		$this->model->select($query);
+		$result = $this->model->select($query);
+		return $result;
 	}
 
 	function insert($query=NULL) {
 
-		$this->model->insert($query);
+		$result = $this->model->insert($query);
+		return $result;
 	}
 
 	function update($query=NULL) {
 
-		$this->model->update($query);
+		$result = $this->model->update($query);
+		return $result;
 	}
 
 	function delete($query=NULL) {
 
-		$this->model->delete($query);
+		$result = $this->model->delete($query);
+		return $result;
 	}
 }
 ?>

@@ -42,13 +42,7 @@ if ($limit_word){
 	for ($i=0; $i<$nums_count; $i++) {
 		$limit_str = $word_nums[$i];
 
-		if ($limit_choice == title) {
-			$result2 = mysql_query("delete from $board where title like '%$limit_str%' order by id desc");
-		} else if ($limit_choice == comment) {
-			$result2 = mysql_query("delete from $board where comment like '%$limit_str%' order by id desc");
-		} else {
-			$result2 = mysql_query("delete from $board where title like '%$limit_str%' and comment like '%$limit_str%' and order by id desc");
-		}
+		mysql_query("delete from $board where $limit_choice like '%$limit_str%' order by id desc");
 	}
 }
 

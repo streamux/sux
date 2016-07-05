@@ -4,32 +4,28 @@ class LoginController extends BaseController {
 
 	var $name = 'login_controlelr';
 
-	function BaseController($m=NULL) {
+	function LoginController($m=NULL) {
 		
 		$this->model = $m;
 	}
 
-	function select($values) {
+	function select($handler, $values=NULL) {
 
-		$handler = $values['handler'];
 		$this->model->{$handler}('select', $values);
 	}
 
-	function insert($values) {
+	function insert($handler, $values=NULL) {
 
-		$handler = $values['handler'];
 		$this->model->{$handler}('insert', $values);
 	}
 
-	function update($values) {
+	function update($handler, $values=NULL) {
 
-		$handler = $values['handler'];
 		$this->model->{$handler}('update', $values);
 	}
 
-	function delete($values) {
+	function delete($handler, $values=NULL) {
 
-		$handler = $values['handler'];
 		$this->model->{$handler}('delete', $values);
 	}
 }
