@@ -12,7 +12,7 @@
 	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
 	<![endif]-->
 	<link rel="stylesheet" type="text/css" href="skin/default/css/common.css">
-	<link rel="stylesheet" type="text/css" href="skin/default/css/login.css">
+	<link rel="stylesheet" type="text/css" href="skin/default/css/login.leave.css">
 </head>
 <body>
 <div id="wrap">
@@ -46,8 +46,12 @@
 								<li><input type="hidden" name="member" value="${ljs_member}"><span class="ui-label">아이디</span><span>${ljs_memberid}</span><input type="hidden" name="memberid" value="${ljs_memberid}"></li>
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
-						</div><div class="panel-btn">
-							<input type="image" name="imagefield" src="skin/default/images/btn_login.gif" alt="로그인버튼" class="login-btn">
+						</div>
+						<div class="panel-btn">
+							<ul>
+								<li data-id="send">보내기</li>
+								<li data-id="cancel">취소</li>
+							</ul>
 						</div>					
 					</div>																	
 				</div>
@@ -59,7 +63,7 @@
 						<li>만일 회원가입을 하지 않고, 로그인을 하셨다면 회원가입을 먼저 해주세요.</li>
 					</ul>
 				</div>
-				<div class="notice">
+				<div class="panel-notice">
 					<dl>
 						<dt>주의사항</dt>
 						<dd>비밀번호가 노출되지 않도록 세심한 주의를 기울여 주세요.</dd>
@@ -83,4 +87,4 @@
 	<option>${label}</option>
 </script>
 
-<script type="text/javascript" src="skin/default/js/login.js"></script>
+<script type="text/javascript" src="skin/default/js/login.leave.js"></script>

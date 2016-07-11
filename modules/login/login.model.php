@@ -2,7 +2,7 @@
 
 class LoginModel extends BaseModel {
 
-	var $name = 'login_model';
+	var $class_name = 'login_model';
 
 	function __construct() {
 
@@ -19,7 +19,7 @@ class LoginModel extends BaseModel {
 		parent::select($query);		
 	}
 
-	function getLogpass($type=NULL,$params=NULL) {
+	function getLogpass($params=NULL, $type=NULL) {
 
 		$context = Context::getInstance();
 
@@ -27,7 +27,9 @@ class LoginModel extends BaseModel {
 			$query = array();
 			$query['select'] = '*';
 			$query['from'] = $context->getPost('member');
-			$query['where'] = 'ljs_memberid=\'' . $context->getPost('memberid') . '\'';
+			$query['where'] =array(
+				'ljs_memberid' => $context->getPost('memberid')
+			);
 			parent::select($query);
 			
 		} else if ($type === 'update') {
@@ -35,12 +37,14 @@ class LoginModel extends BaseModel {
 			$query['tables'] = $context->getPost('member');
 			$query['columnList'] = array();
 			$query['columnList'][] = 'hit='.$params['hit'];
-			$query['where'] = 'ljs_memberid=\'' . $context->getPost('memberid') . '\'';
+			$query['where'] =array(
+				'ljs_memberid' => $context->getPost('memberid')
+			);
 			parent::update($query);
 		}
 	}
 
-	function getLogout($type=NULL) {}
+	function getLogout() {}
 
 	function getSearchid() {
 
@@ -51,7 +55,9 @@ class LoginModel extends BaseModel {
 		$query = array();
 		$query['select'] = 'ljs_memberid, email';
 		$query['from'] = $member;
-		$query['where'] = 'name=\''.$check_name.'\'';
+		$query['where'] = array(
+			'name' => $check_name
+		);
 		parent::select($query);
 	}
 
@@ -65,7 +71,9 @@ class LoginModel extends BaseModel {
 		$query = array();
 		$query['select'] = 'ljs_memberid, email, ljs_pass1';
 		$query['from'] = $member;
-		$query['where'] = 'name=\''.$check_name.'\'';
+		$query['where'] = array(
+			'name' => $check_name
+		);
 		parent::select($query);
 	}
 }

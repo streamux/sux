@@ -2,7 +2,7 @@
 
 class LoginView extends BaseView {
 
-	var $name = 'login_view';
+	var $class_name = 'login_view';
 
 	function display($className=NULL) {
 

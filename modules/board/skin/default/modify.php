@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-write" style="width:<? echo $width; ?>">
-	<form action="board.insert.php?id=<? echo ${id}; ?>&board=<? echo ${board}; ?>&board_grg=<? echo ${board_grg}; ?>&ljs_mod=<? echo ${ljs_mod}; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
+	<form action="board.php?id=<? echo ${id}; ?>&board=<? echo ${board}; ?>&board_grg=<? echo ${board_grg}; ?>&action=record_modify" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
 		<input type="hidden" name="ljs_mod" value="modify">

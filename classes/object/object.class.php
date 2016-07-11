@@ -2,16 +2,16 @@
 
 class Object {
 
-	var $name = 'object';
+	var $class_name = 'object';
 
 	function Object($name=NULL) {
 
-		$this->name = $name;
+		$this->class_name = $name;
 	}
 
 	function toString() {
 
-		return $this->name;
+		return $this->class_name;
 	}
 }
 ?>

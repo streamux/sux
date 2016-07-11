@@ -1,16 +1,4 @@
 <?
-$board = $_REQUEST[board];
-$board_grg = $_REQUEST[board_grg];
-$id = $_REQUEST[id];
-$igroup = $_REQUEST[igroup];
-$passover = $_REQUEST[passover];
-$page = $_REQUEST[page];
-$sid = $_REQUEST[sid];
-$find = $_REQUEST[find];
-$search = $_REQUEST[search];
-$s_mod = $_REQUEST[ljs_mod];
-
-$skin_path = "skin/${include2}";
 $limit =10;
 
 if (!$passover) {
@@ -21,7 +9,7 @@ $query = mysql_query("select * from $board where $find like '%$search%' order by
 $numrows2 = mysql_num_rows($query);
 ?>
 
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_path}; ?>/css/layout.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-list" style="width:<? echo ${width}; ?>">
 	<table summary="게시판 리스트입니다.">
@@ -39,29 +27,28 @@ if ($numrows2) {
 
 	while ($row = mysql_fetch_array($query)) {
 
-		$sid = $row[id];
-		$storytitle = htmlspecialchars($row[title]);
-		$opkey = $row[opkey];
-		$day = $row[date];
-		$space = $row[space];
-		$type=$row[filetype];
-		$filename = $row[filename];
-		$hit = $row[see];
+		$sid = $row['id'];
+		$name = htmlspecialchars($row['name']); 
+		$storytitle = htmlspecialchars($row['title']);
+		$opkey = $row['opkey'];
+		$day = $row['date'];
+		$space = $row['space'];
+		$type=$row['filetype'];
+		$filename = $row['filename'];
+		$hit = $row['see'];
 		$today = date("Y-m-d");
-		$string = $storytitle;
-
-		if ($day == $today && $opkey){
-			$num = 24;
-		} else if ($day == $today || $opkey){
-			$num = 28;
-		} else {
-			$num = 34;
-		}
-
-		$storytitle = trim($string, $num);
-		$storytitle = str_replace("$search","<span class=\"color-red\">$search</span>",$storytitle);
-		$name = htmlspecialchars($row[name]); 
-		$name = str_replace("$search","<span class=\"color-red\">$search</span>",$name);
+		
+		$find_key = strtolower($find);
+		switch ($find_key) {
+			case 'title':
+				$storytitle = str_replace("$search","<span class=\"color-red\">$search</span>",$storytitle);
+				break;
+			case 'name':
+				$name = str_replace("$search","<span class=\"color-red\">$search</span>",$name);
+				break;
+			default:
+				break;
+		}		
 ?>
 			<tr>
 				<td class="author"><span><? echo ${name} ?></span></td>
@@ -79,7 +66,7 @@ if ($numrows2) {
 			$imgname = "text.gif";
 		}
 
-		echo "<img src=\"${skin_path}/img/${imgname}\">&nbsp";
+		echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp";
 
 		$imgname = "";
 
@@ -99,12 +86,10 @@ if ($numrows2) {
 				$imgname = "text.gif";
 			}
 
-			echo "<img src=\"${skin_path}/img/${imgname}\">&nbsp;";
+			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
 		}
 
-		echo "<a href=board.read.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&ljs_mod=s_mode>";
-		echo "$storytitle ";
-		echo "</a>";
+		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&action=searchread>${storytitle}</a>";
 
 		$grgresult = mysql_query("select id from $board_grg where storyid = $sid");
 		$grgnums = mysql_num_rows($grgresult);
@@ -114,7 +99,7 @@ if ($numrows2) {
 		}
 
 		if($day == $today){
-			echo "&nbsp;<img src=\"${skin_path}/img/new.gif\">";
+			echo "&nbsp;<img src=\"${skin_dir}/images/new.gif\">";
 		}
 		
 		if ($opkey) {
@@ -123,7 +108,7 @@ if ($numrows2) {
 								"c"=>"icon_cost.gif",
 								"m"=>"icon_mail.gif",
 								"n"=>"icon_no_cost.gif");
-			echo "&nbsp;<img src=\"${skin_path}/img/$img_list[$opkey]\">";
+			echo "&nbsp;<img src=\"${skin_dir}/images/$img_list[$opkey]\">";
 		}
 ?>
 				</td>				
@@ -146,20 +131,20 @@ if ($numrows2) {
 		<? include "navi.php"; ?>
 	</div>
 	<div class="search ui-inlineblock">
-		<form action="board.search_list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
 									
 			<select name="find">
 				<option value="title">제 목</option>
-				<option value="name">이 름</option>                      
+				<option value="name">작성자</option>                      
 				<option value="comment">내 용</option>
 			</select>
 			<input type="text" name="search" size="15">
-			<input name="imageField" type="image" src="<? echo ${skin_path}; ?>/img/btn_search.gif" width="51" height="23" border="0">
+			<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_search.gif" width="51" height="23" border="0">
 
 		</form>
 	</div>
 	<div class="buttons ui-inlineblock">
-		<a href="board.list.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>"><img src="<? echo ${skin_path}; ?>/img/btn_list.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.write.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&ljs_mode=<? echo w_mode; ?>"><img src="<? echo ${skin_path}; ?>/img/btn_write.gif" width="62" height="23" border="0"></a>
+		<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=list"><img src="<? echo ${skin_dir}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>
 

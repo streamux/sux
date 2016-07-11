@@ -2,7 +2,7 @@
 
 class BoardView extends BaseView {
 
-	var $name = 'board_view';
+	var $class_name = 'board_view';
 
 	function display($className=NULL) {
 
@@ -29,7 +29,7 @@ class BoardView extends BaseView {
 
 class ListPanel extends BaseView {
 
-	var $name = 'board_list';
+	var $class_name = 'board_list';
 
 	function init() {
 
@@ -43,10 +43,11 @@ class ListPanel extends BaseView {
 		$sid = $context->getRequest('sid');
 		$action = $context->getRequest('action');
 
-		$this->controller->select('boardInfo');
-		$rows = $this->model->getRows();	
-		$context->set('board_info',$rows);
-		$this->controller->delete('limitWord');
+		$this->controller->select('boardFromGroup');
+		$rows = $this->model->getRows();
+		$this->controller->delete('limitWord', $rows['limit_word']);
+
+		echo '<br>boar name : ' . $rows[name] . '<br>';
 
 		if (isset($rows['include1'])) {
 			$top_path = $rows['include1'];
@@ -57,7 +58,7 @@ class ListPanel extends BaseView {
 			}			
 		} else {
 			echo '상단 파일경로를 입력하세요.<br>';
-		}		
+		}
 
 		$skin_dir = 'skin/' . $rows['include2'];
 		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.php';
@@ -82,25 +83,79 @@ class ListPanel extends BaseView {
 
 class SearchlistPanel extends BaseView {
 
-	var $name = 'board_search_list';
+	var $class_name = 'board_search_list';
 
 	function init() {
 
+		$context = Context::getInstance();
+		$board = $context->getRequest('board');
+		$board_grg = $board."_grg";
+		$id = $context->getRequest('id');;
+		$igroup = $context->getRequest('igroup');
+		$passover = $context->getRequest('passover');
+		$page = $context->getRequest('page');
+		$sid = $context->getRequest('sid');
+		$action = $context->getRequest('action');
 
+		$find = $context->getPost('find') ?  $context->getPost('find') : $context->getRequest('find');
+		$search = $context->getPost('search') ?  $context->getPost('search') : $context->getRequest('search');
+		
+		$this->controller->select('boardFromGroup');
+		$rows = $this->model->getRows();
+		$this->controller->delete('limitWord', $rows['limit_word']);
+
+		if (isset($rows['include1'])) {
+			$top_path = $rows['include1'];
+			if (is_readable($top_path)) {
+				include $top_path;
+			} else {
+				echo '상단 파일경로를 확인하세요.<br>';
+			}			
+		} else {
+			echo '상단 파일경로를 입력하세요.<br>';
+		}		
+
+		$skin_dir = 'skin/' . $rows['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
+		} else {
+			echo '스킨 파일경로를 확인하세요.<br>';
+		}
+
+		if (isset($rows['include3'])) {
+			$bottom_path = $rows['include3'];
+			if (is_readable($bottom_path)) {
+				include $bottom_path;
+			} else {
+				echo '하단 파일경로를 확인하세요.<br>';
+			}
+		} else {
+			echo '하단 파일경로를 입력하세요.<br>';
+		}
 	}
 }
 
 class ReadPanel extends BaseView {
 
-	var $name = 'board_read';
+	var $class_name = 'board_read';
 
 	function init() {
 
 		$context = Context::getInstance();
-		$action = $context->getRequest('action');
 		$board = $context->getRequest('board');
+		$board_grg = $board."_grg";
+		$id = $context->getRequest('id');;
+		$igroup = $context->getRequest('igroup');
+		$passover = $context->getRequest('passover');
+		$page = $context->getRequest('page');
+		$sid = $context->getRequest('sid');
+		$find = $context->getRequest('find');
+		$search = $context->getRequest('search');
+		$action = $context->getRequest('action');
+
 		$grade = $context->getSession('grade');
-		$this->controller->select('boardInfo');
+		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();	
 
 		if (isset($grade) && $grade) {
@@ -153,9 +208,45 @@ class ReadPanel extends BaseView {
 	}
 }
 
+class SearchreadPanel extends ReadPanel {
+
+	var $class_name = 'search_read';
+
+	function init() {
+
+		$context = Context::getInstance();	
+		$id = $context->getRequest('id');
+		$board = $context->getRequest('board');
+		$board_grg = $board . '_grg';
+
+		$this->controller->select('boardFromGroup');
+		$rows = $this->model->getRows();	
+
+		if (is_readable($rows['include1'])) {
+			include $rows['include1'];
+		} else {
+			echo '상단 파일경로를 확인하세요.<br>';
+		}
+
+		$skin_dir = 'skin/' . $rows['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
+		} else {
+			echo '스킨 파일경로를 확인하세요.<br>';
+		}
+
+		if (is_readable($rows['include3'])) {
+			include $rows['include3'];
+		} else {
+			echo '하단 파일경로를 확인하세요.<br>';
+		}
+	}
+}
+
 class WritePanel extends BaseView {
 
-	var $name = 'board_write';
+	var $class_name = 'board_write';
 
 	function init() {
 
@@ -164,7 +255,7 @@ class WritePanel extends BaseView {
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('wallInfo');
+		$this->controller->select('fieldFromLimit', 'wall');
 		$rows = $this->model->getRows();	
 		if ($rows['wall'] == 'a' || !isset($rows['wall'])) {
 			$wallname = "나라사랑";
@@ -174,7 +265,7 @@ class WritePanel extends BaseView {
 			$wallkey = "a";
 		} 
 
-		$this->controller->select('boardInfo');
+		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();	
 
 		$grade = $context->getSession('grade');	
@@ -230,15 +321,16 @@ class WritePanel extends BaseView {
 
 class ReplyPanel extends BaseView {
 
-	var $name = 'board_reply';
+	var $class_name = 'board_reply';
 
 	function init() {
 
 		$context = Context::getInstance();
+		$id = $context->getRequest('id');
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('rowInfo');
+		$this->controller->select('fieldFromId', '*');
 		$rows = $this->model->getRows();
 		$storycomment =  nl2br($rows['comment']);
 		$m_name = $rows['name'];
@@ -248,9 +340,9 @@ class ReplyPanel extends BaseView {
 		$fileupname = $rows['filename'];
 		$type = $rows['type'];
 		$hit = $rows['see'];
-		$date = $rows['date']; 
+		$date = $rows['date']; 		
 
-		$this->controller->select('wallInfo');
+		$this->controller->select('fieldFromLimit','wall');
 		$rows = $this->model->getRows();		
 		if ($rows['wall'] == 'a' || !isset($rows['wall'])) {
 			$wallname = "나라사랑";
@@ -260,7 +352,7 @@ class ReplyPanel extends BaseView {
 			$wallkey = "a";
 		} 
 
-		$this->controller->select('boardInfo');
+		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();
 
 		$grade = $context->getSession('grade');
@@ -316,15 +408,16 @@ class ReplyPanel extends BaseView {
 
 class ModifyPanel extends BaseView {
 
-	var $name = 'board_modify';
+	var $class_name = 'board_modify';
 
 	function init() {
 		
 		$context = Context::getInstance();
+		$id = $context->getRequest('id');
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('rowInfo');
+		$this->controller->select('fieldFromId', '*');
 		$rows = $this->model->getRows();
 		$storycomment = htmlspecialchars($rows['comment']);
 		$m_name = htmlspecialchars($rows['name']);
@@ -332,17 +425,7 @@ class ModifyPanel extends BaseView {
 		$email = $rows['email'];
 		$type = $rows['type'];
 
-		$this->controller->select('wallInfo');
-		$rows = $this->model->getRows();		
-		if ($rows['wall'] == 'a' || !isset($rows['wall'])) {
-			$wallname = "나라사랑";
-			$wallkey = "b";
-		} else if ($rows['wall'] == 'b') {
-			$wallname = "조국사랑";
-			$wallkey = "a";
-		} 
-
-		$this->controller->select('boardInfo');
+		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();
 
 		$grade = $context->getSession('grade');
@@ -396,9 +479,49 @@ class ModifyPanel extends BaseView {
 	}
 }
 
+class DelpassPanel extends BaseView {
+
+	var $class_name = 'delpass';
+
+	function init() {
+
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+		$board = $context->getRequest('board');
+		$board_grg = $board . '_grg';
+
+		$this->controller->select('fieldFromId', 'name');
+		$rows = $this->model->getRows();	
+		$m_name = $rows['name'];
+
+		$this->controller->select('boardFromGroup');
+		$rows = $this->model->getRows();		
+
+		if (is_readable($rows['include1'])) {
+			include $rows['include1'];
+		} else {
+			echo '상단 파일경로를 확인하세요.<br>';
+		}
+
+		$skin_dir = 'skin/' . $rows['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
+		} else {
+			echo '스킨 파일경로를 확인하세요.<br>';
+		}
+
+		if (is_readable($rows['include3'])) {
+			include $rows['include3'];
+		} else {
+			echo '하단 파일경로를 확인하세요.<br>';
+		}
+	}
+}
+
 class RecordBasePanel extends BaseView {
 
-	var $name = 'record_base';
+	var $class_name = 'record_base';
 
 	function init() {
 
@@ -450,9 +573,9 @@ class RecordBasePanel extends BaseView {
 	}
 }
 
-class InsertWritePanel extends RecordBasePanel {
+class RecordWritePanel extends RecordBasePanel {
 
-	var $name = 'insert_write';
+	var $class_name = 'insert_write';
 
 	function record() {
 
@@ -462,28 +585,84 @@ class InsertWritePanel extends RecordBasePanel {
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
 
-		$this->controller->insert('recordWrite');
-		
+		$this->controller->insert('recordWrite');		
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
 }
 
-class InsertReplyPanel extends RecordBasePanel {
+class RecordReplyPanel extends RecordBasePanel {
 
-	var $name = 'record_reply';
+	var $class_name = 'record_reply';
 
 	function record() {
 
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+
+		$board = $requests['board'];
+		$board_grg = $board . '_grg';
+
+		$this->controller->insert('recordReply');
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
 }
 
-class UpdateModifyPanel extends RecordBasePanel {
+class RecordModifyPanel extends RecordBasePanel {
 
-	var $name = 'record_modify';
+	var $class_name = 'record_modify';
 
 	function record() {
 
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+
+		$id = $requests['id'];
+		$board = $requests['board'];
+		$board_grg = $board . '_grg';
+
+		$this->controller->insert('recordModify');
+		$rows = $this->model->getRows();
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$rows[sid]&igroup=$rows[igroup]&action=read'>");
+	}
+}
+
+class RecordDeletePanel extends RecordBasePanel {
+
+	var $class_name = 'record_delete';
+
+	function init() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$board = $requests['board'];
+		$board_grg = $board . '_grg';
+		$pass = trim($context->getPost('pwd'));
+
+		$this->controller->select('fieldFromId', 'pass,filename');
+		$rows = $this->model->getRows();	
+		$del_filename = $rows['filename'];
+
+		if ($pass == $rows['pass'] || $pass == $context->get('db_admin_pwd')) {
+
+			if(isset($del_filename)) {
+				$del_filename = _SUX_PATH_ . 'board_data/' . $this->board . '/$del_filename';
+
+				if(!@unlink($del_filename)) {
+					echo '파일삭제를 실패하였습니다.';
+				} else {
+					echo '파일삭제를 성공하였습니다.';
+				}
+			}
+			
+			$this->controller->delete('recordDelete');
+		} else  {
+			Error::alertToBack('비밀번호가 틀렸습니다.');
+		}
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
 }
 

@@ -126,7 +126,7 @@ if ($numrows2) {
 		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
 			<select name=find>
 				<option value='title'>제 목</option>
-				<option value='name'>이 름</option>
+				<option value='name'>작성자</option>
 				<option value='comment'>내 용</option>
 			</select>
 			<input type=text name=search size=15>

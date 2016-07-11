@@ -5,8 +5,9 @@ class Context {
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
 	public $db_info = NULL;
+	var $class_name = 'context';
 
-	function Context() {
+	function __contruct() {
 				
 	}
 

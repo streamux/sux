@@ -5,6 +5,7 @@ include "../lib.php";
 
 $ljs_mod = $_REQUEST[ljs_mod];
 $id = $_REQUEST[id];
+
 $board = $_REQUEST[board];
 $board_grg = $_REQUEST[board_grg];
 

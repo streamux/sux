@@ -27,7 +27,7 @@ if ($fileupname) {
 </div>
 
 <div class="board-write" style="width:<? echo $width; ?>">
-	<form action="board.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
+	<form action="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=record_reply" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
 		<input type="hidden" name="ljs_mod" value="reply">

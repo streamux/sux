@@ -2,7 +2,7 @@
 
 class BaseModel extends Object {
 
-	var $name = 'model';
+	var $class_name = 'model';
 	var $query_sql = '';
 	var $result = NULL;
 	var $hashmap_params = array();
@@ -24,7 +24,7 @@ class BaseModel extends Object {
 	}	
 
 	function insert($query=NULL) {
-		
+
 		$result = $this->db->insert($query);
 		return $result;
 	}
@@ -94,7 +94,7 @@ class BaseModel extends Object {
 	}
 
 	function getRows($ignore=TRUE) {
-		
+
 		$rows = $this->getFetchArray($ignore);
 		return count($rows) > 1 ? $rows : $rows[0];
 	}

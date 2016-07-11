@@ -2,7 +2,7 @@
 
 class BoardController extends BaseController {
 
-	var $name = 'board_controller';
+	var $class_name = 'board_controller';
 
 	function BoardController($m=NULL) {
 		
@@ -11,25 +11,25 @@ class BoardController extends BaseController {
 
 	function select($handler, $values=NULL) {
 
-		$result = $this->model->{$handler}('select', $values);		
+		$result = $this->model->{$handler}($values);		
 		return $result;
 	}
 
 	function insert($handler, $values=NULL) {
 
-		$result = $this->model->{$handler}('insert', $values);
+		$result = $this->model->{$handler}($values);
 		return $result;
 	}
 
 	function update($handler, $values=NULL) {
 
-		$result = $this->model->{$handler}('update', $values);
+		$result = $this->model->{$handler}($values);
 		return $result;
 	}
 
 	function delete($handler, $values=NULL) {
 
-		$result = $this->model->{$handler}('delete', $values);
+		$result = $this->model->{$handler}($values);
 		return $result;
 	}
 }

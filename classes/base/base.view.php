@@ -2,7 +2,7 @@
 
 class BaseView extends Object {
 
-	var $name = 'base_view';
+	var $class_name = 'base_view';
 	var $model = NULL;
 	var $controller = NULL;
 

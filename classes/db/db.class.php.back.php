@@ -59,77 +59,122 @@ class DB {
 
 	function _selectSql($query=NULL) {
 
-		$select = $query->getField();
+		$select = $query['select'];
 		if ($select != '') {
 			$select = 'SELECT ' . $select;
 		}
 
-		$from = $query->getTable();
+		$from = $query['from'];
 		if ($from != '') {
 			$from = ' FROM ' . $from;
 		}
 
-		$index_hint_list = $query->getIndexHintList();
-		if ($index_hint_list != '') {
-			$index_hint_list = ' USE INDEX (' . $index_hint_list . ')';
-		}
-
-		$where = $query->getWhere();
+		$where = $query['where'];
 		if ($where != '') {
+
+			$where = $this->addQuotationToValues($where, ' and ');
 			$where = ' WHERE ' . $where;
 		}
 
-		$groupBy = $query->getGroupBy();
+		$index_hint_list = $query->index_hint_list;
+
+		$groupBy = $query['groupBy'];
 		if ($groupBy != '') {
 			$groupBy = ' GROUP BY ' . $groupBy;
 		}
 
-		$orderBy = $query->getOrderBy();
+		$orderBy = $query['orderBy'];
 		if ($orderBy != '') {
 			$orderBy = ' ORDER BY ' . $orderBy;
 		}
 
-		$limit = $query->getLimit();
+		$limit = $query['limit'];
 		if ($limit != '') {
 			$limit = ' LIMIT ' . $limit;
 		}
 
-		$like = $query->getLike();
-		if ($like != '') {
-			$like = ' LIKE ' . $like;
-		}
-
-		return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit . ' ' . $like;
+		return $select . ' ' . $from . ' ' . $where . ' ' . $index_hint_list . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
 	}
 
 	function _insertSql($query=NULL) {
 
-		$tables = $query->getTable();
-		$priority = $query->getPriority();
-		$keys = $query->getColumn('key');
-		if ($keys != '') {
-			$keys = ' (' . $keys . ')' ;
+		$tables = $query['tables'];
+		$priority = $query['priority'];
+		$keys = $query['keys'];
+		if (isset($keys)) {
+			$keys = ' (' . implode(',', $keys) . ')' ;
 		}
-		$values = $query->getColum('value');
 
-		return 'INSERT ' . $priority . ' INTO ' . $tables . $keys . ' VALUES (' . $values .')';
+		$values = $query['values'];
+		if (is_array($values)) {
+			$values = $this->addQuotation($values);
+		}
+
+		return 'INSERT ' . $priority . ' INTO ' . $tables . $keys . ' VALUES (' . implode(',', $values) .')';
 	}
 
 	function _updateSql($query=NULL) {
 
-		$priority = $query->getPriority();
-		$tables = $query->getTable();
-		$columnList = $query->getColumn();
-		$where = $query->getWhere();	
+		$priority = $query['priority'];
+		$tables = $query['tables'];
+		$columnList = $query['columnList'];
+		if ($columnList != '') {
+			$columnList = $this->addQuotationToValues($columnList, ',');
+		}
+
+		$where = $query['where'];	
+		if ($where != '') {
+			$where = $this->addQuotationToValues($where, ' and ');
+		}
 
 		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . ' WHERE ' . $where;
 	}
 
 	function _deleteSql($query=NULL) {
 		
-		$where = $query->getWhere();	
+		$where = $query['where'];	
+		if ($where != '') {
+			$where = $this->addQuotationToValues($where, ' and ');
+		}
 
 		return  'DELETE ' . $query['priority'] . ' FROM ' . $query['from'] . ' WHERE ' . $where;
+	}
+
+	function addQuotation( $arr ) {
+
+		$tmp_arr = array();
+		for ($i=0; $i<count($arr); $i++) {
+
+			if ((is_string($arr[$i]) && strpos($arr[$i], '()') === FALSE) || !isset($arr[$i])) {
+				$tmp_arr[] = '\'' . $arr[$i] . '\'';
+			} else {
+				$tmp_arr[] = $arr[$i];
+			}			
+		}
+
+		return $tmp_arr;
+	}
+
+	function addQuotationToValues($arr, $glue=',') {
+
+		$temp_arr = array();
+		foreach ($arr as $key => $value) {
+			if ((is_string($arr[$i]) && strpos($arr[$i], '()') === FALSE) || !isset($arr[$i])) {
+				$temp_arr[] = $key . '=\'' . $value . '\'';
+			} else {
+				$temp_arr[] = $key . '=' . $value ;
+			}
+		}
+
+		return implode($glue, $temp_arr );
+	}
+
+	function getArrayToList($arr, $glue=',') {
+
+		if (is_array($arr)) {
+			$arr = implode($glue, $arr);
+		}
+		return $arr;
 	}
 
 	function _query($sql) {
@@ -149,8 +194,7 @@ class DB {
 
 	function select($query) {
 
-		$sql = $this->_selectSql($query);
-		echo $sql;
+		$sql = $this->_selectSql($query);		
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;

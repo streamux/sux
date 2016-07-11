@@ -2,13 +2,11 @@
 include "../lib.php";
 
 $member = $_POST['member'];
-$memberid = $_POST['memberid'];
+$memberid = trim($_POST['memberid']);
 $pass = substr(md5(trim($_POST['pass'])),0,8);
 
 $result = mysql_query("select * from $member where ljs_memberid='$memberid'");
 $numrows = mysql_num_rows($result);
-
-$msg = "";
 
 if ($numrows > 0) {
 	$rows = mysql_fetch_array($result);
