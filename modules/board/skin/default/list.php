@@ -11,7 +11,8 @@ $result = mysql_query("select * from $board order by igroup desc,ssunseo asc lim
 $numrows2 = mysql_num_rows($result);
 ?>
 
-<link rel="stylesheet" type="text/css" href="<? echo $skin_dir; ?>/css/layout.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/common.css">
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-list" style="width:<? echo ${width}; ?>">
 	<table summary="게시판 리스트입니다.">
@@ -30,26 +31,18 @@ if ($numrows2) {
 
 	while ($row=mysql_fetch_array($result)) {
 
-		$m_name = $row[name];
-		$sid = $row[id];
-		$title = nl2br($row[title]);
-		$opkey = $row[opkey];
-		$day = $row[date];
-		$type=$row[filetype];
-		$space = $row[space];
-		$hit = $row[see];
-		$filename = $row[filename];
+		$m_name = $row['name'];
+		$sid = $row['id'];
+		$title = nl2br($row['title']);
+		$opkey = $row['opkey'];
+		$day = $row['date'];
+		$type=$row['filetype'];
+		$space = $row['space'];
+		$hit = $row['see'];
+		$filename = $row['filename'];
 		$today = date("Y-m-d");
-		$string = $title;
 
-		if ($day == $today && $opkey){
-			$num =20;
-		} else if ($day == $today || $opkey){
-			$num = 28;
-		} else {
-			$num = 34;
-		}
-		$title = trim($string, $num);
+		$compareDay = split(' ', $day)[0];
 ?>
 			<tr>
 				<td class="author"><span><? echo ${m_name} ?></span></td>
@@ -90,7 +83,7 @@ if ($numrows2) {
 			echo "(".$grgnums.")";
 		}
 
-		if ($day == $today){
+		if ($compareDay == $today){
 			echo "&nbsp;<img src=\"${skin_dir}/images/new.gif\">";
 		}
 		
@@ -100,11 +93,12 @@ if ($numrows2) {
 								"c"=>"icon_cost.gif",
 								"m"=>"icon_mail.gif",
 								"n"=>"icon_no_cost.gif");
+
 			echo "<img src=\"${skin_dir}/images/$img_list[$opkey]\">";
 		}
 ?>
 				</td>				
-				<td class="date"><span><? echo ${day}; ?></span></td>
+				<td class="date"><span><? echo ${compareDay}; ?></span></td>
 				<td class="hit"><span><? echo ${hit}; ?></span></td>
 			</tr>
 <?

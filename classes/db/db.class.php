@@ -94,12 +94,7 @@ class DB {
 			$limit = ' LIMIT ' . $limit;
 		}
 
-		$like = $query->getLike();
-		if ($like != '') {
-			$like = ' LIKE ' . $like;
-		}
-
-		return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit . ' ' . $like;
+		return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
 	}
 
 	function _insertSql($query=NULL) {
@@ -110,7 +105,7 @@ class DB {
 		if ($keys != '') {
 			$keys = ' (' . $keys . ')' ;
 		}
-		$values = $query->getColum('value');
+		$values = $query->getColumn('value');
 
 		return 'INSERT ' . $priority . ' INTO ' . $tables . $keys . ' VALUES (' . $values .')';
 	}
@@ -127,9 +122,11 @@ class DB {
 
 	function _deleteSql($query=NULL) {
 		
+		$priority = $query->getPriority();
+		$tables = $query->getTable();
 		$where = $query->getWhere();	
 
-		return  'DELETE ' . $query['priority'] . ' FROM ' . $query['from'] . ' WHERE ' . $where;
+		return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
 	}
 
 	function _query($sql) {
@@ -150,7 +147,8 @@ class DB {
 	function select($query) {
 
 		$sql = $this->_selectSql($query);
-		echo $sql;
+		/*echo $sql . '<br>';
+		exit;*/
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;
@@ -159,6 +157,8 @@ class DB {
 	function insert($query) {
 
 		$sql = $this->_insertSql($query);
+		/*echo $sql . '<br>';
+		exit;*/
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;
@@ -174,7 +174,7 @@ class DB {
 
 	function delete($query) {
 
-		$sql = $this->_deleteSql($query);
+		$sql = $this->_deleteSql($query);		
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;

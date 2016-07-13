@@ -60,37 +60,41 @@ class BoardModel extends BaseModel {
 	function boardFromGroup() {
 
 		$context = Context::getInstance();
-		$query = Query::getInstance();
+		$query = new Query();
 		$query->setField('*');
 		$query->setTable($context->get('db_board_group'));
 		$query->setWhere( array(
 			'name' => $this->board
 		));
-		parent::select($query);
+		parent::select($query);		
 	}
 
 	function limitWord($values) {
 
+		$rows = $this->getRows();
 		$limit_word = $values;
 		if (!isset($limit_word)) {
 			return;
 		}
 
+		$where = new QueryWhere();
 		$limit_word_arr = split(',',$limit_word);
 		for ($i=0; $i<count($limit_word_arr); $i++) {
 
-			$limit_str = trim($limit_word_arr[$i]);
-			$query = Query::getInstance();
-			$query->setTable($this->board);		
-			$query->setWhere($rows['limit_choice'] . ' LIKE \'%' . $limit_str . '%\' ');
+			$limit_temp_str = trim($limit_word_arr[$i]);
+			$where->set($rows['limit_choice'], $limit_temp_str, 'like', 'or');
+		}
 
-			parent::delete($query);
-		}		
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setWhere($where);
+
+		parent::delete($query);			
 	}
 
 	function fieldFromId($field) {
 
-		$query = Query::getInstance();
+		$query = new Query();
 		$query->setField($field);
 		$query->setTable($this->board);
 		$query->setWhere(array(
@@ -101,7 +105,7 @@ class BoardModel extends BaseModel {
 
 	function fieldFromLimit($field ) {
 
-		$query = array();
+		$query = new Query();
 		$query->setField($field);
 		$query->setTable($this->board);
 		$query->setWhere(array(
@@ -135,7 +139,7 @@ class BoardModel extends BaseModel {
 		$rows = $this->getRows();
 		$igroup = $rows['id']+1; 
 
-		$query = Query::getInstance();
+		$query = new Query();
 		$query->setTable($this->board);
 		$query->setColumn(array(
 			'', 
@@ -160,7 +164,7 @@ class BoardModel extends BaseModel {
 
 		$result = parent::insert($query);
 		if (!isset($result)) {
-			Error::alertToBack('데이터를 저장하는데 실패했습니다.');
+			Error::alertToBack('글을 저장하는데 실패했습니다.');
 		}
 	}
 
@@ -183,13 +187,13 @@ class BoardModel extends BaseModel {
 			}
 		} 
 
-		$this->fieldFromId('id, igroup, space, ssunseo');
+		$this->fieldFromId('igroup, space, ssunseo');
 		$rows = $this->getRows();
-		$igroup = $rows['id']; 
-		$space = $row['space']+1;
-		$ssunseo = $row['ssunseo']+1;
+		$igroup = $rows['igroup']; 
+		$space = $rows['space']+1;
+		$ssunseo = $rows['ssunseo']+1;
 
-		$query = Query::getInstance();
+		$query = new Query();
 		$query->setTable($this->board);
 		$query->setColumn(array(
 			'', 
@@ -214,7 +218,7 @@ class BoardModel extends BaseModel {
 
 		$result = parent::insert($query);
 		if (!isset($result)) {
-			Error::alertToBack('데이터를 저장하는데 실패했습니다.');
+			Error::alertToBack('답글을 저장하는데 실패했습니다.');
 		}
 	}
 
@@ -248,7 +252,7 @@ class BoardModel extends BaseModel {
 				}
 			} 
 
-			$query = Query::getInstance();
+			$query = new Query();
 			$query->setTable($this->board);
 			$query->setColumn(array(
 				'name' => $this->m_name, 
@@ -267,7 +271,7 @@ class BoardModel extends BaseModel {
 
 			$result = parent::update($query);
 			if (!isset($result)) {
-				Error::alertToBack('데이터를 저장하는데 실패했습니다.');
+				Error::alertToBack('글을 수정하는데 실패했습니다.');
 			}
 		} else {
 			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
@@ -276,16 +280,38 @@ class BoardModel extends BaseModel {
 
 	function recordDelete() {
 
-		$query = Query::getInstance();
-		$query->setTable($this->board);
-		$query->setWhere(array(
-			'id'=>$this->id
-		));
+		$context = Context::getInstance();
+		$pass = trim($context->getPost('pwd'));
+		$admin_pwd = trim($context->get('db_admin_pwd'));
+		
+		$rows = $this->getRows();	
+		$del_filename = $rows['filename'];
 
-		$result = parent::delete($query);
-		if (!isset($result)) {
-			Error::alertToBack('데이터를 저장하는데 실패했습니다.');
-		}
+		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+
+			if(isset($del_filename)) {
+				$del_filename = _SUX_PATH_ . 'board_data/' . $this->board . '/' . $del_filename;
+
+				if(!@unlink($del_filename)) {
+					echo '파일삭제를 실패하였습니다.';
+				} else {
+					echo '파일삭제를 성공하였습니다.';
+				}
+			}
+			
+			$query = new Query();
+			$query->setTable($this->board);
+			$query->setWhere(array(
+				'id'=>$this->id
+			));
+
+			$result = parent::delete($query);
+			if (!isset($result)) {
+				Error::alertToBack('글을 삭제하는데 실패했습니다.');
+			}
+		} else  {
+			Error::alertToBack('비밀번호가 틀렸습니다.');
+		}	
 	}
 }
 ?>

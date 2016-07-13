@@ -99,7 +99,7 @@ class Query extends Object {
 
 	function setColumn($values) {
 
-		if (is_object($values)) {			
+		if (is_array($values)) {			
 			$this->column_keys = $this->getColumnKeys($values, ',');
 			$this->column_values = $this->getColumnValues($values, ',');
 			$values = $this->addQuotationToArray($values);
@@ -113,57 +113,50 @@ class Query extends Object {
 		$result = '';
 
 		if ($type == 'key') {
-			$result = $this->column_list;
+			$result = $this->column_keys;			
 		} else if ($type == 'value') {
-			$result = $this->column_keys;
-		} else {
 			$result = $this->column_values;
+		} else {
+			$result = $this->column_list;			
 		}
 		return $result;	
 	}
 
-	function setWhere($values, $glue=" and ") {
+	function setWhere($values, $cond="=", $glue='and') {
 
 		$result = '';
-		if (is_object($values)) {
-			$arr = $this->addQuotationToArray($values);
-			$result = $this->convertToString($arr, $glue);
-		} else if (is_array($values))  {
-			$result = $this->convertToString($values, $glue);
+		$glue = trim($glue);
+
+		if (is_a($values, 'QueryWhere')) {
+			$result = $values->get();
 		} else {
-			$result = $values;
+			if (is_array($values)) {
+				if (preg_match('/like/i', $cond)) {	
+
+					for($i=0; $i<count($values); $i++) {
+						foreach ($values[$i] as $key => $value) {
+
+							$result .= $key . ' LIKE ' . $value;
+							if ($i < count($values)-1) {
+								$result .= ' ' . $glue . ' ';
+							}
+						}
+					}	
+				} else {
+					$arr = $this->addQuotationToArray($values, $cond);
+					$result = $this->convertToString($arr, $glue);
+				}			
+			} else {
+				$result = $values;
+			}
 		}
-		
 		$this->where = $result;
+		//echo $this->where . '<br>';
 	}
 
 	function getWhere() {
 
-		return $this->column_list;
-	}
-
-	function setLike($arr) {
-
-		$like_str = '';
-
-		if (is_array($arr)) {
-
-			for($i=0; $i<count($arr); $i++) {		
-				$like_str .= ' \'%' . $values . '%\' ';
-				if ($i < count($arr)-1) {
-					$like_str .= 'and';
-				}
-			}
-		} else {
-			$like_str .= ' \'%' . $values . '%\' ';
-		}
-
-		$like_list = $like_str;
-	}
-
-	function getLike() {
-
-		return $this->like_list;
+		return $this->where;
 	}
 
 	function setIndexHintList($value) {
@@ -228,10 +221,13 @@ class Query extends Object {
 
 		$temp_arr = array();
 		foreach ($obj as $key => $value) {
-			$temp_arr[] = $key;
+
+			if (is_string($key)) {
+				$temp_arr[] = $key;
+			}
 		}
 
-		return $temp_arr;
+		return count($temp_arr) > 0 ? $temp_arr : '';
 	}
 
 	function getColumnValues($obj) {
@@ -241,14 +237,19 @@ class Query extends Object {
 			$temp_arr[] = $this->addQuotation($value);
 		}
 
-		return $temp_arr;
+		return $this->convertToString($temp_arr);
 	}
 
-	function addQuotationToArray($obj) {
+	function addQuotationToArray($obj, $cond='=') {
 
 		$temp_arr = array();
 		foreach ($obj as $key => $value) {
-			$temp_arr[] = $key . ' = ' . $this->addQuotation($value);
+
+			if (is_string($key)) {
+				$temp_arr[] = $key . $cond . $this->addQuotation($value);
+			} else {
+				$temp_arr[] = $this->addQuotation($value);
+			}			
 		}
 
 		return $temp_arr;

@@ -21,7 +21,7 @@ class BaseModel extends Object {
 		$this->setFetchArray();
 		$this->setNumRows();
 		return $result;
-	}	
+	}
 
 	function insert($query=NULL) {
 
@@ -69,6 +69,7 @@ class BaseModel extends Object {
 
 			$fields = array();
 			$rows = $this->fetchArrayList[$i];
+
 			foreach ($rows as $key => $value) {
 				if (($ignore === 'true' || $ignore === TRUE) && gettype($key) == 'string' && isset($value) && $value != '' ) {
 					$fields[$key]=$value;

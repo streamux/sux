@@ -52,6 +52,7 @@ if ($fileupname) {
 }
 ?>
 
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/common.css">
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-read" style="width:<? echo $width; ?>">
@@ -129,7 +130,7 @@ if (!$passover){
 	$passover = 0;
 }
 
-if ($action == "search"){
+if ($action == 'search' || $action == 'searchread'){
 	$option = "where $find like '%$search%'";
 }else{
 	$option = "";
@@ -167,6 +168,8 @@ if ($numrows2) {
 		$hit = $row[see];
 		$filename = $row[filename];
 		$today = date("Y-m-d");
+
+		$compareDay = split(' ', $day)[0];
 ?>
 			<tr>
 				<td class="author"><span><? echo ${m_name} ?></span></td>
@@ -211,7 +214,7 @@ if ($numrows2) {
 				break;
 		}
 
-		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&action=read><span>${title}</span></a>";
+		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&action=$action><span>${title}</span></a>";
 
 		$grgresult = mysql_query("select id from $board_grg where storyid=$sid");
 		$grgnums = mysql_num_rows($grgresult);
@@ -220,7 +223,7 @@ if ($numrows2) {
 			echo "(".$grgnums.")";
 		}
 
-		if ($day == $today){
+		if ($compareDay == $today){
 			echo "&nbsp;<img src=\"${skin_dir}/images/new.gif\">";
 		}
 		
@@ -254,8 +257,8 @@ if ($numrows2) {
 		<? include "navi.php"; ?>
 	</div>
 	<div class="search ui-inlineblock">
-		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&igroup=<? echo $igroup; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchread" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
-			<select name=find>
+		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&igroup=<? echo $igroup; ?>&sid=<? echo $sid; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
+			<select name='find'>
 				<option value='title'>제 목</option>
 				<option value='name'>이 름</option>
 				<option value='comment'>내 용</option>

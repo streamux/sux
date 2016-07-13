@@ -9,7 +9,7 @@ body,h1,h2,h3,h4,h5,button {margin:0;padding:0;font-family:Dotum,'돋움',Helvet
 table,textarea,input{font-size: 1em}
 div,dl,dt,dd,ul,ol,li,table,thead,tbody,tr,td,th,form,fieldset,p{margin:0;padding:0}
 input{font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;color:#383d41}
-body {background-color:#FFF;text-align:center;word-break:break-all}
+body {background-color:#FFF;word-break:break-all}
 
 img,fieldset,iframe {border:0 none}
 li {list-style:none}
@@ -27,11 +27,15 @@ option {padding-right:6px}
 hr {display:none}
 legend {width:0}
 table {border-collapse:collapse;border-spacing:0}
+input::-ms-clear {display:none}
 
+*, *:before, *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box}
 
 /* common */
 .show{display: block;}
-.hide{display: none;}
+.hide{display:none}
+.ui-inlineblock{display: inline-block}
+.color-red{color:#FF0000}
 .blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
 .warn-msg{display:block;padding-left:5px;text-align: left;font-family:'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움',sans-serif;color:#FF0000;font-size:0.750em}
 

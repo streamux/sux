@@ -10,6 +10,7 @@ if ($fileupname) {
 }
 ?>
 
+<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/common.css">
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-read" style="width:<? echo $width; ?>">

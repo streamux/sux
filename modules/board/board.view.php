@@ -47,8 +47,6 @@ class ListPanel extends BaseView {
 		$rows = $this->model->getRows();
 		$this->controller->delete('limitWord', $rows['limit_word']);
 
-		echo '<br>boar name : ' . $rows[name] . '<br>';
-
 		if (isset($rows['include1'])) {
 			$top_path = $rows['include1'];
 			if (is_readable($top_path)) {
@@ -99,7 +97,7 @@ class SearchlistPanel extends BaseView {
 
 		$find = $context->getPost('find') ?  $context->getPost('find') : $context->getRequest('find');
 		$search = $context->getPost('search') ?  $context->getPost('search') : $context->getRequest('search');
-		
+
 		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();
 		$this->controller->delete('limitWord', $rows['limit_word']);
@@ -152,7 +150,7 @@ class ReadPanel extends BaseView {
 		$sid = $context->getRequest('sid');
 		$find = $context->getRequest('find');
 		$search = $context->getRequest('search');
-		$action = $context->getRequest('action');
+		$action = $context->getRequest('action');		
 
 		$grade = $context->getSession('grade');
 		$this->controller->select('boardFromGroup');
@@ -218,6 +216,10 @@ class SearchreadPanel extends ReadPanel {
 		$id = $context->getRequest('id');
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
+		$action = $context->getRequest('action');
+
+		$find = $context->getRequest('find');
+		$search = $context->getRequest('search');
 
 		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();	
@@ -622,7 +624,7 @@ class RecordModifyPanel extends RecordBasePanel {
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
 
-		$this->controller->insert('recordModify');
+		$this->controller->update('recordModify');
 		$rows = $this->model->getRows();
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$rows[sid]&igroup=$rows[igroup]&action=read'>");
@@ -639,29 +641,10 @@ class RecordDeletePanel extends RecordBasePanel {
 		$requests = $context->getRequestAll();
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
-		$pass = trim($context->getPost('pwd'));
-
+		
 		$this->controller->select('fieldFromId', 'pass,filename');
-		$rows = $this->model->getRows();	
-		$del_filename = $rows['filename'];
-
-		if ($pass == $rows['pass'] || $pass == $context->get('db_admin_pwd')) {
-
-			if(isset($del_filename)) {
-				$del_filename = _SUX_PATH_ . 'board_data/' . $this->board . '/$del_filename';
-
-				if(!@unlink($del_filename)) {
-					echo '파일삭제를 실패하였습니다.';
-				} else {
-					echo '파일삭제를 성공하였습니다.';
-				}
-			}
-			
-			$this->controller->delete('recordDelete');
-		} else  {
-			Error::alertToBack('비밀번호가 틀렸습니다.');
-		}
-
+		$this->controller->delete('recordDelete');
+		
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
 }
