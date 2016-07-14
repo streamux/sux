@@ -40,7 +40,6 @@ class LoginPanel extends BaseView {
 		$context = Context::getInstance();
 		$this->controller->select('getMemberGroup');
 		$strJson = $this->model->getJson();
-		
 		$contents = new Template(_SUX_PATH_ . $this->skin_path);
 		$contents->set('memberList', $strJson);
 		$contents->load();

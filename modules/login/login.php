@@ -1,7 +1,7 @@
 <?
 
 session_start();
-include "../lib.php";
+include "../../config/config.inc.php";
 
 
 $context = Context::getInstance();

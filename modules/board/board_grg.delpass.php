@@ -36,6 +36,6 @@ $row = mysql_fetch_array($result);
 $m_name = $row[name];
 
 include "$include1";
-include $include2 . '/grg_delpass.php";
+include $include2 . '/delpass_grg.php";
 include "$include3";
 ?>

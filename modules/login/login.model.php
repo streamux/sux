@@ -12,10 +12,10 @@ class LoginModel extends BaseModel {
 	function getMemberGroup() {
 
 		$context = Context::getInstance();
-		$query = array();
-		$query['select'] = 'name';
-		$query['from'] = $context->get('db_member_group');
-		$query['orderBy'] = 'id asc';	
+		$query = new Query();
+		$query->setField('name');
+		$query->setTable($context->get('db_member_group'));
+		$query->setOrderBy('id asc');	
 		parent::select($query);		
 	}
 
