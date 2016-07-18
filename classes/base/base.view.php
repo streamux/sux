@@ -12,11 +12,28 @@ class BaseView extends Object {
 		$this->controller = $c;
 	}
 
-	function init() {}
-
 	function display($className=NULL) {
 
-		echo '이 글이 보인다면 제 정의해서 사용하세요.';
+		$oDB = DB::getInstance();
+
+		if (strlen(stristr($className, '_')) > 0) {
+			$tempName = '';
+			$str_arr = split('_', $className);
+
+			for ($i=0; $i<count($str_arr); $i++) {
+				$tempName .= ucfirst($str_arr[$i]);
+			}
+			$className = $tempName . "Panel";
+		} else {
+			$className = ucfirst($className) . "Panel";
+		}
+		
+		$view = new $className($this->model, $this->controller);
+		$view->init();
+
+		$oDB->close();
 	}
+
+	function init() {}
 }
 ?>

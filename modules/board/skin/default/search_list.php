@@ -1,9 +1,12 @@
 <?
-$limit =10;
+$limit =3;
 
 if (!$passover) {
 	 $passover=0;
 }
+
+$result0 = mysql_query("select * from $board where $find like '%$search%' order by id desc");
+$numrows = mysql_num_rows($result0);
 
 $query = mysql_query("select * from $board where $find like '%$search%' order by id desc limit $passover,$limit");
 $numrows2 = mysql_num_rows($query);
@@ -38,6 +41,7 @@ if ($numrows2) {
 		$filename = $row['filename'];
 		$hit = $row['see'];
 		$today = date("Y-m-d");
+		$compareDay = split(' ', $day)[0];
 		
 		$find_key = strtolower($find);
 		switch ($find_key) {
@@ -61,33 +65,21 @@ if ($numrows2) {
 			}
 		}
 
-		if($space) {
+		if ($space) {
 			$imgname = "icon_answer.gif";
-		}else{
-			$imgname = "text.gif";
-		}
-
-		echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp";
+			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp";
+		}	
 
 		$imgname = "";
-
-		if($filename){
-
-			if ($type=="image/gif"){
-				$imgname = "gif.gif";
-			}else if($type=="image/pjpeg"){
-				$imgname = "jpg.gif";
-			}else if($type=="image/x-png"){
-				$imgname = "png.gif";
-			}else if($type=="image/bmp"){
-				$imgname = "bmp.gif";
-			}else if($type=="application/x-zip-compressed"){ 
-				$imgname = "down.gif";
-			}else {
-				$imgname = "text.gif";
+		if ($filename){
+			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
+				$imgname = "icon_img.png";
+			} else if ($download == 'y'  && ($type=="application/x-zip-compressed" || $type=="application/zip")) { 
+				$imgname = "icon_down.png";
 			}
-
-			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			if ($imgname != '') {
+				echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			}			
 		}
 
 		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&action=searchread>${storytitle}</a>";
@@ -99,7 +91,7 @@ if ($numrows2) {
 			echo "(".$grgnums.")";
 		}
 
-		if($day == $today){
+		if($compareDay == $today){
 			echo "&nbsp;<img src=\"${skin_dir}/images/new.gif\">";
 		}
 		
@@ -113,7 +105,7 @@ if ($numrows2) {
 		}
 ?>
 				</td>				
-				<td class="date"><span><? echo ${day}; ?></span></td>
+				<td class="date"><span><? echo ${compareDay}; ?></span></td>
 				<td class="hit"><span><? echo ${hit}; ?></span></td>
 			</tr>
 <?
@@ -129,7 +121,9 @@ if ($numrows2) {
 		</tbody>
 	</table>
 	<div class="navi">
-		<? include "navi.php"; ?>
+		<?
+			include $skin_dir . "/navi.php";
+		?>
 	</div>
 	<div class="search ui-inlineblock">
 		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">

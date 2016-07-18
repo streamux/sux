@@ -70,7 +70,7 @@ jsux.fn = {
 
 		var	params = "";
 		params = {	table_name: $("select[name=table_name]").val(),
-					companyname: $("input[name=companyname]").val()};
+					company: $("input[name=company]").val()};
 
 		jsux.getJSON("../search_companyname.php", params, function( e ) {
 
@@ -151,10 +151,9 @@ jsux.fn = {
 	sendJson: function( f ) {
 
 		var params = "";
-
-		params = { table_name: f.m_groupname.value,
-					memberid: f.m_memberid.value,
-					id: f.m_id.value,
+		params = { action: 'record_edit',
+					table_name: f.table_name.value,
+					memberid: f.memberid.value,
 					pwd1: f.pwd1.value,
 					pwd2: f.pwd2.value,
 					name: f.name.value,
@@ -165,104 +164,95 @@ jsux.fn = {
 					tel1: f.tel1.value,
 					tel2: f.tel2.value,
 					tel3: f.tel3.value,
-					companyname: f.companyname.value,
+					company: f.company.value,
 					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby"),
-					path: f.path.value,
-					proposeid: f.proposeid.value };
+					hobby: this.getCheckboxVal("hobby") };
 
-
-		jsux.getJSON("member.edit.update.php", params, function( e ) {
+		jsux.getJSON("member.php", params, function( e ) {
 
 			trace( e.msg );
-
 			if (e.result == "Y") {
-				jsux.goURL(menuList[0].sub[0].link);
+				jsux.goURL('../login/login.php?action=login');
 			}
 		});
 	},
 	setEvent: function() {
 
 		var self = this;
-
 		$("form").on("submit", function( e ) {
 
 			e.preventDefault();
-
-			var bool  = self.checkFormVal( e.target );
-			
+			var bool  = self.checkFormVal( e.target );			
 			if (bool === true) {
-
 				self.sendJson( e.target );
 			}
 		});
 
 		$("input[name=cancel]").on("click", function(e) {
-
-			jsux.goURL(menuList[0].sub[0].link);
+			jsux.history.back();
 		});
+
 		$("input[name=pwd2]").on("blur", function() {
-
 			self.checkPWD();
-		});				
-		$("input[name=checkCorpName]").on("click",function(e) {
+		});	
 
+		$("input[name=checkCorpName]").on("click",function(e) {
 			self.checkCorpName();
 		});
 
 		$("select[name=email_tail1]").on("change", function() {
-
 			$("input[name=email_tail2").val("");
 		});
 	},
 	setLayout: function() {
 
 		var params = {
-			table_name: $("input[name=m_groupname]").val(),
-			memberid:  $("input[name=m_memberid]").val()
+			action: 'memberfield',
+			table_name: $("input[name=table_name]").val(),
+			memberid:  $("input[name=memberid]").val()
 		};
 
-		jsux.getJSON("member.edit.json.php", params, function( e ) {
+		jsux.getJSON("member.php", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
 				markup = null,
 				labelList = null;
 
-			if (e.result == "Y") {
+			if (e) {
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
 
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+					if (e[this.name]) {
+						this.value = e[this.name];
 					}
 				});
 
 				formLists = $("select");
 				$(formLists).each(function(index) {
 
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+					if (e[this.name]) {
+						this.value = e[this.name];
 					}						
 				});
 
-				formLists = $("input[type=checkbox]");
-				checkedVal = e.data.hobby.split(",");
+				if (e.hobby) {
 
-				$(formLists).each(function(index){
+					formLists = $("input[type=checkbox]");
+					checkedVal = e.hobby.split(",");
+					$(formLists).each(function(index){
 
-					var self = this;
-
-					$(checkedVal).each(function(sIndex){
-
-						if (checkedVal[sIndex]) {
-							if( self.value === checkedVal[sIndex]) {
-								self.checked = true;
+						var self = this;
+						$(checkedVal).each(function(sIndex){
+							if (checkedVal[sIndex]) {
+								if( self.value === checkedVal[sIndex]) {
+									self.checked = true;
+								}
 							}
-						}
+						});
 					});
-				});
+				}
 
 				labelList = $("table tr").find(".view-type-textfield");
 
@@ -273,7 +263,7 @@ jsux.fn = {
 						data = "";
 
 					label = $(labelList[index]).attr("id");						
-					data = {label: e.data[label]};
+					data = {label: e[label]};
 
 					$("#"+label).empty();
 					$(markup).tmpl( data ).appendTo($("#"+label));

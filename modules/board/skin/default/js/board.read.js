@@ -12,17 +12,17 @@ function musimsearch_check( f ) {
 
 function musimsl_check( f ) {
 
-	var nameo = f.name.value.length,
-		passo = f.pass.value.length,
+	var nameo = f.ljs_name.value.length,
+		passo = f.ljs_pass.value.length,
 		commento = f.comment.value.length;
 
 	if ( nameo < 1 ) {
 		alert("이름을 입력하세요.");
-		f.name.focus();
+		f.ljs_name.focus();
 		return (false);
 	}else if ( passo < 1 ) {
 		alert("비밀번호를 입력하세요.");
-		f.pass.focus();
+		f.ljs_pass.focus();
 		return (false);
 	}else if ( commento < 1 ) {
 		alert("내용을 입력하세요.");

@@ -3,28 +3,8 @@
 class BoardView extends BaseView {
 
 	var $class_name = 'board_view';
-
-	function display($className=NULL) {
-
-		$oDB = DB::getInstance();
-
-		if (strlen(stristr($className, '_')) > 0) {
-			$tempName = '';
-			$str_arr = split('_', $className);
-
-			for ($i=0; $i<count($str_arr); $i++) {
-				$tempName .= ucfirst($str_arr[$i]);
-			}
-			$className = $tempName . "Panel";
-		} else {
-			$className = ucfirst($className) . "Panel";
-		}
-		
-		$view = new $className($this->model, $this->controller);
-		$view->init();
-
-		$oDB->close();
-	}
+	
+	// display function is defined in parent class 
 }
 
 class ListPanel extends BaseView {
@@ -45,6 +25,7 @@ class ListPanel extends BaseView {
 
 		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();
+		$download = strtolower($rows['download']);
 		$this->controller->delete('limitWord', $rows['limit_word']);
 
 		if (isset($rows['include1'])) {
@@ -100,6 +81,7 @@ class SearchlistPanel extends BaseView {
 
 		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();
+		$download = strtolower($rows['download']);
 		$this->controller->delete('limitWord', $rows['limit_word']);
 
 		if (isset($rows['include1'])) {
@@ -155,6 +137,7 @@ class ReadPanel extends BaseView {
 		$grade = $context->getSession('grade');
 		$this->controller->select('boardFromGroup');
 		$rows = $this->model->getRows();	
+		$download = strtolower($rows['download']);
 
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -481,7 +464,7 @@ class ModifyPanel extends BaseView {
 	}
 }
 
-class DelpassPanel extends BaseView {
+class DeletepassPanel extends BaseView {
 
 	var $class_name = 'delpass';
 
@@ -521,17 +504,149 @@ class DelpassPanel extends BaseView {
 	}
 }
 
-class RecordBasePanel extends BaseView {
+/*
+class DownPanel extends BaseView {
 
-	var $class_name = 'record_base';
+	var $class_name = 'down';
 
 	function init() {
 
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$files = $context->getFiles();
-		$this->checkValidation($posts);
-		$this->checkFiles($files);
+		$board = $context->getRequest('board');
+		$fileupname = $context->getRequest('fileupname');
+		$fileupname = iconv("UTF-8","EUC-KR",$fileupname) ? iconv("UTF-8","EUC-KR",$fileupname) : $fileupname;
+		$filesize = $context->getRequest('filesize');
+		$filetype = $context->getRequest('filetype');
+		$filesdir = _SUX_PATH_ . 'board_data/' . $board . '/';
+		$filespath = $filesdir . $fileupname;
+		$filespath = preg_replace('/ /i', '', $filespath);
+		$filespath = urldecode($filespath);
+
+		//echo $filetype. '<br>' . $filespath . '<br>' . $filesize . '<br>';		
+		$this->download_file($fileupname, $filesdir, $filetype);
+	}
+
+	function download_file($file_name, $file_dir, $file_type ) { 
+
+		if (!$file_name || !$file_dir) return 1; 
+		if (preg_match( "\\\\|\.\.|/", $file_name)) return 2; 
+
+		if (file_exists($file_dir.$file_name)) { 
+
+			$fp = fopen($file_dir.$file_name,"r"); 
+			if ($file_type) { 
+				//echo $file_type;
+				header("Content-type: $file_type"); 
+				Header("Content-Length: ".filesize($file_dir.$file_name));    
+				Header("Content-Disposition: attachment; filename=" . $file_name);  
+				Header("Content-Transfer-Encoding: binary"); 
+				header("Expires: 0"); 
+			} else { 
+
+				if(eregi("(MSIE 5.0|MSIE 5.1|MSIE 5.5|MSIE 6.0)", $HTTP_USER_AGENT)) { 
+					//echo 'octet-stream';
+					Header("Content-type: application/octet-stream"); 
+					Header("Content-Length: ".filesize($file_dir.$file_name));    
+					Header("Content-Disposition: attachment; filename=" . $file_name);  
+					Header("Content-Transfer-Encoding: binary");  
+					Header("Expires: 0");  
+				} else {
+					//echo 'unknown';
+					Header("Content-type: file/unknown");    
+					Header("Content-Length: ".filesize($file_dir.$file_name)); 
+					Header("Content-Disposition: attachment; filename=". $file_name); 
+					Header("Content-Description: PHP3 Generated Data"); 
+					Header("Expires: 0"); 
+				}
+			}
+			fpassthru($fp); 
+			fclose($fp); 
+		}  else {
+			return 1; 
+		}
+	} 
+}
+*/
+
+class OpkeyPanel extends BaseView {
+
+	var $class_name = 'opkey';
+
+	function init() {
+
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+		$board = $context->getRequest('board');
+		$board_grg = $board . 'grg';
+
+		$result = $this->controller->update('recordOpkey');
+		if (!isset($result)) {
+			Error::alertToBack('진행상황 설정을 실패하였습니다.');
+		}
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
+	}
+}
+
+class DeletecommentPanel extends BaseView {
+
+	var $class_name = 'delete_comment';
+
+	function init() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+
+		$id = $requests['id'];				
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$grgid = $requests['grgid'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+
+		$this->controller->select('boardFromGroup');
+		$rows = $this->model->getRows();
+
+		$this->controller->select('fieldFromId', 'name');
+		$m_name = $this->model->getRows()['name'];
+
+		if (is_readable($rows['include1'])) {
+			include $rows['include1'];
+		} else {
+			echo '상단 파일경로를 확인하세요.<br>';
+		}
+
+		$skin_dir = 'skin/' . $rows['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
+		} else {
+			echo '스킨 파일경로를 확인하세요.<br>';
+		}
+
+		if (is_readable($rows['include3'])) {
+			include $rows['include3'];
+		} else {
+			echo '하단 파일경로를 확인하세요.<br>';
+		}
+	}
+}
+
+class RecordBasePanel extends BaseView {
+
+	var $class_name = 'record_base';
+	var $requests;
+	var $posts;
+	var $files;
+
+	function init() {
+
+		$context = Context::getInstance();
+		$this->requests = $context->getRequestAll();
+		$this->posts = $context->getPostAll();
+		$this->files = $context->getFiles();
+		$this->checkValidation($this->posts);
+		$this->checkFiles($this->files);
 		
 		$this->record();
 	}
@@ -581,13 +696,38 @@ class RecordWritePanel extends RecordBasePanel {
 
 	function record() {
 
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requests = $this->requests;
+		$posts = $this->posts;
+		$files = $this->files;
 
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
+		$wall = trim($posts['wall']);
+		$wallok = trim($posts['wallok']);
+		$imgup_name = $files['imgup']['name'];
+		$imgup_tmpname = $files['imgup']['tmp_name'];
 
-		$this->controller->insert('recordWrite');		
+		if ($wall != $wallok) {
+			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			exit;
+		}
+
+		$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
+
+		if (is_uploaded_file($imgup_tmpname )) {
+			$mktime = mktime();
+			$imgup_name =$mktime . "_" . $imgup_name;
+			$dest = $save_dir . $imgup_name;
+
+			if (!move_uploaded_file($imgup_tmpname , $dest)) {
+				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+			}
+		} 
+
+		$result = $this->controller->insert('recordWrite');
+		if (!isset($result)) {
+			Error::alertToBack('글을 저장하는데 실패했습니다.');
+		}
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
@@ -599,13 +739,38 @@ class RecordReplyPanel extends RecordBasePanel {
 
 	function record() {
 
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requests = $this->requests;
+		$posts = $this->posts;
+		$files = $this->files;
 
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
+		$wall = trim($posts['wall']);
+		$wallok = trim($posts['wallok']);
+		$imgup_name = $files['imgup']['name'];
+		$imgup_tmpname = $files['imgup']['tmp_name'];
 
-		$this->controller->insert('recordReply');
+		if ($wall != $wallok) {
+			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			exit;
+		}
+
+		$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
+
+		if (is_uploaded_file($imgup_tmpname )) {
+			$mktime = mktime();
+			$imgup_name = $mktime . "_" . $imgup_name;
+			$dest = $save_dir . $imgup_name;
+
+			if (!move_uploaded_file($imgup_tmpname , $dest)) {
+				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+			}
+		} 	
+
+		$result = $this->controller->insert('recordReply');
+		if (!isset($result)) {
+			Error::alertToBack('답글을 저장하는데 실패했습니다.');
+		}
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
@@ -617,15 +782,54 @@ class RecordModifyPanel extends RecordBasePanel {
 
 	function record() {
 
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requests = $this->requests;
+		$posts = $this->posts;
+		$files = $this->files;
 
 		$id = $requests['id'];
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
+		$pass = $posts['pass'];
+		$admin_pwd = $context->get('db_admin_pwd');
+		$imgup_name = $files['imgup']['name'];
+		$imgup_tmpname = $files['imgup']['tmp_name'];
 
-		$this->controller->update('recordModify');
+		$this->controller->select('fieldFromId', 'pass, igroup, filename');		
 		$rows = $this->model->getRows();
+
+		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+
+			$del_filename = $rows['filename'];
+
+			$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
+
+			if ($del_filename) {
+				$del_filename = $save_dir . $del_filename;
+
+				if(!@unlink($del_filename)) {
+					echo "파일삭제에 실패했습니다.";
+				} else {
+					echo "파일 삭제에 성공했습니다.";
+				}
+			}
+
+			if (is_uploaded_file($imgup_tmpname)) {
+				$mktime = mktime();
+				$imgup_name = $mktime."_".$imgup_name;
+				$dest = $save_dir . $imgup_name;
+
+				if (!move_uploaded_file($imgup_tmpname, $dest)) {
+					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+				}
+			} 
+
+			$result = $this->controller->update('recordModify');			
+			if (!isset($result)) {
+				Error::alertToBack('글을 수정하는데 실패했습니다.');
+			}
+		} else {
+			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
+		}
 
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$rows[sid]&igroup=$rows[igroup]&action=read'>");
 	}
@@ -635,18 +839,103 @@ class RecordDeletePanel extends RecordBasePanel {
 
 	var $class_name = 'record_delete';
 
-	function init() {
+	function record() {
 
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requests = $this->requests;
+		$posts = $this->posts;
+		$files = $this->files;
+
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
 		
 		$this->controller->select('fieldFromId', 'pass,filename');
-		$this->controller->delete('recordDelete');
+		
+		$pass = trim($posts['pwd']);
+		$admin_pwd = trim($context->get('db_admin_pwd'));
+		
+		$rows = $this->model->getRows();	
+		$del_filename = $rows['filename'];
+
+		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+
+			if(isset($del_filename)) {
+				$del_filename = _SUX_PATH_ . 'board_data/' . $board . '/' . $del_filename;
+
+				if(!@unlink($del_filename)) {
+					echo '파일삭제를 실패하였습니다.';
+				} else {
+					echo '파일삭제를 성공하였습니다.';
+				}
+			}
+			
+			$result = $this->controller->delete('recordDelete');
+			if (!isset($result)) {
+				Error::alertToBack('글을 삭제하는데 실패했습니다.');
+			}
+		} else  {
+			Error::alertToBack('비밀번호가 틀렸습니다.');
+		}		
 		
 		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
 	}
 }
 
+class RecordWritecommentPanel extends RecordBasePanel {
+
+	var $class_name = 'record_writecomment';
+
+	function record() {
+
+		$requests = $this->requests;
+
+		$id = $requests['id'];
+		$board = $requests['board'];		
+		$board_grg = $requests['board_grg'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+		$sid = $requests['sid'];
+
+		$result = $this->controller->insert('recordWriteComment');
+		if (!isset($result)) {
+			Error::alertToBack('댓글 입력을 실패하였습니다.');
+		}
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read'>");
+	}
+}
+
+class RecordDeletecommentPanel extends RecordBasePanel {
+
+	var $class_name = 'record_deletecomment';
+
+	function record() {
+
+		$requests = $this->requests;
+		$posts = $this->posts;
+
+		$pass = trim($posts['pwd']);
+		$admin_pwd = $context->get('db_admin_pwd');
+		
+		$id = $requests['id'];
+		$sid = $requests['sid'];
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+
+		$this->controller->select('fieldFromCommentId', 'pass');
+		$rows = $this->model->getRows();
+
+		if ($pass == $rows['pass'] || $pass == "$admin_pwd") {
+			$result = $this->controller->delete('recordDeleteComment');
+			if (!isset($result)) {
+				Error::alertToBack('댓글 삭제를 실패하였습니다.');
+			}			
+		} else  {
+			Error::alertToBack('비밀번호가 틀립니다');
+		}
+
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&action=read'>");		
+	}
+}
 ?>

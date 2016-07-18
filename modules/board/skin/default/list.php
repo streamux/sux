@@ -62,16 +62,15 @@ if ($numrows2) {
 		}		
 
 		$imgname = "";
-
 		if ($filename){
-
 			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
 				$imgname = "icon_img.png";
-			} else if ($type=="application/x-zip-compressed"){ 
+			} else if ($download == 'y'  && ($type=="application/x-zip-compressed" || $type=="application/zip")) { 
 				$imgname = "icon_down.png";
 			}
-
-			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			if ($imgname != '') {
+				echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			}			
 		}
 
 		echo "<a href=board.php?board=$board&board_grg=$board_grg&id=$row[id]&igroup=$row[igroup]&passover=$passover&page=$page&sid=$sid&action=read><span>${title}</span></a>&nbsp;";
@@ -94,7 +93,7 @@ if ($numrows2) {
 								"m"=>"icon_mail.gif",
 								"n"=>"icon_no_cost.gif");
 
-			echo "<img src=\"${skin_dir}/images/$img_list[$opkey]\">";
+			echo "&nbsp;<img src=\"${skin_dir}/images/$img_list[$opkey]\">";
 		}
 ?>
 				</td>				
@@ -114,7 +113,9 @@ if ($numrows2) {
 		</tbody>
 	</table>
 	<div class="navi">
-		<? include "navi.php"; ?>
+		<? 
+			include $skin_dir . "/navi.php";
+		?>
 	</div>
 	<div class="search ui-inlineblock">
 		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">

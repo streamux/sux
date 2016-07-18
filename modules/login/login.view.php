@@ -51,6 +51,7 @@ class LoginPanel extends BaseView {
 		$session_list = $context->getSessionAll();
 		$contents = new Template(_SUX_PATH_ . $this->info_skin_path);
 		foreach ($session_list as $key => $value) {
+			//echo $key . ' : ' . $value . '<br>';
 			$contents->set($key, $value);
 		}
 		$contents->load();
@@ -66,7 +67,7 @@ class LogpassPanel extends BaseView {
 		$context = Context::getInstance();
 		$member = $context->getPost('member');
 		$memberid = $context->getPost('memberid');
-		$pass =$context->getPost('pass');
+		$pass = trim($context->getPost('pass'));
 
 		$msg = "";
 
@@ -85,26 +86,31 @@ class LogpassPanel extends BaseView {
 		$num = $this->model->getNumRows();
 
 		if ($num > 0) {			
-			$row = $this->model->getRows();
-			$ljs_memberid = $row['ljs_memberid'];
-			$ljs_pass1 = $row['ljs_pass1'];
-			$ljs_name = $row['name'];
+			$rows = $this->model->getRows();
+			$ljs_memberid = $rows['ljs_memberid'];
+			$ljs_pass1 = $rows['ljs_pass1'];
+			$ljs_name = $rows['name'];
 
-			$ljs_conpanyname = $row['conpany'];
+			if ($pass !== $ljs_pass1) {
+				Error::alertToBack('비밀번호가 일치하지 않습니다.');
+				exit;
+			}
+
+			$ljs_conpanyname = $rows['conpany'];
 			if ($ljs_conpanyname) {
 				$ljs_name = $ljs_conpanyname;
 			}
 
-			$ljs_email = $row['email'];
-			$ljs_writer = $row['writer'];			
-			$ljs_point = $row['point'];
-			$grade = $row['grade'];
+			$ljs_email = $rows['email'];
+			$ljs_writer = $rows['writer'];			
+			$ljs_point = $rows['point'];
+			$grade = $rows['grade'];
 			$automod1 = "yes";
 			$chatip = $REMOTE_ADDR;
-			$ljs_hit = $row['hit'] + 1;
+			$ljs_hit = $rows['hit'] + 1;
 
 			$values['hit'] = $ljs_hit;
-			$this->controller->update('getLogpass');
+			$this->controller->update('getLogpass', $values);
 
 			$_SESSION['ljs_member'] = $member;
 			$_SESSION['ljs_memberid'] = $ljs_memberid;

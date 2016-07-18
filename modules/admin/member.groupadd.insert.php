@@ -38,7 +38,7 @@ $result = mysql_query(	"create table $table_name".
 						"hobby varchar(40),". 
 						"path char(20),". 
 						"proposeid char(20),". 
-						"date date,".
+						"date timestamp,".
 						"hit int,". 
 						"writer varchar(5),".
 						"point int(11),".

@@ -87,7 +87,7 @@ if (!$result) {
 							"nickname varchar(12),".
 							"pass varchar(30),".
 							"comment text,".
-							"date date)");
+							"date timestamp)");
 	if (!$result) {
 		$msg .= "${table_name_gg}꼬리글 테이블 생성을 실패하였습니다.\n";
 	} else {

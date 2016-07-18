@@ -25,7 +25,7 @@ if ($result) {
 	$hp1 = $row['hp1'];
 	$hp2 = $row['hp2'];
 	$hp3 = $row['hp3'];
-	$companyname = $row['company'];
+	$company = $row['company'];
 	$job = $row['job'];
 	$hobby = $row['hobby'];
 	$path = $row['path'];
@@ -38,7 +38,7 @@ if ($result) {
 
 	$emailList = split("@", $email );
 
-	$dataObj = array("table_name"=>$table_name,"id"=>$id,"memberid"=>$memberid,"pwd1"=>$pwd1,"pwd2"=>$pwd2,"name"=>$name,"email"=>$emailList[0],"email_tail2"=>$emailList[1],"tel1"=>$tel1,"tel2"=>$tel2,"tel3"=>$tel3,"hp1"=>$hp1,"hp2"=>$hp2,"hp3"=>$hp3,"companyname"=>$companyname,"job"=>$job,"hobby"=>$hobby,"path"=>$path,"proposeid"=>$proposeid,"date"=>$date,"writer"=>$writer,"point"=>$point,"grade"=>$grade,"ip"=>$ip);
+	$dataObj = array("table_name"=>$table_name,"id"=>$id,"memberid"=>$memberid,"pwd1"=>$pwd1,"pwd2"=>$pwd2,"name"=>$name,"email"=>$emailList[0],"email_tail2"=>$emailList[1],"tel1"=>$tel1,"tel2"=>$tel2,"tel3"=>$tel3,"hp1"=>$hp1,"hp2"=>$hp2,"hp3"=>$hp3,"companyname"=>$company,"job"=>$job,"hobby"=>$hobby,"path"=>$path,"proposeid"=>$proposeid,"date"=>$date,"writer"=>$writer,"point"=>$point,"grade"=>$grade,"ip"=>$ip);
 
 } else {
 	$msg = "$memberid 회원이 존재하지 않습니다.";

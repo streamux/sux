@@ -42,9 +42,6 @@
 						<select name="member" id="ljsMember">
 							<!-- templete -->
 						</select>
-						<span class="link-searchinfo">
-							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
-						</span>
 					</div>
 					<div class="login-body">
 						<div class="panel-info">
@@ -55,7 +52,12 @@
 						</div><div class="panel-btn">
 							<input type="image" name="imagefield" src="skin/default/images/btn_login.gif" title="로그인버튼" class="login-btn">
 						</div>					
-					</div>																	
+					</div>
+					<div class="login-footer">
+						<span class="link-searchinfo">
+							<a href="../member/member.php?action=add" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchid"><span>아이디</span></a><span>/</span><a href="login.php?action=searchpwd"><span>비밀번호 찾기</span></a>	
+						</span>
+					</div>																
 				</div>
 				</form>
 				<div class="panel-login-fail">

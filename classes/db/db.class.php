@@ -1,6 +1,6 @@
 <?php
 
-class DB {
+class DB extends Object {
 
 	private static $aInstance = NULL;
 
@@ -146,10 +146,9 @@ class DB {
 
 	function select($query) {
 
-		$sql = $this->_selectSql($query);
-		/*echo $sql . '<br>';
-		exit;*/
+		$sql = $this->_selectSql($query);	
 		$this->query_result = $this->_query($sql);
+		//parent::output($sql);
 
 		return $this->query_result;
 	}
@@ -157,8 +156,7 @@ class DB {
 	function insert($query) {
 
 		$sql = $this->_insertSql($query);
-		/*echo $sql . '<br>';
-		exit;*/
+		//parent::output($sql);
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;
@@ -167,6 +165,7 @@ class DB {
 	function update($query) {
 
 		$sql = $this->_updateSql($query);
+		//parent::output($sql);
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;
@@ -174,7 +173,8 @@ class DB {
 
 	function delete($query) {
 
-		$sql = $this->_deleteSql($query);		
+		$sql = $this->_deleteSql($query);
+		//parent::output($sql);	
 		$this->query_result = $this->_query($sql);
 
 		return $this->query_result;

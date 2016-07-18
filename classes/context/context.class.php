@@ -7,9 +7,7 @@ class Context {
 	public $db_info = NULL;
 	var $class_name = 'context';
 
-	function __contruct() {
-				
-	}
+	function __contruct() {}
 
 	public static function &getInstance() {
 
@@ -21,10 +19,21 @@ class Context {
 	}
 
 	function init() {
-
+	
+		$this->startSession();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
 		$this->loadTablesInfo();
+	}
+
+	function startSession() {
+
+		session_start();
+	}
+
+	function stopSession() {
+
+		session_destroy();
 	}
 
 	function loadDBInfo() {
@@ -158,6 +167,16 @@ class Context {
 	function getSessionAll() {
 
 		return $_SESSION;
+	}
+
+	function getServer($key) {
+
+		return $_SERVER[$key];
+	}
+
+	function getServerAll() {
+
+		return $_SERVER;
 	}
 
 	function set($key, $val) {

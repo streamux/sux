@@ -136,7 +136,7 @@ class Query extends Object {
 					for($i=0; $i<count($values); $i++) {
 						foreach ($values[$i] as $key => $value) {
 
-							$result .= $key . ' LIKE ' . $value;
+							$result .= $key . ' LIKE %\'' . $value . '\'';
 							if ($i < count($values)-1) {
 								$result .= ' ' . $glue . ' ';
 							}

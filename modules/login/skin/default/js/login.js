@@ -2,8 +2,6 @@ jsux.fn = {
 
 	dispSelectMemberList: function() {
 
-		alert('aa');
-
 		var data = loginObj.memberList,
 			markup = $("#ljsMember_tmpl");
 

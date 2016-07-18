@@ -19,19 +19,21 @@ class JsonEncoder {
 		if (empty(self::$je_instance)) {
 			self::$je_instance = new self;
 		}
-
+;
 		return self::$je_instance;
 	}
 
 	public function parse( $data = NULL) {
 
 		$data = ($data === NULL) ? $this->json_data : $data;
+		$result = NULL;
 
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
-			return json_encode($data, JSON_UNESCAPED_UNICODE);	
+			$result = json_encode($data, JSON_UNESCAPED_UNICODE);	
 		} else {
-			return json_encode($data);	
+			$result = json_encode($data);	
 		}
+		return $result;
 	}
 
 }

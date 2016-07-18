@@ -1,10 +1,10 @@
 <?
 /**
 	@테스트 용  
-	$tail = "y";
+*/	$tail = "y";
 	$setup = "y";
-	$_SESSION[grade] = 10;
-*/
+	$_SESSION['grade'] = 10;
+
 $result0 = mysql_query("select see from $board where id=$id");
 $row0 = mysql_fetch_array($result0);
 $see = $row0[see]+1;
@@ -21,6 +21,7 @@ $storytitle = htmlspecialchars($storytitle);
 $email = $row[email];
 $fileupname = $row[filename];
 $filesize = $row[filesize];
+$filetype = $row[filetype];
 $type = trim($row[type]);
 $date = $row[date]; 
 
@@ -39,15 +40,13 @@ if ($admin_type == 'all'){
 	$storycomment = nl2br($row[comment]);
 }
 
-$fileupPath = "";
-
 if ($fileupname) {
+	if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+		//$fileupPath = "<a href=\"board.php?board=$board&fileupname=$fileupname&filesize=$filesize&filetype=$filetype&&action=down\">${fileupname}&nbsp;<b>[ 다운로드 ]</b></a>";
 
-	if ($download == 'y') {
-		$fileupPath = "<a href=\"board.down.php?board=<? echo $board; ?>&fileupname=<? echo $fileupname; ?>&filepath=<? echo $filesize; ?>\"><? echo $fileupname; ?>&nbsp;&nbsp;<b>[다운로드]</b></a>";
-	} else {
-		$fileupPath = "<img src='../../board_data/$board/$fileupname' border='0'>";
-
+		$fileupPath = "<a href=\"../../board_data/$board/$fileupname\">${fileupname}&nbsp;<b>[ 다운로드 ]</b></a>";
+	} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+		$fileupPath = "<img src=\"../../board_data/$board/$fileupname\" border=\"0\">";
 	}
 }
 ?>
@@ -58,68 +57,21 @@ if ($fileupname) {
 <div class="board-read" style="width:<? echo $width; ?>">
 	<div class="panel-heading">
 		<h1><? echo ${storytitle}; ?></h1>
-		<p><? echo ${m_name}; ?> | <? echo ${date}; ?> | hit-<? echo ${hit}; ?></p>
+		<p><? echo ${m_name}; ?> &nbsp; <? echo ${date}; ?> &nbsp; 조회 <? echo ${hit}; ?></p>
 	</div>
 	<div class="panel-body">
-		<? echo ${fileupPath}; ?>
+		<p><? echo ${fileupPath}; ?></p>
 		<p><? echo ${storycomment}; ?></p>
 	</div>
 
 <?
 if ($tail == 'y') {
-	$result2 = mysql_query("select * from $board_grg where storyid=$id order by id");
-	$numrow2 = mysql_num_rows($result2);
-?>
-	<div class="board-tail" style="width:<? echo ${width}; ?>">
-		<div class="panel-list">
-			<dl>
-				<dt>댓글 <? echo $numrow2; ?></dt>
-<? 
-	
-
-	while ($row2 = mysql_fetch_array($result2)) {
-
-		$day = $row2[date];
-		$nickname = htmlspecialchars($row2[nickname]);
-		$iyggrcomment =  nl2br($row2[comment]);
-		$grgid = $row2[id];
-?>
-				<dd>
-					<? echo "${nickname} - <span class=\"grgcomment\">${iyggrcomment}</span><span class=\"date\">${day}</span>"; ?> 
-					<a href="board_grg.delpass.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>">[삭제]</a>
-				</dd>
-<?
-	}
-?>
-			</dl>
-		</div>
-		<div class="panel-write">
-			<form action="board_grg.insert.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>&sid=<? echo $sid; ?>" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
-			<ul>		
-				<li class="form-heading">
-					<span>이름</span>
-					<input type="text" name="ljs_name" size="10" maxlength="20" value="<? echo $ljs_nickname; ?>">&nbsp;
-					<span>비밀번호</span>
-					<input type="password" name="ljs_pass" size="8" maxlength="8" value="<? echo $ljs_pass1; ?>">
-				</li>
-				<li class="form-comment">
-					<textarea name="comment" cols="64" rows="5"></textarea>
-				</li>
-				<li class="form-buttons">
-					<input type="submit" name="Submit" value="댓글등록">
-					<input type="reset" name="Submit2" value="다시쓰기">
-				</li>
-			</ul>
-			</form>
-		</div>
-	</div>
-<?
+	include 'comment.php';
 }
 ?>
-
 	<div class="panel-buttons">
 		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-		<a href="board.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&action=reply"><img src="<? echo ${skin_dir}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&action=modify"><img src="<? echo ${skin_dir}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=delpass"><img src="<? echo ${skin_dir}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
+		<a href="board.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&action=reply"><img src="<? echo ${skin_dir}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&action=modify"><img src="<? echo ${skin_dir}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=deletepass"><img src="<? echo ${skin_dir}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
 	</div>
 </div>
 
@@ -190,16 +142,16 @@ if ($numrows2) {
 		}		
 
 		$imgname = "";
-
 		if($filename){
-
-			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp"){
+			if ($type =="image/gif" || $type =="image/jpeg" || $type =="image/x-png" || $type =="image/png" || $type =="image/bmp") {
 				$imgname = "icon_img.png";
-			} else if ($type =="application/x-zip-compressed"){ 
+			} else if ($download == 'y'  && ($type =="application/x-zip-compressed" || $type =="application/zip")) { 
 				$imgname = "icon_down.png";
 			}
 
-			echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			if ($imgname != '') {
+				echo "<img src=\"${skin_dir}/images/${imgname}\">&nbsp;";
+			}
 		}
 
 		$find_key = strtolower($find);
@@ -238,7 +190,7 @@ if ($numrows2) {
 		}
 ?>
 				</td>				
-				<td class="date"><span><? echo ${day}; ?></span></td>
+				<td class="date"><span><? echo ${compareDay}; ?></span></td>
 				<td class="hit"><span><? echo ${hit}; ?></span></td>
 			</tr>
 <?
@@ -254,7 +206,9 @@ if ($numrows2) {
 		</tbody>
 	</table>
 	<div class="navi">
-		<? include "navi.php"; ?>
+		<?
+			include $skin_dir . "/navi.php";
+		?>
 	</div>
 	<div class="search ui-inlineblock">
 		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&igroup=<? echo $igroup; ?>&sid=<? echo $sid; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsearch_check(this);">
@@ -287,42 +241,7 @@ if($action=="searchread") {
  <? 
 if ($setup == "y") {
 	if ($grade > 9){
-?>
-<div class="board-adminsetup" style="width:<? echo ${width}; ?>">
-	<form action="board.opkey.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>" method="post"  name="musimso" onSubmit="return musimso_check(this);">
-	<table summary="관리자 설정옵션입니다.">
-		<tbody>
-			<tr>
-				<td>진행상황</td>
-				<td>
-					<input type="radio" name="opkey" value="f" checked> <span>진행완료</span>&nbsp;
-					<input type="radio" name="opkey" value="i"> <span>진행중</span>
-				</td>
-			</tr>
-			<tr>
-				<td>입금상황</td>
-				<td>
-					<input type="radio" name="opkey" value="c"> <span>입금완료</span>&nbsp;
-					<input type="radio" name="opkey" value="n"> <span>미입금</span>
-				</td>
-			</tr>
-			<tr>
-				<td>메일현황</td>
-				<td><input type="radio" name="opkey" value="m"> <span>발송완료</span></td>
-			</tr>
-			<tr>
-				<td>초기화</td>
-				<td><input type="radio" name="opkey" value=""> <sapn>초기화</sapn></td>
-			</tr>
-		</tbody>
-	</table>
-	<div class="form-text-tip">※ 해당버튼을 선택하여 진행상황을 표시할 수 있습니다.</div>
-	<div class="form-submit">		
-		<input type="submit" name="submit" size="10" value=" 보내기 ">
-	</div>
-	</form>
-</div>
-<?
+		include 'opkey.php';
 	}
 }
 ?>

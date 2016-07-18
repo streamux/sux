@@ -9,6 +9,8 @@ class LoginModel extends BaseModel {
 		 parent::__construct();
 	}
 
+	function init() {}
+
 	function getMemberGroup() {
 
 		$context = Context::getInstance();
@@ -24,22 +26,21 @@ class LoginModel extends BaseModel {
 		$context = Context::getInstance();
 
 		if ($type === 'select') {
-			$query = array();
-			$query['select'] = '*';
-			$query['from'] = $context->getPost('member');
-			$query['where'] =array(
-				'ljs_memberid' => $context->getPost('memberid')
-			);
+			$query = new Query();
+			$query->setField('*');
+			$query->setTable($context->getPost('member'));
+			$query->setWhere(array(
+				'ljs_memberid'=>$context->getPost('memberid')
+			));
 			parent::select($query);
 			
 		} else if ($type === 'update') {
-			$query = array();
-			$query['tables'] = $context->getPost('member');
-			$query['columnList'] = array();
-			$query['columnList'][] = 'hit='.$params['hit'];
-			$query['where'] =array(
-				'ljs_memberid' => $context->getPost('memberid')
-			);
+			$query = new Query();
+			$query->setTable($context->getPost('member'));
+			$query->setColumn(array('hit'=>$params['hit']));
+			$query->setWhere(array(
+				'ljs_memberid'=>$context->getPost('memberid')
+			));
 			parent::update($query);
 		}
 	}
@@ -52,12 +53,12 @@ class LoginModel extends BaseModel {
 		$member = $context->getPost('member');
 		$check_name = $context->getPost('check_name');
 
-		$query = array();
-		$query['select'] = 'ljs_memberid, email';
-		$query['from'] = $member;
-		$query['where'] = array(
-			'name' => $check_name
-		);
+		$query = new Query();
+		$query->setField('ljs_memberid, email');
+		$query->setTable($member);
+		$query->setWhere(array(
+			'name'=>$check_name
+		));
 		parent::select($query);
 	}
 
@@ -68,12 +69,12 @@ class LoginModel extends BaseModel {
 		$check_name = $context->getPost('check_name');
 		$check_email = $context->getPost('check_email');
 
-		$query = array();
-		$query['select'] = 'ljs_memberid, email, ljs_pass1';
-		$query['from'] = $member;
-		$query['where'] = array(
-			'name' => $check_name
-		);
+		$query = new Query();
+		$query->setField('ljs_memberid, email, ljs_pass1');
+		$query->setTable($member);
+		$query->setWhere(array(
+			'name'=>$check_name
+		));
 		parent::select($query);
 	}
 }

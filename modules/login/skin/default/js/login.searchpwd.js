@@ -50,7 +50,7 @@ jsux.fn = {
 	init: function() {
 		this.dispSelectMemberList();
 		this.setEvent();
-		$("input[name=memberid]").focus();
+		$("input[name=check_name]").focus();
 	}
 };
 

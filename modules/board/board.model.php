@@ -26,8 +26,6 @@ class BoardModel extends BaseModel {
 	function __construct() {
 
 		parent::__construct();
-
-		$this->init();
 	}
 
 	function init() {
@@ -35,10 +33,12 @@ class BoardModel extends BaseModel {
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 		$posts = $context->getPostAll();
+		$files = $context->getFiles();
 
 		$this->board = $requests['board'];
 		$this->board_grg = $this->board . '_grg';
 		$this->id = $requests['id'];
+		$this->grgid = $requests['grgid'];
 
 		$this->m_name = $posts['m_name'];
 		$this->pass = $posts['pass'];
@@ -66,7 +66,8 @@ class BoardModel extends BaseModel {
 		$query->setWhere( array(
 			'name' => $this->board
 		));
-		parent::select($query);		
+		$result = parent::select($query);
+		return $result;
 	}
 
 	function limitWord($values) {
@@ -89,7 +90,8 @@ class BoardModel extends BaseModel {
 		$query->setTable($this->board);
 		$query->setWhere($where);
 
-		parent::delete($query);			
+		$result = parent::delete($query);
+		return $result;
 	}
 
 	function fieldFromId($field) {
@@ -100,7 +102,9 @@ class BoardModel extends BaseModel {
 		$query->setWhere(array(
 			'id' => $this->id
 		));
-		parent::select($query);
+
+		$result = parent::select($query);
+		return $result;
 	}
 
 	function fieldFromLimit($field ) {
@@ -113,27 +117,23 @@ class BoardModel extends BaseModel {
 		));
 		$query->setOrderBy('id desc');
 		$query->setLimit(1);
-		parent::select($query);
+		$result = parent::select($query);
+		return $result;
+	}
+
+	function fieldFromCommentId($field) {
+
+		$query = new Query();
+		$query->setField($field);
+		$query->setTable($this->board_grg);
+		$query->setWhere(array(
+			'id' => $this->grgid
+		));
+		$result = parent::select($query);
+		return $result;
 	}
 
 	function recordWrite() {
-
-		if ($this->wall != $this->wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
-			exit;
-		}
-
-		$save_dir = _SUX_PATH_ . 'board_data/' . $this->board;
-
-		if (is_uploaded_file($this->imgup_tmpname )) {
-			$mktime = mktime();
-			$this->imgup_name =$mktime . "_" . $this->imgup_name;
-			$dest = $save_dir . $this->imgup_name;
-
-			if (!move_uploaded_file($this->imgup_tmpname , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-			}
-		} 
 
 		$this->fieldFromLimit('id');
 		$rows = $this->getRows();
@@ -163,29 +163,10 @@ class BoardModel extends BaseModel {
 		));
 
 		$result = parent::insert($query);
-		if (!isset($result)) {
-			Error::alertToBack('글을 저장하는데 실패했습니다.');
-		}
+		return $result;
 	}
 
 	function recordReply() {
-
-		if ($this->wall != $this->wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
-			exit;
-		}
-
-		$save_dir = _SUX_PATH_ . 'board_data/' . $this->board;
-
-		if (is_uploaded_file($this->imgup_tmpname )) {
-			$mktime = mktime();
-			$this->imgup_name = $mktime . "_" . $this->imgup_name;
-			$dest = $save_dir . $this->imgup_name;
-
-			if (!move_uploaded_file($this->imgup_tmpname , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-			}
-		} 
 
 		$this->fieldFromId('igroup, space, ssunseo');
 		$rows = $this->getRows();
@@ -217,101 +198,102 @@ class BoardModel extends BaseModel {
 		));
 
 		$result = parent::insert($query);
-		if (!isset($result)) {
-			Error::alertToBack('답글을 저장하는데 실패했습니다.');
-		}
+		return $result;
+		
 	}
 
 	function recordModify() {
 
-		$context = Context::getInstance();
-		$this->fieldFromId('pass, igroup, filename');
-		$rows = $this->getRows();
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setColumn(array(
+			'name' => $this->m_name, 
+			'title' => $this->storytitle, 
+			'comment' => $this->storycomment,
+			'email' => $this->email, 
+			'filename' => $this->imgup_name, 
+			'filesize' => $this->imgup_size, 
+			'filetype' => $this->imgup_type, 
+			'type' => $this->type
+		));
 
-		if ($this->pass == $rows['pass'] || $this->pass == $context->get('db_admin_pwd')) {
+		$query->setWhere(array(
+			'id' => $this->id
+		));
 
-			$del_filename = $rows['filename'];
-
-			if ($del_filename) {
-				$del_filename = $save_dir . $del_filename;
-
-				if(!@unlink($del_filename)) {
-					echo "파일삭제에 실패했습니다.";
-				} else {
-					echo "파일 삭제에 성공했습니다.";
-				}
-			}
-
-			if (is_uploaded_file($this->imgup_tmpname)) {
-				$mktime = mktime();
-				$this->imgup_name = $mktime."_".$this->imgup_name;
-				$dest = $save_dir . $this->imgup_name;
-
-				if (!move_uploaded_file($this->imgup_tmpname, $dest)) {
-					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-				}
-			} 
-
-			$query = new Query();
-			$query->setTable($this->board);
-			$query->setColumn(array(
-				'name' => $this->m_name, 
-				'title' => $this->storytitle, 
-				'comment' => $this->storycomment,
-				'email' => $this->email, 
-				'filename' => $this->imgup_name, 
-				'filesize' => $this->imgup_size, 
-				'filetype' => $this->imgup_type, 
-				'type' => $this->type
-			));
-
-			$query->setWhere(array(
-				'id' => $this->id
-			));
-
-			$result = parent::update($query);
-			if (!isset($result)) {
-				Error::alertToBack('글을 수정하는데 실패했습니다.');
-			}
-		} else {
-			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
-		}
+		$result = parent::update($query);
+		return $result;
 	}
 
 	function recordDelete() {
 
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setWhere(array(
+			'id'=>$this->id
+		));
+
+		$result = parent::delete($query);
+		return $result;
+	}
+
+	function recordOpkey() {
+
 		$context = Context::getInstance();
-		$pass = trim($context->getPost('pwd'));
-		$admin_pwd = trim($context->get('db_admin_pwd'));
-		
-		$rows = $this->getRows();	
-		$del_filename = $rows['filename'];
+		$opkey = $context->getPost('opkey');
 
-		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setColumn(array(
+			'opkey'=>$opkey
+		));
+		$query->setWhere(array(
+			'id'=>$this->id
+		));
+		$result = parent::update($query);
+		return $result;
+	}
 
-			if(isset($del_filename)) {
-				$del_filename = _SUX_PATH_ . 'board_data/' . $this->board . '/' . $del_filename;
+	function recordWriteComment() {
 
-				if(!@unlink($del_filename)) {
-					echo '파일삭제를 실패하였습니다.';
-				} else {
-					echo '파일삭제를 성공하였습니다.';
-				}
-			}
-			
-			$query = new Query();
-			$query->setTable($this->board);
-			$query->setWhere(array(
-				'id'=>$this->id
-			));
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
 
-			$result = parent::delete($query);
-			if (!isset($result)) {
-				Error::alertToBack('글을 삭제하는데 실패했습니다.');
-			}
-		} else  {
-			Error::alertToBack('비밀번호가 틀렸습니다.');
-		}	
+		$board_grg = $requests['board_grg'];
+		$id = $requests['id'];
+
+		$ljs_name = $posts['ljs_name'];
+		$ljs_pass = $posts['ljs_pass'];
+		$comment = $posts['comment'];
+
+		$query = new Query();
+		$query->setTable($board_grg);
+		$query->setColumn(array(
+			'',
+			$id,
+			$ljs_name,
+			$ljs_pass,
+			$comment,
+			'now()'
+		));
+		$result = parent::insert($query);
+		return $result;
+	}
+
+	function recordDeleteComment() {
+
+		$context = Context::getInstance();
+		$grgid = $context->getRequest('grgid');
+		$board_grg = $context->getRequest('board_grg');	
+
+		$query = new Query();
+		$query->setTable($board_grg);
+		$query->setWhere(array(
+			'id'=>$grgid
+		));
+		$result = parent::delete($query);
+		return $result;
 	}
 }
 ?>

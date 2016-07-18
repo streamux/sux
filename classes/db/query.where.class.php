@@ -15,7 +15,7 @@ class QueryWhere extends Object {
 		return $this->sql;
 	}
 
-	function set($field,$value,$glue='=', $cond) {
+	function set($field,$value,$glue='=', $cond='and') {
 
 		if ($cond != '' && $this->counter > 0) {
 			$this->sql .= ' ' . $cond . ' ';
@@ -24,7 +24,7 @@ class QueryWhere extends Object {
 		if (preg_match('/like/i', $glue)) {
 			$this->sql .= $field . ' LIKE \'%' . $value . '%\'';
 		} else {
-			$this->sql .= $field . $glue . $value;
+			$this->sql .= $field . $glue . '\'' . $value . '\'';
 		}
 
 		$this->counter++;

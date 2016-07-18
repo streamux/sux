@@ -13,7 +13,13 @@ class BaseModel extends Object {
 	function __construct() {
 
 		$this->db = DB::getInstance();
+		$this->init();
 	}	
+
+	function init() {
+
+		echo '이글이 보인다면 오버라이드해서 사용하세요';
+	}
 
 	function select($query=NULL) {
 
@@ -54,7 +60,7 @@ class BaseModel extends Object {
 				} else if (gettype($key) == 'string'){
 					$fields[$key]=$value;
 				}
-				$fields[$key]=$value;	
+				$fields[$key]=$value;
 			}
 			$this->fetchArrayList[]=$fields;
 		}	
@@ -103,6 +109,11 @@ class BaseModel extends Object {
 	function getJson($ignore=TRUE) {
 
 		return JsonEncoder::getInstance()->parse($this->getRows($ignore));
+	}
+
+	function parseToJson($rows) {
+
+		return JsonEncoder::getInstance()->parse($rows);
 	}
 }
 ?>

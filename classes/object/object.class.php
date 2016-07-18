@@ -9,6 +9,12 @@ class Object {
 		$this->class_name = $name;
 	}
 
+	function output($str) {
+
+		echo $str . '<br>';
+		exit;
+	}
+
 	function toString() {
 
 		return $this->class_name;

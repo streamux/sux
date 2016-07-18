@@ -1,4 +1,4 @@
-<?
+<?php
 
 if (!$page) {
 	$page = 1;
@@ -36,5 +36,4 @@ for ($i=$nowpage; $i<=$nowpageend; $i++) {
 if ($numrows >= $hanpassoverpage) {
 	echo  "<a href=$PHP_SELF?board=$board&board_grg=$board_grg&sid=$sid&id=$id&passover=$newpassover&page=$nextpage&find=$find&search=$search&action=$action>다음</a>";
 }
-
 ?>

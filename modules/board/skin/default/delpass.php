@@ -14,7 +14,7 @@
 			<form action="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=record_delete" method="post" name="musimd" onSubmit="return jsux.fn.checkForm(this);">
 			<div class="box ui-edgebox-2px">
 				<div class="login-title">
-					<img src="<? echo ${skin_dir}; ?>/images/icon_01.gif" title="">					
+					<img src="<? echo ${skin_dir}; ?>/images/icon_01.gif" title="">			
 					<span class="link-searchinfo">
 						<a href="../login/login.php?action=searchid">아이디</a> | <a href="../login/login.php?action=searchpwd">비밀번호 찾기</a>
 					</span>
@@ -25,9 +25,13 @@
 							<li><span class="ui-label">이름</span><? echo $m_name; ?><input type="hidden" name="m_name" maxlength="14" value="<? echo $m_name; ?>"class="input-id"></li>
 							<li><span class="ui-label">비밀번호</span><input type="password" name="pwd" maxlength="20"class="input-pwd"></li>
 						</ul>							
-					</div><div class="panel-btn">
-						<input type="image" name="imagefield" src="<? echo ${skin_dir}; ?>/images/btn_login.gif" title="로그인버튼" class="login-btn">
-					</div>					
+					</div>
+					<div class="panel-btn">
+						<ul>
+							<li data-id="send">삭제</li>
+							<li data-id="cancel">취소</li>
+						</ul>							
+					</div>			
 				</div>																	
 			</div>
 			</form>
