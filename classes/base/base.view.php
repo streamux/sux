@@ -34,6 +34,9 @@ class BaseView extends Object {
 		$oDB->close();
 	}
 
-	function init() {}
+	function init() {
+
+		echo '이글이 보인다면 상위 클래스 BaseView의 init() 메서드를 오버라이드해서 사용하세요';
+	}
 }
 ?>

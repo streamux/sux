@@ -39,12 +39,12 @@ jsux.fn = {
 				db_database:f.db_database.value
 			};
 
-		jsux.getJSON("install.step3.php", params, function( e ) {
+		jsux.getJSON("install.php?action=record_dbsetup", params, function( e ) {
 
 			trace( e.msg );
 
 			if (e.result == "Y") {				
-				jsux.goURL("install.step4.php");
+				jsux.goURL("install.php?action=adminsetup");
 			} 
 		});
 	},
@@ -56,7 +56,6 @@ jsux.fn = {
 
 			e.preventDefault();
 			var bool = self.checkForm( e.target );
-
 			if ( bool === true) {
 				self.sendAndLoad(e.target);
 			}

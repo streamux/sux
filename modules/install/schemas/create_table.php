@@ -1,6 +1,4 @@
 <?
-include "../lib.php";
-
 $resultStr = "Y";
 $msg = "";
 
@@ -207,7 +205,7 @@ if (!$result) {
 }
 
 if ($resultStr == "N") {
-	$msg .= "3초 후 관리자 로그인 페이지로 자동 이동합니다.";
+	$msg .= "확인을 누르면 3초 후 관리자 로그인 페이지로 자동 이동합니다.";
 } else {
 	$msg .= "데이터베이스 테이블  생성을 완료하였습니다.";
 }
@@ -217,6 +215,4 @@ $json_data = array(	"result"=>$resultYN,
 
 $strJson = json_encode($json_data);
 echo $_REQUEST['callback'].'('.$strJson.')';
-
-mysql_close();
 ?>

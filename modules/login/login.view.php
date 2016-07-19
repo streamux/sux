@@ -4,16 +4,7 @@ class LoginView extends BaseView {
 
 	var $class_name = 'login_view';
 
-	function display($className=NULL) {
-
-		$oDB = DB::getInstance();
-
-		$className = ucfirst($className) . "Panel";
-		$view = new $className($this->model, $this->controller);
-		$view->init();
-
-		$oDB->close();
-	}
+	// display function is defined in parent class 
 }
 
 class LoginPanel extends BaseView {

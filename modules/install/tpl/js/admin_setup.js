@@ -20,7 +20,7 @@ jsux.fn = {
 	},
 	createTable: function() {
 
-		jsux.getJSON("../schemas/query.create_table.php", function(e) {
+		jsux.getJSON("install.php?action=record_createtable", function(e) {
 
 			trace( e.msg  );
 
@@ -46,7 +46,7 @@ jsux.fn = {
 				yourhome: f.yourhome.value
 			};
 
-		jsux.getJSON("install.step5.php", params, function(e) {
+		jsux.getJSON("install.php?action=record_adminsetup", params, function(e) {
 
 			trace( e.msg );
 

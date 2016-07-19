@@ -16,12 +16,13 @@ function __sux_autoload($class_name) {
 
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][strtolower($class_name)];
 		
-	} else if(preg_match('/^([a-zA-Z0-9_]+?)(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {
+	} else if(preg_match('/^([a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {
 
 		for ($i=0; $i<count($GLOBALS['__sux_autoload_file_map_directory']); $i++) {
 			$candidate_filename = array();
 			$candidate_filename[] = $GLOBALS['__sux_autoload_file_map_directory'][$i] . '/' . strtolower($matches[1]) . '/' . strtolower($matches[1]);
-			$candidate_filename[] = (isset($matches[2]) && $matches[2]) ? strtolower($matches[2]) : 'class';
+			if (isset($matches[2]) && $matches[2]) $candidate_filename[] = 'admin';
+			$candidate_filename[] = (isset($matches[3]) && $matches[3]) ? strtolower($matches[3]) : 'class';
 			$candidate_filename[] = 'php';
 
 			$candidate_filename = implode('.', $candidate_filename);
