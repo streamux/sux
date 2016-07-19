@@ -19,8 +19,8 @@ class LoginView extends BaseView {
 class LoginPanel extends BaseView {
 
 	var $name = 'login_panel';
-	var $skin_path = 'modules/login/skin/default/login.html';
-	var $info_skin_path = 'modules/login/skin/default/login.info.html';
+	var $skin_path = 'modules/login/tpl/login.html';
+	var $info_skin_path = 'modules/login/tpl/info.html';
 
 	function init() {
 
@@ -167,8 +167,8 @@ class LogoutPanel extends BaseView {
 class FailPanel extends BaseView {
 
 	var $name = 'fail_panel';
-	var $skin_path = 'modules/login/skin/default/login.html';
-	var $footer_skin_path = 'modules/login/skin/default/login.fail.html';
+	var $skin_path = 'modules/login/tpl/login.html';
+	var $footer_skin_path = 'modules/login/tpl/fail.html';
 
 	function init() {
 
@@ -187,7 +187,7 @@ class FailPanel extends BaseView {
 class LeavePanel extends BaseView {
 
 	var $name = 'leave_panel';
-	var $skin_path = 'modules/login/skin/default/login.leave.html';
+	var $skin_path = 'modules/login/tpl/leave.html';
 
 	function init($param=NULL) {
 
@@ -202,8 +202,8 @@ class LeavePanel extends BaseView {
 class SearchidPanel extends BaseView {
 
 	var $name = 'earchid_panel';
-	var $skin_path = 'modules/login/skin/default/login.searchid.html';
-	var $result_skin_path = 'modules/login/skin/default/login.searchid_result.html';
+	var $skin_path = 'modules/login/tpl/searchid.html';
+	var $result_skin_path = 'modules/login/tpl/searchid_result.html';
 
 	function init() {
 
@@ -247,9 +247,9 @@ class SearchidPanel extends BaseView {
 class SearchpwdPanel extends BaseView {
 
 	var $name = 'searchpwd_panel';
-	var $email_skin_path = 'modules/mail/member/member.searchpwd.html';
-	var $skin_path = 'modules/login/skin/default/login.searchpwd.html';
-	var $result_skin_path = 'modules/login/skin/default/login.searchpwd_result.html';
+	var $email_skin_path = 'modules/mail/member/email_skin.html';
+	var $skin_path = 'modules/login/tpl/searchpwd.html';
+	var $result_skin_path = 'modules/login/tpl/searchpwd_result.html';
 
 	function init() {
 

@@ -18,15 +18,32 @@ jsux.fn = {
 		}
 		return (true);
 	},
+	sendJson: function( f ) {
+
+		var params = "";
+		params = { action: 'record_delete',
+					table_name: f.member.value,
+					memberid: f.memberid.value,
+					pass: f.pass.value };
+
+		jsux.getJSON("../member/member.php", params, function( e ) {
+
+			trace( e.msg );
+			if (e.result == "Y") {
+				jsux.goURL('../login/login.php?action=logout');
+			}
+		});
+	},
 	setEvent: function() {
 
+		var self = this;
 		$(".panel-btn ul li").on("click",function(e) {
 
 			var form = $("form")[0],
 				key = $(this).data("id");
 
 			if (key == "send") {
-				$(form).submit();
+				self.sendJson(form);
 			} else if (key == "cancel") {
 				jsux.goURL("login.php?action=login");
 			}

@@ -7,29 +7,29 @@ class MemberView extends BaseView {
 	// display function is defined in parent class 
 }
 
-class AddPanel extends BaseView {
+class JoinPanel extends BaseView {
 
-	var $class_name = 'add';
+	var $class_name = 'join';
 
 	function init() {
 		
 		$skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
 
-		$skin_path = $skin_dir . 'member.header.html';
+		$skin_path = $skin_dir . 'header.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
 		} else {
 			echo '헤더 파일경로를 확인하세요.<br>';
 		}
 		
-		$skin_path = $skin_dir . 'member.add.html';
+		$skin_path = $skin_dir . 'join.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
 		} else {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_path = $skin_dir . 'member.footer.html';
+		$skin_path = $skin_dir . 'footer.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
 		} else {
@@ -38,9 +38,9 @@ class AddPanel extends BaseView {
 	}
 }
 
-class EditPanel extends BaseView {
+class ModifyPanel extends BaseView {
 
-	var $class_name = 'edit';
+	var $class_name = 'modify';
 
 	function init() {
 
@@ -49,14 +49,14 @@ class EditPanel extends BaseView {
 
 		$skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
 
-		$skin_path = $skin_dir . 'member.header.html';
+		$skin_path = $skin_dir . 'header.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
 		} else {
 			echo '헤더 파일경로를 확인하세요.<br>';
 		}
 		
-		$skin_path = $skin_dir . 'member.edit.html';
+		$skin_path = $skin_dir . 'modify.html';
 		if (is_readable($skin_path)) {
 
 			$contents = new Template($skin_path);
@@ -68,7 +68,7 @@ class EditPanel extends BaseView {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_path = $skin_dir . 'member.footer.html';
+		$skin_path = $skin_dir . 'footer.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
 		} else {
@@ -282,19 +282,31 @@ class RecordDeletePanel extends RecordBasePanel {
 
 	function record() {
 
-		$result = $this->controller->select('fieldFromMember');
-		if (isset($result)) {
+		$msg = '';
+		$resultYN = 'Y';
+		$pass = trim($this->posts['pass']);
+		$pass = substr(md5($pass),0,8);
 
-			$rows = $this->model->getRows();
-			if ($pass != $rows['ljs_pass1']) {
-				Error::alertToBack('비밀번호가 잘못되었습니다.');
-			}
-
+		$this->controller->select('fieldFromMember', 'ljs_pass1');
+		$rows = $this->model->getRows();		
+		if ($pass != $rows['ljs_pass1']) {
+			$msg = '비밀번호가 잘못되었습니다.';
+			$resultYN = 'N';
+		} else {
 			$result = $this->controller->delete('recordDelete');
-			if (!isset($result)) {
-			Error::alertToBack('회원 탈퇴를 실패하였습니다.');
+			if (isset($result)) {
+				$msg = '회원 탈퇴를 완료하였습니다.';
+				$resultYN = 'Y';
+			} else {
+				$msg = '회원 탈퇴를 실패하였습니다.';
+				$resultYN = 'N';
+			}
 		}
-		} 
+		$data = array(	"result"=>$resultYN,
+						"msg"=>urlencode($msg));
+
+		$strJson = $this->model->parseToJson($data);
+		echo $this->requests['callback'].'('.urldecode($strJson).')';
 	}
 }
 ?>

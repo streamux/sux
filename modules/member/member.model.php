@@ -126,7 +126,17 @@ class MemberModel extends BaseModel {
 
 	function recordDelete() {
 
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
 
+		$query = new Query();
+		$query->setTable($posts['table_name']);
+		$query->setWhere(array(
+			'ljs_memberid'=>$posts['memberid']
+		));
+
+		$result = parent::delete($query);
+		return $result;
 	}
 }
 ?>
