@@ -16,7 +16,7 @@ function __sux_autoload($class_name) {
 
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][strtolower($class_name)];
 		
-	} else if(preg_match('/^([a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {
+	} else if(preg_match('/(^[a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {
 
 		for ($i=0; $i<count($GLOBALS['__sux_autoload_file_map_directory']); $i++) {
 			$candidate_filename = array();

@@ -4,7 +4,7 @@ class BoardController extends BaseController {
 
 	var $class_name = 'board_controller';
 
-	function BoardController($m=NULL) {
+	function __construct($m=NULL) {
 		
 		$this->model = $m;
 	}

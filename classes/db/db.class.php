@@ -116,8 +116,11 @@ class DB extends Object {
 		$tables = $query->getTable();
 		$columnList = $query->getColumn();
 		$where = $query->getWhere();	
+		if ($where != '') {
+			$where = ' WHERE ' . $where;
+		}
 
-		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . ' WHERE ' . $where;
+		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . $where;
 	}
 
 	function _deleteSql($query=NULL) {
@@ -148,34 +151,34 @@ class DB extends Object {
 
 		$sql = $this->_selectSql($query);	
 		$this->query_result = $this->_query($sql);
-		//parent::output($sql);
+		parent::output($sql);
 
 		return $this->query_result;
 	}
 
 	function insert($query) {
 
-		$sql = $this->_insertSql($query);
-		//parent::output($sql);
+		$sql = $this->_insertSql($query);		
 		$this->query_result = $this->_query($sql);
+		parent::output($sql);
 
 		return $this->query_result;
 	}
 
 	function update($query) {
 
-		$sql = $this->_updateSql($query);
-		//parent::output($sql);
+		$sql = $this->_updateSql($query);		
 		$this->query_result = $this->_query($sql);
+		parent::output($sql);
 
 		return $this->query_result;
 	}
 
 	function delete($query) {
 
-		$sql = $this->_deleteSql($query);
-		//parent::output($sql);	
+		$sql = $this->_deleteSql($query);		
 		$this->query_result = $this->_query($sql);
+		parent::output($sql);	
 
 		return $this->query_result;
 	}

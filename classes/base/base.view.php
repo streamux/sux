@@ -6,7 +6,7 @@ class BaseView extends Object {
 	var $model = NULL;
 	var $controller = NULL;
 
-	function BaseView($m=NULL, $c=NULL) {
+	function __construct($m=NULL, $c=NULL) {
 		
 		$this->model = $m;
 		$this->controller = $c;

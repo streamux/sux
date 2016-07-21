@@ -207,6 +207,7 @@ class Query extends Object {
 
 	function convertToString($arr, $glue=',') {
 
+		$glue = ' ' . $glue . ' ';
 		$tempArr = NULL;
 		if (is_array($arr)) {
 			$tempArr = implode($glue, $arr);

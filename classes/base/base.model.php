@@ -103,7 +103,20 @@ class BaseModel extends Object {
 	function getRows($ignore=TRUE) {
 
 		$rows = $this->getFetchArray($ignore);
-		return count($rows) > 1 ? $rows : $rows[0];
+		$rownum = $this->getNumRows();
+		return count($rownum) > 1 ? $rows : $rows[0];
+	}
+
+	function getRow() {
+
+		$rows = $this->getFetchArray($ignore);
+		return $rows[0];
+	}
+
+	function getRowList($ignore=TRUE) {
+
+		$rows = $this->getFetchArray($ignore);	
+		return $rows;
 	}
 
 	function getJson($ignore=TRUE) {

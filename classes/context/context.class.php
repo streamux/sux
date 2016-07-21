@@ -4,6 +4,7 @@ class Context {
 
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
+	private $table_list;
 	public $db_info = NULL;
 	var $class_name = 'context';
 
@@ -93,14 +94,12 @@ class Context {
 			include $tables_file;
 		}
 
-		$table_list = array(	'popup','memo','board_group','member_group','question','questiont','questionc',
-							'dayman','post','connecter','connecter_real','connecter_real_all','connecter_all',
-							'connecter_site','pageview','calender');
+		$this->table_list = array('popup','memo','board_group','member_group','question','questiont','questionc','dayman','post','connecter','connecter_real','connecter_real_all','connecter_all','connecter_site','pageview','calender');
 
 		$table_key_prefix = 'db_';
-		for($i=0; $i<count($table_list); $i++) {
-			$this->set($table_key_prefix . $table_list[$i], ${$table_list[$i]});
-			unset(${$table_list[$i]});
+		for($i=0; $i<count($this->table_list); $i++) {
+			$this->set($table_key_prefix . $this->table_list[$i], ${$this->table_list[$i]});
+			unset(${$this->table_list[$i]});
 		}
 	}
 
@@ -187,6 +186,16 @@ class Context {
 	function get($key) {
 
 		return $this->hashmap_params[$key];
+	}
+
+	function getAll() {
+
+		return $this->hashmap_params;
+	}
+
+	function getTableList() {
+
+		return $this->table_list;
 	}
 
 	function checkAdminPass() {

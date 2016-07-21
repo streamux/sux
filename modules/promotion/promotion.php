@@ -12,13 +12,13 @@ echo 'returnToURL=' . $url;
 echo ("<meta http-equiv='Refresh' content='0; URL=$url'>");
 return;*/
 
-$model = new PopupModel();
-$controller = new PopupController($model);
-$views = new PopupView($model, $controller);
+$model = new PromotionModel();
+$controller = new PromotionController($model);
+$views = new PromotionView($model, $controller);
 
 if (isset($action) && $action) {
 	$views->display($action);
 } else {
-	Error::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $index_url . '?action=open');
+	Error::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $index_url . '?action=login');
 }
 ?>

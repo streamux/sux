@@ -248,6 +248,16 @@ class RecordCreatetablePanel extends Object {
 
 	function init() {
 
+		$context = Context::getInstance();
+		$context->init();
+
+		$oDB = DB::getInstance();
+
+		$table_list = $context->getTableList();		
+		for($i=0; $i < count($table_list); $i++) {
+			${$table_list[$i]} = $table_list[$i];
+		}
+
 		$skin_dir = _SUX_PATH_ . 'modules/install/schemas/';
 
 		$skin_path = $skin_dir . 'create_table.php';
@@ -256,6 +266,12 @@ class RecordCreatetablePanel extends Object {
 		} else {
 			echo '헤더 파일경로를 확인하세요.<br>';
 		}
+
+		for($i=0; $i < count($table_list); $i++) {
+			unset(${$table_list[$i]});
+		}
+
+		$oDB->close();
 	}
 }
 ?>

@@ -11,22 +11,26 @@ class LoginController extends BaseController {
 
 	function select($handler, $values=NULL) {
 
-		$this->model->{$handler}($values, 'select');
+		$result = $this->model->{$handler}($values, 'select');
+		return $result;
 	}
 
 	function insert($handler, $values=NULL) {
 
-		$this->model->{$handler}($values, 'insert');
+		$result = $this->model->{$handler}($values, 'insert');
+		return $result;
 	}
 
 	function update($handler, $values=NULL) {
 
-		$this->model->{$handler}($values, 'update');
+		$result = $this->model->{$handler}($values, 'update');
+		return $result;
 	}
 
 	function delete($handler, $values=NULL) {
 
-		$this->model->{$handler}($values, 'delete');
+		$result = $this->model->{$handler}($values, 'delete');
+		return $result;
 	}
 }
 ?>

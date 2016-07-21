@@ -2,8 +2,6 @@
 include "../../config/config.inc.php";
 
 $context = Context::getInstance();
-$context->init();
-
 $action = $context->getRequest('action');
 
 $views = new InstallView();

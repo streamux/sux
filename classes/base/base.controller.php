@@ -6,9 +6,8 @@ class BaseController extends Object {
 	var $model = NULL;
 	
 	function __construct($m=NULL) {
-		
-		$result = $this->model = $m;
-		return $result;
+
+		$this->model = $m;
 	}
 
 	function select($query=NULL) {

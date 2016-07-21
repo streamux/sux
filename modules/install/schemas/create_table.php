@@ -60,10 +60,10 @@ $result=mysql_query(	"create table $question".
 						"hit int,".
 						"igroup int)");  
 if (!$result) {
-	$msg .= "$question(설문) 테이블 생성을 실패하였습니다.\n";
+	$msg .= "$question [설문] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
-	$msg .= "$question(설문) 테이블 생성을 성공하였습니다.\n";
+	$msg .= "$question [설문] 테이블 생성을 성공하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $questiont".  
@@ -71,10 +71,10 @@ $result=mysql_query(	"create table $questiont".
 						"jilmunno int,".
 						"igroup int)");
 if (!$result) {
-	$msg .= "questiont(총 참가자 수) 테이블 생성을 실패하였습니다.\n";
+	$msg .= "questiont [총 참가자 수] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
-	$msg .= "questiont(총 참가자 수) 테이블 생성을 성공하였습니다.\n";
+	$msg .= "questiont [총 참가자 수] 테이블 생성을 성공하였습니다.\n";
 }
 
 $result=mysql_query(	"create table questionc".  
@@ -86,10 +86,10 @@ $result=mysql_query(	"create table questionc".
 						"q_top int(4),".
 						"q_left int(4))");  
 if (!$result) {
-	$msg .= "questionc(설정) 테이블 생성을 실패하였습니다.\n";
+	$msg .= "questionc [설문 설정] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
-	$msg .= "questionc(설정) 테이블 생성을 성공하였습니다.\n";
+	$msg .= "questionc [설문 설정] 테이블 생성을 성공하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $popup".
@@ -113,10 +113,10 @@ $result=mysql_query(	"create table $popup".
 						"skin_right int(4),".
 						"comment text)");		
 if (!$result) {
-	$msg .= "$popup 팝업창 테이블 생성을 실패하였습니다.\n";
+	$msg .= "$popup [팝업창] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
-	$msg .= "$popup 팝업창 테이블 생성을 성공하였습니다.\n";
+	$msg .= "$popup [팝업창] 테이블 생성을 성공하였습니다.\n";
 }
 
 $result = mysql_query(	"create table $calender".  
@@ -128,21 +128,25 @@ $result = mysql_query(	"create table $calender".
 						"ljs_memberid varchar(30),".
 						"date date)");  
 if (!$result) {
-	$msg .= "dayman(일정관리) 테이블 생성을 실패하였습니다.\n";
+	$msg .= "dayman [일정관리] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 }
 
 $result = mysql_query(	"create table $connecter_all". 
 						"(hit int,".
 						"checky char(1))");
-
-$qresult = mysql_query("insert into $connecter_all values ('0','y')");
-
 if (!$result) {
 	$msg .= "$connecter_all [전체 접속수분석] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
-} else {
+} else {	
 	$msg .= "$connecter_all [전체 접속수분석] 테이블 생성을 성공하였습니다.\n";
+
+	$qresult = mysql_query("insert into $connecter_all values ('0','y')");
+	if (!$qresult) {
+		$msg .= "$connecter_real_all [전체 접속수분석] 레코드 등록을 실패하였습니다.\n";
+	} else {
+		$msg .= "$connecter_real_all [전체 접속수분석] 레코드 등록을 성공하였습니다.\n";
+	}
 }
 
 $result = mysql_query(	"create table $connecter". 
@@ -160,13 +164,18 @@ $result = mysql_query(	"create table $connecter_real_all".
 						"(hit int,".
 						"checky char(1))");
 
-$qresult = mysql_query("insert into $connecter_real_all values ('0','y')");
-
 if (!$result) {
 	$msg .= "$connecter_real_all [전체 실접속자분석] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
 	$msg .= "$connecter_real_all [전체 실접속자분석] 테이블 생성을 성공하였습니다.\n";
+
+	$qresult = mysql_query("insert into $connecter_real_all values ('0','y')");
+	if (!$qresult) {
+		$msg .= "$connecter_real_all [전체 실접속자분석] 레코드 등록을 실패하였습니다.\n";
+	} else {
+		$msg .= "$connecter_real_all [전체 실접속자분석] 레코드 등록을 성공하였습니다.\n";
+	}
 }
 
 $result = mysql_query(	"create table $connecter_real". 
@@ -174,10 +183,10 @@ $result = mysql_query(	"create table $connecter_real".
 						"ip varchar(30),".
 						"date date)");
 if (!$result) {
-	$msg .= "$connecter_real [실접속자분석] 테이블생성을 실패하였습니다.\n";
+	$msg .= "$connecter_real [실접속자분석] 테이블 생성을 실패하였습니다.\n";
 	$resultStr = "N";
 } else {
-	$msg .= "$connecter_real [실접속자분석] 테이블생성을 성공하였습니다.\n";
+	$msg .= "$connecter_real [실접속자분석] 테이블 생성을 성공하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $connecter_site".
