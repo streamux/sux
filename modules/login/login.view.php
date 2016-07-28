@@ -77,7 +77,7 @@ class LogpassPanel extends BaseView {
 		$num = $this->model->getNumRows();
 
 		if ($num > 0) {			
-			$rows = $this->model->getRows();
+			$rows = $this->model->getRow();
 			$ljs_memberid = $rows['ljs_memberid'];
 			$ljs_pass1 = $rows['ljs_pass1'];
 			$ljs_name = $rows['name'];
@@ -205,7 +205,7 @@ class SearchidPanel extends BaseView {
 		if (isset($check_name) && $check_name){
 
 			$this->controller->select('getSearchid');
-			$rows = $this->model->getRows();
+			$rows = $this->model->getRow();
 
 			if (count($rows) > 0) {
 				$memberid = $rows['ljs_memberid'];
@@ -254,7 +254,7 @@ class SearchpwdPanel extends BaseView {
 		if(isset($check_memberid) && $check_memberid) {
 
 			$this->controller->select('getSearchpwd');
-			$rows = $this->model->getRows();
+			$rows = $this->model->getRow();
 
 			if (count($rows) > 0) {
 				$memberid = $rows['ljs_memberid'];

@@ -4,11 +4,6 @@ class MemberController extends BaseController {
 
 	var $class_name = 'member_conntroller';
 
-	function MemberController($m=NULL) {
-		
-		$this->model = $m;
-	}
-
 	function select($handler, $values=NULL) {
 
 		$result = $this->model->{$handler}($values);		

@@ -57,44 +57,45 @@ class BoardModel extends BaseModel {
 		$this->imgup_tmpname = $files['imgup']['tmp_name'];
 	}
 
-	function boardFromGroup() {
+	function SelectListFromBoardGroup() {
 
 		$context = Context::getInstance();
+		$group = $context->get('db_board_group');
+		$field = '*';
+		$where = array('name'=>$this->board);
+
 		$query = new Query();
-		$query->setField('*');
-		$query->setTable($context->get('db_board_group'));
-		$query->setWhere( array(
-			'name' => $this->board
-		));
+		if ($field != '') $query->setField($field);
+		$query->setTable($group);
+		if ($where != '') $query->setWhere($where);
+
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function limitWord($values) {
+	function DeleteLimitwordFromBoard() {
 
-		$rows = $this->getRows();
-		$limit_word = $values;
-		if (!isset($limit_word)) {
-			return;
-		}
+		$row = $this->getRow();
+		$limit_word = $row['limit_word'];
+		if (isset($limit_word) && $limit_word != '') {
 
-		$where = new QueryWhere();
-		$limit_word_arr = split(',',$limit_word);
-		for ($i=0; $i<count($limit_word_arr); $i++) {
+			$where = new QueryWhere();
+			$limit_word_arr = split(',',$limit_word);
+			for ($i=0; $i<count($limit_word_arr); $i++) {
+				$limit_temp_str = trim($limit_word_arr[$i]);
+				$where->set($row['limit_choice'], $limit_temp_str, 'like', 'or');
+			}
 
-			$limit_temp_str = trim($limit_word_arr[$i]);
-			$where->set($rows['limit_choice'], $limit_temp_str, 'like', 'or');
-		}
+			$query = new Query();
+			$query->setTable($this->board);
+			$query->setWhere($where);
 
-		$query = new Query();
-		$query->setTable($this->board);
-		$query->setWhere($where);
-
-		$result = parent::delete($query);
-		return $result;
+			$result = parent::delete($query);
+			return $result;			
+		}		
 	}
 
-	function fieldFromId($field) {
+	function SelectFieldFromId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -107,7 +108,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function fieldFromLimit($field ) {
+	function SelectFieldFromLimit($field ) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -121,7 +122,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function fieldFromCommentId($field) {
+	function SelectFieldFromCommentId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -133,11 +134,11 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordWrite() {
+	function InsertRecordWrite() {
 
-		$this->fieldFromLimit('id');
-		$rows = $this->getRows();
-		$igroup = $rows['id']+1; 
+		$this->SelectFieldFromLimit('id');
+		$row = $this->getRow();
+		$igroup = $row['id']+1; 
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -166,13 +167,13 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordReply() {
+	function InsertRecordReply() {
 
-		$this->fieldFromId('igroup, space, ssunseo');
-		$rows = $this->getRows();
-		$igroup = $rows['igroup']; 
-		$space = $rows['space']+1;
-		$ssunseo = $rows['ssunseo']+1;
+		$this->SelectFieldFromId('igroup, space, ssunseo');
+		$row = $this->getRow();
+		$igroup = $row['igroup']; 
+		$space = $row['space']+1;
+		$ssunseo = $row['ssunseo']+1;
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -202,7 +203,7 @@ class BoardModel extends BaseModel {
 		
 	}
 
-	function recordModify() {
+	function UpdateRecordModify() {
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -225,7 +226,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordDelete() {
+	function DeleteRecordDelete() {
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -237,7 +238,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordOpkey() {
+	function UpdatRrecordOpkey() {
 
 		$context = Context::getInstance();
 		$opkey = $context->getPost('opkey');
@@ -254,7 +255,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordWriteComment() {
+	function InsertRecordWriteComment() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -281,7 +282,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function recordDeleteComment() {
+	function DeleteRecordDeleteComment() {
 
 		$context = Context::getInstance();
 		$grgid = $context->getRequest('grgid');

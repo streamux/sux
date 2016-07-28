@@ -220,14 +220,15 @@ jsux.fn = {
 	setLayout: function() {
 
 		var	params = '';
-		params = {	action: 'grouplist' };
+		params = { action: 'grouplist' };
+		
 		jsux.getJSON('member.php', params, function( e )  {
-
+			
 			var markup = $('#tableList_tmpl');
 
 			$('#tableList').empty();
-			if (e.length > 0) {
-				$('#tableList_tmpl').tmpl(e).appendTo('#tableList');
+			if (e.data.length > 0) {
+				$('#tableList_tmpl').tmpl(e.data).appendTo('#tableList');
 			} else {
 				$('#tableList_tmpl').tmpl('{name: no data}').appendTo('#tableList');
 			}

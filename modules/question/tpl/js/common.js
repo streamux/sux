@@ -28,7 +28,7 @@ function getCookie( name ) {
 
 function openPopup( url, popwinname, left, top, width, height ) {
 
-	if ( getCookie(popwinname) != "___sux_popup" ) {
+	if ( getCookie(popwinname) != "___sux_question" ) {
 		smxpopWindow  =  window.open( url , popwinname ,"'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,left="+left+",top="+top+",width="+width+",height="+height+"'");
 		smxpopWindow.opener = self;
 	}

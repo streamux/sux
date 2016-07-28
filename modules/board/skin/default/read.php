@@ -88,7 +88,7 @@ if ($action == 'search' || $action == 'searchread'){
 	$option = "";
 }
 
-$result0 = mysql_query("select * from $board");
+$result0 = mysql_query("select * from $board $option");
 $numrows = mysql_num_rows($result0);
 
 $result = mysql_query("select * from $board $option order by igroup desc,ssunseo asc limit $passover,$limit");

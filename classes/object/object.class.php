@@ -11,7 +11,7 @@ class Object {
 
 	function output($str) {
 
-		echo $str . '<br>';
+		//echo $str . '<br>';
 	}
 
 	function toString() {

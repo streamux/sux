@@ -17,14 +17,14 @@ $qheight=$row[q_height];
 <link href="css/css.css" rel="stylesheet" type="text/css">
 <SCRIPT language="JavaScript">
 <!--
-function setCookie( name, value, expiredays )
-		{
+function setCookie( name, value, expiredays ) {
+
 	var todayDate = new Date();
 	todayDate.setDate( todayDate.getDate() + expiredays );
 	document.cookie = name + "=" + escape( value ) + "; path=/; expires=" + todayDate.toGMTString() + ";"
 	}
-function closeWin() 
-{ 
+function closeWin() { 
+
 	if ( document.forms[0].smxpop.checked ) 
 		setCookie( "questionpop", "nooppop2" , 1); 
 
@@ -48,38 +48,37 @@ function closeWin()
 $quesvalue=mysql_query("delete from questiont");
 $quesinsert=mysql_query("insert into questiont values ('','0','$igroup')");
 $query3=mysql_query("select hit from question where hit>0 and igroup = '$igroup' ");
-while ($row3=mysql_fetch_array($query3))
-{
-$see3=$row3[hit];
-$update3=mysql_query("update questiont set jilmunno=$jilmunno+$see3");
+while ($row3=mysql_fetch_array($query3)) {
+	$see3=$row3[hit];
+	$update3=mysql_query("update questiont set jilmunno=$jilmunno+$see3");
 }
+
 $query4=mysql_query("select * from questiont");
-while($row4=mysql_fetch_array($query4))
-{
-$questt=$row4[jilmunno];
-echo "<b>총 투표자";
-echo number_format($questt);
-echo "명</b>";
-echo "&nbsp; &nbsp;<br><br>";
+while($row4=mysql_fetch_array($query4)) {
+
+	$questt=$row4[jilmunno];
+	echo "<b>총 투표자";
+	echo number_format($questt);
+	echo "명</b>";
+	echo "&nbsp; &nbsp;<br><br>";
 }
 
 $query5=mysql_query("select * from question where title ='' and igroup = '$igroup' order by id asc");
-while ($row5=mysql_fetch_array($query5))
-{
-$comment=$row5[comment];
-echo $comment."<br>";
-	 if($questt && (int)$row5[hit])
-	 {
+while ($row5=mysql_fetch_array($query5)) {
+	$comment=$row5[comment];
+	echo $comment."<br>";
+	 if($questt && (int)$row5[hit]) {
 		$percent = (int)(70 * $row5[hit]/$questt).'%';
-	$length = (int)(150 * $row5[hit]/$questt);
+		$length = (int)(150 * $row5[hit]/$questt);
 
-	echo ("<img src=./admin/img/stick.jpg width=$percent height=10 > &nbsp;&nbsp;");
-		}else{
+		echo ("<img src=./admin/img/stick.jpg width=$percent height=10 > &nbsp;&nbsp;");
+	}else{
 		$percent=0;
-		}
-echo ("<B>$row5[hit]명 ($percent)</B><br>");
+	}
+	echo ("<B>$row5[hit]명 ($percent)</B><br>");
 }
-?></td>
+?>
+				</td>
 			</tr>
 			<tr>
 				<td height="20"></td>
@@ -97,17 +96,18 @@ echo ("<B>$row5[hit]명 ($percent)</B><br>");
 		<tr>
 			<td height="24" align="center" bgcolor="#333333">		
 				<table border="0" align="center" cellpadding="0" cellspacing="0">
-						<tr>
-							<td class="txt_gray_01">오늘하루 이창을 열지 않음</td>
-							<td class="txt_gray_01">&nbsp;</td>
-							<td><input type=CHECKBOX name="smxpop" value=""></td>
-							<td width="4"></td>
-							<td><a href="javascript:history.onclick=closeWin();" class="gray">닫기</a></td>
-						</tr>
-					</table></td>
+					<tr>
+						<td class="txt_gray_01">오늘하루 이창을 열지 않음</td>
+						<td class="txt_gray_01">&nbsp;</td>
+						<td><input type=CHECKBOX name="smxpop" value=""></td>
+						<td width="4"></td>
+						<td><a href="javascript:history.onclick=closeWin();" class="gray">닫기</a></td>
+					</tr>
+				</table>
+			</td>
 		</tr>
 	</form>
-	</table>	</td>
+	</table></td>
 	</tr>
 </table>
 </body>

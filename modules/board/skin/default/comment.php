@@ -19,9 +19,7 @@ $numrow2 = mysql_num_rows($result2);
 					<? echo "${nickname} - <span class=\"grgcomment\">${iyggrcomment}</span><span class=\"date\">${day}</span>"; ?> 
 					<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>&action=deletecomment">[삭제]</a>
 				</dd>
-<?
-	}
-?>
+				<? } ?>
 			</dl>
 		</div>
 		<div class="panel-write">

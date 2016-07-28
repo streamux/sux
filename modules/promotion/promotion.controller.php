@@ -4,7 +4,7 @@ class PromotionController extends BaseController {
 
 	var $class_name = 'Promotion_controller';
 
-	function LoginController($m=NULL) {
+	function __construct($m=NULL) {
 		
 		$this->model = $m;
 	}

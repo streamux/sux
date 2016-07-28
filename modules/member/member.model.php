@@ -4,11 +4,6 @@ class MemberModel extends BaseModel {
 
 	var $class_name = 'member_view';
 
-	function __construct() {
-
-		parent::__construct();
-	}
-
 	function init() {
 		
 	}

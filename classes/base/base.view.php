@@ -8,7 +8,7 @@ class BaseView extends Object {
 
 	function __construct($m=NULL, $c=NULL) {
 		
-		$this->model = $m;
+		$this->model = $m;		
 		$this->controller = $c;
 	}
 

@@ -22,14 +22,15 @@ class ListPanel extends BaseView {
 		$page = $context->getRequest('page');
 		$sid = $context->getRequest('sid');
 		$action = $context->getRequest('action');
+		
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
+		$download = strtolower($row['download']);
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();
-		$download = strtolower($rows['download']);
-		$this->controller->delete('limitWord', $rows['limit_word']);
+		$this->controller->delete('limitwordFromBoard');
 
-		if (isset($rows['include1'])) {
-			$top_path = $rows['include1'];
+		$top_path = $row['include1'];
+		if (isset($top_path) && $top_path != '') {
 			if (is_readable($top_path)) {
 				include $top_path;
 			} else {
@@ -39,16 +40,21 @@ class ListPanel extends BaseView {
 			echo '상단 파일경로를 입력하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		$main_path = $row['include2'];
+		if (isset($main_path) && $main_path != '') {
+			$skin_dir = 'skin/' . $main_path;
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (isset($rows['include3'])) {
-			$bottom_path = $rows['include3'];
+		$bottom_path = $row['include3'];
+		if (isset($bottom_path) && $bottom_path != '') {
 			if (is_readable($bottom_path)) {
 				include $bottom_path;
 			} else {
@@ -76,16 +82,22 @@ class SearchlistPanel extends BaseView {
 		$sid = $context->getRequest('sid');
 		$action = $context->getRequest('action');
 
-		$find = $context->getPost('find') ?  $context->getPost('find') : $context->getRequest('find');
-		$search = $context->getPost('search') ?  $context->getPost('search') : $context->getRequest('search');
+		$find = $context->getPost('find');
+		if (!isset($find) && $find == '') {
+			$find = $context->getRequest('find');
+		}
+		$search = $context->getPost('search');
+		if (!isset($search) && $search == '') {
+			$search = $context->getRequest('search');
+		}
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();
-		$download = strtolower($rows['download']);
-		$this->controller->delete('limitWord', $rows['limit_word']);
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
+		$download = strtolower($row['download']);
+		$this->controller->delete('limitwordFromBoard');
 
-		if (isset($rows['include1'])) {
-			$top_path = $rows['include1'];
+		$top_path = $row['include1'];
+		if (isset($top_path) && $top_path != '') {
 			if (is_readable($top_path)) {
 				include $top_path;
 			} else {
@@ -95,16 +107,21 @@ class SearchlistPanel extends BaseView {
 			echo '상단 파일경로를 입력하세요.<br>';
 		}		
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		$main_path = $row['include2'];
+		if (isset($main_path) && $main_path != '') {
+			$skin_dir = 'skin/' . $main_path;
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (isset($rows['include3'])) {
-			$bottom_path = $rows['include3'];
+		$bottom_path = $row['include3'];
+		if (isset($bottom_path) && $bottom_path != '') {
 			if (is_readable($bottom_path)) {
 				include $bottom_path;
 			} else {
@@ -133,11 +150,11 @@ class ReadPanel extends BaseView {
 		$find = $context->getRequest('find');
 		$search = $context->getRequest('search');
 		$action = $context->getRequest('action');		
-
 		$grade = $context->getSession('grade');
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();	
-		$download = strtolower($rows['download']);
+
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();	
+		$download = strtolower($row['download']);
 
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -145,13 +162,12 @@ class ReadPanel extends BaseView {
 			$level = 1;
 		}
 
-		if ($level < $rows['r_grade']) {
+		if ($level < $row['r_grade']) {
 			Error::alertToBack('죄송합니다. 읽기 권한이 없습니다.');
 			exit;
 		}
 
-		if ($rows['log_key'] != 'yes') {
-
+		if ($row['log_key'] != 'yes') {
 			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
 
 				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
@@ -161,30 +177,45 @@ class ReadPanel extends BaseView {
 			} 
 		}
 
-		if ($rows["r_admin"] == 'n') {
+		if ($row["r_admin"] == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
 				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		$top_path = $row['include1'];
+		if (isset($top_path) && $top_path != '') {
+			if (is_readable($top_path)) {
+				include $top_path;
+			} else {
+				echo '상단 파일경로를 확인하세요.<br>';
+			}			
 		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
+			echo '상단 파일경로를 입력하세요.<br>';
+		}		
+
+		$main_path = $row['include2'];
+		if (isset($main_path) && $main_path != '') {
+			$skin_dir = 'skin/' . $main_path;
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
+		} else {
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		$bottom_path = $row['include3'];
+		if (isset($bottom_path) && $bottom_path != '') {
+			if (is_readable($bottom_path)) {
+				include $bottom_path;
+			} else {
+				echo '하단 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			echo '하단 파일경로를 입력하세요.<br>';
 		}
 	}
 }
@@ -196,35 +227,53 @@ class SearchreadPanel extends ReadPanel {
 	function init() {
 
 		$context = Context::getInstance();	
-		$id = $context->getRequest('id');
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 		$action = $context->getRequest('action');
 
+		$id = $context->getRequest('id');;
+		$igroup = $context->getRequest('igroup');
+		$passover = $context->getRequest('passover');
+		$page = $context->getRequest('page');
+		$sid = $context->getRequest('sid');
 		$find = $context->getRequest('find');
 		$search = $context->getRequest('search');
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();	
-
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
+		$top_path = $row['include1'];
+		if (isset($top_path) && $top_path != '') {
+			if (is_readable($top_path)) {
+				include $top_path;
+			} else {
+				echo '상단 파일경로를 확인하세요.<br>';
+			}			
 		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
+			echo '상단 파일경로를 입력하세요.<br>';
+		}		
+
+		$main_path = $row['include2'];
+		if (isset($main_path) && $main_path != '') {
+			$skin_dir = 'skin/' . $main_path;
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
+		} else {
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		$bottom_path = $row['include3'];
+		if (isset($bottom_path) && $bottom_path != '') {
+			if (is_readable($bottom_path)) {
+				include $bottom_path;
+			} else {
+				echo '하단 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			echo '하단 파일경로를 입력하세요.<br>';
 		}
 	}
 }
@@ -241,18 +290,17 @@ class WritePanel extends BaseView {
 		$board_grg = $board . '_grg';
 
 		$this->controller->select('fieldFromLimit', 'wall');
-		$rows = $this->model->getRows();	
-		if ($rows['wall'] == 'a' || !isset($rows['wall'])) {
+		$row = $this->model->getRow();	
+		if ($row['wall'] == 'a' || !isset($row['wall'])) {
 			$wallname = "나라사랑";
 			$wallkey = "b";
-		} else if ($rows['wall'] == 'b') {
+		} else if ($row['wall'] == 'b') {
 			$wallname = "조국사랑";
 			$wallkey = "a";
 		} 
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();	
-
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();	
 		$grade = $context->getSession('grade');	
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -260,12 +308,12 @@ class WritePanel extends BaseView {
 			$level = 1;
 		}
 
-		if ($level < $rows['r_grade']) {
+		if ($level < $row['r_grade']) {
 			Error::alertToBack('죄송합니다. 쓰기 권한이 없습니다.');
 			exit;
 		}
 
-		if ($rows['log_key'] != 'yes') {
+		if ($row['log_key'] != 'yes') {
 
 			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
 
@@ -276,30 +324,45 @@ class WritePanel extends BaseView {
 			} 
 		}
 
-		if ($rows["r_admin"] == 'n') {
+		if ($row["r_admin"] == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
 				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		$top_path = $row['include1'];
+		if (isset($top_path) && $top_path != '') {
+			if (is_readable($top_path)) {
+				include $top_path;
+			} else {
+				echo '상단 파일경로를 확인하세요.<br>';
+			}			
 		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
+			echo '상단 파일경로를 입력하세요.<br>';
+		}		
+
+		$main_path = $row['include2'];
+		if (isset($main_path) && $main_path != '') {
+			$skin_dir = 'skin/' . $main_path;
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/write.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
+		} else {
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/write.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		$bottom_path = $row['include3'];
+		if (isset($bottom_path) && $bottom_path != '') {
+			if (is_readable($bottom_path)) {
+				include $bottom_path;
+			} else {
+				echo '하단 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			echo '하단 파일경로를 입력하세요.<br>';
 		}
 	}
 }
@@ -316,30 +379,29 @@ class ReplyPanel extends BaseView {
 		$board_grg = $board . '_grg';
 
 		$this->controller->select('fieldFromId', '*');
-		$rows = $this->model->getRows();
-		$storycomment =  nl2br($rows['comment']);
-		$m_name = $rows['name'];
-		$email = $rows['email'];
-		$storytitle = $rows['title'];
+		$row = $this->model->getRow();
+		$storycomment =  nl2br($row['comment']);
+		$m_name = $row['name'];
+		$email = $row['email'];
+		$storytitle = $row['title'];
 		$storytitle = substr(htmlspecialchars($storytitle),0,40);
-		$fileupname = $rows['filename'];
-		$type = $rows['type'];
-		$hit = $rows['see'];
-		$date = $rows['date']; 		
+		$fileupname = $row['filename'];
+		$type = $row['type'];
+		$hit = $row['see'];
+		$date = $row['date']; 		
 
 		$this->controller->select('fieldFromLimit','wall');
-		$rows = $this->model->getRows();		
-		if ($rows['wall'] == 'a' || !isset($rows['wall'])) {
+		$row = $this->model->getRow();		
+		if ($row['wall'] == 'a' || !isset($row['wall'])) {
 			$wallname = "나라사랑";
 			$wallkey = "b";
-		} else if ($rows['wall'] == 'b') {
+		} else if ($row['wall'] == 'b') {
 			$wallname = "조국사랑";
 			$wallkey = "a";
 		} 
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();
-
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
 		$grade = $context->getSession('grade');
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -347,12 +409,12 @@ class ReplyPanel extends BaseView {
 			$level = 1;
 		}
 
-		if ($level < $rows['r_grade']) {
+		if ($level < $row['r_grade']) {
 			Error::alertToBack('죄송합니다. 답변 권한이 없습니다.');
 			exit;
 		}
 
-		if ($rows['log_key'] != 'yes') {
+		if ($row['log_key'] != 'yes') {
 
 			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
 
@@ -363,28 +425,32 @@ class ReplyPanel extends BaseView {
 			} 
 		}
 
-		if ($rows["r_admin"] == 'n') {
+		if ($row["r_admin"] == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
 				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		if (is_readable($row['include1'])) {
+			include $row['include1'];
 		} else {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/reply.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		if (isset($row['include2']) && $row['include2'] != '') {
+			$skin_dir = 'skin/' . $row['include2'];
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/reply.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
+		if (is_readable($row['include3'])) {
+			include $row['include3'];
 		} else {
 			echo '하단 파일경로를 확인하세요.<br>';
 		}
@@ -403,16 +469,15 @@ class ModifyPanel extends BaseView {
 		$board_grg = $board . '_grg';
 
 		$this->controller->select('fieldFromId', '*');
-		$rows = $this->model->getRows();
-		$storycomment = htmlspecialchars($rows['comment']);
-		$m_name = htmlspecialchars($rows['name']);
-		$storytitle = nl2br($rows['title']);
-		$email = $rows['email'];
-		$type = $rows['type'];
+		$row = $this->model->getRow();
+		$storycomment = htmlspecialchars($row['comment']);
+		$m_name = htmlspecialchars($row['name']);
+		$storytitle = nl2br($row['title']);
+		$email = $row['email'];
+		$type = $row['type'];
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();
-
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
 		$grade = $context->getSession('grade');
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -420,12 +485,12 @@ class ModifyPanel extends BaseView {
 			$level = 1;
 		}
 
-		if ($level < $rows['r_grade']) {
+		if ($level < $row['r_grade']) {
 			Error::alertToBack('죄송합니다. 수정 권한이 없습니다.');
 			exit;
 		}
 
-		if ($rows['log_key'] != 'yes') {
+		if ($row['log_key'] != 'yes') {
 
 			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
 
@@ -436,28 +501,32 @@ class ModifyPanel extends BaseView {
 			} 
 		}
 
-		if ($rows["r_admin"] == 'n') {
+		if ($row["r_admin"] == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
 				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		if (is_readable($row['include1'])) {
+			include $row['include1'];
 		} else {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/modify.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		if (isset($row['include2']) && $row['include2'] != '') {
+			$skin_dir = 'skin/' . $row['include2'];
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/modify.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
+		if (is_readable($row['include3'])) {
+			include $row['include3'];
 		} else {
 			echo '하단 파일경로를 확인하세요.<br>';
 		}
@@ -476,28 +545,31 @@ class DeletepassPanel extends BaseView {
 		$board_grg = $board . '_grg';
 
 		$this->controller->select('fieldFromId', 'name');
-		$rows = $this->model->getRows();	
-		$m_name = $rows['name'];
+		$row = $this->model->getRow();	
+		$m_name = $row['name'];
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();		
-
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();		
+		if (is_readable($row['include1'])) {
+			include $row['include1'];
 		} else {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		if (isset($row['include2']) && $row['include2'] != '') {
+			$skin_dir = 'skin/' . $row['include2'];
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
+		if (is_readable($row['include3'])) {
+			include $row['include3'];
 		} else {
 			echo '하단 파일경로를 확인하세요.<br>';
 		}
@@ -604,28 +676,32 @@ class DeletecommentPanel extends BaseView {
 		$igroup = $requests['igroup'];
 		$passover = $requests['passover'];
 
-		$this->controller->select('boardFromGroup');
-		$rows = $this->model->getRows();
+		$this->controller->select('listFromBoardGroup');
+		$row = $this->model->getRow();
 
 		$this->controller->select('fieldFromId', 'name');
-		$m_name = $this->model->getRows()['name'];
+		$m_name = $this->model->getRow()['name'];
 
-		if (is_readable($rows['include1'])) {
-			include $rows['include1'];
+		if (is_readable($row['include1'])) {
+			include $row['include1'];
 		} else {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		$skin_dir = 'skin/' . $rows['include2'];
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		if (isset($row['include2']) && $row['include2'] != '') {
+			$skin_dir = 'skin/' . $row['include2'];
+			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
+			if (is_readable($skin_path)) {
+				include $skin_path;
+			} else {
+				echo '스킨 파일경로를 확인하세요.<br>';
+			}
 		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+			echo '스킨 파일경로를 입력하세요.<br>';
 		}
 
-		if (is_readable($rows['include3'])) {
-			include $rows['include3'];
+		if (is_readable($row['include3'])) {
+			include $row['include3'];
 		} else {
 			echo '하단 파일경로를 확인하세요.<br>';
 		}
@@ -782,6 +858,7 @@ class RecordModifyPanel extends RecordBasePanel {
 
 	function record() {
 
+		$context = Context::getInstance();
 		$requests = $this->requests;
 		$posts = $this->posts;
 		$files = $this->files;
@@ -794,12 +871,12 @@ class RecordModifyPanel extends RecordBasePanel {
 		$imgup_name = $files['imgup']['name'];
 		$imgup_tmpname = $files['imgup']['tmp_name'];
 
-		$this->controller->select('fieldFromId', 'pass, igroup, filename');		
-		$rows = $this->model->getRows();
+		$this->controller->select('fieldFromId', 'pass, igroup, filename');	
+		$row = $this->model->getRow();
 
-		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 
-			$del_filename = $rows['filename'];
+			$del_filename = $row['filename'];
 
 			$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
 
@@ -831,7 +908,7 @@ class RecordModifyPanel extends RecordBasePanel {
 			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
 		}
 
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$rows[sid]&igroup=$rows[igroup]&action=read'>");
+		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$row[sid]&igroup=$row[igroup]&action=read'>");
 	}
 }
 
@@ -841,6 +918,7 @@ class RecordDeletePanel extends RecordBasePanel {
 
 	function record() {
 
+		$context = Context::getInstance();
 		$requests = $this->requests;
 		$posts = $this->posts;
 		$files = $this->files;
@@ -853,10 +931,10 @@ class RecordDeletePanel extends RecordBasePanel {
 		$pass = trim($posts['pwd']);
 		$admin_pwd = trim($context->get('db_admin_pwd'));
 		
-		$rows = $this->model->getRows();	
-		$del_filename = $rows['filename'];
+		$row = $this->model->getRow();	
+		$del_filename = $row['filename'];
 
-		if ($pass == $rows['pass'] || $pass == $admin_pwd) {
+		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 
 			if(isset($del_filename)) {
 				$del_filename = _SUX_PATH_ . 'board_data/' . $board . '/' . $del_filename;
@@ -910,6 +988,7 @@ class RecordDeletecommentPanel extends RecordBasePanel {
 
 	function record() {
 
+		$context = Context::getInstance();
 		$requests = $this->requests;
 		$posts = $this->posts;
 
@@ -924,9 +1003,9 @@ class RecordDeletecommentPanel extends RecordBasePanel {
 		$passover = $requests['passover'];
 
 		$this->controller->select('fieldFromCommentId', 'pass');
-		$rows = $this->model->getRows();
+		$row = $this->model->getRow();
 
-		if ($pass == $rows['pass'] || $pass == "$admin_pwd") {
+		if ($pass == $row['pass'] || $pass == "$admin_pwd") {
 			$result = $this->controller->delete('recordDeleteComment');
 			if (!isset($result)) {
 				Error::alertToBack('댓글 삭제를 실패하였습니다.');

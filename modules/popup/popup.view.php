@@ -28,29 +28,25 @@ class OpenerPanel extends BaseView {
 		$result = $this->controller->select('fieldFromPopup', '*');
 		if ($result) {
 
-			$rows = $this->model->getRowList();
-
-			echo count($rows);
-
-			for($i=0; $i<$numrow; $i++) {
-				$id = $rows['id'];				
-				$name = $rows['name'];
-				$period = mktime($rows['time1'],$rows['time2'],$rows['time3'],$rows['time4'],$rows['time5'],$rows['time6']);
+			$rows = $this->model->getRows();
+			for($i=0; $i<count($rows); $i++) {
+				$id = $rows[$i]['id'];				
+				$name = $rows[$i]['name'];
+				$period = mktime($rows[$i]['time1'],$rows[$i]['time2'],$rows[$i]['time3'],$rows[$i]['time4'],$rows[$i]['time5'],$rows[$i]['time6']);
 				$nowtime = mktime();
-				$left = $row['w_left'];
-				$top = $row['w_top'];
-				$width = $row['width'];
-				$height = $row['height'];				
-				$winname = 'sux_'.$name;
+				$left = $rows[$i]['w_left'];
+				$top = $rows[$i]['w_top'];
+				$width = $rows[$i]['width'];
+				$height = $rows[$i]['height'];
+				$choice = 	$rows[$i]['choice'];
+				$winname = $name;
 
-				echo $name . '<br>';
+				if ($choice == "y" && $nowtime < $period) {
 
-				if (($rows['choice'] == "y") && ($nowtime < $period)) {
+					$url = 'popup.php?action=event&id=' . $id . '&winname=' . $winname;
 
-					$url = '../board/popup.php?action=event&id='+$id+'&winname='+$winname;
-
-					echo 	'<script type="text/javascript">
-								openPopup(<? echo ${url}; ?>, <? echo ${left}; ?>, <? echo ${top}; ?>, <? echo ${width}; ?>, <? echo ${height}; ?>);
+					echo 	'<script type=\'text/javascript\'>
+								openPopup(\'' . $url . '\', \'' . $winname . '\', \'' . $left . '\', \'' . $top . '\', \'' . $width . '\', \'' . $height . '\');
 							</script>';
 				}
 			}
@@ -66,8 +62,9 @@ class EventPanel extends BaseView {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
+		$popup_name = $requests['winname'];
 
-		$skin_dir = _SUX_PATH_ . 'modules/popup/skin/default/';
+		$skin_dir = _SUX_PATH_ . 'modules/popup/skin/' . $popup_name . '/';
 
 		$skin_path = $skin_dir . 'index.html';
 		if (is_readable($skin_path)) {

@@ -1,8 +1,8 @@
 <?php
 
-class BoardController extends BaseController {
+class QuestionController extends BaseController {
 
-	var $class_name = 'board_controller';
+	var $class_name = 'popup_controller';
 
 	function __construct($m=NULL) {
 		

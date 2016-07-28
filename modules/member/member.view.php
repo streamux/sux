@@ -85,13 +85,21 @@ class GrouplistPanel extends BaseView {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
+		$msg = '';
+
 		$result = $this->controller->select('memberListFromGroup');
-		if (isset($result)) {
-			$strJson = $this->model->getJson();
+		if ($result) {
+
+			$data = array(	'data'=>$this->model->getRows(),
+							'msg'=>$msg);
+			$strJson = $this->model->parseToJson($data);
 			echo $requests['callback'].'('.$strJson.')';
 		} else {
-			echo '데이터 로드를 실패하였습니다.';
-		}
+			$msg = '데이터 로드를 실패하였습니다.';
+			$data = array('msg'=>$msg);
+			$strJson = $this->model->parseToJson($data);
+			echo $requests['callback'].'('.$strJson.')';
+		}		
 	}
 }
 
@@ -105,8 +113,8 @@ class MemberfieldPanel extends BaseView {
 		$requests = $context->getRequestAll();
 
 		$result = $this->controller->select('fieldFromMember', '*');
-		if (isset($result)) {
-			$rows = $this->model->getRows();
+		if ($result) {
+			$rows = $this->model->getRow();
 			$email_arr = split('@', $rows['email']);
 			$rows['email'] = $email_arr[0];
 			$rows['email_tail2'] = $email_arr[1];
@@ -146,7 +154,7 @@ class SearchidPanel extends BaseView {
 			exit;
 		} 
 
-		if (isset($id)) {
+		if ($id) {
 
 			$this->controller->select('fieldFromMember', 'name');
 			$numrows = $this->model->getNumRows();
@@ -169,7 +177,6 @@ class SearchidPanel extends BaseView {
 
 		$strJson = $this->model->parseToJson($data);
 		echo $requests['callback'].'('.$strJson.')';
-		exit;
 	}
 }
 
@@ -222,7 +229,7 @@ class RecordAddPanel extends RecordBasePanel {
 			$resultYN = "N";
 		} else {
 			$result = $this->controller->insert('recordAdd');
-			if (isset($result)) {
+			if ($result) {
 				$msg = '신규회원 가입을 완료하였습니다.';
 				$resultYN = "Y";
 			} else {
@@ -251,7 +258,7 @@ class RecordEditPanel extends RecordBasePanel {
 		$pwd = trim($this->posts['pwd1']);
 
 		$this->controller->select('fieldFromMember', 'ljs_pass1');
-		$rows = $this->model->getRows();
+		$rows = $this->model->getRow();
 		$pwd = substr(md5($pwd),0,8);
 
 		if ($pwd != $rows['ljs_pass1']) {
@@ -260,7 +267,7 @@ class RecordEditPanel extends RecordBasePanel {
 		} else {
 
 			$result = $this->controller->insert('recordEdit');
-			if (isset($result)) {
+			if ($result) {
 				$msg = '회원정보를 수정하였습니다.';
 				$resultYN = "Y";
 			} else {
@@ -288,13 +295,13 @@ class RecordDeletePanel extends RecordBasePanel {
 		$pass = substr(md5($pass),0,8);
 
 		$this->controller->select('fieldFromMember', 'ljs_pass1');
-		$rows = $this->model->getRows();		
+		$rows = $this->model->getRow();		
 		if ($pass != $rows['ljs_pass1']) {
 			$msg = '비밀번호가 잘못되었습니다.';
 			$resultYN = 'N';
 		} else {
 			$result = $this->controller->delete('recordDelete');
-			if (isset($result)) {
+			if ($result) {
 				$msg = '회원 탈퇴를 완료하였습니다.';
 				$resultYN = 'Y';
 			} else {
