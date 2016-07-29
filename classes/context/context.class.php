@@ -24,7 +24,7 @@ class Context {
 		$this->startSession();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
-		$this->loadTablesInfo();
+		$this->setTablesInfo();
 	}
 
 	function startSession() {
@@ -60,7 +60,7 @@ class Context {
 
 	function getConfigFile() {
 
-		return _SUX_PATH_ . 'config/db.config.php';
+		return _SUX_PATH_ . 'config/config.db.php';
 	}
 
 	function loadAdminInfo() {
@@ -84,28 +84,17 @@ class Context {
 
 	function getAdminFile() {
 
-		return _SUX_PATH_ . 'config/admin.inc.php';
+		return _SUX_PATH_ . 'config/config.admin.php';
 	}
 
-	function loadTablesInfo() {
-
-		$tables_file = $this->getTablesFile();
-		if (is_readable($tables_file)) {
-			include $tables_file;
-		}
+	function setTablesInfo() {
 
 		$this->table_list = array('popup','memo','board_group','member_group','question','questiont','questionc','dayman','post','connecter','connecter_real','connecter_real_all','connecter_all','connecter_site','pageview','calender');
 
 		$table_key_prefix = 'db_';
 		for($i=0; $i<count($this->table_list); $i++) {
-			$this->set($table_key_prefix . $this->table_list[$i], ${$this->table_list[$i]});
-			unset(${$this->table_list[$i]});
+			$this->set($table_key_prefix . $this->table_list[$i], $this->table_list[$i]);
 		}
-	}
-
-	function getTablesFile() {
-
-		return _SUX_PATH_ . 'config/tables.inc.php';
 	}
 	
 	function getDBInfo() {

@@ -134,7 +134,7 @@ class RecordDbsetupPanel extends Object {
 		$resultYN = 'Y';
 		$msg = '';
 
-		$file_name = 'db.config.php';
+		$file_name = 'config.db.php';
 		$file = '../../config/' . $file_name;
 		$fp = fopen($file, 'w');
 
@@ -195,7 +195,7 @@ class RecordAdminsetupPanel extends Object {
 		$resultYN = 'Y';
 		$msg = '';
 
-		$file_name = 'admin.inc.php';
+		$file_name = 'config.admin.php';
 		$file = '../../config/' . $file_name;
 		$fp = fopen($file, 'w');
 
