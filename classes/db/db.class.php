@@ -132,6 +132,13 @@ class DB extends Object {
 		return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
 	}
 
+	function _showSql($query) {
+
+		$db = $query->getDB();
+
+		return 'SHOW TABLES FROM ' . $db;
+	}
+
 	function _query($sql) {
 
 		return mysql_query($sql);
@@ -183,12 +190,23 @@ class DB extends Object {
 		return $this->query_result;
 	}
 
+	function showTables($query) {
+
+		$sql = $this->_showSql($query);		
+		$this->query_result = $this->_query($sql);
+		parent::output($sql);	
+
+		return $this->query_result;
+	}
+
 	function getFetchArray() {
 
 		return $this->_fetchArray($this->query_result);
 	}
 
 	function getNumRows() {
+
+		$this->query_result;
 
 		return$this->_numRows($this->query_result);
 	}

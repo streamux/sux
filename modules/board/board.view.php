@@ -62,7 +62,7 @@ class ListPanel extends BaseView {
 			}
 		} else {
 			echo '하단 파일경로를 입력하세요.<br>';
-		}		
+		}
 	}
 }
 

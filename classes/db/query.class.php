@@ -5,6 +5,7 @@ class Query extends Object {
 	private static $aInstance = NULL;
 
 	var $class_name = 'query_class';
+	var $db;
 	var $tableId;
 	var $priority;
 	var $fields;
@@ -65,6 +66,16 @@ class Query extends Object {
 		if ($priority != '') {
 			$this->setLimit($table);
 		}
+
+	}
+
+	function setDB($db) {
+
+		$this->db = $db;
+	}
+	function getDB() {
+
+		return $this->db;
 	}
 
 	function setTable($id) {
@@ -195,9 +206,13 @@ class Query extends Object {
 		return $this->orderBy;
 	}
 
-	function setLimit($values) {
+	function setLimit($passover, $limit) {
 
-		$this->limit = $values;
+		$this->limit = $passover;
+
+		if (isset($limit) || $limit != '') {
+			$this->limit .= ', ' . $limit;
+		}
 	}
 
 	function getLimit() {

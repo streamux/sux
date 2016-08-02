@@ -7,7 +7,7 @@ jsux.fn = {
 			id:$("input[name=id]").val()
 		};
 
-		jsux.getJSON("board.del.delete.php",params, function( e )  {
+		jsux.getJSON("board.admin.php?action=record_delete",params, function( e )  {
 
 			trace( e.msg );
 

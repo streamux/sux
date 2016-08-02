@@ -96,12 +96,17 @@ class Context {
 			$this->set($table_key_prefix . $this->table_list[$i], $this->table_list[$i]);
 		}
 	}
-	
+
+	function getDB() {
+
+		return $this->db_info['db_database'];
+	}
+
 	function getDBInfo() {
 
 		return $this->db_info;
 	}
-
+	
 	function setDbInfo($db_info) {
 
 		$this->db_info = $db_info;

@@ -2,13 +2,11 @@ jsux.fn = {
 
 	setLayout: function() {
 
-		jsux.getJSON("board.list.json.php", function( e )  {
+		jsux.getJSON("board.admin.php?action=record_list&pageType=board", function( e )  {
 
 			var 	func = {
 					editDate: function( value ) {
-
 						var list = value.split(" ");
-
 						return list[0];
 					}
 				},

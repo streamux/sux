@@ -113,7 +113,7 @@ jsux.fn = {
 
 					limit_word: f.limit_word.value };
 
-		jsux.getJSON("board.add.insert.php", params, function( e ) {
+		jsux.getJSON("board.admin.php?action=record_add", params, function( e ) {
 
 			trace( e.msg );
 
@@ -148,7 +148,7 @@ jsux.fn = {
 	},
 	setLayout: function() {
 
-		jsux.getJSON("board.add.json.php", function( e ) {
+		jsux.getJSON("board.admin.php?action=add", function( e ) {
 
 			markup = $("#skinList_tmpl");
 			$("#skinList").empty();

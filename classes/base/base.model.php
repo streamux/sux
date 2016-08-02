@@ -47,6 +47,14 @@ class BaseModel extends Object {
 		return $result;
 	}
 
+	function showTables($query) {
+
+		$result = $this->db->showTables($query);
+		$this->setFetchArray();
+		$this->setNumRows();
+		return $result;
+	}
+
 	function setFetchArray() {
 
 		$this->fetchArrayList = array();

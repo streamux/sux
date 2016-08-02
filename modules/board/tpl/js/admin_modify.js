@@ -99,7 +99,7 @@ jsux.fn = {
 					limit_word: this.getTextAreaVal("limit_word")};
 
 
-		jsux.getJSON("board.edit.update.php", params, function( e ) {
+		jsux.getJSON("board.admin.php?action=record_modify", params, function( e ) {
 
 			trace( e.msg );
 
@@ -125,7 +125,7 @@ jsux.fn = {
 		});
 
 		$("input[name=cancel]").on("click", function(e) {
-		
+
 			jsux.goURL(menuList[1].sub[0].link);
 		});
 	},
@@ -136,7 +136,7 @@ jsux.fn = {
 				table_name: $("input[name=b_tablename]").val()
 			};
 
-		jsux.getJSON("board.edit.json.php", params, function( e ) {
+		jsux.getJSON("board.admin.php?action=modify", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
