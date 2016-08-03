@@ -78,7 +78,7 @@ jsux.fn = {
 					board_name: f.board_name.value,
 					width: f.width.value,
 					include1: f.include1.value,
-					skin: this.getSelectVal("skin"),
+					include2: this.getSelectVal("include2"),
 					include3: f.include3.value,
 					log_key: this.getSelectVal("log_key"),
 					w_grade: this.getSelectVal("w_grade"),
@@ -102,7 +102,7 @@ jsux.fn = {
 		jsux.getJSON("board.admin.php?action=record_modify", params, function( e ) {
 
 			trace( e.msg );
-
+			return;
 			if (e.result == "Y") {
 				jsux.goURL(menuList[1].sub[0].link);
 			}
@@ -117,9 +117,7 @@ jsux.fn = {
 			e.preventDefault();
 
 			var bool  = self.checkFormVal( e.target );
-
 			if (bool === true) {
-
 				self.sendJson( e.target );
 			}
 		});
@@ -136,18 +134,14 @@ jsux.fn = {
 				table_name: $("input[name=b_tablename]").val()
 			};
 
-		jsux.getJSON("board.admin.php?action=modify", params, function( e ) {
+		jsux.getJSON("board.admin.php?action=modifydata", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
 				markup = null,
 				labelList = null;
 
-			if (e.result == "Y") {
-
-				markup = $("#skinList_tmpl");
-				$("#skinList").empty();
-				$(markup).tmpl(e.data.skinList).appendTo("#skinList");
+			if (e.result == "Y") {				
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
@@ -190,6 +184,13 @@ jsux.fn = {
 			} else {
 				trace( e.msg );
 			}
+		});
+
+		jsux.getJSON("board.admin.php?action=skinlist", function( e ) {
+
+			markup = $("#skinList_tmpl");
+			$("#skinList").empty();
+			$(markup).tmpl(e.data.list).appendTo("#skinList");
 		});
 	},
 	init: function() {

@@ -29,7 +29,7 @@ class Template {
 		$data = ob_get_clean();
 
 		foreach ($this->values as $key => $value) {
-			$data = str_replace('${'.$key.'}', $value, $data);
+			$data = str_replace('{$'.$key.'}', $value, $data);
 		}
 
 		if (strtolower($op) === 'hide') {

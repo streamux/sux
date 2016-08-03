@@ -40,17 +40,6 @@ if ($result) {
 	$limit_choice = $row['limit_choice'];
 	$limit_word = $row['limit_word'];
 
-	if ($handle = opendir($dir)) { 
-
-		while (false !== ($file = readdir($handle))) { 
-
-				if ($file != "." && $file != "..") {
-					array_push($skinList, array("file_name"=>$file));					
-				} 
-		} 
-		closedir($handle); 
-	} 
-
 	$dataObj = array("table_name"=>$table_name,"board_name"=>$board_name,"id"=>$id,"width"=>$width,"include1"=>$include1,"skin"=>$include2,"include3"=>$include3,"log_key"=>$log_key,"w_grade"=>$w_grade,"r_grade"=>$r_grade,"rw_grade"=>$rw_grade,"re_grade"=>$re_grade,"w_admin"=>$w_admin,"r_admin"=>$r_admin,"rw_admin"=>$rw_admin,"re_admin"=>$re_admin,"listnum"=>$listnum,"tail"=>$tail,"download"=>$download,"setup"=>$setup,"output"=>$output,"type"=>$type,"limit_choice"=>$limit_choice,"limit_word"=>$limit_word,"skinList"=>$skinList);
 
 } else {

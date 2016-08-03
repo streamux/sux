@@ -139,6 +139,21 @@ class DB extends Object {
 		return 'SHOW TABLES FROM ' . $db;
 	}
 
+	function _createSql($query) {
+
+		$tables = $query->getTable();
+		$schema = $query->getSchema();
+
+		return 'CREATE TABLE ' . $tables . '(' . $schema . ')';
+	}
+
+	function _dropSql($query) {
+
+		$tables = $query->getTable();
+
+		return 'DROP TABLE ' . $tables;
+	}
+
 	function _query($sql) {
 
 		return mysql_query($sql);
@@ -193,6 +208,24 @@ class DB extends Object {
 	function showTables($query) {
 
 		$sql = $this->_showSql($query);		
+		$this->query_result = $this->_query($sql);
+		parent::output($sql);	
+
+		return $this->query_result;
+	}
+
+	function createTable($query) {
+
+		$sql = $this->_createSql($query);		
+		$this->query_result = $this->_query($sql);
+		parent::output($sql);	
+
+		return $this->query_result;
+	}
+
+	function dropTable($query) {
+
+		$sql = $this->_dropSql($query);		
 		$this->query_result = $this->_query($sql);
 		parent::output($sql);	
 

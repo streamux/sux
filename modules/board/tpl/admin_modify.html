@@ -1,17 +1,10 @@
-<?
-include "top.php";
-
-$table_name = $_REQUEST['table_name'];
-$id = $_REQUEST['id'];
-?>
-
 <div class="container">	
 		<div class="articles ui-edgebox">
 			<div class="add">
 				<h2 class="blind">게시판 수정</h2>
 				<div class="tt">
 					<div class="imgbox">
-						<span>게시판 내용수정</span>
+						<span>게시판 옵션 수정</span>
 					</div>
 				</div>
 				<div class="box">
@@ -28,9 +21,9 @@ $id = $_REQUEST['id'];
 						<tbody>
 							<tr>
 								<td>
-									테이블 이름
-									<input type="hidden" name="b_tablename" value=<? echo $table_name?>>
-									<input type="hidden" name="b_id" value=<? echo $id?>>
+									<label for="b_tablename">테이블 이름</label>
+									<input type="hidden" name="b_tablename" value="{$table_name}">
+									<input type="hidden" name="b_id" value="{$id}">
 								</td>
 								<td id="table_name" class="view-type-textfield">
 									<!--
@@ -61,7 +54,7 @@ $id = $_REQUEST['id'];
 							<tr>
 								<td>스킨</td>
 								<td>
-									<select name="skin" id="skinList">
+									<select name="include2" id="skinList">
 										<!--
 										@ jquery templete
 										@ name skinList_tmpl
@@ -237,5 +230,3 @@ $id = $_REQUEST['id'];
 </script>
 
 <script type="text/javascript" src="./tpl/js/admin_modify.js"></script>
-
-<? include "bottom.php"; ?>

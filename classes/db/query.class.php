@@ -18,6 +18,7 @@ class Query extends Object {
 	var $groupBy;
 	var $orderBy;
 	var $limit;
+	var $schema;
 
 	function __construct() {
 			
@@ -218,6 +219,21 @@ class Query extends Object {
 	function getLimit() {
 
 		return $this->limit;
+	}
+
+	function resetSchema() {
+
+		$this->schema = '';
+	}
+	function setSchema($schema) {
+
+		$resultArr = $schema->get();
+		$this->schema = implode(',', $resultArr);
+	}
+
+	function getSchema() {
+
+		return $this->schema;
 	}
 
 	function convertToString($arr, $glue=',') {

@@ -90,7 +90,7 @@ jsux.fn = {
 					board_name: f.board_name.value,
 					width: f.width.value,
 					include1: f.include1.value,
-					skin: this.getSelectVal("skin"),
+					include2: this.getSelectVal("include2"),
 					include3: f.include3.value,
 					log_key: f.log_key.value,
 					w_grade: this.getSelectVal("w_grade"),
@@ -148,7 +148,7 @@ jsux.fn = {
 	},
 	setLayout: function() {
 
-		jsux.getJSON("board.admin.php?action=add", function( e ) {
+		jsux.getJSON("board.admin.php?action=skinlist", function( e ) {
 
 			markup = $("#skinList_tmpl");
 			$("#skinList").empty();

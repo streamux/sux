@@ -42,5 +42,19 @@ class BoardAdminController extends BaseController {
 		$result = $this->model->searchTables($table);
 		return $result;
 	}
+
+	function createTable($handler, $values=NULL) {
+
+		$method = 'createTable' . ucfirst($handler);
+		$result = $this->model->{$method}($values);
+		return $result;
+	}
+
+	function dropTable($handler, $values=NULL) {
+
+		$method = 'dropTable' . ucfirst($handler);
+		$result = $this->model->{$method}($values);
+		return $result;
+	}
 }
 ?>
