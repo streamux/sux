@@ -20,7 +20,7 @@ class BoardAdminModule extends BaseView {
 		$requests = $context->getRequestAll();
 		$board = $requests['table_name'];
 		$id = $requests['id'];
-		$page_type = $requests['pageType'];
+		$page_type = $requests['pagetype'];
 		$page_type = $page_type ? $page_type : "main";
 
 		$top_path = _SUX_PATH_ . 'modules/admin/top.html';
@@ -118,8 +118,7 @@ class ModifydataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -155,8 +154,7 @@ class SkinlistPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -243,8 +241,7 @@ class RecordListPanel extends RecordModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -313,8 +310,7 @@ class RecordAddPanel extends RecordModules {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -342,8 +338,7 @@ class RecordModifyPanel extends RecordModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -397,8 +392,7 @@ class RecordDeletePanel extends RecordModules {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 ?>

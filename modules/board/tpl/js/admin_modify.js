@@ -102,7 +102,7 @@ jsux.fn = {
 		jsux.getJSON("board.admin.php?action=record_modify", params, function( e ) {
 
 			trace( e.msg );
-			return;
+			
 			if (e.result == "Y") {
 				jsux.goURL(menuList[1].sub[0].link);
 			}

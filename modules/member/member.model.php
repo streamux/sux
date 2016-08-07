@@ -2,7 +2,7 @@
 
 class MemberModel extends BaseModel {
 
-	var $class_name = 'member_view';
+	var $class_name = 'member_model';
 
 	function init() {
 		
@@ -56,7 +56,6 @@ class MemberModel extends BaseModel {
 			$pwd1,
 			$pwd2,
 			$posts['name'],
-			'','',
 			$posts['email'],
 			$posts['tel1'],
 			$posts['tel2'],
@@ -64,9 +63,7 @@ class MemberModel extends BaseModel {
 			$posts['hp1'],
 			$posts['hp2'],
 			$posts['hp3'],
-			'','','',
 			$posts['company'],
-			'','','','','','','',
 			$posts['recordnum'],
 			$posts['job'],
 			$posts['hobby'],
@@ -88,6 +85,7 @@ class MemberModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
+		$memberid = $posts['memberid'];
 
 		$pwd1 = trim($posts['pwd1']);
 		$pwd2 = trim($posts['pwd2']);
@@ -112,7 +110,7 @@ class MemberModel extends BaseModel {
 			'hobby'=>$posts['hobby']
 		));
 		$query->setWhere(array(
-			'ljs_memberid'=>$posts['memberid']
+			'ljs_memberid'=>$memberid
 		));
 
 		$result = parent::update($query);

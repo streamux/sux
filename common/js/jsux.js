@@ -2,7 +2,7 @@
 /**!
  * @concat jsux.js 
  * project sux
- * date 14-07-2016
+ * date 05-08-2016
  @brief jsux Common Javascript
  **/
 window.jsux = window.jsux || {};

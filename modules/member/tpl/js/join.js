@@ -140,8 +140,9 @@ jsux.fn = {
 		jsux.getJSON('member.php', params, function( e ) {
 
 			trace( e.msg );
+			
 			if (e.result == 'Y') {
-				jsux.goURL('../login/login.php?action=login');
+				//jsux.goURL('../login/login.php?action=login');
 			}
 		});
 	},

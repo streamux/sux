@@ -1,18 +1,10 @@
 jsux.fn = {
 
-	returnToURL: function () {
-
-		var table_name = $('input[name=table_name]').val(),
-			url = '../member/member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
-
-		return url;
-	},
 	getEmailVal: function( id ) {
 
 		var result = $.trim($("select[name="+id+"1]").val());
 
 		if ( result == "직접입력") {
-			result = "";
 			result = $("input[name="+id+"2]").val();
 		}
 
@@ -49,44 +41,9 @@ jsux.fn = {
 
 		return reg.test( value );
 	},
-	checkPWD: function() {
-
-		if ($("input[name=pwd1]").val() != $("input[name=pwd2]").val()) {
-
-			trace("비밀번호가 일치하지 않습니다.");
-
-			$("input[name=pwd1]").val("");
-			$("input[name=pwd2]").val("");
-			$("input[name=pwd1]").focus();
-
-			return(false);
-		}
-	},		
-	checkID: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					memberid: $("input[name=memberid]").val()};
-
-		jsux.getJSON("../search_id.php", params, function( e ) {
-
-			trace( e.msg );
-		});
-	},
-	checkCorpName: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					company: $("input[name=company]").val()};
-
-		jsux.getJSON("../search_companyname.php", params, function( e ) {
-
-			trace( e.msg );
-		});
-	},
 	checkFormVal: function( f ) {
 
-		var memberid = memberid: $("input[name=memberid]").val(),
+		var memberid = f.memberid.value.length,
 			pwd1 = f.pwd1.value.length,
 			pwd2 = f.pwd2.value.length,
 			name = f.name.value.length,
@@ -98,6 +55,12 @@ jsux.fn = {
 
 		if ( memberid < 1 ) {
 			trace("아이디를 입력 하세요.");
+			f.memberid.focus();
+			return (false);
+		}
+
+		if (this.checkLangKor( f.memberid.value)) {
+			trace("아이디에 한글이 포함되어 있습니다.");
 			f.memberid.focus();
 			return (false);
 		}
@@ -158,8 +121,8 @@ jsux.fn = {
 	sendJson: function( f ) {
 
 		var params = "";
-		params = { action: 'record_edit',
-					table_name: f.table_name.value,
+
+		params = { table_name: this.getSelectVal("table_name"),
 					memberid: f.memberid.value,
 					pwd1: f.pwd1.value,
 					pwd2: f.pwd2.value,
@@ -171,120 +134,120 @@ jsux.fn = {
 					tel1: f.tel1.value,
 					tel2: f.tel2.value,
 					tel3: f.tel3.value,
-					company: f.company.value,
+					companyname: f.companyname.value,
 					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby") };
+					hobby: this.getCheckboxVal("hobby"),
+					path: f.path.value,
+					proposeid: f.proposeid.value,
+					writer: this.getSelectVal("writer"),
+					point: f.point.value,
+					grade: f.grade.value };
 
-		jsux.getJSON("member.php", params, function( e ) {
+		jsux.getJSON("member.add.insert.php", params, function( e ) {
 
 			trace( e.msg );
 
 			if (e.result == "Y") {
-				jsux.goURL('../login/login.php?action=logpass');
+				jsux.goURL(menuList[0].sub[0].link);
 			}
+		});
+	},
+	checkPWD: function() {
+
+		if ($("input[name=pwd1]").val() != $("input[name=pwd2]").val()) {
+
+			trace("비밀번호가 일치하지 않습니다.");
+
+			$("input[name=pwd1]").val("");
+			$("input[name=pwd2]").val("");
+			$("input[name=pwd1]").focus();
+
+			return(false);
+		}
+	},		
+	checkID: function() {
+
+		var	params =  {	table_name: this.getSelectVal("table_name"),
+						memberid: $("input[name=memberid]").val()};
+
+
+		if (params.memberid === "") {
+			trace("아이디를 입력해주세요");
+			return;
+		}
+
+		jsux.getJSON("../member/member.searchid.json.php", params, function( e ) {
+
+			trace( e.msg );
+		});
+	},
+	checkCorpName: function() {
+
+		var	params = "";
+		params = {	table_name: $("select[name=table_name]").val(),
+					companyname: $("input[name=companyname]").val()};
+
+		jsux.getJSON("../member/member.searchcorp.json.php", params, function( e ) {
+
+			trace( e.msg );
 		});
 	},
 	setEvent: function() {
 
 		var self = this;
-		
+
 		$("form").on("submit", function( e ) {
 
 			e.preventDefault();
-			var bool  = self.checkFormVal( e.target );			
+
+			var bool  = self.checkFormVal( e.target );
+			
 			if (bool === true) {
 				self.sendJson( e.target );
 			}
 		});
+		$("input[name=cancel]").on("click", function(e) {
 
-		$("input[name=cancel]").on("click", function(e) {			
-			jsux.goURL( self.returnToURL() );
+			jsux.goURL(menuList[0].sub[0].link);
 		});
 
 		$("input[name=pwd2]").on("blur", function() {
+
 			self.checkPWD();
 		});	
+		$("input[name=checkID]").on("click",function(e) {
 
+			self.checkID();
+		});
 		$("input[name=checkCorpName]").on("click",function(e) {
+
 			self.checkCorpName();
 		});
-
 		$("select[name=email_tail1]").on("change", function() {
+
 			$("input[name=email_tail2").val("");
-		});
+		});	
 	},
 	setLayout: function() {
 
-		var params = {
-			action: 'memberfield',
-			table_name: $("input[name=table_name]").val(),
-			memberid:  $("input[name=memberid]").val()
-		};
+		jsux.getJSON("member.add.json.php", function( e )  {
 
-		jsux.getJSON("member.php", params, function( e ) {
+			var markup = $("#tableList_tmpl");
 
-			var formLists = null,
-				checkedVal = "",
-				markup = null,
-				labelList = null;
+			if (e.result == "Y") {
+				$("#tableList").empty();
 
-			if (e) {
-
-				formLists = $("input[type=text]");
-				$(formLists).each(function(index) {
-
-					if (e[this.name]) {
-						this.value = e[this.name];
-					}
-				});
-
-				formLists = $("select");
-				$(formLists).each(function(index) {
-
-					if (e[this.name]) {
-						this.value = e[this.name];
-					}						
-				});
-
-				if (e.hobby) {
-
-					formLists = $("input[type=checkbox]");
-					checkedVal = e.hobby.split(",");
-					$(formLists).each(function(index){
-
-						var self = this;
-						$(checkedVal).each(function(sIndex){
-							if (checkedVal[sIndex]) {
-								if( self.value === checkedVal[sIndex]) {
-									self.checked = true;
-								}
-							}
-						});
-					});
+				if (e.data.list.length > 0) {
+					$("#tableList_tmpl").tmpl(e.data.list).appendTo("#tableList");
+				} else {
+					$("#tableList_tmpl").tmpl("{name: no data}").appendTo("#tableList");
 				}
-
-				labelList = $("table tr").find(".view-type-textfield");
-
-				markup = $("#memberLabel_tmpl");
-				$(labelList).each(function(index) {
-
-					var label = "",
-						data = "";
-
-					label = $(labelList[index]).attr("id");						
-					data = {label: e[label]};
-
-					$("#"+label).empty();
-					$(markup).tmpl( data ).appendTo($("#"+label));
-				});
-			} else {
-				trace( e.msg );
 			}
 		});
-	},		
+	},
 	init: function() {
 
-		this.setLayout();
 		this.setEvent();
+		this.setLayout();
 	}
 };

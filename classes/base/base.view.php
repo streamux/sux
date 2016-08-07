@@ -38,5 +38,13 @@ class BaseView extends Object {
 
 		echo '이글이 보인다면 상위 클래스 BaseView의 init() 메서드를 오버라이드해서 사용하세요';
 	}
+
+	function callback($data) {
+
+		$context = Context::getInstance();
+		$callback = $context->getRequest('callback');
+		$strJson = JsonEncoder::parse($data);
+		return $callback . '('.$strJson.')';
+	}
 }
 ?>

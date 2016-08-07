@@ -3,25 +3,22 @@ jsux.fn = {
 	returnToURL: function () {
 
 		var table_name = $('input[name=table_name]').val(),
-			url = '../member/member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
-
+			url = 'member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
 		return url;
 	},
 	getEmailVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"1]").val());
+		var result = "";
 
+		result = $.trim($("select[name="+id+"1]").val());
 		if ( result == "직접입력") {
-			result = "";
 			result = $("input[name="+id+"2]").val();
 		}
-
 		return result;
 	},
 	getSelectVal: function( id ) {
 
 		var result = $.trim($("select[name="+id+"]").val());
-
 		return result;
 	},
 	setSelectVal:function( id, value ) {
@@ -46,19 +43,16 @@ jsux.fn = {
 	checkLangKor: function( value ) {
 
 		var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-
 		return reg.test( value );
 	},
 	checkPWD: function() {
 
-		if ($("input[name=pwd1]").val() != $("input[name=pwd2]").val()) {
+		if ($("input[name=ljs_pass1]").val() != $("input[name=ljs_pass2]").val()) {
 
 			trace("비밀번호가 일치하지 않습니다.");
-
-			$("input[name=pwd1]").val("");
-			$("input[name=pwd2]").val("");
-			$("input[name=pwd1]").focus();
-
+			$("input[name=ljs_pass1]").val("");
+			$("input[name=ljs_pass2]").val("");
+			$("input[name=ljs_pass1]").focus();
 			return(false);
 		}
 	},		
@@ -68,8 +62,7 @@ jsux.fn = {
 		params = {	table_name: $("select[name=table_name]").val(),
 					memberid: $("input[name=memberid]").val()};
 
-		jsux.getJSON("../search_id.php", params, function( e ) {
-
+		jsux.getJSON("member.searchid.json.php", params, function( e ) {			
 			trace( e.msg );
 		});
 	},
@@ -79,16 +72,15 @@ jsux.fn = {
 		params = {	table_name: $("select[name=table_name]").val(),
 					company: $("input[name=company]").val()};
 
-		jsux.getJSON("../search_companyname.php", params, function( e ) {
-
+		jsux.getJSON("member.searchcorp.json.php", params, function( e ) {
 			trace( e.msg );
 		});
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = memberid: $("input[name=memberid]").val(),
-			pwd1 = f.pwd1.value.length,
-			pwd2 = f.pwd2.value.length,
+		var memberid = $("input[name=memberid]").val(),
+			ljs_pass1 = f.ljs_pass1.value.length,
+			ljs_pass2 = f.ljs_pass2.value.length,
 			name = f.name.value.length,
 			email = f.email.value.length,
 			emailTail = this.getEmailVal("email_tail"),
@@ -102,15 +94,15 @@ jsux.fn = {
 			return (false);
 		}
 
-		if ( pwd1 < 1) {
+		if ( ljs_pass1 < 1) {
 			trace("비밀번호를 입력 하세요.");
-			f.pwd1.focus();
+			f.ljs_pass1.focus();
 			return (false);
 		}
 
-		if ( pwd2 < 1) {
+		if ( ljs_pass2 < 1) {
 			trace("확인번호를 입력 하세요.");
-			f.pwd2.focus();
+			f.ljs_pass2.focus();
 			return (false);
 		}
 
@@ -157,12 +149,14 @@ jsux.fn = {
 	},
 	sendJson: function( f ) {
 
-		var params = "";
-		params = { action: 'record_edit',
-					table_name: f.table_name.value,
+		var params = "",
+			self = this;
+
+		params = {	table_name: f.table_name.value,
 					memberid: f.memberid.value,
-					pwd1: f.pwd1.value,
-					pwd2: f.pwd2.value,
+					id: f.id.value,
+					ljs_pass1: f.ljs_pass1.value,
+					ljs_pass2: f.ljs_pass2.value,
 					name: f.name.value,
 					email: f.email.value+"@"+this.getEmailVal("email_tail"),
 					hp1: f.hp1.value,
@@ -173,37 +167,42 @@ jsux.fn = {
 					tel3: f.tel3.value,
 					company: f.company.value,
 					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby") };
+					hobby: this.getCheckboxVal("hobby"),
+					path: f.path.value,
+					proposeid: f.proposeid.value,
+					writer: this.getSelectVal("writer"),
+					point: f.point.value,
+					grade: f.grade.value };
 
-		jsux.getJSON("member.php", params, function( e ) {
+		jsux.getJSON("member.admin.php?action=record_modify", params, function( e ) {
 
 			trace( e.msg );
-
 			if (e.result == "Y") {
-				jsux.goURL('../login/login.php?action=logpass');
+				jsux.goURL( self.returnToURL() );
 			}
 		});
 	},
 	setEvent: function() {
 
 		var self = this;
-		
+
 		$("form").on("submit", function( e ) {
 
 			e.preventDefault();
+
 			var bool  = self.checkFormVal( e.target );			
 			if (bool === true) {
 				self.sendJson( e.target );
 			}
 		});
 
-		$("input[name=cancel]").on("click", function(e) {			
+		$("input[name=cancel]").on("click", function(e) {
 			jsux.goURL( self.returnToURL() );
 		});
 
-		$("input[name=pwd2]").on("blur", function() {
+		$("input[name=ljs_pass2]").on("blur", function() {
 			self.checkPWD();
-		});	
+		});
 
 		$("input[name=checkCorpName]").on("click",function(e) {
 			self.checkCorpName();
@@ -216,52 +215,51 @@ jsux.fn = {
 	setLayout: function() {
 
 		var params = {
-			action: 'memberfield',
 			table_name: $("input[name=table_name]").val(),
 			memberid:  $("input[name=memberid]").val()
 		};
 
-		jsux.getJSON("member.php", params, function( e ) {
+		jsux.getJSON("member.admin.php?action=modifydata", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
 				markup = null,
 				labelList = null;
 
-			if (e) {
+			if (e.result == "Y") {
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
 
-					if (e[this.name]) {
-						this.value = e[this.name];
+					if (e.data[this.name]) {
+						this.value = e.data[this.name];
 					}
 				});
 
 				formLists = $("select");
 				$(formLists).each(function(index) {
 
-					if (e[this.name]) {
-						this.value = e[this.name];
+					if (e.data[this.name]) {
+						this.value = e.data[this.name];
 					}						
 				});
 
-				if (e.hobby) {
+				formLists = $("input[type=checkbox]");
+				checkedVal = e.data.hobby.split(",");
 
-					formLists = $("input[type=checkbox]");
-					checkedVal = e.hobby.split(",");
-					$(formLists).each(function(index){
+				$(formLists).each(function(index){
 
-						var self = this;
-						$(checkedVal).each(function(sIndex){
-							if (checkedVal[sIndex]) {
-								if( self.value === checkedVal[sIndex]) {
-									self.checked = true;
-								}
+					var self = this;
+
+					$(checkedVal).each(function(sIndex){
+
+						if (checkedVal[sIndex]) {
+							if( self.value === checkedVal[sIndex]) {
+								self.checked = true;
 							}
-						});
+						}
 					});
-				}
+				});
 
 				labelList = $("table tr").find(".view-type-textfield");
 
@@ -272,7 +270,7 @@ jsux.fn = {
 						data = "";
 
 					label = $(labelList[index]).attr("id");						
-					data = {label: e[label]};
+					data = {label: e.data[label]};
 
 					$("#"+label).empty();
 					$(markup).tmpl( data ).appendTo($("#"+label));

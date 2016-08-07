@@ -7,48 +7,19 @@ class MemberView extends BaseView {
 	// display function is defined in parent class 
 }
 
-class JoinPanel extends BaseView {
+class MemberModules extends BaseView {
 
-	var $class_name = 'join';
-
-	function init() {
-		
-		$skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
-
-		$skin_path = $skin_dir . 'header.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '헤더 파일경로를 확인하세요.<br>';
-		}
-		
-		$skin_path = $skin_dir . 'join.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$skin_path = $skin_dir . 'footer.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '푸터 파일경로를 확인하세요.<br>';
-		}
-	}
-}
-
-class ModifyPanel extends BaseView {
-
-	var $class_name = 'modify';
+	var $class_name = 'member_modules';
+	var $file_name = 'default.html';
 
 	function init() {
+
+		$this->defaultSetting();
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 
 		$skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
-
 		$skin_path = $skin_dir . 'header.html';
 		if (is_readable($skin_path)) {
 			include $skin_path;
@@ -56,14 +27,19 @@ class ModifyPanel extends BaseView {
 			echo '헤더 파일경로를 확인하세요.<br>';
 		}
 		
-		$skin_path = $skin_dir . 'modify.html';
-		if (is_readable($skin_path)) {
+		$skin_path = $skin_dir . $this->file_name;
+		if (is_readable($skin_path)) {			
+			if (preg_match('/modify/', $skin_path)) {
 
-			$contents = new Template($skin_path);
-			foreach ($requests as $key => $value) {
-				$contents->set($key, $value);
+				$contents = new Template($skin_path);
+				foreach ($requests as $key => $value) {
+					$contents->set($key, $value);
+				}
+				$contents->load();
+			} else {
+				include $skin_path;
 			}
-			$contents->load();
+			
 		} else {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
@@ -74,6 +50,30 @@ class ModifyPanel extends BaseView {
 		} else {
 			echo '푸터 파일경로를 확인하세요.<br>';
 		}
+
+		function display() {}
+	}
+
+	function defaultSetting() {}
+	function display() {}
+}
+class JoinPanel extends MemberModules {
+
+	var $class_name = 'join';
+
+	function defaultSetting() {
+
+		$this->file_name = 'join.html';
+	}
+}
+
+class ModifyPanel extends MemberModules {
+
+	var $class_name = 'modify';
+
+	function defaultSetting() {
+
+		$this->file_name = 'modify.html';
 	}
 }
 
@@ -92,14 +92,14 @@ class GrouplistPanel extends BaseView {
 
 			$data = array(	'data'=>$this->model->getRows(),
 							'msg'=>$msg);
-			$strJson = $this->model->parseToJson($data);
-			echo $requests['callback'].'('.$strJson.')';
 		} else {
 			$msg = '데이터 로드를 실패하였습니다.';
 			$data = array('msg'=>$msg);
-			$strJson = $this->model->parseToJson($data);
-			echo $requests['callback'].'('.$strJson.')';
-		}		
+
+			
+		}
+
+		echo parent::callback($data);	
 	}
 }
 
@@ -118,8 +118,8 @@ class MemberfieldPanel extends BaseView {
 			$email_arr = split('@', $rows['email']);
 			$rows['email'] = $email_arr[0];
 			$rows['email_tail2'] = $email_arr[1];
-			$strJson = $this->model->parseToJson($rows);
-			echo $requests['callback'].'('.$strJson.')';
+
+			echo parent::callback($rows);
 		} else {
 			echo '데이터 로드를 실패하였습니다.';
 		}
@@ -149,8 +149,7 @@ class SearchidPanel extends BaseView {
 			$msg .= "아이디명은 4글자 이상 사용하세요.";
 
 			$data = array(	"msg"=>$msg);
-			$strJson = $this->model->parseToJson($data);
-			echo $_REQUEST['callback'].'('.$strJson.')';
+			echo parent::callback($rows);
 			exit;
 		} 
 
@@ -175,8 +174,7 @@ class SearchidPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -230,10 +228,10 @@ class RecordAddPanel extends RecordBasePanel {
 		} else {
 			$result = $this->controller->insert('recordAdd');
 			if ($result) {
-				$msg = '신규회원 가입을 완료하였습니다.';
+				$msg .= '신규회원 가입을 완료하였습니다.';
 				$resultYN = "Y";
 			} else {
-				$msg = '신규회원 가입을 실패하였습니다.';
+				$msg .= '신규회원 가입을 실패하였습니다.';
 				$resultYN = "N";
 			}
 		}
@@ -242,8 +240,7 @@ class RecordAddPanel extends RecordBasePanel {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.$strJson.')';
+		echo parent::callback($data);
 	}
 }
 
@@ -276,10 +273,9 @@ class RecordEditPanel extends RecordBasePanel {
 			}
 		}
 		$data = array(	"result"=>$resultYN,
-						"msg"=>urlencode($msg));
+						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.urldecode($strJson).')';
+		echo parent::callback($data);
 	}
 }
 
@@ -310,10 +306,9 @@ class RecordDeletePanel extends RecordBasePanel {
 			}
 		}
 		$data = array(	"result"=>$resultYN,
-						"msg"=>urlencode($msg));
+						"msg"=>$msg);
 
-		$strJson = $this->model->parseToJson($data);
-		echo $this->requests['callback'].'('.urldecode($strJson).')';
+		echo parent::callback($data);
 	}
 }
 ?>

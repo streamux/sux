@@ -24,22 +24,31 @@ class LoginModel extends BaseModel {
 	function getLogpass($params=NULL, $type=NULL) {
 
 		$context = Context::getInstance();
+		$member = $context->getSession('ljs_member');
+		if (!isset($member) || $member == '') {
+			$member = $context->getPost('member');
+		}
+
+		$memberid = $context->getSession('ljs_memberid');
+		if (!isset($memberid) || $memberid == '') {
+			$memberid = $context->getPost('memberid');
+		}
 
 		if ($type === 'select') {
 			$query = new Query();
 			$query->setField('*');
-			$query->setTable($context->getPost('member'));
+			$query->setTable($member);
 			$query->setWhere(array(
-				'ljs_memberid'=>$context->getPost('memberid')
+				'ljs_memberid'=>$memberid
 			));
 			parent::select($query);
 			
 		} else if ($type === 'update') {
 			$query = new Query();
-			$query->setTable($context->getPost('member'));
+			$query->setTable($member);
 			$query->setColumn(array('hit'=>$params['hit']));
 			$query->setWhere(array(
-				'ljs_memberid'=>$context->getPost('memberid')
+				'ljs_memberid'=>$memberid
 			));
 			parent::update($query);
 		}

@@ -2,7 +2,7 @@ jsux.fn = {
 
 	setLayout: function() {
 
-		jsux.getJSON("board.admin.php?action=record_list&pageType=board", function( e )  {
+		jsux.getJSON("board.admin.php?action=record_list&pagetype=board", function( e )  {
 
 			var 	func = {
 					editDate: function( value ) {

@@ -56,10 +56,23 @@ class LogpassPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$member = $context->getPost('member');
-		$memberid = $context->getPost('memberid');
-		$pass = trim($context->getPost('pass'));
+		
+		$member = $context->getSession('ljs_member');
+		if (!isset($member) || $member == '') {
+			$member = $context->getPost('member');
+		}
 
+		$memberid = $context->getSession('ljs_memberid');
+		if (!isset($memberid) || $memberid == '') {
+			$memberid = $context->getPost('memberid');
+		}
+
+		$pass = trim($context->getSession('ljs_pass1'));
+		if (!isset($pass) || $pass == '') {
+			$pass = trim($context->getPost('pass'));
+			$pass = substr(md5($pass),0,8);
+		}
+		
 		$msg = "";
 
 		if (!$memberid) {
@@ -72,7 +85,7 @@ class LogpassPanel extends BaseView {
 			Error::alertToBack($msg);
 		}
 
-		$pass = substr(md5($pass),0,8);
+		
 		$this->controller->select('getLogpass');
 		$num = $this->model->getNumRows();
 
