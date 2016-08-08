@@ -1,4 +1,4 @@
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css">
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 <script src="../../common/js/jquery.min.js"></script>
 <script src="../../common/js/jsux-1.0.0.min.js"></script>

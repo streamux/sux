@@ -19,7 +19,7 @@ menuList = [{
 	link: "#none",
 	//link: "popup_01.html",
 	sub: [	{label: "팝업목록",  link:"../popup/popup.admin.php?action=list&pagetype=popup"},
-			{label: "팝업추가",  link:"./popup/popup.admin.php?action=add&pagetype=popup"}]
+			{label: "팝업추가",  link:"../popup/popup.admin.php?action=add&pagetype=popup"}]
 			//{label: "팝업스킨", link:"popup.skin.php?pagetype=popup"}]
 },
 {

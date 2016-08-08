@@ -1,4 +1,13 @@
 
+/* layout */
+.wrap {position: relative}
+.header {position:relative;z-index:1000;margin:0 auto;width:100%;border: 0 solid #FF0000}
+.container {clear:both;position:relative;margin:0 auto;width:98%}
+.footer{margin-top:20px;height:50px;text-align: center}
+
+/* header */
+.header .util{height: 20px;border: 0 solid #FF0000}
+
 /* list & search*/
 .board-list table{border-collapse:collapse;border-spacing: 0;width:100%;}
 .board-list table thead th{height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:center;}

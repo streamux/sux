@@ -198,7 +198,7 @@ jsux.fn = {
 		});
 		$('input[name=cancel]').on('click', function(e) {
 
-			jsux.history.back();
+			jsux.goURL( '../login/login.php?action=login' );
 		});
 
 		$('input[name=pwd2]').on('blur', function() {

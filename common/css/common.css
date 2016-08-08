@@ -1,0 +1,45 @@
+@charset "utf-8";
+
+/* streamux.com */
+
+/* Reset */
+html, body {width:100%;height:100%}
+html {overflow:scroll}
+body,h1,h2,h3,h4,h5,button {margin:0;padding:0;font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;font-size:12px;color:#383d41}
+table,textarea,input{font-size: 1em}
+div,dl,dt,dd,ul,ol,li,table,thead,tbody,tr,td,th,form,fieldset,p{margin:0;padding:0}
+input{font-family:Dotum,'돋움',Helvetica,AppleSDGothicNeo,sans-serif;color:#383d41}
+body {background-color:#FFF;word-break:break-all}
+
+img,fieldset,iframe {border:0 none}
+li {list-style:none}
+input,select,button {vertical-align:middle}
+img {vertical-align:top}
+i,em,address {font-style:normal}
+label,button {cursor:pointer}
+button {margin:0;padding:0}
+a {color:#222;text-decoration:none}
+a:hover {color:#390;text-decoration:underline}
+button {position:relative}
+button img {left:-3px;left:auto}
+html:first-child select {height:20;padding-right:6px}
+option {padding-right:6px}
+hr {display:none}
+legend {width:0}
+table {border-collapse:collapse;border-spacing:0}
+input::-ms-clear {display:none}
+
+*, *:before, *:after {-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box}
+
+/* common */
+.show{display: block;}
+.hide{display:none}
+.ui-inlineblock{display: inline-block}
+.color-red{color:#FF0000}
+.blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
+.warn-msg{display:block;padding-left:5px;text-align: left;font-family:'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움',sans-serif;color:#FF0000;font-size:0.750em}
+
+.ui-edgebox{background:url('../images/edgebox1.png') 0 0 no-repeat,url('../images/edgebox2.png') 100% 0 no-repeat,url('../images/edgebox3.png') 100% 100% no-repeat,url('../images/edgebox4.png') 0 100% no-repeat,url('../images/edgebox_top.png') 0 0 repeat-x,url('../images/edgebox_right.png') 100% 0 repeat-y,url('../images/edgebox_bottom.png') 0 100% repeat-x,url('../images/edgebox_left.png') 0 0 repeat-y}
+
+.ui-edgebox-2px{background: url('../images/edgebox_line2px_tl.png') no-repeat 0 0, url('../images/edgebox_line2px_tr.png') no-repeat 100% 0,url('../images/edgebox_line2px_bl.png') no-repeat 0 100%,url('../images/edgebox_line2px_br.png') no-repeat 100% 100%,url('../images/edgebox_line2px.png') 0 0 repeat-x,url('../images/edgebox_line2px.png') 100% 0 repeat-y,url('../images/edgebox_line2px.png') 0 100% repeat-x,url('../images/edgebox_line2px.png') 0 0 repeat-y
+}

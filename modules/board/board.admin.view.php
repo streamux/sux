@@ -131,21 +131,13 @@ class SkinlistPanel extends BaseView {
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 
-		$dir = _SUX_PATH_ . "modules/board/skin/";
-
-		$skinList = array();
+		$path = _SUX_PATH_ . "modules/board/skin/";
+		
 		$msg = "";
 		$resultYN = "Y";
 
-		if ($handle = opendir($dir)) { 
-			while (false !== ($file = readdir($handle))) { 
-
-					if ($file != "." && $file != "..") {
-						array_push($skinList, array("file_name"=>$file));				
-					} 
-			} 
-			closedir($handle); 
-		}  else {
+		$skinList = Utils::getInstance()->readDir($path);
+		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
 		}

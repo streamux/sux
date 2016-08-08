@@ -31,19 +31,20 @@ class OpenerPanel extends BaseView {
 			$rows = $this->model->getRows();
 			for($i=0; $i<count($rows); $i++) {
 				$id = $rows[$i]['id'];				
-				$name = $rows[$i]['name'];
+				$name = $rows[$i]['popup_name'];
 				$period = mktime($rows[$i]['time1'],$rows[$i]['time2'],$rows[$i]['time3'],$rows[$i]['time4'],$rows[$i]['time5'],$rows[$i]['time6']);
 				$nowtime = mktime();
-				$left = $rows[$i]['w_left'];
-				$top = $rows[$i]['w_top'];
-				$width = $rows[$i]['width'];
-				$height = $rows[$i]['height'];
+				$skin = $rows[$i]['skin'];
+				$left = $rows[$i]['popup_left'];
+				$top = $rows[$i]['popup_top'];
+				$width = $rows[$i]['popup_width'];
+				$height = $rows[$i]['popup_height'];
 				$choice = 	$rows[$i]['choice'];
 				$winname = $name;
 
 				if ($choice == "y" && $nowtime < $period) {
 
-					$url = 'popup.php?action=event&id=' . $id . '&winname=' . $winname;
+					$url = 'popup.php?action=event&id=' . $id . '&winname=' . $winname . '&skin=' . $skin;
 
 					echo 	'<script type=\'text/javascript\'>
 								openPopup(\'' . $url . '\', \'' . $winname . '\', \'' . $left . '\', \'' . $top . '\', \'' . $width . '\', \'' . $height . '\');
@@ -63,8 +64,9 @@ class EventPanel extends BaseView {
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 		$popup_name = $requests['winname'];
+		$skin_name = $requests['skin'];
 
-		$skin_dir = _SUX_PATH_ . 'modules/popup/skin/' . $popup_name . '/';
+		$skin_dir = _SUX_PATH_ . 'modules/popup/skin/' . $skin_name . '/';
 
 		$skin_path = $skin_dir . 'index.html';
 		if (is_readable($skin_path)) {

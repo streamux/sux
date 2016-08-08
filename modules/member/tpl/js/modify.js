@@ -1,12 +1,5 @@
 jsux.fn = {
 
-	returnToURL: function () {
-
-		var table_name = $('input[name=table_name]').val(),
-			url = '../member/member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
-
-		return url;
-	},
 	getEmailVal: function( id ) {
 
 		var result = $.trim($("select[name="+id+"1]").val());
@@ -86,7 +79,7 @@ jsux.fn = {
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = memberid: $("input[name=memberid]").val(),
+		var memberid = $("input[name=memberid]").val(),
 			pwd1 = f.pwd1.value.length,
 			pwd2 = f.pwd2.value.length,
 			name = f.name.value.length,
@@ -198,7 +191,7 @@ jsux.fn = {
 		});
 
 		$("input[name=cancel]").on("click", function(e) {			
-			jsux.goURL( self.returnToURL() );
+			jsux.goURL( '../login/login.php?action=login' );
 		});
 
 		$("input[name=pwd2]").on("blur", function() {

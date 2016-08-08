@@ -7,7 +7,8 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'Query'=>'/classes/db/query.class.php',
 	'QueryWhere'=>'/classes/db/query.where.class.php',
 	'QuerySchema'=>'/classes/db/query.schema.class.php',
-	'Utils'=>'/classes/utils/utils.class.php'
+	'Utils'=>'/classes/utils/utils.class.php',
+	'UtilsString'=>'/classes/utils/utils.string.class.php'
 ), CASE_LOWER);
 
 $GLOBALS['__sux_autoload_file_map_directory'] = array('modules', 'classes');

@@ -39,5 +39,25 @@ class Utils extends Object {
 
 		return true;
 	}
+
+	function readDir( $dir ) {
+
+		$temArr = array();
+
+		if ($handle = opendir($dir)) { 
+			while (false !== ($file = readdir($handle))) { 
+
+					if ($file != "." && $file != "..") {
+						array_push($temArr, array("file_name"=>$file));				
+					} 
+			} 
+			closedir($handle); 
+
+			return $temArr;
+		}  else {
+
+			return false;
+		}
+	}	
 }
 ?>

@@ -11,7 +11,7 @@ $result = mysql_query("select * from $board order by igroup desc,ssunseo asc lim
 $numrows2 = mysql_num_rows($result);
 ?>
 
-<link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/common.css">
+<link rel="stylesheet" type="text/css" href="../../common/css/common.css">
 <link rel="stylesheet" type="text/css" href="<? echo ${skin_dir}; ?>/css/layout.css">
 
 <div class="board-list" style="width:<? echo ${width}; ?>">

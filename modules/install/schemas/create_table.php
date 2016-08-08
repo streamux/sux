@@ -94,7 +94,7 @@ if (!$result) {
 
 $result=mysql_query(	"create table $popup".
 						"(id int not null auto_increment primary key,".
-						"name varchar(30) not null,".
+						"popup_name varchar(30) not null,".
 						"choice char(1),".
 						"time1 int(2),".
 						"time2 int(2),".
@@ -102,12 +102,12 @@ $result=mysql_query(	"create table $popup".
 						"time4 int(2),".
 						"time5 int(2),".
 						"time6 int(4),".
-						"title varchar(30),".
-						"width int(4),".
-						"height int(4),".
-						"w_top int(4),".
-						"w_left int(4),".
-						"url varchar(30),".
+						"popup_title varchar(30),".
+						"popup_width int(4),".
+						"popup_height int(4),".
+						"popup_top int(4),".
+						"popup_left int(4),".
+						"skin varchar(30),".
 						"skin_top int(4),".
 						"skin_left int(4),".
 						"skin_right int(4),".
