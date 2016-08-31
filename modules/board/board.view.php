@@ -155,6 +155,8 @@ class ReadPanel extends BaseView {
 		$this->controller->select('listFromBoardGroup');
 		$row = $this->model->getRow();	
 		$download = strtolower($row['download']);
+		$tail = $row['tail'];
+		$setup = $row['setup'];
 
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -772,6 +774,7 @@ class RecordWritePanel extends RecordBasePanel {
 
 	function record() {
 
+		$context = Context::getInstance();
 		$requests = $this->requests;
 		$posts = $this->posts;
 		$files = $this->files;
@@ -798,7 +801,10 @@ class RecordWritePanel extends RecordBasePanel {
 			if (!move_uploaded_file($imgup_tmpname , $dest)) {
 				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 			}
-		} 
+
+			$this->imgup_name = $imgup_name;
+		}
+		$context->set('fileup_name', $imgup_name);
 
 		$result = $this->controller->insert('recordWrite');
 		if (!isset($result)) {
@@ -815,6 +821,7 @@ class RecordReplyPanel extends RecordBasePanel {
 
 	function record() {
 
+		$context = Context::getInstance();
 		$requests = $this->requests;
 		$posts = $this->posts;
 		$files = $this->files;
@@ -841,7 +848,10 @@ class RecordReplyPanel extends RecordBasePanel {
 			if (!move_uploaded_file($imgup_tmpname , $dest)) {
 				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 			}
-		} 	
+
+			$this->imgup_name = $imgup_name;
+		} 
+		$context->set('fileup_name', $imgup_name);
 
 		$result = $this->controller->insert('recordReply');
 		if (!isset($result)) {
@@ -898,7 +908,8 @@ class RecordModifyPanel extends RecordBasePanel {
 				if (!move_uploaded_file($imgup_tmpname, $dest)) {
 					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 				}
-			} 
+			}
+			$context->set('fileup_name', $imgup_name);
 
 			$result = $this->controller->update('recordModify');			
 			if (!isset($result)) {

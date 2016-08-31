@@ -23,7 +23,7 @@ class BoardAdminModule extends BaseView {
 		$page_type = $requests['pagetype'];
 		$page_type = $page_type ? $page_type : "main";
 
-		$top_path = _SUX_PATH_ . 'modules/admin/top.html';
+		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
 		if (is_readable($top_path)) {
 			$contents = new Template($top_path);
 			$contents->set('page_type', $page_type);
@@ -42,7 +42,7 @@ class BoardAdminModule extends BaseView {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/bottom.html';
+		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
 		if (is_readable($bottom_path)) {
 			include $bottom_path;
 		} else {

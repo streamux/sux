@@ -1,7 +1,7 @@
 jsux.fn = {
 
-	datas: {pageview:null, analysis:null},
-	naviManager: {	pageview:null, analysis:null, limit: 5, limitGroup: 10},
+	datas: {pageview:null, analytics:null},
+	naviManager: {	pageview:null, analytics:null, limit: 5, limitGroup: 10},
 	currentTabId: 1,
 	isLoading: false,
 
@@ -10,8 +10,8 @@ jsux.fn = {
 		var label = id,
 			data = {label: value};
 
-		$("#"+label).empty();
-		$(markup).tmpl(data, func).appendTo("#"+label);
+		$('#'+label).empty();
+		$(markup).tmpl(data, func).appendTo('#'+label);
 	},
 	animateStickGraph: function( target, total, hit ) {
 
@@ -24,13 +24,13 @@ jsux.fn = {
 
 		percent = Math.round((95 - 0)/(TOTAL_NUM - 0)*(CURRENT_NUM - 0) + 0);
 		
-		field = $(target).parent().find("span");
+		field = $(target).parent().find('span');
 		field.empty();
-		field.css({"left":0,"width":""});
+		field.css({'left':0,'width':''});
 
-		$(target).css("width",0);
+		$(target).css('width',0);
 		$(target).stop();
-		$(target).animate({"width":percent+"%"}, {
+		$(target).animate({'width':percent+'%'}, {
 			duration: 1000,
 			progress: function( e ) {
 				
@@ -39,11 +39,11 @@ jsux.fn = {
 					txt_per = Math.floor((100 - 0)/(MAX_WIDTH - 0)*(fw - 0)+0);
 
 				if (fw >= 30) {	
-					field.css({"width": per+"%"});
+					field.css({'width': per+'%'});
 				}
 
 				field.empty();
-				field.append( Math.round(txt_per)+"%" );
+				field.append( Math.round(txt_per)+'%' );
 			}
 		});
 	},
@@ -51,69 +51,69 @@ jsux.fn = {
 
 		var self = this;
 
-		graphList = $("#articlesHitList .g-graph");
+		graphList = $('#articlesHitList .g-graph');
 		$(graphList).each(function( index ) {
 			self.animateStickGraph( this, self.datas.pageview[index].total, self.datas.pageview[index].hit);
 		});
 	},
-	animateAnalysis: function() {
+	animateAnalytics: function() {
 
 		var self = this;
 
-		graphList = $("#articlesAnalysisList .g-graph");
+		graphList = $('#articlesAnalyticsList .g-graph');
 		$(graphList).each(function( index ) {
-			self.animateStickGraph( this, self.datas.analysis[index].total, self.datas.analysis[index].hit);
+			self.animateStickGraph( this, self.datas.analytics[index].total, self.datas.analytics[index].hit);
 		});
 	},
 	setDataPageview: function( json ) {
 
-		var markup = "",
-			list = "",
-			z = "",
+		var markup = '',
+			list = '',
+			z = '',
 			data = this.datas.pageview = json.list;
 
-		markup = $("#hitAnalysisList_tmpl");
+		markup = $('#hitAnalyticsList_tmpl');
 
-		$("#articlesHitList").empty();
+		$('#articlesHitList').empty();
 		$(markup).tmpl(data, {
 			getRate: function( hit, total) {
 
 				return (hit || total) === 0 ? 0 : Math.round(hit/total*100);
 			}
-		}).appendTo("#articlesHitList");
+		}).appendTo('#articlesHitList');
 
 		this.naviManager.pageview.setData({	total: json.total_num,
 												limit: this.naviManager.limit,
 												limitGroup: this.naviManager.limitGroup});	
 	},
-	setDataToAnalysis: function( json ) {
+	setDataToAnalytics: function( json ) {
 
-		var markup = "",
-			list = "",
-			data = this.datas.analysis = json.list;
+		var markup = '',
+			list = '',
+			data = this.datas.analytics = json.list;
 
-		markup = $("#hitAnalysisList_tmpl");
+		markup = $('#hitAnalyticsList_tmpl');
 			
-		$("#articlesAnalysisList").empty();
+		$('#articlesAnalyticsList').empty();
 		$(markup).tmpl(data, {
 			getRate: function( hit, total) {
 
 				return (hit || total) === 0 ? 0 : (hit/total*100);
 			}
-		}).appendTo("#articlesAnalysisList");
+		}).appendTo('#articlesAnalyticsList');
 
-		this.naviManager.analysis.setData({	total: json.total_num,
+		this.naviManager.analytics.setData({	total: json.total_num,
 											limit: this.naviManager.limit,
 											limitGroup: this.naviManager.limitGroup});	
 	},
-	setHitAnalysisTabs: function() {
+	setHitAnalyticsTabs: function() {
 
 		var self = this,
-			listTT = $(".ui-tab-promotion .tab-header .tt"),
+			listTT = $('.ui-tab-promotion .tab-header .tt'),
 			listBody = null,
 			activateTab = null;
 
-		listBody = $(".ui-tab-promotion > div");
+		listBody = $('.ui-tab-promotion > div');
 
 		activateTab = function( id ) {
 
@@ -125,68 +125,68 @@ jsux.fn = {
 
 			$(listTT).each(function(index) {
 
-				var obj = $(this).find("div");
+				var obj = $(this).find('div');
 
-				if (obj.hasClass("imgbox-true")) {
-					obj.removeClass("imgbox-true");
+				if (obj.hasClass('imgbox-true')) {
+					obj.removeClass('imgbox-true');
 				}
 
-				if (obj.hasClass("imgbox-false")) {
-					obj.removeClass("imgbox-false");
+				if (obj.hasClass('imgbox-false')) {
+					obj.removeClass('imgbox-false');
 				}					
 
-				obj.addClass("imgbox-"+(id === index));
+				obj.addClass('imgbox-'+(id === index));
 
-				if ($(listBody[index]).hasClass("activate-true")) {
-					$(listBody[index]).removeClass("activate-true");
+				if ($(listBody[index]).hasClass('activate-true')) {
+					$(listBody[index]).removeClass('activate-true');
 				}
 
-				if ($(listBody[index]).hasClass("activate-false")) {
-					$(listBody[index]).removeClass("activate-false");
+				if ($(listBody[index]).hasClass('activate-false')) {
+					$(listBody[index]).removeClass('activate-false');
 				}
 
-				$(listBody[index]).addClass("activate-"+(id === index));				
+				$(listBody[index]).addClass('activate-'+(id === index));				
 			});
 
 			// id == 0 is pageview
 			if (id === 0) {
 				self.animatePageview();
 			} else {
-				self.animateAnalysis();
+				self.animateAnalytics();
 			}
 
 			currentTabId = id;
 		};
 		
-		listTT.on("click", function( e ) {
+		listTT.on('click', function( e ) {
 
 			activateTab( $(this).index() );
 		});
 
-		$(listTT[0]).trigger("click");
+		$(listTT[0]).trigger('click');
 	},
 	reloadData: function( page, limit, mod ) { 
 
 		var self = this,
 			params = {
-				mod: mod,
 				passover: (page-1) * limit,
 				limit: limit
-			};
+			},
+			mode = mod + 'data';
 
 		if (self.isLoading === true) {
 			return;
 		}
-		self.isLoading = true;
+		self.isLoading = true;		
 
-		jsux.getJSON("main.hitAnalysis.json.php", params, function( e )  {
+		jsux.getJSON('index.php?action='+mode, params, function( e )  {
 
-			if ( e.mod == "pageview" ) {
+			if ( e.mode == 'pageview' ) {
 				self.setDataPageview( e.data );
 				self.animatePageview();
 			} else {
-				self.setDataToAnalysis( e.data );
-				self.animateAnalysis();
+				self.setDataToAnalytics( e.data );
+				self.animateAnalytics();
 			}
 			self.isLoading = false;
 		});
@@ -200,86 +200,85 @@ jsux.fn = {
 				limit: this.naviManager.limit
 			};
 
-		jsux.getJSON("main.json.php", params,function( e )  {
+		jsux.getJSON('index.php?action=maindata', params,function( e )  {
 
-			var markup = "",
-				list = "",
-				data = "";
+			var markup = '',
+				list = '',
+				data = '';
 
-			markup = $("#textfield_tmpl");
+			markup = $('#textfield_tmpl');
 
-			list = $(".connect .box .view-type-textfield");
+			list = $('.connect .box .view-type-textfield');
 			$(list).each(function( index ) {
 
 				self.convertJsonToObj( markup, this.id, e.data.connecter[this.id], {
 					getUnit: function( label ) {
 
-						return label+"회";
+						return label+'회';
 					}
 				});
 			});
 
-			list = $(".config .box .view-type-textfield");
+			list = $('.config .box .view-type-textfield');
 			$(list).each(function( index ) {
 
-				markup = $("#textfield_tmpl");
+				markup = $('#textfield_tmpl');
 
 				self.convertJsonToObj( markup, this.id, e.data.serviceConfig[this.id], {
 					getUnit: function(label) {
-						return label+"개";
+						return label+'개';
 					}
 				});
 			});
 
-			list = $(".config .box .view-type-icon");
+			list = $('.config .box .view-type-icon');
 			$(list).each(function( index ) {
 
-				if ($(this).hasClass("icon-inactivate")) {
-					$(this).removeClass("icon-inactivate");
+				if ($(this).hasClass('icon-inactivate')) {
+					$(this).removeClass('icon-inactivate');
 				}
-				$(this).addClass("icon-"+e.data.serviceConfig[this.id]);
+				$(this).addClass('icon-'+e.data.serviceConfig[this.id]);
 			});
 
 			if (e.data.pageview.list.length > 0) {			
 
-				listener.changeHitHandler = function( e ) {
-
-					self.reloadData( e.page, self.naviManager.limit, "pageview");
+				listener.changeHitHandler = function( e ) {					
+					self.reloadData( e.page, self.naviManager.limit, 'pageview');
 				};
 
 				self.naviManager.pageview = new BoardApp.Navi();
-				self.naviManager.pageview.setUI({	el: ".pageview .ui-navi",
-													id: "#hitNaviList",
-													tmpl: "#NaviList_tmpl"});	
-				self.naviManager.pageview.addEventListener("change", listener.changeHitHandler);
+				self.naviManager.pageview.setUI({	el: '.pageview .ui-navi',
+													id: '#hitNaviList',
+													tmpl: '#NaviList_tmpl'});	
+				self.naviManager.pageview.addEventListener('change', listener.changeHitHandler);
 				self.setDataPageview( e.data.pageview );	
 			} else {
-				markup = $("#hitAnalysisWarnMsg_tmpl");
+				markup = $('#hitAnalyticsWarnMsg_tmpl');
 
-				$("#articlesHitList").empty();
-				$(markup).tmpl(e.data.pageview).appendTo("#articlesHitList");
+				$('#articlesHitList').empty();
+				$(markup).tmpl(e.data.pageview).appendTo('#articlesHitList');
 			}
 
-			if (e.data.analysis.list.length > 0) {	
+			if (e.data.connectersite.list.length > 0) {	
 
-				listener.changeAnalysisHandler = function( e ) {						
-					self.reloadData( e.page, self.naviManager.limit, "analysis");
+				listener.changeAnalyticsHandler = function( e ) {									
+					self.reloadData( e.page, self.naviManager.limit, 'connectersite');
 				};
 
-				self.naviManager.analysis = new BoardApp.Navi();
-				self.naviManager.analysis.setUI({	el: ".analysis .ui-navi",
-													id: "#analysisNaviList",
-													tmpl: "#NaviList_tmpl"});			
-				self.naviManager.analysis.addEventListener("change", listener.changeAnalysisHandler);
-				self.setDataToAnalysis( e.data.analysis );
+				self.naviManager.analytics = new BoardApp.Navi();
+				self.naviManager.analytics.setUI({	el: '.analytics .ui-navi',
+													id: '#analyticsNaviList',
+													tmpl: '#NaviList_tmpl'});
+				self.naviManager.analytics.addEventListener('change', listener.changeAnalyticsHandler);
+				self.setDataToAnalytics( e.data.connectersite );
 			} else {
-				markup = $("#hitAnalysisWarnMsg_tmpl");
+				markup = $('#hitAnalyticsWarnMsg_tmpl');
 
-				$("#articlesAnalysisList").empty();
-				$(markup).tmpl(e.data.analysis).appendTo("#articlesAnalysisList");
+				$('#articlesAnalyticsList').empty();
+				$(markup).tmpl(e.data.connectersite).appendTo('#articlesAnalyticsList');
 			}
 			
-			self.setHitAnalysisTabs();
+			self.setHitAnalyticsTabs();
 		});
 	},
 	init: function() {

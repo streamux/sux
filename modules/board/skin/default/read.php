@@ -1,10 +1,10 @@
 <?
 /**
 	@테스트 용  
-*/	$tail = "y";
+	$tail = "y";
 	$setup = "y";
 	$_SESSION['grade'] = 10;
-
+*/
 $result0 = mysql_query("select see from $board where id=$id");
 $row0 = mysql_fetch_array($result0);
 $see = $row0[see]+1;
@@ -63,17 +63,21 @@ if ($fileupname) {
 		<p><? echo ${fileupPath}; ?></p>
 		<p><? echo ${storycomment}; ?></p>
 	</div>
-
+	<div class="panel-buttons">
+		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&passover=<? echo ${passover} ?>&page=<? echo ${page} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
+		<a href="board.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&action=reply"><img src="<? echo ${skin_dir}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&action=modify"><img src="<? echo ${skin_dir}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=deletepass"><img src="<? echo ${skin_dir}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
+	</div>	
+</div>
 <?
+if ($setup == "y" && $grade > 9) {
+	include 'opkey.php';
+}
+
+// board-tail
 if ($tail == 'y') {
 	include 'comment.php';
 }
 ?>
-	<div class="panel-buttons">
-		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-		<a href="board.php?&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&action=reply"><img src="<? echo ${skin_dir}; ?>/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo $sid; ?>&action=modify"><img src="<? echo ${skin_dir}; ?>/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?id=<? echo $id; ?>&board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=deletepass"><img src="<? echo ${skin_dir}; ?>/images/btn_del.gif" width="51" height="23" border="0"></a>
-	</div>
-</div>
 
 <?
 $limit =3; 
@@ -226,24 +230,16 @@ if ($numrows2) {
 if($action=="searchread") {
 ?>
 
-		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&find=<? echo ${find} ?>&search=<? echo ${search} ?>&action=searchlist"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0"></a>
+		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&find=<? echo ${find} ?>&search=<? echo ${search} ?>&passover=<? echo ${passover} ?>&page=<? echo ${page} ?>&action=searchlist"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0"></a>
 <?
 }else{
 ?>
-		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
+		<a href="board.php?board=<? echo ${board} ?>&board_grg=<? echo ${board_grg} ?>&passover=<? echo ${passover} ?>&page=<? echo ${page} ?>&action=list"><img src="<? echo ${skin_dir} ?>/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
 <?
 }		
 ?>
 		<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>
-
- <? 
-if ($setup == "y") {
-	if ($grade > 9){
-		include 'opkey.php';
-	}
-}
-?>
 
 <script type="text/javascript" src="<? echo ${skin_dir}; ?>/js/board.read.js"></script>

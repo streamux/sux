@@ -37,7 +37,7 @@ input::-ms-clear {display:none}
 .ui-inlineblock{display: inline-block}
 .color-red{color:#FF0000}
 .blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
-.warn-msg{display:block;padding-left:5px;text-align: left;font-family:'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움',sans-serif;color:#FF0000;font-size:0.750em}
+.warn-msg{display:block;padding-left:5px;text-align: left;font-family:'NanumGothic', '나눔고딕','NanumGothicWeb', '맑은 고딕', 'Malgun Gothic', Dotum, '돋움',sans-serif;color:#FF0000}
 
 .ui-edgebox{background:url('../images/edgebox1.png') 0 0 no-repeat,url('../images/edgebox2.png') 100% 0 no-repeat,url('../images/edgebox3.png') 100% 100% no-repeat,url('../images/edgebox4.png') 0 100% no-repeat,url('../images/edgebox_top.png') 0 0 repeat-x,url('../images/edgebox_right.png') 100% 0 repeat-y,url('../images/edgebox_bottom.png') 0 100% repeat-x,url('../images/edgebox_left.png') 0 0 repeat-y}
 

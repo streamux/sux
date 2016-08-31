@@ -18,15 +18,10 @@ class PopupAdminModule extends BaseView {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
-
-		$table_name = $requests['table_name'];
-		$memberid = $requests['memberid'];
-		$id = $requests['id'];
-		$popup_name = $requests['popup_name'];	
 		$page_type = $requests['pagetype'];
 		$page_type = $page_type ? $page_type : "main";
 
-		$top_path = _SUX_PATH_ . 'modules/admin/top.html';
+		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
 		if (is_readable($top_path)) {
 			$contents = new Template($top_path);
 			$contents->set('page_type', $page_type);
@@ -37,17 +32,16 @@ class PopupAdminModule extends BaseView {
 
 		$skin_path = _SUX_PATH_ . 'modules/popup/tpl/' . $this->file_name;
 		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);			
-			$contents->set('table_name', $table_name);
-			$contents->set('memberid', $memberid);			
-			$contents->set('id', $id);
-			$contents->set('popup_name', $popup_name);
+			$contents = new Template($skin_path);
+			foreach ($requests as $key => $value) {
+				$contents->set($key, $value);
+			}
 			$contents->load();			
 		} else {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/bottom.html';
+		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
 		if (is_readable($bottom_path)) {
 			include $bottom_path;
 		} else {
@@ -98,14 +92,14 @@ class ListdataPanel extends BaseView {
 					foreach ($rows[$i] as $key => $value) {
 
 						if (preg_match('/(time+)/i', $key)) {
-							$timeList[$key] = $value;
+							$timeList[$key] = UtilsString::digit($value);
 						} else {
 							$dataList[$key] = $value;
 						}
 						
 					}
 					$dataList['date'] = $timeList['time6'] . '-' . $timeList['time4'] . '-' . $timeList['time5'];
-					$dataList['time'] = $timeList['time1'] . ':' . $timeList['time2'] . ':' . UtilsString::digit($timeList['time3']);
+					$dataList['time'] = $timeList['time1'] . ':' . $timeList['time2'] . ':' . $timeList['time3'];
 					$dataObj[] = $dataList;
 				}				
 			} else {

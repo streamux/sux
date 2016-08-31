@@ -19,13 +19,10 @@ class MemberAdminModule extends BaseView {
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 
-		$table_name = $requests['table_name'];
-		$memberid = $requests['memberid'];
-		$id = $requests['id'];		
 		$page_type = $requests['pagetype'];
 		$page_type = $page_type ? $page_type : "main";
 
-		$top_path = _SUX_PATH_ . 'modules/admin/top.html';
+		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
 		if (is_readable($top_path)) {
 			$contents = new Template($top_path);
 			$contents->set('page_type', $page_type);
@@ -36,16 +33,17 @@ class MemberAdminModule extends BaseView {
 
 		$skin_path = _SUX_PATH_ . 'modules/member/tpl/' . $this->file_name;
 		if (is_readable($skin_path)) {
+
 			$contents = new Template($skin_path);
-			$contents->set('table_name', $table_name);
-			$contents->set('memberid', $memberid);			
-			$contents->set('id', $id);
+			foreach ($requests as $key => $value) {
+				$contents->set($key, $value);
+			}
 			$contents->load();			
 		} else {
 			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/bottom.html';
+		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
 		if (is_readable($bottom_path)) {
 			include $bottom_path;
 		} else {

@@ -26,10 +26,10 @@ menuList = [{
 	label: "통계관리",
 	link: "#none",
 	//link: "totallog_01.html",
-	sub: [	{label: "키워드목록",  link:"../analysis/analysis.admin.php?action=list&pagetype=totallog"},
-			{label: "키워드추가",  link:"../analysis/analysis.admin.php?action=add&pagetype=totallog"},
-			{label: "페이지뷰목록", link:"../pageview/pageview.admin.php?action=list&pagetype=totallog"},
-			{label: "페이지뷰추가", link:"../pageview/pageview.admin.php?action=add&pagetype=totallog"}]
+	sub: [	{label: "접속키워드목록",  link:"../analytics/analytics.admin.php?action=connecterlist&pagetype=analytics"},
+			{label: "접속키워드추가",  link:"../analytics/analytics.admin.php?action=connecteradd&pagetype=analytics"},
+			{label: "페이지뷰목록", link:"../analytics/analytics.admin.php?action=pageviewlist&pagetype=analytics"},
+			{label: "페이지뷰추가", link:"../analytics/analytics.admin.php?action=pageviewadd&pagetype=analytics"}]
 }];
 
 visualList = [{

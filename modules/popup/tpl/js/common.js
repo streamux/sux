@@ -7,14 +7,15 @@ function setCookie( name, value, expiredays ) {
 
 function getCookie( name ) {
 
-	var smxpopCookie = name + "=";
+	var suxpopCookie = name + "=";
 	var i = 0;
 	while ( i <= document.cookie.length ) {
 
-		var e = (i+smxpopCookie.length);
-		if ( document.cookie.substring( i, e ) == smxpopCookie ) {
-			if ( (popendCookie=document.cookie.indexOf( ";", e )) == -1 )
+		var e = i + suxpopCookie.length;
+		if ( document.cookie.substring( i, e ) == suxpopCookie ) {
+			if ( (popendCookie=document.cookie.indexOf( ";", e )) == -1 ) {
 				popendCookie = document.cookie.length;
+			}
 			return unescape( document.cookie.substring( e, popendCookie ) );
 		}
 
@@ -28,8 +29,8 @@ function getCookie( name ) {
 
 function openPopup( url, popwinname, left, top, width, height ) {
 
-	if ( getCookie(popwinname) != "___sux_popup" ) {
-		smxpopWindow  =  window.open( url , popwinname ,"'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,left="+left+",top="+top+",width="+width+",height="+height+"'");
-		smxpopWindow.opener = self;
+	if ( getCookie(popwinname) != "___sux_popup" ) {		
+		suxpopWindow  =  window.open( url , popwinname ,"'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,left="+left+",top="+top+",width="+width+",height="+height+"'");
+		suxpopWindow.opener = self;
 	}
 }

@@ -136,6 +136,7 @@ class BoardModel extends BaseModel {
 
 	function InsertRecordWrite() {
 
+		$context = Context::getInstance();
 		$this->SelectFieldFromLimit('id');
 		$row = $this->getRow();
 		$igroup = $row['id']+1; 
@@ -157,7 +158,7 @@ class BoardModel extends BaseModel {
 			0,
 			0,
 			$this->wallwd,
-			$this->imgup_name,
+			$context->get('fileup_name'),
 			$this->imgup_size,
 			$this->imgup_type,
 			$this->type
@@ -169,6 +170,7 @@ class BoardModel extends BaseModel {
 
 	function InsertRecordReply() {
 
+		$context = Context::getInstance();
 		$this->SelectFieldFromId('igroup, space, ssunseo');
 		$row = $this->getRow();
 		$igroup = $row['igroup']; 
@@ -192,7 +194,7 @@ class BoardModel extends BaseModel {
 			$space, 
 			$ssunseo, 
 			$this->wallwd,
-			$this->imgup_name, 
+			$context->get('fileup_name'), 
 			$this->imgup_size, 
 			$this->imgup_type, 
 			$this->type
@@ -205,6 +207,7 @@ class BoardModel extends BaseModel {
 
 	function UpdateRecordModify() {
 
+		$context = Context::getInstance();
 		$query = new Query();
 		$query->setTable($this->board);
 		$query->setColumn(array(
@@ -212,7 +215,7 @@ class BoardModel extends BaseModel {
 			'title' => $this->storytitle, 
 			'comment' => $this->storycomment,
 			'email' => $this->email, 
-			'filename' => $this->imgup_name, 
+			'filename' => $context->get('fileup_name'),
 			'filesize' => $this->imgup_size, 
 			'filetype' => $this->imgup_type, 
 			'type' => $this->type
@@ -238,7 +241,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function UpdatRrecordOpkey() {
+	function UpdateRecordOpkey() {
 
 		$context = Context::getInstance();
 		$opkey = $context->getPost('opkey');

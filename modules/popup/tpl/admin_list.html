@@ -18,9 +18,9 @@
 						<caption><span class="blind">팝업목록</span></caption>
 						<colgroup>
 							<col width="8%">
-							<col width="32%">
+							<col width="26%">
 							<col width="24%">
-							<col width="20%">
+							<col width="26%">
 							<col width="8%">
 							<col width="8%">
 						</colgroup>
@@ -55,7 +55,7 @@
 <script type="jquery-templete" id="popupList_tmpl">
 	<tr>
 		<td><span>${no}</span></td>
-		<td><a href="popup.php?id=${id}&action=opener&pagetype=popup"><span>${popup_name}</span></a></td>								
+		<td data-key="td"><span class="popup"><a href="#" data-key="${id}">${popup_name}</a></span></td>								
 		<td><span class="ui-date">${date}</span><span class="ui-time">${time}</span></td>
 		<td><span>${skin}</span></td>
 		<td>

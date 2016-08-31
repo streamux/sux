@@ -99,6 +99,8 @@ jsux.fn = {
 			$("#skinList").empty();
 			$(markup).tmpl(e.data.list).appendTo("#skinList");
 		});
+
+		$('input[name=popup_name]').focus();
 	},
 	init: function() {
 

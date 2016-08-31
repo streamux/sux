@@ -57,7 +57,7 @@
 <script type="jquery-templete" id="boardList_tmpl">
 	<tr>
 		<td><span>${no}</span></td>
-		<td><span>${board_name}</span></td>								
+		<td><a href="../board/board.php?board=${name}&action=list" target="_blank"><span>${board_name}</span></a></td>								
 		<td><span>${$item.editDate(date)}</span></td>
 		<td><span>${log_key}</span></td>						
 		<td><span>${width}</span></td>

@@ -154,6 +154,8 @@ jsux.fn = {
 			$("#skinList").empty();
 			$(markup).tmpl(e.data.list).appendTo("#skinList");
 		});
+
+		$('input[name=table_name]').focus();
 	},
 	init: function() {
 

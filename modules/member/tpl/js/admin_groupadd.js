@@ -61,5 +61,6 @@ jsux.fn = {
 	init: function() {
 
 		this.setEvent();
+		$('input[name=table_name]').focus();
 	}
 };

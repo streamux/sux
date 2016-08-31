@@ -1,13 +1,12 @@
 
 /* layout */
 .wrap {position: relative}
-.header {position:relative;z-index:1000;margin:0 auto;width:100%;border: 0 solid #FF0000}
-.container {clear:both;position:relative;margin:0 auto;width:98%}
+.header {position:relative;z-index:1000;margin:0 auto;width:100%;border: 0 solid #FF0000;text-align: center;}
+.container {position:relative;margin:0 auto;width:98%}
 .footer{margin-top:20px;height:50px;text-align: center}
 
 /* header */
 .header .util{height: 20px;border: 0 solid #FF0000}
-
 /* gnb_icon */
 .header .gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}
 .header .gnb-icon ul li{float:left;position:relative;height:72px}

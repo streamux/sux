@@ -1,12 +1,21 @@
 jsux.fn = {
+		
+	setEvent: function() {
 
+		//popupManager.open();
+
+		var self = this;
+		$(".popup > a").bind("click", function(e) {
+
+			var id = $(this).data('key');
+			popupManager.open( id );	
+		});
+	},
 	setLayout: function() {
 
+		var self = this;
 		jsux.getJSON("popup.admin.php?action=listdata", function( e )  {
-
-
-			trace( e.data['title'], 1);
-			
+		
 			var markup = "";
 			$("#popupList").empty();
 
@@ -18,10 +27,12 @@ jsux.fn = {
 				markup = $("#popupWarnMsg_tmpl");
 				$(markup).tmpl( e ).appendTo("#popupList");
 			}
+
+			self.setEvent();
 		});
 	},
 	init: function() {
 
-		this.setLayout();
+		this.setLayout();		
 	}
 };

@@ -50,8 +50,6 @@ class MemberModules extends BaseView {
 		} else {
 			echo '푸터 파일경로를 확인하세요.<br>';
 		}
-
-		function display() {}
 	}
 
 	function defaultSetting() {}
