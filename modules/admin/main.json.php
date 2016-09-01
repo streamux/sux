@@ -33,6 +33,8 @@ if ($result15){
 	$jnumrows17 = mysql_num_rows($jnumresults17);
 	$yescon = $jnumrows17;
 
+
+
 	$realdeldate2 = date("Y-m-d", time()-86400);
 	$delresult2 = mysql_query("delete from $connecter_real where date < '$realdeldate2'");
 
@@ -288,7 +290,6 @@ if ($result){
 }
 
 $result = mysql_query("select * from $pageview ORDER BY id asc");
-
 if ($result){
 	$totalhit = 0;
 

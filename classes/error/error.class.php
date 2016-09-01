@@ -6,6 +6,13 @@ class Error {
 
 		echo '	<script>
 					alert(\''.${msg}.'\');
+				</script>';
+	}
+
+	static function alertToBack($msg) {
+
+		echo '	<script>
+					alert(\''.${msg}.'\');
 					history.go(-1);
 				</script>';
 	}
@@ -13,8 +20,8 @@ class Error {
 	static function alertTo($msg, $url=null) {
 
 		echo '	<script>
-					alert(\''.${msg}.'\');
-					location.href=\'login.php?action=login\';
+					alert(\'' . $msg . '\');
+					location.href=\'' . $url . '\';
 				</script>';
 	}
 }

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SUX Board | 비밀번호 찾기 결과</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
+	<script src="../../common/js/jquery.min.js"></script>
+	<script src="../../common/js/jquery.tmpl.min.js"></script>
+	<script src="../../common/js/jsux-1.0.0.min.js"></script>
+	<script src="../../common/js/jsux.min.js"></script>
+	<!--[if (gte IE 6)&(lte IE 8)]>
+	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
+	<![endif]-->
+	<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
+	<link rel="stylesheet" type="text/css" href="tpl/css/login.search.css">
+</head>
+<body>
+<div id="wrap">
+	<div class="header">
+		<div class="util"></div>
+		<div class="gnb-box">
+			<div class="logo">
+				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
+			</div>			
+			<div class="gnb">
+				
+			</div>
+		</div>	
+	</div>
+	<div class="container">		
+		<div class="article-box ui-edgebox">			
+			<h2 class="blind">비밀번호 찾기 결과</h2>		
+			<div class="login">
+				<span class="title">비밀번호 찾기 결과</span>
+				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
+
+				<form action="login.php?action=searchid" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
+				<div class="box ui-edgebox-2px">
+					<div class="login-title">
+						<img src="tpl/images/icon_01.gif" title="">						
+						<span class="ui-subtitle">조회 결과</span>
+						<span class="link-searchinfo">
+							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
+						</span>
+					</div>
+					<div class="login-body">
+						<div class="panel-info-result">
+							<ul>
+								<li>
+									<p>{$check_name}님의 이메일 주소 '<span>{$check_email}</span>' (으)로 비밀번호가 발송되었습니다.</p>
+								</li>
+							</ul>				
+						</div>
+						<div class="panel-btn">
+							<ul>
+								<li data-id="confirm">확인</li>
+							</ul>							
+						</div>
+					</div>																	
+				</div>
+				</form>
+				<div class="panel-notice">
+					<ul>
+						<li>기타 궁금한 사항이나 질문은 Q&amp;A 게시판을 이용해 주세요.</li>
+					</ul>
+				</div>		
+			</div>			
+		</div>		
+	</div>
+	<div class="footer">
+		@StreamUX Corp
+	</div>
+</div>
+<div class="ui-panel-msg"></div>
+<script type="text/javascript" src="tpl/js/login.search_result.js"></script>
+</body>
+</html>

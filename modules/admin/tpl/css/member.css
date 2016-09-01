@@ -1,9 +1,16 @@
+/* layout */
+.wrap {position: relative}
+.header {position:relative;z-index:1000;margin:0 auto;width:100%;border: 0 solid #FF0000}
+.container {clear:both;position:relative;margin:0 auto;width:98%}
+.footer{margin-top:20px;height:50px;text-align: center}
+
+/* header */
+.header .util{height: 20px;border: 0 solid #FF0000}
+
 /* articles */
 .container .articles {margin-top:10px;padding:35px 7px 20px 7px;background-color:#fcfcfc}
 
 /* common font-size */
-.container .articles .box table tbody tr td .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}
-
 .container .articles .tt{text-align: left}
 .container .articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('../images/tt_box4_01.gif') 0 0 no-repeat,url('../images/tt_box4_03.gif') 100% 0 no-repeat,url('../images/tt_box4_02.gif') 0 0 repeat-x;text-align:center;font-size: 1.1875em;font-weight:bold}
 
@@ -26,10 +33,9 @@
 .container .articles .list .box table tbody tr td{overflow:hidden;padding-left:5px;height: 27px;line-height: 27px;text-align:center}
 .container .articles .list .box table tbody tr td:nth-child(2){text-align:left}
 .container .articles .list .box table tbody tr td img{display:block;margin:0 auto}
-.container .articles .list .box table tbody tr td .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}
 	
 /* member add, edit */
-.container .articles .member-edit .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF}
+.container .articles .member-edit .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF;text-align: center}
 .container .articles .member-edit .box dl{overflow:hidden;margin-top:25px;margin-bottom:10px;width:100%;text-align: left}
 .container .articles .member-edit .box dl dt{padding-left:5px;height: 20px;font-weight: bold}
 .container .articles .member-edit .box dl dd{padding-left:5px;height: 20px}
@@ -40,7 +46,7 @@
 .container .articles .member-edit .box table tr td:nth-child(2) span{display:inline-block}
 
 /* member groupadd */
-.container .articles .group-add .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF}
+.container .articles .group-add .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF;text-align: center}
 .container .articles .group-add .box ul{overflow:hidden;margin-top:30px;margin-bottom:20px;width:100%;;text-align: left}
 .container .articles .group-add .box ul li{padding-left:5px}
 .container .articles .group-add .box ul li:nth-child(2){padding:20px 0 10px 38px}

@@ -1,28 +1,24 @@
 <?
-session_start();
-include "../lib.php";
+include "../../config/config.inc.php";
 
-$action = trim($_REQUEST['action']);
+$context = Context::getInstance();
+$context->init();
 
-$login_model = new LoginModel();
-$login_view = new LoginView($login_model);
+$action = $context->getRequest('action');
+$index_url = $context->getServer('PHP_SELF');
 
-$query = array();
-$query['select'] = 'name';
-$query['from'] = $member_group;
-$query['orderBy'] = 'id asc';
+/*$url = $context->getRequest('returnToURL');
+echo 'returnToURL=' . $url;
+echo ("<meta http-equiv='Refresh' content='0; URL=$url'>");
+return;*/
 
-$login_model->select($query);
+$model = new LoginModel();
+$controller = new LoginController($model);
+$views = new LoginView($model, $controller);
 
 if (isset($action) && $action) {
-
-	$params_type = array();
-	$params_type['request'] = $_REQUEST;
-	$params_type['post'] = $_POST;
-	$params_type['get'] = $_GET;
-
-	$login_view->display($action, $params_type);
+	$views->display($action);
 } else {
-	Error::alertTo('파라미터 값을 확인해주세요.\n로그인 메인으로 이동합니다.', 'login.php?action=login');
+	Error::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $index_url . '?action=login');
 }
 ?>

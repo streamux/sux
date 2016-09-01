@@ -18,11 +18,12 @@
 .container .articles .list .box table tbody tr td{overflow:hidden;padding-left:5px;height: 27px;line-height: 27px;text-align:center}
 .container .articles .list .box table tbody tr td:nth-child(2){text-align:left}
 .container .articles .list .box table tbody tr td img{display:block;margin:0 auto}
-.container .articles .list .box table tbody tr td .ui-time{display:inline-block;margin-left:5px}
+.container .articles .list .box table tbody tr td .ui-date{padding-right:5px}
+.container .articles .list .box table tbody tr td .ui-time{display:inline-block}
 .container .articles .list .box table tbody tr td .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}
 
 /* add, edit */
-.container .articles .add .box{clear:both;margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF}
+.container .articles .add .box{clear:both;margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF;text-align: center;}
 .container .articles .add .box dl{overflow:hidden;margin-top:25px;margin-bottom:10px;width:100%;;text-align: left}
 .container .articles .add .box dl dt{padding-left:5px;height: 20px;font-weight: bold}
 .container .articles .add .box dl dd{padding-left:5px;height: 20px}
