@@ -37,3 +37,10 @@ if ($numrows >= $hanpassoverpage) {
 	echo  "<a href=$PHP_SELF?board=$board&board_grg=$board_grg&sid=$sid&id=$id&passover=$newpassover&page=$nextpage&find=$find&search=$search&action=$action>다음</a>";
 }
 ?>
+
+
+$prev_url = "$PHP_SELF?board=$board&board_grg=$board_grg&sid=$sid&id=$id&passover=$prevpassover&page=$befopage&find=$find&search=$search&action=$action";
+
+		$current_url = "$PHP_SELF?board=$board&board_grg=$board_grg&sid=$sid&id=$id&passover=$nowpassover&page=$page&find=$find&search=$search&action=$action";
+
+		$next_url = "$PHP_SELF?board=$board&board_grg=$board_grg&sid=$sid&id=$id&passover=$newpassover&page=$nextpage&find=$find&search=$search&action=$action";

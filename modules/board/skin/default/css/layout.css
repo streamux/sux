@@ -9,31 +9,29 @@
 .header .util{height: 20px;border: 0 solid #FF0000}
 
 /* list & search*/
-.board-list table{border-collapse:collapse;border-spacing: 0;width:100%;}
-.board-list table thead th{height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:center;}
-.board-list .author{width:90px}
-.board-list .date{width:100px;}
-.board-list .hit{width:70px;}
-.board-list table tbody .author{padding-left:10px;text-align: left}
-.board-list table tbody .subject{padding-left:10px;text-align: left}
-.board-list table tbody .hit{text-align: center;}
-.board-list table tbody tr td{padding:5px 0 5px 0;text-align: center;height:30px;line-height: 17px;vertical-align: middle}
+.board-list table{border-collapse:collapse;border-spacing: 0;width:100%}
+.board-list table thead th{padding-left:10px;height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:left}
+.board-list .author{padding-left:10px;width:90px}
+.board-list .subject{padding-left:10px}
+.board-list .date{padding-left:10px;width:100px}
+.board-list .hit{padding-left:10px;width:70px}
+.board-list table tbody tr td{padding:5px 0 5px 0;text-align: left;height:35px;line-height: 17px;vertical-align: middle}
 .board-list table tbody tr td span{position:relative;top:1px}
 .board-list table tbody tr td img{vertical-align: middle;}
 .board-list table tbody tr:last-child {border-bottom: 1px solid #D6D7D6}
-.board-list .navi{margin-top:10px;text-align: center;}
-.board-list .search{margin-top:20px}
-.board-list .search input[name=search]{width:120px}
-.board-list .buttons{float:right;margin-top:20px;width:117px;text-align: right}
-.board-list .buttons{clear:both;}
 .board-list .warn-subject{padding-left:10px;text-align: left}
+
+.board-page-navi{margin-top:10px;text-align: center;}
+.board-search{margin-top:20px}
+.board-search input[name=search]{width:120px}
+.board-buttons{float:right;margin-top:20px;width:117px;text-align: right;clear:both}
 
 /* read */
 .board-read{border-top:2px solid #CE0000}
-.board-read .panel-heading{margin:0 auto;padding:15px 0 15px 10px;width:98%}
+.board-read .panel-heading{margin:0 auto;padding:15px 0px 15px 15px;width:98%}
 .board-read .panel-heading h1{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
 .board-read .panel-heading p{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
-.board-read .panel-body{margin:0 auto;padding: 10px 0 20px 10px;width:98%;min-height:100px;border:1px solid #ececec;line-height: 20px}
+.board-read .panel-body{margin:0 auto;padding: 10px 10px 20px 10px;max-width:98%;border:1px solid #ececec;line-height: 20px}
 .board-read .panel-buttons{margin: 20px 0 10px 0;text-align: right}
 
 /* setup */

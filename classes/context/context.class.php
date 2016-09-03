@@ -147,6 +147,11 @@ class Context {
 		return $_FILES;
 	}
 
+	function getFileAll() {
+
+		return $_FILES;
+	}
+
 	function getSession($key) {
 
 		return $_SESSION[$key];
@@ -165,6 +170,11 @@ class Context {
 	function getServer($key) {
 
 		return $_SERVER[$key];
+	}
+
+	function getServers() {
+
+		return $_SERVER;
 	}
 
 	function getServerAll() {

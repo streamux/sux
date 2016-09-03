@@ -7,6 +7,51 @@ class BoardView extends BaseView {
 	// display function is defined in parent class 
 }
 
+class Navi extends Object {
+
+	var $class_name = 'board_navi';
+	var $navi_skin_path = '';
+	var $passover = 0;
+	var $limit = 10;
+	var $total = 1;
+	var $page = 1;
+	
+	var $nextpage = 0;
+	var $befopage = 0;
+	var $prevpassover = 0;
+	var $hanpassoverpage = 0;
+	var $newpassover = 0;
+	var $nowpage = 0;
+	var $nowpageend = 0;
+	var $okpage = 'no';
+	var $PHP_SELF = '';
+
+	function init() {
+
+		$context = Context::getInstance();
+		$result = array();
+
+		if (!$this->page) {
+			$this->page = 1;
+		}
+
+		$passoverpage = $this->limit * 10;
+		$this->nextpage = $this->page+1;
+		$this->befopage = $this->page-1;
+		$this->prevpassover = ($this->befopage * $passoverpage)-$passoverpage; 
+		$this->hanpassoverpage = $this->page*$passoverpage;
+		$this->newpassover = ($this->nextpage * $passoverpage)-$passoverpage; 
+		$this->nowpage = ($this->page*10)-9;
+		$this->nowpageend = $this->page*10;
+
+		if ($this->page ==1) {
+			$this->okpage ='yes';
+		}
+
+		$this->PHP_SELF = $context->getServer('PHP_SELF');
+	}
+}
+
 class ListPanel extends BaseView {
 
 	var $class_name = 'board_list';
@@ -14,54 +59,182 @@ class ListPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$action = $context->getRequest('action');
+		$board = $context->getRequest('board');		
+		$requests = $context->getRequestAll();
+
+		$id = $requests['id'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+		$page = $requests['page'];
+		$sid = $requests['sid'];
+		$action = $requests['action'];
 		
+		// group logic
 		$this->controller->select('listFromBoardGroup');
+
 		$row = $this->model->getRow();
+		$width = $row['width'];
 		$download = strtolower($row['download']);
-
-		$this->controller->delete('limitwordFromBoard');
-
 		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
-		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}
-
 		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+		$bottom_path = $row['include3'];
+		$limit = $row['listnum'];
+
+		$this->controller->delete('limitwordFromBoard');		
+		
+		$skin_dir = 'skin/' . $main_path;		
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.tpl';
+		$default_header_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/_header.tpl';
+		$default_footer_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/_footer.tpl';
+
+		// list logic
+		if (!$passover) {
+			 $passover=0;
 		}
 
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
+		$context->set('limit', $limit);
+		$context->set('passover', $passover);
+
+		$result = $this->controller->select('fromBoard');
+		if ($result) {
+			$numrows = $this->model->getNumRows();
+
+			$result = $this->controller->select('fromBoardLimit');
+			if ($result) {
+				$numrows2 = $this->model->getNumRows();
+				$rows = $this->model->getRows();				
+				$rows_data = array();
+				$today = date("Y-m-d");
+
+				for($i=0; $i<count($rows); $i++) {
+
+					$name =$rows[$i]['name'];
+					$id =$rows[$i]['id'];
+					$igroup =$rows[$i]['igroup'];
+					$sid =$rows[$i]['id'];
+					$title =$rows[$i]['title'];
+					$opkey =$rows[$i]['opkey'];
+					$date =$rows[$i]['date'];					
+					$space =$rows[$i]['space'];
+					$hit =$rows[$i]['see'];
+					$filename =$rows[$i]['filename'];
+					$filetype =$rows[$i]['filetype'];					
+					$compareDay =split(' ', $rows[$i]['date'])[0];
+					$subject_str = "";
+
+					$subject_obj = array();					
+					$subject_obj['space_display'] = 'none';
+					$subject_obj['space_width'] = '0px';
+					$subject_obj['icon_display'] = 'none';
+					$subject_obj['icon_name'] = '';
+					$subject_obj['title'] = $title;
+					$subject_obj['id'] = $id;
+					$subject_obj['igroup'] = $igroup;
+					$subject_obj['sid'] = $sid;
+					$subject_obj['comment_display'] = 'none';
+					$subject_obj['comment_num'] = 0;
+					$subject_obj['newicon_display'] = 'none';
+					$subject_obj['opkey_display'] = 'none';
+					$subject_obj['opkey_name'] = '';
+
+					if ($space) {
+						$subject_obj['space_width'] = ($space*10).'px';
+						$subject_obj['space_display'] = 'inline-block';
+					}
+
+					$imgname = "";
+					if ($filename){
+						if ($filetype =="image/gif" || $filetype =="image/jpeg" || $filetype =="image/x-png" || $filetype =="image/png" || $filetype =="image/bmp"){
+							$imgname = "icon_img.png";
+						} else if ($download == 'y'  && ($filetype=="application/x-zip-compressed" || $filetype=="application/zip")) { 
+							$imgname = "icon_down.png";
+						}
+
+						if ($imgname != '') {
+							$subject_obj['icon_display'] = 'inline-block';
+							$subject_obj['icon_name'] = $imgname;
+						}			
+					}				
+
+					$grgresult = $this->controller->select('IdFromCommentWhere', $sid);
+					$grgnums = $this->model->getNumRows();
+
+					if ($grgnums) {
+						$subject_obj['comment_display'] = 'inline-block';
+						$subject_obj['comment_num'] = $grgnums;
+					}
+
+					if ($compareDay == $today){
+						$subject_obj['newicon_display'] = 'inline-block';
+					}
+					
+					if ($opkey) {
+						$img_list = array(	"f"=>"icon_finish.gif",
+											"i"=>"icon_ing.gif",
+											"c"=>"icon_cost.gif",
+											"m"=>"icon_mail.gif",
+											"n"=>"icon_no_cost.gif");
+
+						$subject_obj['opkey_display'] = 'inline-block';
+						$subject_obj['opkey_name'] = $img_list[$opkey];
+					}
+
+					$rows_data[] = array(
+						'name'=>$name,
+						'hit'=>$hit,
+						'compareDay'=>split(' ', $date)[0],
+						'subject' => $subject_obj
+					);
+				}
 			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
+				echo '게시물 목록 가져오기를 실패하였습니다.';
 			}
 		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			echo '게시물 전체 목록 가져오기를 실패하였습니다.';
+		}
+
+		// navi logic
+		$navi_skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/navi.tpl';
+
+		$navi = New Navi();
+		$navi->passover = $passover;
+		$navi->limit = $limit;
+		$navi->total = $numrows;
+		$navi->navi_skin_path = $navi_skin_path;
+		$navi->init();
+
+		$smarty = new Smarty;
+		if (is_readable($top_path)) {
+			$smarty->display( $top_path );
+		} else {
+			$smarty->assign('skin_dir', $skin_dir);
+			$smarty->display( $default_header_path );
+			echo '<p>상단 파일경로를 확인하세요.</p>';
+		}
+		
+		if (is_readable($skin_path)) {
+			$smarty->assign('skin_dir', $skin_dir);		
+			$smarty->assign('rows_data', $rows_data);
+
+			foreach ($requests as $key => $value) {
+				$smarty->assign($key, $value);
+			}
+
+			// navi logic
+			foreach ($navi as $key => $value) {
+				$smarty->assign($key, $value);
+			}
+			
+			$smarty->display( $skin_path );
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+		
+		if (is_readable($bottom_path)) {
+			$smarty->display( $bottom_path );
+		} else {			
+			echo '<p>하단 파일경로를 확인하세요.</p>';
+			$smarty->display( $default_footer_path );
 		}
 	}
 }
@@ -97,38 +270,26 @@ class SearchlistPanel extends BaseView {
 		$this->controller->delete('limitwordFromBoard');
 
 		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
+		if (is_readable($top_path)) {
+			include $top_path;
 		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
+			echo '<p>상단 파일경로를 확인하세요.</p>';
 		}		
 
 		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $main_path;
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
+		if (is_readable($bottom_path)) {
+			include $bottom_path;
 		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -186,38 +347,26 @@ class ReadPanel extends BaseView {
 		}
 
 		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
+		if (is_readable($top_path)) {
+			include $top_path;
 		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
+			echo '상단 파일경로를 확인하세요.<br>';
 		}		
 
 		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $main_path;
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
+		if (is_readable($bottom_path)) {
+			include $bottom_path;
 		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -243,39 +392,28 @@ class SearchreadPanel extends ReadPanel {
 
 		$this->controller->select('listFromBoardGroup');
 		$row = $this->model->getRow();
+
 		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
+		if (is_readable($top_path)) {
+			include $top_path;
 		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}		
+			echo '상단 파일경로를 확인하세요.<br>';
+		}	
 
 		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $main_path;
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
+		if (is_readable($bottom_path)) {
+			include $bottom_path;
 		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -316,7 +454,6 @@ class WritePanel extends BaseView {
 		}
 
 		if ($row['log_key'] != 'yes') {
-
 			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
 
 				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
@@ -333,38 +470,26 @@ class WritePanel extends BaseView {
 		}
 
 		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
+		if (is_readable($top_path)) {
+			include $top_path;
 		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
+			echo '상단 파일경로를 확인하세요.<br>';
 		}		
 
 		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/write.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $main_path;
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/write.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
+		if (is_readable($bottom_path)) {
+			include $bottom_path;
 		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -439,22 +564,18 @@ class ReplyPanel extends BaseView {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/reply.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $row['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/reply.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		if (is_readable($row['include3'])) {
 			include $row['include3'];
 		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -515,22 +636,18 @@ class ModifyPanel extends BaseView {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/modify.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $row['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/modify.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		if (is_readable($row['include3'])) {
 			include $row['include3'];
 		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			echo '<br>하단 파일경로를 확인하세요.';
 		}
 	}
 }
@@ -551,23 +668,20 @@ class DeletepassPanel extends BaseView {
 		$m_name = $row['name'];
 
 		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();		
+		$row = $this->model->getRow();
+
 		if (is_readable($row['include1'])) {
 			include $row['include1'];
 		} else {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $row['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		if (is_readable($row['include3'])) {
@@ -690,16 +804,12 @@ class DeletecommentPanel extends BaseView {
 			echo '상단 파일경로를 확인하세요.<br>';
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
+		$skin_dir = 'skin/' . $row['include2'];
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
+		if (is_readable($skin_path)) {
+			include $skin_path;
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '스킨 파일경로를 확인하세요.<br>';
 		}
 
 		if (is_readable($row['include3'])) {
@@ -898,7 +1008,7 @@ class RecordModifyPanel extends RecordBasePanel {
 				} else {
 					echo "파일 삭제에 성공했습니다.";
 				}
-			}
+			}		
 
 			if (is_uploaded_file($imgup_tmpname)) {
 				$mktime = mktime();
@@ -909,6 +1019,7 @@ class RecordModifyPanel extends RecordBasePanel {
 					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 				}
 			}
+
 			$context->set('fileup_name', $imgup_name);
 
 			$result = $this->controller->update('recordModify');			
@@ -923,16 +1034,16 @@ class RecordModifyPanel extends RecordBasePanel {
 	}
 }
 
-class RecordDeletePanel extends RecordBasePanel {
+class RecordDeletePanel extends BaseView {
 
 	var $class_name = 'record_delete';
 
-	function record() {
+	function init() {
 
 		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
+		$requests =  $context->getRequestAll();
+		$posts =  $context->getPostAll();
+		$files =  $context->getFiles();
 
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
@@ -969,13 +1080,14 @@ class RecordDeletePanel extends RecordBasePanel {
 	}
 }
 
-class RecordWritecommentPanel extends RecordBasePanel {
+class RecordWritecommentPanel extends BaseView {
 
 	var $class_name = 'record_writecomment';
 
-	function record() {
+	function init() {
 
-		$requests = $this->requests;
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
 
 		$id = $requests['id'];
 		$board = $requests['board'];		
@@ -993,15 +1105,15 @@ class RecordWritecommentPanel extends RecordBasePanel {
 	}
 }
 
-class RecordDeletecommentPanel extends RecordBasePanel {
+class RecordDeletecommentPanel extends BaseView {
 
 	var $class_name = 'record_deletecomment';
 
-	function record() {
+	function init() {
 
 		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
 
 		$pass = trim($posts['pwd']);
 		$admin_pwd = $context->get('db_admin_pwd');

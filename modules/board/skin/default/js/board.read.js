@@ -29,6 +29,7 @@ function musimsl_check( f ) {
 		f.comment.focus();
 		return (false);
 	}
+
 	return (true);
 }
 

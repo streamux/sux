@@ -4,7 +4,7 @@ class Object {
 
 	var $class_name = 'object';
 
-	function Object($name=NULL) {
+	function setName($name=NULL) {
 
 		$this->class_name = $name;
 	}

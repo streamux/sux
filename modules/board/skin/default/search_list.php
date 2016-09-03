@@ -119,43 +119,29 @@ if ($numrows2) {
 }
 ?>
 		</tbody>
-	</table>
-	<div class="navi">
-		<?
-			include $skin_dir . "/navi.php";
-		?>
-	</div>
-	<div class="search ui-inlineblock">
-		<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
-									
-			<select name="find">
-				<option value="title">제 목</option>
-				<option value="name">작성자</option>                      
-				<option value="comment">내 용</option>
-			</select>
-			<input type="text" name="search" size="15">
-			<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_search.gif" width="51" height="23" border="0">
+	</table>	
+</div>
+<div class="board-page-navi">
+<?
+	include $skin_dir . "/navi.php";
+?>
+</div>
+<div class="board-search ui-inlineblock">
+	<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&sid=<? echo sid; ?>&find=<? echo $find; ?>&search=<? echo $search; ?>&action=searchlist" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+								
+		<select name="find">
+			<option value="title">제 목</option>
+			<option value="name">작성자</option>                      
+			<option value="comment">내 용</option>
+		</select>
+		<input type="text" name="search" size="15">
+		<input name="imageField" type="image" src="<? echo ${skin_dir}; ?>/images/btn_search.gif" width="51" height="23" border="0">
 
-		</form>
-	</div>
-	<div class="buttons ui-inlineblock">
-		<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=list"><img src="<? echo ${skin_dir}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
-	</div>
+	</form>
+</div>
+<div class="board-buttons ui-inlineblock">
+	<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&action=list"><img src="<? echo ${skin_dir}; ?>/images/btn_list.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $row[id]; ?>&igroup=<? echo $row[igroup]; ?>&passover=<? echo $passover; ?>&page=<? echo $page; ?>&sid=<? echo $sid; ?>&action=write"><img src="<? echo ${skin_dir}; ?>/images/btn_write.gif" width="62" height="23" border="0"></a>
 </div>
 
-
-<script type="text/javascript">
-
-	function musimsl_check(f) {
-
-		searcho = f.search.value.length;
-
-		if ( searcho < 1 ) {
-			alert("검색어를 입력하세요.");
-			f.search.focus();
-			return (false);
-		}
-		return (true);
-	}
-</script>
+<script type="text/javascript" src="<? echo ${skin_dir}; ?>/js/board.list.js"></script>
 

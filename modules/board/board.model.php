@@ -6,6 +6,7 @@ class BoardModel extends BaseModel {
 	var	$board;
 	var	$board_grg;
 	var $id;
+	var $grgid;
 
 	var	$m_name;
 	var	$pass;
@@ -95,6 +96,32 @@ class BoardModel extends BaseModel {
 		}		
 	}
 
+	function SelectFromBoard() {
+
+		$query = new Query();
+		$query->setField('*');
+		$query->setTable($this->board);
+
+		$result = parent::select($query);
+		return $result;
+	}
+
+	function SelectFromBoardLimit() {
+
+		$context = Context::getInstance();
+		$limit = $context->get('limit');
+		$passover = $context->get('passover');
+
+		$query = new Query();
+		$query->setField('*');
+		$query->setTable($this->board);
+		$query->setOrderBy('igroup desc, ssunseo asc');
+		$query->setLimit($passover, $limit);
+
+		$result = parent::select($query);
+		return $result;
+	}
+
 	function SelectFieldFromId($field) {
 
 		$query = new Query();
@@ -129,6 +156,17 @@ class BoardModel extends BaseModel {
 		$query->setTable($this->board_grg);
 		$query->setWhere(array(
 			'id' => $this->grgid
+		));
+		$result = parent::select($query);
+		return $result;
+	}
+	function SelectIdFromCommentWhere($sid) {
+
+		$query = new Query();
+		$query->setField('id');
+		$query->setTable($this->board_grg);
+		$query->setWhere(array(
+			'storyid' => $sid
 		));
 		$result = parent::select($query);
 		return $result;
