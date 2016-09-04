@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-02 12:27:49
+/* Smarty version 3.1.30, created on 2016-09-04 11:31:53
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57c954256d05b6_16777275',
+  'unifunc' => 'content_57cbea096297b2_46429018',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1472812066,
+      1 => 1472981511,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57c954256d05b6_16777275 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57cbea096297b2_46429018 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <div class="board-list" style="width:<?php echo $_smarty_tpl->tpl_vars['width']->value;?>
 ">
@@ -43,17 +43,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 			<tr>
 				<td class="author"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
 </span></td>
-				<td class="subject">
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space_display'];?>
-;width:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space_width'];?>
-"></span>
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space_display'];?>
-;padding-right:5px"><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
-/images/icon_answer.gif"></span>
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_display'];?>
-"><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
-/images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_name'];?>
-"></span>
+				<td class="subject">					
 					<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
 &id=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['id'];?>
@@ -61,20 +51,34 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 &sid=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['sid'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['passover']->value;?>
 &page=<?php echo $_smarty_tpl->tpl_vars['page']->value;?>
-&action=read"><span><?php echo nl2br($_smarty_tpl->tpl_vars['item']->value['subject']['title']);?>
-</span></a>
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['comment_display'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['search'];?>
+&find=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['find'];?>
+&action=read"><span class="link-area <?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
+">
+						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/images/icon_answer<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_reply_type'];?>
+.png" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_reply'];?>
+">
+
+						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['img_name'];?>
+" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_img'];?>
+">
+						<?php echo nl2br($_smarty_tpl->tpl_vars['item']->value['subject']['title']);?>
+
+						<span class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['txt_comment'];?>
 ">(<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['comment_num'];?>
 )</span>
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['newicon_display'];?>
-;padding-left:5px"><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
-/images/new.gif"></span>
-					<span style="display:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['opkey_display'];?>
-;padding-left:5px"><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/images/new.gif" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_new'];?>
+">
+						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
 /images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['opkey_name'];?>
-"></span>
+" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_opkey'];?>
+">
+					</span></a>
 				</td>				
-				<td class="date"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['compareDay'];?>
+				<td class="date"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['date'];?>
 </span></td>
 				<td class="hit"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['hit'];?>
 </span></td>
@@ -100,24 +104,39 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 
 </div>
 <div class="board-search ui-inlineblock">
-	<form action="" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
-		<select name=find>
+	<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
+&find=<?php echo $_smarty_tpl->tpl_vars['find']->value;?>
+&search=<?php echo $_smarty_tpl->tpl_vars['search']->value;?>
+&action=list" method="post" name="musimsl" onSubmit="return musimsl_check(this);" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<select name="find">
 			<option value='title'>제 목</option>
 			<option value='name'>작성자</option>
 			<option value='comment'>내 용</option>
 		</select>
-		<input type=text name=search size=15>
+		<input type="text" name="search" size="15">
 		<input name="imageField" type="image" src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
 /images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
 <div class="board-buttons ui-inlineblock">
-	<a href=""><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+	<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
+&action=list">
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/images/btn_list.gif" width="51" height="23" border="0">
+	</a>
+	<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
+&passover=<?php echo $_smarty_tpl->tpl_vars['passover']->value;?>
+&page=<?php echo $_smarty_tpl->tpl_vars['page']->value;?>
+&action=write"><img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
 /images/btn_write.gif" width="62" height="23" border="0"></a>
 </div>
 
 <?php echo '<script'; ?>
- type="text/javascript" src="/js/board.list.js"><?php echo '</script'; ?>
+ type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/js/board.list.js"><?php echo '</script'; ?>
 >
 <?php }
 }

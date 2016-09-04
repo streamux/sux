@@ -122,7 +122,47 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFieldFromId($field) {
+	function SelectFromBoardSearch() {
+
+		$context = Context::getInstance();
+		$limit = $context->get('limit');
+		$passover = $context->get('passover');
+
+		$find = $context->getRequest('find');
+		$search = $context->getRequest('search');
+
+		$where = new QueryWhere();
+		$where->set($find, $search, 'like');
+
+		$query = new Query();
+		$query->setField('*');
+		$query->setTable($this->board);
+		$query->setWhere( $where );
+
+		$result = parent::select($query);
+		return $result;
+	}
+
+	function SelectFromBoardSearchLimit() {
+
+		$context = Context::getInstance();
+		$find = $context->getRequest('find');
+		$search = $context->getRequest('search');
+		
+		$where = new QueryWhere();
+		$where->set($find, $search, 'like');
+
+		$query = new Query();
+		$query->setField('*');
+		$query->setTable($this->board);
+		$query->setWhere( $where );
+		$query->setLimit($passover, $limit);
+
+		$result = parent::select($query);
+		return $result;
+	}
+
+	function SelectFieldFromBoardWhereId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -146,6 +186,23 @@ class BoardModel extends BaseModel {
 		$query->setOrderBy('id desc');
 		$query->setLimit(1);
 		$result = parent::select($query);
+		return $result;
+	}
+
+	function UpdateBoardSetSee( $value ) {
+
+		$context = Context::getInstance();
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setColumn(array(
+			'see' => $value
+		));
+
+		$query->setWhere(array(
+			'id' => $this->id
+		));
+
+		$result = parent::update($query);
 		return $result;
 	}
 

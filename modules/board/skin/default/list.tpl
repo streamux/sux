@@ -13,16 +13,18 @@
 			{if isset($item)}
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
-				<td class="subject">
-					<span style="display:{$item.subject.space_display};width:{$item.subject.space_width}"></span>
-					<span style="display:{$item.subject.space_display};padding-right:5px"><img src="{$skin_dir}/images/icon_answer.gif"></span>
-					<span style="display:{$item.subject.icon_display}"><img src="{$skin_dir}/images/{$item.subject.icon_name}"></span>
-					<a href="board.php?board={$board}&board_grg={$board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&sid={$item.subject.sid}&passover={$passover}&page={$page}&action=read"><span>{$item.subject.title|nl2br}</span></a>
-					<span style="display:{$item.subject.comment_display}">({$item.subject.comment_num})</span>
-					<span style="display:{$item.subject.newicon_display};padding-left:5px"><img src="{$skin_dir}/images/new.gif"></span>
-					<span style="display:{$item.subject.opkey_display};padding-left:5px"><img src="{$skin_dir}/images/{$item.subject.opkey_name}"></span>
+				<td class="subject">					
+					<a href="board.php?board={$board}&board_grg={$board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&sid={$item.subject.sid}&passover={$passover}&page={$page}&search={$item.subject.search}&find={$item.subject.find}&action=read"><span class="link-area {$item.subject.space}">
+						<img src="{$skin_dir}/images/icon_answer{$item.subject.icon_reply_type}.png" class="{$item.subject.icon_reply}">
+
+						<img src="{$skin_dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+						{$item.subject.title|nl2br}
+						<span class="{$item.subject.txt_comment}">({$item.subject.comment_num})</span>
+						<img src="{$skin_dir}/images/new.gif" class="{$item.subject.icon_new}">
+						<img src="{$skin_dir}/images/{$item.subject.opkey_name}" class="{$item.subject.icon_opkey}">
+					</span></a>
 				</td>				
-				<td class="date"><span>{$item.compareDay}</span></td>
+				<td class="date"><span>{$item.date}</span></td>
 				<td class="hit"><span>{$item.hit}</span></td>
 			</tr>
 			{else if}
@@ -39,18 +41,21 @@
 {include file="$navi_skin_path"}
 </div>
 <div class="board-search ui-inlineblock">
-	<form action="" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
-		<select name=find>
+	<form action="board.php?board={$board}&board_grg={$board_grg}&find={$find}&search={$search}&action=list" method="post" name="musimsl" onSubmit="return musimsl_check(this);" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<select name="find">
 			<option value='title'>제 목</option>
 			<option value='name'>작성자</option>
 			<option value='comment'>내 용</option>
 		</select>
-		<input type=text name=search size=15>
+		<input type="text" name="search" size="15">
 		<input name="imageField" type="image" src="{$skin_dir}/images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
 <div class="board-buttons ui-inlineblock">
-	<a href=""><img src="{$skin_dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+	<a href="board.php?board={$board}&board_grg={$board_grg}&action=list">
+		<img src="{$skin_dir}/images/btn_list.gif" width="51" height="23" border="0">
+	</a>
+	<a href="board.php?board={$board}&board_grg={$board_grg}&passover={$passover}&page={$page}&action=write"><img src="{$skin_dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
 </div>
 
-<script type="text/javascript" src="/js/board.list.js"></script>
+<script type="text/javascript" src="{$skin_dir}/js/board.list.js"></script>

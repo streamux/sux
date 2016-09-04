@@ -68,8 +68,9 @@ class ListPanel extends BaseView {
 		$page = $requests['page'];
 		$sid = $requests['sid'];
 		$action = $requests['action'];
+		$find = $requests['find'];
+		$search = $requests['search'];
 		
-		// group logic
 		$this->controller->select('listFromBoardGroup');
 
 		$row = $this->model->getRow();
@@ -80,7 +81,7 @@ class ListPanel extends BaseView {
 		$bottom_path = $row['include3'];
 		$limit = $row['listnum'];
 
-		$this->controller->delete('limitwordFromBoard');		
+		$this->controller->delete('limitwordFromBoard');
 		
 		$skin_dir = 'skin/' . $main_path;		
 		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.tpl';
@@ -95,24 +96,26 @@ class ListPanel extends BaseView {
 		$context->set('limit', $limit);
 		$context->set('passover', $passover);
 
-		$result = $this->controller->select('fromBoard');
+		$_method = (isset($search) && $search != '') ? 'fromBoardSearch' : 'fromBoard';
+		$result = $this->controller->select($_method);		
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 
-			$result = $this->controller->select('fromBoardLimit');
+			$_method = (isset($search) && $search != '') ? 'fromBoardSearchLimit' : 'fromBoardLimit';
+			$result = $this->controller->select($_method);
 			if ($result) {
 				$numrows2 = $this->model->getNumRows();
 				$rows = $this->model->getRows();				
 				$rows_data = array();
 				$today = date("Y-m-d");
 
-				for($i=0; $i<count($rows); $i++) {
+				for ($i=0; $i<count($rows); $i++) {
 
-					$name =$rows[$i]['name'];
+					$name =htmlspecialchars($rows[$i]['name']);
 					$id =$rows[$i]['id'];
 					$igroup =$rows[$i]['igroup'];
 					$sid =$rows[$i]['id'];
-					$title =$rows[$i]['title'];
+					$title =htmlspecialchars($rows[$i]['title']);
 					$opkey =$rows[$i]['opkey'];
 					$date =$rows[$i]['date'];					
 					$space =$rows[$i]['space'];
@@ -122,24 +125,47 @@ class ListPanel extends BaseView {
 					$compareDay =split(' ', $rows[$i]['date'])[0];
 					$subject_str = "";
 
-					$subject_obj = array();					
-					$subject_obj['space_display'] = 'none';
-					$subject_obj['space_width'] = '0px';
-					$subject_obj['icon_display'] = 'none';
-					$subject_obj['icon_name'] = '';
-					$subject_obj['title'] = $title;
+					$subject_obj = array();
+
+					if (isset($search) && $search != '') {
+
+						$subject_obj['find'] = $find;
+						$subject_obj['search'] = $search;
+
+						$find_key = strtolower($find);
+						switch ($find_key) {
+							case 'title':
+								$title = str_replace("$search","<span class=\"color-red\">$search</span>",$title);
+								break;
+							case 'name':
+								$name = str_replace("$search","<span class=\"color-red\">$search</span>",$name);
+								break;
+							default:
+								break;
+						}
+					}
+					
 					$subject_obj['id'] = $id;
 					$subject_obj['igroup'] = $igroup;
 					$subject_obj['sid'] = $sid;
-					$subject_obj['comment_display'] = 'none';
+					$subject_obj['title'] = $title;
 					$subject_obj['comment_num'] = 0;
-					$subject_obj['newicon_display'] = 'none';
-					$subject_obj['opkey_display'] = 'none';
+					$subject_obj['img_name'] = '';
 					$subject_obj['opkey_name'] = '';
 
+					// 'off' in value is a class name of CSS
+					$subject_obj['space'] = 'space-off';
+					$subject_obj['icon_reply'] = 'off';
+					$subject_obj['icon_reply_type'] = 0;
+					$subject_obj['icon_img'] = 'off';
+					$subject_obj['txt_comment'] = 'off';
+					$subject_obj['icon_new'] = 'off';
+					$subject_obj['icon_opkey'] = 'off';
+
 					if ($space) {
-						$subject_obj['space_width'] = ($space*10).'px';
-						$subject_obj['space_display'] = 'inline-block';
+						$subject_obj['space'] = 'space-on';
+						$subject_obj['icon_reply'] = 'on';
+						$subject_obj['icon_reply_type'] = $space%4;					
 					}
 
 					$imgname = "";
@@ -151,21 +177,21 @@ class ListPanel extends BaseView {
 						}
 
 						if ($imgname != '') {
-							$subject_obj['icon_display'] = 'inline-block';
-							$subject_obj['icon_name'] = $imgname;
-						}			
+							$subject_obj['icon_img'] = 'on';
+							$subject_obj['img_name'] = $imgname;
+						}	
 					}				
 
 					$grgresult = $this->controller->select('IdFromCommentWhere', $sid);
 					$grgnums = $this->model->getNumRows();
 
 					if ($grgnums) {
-						$subject_obj['comment_display'] = 'inline-block';
+						$subject_obj['txt_comment'] = 'on';
 						$subject_obj['comment_num'] = $grgnums;
 					}
 
 					if ($compareDay == $today){
-						$subject_obj['newicon_display'] = 'inline-block';
+						$subject_obj['icon_new'] = 'on';
 					}
 					
 					if ($opkey) {
@@ -175,16 +201,18 @@ class ListPanel extends BaseView {
 											"m"=>"icon_mail.gif",
 											"n"=>"icon_no_cost.gif");
 
-						$subject_obj['opkey_display'] = 'inline-block';
+						$subject_obj['icon_opkey'] = 'on';
 						$subject_obj['opkey_name'] = $img_list[$opkey];
 					}
 
 					$rows_data[] = array(
 						'name'=>$name,
 						'hit'=>$hit,
-						'compareDay'=>split(' ', $date)[0],
+						'date'=>split(' ', $date)[0],
 						'subject' => $subject_obj
 					);
+
+					echo 'aaaa'.$grgnums;
 				}
 			} else {
 				echo '게시물 목록 가져오기를 실패하였습니다.';
@@ -213,6 +241,7 @@ class ListPanel extends BaseView {
 		}
 		
 		if (is_readable($skin_path)) {
+			$smarty->assign('width', $width);
 			$smarty->assign('skin_dir', $skin_dir);		
 			$smarty->assign('rows_data', $rows_data);
 
@@ -239,61 +268,6 @@ class ListPanel extends BaseView {
 	}
 }
 
-class SearchlistPanel extends BaseView {
-
-	var $class_name = 'board_search_list';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$action = $context->getRequest('action');
-
-		$find = $context->getPost('find');
-		if (!isset($find) && $find == '') {
-			$find = $context->getRequest('find');
-		}
-		$search = $context->getPost('search');
-		if (!isset($search) && $search == '') {
-			$search = $context->getRequest('search');
-		}
-
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-		$download = strtolower($row['download']);
-		$this->controller->delete('limitwordFromBoard');
-
-		$top_path = $row['include1'];
-		if (is_readable($top_path)) {
-			include $top_path;
-		} else {
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}		
-
-		$main_path = $row['include2'];
-		$skin_dir = 'skin/' . $main_path;
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$bottom_path = $row['include3'];
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '<br>하단 파일경로를 확인하세요.';
-		}
-	}
-}
-
 class ReadPanel extends BaseView {
 
 	var $class_name = 'board_read';
@@ -301,119 +275,181 @@ class ReadPanel extends BaseView {
 	function init() {
 
 		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$find = $context->getRequest('find');
-		$search = $context->getRequest('search');
-		$action = $context->getRequest('action');		
-		$grade = $context->getSession('grade');
+		$requests = $context->getRequestAll();
+		$sessions = $context->getSessionAll();
+
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$id = $requests['id'];;
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+		$page = $requests['page'];
+		$sid = $requests['sid'];
+		$find = $requests['find'];
+		$search = $requests['search'];
+		$action = $requests['action'];
+
+		$grade = $sessions['grade'];
+		$ljs_name = $sessions['ljs_name'];
+		$ljs_pass1 = $sessions['ljs_pass1'];
 
 		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();	
+
+		$row = $this->model->getRow();
+		$width = $row['width'];
+		$log_key = $row['log_key'];
+		$r_grade = $row['r_grade'];
+		$r_admin = $row['r_admin'];
 		$download = strtolower($row['download']);
 		$tail = $row['tail'];
 		$setup = $row['setup'];
-
-		if (isset($grade) && $grade) {
+		$top_path = $row['include1'];
+		$main_path = $row['include2'];
+		$bottom_path = $row['include3'];
+		$admin_type = $row['type'];
+		
+		if (isset($grade) && $grade != '') {
 			$level = $grade;
 		} else {
 			$level = 1;
 		}
 
-		if ($level < $row['r_grade']) {
+		if ($level < $r_grade) {
 			Error::alertToBack('죄송합니다. 읽기 권한이 없습니다.');
 			exit;
 		}
 
-		if ($row['log_key'] != 'yes') {
-			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
+		if ($log_key != 'yes') {
+			if (!$ljs_name || !$ljs_pass1) {
 
-				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
+				$returnToURL = $context->getServer('PHP_SELF') . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
 				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
-		if ($row["r_admin"] == 'n') {
+		if ($r_admin == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
 				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		$top_path = $row['include1'];
-		if (is_readable($top_path)) {
-			include $top_path;
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}		
+		$skin_dir = 'skin/' . $main_path;		
+		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.tpl';
+		$default_header_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/_header.tpl';
+		$default_footer_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/_footer.tpl';
 
-		$main_path = $row['include2'];
-		$skin_dir = 'skin/' . $main_path;
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$comment_skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/comment.tpl';
+		$opkey_skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/opkey.tpl';
 
-		$bottom_path = $row['include3'];
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '<br>하단 파일경로를 확인하세요.';
-		}
-	}
-}
+		// read panel
+		$this->controller->select('fieldFromBoardWhereId', 'see');
 
-class SearchreadPanel extends ReadPanel {
-
-	var $class_name = 'search_read';
-
-	function init() {
-
-		$context = Context::getInstance();	
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
-		$action = $context->getRequest('action');
-
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$find = $context->getRequest('find');
-		$search = $context->getRequest('search');
-
-		$this->controller->select('listFromBoardGroup');
 		$row = $this->model->getRow();
+		$hit = $row['see']+1;
 
-		$top_path = $row['include1'];
-		if (is_readable($top_path)) {
-			include $top_path;
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}	
+		$this->controller->update('boardSetSee', $hit);
+		$this->controller->select('fieldFromBoardWhereId', '*');
 
-		$main_path = $row['include2'];
-		$skin_dir = 'skin/' . $main_path;
-		$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+		$row = $this->model->getRow();
+		$type = trim($row['type']);
+		$filename = $row['filename'];
+		$filetype = $row['filetype'];
+		$download = $row['download'];
+		$row['name'] = htmlspecialchars($row['name']);
+		$row['title'] = htmlspecialchars($row['title']);
+
+		switch ($admin_type) {
+			case 'all':
+				if ($type =='html'){
+					$comment = $row['comment'];
+				}else if ($type == 'text'){
+					$comment = nl2br($row['comment']);
+				}
+				break;
+			case 'text':
+				$comment = nl2br($row['comment']);
+				break;
+			case 'html':
+				$comment = $row['comment'];
+				break;			
+			default:
+				break;
 		}
 
-		$bottom_path = $row['include3'];
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
+		$row['comment'] = $comment;
+		$down_display = 'none';
+		$img_display = 'none';
+
+		if ($filename) {
+			if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+
+				$down_display = 'block';
+				$fileup_path = "<a href=\"../../board_data/$board/$filename\">${filename}&nbsp;<b>[ 다운로드 ]</b></a>";
+			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+
+				$imgpath = '../../board_data/'.$board.'/'.$filename;
+				$image_info = getimagesize($imgpath);
+			      $image_type = $image_info[2];
+
+			      if ( $image_type == IMAGETYPE_JPEG ) {
+			      	$image = imagecreatefromjpeg($imgpath);
+			      } elseif( $image_type == IMAGETYPE_GIF ) {
+			       	$image = imagecreatefromgif($imgpath);
+			      } elseif( $image_type == IMAGETYPE_PNG ) {
+			     		$image = imagecreatefrompng($imgpath);
+				}
+
+				$img_width = imagesx($image) . 'px';
+				$fileup_path = "$board/$filename";
+				$img_display = 'block';
+
+				$row['img_width'] = $img_width;
+				$row['fileup_path'] = $fileup_path;
+			}
+		}
+
+		$row['down_display'] = $down_display;
+		$row['img_display'] = $img_display;
+
+		// comment
+
+		// opkey
+		$row['opkey'] = 'none';
+		if ($setup == "y" || $grade > 9) {
+			$row['opkey'] = 'block';
+		}
+
+		$smarty = new Smarty;
+		if (is_readable($top_path)) {
+			$smarty->display( $top_path );
 		} else {
-			echo '<br>하단 파일경로를 확인하세요.';
+			$smarty->assign('skin_dir', $skin_dir);
+			$smarty->display( $default_header_path );
+			echo '<p>상단 파일경로를 확인하세요.</p>';
+		}
+		
+		if (is_readable($skin_path)) {
+			$smarty->assign('wdith', $wdith);		
+			$smarty->assign('skin_dir', $skin_dir);
+			$smarty->assign('opkey_skin_path', $opkey_skin_path);
+			$smarty->assign('data', $row);
+
+			foreach ($requests as $key => $value) {
+				$smarty->assign($key, $value);
+			}
+
+			$smarty->display( $skin_path );
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+		
+		if (is_readable($bottom_path)) {
+			$smarty->display( $bottom_path );
+		} else {			
+			echo '<p>하단 파일경로를 확인하세요.</p>';
+			$smarty->display( $default_footer_path );
 		}
 	}
 }
@@ -430,6 +466,7 @@ class WritePanel extends BaseView {
 		$board_grg = $board . '_grg';
 
 		$this->controller->select('fieldFromLimit', 'wall');
+
 		$row = $this->model->getRow();	
 		if ($row['wall'] == 'a' || !isset($row['wall'])) {
 			$wallname = "나라사랑";
@@ -440,6 +477,7 @@ class WritePanel extends BaseView {
 		} 
 
 		$this->controller->select('listFromBoardGroup');
+
 		$row = $this->model->getRow();	
 		$grade = $context->getSession('grade');	
 		if (isset($grade) && $grade) {
@@ -505,7 +543,7 @@ class ReplyPanel extends BaseView {
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('fieldFromId', '*');
+		$this->controller->select('fieldFromBoardWhereId', '*');
 		$row = $this->model->getRow();
 		$storycomment =  nl2br($row['comment']);
 		$m_name = $row['name'];
@@ -518,6 +556,7 @@ class ReplyPanel extends BaseView {
 		$date = $row['date']; 		
 
 		$this->controller->select('fieldFromLimit','wall');
+
 		$row = $this->model->getRow();		
 		if ($row['wall'] == 'a' || !isset($row['wall'])) {
 			$wallname = "나라사랑";
@@ -528,6 +567,7 @@ class ReplyPanel extends BaseView {
 		} 
 
 		$this->controller->select('listFromBoardGroup');
+
 		$row = $this->model->getRow();
 		$grade = $context->getSession('grade');
 		if (isset($grade) && $grade) {
@@ -591,7 +631,7 @@ class ModifyPanel extends BaseView {
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('fieldFromId', '*');
+		$this->controller->select('fieldFromBoardWhereId', '*');
 		$row = $this->model->getRow();
 		$storycomment = htmlspecialchars($row['comment']);
 		$m_name = htmlspecialchars($row['name']);
@@ -663,7 +703,7 @@ class DeletepassPanel extends BaseView {
 		$board = $context->getRequest('board');
 		$board_grg = $board . '_grg';
 
-		$this->controller->select('fieldFromId', 'name');
+		$this->controller->select('fieldFromBoardWhereId', 'name');
 		$row = $this->model->getRow();	
 		$m_name = $row['name'];
 
@@ -795,7 +835,7 @@ class DeletecommentPanel extends BaseView {
 		$this->controller->select('listFromBoardGroup');
 		$row = $this->model->getRow();
 
-		$this->controller->select('fieldFromId', 'name');
+		$this->controller->select('fieldFromBoardWhereId', 'name');
 		$m_name = $this->model->getRow()['name'];
 
 		if (is_readable($row['include1'])) {
@@ -991,7 +1031,7 @@ class RecordModifyPanel extends RecordBasePanel {
 		$imgup_name = $files['imgup']['name'];
 		$imgup_tmpname = $files['imgup']['tmp_name'];
 
-		$this->controller->select('fieldFromId', 'pass, igroup, filename');	
+		$this->controller->select('fieldFromBoardWhereId', 'pass, igroup, filename');	
 		$row = $this->model->getRow();
 
 		if ($pass == $row['pass'] || $pass == $admin_pwd) {
@@ -1048,7 +1088,7 @@ class RecordDeletePanel extends BaseView {
 		$board = $requests['board'];
 		$board_grg = $board . '_grg';
 		
-		$this->controller->select('fieldFromId', 'pass,filename');
+		$this->controller->select('fieldFromBoardWhereId', 'pass,filename');
 		
 		$pass = trim($posts['pwd']);
 		$admin_pwd = trim($context->get('db_admin_pwd'));

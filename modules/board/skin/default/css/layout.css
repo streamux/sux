@@ -12,12 +12,17 @@
 .board-list table{border-collapse:collapse;border-spacing: 0;width:100%}
 .board-list table thead th{padding-left:10px;height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:left}
 .board-list .author{padding-left:10px;width:90px}
-.board-list .subject{padding-left:10px}
-.board-list .date{padding-left:10px;width:100px}
+.board-list .subject{min-height:35px}
+.board-list .subject .link-area{display:inline-block;padding:5px 0 5px 10px;width:100%;line-height:20px}
+.board-list .subject .off{display: none}
+.board-list .subject .on{display: inline-block}
+.board-list .subject .space-on{margin-left:10px}
+.board-list .subject .space-off{margin-left:none}
+
+.board-list .date{padding-left:10px;width:90px}
 .board-list .hit{padding-left:10px;width:70px}
-.board-list table tbody tr td{padding:5px 0 5px 0;text-align: left;height:35px;line-height: 17px;vertical-align: middle}
-.board-list table tbody tr td span{position:relative;top:1px}
-.board-list table tbody tr td img{vertical-align: middle;}
+.board-list table tbody tr td{text-align: left}
+.board-list table tbody tr td img{vertical-align: middle}
 .board-list table tbody tr:last-child {border-bottom: 1px solid #D6D7D6}
 .board-list .warn-subject{padding-left:10px;text-align: left}
 
