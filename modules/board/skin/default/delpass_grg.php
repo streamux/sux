@@ -11,7 +11,7 @@
 			<span class="title">댓글삭제 비밀번호 인증</span>
 			<span class="subtitle">SUX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-			<form action="board.php?board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&board=<? echo $board; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>&action=record_deletecomment" method="post" name="musimd" onSubmit="return jsux.fn.checkForm(this);">			
+			<form action="board.php?board=<? echo $board; ?>&board_grg=<? echo $board_grg; ?>&id=<? echo $id; ?>&grgid=<? echo $grgid; ?>&igroup=<? echo $igroup; ?>&passover=<? echo $passover; ?>&action=record_deletecomment" method="post" name="musimd" onSubmit="return jsux.fn.checkForm(this);">			
 			<div class="box ui-edgebox-2px">
 				<div class="login-title">
 					<img src="<? echo ${skin_dir}; ?>/images/icon_01.gif" title="">			
@@ -22,8 +22,8 @@
 				<div class="login-body">
 					<div class="panel-info">
 						<ul>
-							<li><span class="ui-label">이름</span><? echo $m_name; ?><input type="hidden" name="m_name" maxlength="14" value="<? echo $m_name; ?>"class="input-id"></li>
-							<li><span class="ui-label">비밀번호</span><input type="password" name="pwd" maxlength="20"class="input-pwd"></li>
+							<li><span class="ui-label">이름</span><? echo $name; ?><input type="hidden" name="m_name" maxlength="14" value="<? echo $name; ?>"class="input-id"></li>
+							<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 						</ul>							
 					</div>
 					<div class="panel-btn">

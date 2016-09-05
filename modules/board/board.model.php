@@ -8,13 +8,13 @@ class BoardModel extends BaseModel {
 	var $id;
 	var $grgid;
 
-	var	$m_name;
+	var	$name;
 	var	$pass;
-	var	$storytitle;
+	var	$title;
 	var	$storycomment;
 	var	$email;
 	var	$igroup;
-	var	$name;
+	var	$type;
 	var	$wall;
 	var	$wallok;
 	var	$wallwd;
@@ -41,13 +41,13 @@ class BoardModel extends BaseModel {
 		$this->id = $requests['id'];
 		$this->grgid = $requests['grgid'];
 
-		$this->m_name = $posts['m_name'];
+		$this->name = $posts['name'];
 		$this->pass = $posts['pass'];
-		$this->storytitle = $posts['storytitle'];
-		$this->storycomment = $posts['storycomment'];
+		$this->title = $posts['title'];
+		$this->comment = $posts['comment'];
 		$this->email = $posts['email'];
 		$this->igroup = $posts['igroup'];
-		$this->name = $posts['type'];
+		$this->type = $posts['type'];
 		$this->wall = trim($posts['wall']);
 		$this->wallok = trim($posts['wallok']);
 		$this->wallwd = $posts['wallwd'];
@@ -58,7 +58,7 @@ class BoardModel extends BaseModel {
 		$this->imgup_tmpname = $files['imgup']['tmp_name'];
 	}
 
-	function SelectListFromBoardGroup() {
+	function SelectFromBoardGroup() {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
@@ -175,7 +175,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFieldFromLimit($field ) {
+	function SelectFieldFromBoardLimit($field ) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -206,7 +206,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFieldFromCommentId($field) {
+	function SelectfieldFromTailCommentId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -217,7 +217,7 @@ class BoardModel extends BaseModel {
 		$result = parent::select($query);
 		return $result;
 	}
-	function SelectIdFromCommentWhere($sid) {
+	function SelectidFromTailCommentWhere($sid) {
 
 		$query = new Query();
 		$query->setField('id');
@@ -229,10 +229,22 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
+	function SelectFromTailCommentWhere($sid) {
+
+		$query = new Query();
+		$query->setField('*');
+		$query->setTable($this->board_grg);
+		$query->setWhere(array(
+			'storyid' => $sid
+		));
+		$result = parent::select($query);
+		return $result;
+	}
+
 	function InsertRecordWrite() {
 
 		$context = Context::getInstance();
-		$this->SelectFieldFromLimit('id');
+		$this->SelectFieldFromBoardLimit('id');
 		$row = $this->getRow();
 		$igroup = $row['id']+1; 
 
@@ -240,10 +252,10 @@ class BoardModel extends BaseModel {
 		$query->setTable($this->board);
 		$query->setColumn(array(
 			'', 
-			$this->m_name,
+			$this->name,
 			$this->pass,
-			$this->storytitle,
-			$this->storycomment,
+			$this->title,
+			$this->comment,
 			$this->email,
 			'now()',
 			$_SERVER['REMOTE_ADDR'],
@@ -266,7 +278,7 @@ class BoardModel extends BaseModel {
 	function InsertRecordReply() {
 
 		$context = Context::getInstance();
-		$this->SelectFieldFromId('igroup, space, ssunseo');
+		$this->SelectFieldFromBoardWhereId('igroup, space, ssunseo');
 		$row = $this->getRow();
 		$igroup = $row['igroup']; 
 		$space = $row['space']+1;
@@ -276,10 +288,10 @@ class BoardModel extends BaseModel {
 		$query->setTable($this->board);
 		$query->setColumn(array(
 			'', 
-			$this->m_name, 
+			$this->name, 
 			$this->pass, 
-			$this->storytitle, 
-			$this->storycomment,
+			$this->title, 
+			$this->comment,
 			$this->email, 
 			'now()', 
 			$_SERVER['REMOTE_ADDR'],
@@ -306,9 +318,9 @@ class BoardModel extends BaseModel {
 		$query = new Query();
 		$query->setTable($this->board);
 		$query->setColumn(array(
-			'name' => $this->m_name, 
-			'title' => $this->storytitle, 
-			'comment' => $this->storycomment,
+			'name' => $this->name, 
+			'title' => $this->title, 
+			'comment' => $this->comment,
 			'email' => $this->email, 
 			'filename' => $context->get('fileup_name'),
 			'filesize' => $this->imgup_size, 
@@ -353,17 +365,17 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function InsertRecordWriteComment() {
+	function InsertRecordWriteTailComment() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
-		$posts = $context->getPostAll();
 
+		$posts = $context->getPostAll();
 		$board_grg = $requests['board_grg'];
 		$id = $requests['id'];
 
-		$ljs_name = $posts['ljs_name'];
-		$ljs_pass = $posts['ljs_pass'];
+		$name = $posts['nickname'];
+		$pass = $posts['pass'];
 		$comment = $posts['comment'];
 
 		$query = new Query();
@@ -371,8 +383,8 @@ class BoardModel extends BaseModel {
 		$query->setColumn(array(
 			'',
 			$id,
-			$ljs_name,
-			$ljs_pass,
+			$name,
+			$pass,
 			$comment,
 			'now()'
 		));
@@ -380,7 +392,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function DeleteRecordDeleteComment() {
+	function DeleteRecordDeleteTailComment() {
 
 		$context = Context::getInstance();
 		$grgid = $context->getRequest('grgid');

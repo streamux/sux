@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-04 11:31:53
+/* Smarty version 3.1.30, created on 2016-09-05 09:40:28
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57cbea096297b2_46429018',
+  'unifunc' => 'content_57cd216cdaba62_76809083',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1472981511,
+      1 => 1473061222,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57cbea096297b2_46429018 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57cd216cdaba62_76809083 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <div class="board-list" style="width:<?php echo $_smarty_tpl->tpl_vars['width']->value;?>
 ">
@@ -35,10 +35,10 @@ function content_57cbea096297b2_46429018 (Smarty_Internal_Template $_smarty_tpl)
 		</thead>
 		<tbody>
 		<?php
-$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['rows_data']->value, 'item');
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['list_data']->value, 'item');
 if ($_from !== null) {
 foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
-?>			
+?>
 			<?php if (isset($_smarty_tpl->tpl_vars['item']->value)) {?>
 			<tr>
 				<td class="author"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
@@ -119,7 +119,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 /images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
-<div class="board-buttons ui-inlineblock">
+<div class="board-list-buttons ui-inlineblock">
 	<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
 &action=list">

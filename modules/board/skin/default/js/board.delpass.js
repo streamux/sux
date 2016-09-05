@@ -2,11 +2,11 @@ jsux.fn = {
 
 	checkForm: function( f ) {
 
-		var pass = f.pwd.value.length;
+		var pass = f.pass.value.length;
 
 		if ( pass < 1) {
 			trace('비밀번호를 입력하세요.');
-			f.pwd.focus();
+			f.pass.focus();
 			return false;				
 		}
 		return true;
@@ -27,7 +27,7 @@ jsux.fn = {
 	},
 	init: function() {
 		this.setEvent();
-		$('input[name=pwd]').focus();
+		$('input[name=pass]').focus();
 	}
 };
 

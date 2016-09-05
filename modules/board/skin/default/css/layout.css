@@ -1,8 +1,8 @@
 
 /* layout */
 .wrap {position: relative}
-.header {position:relative;z-index:1000;margin:0 auto;width:100%;border: 0 solid #FF0000}
-.container {clear:both;position:relative;margin:0 auto;width:98%}
+.header {position:relative;z-index:1000;border: 0 solid #FF0000}
+.container {clear:both;position:relative}
 .footer{margin-top:20px;height:50px;text-align: center}
 
 /* header */
@@ -25,56 +25,59 @@
 .board-list table tbody tr td img{vertical-align: middle}
 .board-list table tbody tr:last-child {border-bottom: 1px solid #D6D7D6}
 .board-list .warn-subject{padding-left:10px;text-align: left}
+.board-list-buttons{float:right;margin-top:20px;padding:0 10px 0 0px;text-align: right;clear:both}
 
 .board-page-navi{margin-top:10px;text-align: center;}
 .board-search{margin-top:20px}
 .board-search input[name=search]{width:120px}
-.board-buttons{float:right;margin-top:20px;width:117px;text-align: right;clear:both}
 
 /* read */
-.board-read{border-top:2px solid #CE0000}
-.board-read .panel-heading{margin:0 auto;padding:15px 0px 15px 15px;width:98%}
-.board-read .panel-heading h1{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
-.board-read .panel-heading p{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
-.board-read .panel-body{margin:0 auto;padding: 10px 10px 20px 10px;max-width:98%;border:1px solid #ececec;line-height: 20px}
-.board-read .panel-buttons{margin: 20px 0 10px 0;text-align: right}
+.board-read{padding:0 5px 0 5px;border-top:2px solid #CE0000}
+.board-read .panel-heading{padding:15px 5px 15px 5px}
+.board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
+.board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
+.board-read .panel-body{padding: 5px 5px 10px 5px;border:1px solid #ececec;line-height: 20px}
+.board-buttons{margin-top:20px;padding:0 10px 0 0px;text-align: right}
 
-/* setup */
-.board-adminsetup{margin-top:30px}
-.board-adminsetup table{margin:0 auto;width:96%;background-color: #efefef}
+/* opkey - setup */
+.board-adminsetup{margin-top:20px;padding:0 10px 0 10px}
+.board-adminsetup table{margin:0 auto;width:100%;background-color: #efefef}
 .board-adminsetup table tr td{padding-left: 10px;line-height: 35px;border-bottom:1px dotted #D6D7D6}
 .board-adminsetup table tr:last-child td{border-bottom:none}
-.board-adminsetup .form-text-tip{margin:0 auto;margin-top:15px;width:96%}
-.board-adminsetup .form-submit{margin:0 auto;margin-top:15px;width:96%;text-align: right}
+.board-adminsetup .form-text-tip{margin-top:15px}
+.board-adminsetup .form-submit{text-align: right}
 
-/* tail */
-.board-tail{margin-top:30px;}
-.board-tail .panel-list dl dt{padding-left:10px;background-color: #efefef;line-height:45px;font-size: 1.500em}
+/* comment tail */
+.board-tail{margin-top:20px}
+.board-tail .panel-write dl dt{padding-left:10px;background-color: #efefef;line-height:40px;font-size: 1.500em}
+.board-tail .panel-write .form-heading{padding:10px 0px 5px 10px;line-height: 35px}
+.board-tail .panel-write .form-heading span{font-size: 1.0625em}
+.board-tail .panel-write .form-comment {padding: 0 10px 0 10px}
+.board-tail .panel-write .form-comment textarea{width:100%;min-height:165px;line-height:20px}
+.board-tail .panel-write .form-buttons {padding:10px 10px 10px 0;text-align: right}
+
+
+.board-tail .panel-list{margin-top:10px}
+.board-tail .panel-list dl dt{padding-left:10px;background-color: #efefef;line-height:40px;font-size: 1.500em}
 .board-tail .panel-list dl dd{padding-left:10px;border-bottom:1px dotted #D6D7D6;line-height:40px}
 .board-tail .panel-list dl dd:last-child{border-bottom:1px solid #D6D7D6;}
 .board-tail .panel-list .grgcomment{margin:0 20px 0 0}
 .board-tail .panel-list .date{margin-right:5px}
-.board-tail .panel-write{margin-top:20px;padding-left:10px;}
-.board-tail .panel-write .form-heading{line-height: 35px}
-.board-tail .panel-write .form-heading span{font-size: 1.0625em}\
-.board-tail .panel-write .form-comment {padding-bottom: 10px}
-.board-tail .panel-write .form-comment textarea{width:99%;min-height:165px;line-height:20px}
-.board-tail .panel-write .form-buttons {padding:10px 0 10px 0;text-align: right}
 
 /* write & rewrite*/
-.board-write{border-top:2px solid #CE0000}
+.board-write{padding:0 10px 0 10px;border-top:2px solid #CE0000}
 .board-write .ui-label-width{width:20%}
-.board-write .panel-heading{margin:0 auto;margin-top:20px;width:98%}
-.board-write .panel-heading span{display:inline-block;height:22px}
-.board-write .panel-heading input{width:80%}
-.board-write .panel-body{margin:0 auto;margin-top:35px;width:98%}
-.board-write .panel-body textarea{margin-top:5px;width:100%;line-height: 22px}
+.board-write .panel-heading{margin-top:20px}
+.board-write .panel-heading p{margin-top:5px;line-height:15px}
+.board-write .panel-heading input{width:100%}
+.board-write .panel-body{margin-top:30px}
+.board-write .panel-body textarea{margin-top:7px;width:100%;line-height: 22px}
 .board-write .panel-body span{display:inline-block;margin-top:5px}
-.board-write .panel-footer{margin:0  auto;margin-top:20px;width:98%}
+.board-write .panel-footer{margin-top:20px}
 .board-write .panel-footer .ui-imgup{height:25px;}
 .board-write .panel-footer .ui-imgup input{width:75%}
 .board-write .panel-footer .ui-wallkey{margin-top:20px}
-.board-write .buttons{margin-top:20px;text-align: right;}
+.board-write .panel-buttons{margin-top:20px;text-align: right}
 
 /* reply */
 .board-read .panel-body .download-align{margin-right:10px;text-align: right}

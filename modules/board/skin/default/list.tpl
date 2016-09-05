@@ -9,7 +9,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		{foreach from=$rows_data  item=$item}			
+		{foreach from=$list_data  item=$item}
 			{if isset($item)}
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
@@ -51,7 +51,7 @@
 		<input name="imageField" type="image" src="{$skin_dir}/images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
-<div class="board-buttons ui-inlineblock">
+<div class="board-list-buttons ui-inlineblock">
 	<a href="board.php?board={$board}&board_grg={$board_grg}&action=list">
 		<img src="{$skin_dir}/images/btn_list.gif" width="51" height="23" border="0">
 	</a>

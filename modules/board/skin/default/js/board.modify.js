@@ -1,9 +1,8 @@
 function musimw_check(f) {
 
 	var pass = f.pass.value.length,
-		storytitle = f.storytitle.value.length,
-		email = f.email.value.length,
-		storycomment = f.storycomment.value.length,
+		title = f.title.value.length,
+		comment = f.comment.value.length,
 		wall = f.wall.value.length;
 	
 	if ( pass < 1 ) {
@@ -14,13 +13,13 @@ function musimw_check(f) {
 
 	if ( storytitle < 1 ) {
 		alert("제목을 입력하세요.");
-		f.storytitle.focus();
+		f.title.focus();
 		return (false);
 	}
 
-	if ( storytitle > 60 ) {
+	if ( title > 60 ) {
 		alert("제목은 최대 60바이트까지 허용합니다.");
-		f.storytitle.focus();
+		f.title.focus();
 		return (false);
 	}
 
@@ -32,7 +31,7 @@ function musimw_check(f) {
 
 	if ( storycomment < 1 ) {
 		alert("내용을 입력하세요.");
-		f.storycomment.focus();
+		f.comment.focus();
 		return (false);
 	}
 
