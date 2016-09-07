@@ -123,10 +123,10 @@ class LogpassPanel extends BaseView {
 			$_SESSION['ljs_email'] = $ljs_email;
 			$_SESSION['ljs_writer'] = $ljs_writer;			
 			$_SESSION['ljs_point'] = $ljs_point;
+			$_SESSION['ljs_hit'] = $ljs_hit;	
 			$_SESSION['grade'] = $grade;
 			$_SESSION['automod1'] = $automod1;
-			$_SESSION['chatip'] = $chatip;
-			$_SESSION['ljs_hit'] = $ljs_hit;			
+			$_SESSION['chatip'] = $chatip;					
 			
 			if ($ljs_mod == "r_mode") {
 				echo ("<meta http-equiv='Refresh' content='0; URL=../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
@@ -147,22 +147,10 @@ class LogoutPanel extends BaseView {
 
 	function init($param=NULL) {
 
-		$xml_list = array();
-		$xml_list[] = 'ljs_member';
-		$xml_list[] = 'ljs_memberid';
-		$xml_list[] = 'ljs_pass1';
-		$xml_list[] = 'ljs_writer';
-		$xml_list[] = 'ljs_nickname';
-		$xml_list[] = 'ljs_email';
-		$xml_list[] = 'ljs_hit';
-		$xml_list[] = 'ljs_point';
-		$xml_list[] = 'user';
-		$xml_list[] = 'grade';
-		$xml_list[] = 'chatip';
-		$xml_list[] = 'admin_ok';
-
-		for ($i=0; $i<count($xml_list); $i++) {
-			unset($_SESSION[$xml_list[$i]]);
+		$context = Context::getInstance();
+		$requests = $context->getSessionAll();
+		foreach ($requests as $key => $value) {
+			unset($_SESSION[$key]);
 		}
 		echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
 	}

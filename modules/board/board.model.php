@@ -33,6 +33,7 @@ class BoardModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
+		$sesstions = $context->getSessionAll();
 		$posts = $context->getPostAll();
 		$files = $context->getFiles();
 
@@ -40,13 +41,20 @@ class BoardModel extends BaseModel {
 		$this->board_grg = $this->board . '_grg';
 		$this->id = $requests['id'];
 		$this->grgid = $requests['grgid'];
+		$this->igroup = $requests['igroup'];
+		$this->ssunseo = $requests['ssunseo'];
 
 		$this->name = $posts['name'];
-		$this->pass = $posts['pass'];
+		$this->pass = substr(md5(trim($posts['pass'])),0,8);
+
+		$ljs_name = $sesstions['ljs_name'];
+		if (!isset($ljs_name) && $ljs_name == '') { 
+			$this->pass = substr(md5($this->pass),0,8);
+		}
+
 		$this->title = $posts['title'];
 		$this->comment = $posts['comment'];
-		$this->email = $posts['email'];
-		$this->igroup = $posts['igroup'];
+		$this->email = $posts['email'];		
 		$this->type = $posts['type'];
 		$this->wall = trim($posts['wall']);
 		$this->wallok = trim($posts['wallok']);
@@ -108,9 +116,9 @@ class BoardModel extends BaseModel {
 
 	function SelectFromBoardLimit() {
 
-		$context = Context::getInstance();
-		$limit = $context->get('limit');
+		$context = Context::getInstance();		
 		$passover = $context->get('passover');
+		$limit = $context->get('limit');
 
 		$query = new Query();
 		$query->setField('*');
@@ -125,9 +133,6 @@ class BoardModel extends BaseModel {
 	function SelectFromBoardSearch() {
 
 		$context = Context::getInstance();
-		$limit = $context->get('limit');
-		$passover = $context->get('passover');
-
 		$find = $context->getRequest('find');
 		$search = $context->getRequest('search');
 
@@ -147,7 +152,9 @@ class BoardModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$find = $context->getRequest('find');
-		$search = $context->getRequest('search');
+		$search = $context->getRequest('search');		
+		$passover = $context->get('passover');
+		$limit = $context->get('limit');
 		
 		$where = new QueryWhere();
 		$where->set($find, $search, 'like');
@@ -175,14 +182,24 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
+	function SelectIdFromBoardWhere($igroup) {
+
+		$query = new Query();
+		$query->setField('id');
+		$query->setTable($this->board);
+		$query->setWhere(array(
+			'igroup' => $igroup
+		));
+
+		$result = parent::select($query);
+		return $result;
+	}
+
 	function SelectFieldFromBoardLimit($field ) {
 
 		$query = new Query();
 		$query->setField($field);
 		$query->setTable($this->board);
-		$query->setWhere(array(
-			'space' => 0
-		));
 		$query->setOrderBy('id desc');
 		$query->setLimit(1);
 		$result = parent::select($query);
@@ -275,14 +292,39 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
+	function UpdateRecordSsunseo() {
+
+		$where = new QueryWhere();
+		$where->set('ssunseo', $this->ssunseo, '>');
+		$where->set('igroup', $this->igroup, '=','and');
+
+		$context = Context::getInstance();
+		$query = new Query();
+		$query->setTable($this->board);
+		$query->setColumn(array(
+			'ssunseo' => '(ssunseo+1)'
+		));
+		$query->setWhere($where);
+
+		$result = parent::update($query);
+		return $result;
+	}
+
 	function InsertRecordReply() {
 
 		$context = Context::getInstance();
-		$this->SelectFieldFromBoardWhereId('igroup, space, ssunseo');
+		$this->SelectFieldFromBoardWhereId('id, igroup, space, ssunseo');
 		$row = $this->getRow();
 		$igroup = $row['igroup']; 
 		$space = $row['space']+1;
-		$ssunseo = $row['ssunseo']+1;
+		$ssunseo = $row['ssunseo'];
+
+		if ($ssunseo == 0) {
+			$this->SelectIdFromBoardWhere($igroup);
+			$ssunseo = $this->getNumRows();
+		} else {
+			$ssunseo += 1;
+		}
 
 		$query = new Query();
 		$query->setTable($this->board);

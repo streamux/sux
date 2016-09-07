@@ -8,7 +8,7 @@ function musimw_check(f) {
 
 	if ( name < 1 ) {
 		alert("이름을 입력하세요.");
-		f.m_name.focus();
+		f.name.focus();
 		return (false);
 	}
 	
@@ -41,7 +41,12 @@ function musimw_check(f) {
 		f.wall.focus();
 		return (false);
 	}
+
 	return (true);
 }
 
-document.musimw.m_name.focus();
+if (document.musimw.name.value.length == 0) {
+	document.musimw.name.focus();
+} else if (document.musimw.title.value.length == 0) {
+	document.musimw.title.focus();
+}

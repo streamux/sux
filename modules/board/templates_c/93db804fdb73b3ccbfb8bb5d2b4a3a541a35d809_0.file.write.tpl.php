@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-05 10:37:55
+/* Smarty version 3.1.30, created on 2016-09-06 12:52:39
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/write.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57cd2ee3e167c6_56316923',
+  'unifunc' => 'content_57ce9ff704eb36_42183772',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '93db804fdb73b3ccbfb8bb5d2b4a3a541a35d809' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/write.tpl',
-      1 => 1473064674,
+      1 => 1473159152,
       2 => 'file',
     ),
   ),
@@ -20,24 +20,27 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57cd2ee3e167c6_56316923 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57ce9ff704eb36_42183772 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
-<div class="board-write" style="width:<?php echo $_smarty_tpl->tpl_vars['width']->value;?>
+<div class="board-write" style="width:<?php echo $_smarty_tpl->tpl_vars['group_data']->value['width'];?>
 ">
-	<form action="board.php?id=<?php echo $_smarty_tpl->tpl_vars['id']->value;?>
-&board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
+	<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['req_data']->value['board'];?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['req_data']->value['board_grg'];?>
 &action=record_write" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
-		<p>	
-			<label for="name">이름</label>
-			<input type="text" name="name" id="name" maxlength="20" value="<?php echo $_smarty_tpl->tpl_vars['data']->value['name'];?>
+		<p>
+			<label for="name" class="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['user_label_display'];?>
+">이름</label>
+			<input type="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['user_name_type'];?>
+" name="name" id="name" maxlength="20" value="<?php echo $_smarty_tpl->tpl_vars['ses_data']->value['ljs_name'];?>
 ">
 		</p>
 		<p>
-			<label for="pass">비번</label>
-			<input type="password" name="pass" id="pass" maxlength="10" value="<?php echo $_smarty_tpl->tpl_vars['data']->value['pass'];?>
+			<label for="pass" class="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['user_label_display'];?>
+">비번</label>
+			<input type="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['user_pass_type'];?>
+" name="pass" id="pass" maxlength="10" value="<?php echo $_smarty_tpl->tpl_vars['ses_data']->value['ljs_pass1'];?>
 ">
 		</p>
 		<p>
@@ -52,12 +55,10 @@ function content_57cd2ee3e167c6_56316923 (Smarty_Internal_Template $_smarty_tpl)
 	<div class="panel-body">
 		<p>
 			<span class="ui-label-width"><label for="comment">내용</label></span>
-			<span><input type="radio" name="type" id="radio_type_text" value="text" <?php echo $_smarty_tpl->tpl_vars['data']->value['comment_type_text'];?>
+			<span><input type="radio" name="type" id="radio_type_text" value="text" <?php echo $_smarty_tpl->tpl_vars['write_data']->value['comment_type_text'];?>
 ><label for="radio_type_text">TEXT</label></span>
-			<span><input type="radio" name="type" id="radio_type_html" value="html" <?php echo $_smarty_tpl->tpl_vars['data']->value['comment_type_html'];?>
-><label for="radio_type_html">HTML</label></span>			
-			<span><input type="radio" name="type" id="radio_type_all" value="text" <?php echo $_smarty_tpl->tpl_vars['data']->value['comment_type_all'];?>
-><label for="radio_type_all">TEXT + HTML</label></span>
+			<span><input type="radio" name="type" id="radio_type_html" value="html" <?php echo $_smarty_tpl->tpl_vars['write_data']->value['comment_type_html'];?>
+><label for="radio_type_html">HTML</label></span>	
 		</p>
 		<textarea name="comment" id="comment" cols="64" rows="14"></textarea>
 	</div>
@@ -66,15 +67,15 @@ function content_57cd2ee3e167c6_56316923 (Smarty_Internal_Template $_smarty_tpl)
 			<label for="imgup_pick">첨부파일</label> <input type="file" name="imgup" id="imgup_pick">
 		</p>
 		<span class="ui-wallkey">
-			<label for="wall_key">등록키 [ <span class="color-red font-weight-bold"><?php echo $_smarty_tpl->tpl_vars['data']->value['wallname'];?>
+			<label for="wall_key">등록키 [ <span class="color-red font-weight-bold"><?php echo $_smarty_tpl->tpl_vars['write_data']->value['wallname'];?>
 </span> ]</label>
 			<input type="text" name="wall" id="wall_key" size="16" maxlength="20">			
-			<input type="hidden" name="wallok" value="<?php echo $_smarty_tpl->tpl_vars['data']->value['wallname'];?>
+			<input type="hidden" name="wallok" value="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['wallname'];?>
 ">
-			<input type="hidden" name="wallwd" value="<?php echo $_smarty_tpl->tpl_vars['data']->value['wallkey'];?>
+			<input type="hidden" name="wallwd" value="<?php echo $_smarty_tpl->tpl_vars['write_data']->value['wallkey'];?>
 ">
 		</span>
-		<span class="ui-inlineblock">발강색 등록키를 입력해주세요.</span>
+		<span class="ui-inlineblock">등록키를 입력해주세요.</span>
 	</div>
 	<div class="panel-buttons">
 		<input name="imageField" type="image" src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>

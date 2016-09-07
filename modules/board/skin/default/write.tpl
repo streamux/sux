@@ -1,14 +1,14 @@
-<div class="board-write" style="width:{$width}">
-	<form action="board.php?id={$id}&board={$board}&board_grg={$board_grg}&action=record_write" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
+<div class="board-write" style="width:{$group_data.width}">
+	<form action="board.php?board={$req_data.board}&board_grg={$req_data.board_grg}&action=record_write" method="post"  name="musimw" enctype="multipart/form-data" onSubmit="return musimw_check(this);">
 
 	<div class="panel-heading">
-		<p>	
-			<label for="name">이름</label>
-			<input type="text" name="name" id="name" maxlength="20" value="{$data.name}">
+		<p>
+			<label for="name" class="{$write_data.user_label_display}">이름</label>
+			<input type="{$write_data.user_name_type}" name="name" id="name" maxlength="20" value="{$ses_data.ljs_name}">
 		</p>
 		<p>
-			<label for="pass">비번</label>
-			<input type="password" name="pass" id="pass" maxlength="10" value="{$data.pass}">
+			<label for="pass" class="{$write_data.user_label_display}">비번</label>
+			<input type="{$write_data.user_pass_type}" name="pass" id="pass" maxlength="10" value="{$ses_data.ljs_pass1}">
 		</p>
 		<p>
 			<label for="title">제목</label>
@@ -21,22 +21,21 @@
 	</div>
 	<div class="panel-body">
 		<p>
-			<span class="ui-label-width">내용</span>
-			<span><input name="type" type="radio" value="html" <? if ($admin_type == 'html') echo "checked"; ?>>HTML</span>
-			<span><input name="type" type="radio" value="text" <? if ($admin_type == 'text' || $admin_type == 'all') echo "checked"; ?>>TEXT</span>
-			<span>※ 형식을 선택해주세요.<span>
+			<span class="ui-label-width"><label for="comment">내용</label></span>
+			<span><input type="radio" name="type" id="radio_type_text" value="text" {$write_data.comment_type_text}><label for="radio_type_text">TEXT</label></span>
+			<span><input type="radio" name="type" id="radio_type_html" value="html" {$write_data.comment_type_html}><label for="radio_type_html">HTML</label></span>	
 		</p>
-		<textarea name="storycomment" cols="64" rows="14"><? echo ${storycomment}; ?></textarea>
+		<textarea name="comment" id="comment" cols="64" rows="14"></textarea>
 	</div>
 	<div class="panel-footer">
 		<p class="ui-imgup">
 			<label for="imgup_pick">첨부파일</label> <input type="file" name="imgup" id="imgup_pick">
 		</p>
 		<span class="ui-wallkey">
-			<label for="wall_key">등록키 [ <span class="color-red font-weight-bold">{$data.wallname}</span> ]</label>
+			<label for="wall_key">등록키 [ <span class="color-red font-weight-bold">{$write_data.wallname}</span> ]</label>
 			<input type="text" name="wall" id="wall_key" size="16" maxlength="20">			
-			<input type="hidden" name="wallok" value="{$data.wallname}">
-			<input type="hidden" name="wallwd" value="{$data.wallkey}">
+			<input type="hidden" name="wallok" value="{$write_data.wallname}">
+			<input type="hidden" name="wallwd" value="{$write_data.wallkey}">
 		</span>
 		<span class="ui-inlineblock">등록키를 입력해주세요.</span>
 	</div>

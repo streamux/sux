@@ -10,14 +10,12 @@
 
 /* list & search*/
 .board-list table{border-collapse:collapse;border-spacing: 0;width:100%}
-.board-list table thead th{padding-left:10px;height:35px;border-top: 2px solid #CE0000;border-bottom: 1px solid #e8eef1;text-align:left}
+.board-list table thead th{padding-left:10px;height:45px;border-top: 1px solid #e8eef1;border-bottom: 2px solid #e8eef1;text-align:left;font-size: 1.250em;}
 .board-list .author{padding-left:10px;width:90px}
 .board-list .subject{min-height:35px}
-.board-list .subject .link-area{display:inline-block;padding:5px 0 5px 10px;width:100%;line-height:20px}
+.board-list .subject .link-area{display:inline-block;padding:7px 0 7px 10px;width:100%;line-height:20px}
 .board-list .subject .off{display: none}
 .board-list .subject .on{display: inline-block}
-.board-list .subject .space-on{margin-left:10px}
-.board-list .subject .space-off{margin-left:none}
 
 .board-list .date{padding-left:10px;width:90px}
 .board-list .hit{padding-left:10px;width:70px}
@@ -32,7 +30,7 @@
 .board-search input[name=search]{width:120px}
 
 /* read */
-.board-read{padding:0 5px 0 5px;border-top:2px solid #CE0000}
+.board-read{padding:0 5px 0 5px;border-top:2px solid #e8eef1}
 .board-read .panel-heading{padding:15px 5px 15px 5px}
 .board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
 .board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
@@ -65,7 +63,7 @@
 .board-tail .panel-list .date{margin-right:5px}
 
 /* write & rewrite*/
-.board-write{padding:0 10px 0 10px;border-top:2px solid #CE0000}
+.board-write{padding:0 10px 0 10px;border-top:2px solid #e8eef1}
 .board-write .ui-label-width{width:20%}
 .board-write .panel-heading{margin-top:20px}
 .board-write .panel-heading p{margin-top:5px;line-height:15px}

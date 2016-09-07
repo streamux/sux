@@ -2,8 +2,7 @@ function musimw_check(f) {
 
 	var pass = f.pass.value.length,
 		title = f.title.value.length,
-		comment = f.comment.value.length,
-		wall = f.wall.value.length;
+		comment = f.comment.value.length;
 	
 	if ( pass < 1 ) {
 		alert("비밀번호를 입력하세요.");
@@ -11,7 +10,7 @@ function musimw_check(f) {
 		return (false);
 	}
 
-	if ( storytitle < 1 ) {
+	if ( title < 1 ) {
 		alert("제목을 입력하세요.");
 		f.title.focus();
 		return (false);
@@ -29,7 +28,7 @@ function musimw_check(f) {
 		return (false);
 	}
 
-	if ( storycomment < 1 ) {
+	if ( comment < 1 ) {
 		alert("내용을 입력하세요.");
 		f.comment.focus();
 		return (false);
