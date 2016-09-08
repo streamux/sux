@@ -15,15 +15,12 @@
 				<td class="author"><span>{$item.name}</span></td>
 				<td class="subject">					
 					<a href="board.php?board={$req_data.board}&board_grg={$req_data.board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&ssunseo={$item.subject.ssunseo}&sid={$item.subject.sid}&passover={$req_data.passover}&page={$req_data.page}&search={$req_data.search}&find={$req_data.find}&action=read"><span style="padding-left:{$item.subject.space}" class="link-area">
-						<img src="{$skin_dir}/images/icon_answer{$item.subject.icon_reply_type}.png" class="{$item.subject.icon_reply}">
-
-						<span class="label label-primary">공지</span>
-
-						<img src="{$skin_dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
 						<span class="{$item.subject.txt_tail}">({$item.subject.tail_num})</span>
 						<img src="{$skin_dir}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
 						<img src="{$skin_dir}/images/{$item.subject.opkey_name}" class="{$item.subject.icon_opkey}">
+						<img src="{$skin_dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
 					</span></a>
 				</td>				
 				<td class="date"><span>{$item.date}</span></td>

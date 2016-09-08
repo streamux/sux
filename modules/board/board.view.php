@@ -152,8 +152,8 @@ class ListPanel extends BaseView {
 
 					// 'off' in value is a class name of CSS
 					$subject_obj['space'] = '10px';
-					$subject_obj['icon_reply'] = 'off';
-					$subject_obj['icon_reply_type'] = 0;
+					$subject_obj['icon_box'] = '';
+					$subject_obj['icon_box_type'] = 0;
 					$subject_obj['icon_img'] = 'off';
 					$subject_obj['txt_tail'] = 'off';
 					$subject_obj['tail_num'] = 0;
@@ -161,9 +161,9 @@ class ListPanel extends BaseView {
 					$subject_obj['icon_opkey'] = 'off';
 
 					if ($space) {
-						$subject_obj['space'] = ($space*5) . 'px';
-						$subject_obj['icon_reply'] = 'on';
-						$subject_obj['icon_reply_type'] = $space%4;
+						$subject_obj['space'] = (10+$space*10) . 'px';
+						$subject_obj['icon_box'] = '답변';
+						$subject_obj['icon_box_color'] = 'icon-replay-color';
 					}
 
 					$imgname = "";

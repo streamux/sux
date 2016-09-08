@@ -16,6 +16,7 @@
 .board-list .subject .link-area{display:inline-block;padding:7px 0 7px 10px;width:100%;line-height:20px}
 .board-list .subject .off{display: none}
 .board-list .subject .on{display: inline-block}
+.board-list .subject .icon-replay-color{background:#fa7000}
 
 .board-list .date{padding-left:10px;width:90px}
 .board-list .hit{padding-left:10px;width:70px}
@@ -25,7 +26,7 @@
 .board-list .warn-subject{padding-left:10px;text-align: left}
 .board-list-buttons{float:right;margin-top:20px;padding:0 10px 0 0px;text-align: right;clear:both}
 
-.board-page-navi{margin-top:10px;text-align: center;}
+.board-page-navi{margin-top:10px;text-align: center}
 .board-search{margin-top:20px}
 .board-search input[name=search]{width:120px}
 

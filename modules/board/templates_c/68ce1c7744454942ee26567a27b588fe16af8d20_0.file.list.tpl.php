@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-07 10:17:16
+/* Smarty version 3.1.30, created on 2016-09-07 10:50:32
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57cfcd0c5dbd91_46077043',
+  'unifunc' => 'content_57cfd4d87bc880_51181015',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1473236231,
+      1 => 1473238230,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57cfcd0c5dbd91_46077043 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57cfd4d87bc880_51181015 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <div class="board-list" style="width:<?php echo $_smarty_tpl->tpl_vars['group_data']->value['width'];?>
 ">
@@ -56,17 +56,9 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 &find=<?php echo $_smarty_tpl->tpl_vars['req_data']->value['find'];?>
 &action=read"><span style="padding-left:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
 " class="link-area">
-						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
-/images/icon_answer<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_reply_type'];?>
-.png" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_reply'];?>
-">
-
-						<span class="label label-primary">공지</span>
-
-						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
-/images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['img_name'];?>
-" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_img'];?>
-">
+						<span class="label label-primary <?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box_color'];?>
+"><?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box'];?>
+</span>						
 						<?php echo nl2br($_smarty_tpl->tpl_vars['item']->value['subject']['title']);?>
 
 						<span class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['txt_tail'];?>
@@ -79,6 +71,10 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
 /images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['opkey_name'];?>
 " class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_opkey'];?>
+">
+						<img src="<?php echo $_smarty_tpl->tpl_vars['skin_dir']->value;?>
+/images/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['img_name'];?>
+" class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_img'];?>
 ">
 					</span></a>
 				</td>				

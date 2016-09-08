@@ -48,6 +48,6 @@ input::-ms-clear {display:none}
 .ui-box-input{padding-left:3px;line-height: 18px;border:1px solid #a6a6a6;box-shadow:inset -1px 1px 1px #e0e0e0}
 
 .label {display: inline;padding: 1px 4px;line-height:1;color: #fff;text-align:center;white-space:nowrap;vertical-align: baseline;font-size:0.925em;border-radius: .25em}
-.lable:empty{display:none}
+.label:empty{display:none}
 .label-primary {background-color:#428bca}
 .label-primary[href]:hover, .label-primary[href]:focus {background-color: #3071a9}
