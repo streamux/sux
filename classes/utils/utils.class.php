@@ -58,6 +58,11 @@ class Utils extends Object {
 
 			return false;
 		}
-	}	
+	}
+
+	public static function goURL( $url, $delay=0) {
+
+		echo ("<meta http-equiv='Refresh' content='". $delay . "; URL=" . $url . "'>");
+	}
 }
 ?>

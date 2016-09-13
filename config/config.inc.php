@@ -3,7 +3,8 @@
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
-	'JsonEncoder'=>'classes/utils/jsonencoder.class.php',
+	'JsonEncoder'=>'classes/utils/JsonEncoder.class.php',
+	'Navigator'=>'classes/plugin/navigator.class.php',
 	'Query'=>'classes/db/query.class.php',
 	'QueryWhere'=>'classes/db/query.where.class.php',
 	'QuerySchema'=>'classes/db/query.schema.class.php',

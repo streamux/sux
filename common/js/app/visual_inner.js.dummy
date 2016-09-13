@@ -34,7 +34,7 @@
 
 			_aniList = [];
 
-			_list = _stage.find(".item");
+			_list = _stage.find('.item');
 
 			$(_list).each(function(index) {
 				_aniList.push(this);
@@ -43,13 +43,13 @@
 
 		this.setEvent = function() {
 
-			$( _stage ).on("mouseover", function( e ) {
+			$( _stage ).on('mouseover', function( e ) {
 
 				_c.setRolling( false );
 				e.preventDefault();
 			});
 
-			$( _stage ).on("mouseout", function( e ) {
+			$( _stage ).on('mouseout', function( e ) {
 
 				_c.setRolling( true );
 				e.preventDefault();
@@ -82,12 +82,12 @@
 
 			$(_aniList).each(function(index) {
 
-				var key = parseInt($(this).data("key"))-1;
+				var key = parseInt($(this).data('key'))-1;
 
 				if (key == _selectId) {
-					_scope.tween( _aniList[index], 24, {"left": "0%", ease: Linear.easeInOut, useFrames: true});
+					_scope.tween( _aniList[index], 24, {'left': '0%', ease: Linear.easeInOut, useFrames: true});
 				} else if (key == _currentId) {
-					_scope.tween( _aniList[index], 24, {"left": tx+"%", ease: Linear.easeInOut, useFrames: true});
+					_scope.tween( _aniList[index], 24, {'left': tx+'%', ease: Linear.easeInOut, useFrames: true});
 				} 				
 			});
 		};
@@ -141,21 +141,21 @@
 
 			$(_aniList).each(function(index) {
 
-				var key = parseInt($(this).data("key"))-1;
+				var key = parseInt($(this).data('key'))-1;
 
 				if (key == _selectId) {
 
 					if (gab > 0) { 
-						$(this).css({"left": "100%","z-index": "101"});
+						$(this).css({'left': '100%','z-index': '101'});
 					} else if (gab < 0) {
-						$(this).css({"left": "-100%","z-index": "101"});
+						$(this).css({'left': '-100%','z-index': '101'});
 					} else {
-						$(this).css({"left": "0%","z-index": "101"});
+						$(this).css({'left': '0%','z-index': '101'});
 					}		
 				} else if (key == _currentId) {
-					$(this).css({"left": "0%","z-index": "100"});
+					$(this).css({'left': '0%','z-index': '100'});
 				} else {
-					$(this).css({"z-index": "0"});
+					$(this).css({'z-index': '0'});
 				}
 			});
 		};
@@ -169,11 +169,11 @@
 	app.createInnerView = function(path, m, c) {
 
 		if ($(path).length > 0) {
-			$( document.body ).append("<div id=\"inner\" class=\"inner\"></div>");
-			path = "#inner";
+			$( document.body ).append('<div id="inner" class="inner"></div>');
+			path = '#inner';
 		}
 
 		return new InnerView( path, m, c);
 	};
 
-})( jsuxApp, jQuery);
+})( jsux, jQuery);

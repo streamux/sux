@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-05 04:43:54
+/* Smarty version 3.1.30, created on 2016-09-09 10:15:49
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_tail.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57ccdbea0f0065_25445583',
+  'unifunc' => 'content_57d26fb5cd8321_82168389',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c3e50f7fe370c97fd981c08492204dcc5fc6082b' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_tail.tpl',
-      1 => 1473043428,
+      1 => 1473408836,
       2 => 'file',
     ),
   ),
@@ -20,16 +20,16 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57ccdbea0f0065_25445583 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57d26fb5cd8321_82168389 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	<div class="panel-write">
-		<form action="board.php?id=<?php echo $_smarty_tpl->tpl_vars['id']->value;?>
-&board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
-&igroup=<?php echo $_smarty_tpl->tpl_vars['igroup']->value;?>
-&passover=<?php echo $_smarty_tpl->tpl_vars['passover']->value;?>
-&sid=<?php echo $_smarty_tpl->tpl_vars['sid']->value;?>
-&action=record_writecomment" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
+&id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
+&igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
+&passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
+&sid=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['sid'];?>
+&action=record_writetailcomment" method="post" name="f_board_write_tail" onSubmit="return jsux.fn.boardRead.checkTailDocumentForm(this);">
 		<dl>
 			<dt>댓글 쓰기</dt>
 			<dd class="form-heading">
@@ -50,10 +50,10 @@ function content_57ccdbea0f0065_25445583 (Smarty_Internal_Template $_smarty_tpl)
 	</div>
 	<div class="panel-list">
 		<dl>
-			<dt>댓글 <?php echo $_smarty_tpl->tpl_vars['tail_data']->value['num'];?>
+			<dt>댓글 <?php echo $_smarty_tpl->tpl_vars['tailData']->value['num'];?>
 </dt>
 			<?php
-$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['tail_data']->value['list'], 'item');
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['tailData']->value['list'], 'item');
 if ($_from !== null) {
 foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 ?>
@@ -64,13 +64,13 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 </span>
 				<span class="date"><?php echo $_smarty_tpl->tpl_vars['item']->value['day'];?>
 </span>
-				<a href="board.php?id=<?php echo $_smarty_tpl->tpl_vars['id']->value;?>
-&board=<?php echo $_smarty_tpl->tpl_vars['board']->value;?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['board_grg']->value;?>
+				<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
+&id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
 &grgid=<?php echo $_smarty_tpl->tpl_vars['item']->value['id'];?>
-&igroup=<?php echo $_smarty_tpl->tpl_vars['igroup']->value;?>
-&passover=<?php echo $_smarty_tpl->tpl_vars['passover']->value;?>
-&action=deletecomment">[삭제]</a>
+&igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
+&passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
+&action=deletepassgrg">[삭제]</a>
 			</dd>
 			<?php
 }

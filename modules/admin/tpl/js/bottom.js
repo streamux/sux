@@ -1,4 +1,5 @@
-var menuList;
+var menuList = null,
+	visualList = null;
 
 menuList = [{
 	label: "회원관리",
@@ -49,39 +50,21 @@ visualList = [{
 }];
 
 $(document).ready(function() {
-
-	var gModel,
-		gView,
-		gIconView,    
-		vModel,
-		vControl,     
-		
-		vIndicatorView,
-		vInnerView;
 		
 	/**
 	 * 추후 현재 Model에서 구현된 Observer기능은 별도 클래스로 분리시켜
 	 * Model에서 상속받아 사용하는 구조로 만든다.
 	 */
-	gModel  = jsuxApp.getModel();
-	gView   = jsuxApp.createGNB("#gnb", gModel);
-	gIconView = jsuxApp.createGNB_ICON("#gnb_icon", gModel);
+	var gnbModel = jsux.adminGnb.Model.create();
+	var gnbView   = jsux.adminGnb.Menu.create("#gnb", gnbModel);
+	var gnbIconView = jsux.adminGnb.Icon.create("#gnb_icon", gnbModel);
 
-	gModel.addView( gView );
-	gModel.addView( gIconView );    
-	gModel.setData( menuList );
-	// gModel.activate( 1, 2 );
+	gnbModel.addObserver( gnbView );
+	gnbModel.addObserver( gnbIconView );  
+	gnbModel.setData( menuList );
+	//gnbModel.activate( 1, 2 );
 
-	vModel  = jsuxApp.getModel();
-	vControl  = jsuxApp.getControl( vModel );
-	vIndicView  = jsuxApp.createIndicatorView("#indicator", vModel, vControl);
-	vInnerView = jsuxApp.createInnerView("#inner", vModel, vControl);
-
-	vModel.addView( vIndicView );
-	vModel.addView( vInnerView );
-	vModel.setData( visualList );
-	vModel.activate(1);
-	vControl.setRolling( true );
+	var visualView = jsux.adminVisual.View.create();
 
 	// initialization
 	jsux.fn.init();

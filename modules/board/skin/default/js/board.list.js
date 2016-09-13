@@ -1,11 +1,18 @@
-function musimsl_check(f) {
+jsux.fn = jsux.fn || {};
+jsux.fn.boardList = jsux.fn.boardList || {};
+jsux.fn.boardList = {
 
-	var searcho = f.search.value.length;
+	checkSearchForm: function(f) {
 
-	if ( searcho < 1 ) {
-		alert("검색어를 입력하세요.");
-		f.search.focus();
-		return (false);
+		var search = f.search.value.length;
+		if ( search < 1 ) {
+			alert("검색어를 입력하세요.");
+			f.search.focus();
+			return (false);
+		}
+		return (true);
+	},
+	init: function() {
+		
 	}
-	return (true);
-}
+};

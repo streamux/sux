@@ -1,5 +1,5 @@
 	<div class="panel-write">
-		<form action="board.php?id={$id}&board={$board}&board_grg={$board_grg}&igroup={$igroup}&passover={$passover}&sid={$sid}&action=record_writecomment" method="post" name="musimsl" onSubmit="return musimsl_check(this);">
+		<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&igroup={$requestData.igroup}&passover={$requestData.passover}&sid={$requestData.sid}&action=record_writetailcomment" method="post" name="f_board_write_tail" onSubmit="return jsux.fn.boardRead.checkTailDocumentForm(this);">
 		<dl>
 			<dt>댓글 쓰기</dt>
 			<dd class="form-heading">
@@ -20,13 +20,13 @@
 	</div>
 	<div class="panel-list">
 		<dl>
-			<dt>댓글 {$tail_data.num}</dt>
-			{foreach from=$tail_data.list item=$item}
+			<dt>댓글 {$tailData.num}</dt>
+			{foreach from=$tailData.list item=$item}
 			<dd>
 				{$item.nickname} - 
 				<span class="grgcomment">{$item.comment}</span>
 				<span class="date">{$item.day}</span>
-				<a href="board.php?id={$id}&board={$board}&board_grg={$board_grg}&grgid={$item.id}&igroup={$igroup}&passover={$passover}&action=deletecomment">[삭제]</a>
+				<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&grgid={$item.id}&igroup={$requestData.igroup}&passover={$requestData.passover}&action=deletepassgrg">[삭제]</a>
 			</dd>
 			{/foreach}
 		</dl>

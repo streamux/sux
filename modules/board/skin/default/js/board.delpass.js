@@ -1,6 +1,8 @@
-jsux.fn = {
+jsux.fn = jsux.fn || {};
+jsux.fn.boardDelpass = jsux.fn.boardDelpass || {};
+jsux.fn.boardDelpass = {
 
-	checkForm: function( f ) {
+	checkDocumentForm: function( f ) {
 
 		var pass = f.pass.value.length;
 
@@ -31,5 +33,4 @@ jsux.fn = {
 	}
 };
 
-jsux.fn.init();
-
+jsux.fn.boardDelpass.init();

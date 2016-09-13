@@ -16,7 +16,9 @@
 .board-list .subject .link-area{display:inline-block;padding:7px 0 7px 10px;width:100%;line-height:20px}
 .board-list .subject .off{display: none}
 .board-list .subject .on{display: inline-block}
+.board-list .subject .icon-notice-color{background:#FF0000}
 .board-list .subject .icon-replay-color{background:#fa7000}
+.board-list .subject .icon-opkey-color{background:#428bca}
 
 .board-list .date{padding-left:10px;width:90px}
 .board-list .hit{padding-left:10px;width:70px}
@@ -35,7 +37,7 @@
 .board-read .panel-heading{padding:15px 5px 15px 5px}
 .board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
 .board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
-.board-read .panel-body{padding: 5px 5px 10px 5px;border:1px solid #ececec;line-height: 20px}
+.board-read .panel-body{padding: 5px 5px 30px 5px;min-height:200px;border:1px solid #ececec;line-height: 20px}
 .board-buttons{margin-top:20px;padding:0 10px 0 0px;text-align: right}
 
 /* opkey - setup */

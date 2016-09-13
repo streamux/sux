@@ -137,7 +137,7 @@ var popupManager = popupManager || {};
 	app.open = function( id ) {
 		this.popup.load(id);
 	};
-	app.sux_path = function( path='' ) {
+	app.sux_path = function( path ) {
 		this.popup.sux_path = path;
 	};
 })(popupManager);

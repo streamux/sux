@@ -104,7 +104,7 @@ class BoardModel extends BaseModel {
 		}		
 	}
 
-	function SelectFromBoard() {
+	function SelectFromBoard($query) {
 
 		$query = new Query();
 		$query->setField('*');

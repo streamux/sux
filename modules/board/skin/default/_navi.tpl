@@ -1,22 +1,22 @@
-{if $navi_data.okpage != 'yes'}
-	<a href="{$navi_data.PHP_SELF}?board={$req_data.board}&board_grg={$req_data.board_grg}&passover={$navi_data.prevpassover}&page={$navi_data.befopage}&find={$req_data.find}&search={$req_data.search}&action={$req_data.action}">이전</a>	
+{if $naviData.okpage != 'yes'}
+	<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$naviData.prevpassover}&page={$naviData.befopage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">이전</a>	
 {/if}
 
-{section name=page start=$navi_data.nowpage loop=$navi_data.nowpageend}
+{section name=page start=$naviData.nowpage loop=$naviData.nowpageend}
 	{assign var=index value=$smarty.section.page.index}
-	{assign var=nowpassover value=$navi_data.limit*($index-1)}
+	{assign var=nowpassover value=$naviData.limit*($index-1)}
 
-	{if $navi_data.total > $nowpassover }
-		{if $navi_data.passover != $nowpassover }
-			<a href="{$navi_data.PHP_SELF}?board={$req_data.board}&board_grg={$req_data.board_grg}&passover={$nowpassover}&page={$navi_data.page}&find={$req_data.find}&search={$req_data.search}&action={$req_data.action}">[{$index}]</a>
+	{if $naviData.total > $nowpassover }
+		{if $naviData.passover != $nowpassover }
+			<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$nowpassover}&page={$naviData.page}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">[{$index}]</a>
 		{else}
-			&nbsp;<font color="blue">{$index}</font>&nbsp
+			&nbsp;<span class="color-red">{$index}</span>&nbsp
 		{/if}
 	{/if}
 {/section}
 
-{if $navi_data.total >= $navi_data.hanpassoverpage }
-	<a href="{$navi_data.PHP_SELF}?board={$req_data.board}&board_grg={$req_data.board_grg}&passover={$navi_data.newpassover}&page={$navi_data.nextpage}&find={$req_data.find}&search={$req_data.search}&action={$req_data.action}">다음</a>
+{if $naviData.total >= $naviData.hanpassoverpage }
+	<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$naviData.newpassover}&page={$naviData.nextpage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">다음</a>
 {/if}
 
 

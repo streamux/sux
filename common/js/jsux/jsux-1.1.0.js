@@ -23,6 +23,7 @@ window.trace = function( str, bool ) {
 
 		klass.prototype.init = function() {};
 
+		// Inheritance
 		this.extend = function( parent ) {
 
 			var subclass = function() {};
@@ -45,6 +46,7 @@ window.trace = function( str, bool ) {
 		klass.fn = klass.prototype;	
 		klass.fn.parent = klass;
 		
+		// add class's method
 		klass.extend = function(obj) {
 			
 			var extended = obj.extended;
@@ -259,22 +261,21 @@ jsux.Observables.include({
 			return;
 		}
 
-		for (var i=0; i<observers.length; ++i) {
-			if (observers[i] == o) {
+		for (var i=0; i<this.observers.length; ++i) {
+			if (this.observers[i] == o) {
 				return false;
 			}
 		}
-		observers.push(o);
-
+		this.observers.unshift(o);
 		return true;
 	},
 	removeObserver: function( o ) {
 
-		var len = observers.length;
+		var len = this.observers.length;
 
-		for (var i=0; i<len; ++i) {
-			if (observers[i] == o) {
-				observers.splice(i, 1);
+		for (var i=this.observers.length-1; i>=0; i--) {
+			if (this.observers[i] == o) {
+				this.observers.splice(i, 1);
 				return true;
 			}
 		}
@@ -286,11 +287,11 @@ jsux.Observables.include({
 			infoObj = null;
 		}
 
-		if (!changed) {
+		if (!this.changed) {
 			return;
 		}
-		var observersCopy = observers.splice(0);
-		clearChanged();
+		var observersCopy = this.observers.slice(0);
+		this.clearChanged();
 
 		for (var i=observersCopy.length-1; i>=0; i--) {
 			observersCopy[i].update( this, infoObj );
@@ -298,23 +299,23 @@ jsux.Observables.include({
 	},
 	clearObserver: function() {
 
-		observers = [];
+		this.observers = [];
 	},
 	setChanged: function() {
 
-		changed = true;
+		this.changed = true;
 	},
 	clearChanged: function() {
 
-		changed = false;
+		this.changed = false;
 	},
 	hasChanged: function() {
 
-		return changed;
+		return this.changed;
 	},
 	countObserver: function() {
 
-		return observers.length;
+		return this.observers.length;
 	}
 });
 
@@ -335,8 +336,7 @@ jsux.Model.extend({
 		if (parent) {
 			this.prototype = jsux.Class.extend( parent );
 		}		
-
-		return  jsux.Class.create( this );
+		return jsux.Class.create(this);
 	}
 });
 
@@ -345,14 +345,14 @@ jsux.View.extend({
 
 	create: function( parent ) {
 
+		var klass = null;
 		if (parent) {
 			this.prototype = jsux.Class.extend( parent );
 		}	
 		
-		return  jsux.Class.create( this );
+		return  jsux.Class.create(this);
 	}
 });
-
 
 
 
