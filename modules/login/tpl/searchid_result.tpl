@@ -21,9 +21,6 @@
 		<div class="gnb-box">
 			<div class="logo">
 				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
 			</div>
 		</div>	
 	</div>

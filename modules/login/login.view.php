@@ -1,80 +1,92 @@
 <?php
 
-class LoginView extends BaseView {
+class LoginModule extends BaseView {
+
+	var $class_name = 'login_module';
+	var $header_path = '';	
+	var $footer_path = '';
+	var $skin_path = '';
+	var $document_data = null;
+
+	function output() {
+
+		$smarty = new Smarty;
+		if (is_readable($this->skin_path)) {
+			$smarty->assign('headerPath', $this->header_path);
+			$smarty->assign('footerPath', $this->footer_path);
+			$smarty->assign('documentData', $this->document_data);
+			$smarty->display( $this->skin_path );
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class LoginView extends LoginModule {
 
 	var $class_name = 'login_view';
 
-	// display function is defined in parent class 
-}
-
-class LoginPanel extends BaseView {
-
-	var $name = 'login_panel';
-	var $skin_path = 'modules/login/tpl/login.html';
-	var $info_skin_path = 'modules/login/tpl/info.html';
-
-	function init() {
+	function displayLogin() {
 
 		$context = Context::getInstance();
-		$ljs_memberid = $context->getSession('ljs_memberid');
-		$ljs_pass1 = $context->getSession('ljs_pass1');	
+		$this->requests = $context->getRequestAll();
+		$this->sessions = $context->getSessionAll();
 
-		if (!$ljs_memberid  || !$ljs_pass1) {		
-			$this->dispLogon($param);	
+		$this->document_data = array();
+		$this->document_data['sessions'] = $this->sessions;
+		$this->document_data['requests'] = $this->requests;
+
+		$ljs_memberid = $this->sessions['ljs_memberid'];
+		$ljs_pass1 = $this->sessions['ljs_pass1'];
+
+		$this->header_path = _SUX_PATH_ . 'modules/login/tpl/_header.tpl';
+		$this->footer_path = _SUX_PATH_ . 'modules/login/tpl/_footer.tpl';
+
+		if (!$ljs_memberid  || !$ljs_pass1) {
+			$this->document_data['requests']['action'] = 'login';
+			$this->controller->select('getMemberGroup');
+			$this->document_data['group'] = $this->model->getJson();
+			$this->skin_path = _SUX_PATH_ . 'modules/login/tpl/login.tpl';
 		} else {
-			$this->dispLoginInfo();
+			$this->document_data['requests']['action'] = '';
+			$this->skin_path = _SUX_PATH_ . 'modules/login/tpl/info.tpl';
 		}
+
+		parent::output();
 	}
 
-	function dispLogon() {
+	function displayLogpass() {
 
 		$context = Context::getInstance();
-		$this->controller->select('getMemberGroup');
-		$strJson = $this->model->getJson();
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		$contents->set('memberList', $strJson);
-		$contents->load();
-	}
+		$this->requests = $context->getRequestAll();
+		$this->sessions = $context->getSessionAll();
+		$this->posts = $context->getPostAll();
 
-	function dispLoginInfo() {
+		$this->document_data = array();
+		$this->document_data['sessions'] = $this->sessions;
+		$this->document_data['requests'] = $this->requests;
+		$this->document_data['posts'] = $this->posts;
 
-		$context = Context::getInstance();
-		$session_list = $context->getSessionAll();
-		$contents = new Template(_SUX_PATH_ . $this->info_skin_path);
-		foreach ($session_list as $key => $value) {
-			//echo $key . ' : ' . $value . '<br>';
-			$contents->set($key, $value);
-		}
-		$contents->load();
-	}
-}
-
-class LogpassPanel extends BaseView {
-
-	var $name = 'logpass_panel';
-
-	function init() {
-
-		$context = Context::getInstance();
+		$ljs_memberid = $this->sessions['ljs_memberid'];
+		$ljs_pass1 = $this->sessions['ljs_pass1'];
 		
-		$member = $context->getSession('ljs_member');
-		if (!isset($member) || $member == '') {
-			$member = $context->getPost('member');
+		$ljs_member = $this->sessions['ljs_member'];
+		if (!isset($ljs_member) || $ljs_member == '') {
+			$ljs_member = $this->posts['member'];
 		}
 
-		$memberid = $context->getSession('ljs_memberid');
+		$memberid = $this->sessions['ljs_memberid'];
 		if (!isset($memberid) || $memberid == '') {
-			$memberid = $context->getPost('memberid');
+			$memberid = $this->posts['memberid'];
 		}
 
-		$pass = trim($context->getSession('ljs_pass1'));
+		$pass = trim($this->sessions['ljs_pass1']);
 		if (!isset($pass) || $pass == '') {
-			$pass = trim($context->getPost('pass'));
+			$pass = trim($this->posts['pass']);
 			$pass = substr(md5($pass),0,8);
 		}
 		
-		$msg = "";
-
+		$msg = '';
 		if (!$memberid) {
 			$msg = "아이디를 입력하세요.";
 		} else if (!$pass) {
@@ -84,7 +96,6 @@ class LogpassPanel extends BaseView {
 		if ($msg) {
 			Error::alertToBack($msg);
 		}
-
 		
 		$this->controller->select('getLogpass');
 		$num = $this->model->getNumRows();
@@ -116,21 +127,15 @@ class LogpassPanel extends BaseView {
 			$values['hit'] = $ljs_hit;
 			$this->controller->update('getLogpass', $values);
 
-			$_SESSION['ljs_member'] = $member;
-			$_SESSION['ljs_memberid'] = $ljs_memberid;
-			$_SESSION['ljs_pass1'] = $ljs_pass1;
-			$_SESSION['ljs_name'] = $ljs_name;
-			$_SESSION['ljs_email'] = $ljs_email;
-			$_SESSION['ljs_writer'] = $ljs_writer;			
-			$_SESSION['ljs_point'] = $ljs_point;
-			$_SESSION['ljs_hit'] = $ljs_hit;	
-			$_SESSION['grade'] = $grade;
-			$_SESSION['automod1'] = $automod1;
-			$_SESSION['chatip'] = $chatip;					
+			$session_list = array('ljs_member','ljs_memberid','ljs_pass1','ljs_name','ljs_email','ljs_writer','ljs_point','ljs_member','ljs_hit','grade','automod1','chatip');
+
+			foreach ($session_list as $key => $value) {
+				$_SESSION[$value] = ${$value};
+			}				
 			
-			if ($ljs_mod == "r_mode") {
+			if ($this->requests['action'] == "read") {
 				echo ("<meta http-equiv='Refresh' content='0; URL=../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
-			} else if ($ljs_mod == "writer"){
+			} else if ($this->requests['action'] == "write"){
 				echo ("<meta http-equiv='Refresh' content='0; URL=../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 			} else {
 				echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
@@ -139,61 +144,61 @@ class LogpassPanel extends BaseView {
 			echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=fail'>");
 		}
 	}
-}
 
-class LogoutPanel extends BaseView {
-
-	var $name = 'logout_panel';
-
-	function init($param=NULL) {
+	function displayLogout() {
 
 		$context = Context::getInstance();
-		$requests = $context->getSessionAll();
-		foreach ($requests as $key => $value) {
-			unset($_SESSION[$key]);
+		$this->sessions = $context->getSessionAll();
+		foreach ($this->sessions as $key => $value) {
+			$context->setSession($key, '');
 		}
 		echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
 	}
-}
 
-class FailPanel extends BaseView {
+	function displayFail() {
 
-	var $name = 'fail_panel';
-	var $skin_path = 'modules/login/tpl/login.html';
-	var $footer_skin_path = 'modules/login/tpl/fail.html';
+		$context = Context::getInstance();
+		$this->requests = $context->getRequestAll();
+		$this->sessions = $context->getSessionAll();
 
-	function init() {
+		$this->header_path = _SUX_PATH_ . 'modules/login/tpl/_header.tpl';
+		$this->footer_path = _SUX_PATH_ . 'modules/login/tpl/_footer.tpl';
+		$this->skin_path = _SUX_PATH_ . 'modules/login/tpl/login.tpl';
+		$fail_css_path = 'tpl/css/login_fail.css';
+
+		$this->document_data = array();
+		$this->document_data['sessions'] = $this->sessions;
+		$this->document_data['requests'] = $this->requests;
 
 		$this->controller->select('getMemberGroup');
-		$strJson = $this->model->getJson();
+		$this->document_data['group'] = $this->model->getJson();
+		$this->document_data['requests']['action'] = 'login';
+		$this->document_data['failCssPath'] = $fail_css_path;
 
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		$contents->set('memberList', $strJson);
-		$contents->load();
-
-		$contents = new Template(_SUX_PATH_ . $this->footer_skin_path);
-		$contents->load();
+		parent::output();
 	}
-}
 
-class LeavePanel extends BaseView {
+	function displayLeave() {
 
-	var $name = 'leave_panel';
-	var $skin_path = 'modules/login/tpl/leave.html';
+		$context = Context::getInstance();
+		$this->sessions = $context->getSessionAll();
 
-	function init($param=NULL) {
+		$this->header_path = _SUX_PATH_ . 'modules/login/tpl/_header.tpl';
+		$this->footer_path = _SUX_PATH_ . 'modules/login/tpl/_footer.tpl';
+		$this->skin_path = _SUX_PATH_ . 'modules/login/tpl/leave.tpl';
 
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		foreach ($_SESSION as $key => $value) {
-			$contents->set($key, $value);
-		}
-		$contents->load();
+		$this->document_data = array();
+		$this->document_data['sessions'] = $this->sessions;
+
+		$this->document_data['requests']['action'] = 'leave';
+
+		parent::output();
 	}
 }
 
 class SearchidPanel extends BaseView {
 
-	var $name = 'earchid_panel';
+	var $class_name = 'earchid_panel';
 	var $skin_path = 'modules/login/tpl/searchid.html';
 	var $result_skin_path = 'modules/login/tpl/searchid_result.html';
 

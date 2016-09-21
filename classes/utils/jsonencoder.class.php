@@ -19,7 +19,6 @@ class JsonEncoder {
 		if (empty(self::$je_instance)) {
 			self::$je_instance = new self;
 		}
-;
 		return self::$je_instance;
 	}
 
@@ -33,11 +32,11 @@ class JsonEncoder {
 		} else {
 			$result = json_encode($data);	
 		}
+
 		return $result;
 	}
 
 }
 /* End of file JsonEncoder.class.php */
-
 ?>
 

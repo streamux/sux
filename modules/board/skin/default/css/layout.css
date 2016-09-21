@@ -1,7 +1,7 @@
 
 /* layout */
 .wrap {position: relative}
-.header {position:relative;z-index:1000;border: 0 solid #FF0000}
+.header {position:relative;z-index}
 .container {clear:both;position:relative}
 .footer{margin-top:20px;height:50px;text-align: center}
 

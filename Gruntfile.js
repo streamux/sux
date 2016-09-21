@@ -16,7 +16,8 @@ module.exports = function(grunt) {
 				'common/js/admin_gnb.js',
 				'common/js/admin_gnb.min.js',
 				'common/js/admin_visual.js',
-				'common/js/admin_visual.min.js'
+				'common/js/admin_visual.min.js',
+				'common/js/idangerous.swiper.min.js'
 			]			
 		},
 		concat: {
@@ -62,7 +63,8 @@ module.exports = function(grunt) {
 				},
 				files: {
 					'common/js/jsux-1.0.0.min.js': ['common/js/jsux/jsux-1.0.0.js'],
-					'common/js/jsux.min.js': ['common/js/jsux.js']
+					'common/js/jsux.min.js': ['common/js/jsux.js'],
+					'common/js/idangerous.swiper.min.js': ['common/js/api/idangerous.swiper.3.3.1.js']
 				}
 			},
 			'common-apps': {

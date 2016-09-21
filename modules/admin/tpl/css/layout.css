@@ -1,0 +1,8 @@
+
+/* layout */
+.header {z-index:1000;width:100%;text-align: center}
+.container {margin:0 auto;width:98%}
+.footer{margin-top:20px;height:50px;text-align: center}
+
+/* header */
+.header .logo{float:none}

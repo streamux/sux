@@ -1,31 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>SUX Board | 로그인</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
-	<script src="../../common/js/jquery.min.js"></script>
-	<script src="../../common/js/jquery.tmpl.min.js"></script>
-	<script src="../../common/js/jsux-1.0.0.min.js"></script>
-	<script src="../../common/js/jsux.min.js"></script>
-	<!--[if (gte IE 6)&(lte IE 8)]>
-	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
-	<![endif]-->
-	<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
-	<link rel="stylesheet" type="text/css" href="tpl/css/login.css">
-</head>
-<body>
-<div id="wrap">
+{include file="$headerPath"}
+<div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
-			</div>
-		</div>	
+		<h1 class="logo"><img src="tpl/images/logo.png" alt="streamxux"></h1>
 	</div>
 	<div class="container">		
 		<div class="article-box ui-edgebox">			
@@ -34,7 +11,7 @@
 				<span class="title">회원 로그인</span>
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="login.php?action=logpass" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
+				<form action="login.php?action=logpass" name="musimsm" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
 				<div class="box ui-edgebox-2px">
 					<div class="login-title">
 						<img src="tpl/images/icon_01.gif" title="">						
@@ -60,7 +37,7 @@
 					</div>																
 				</div>
 				</form>
-				<div class="panel-login-fail">
+				<div class="panel-fail">
 					<ul>
 						<li><span>아이디와 비밀번호가 일치하지 않습니다.</span></li>
 						<li><span>아이디와 비밀번호를 정확하게 입력해주세요.</span></li>
@@ -80,18 +57,16 @@
 		</div>		
 	</div>
 	<div class="footer">
-		@StreamUX Corp
+		Copyright @ STREAMUX Corp
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
 
 <script type="text/javascript">
 	var loginObj = loginObj || {};
-	loginObj.memberList = {$memberList};
+	loginObj.memberList = {$documentData.group};
 </script>
 <script type="x-jquery-templete" id="ljsMember_tmpl">
-	<option>${name}</option>
+	<option>{literal}${name}{/literal}</option>
 </script>
-<script type="text/javascript" src="tpl/js/login.js"></script>
-</body>
-</html>
+{include file="$footerPath"}

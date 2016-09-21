@@ -3,14 +3,7 @@
 <head>
 	<title>SUX Board | 비밀번호 찾기 결과</title>
 	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
-	<script src="../../common/js/jquery.min.js"></script>
-	<script src="../../common/js/jquery.tmpl.min.js"></script>
-	<script src="../../common/js/jsux-1.0.0.min.js"></script>
-	<script src="../../common/js/jsux.min.js"></script>
-	<!--[if (gte IE 6)&(lte IE 8)]>
-	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
-	<![endif]-->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">	
 	<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
 	<link rel="stylesheet" type="text/css" href="tpl/css/login.search.css">
 </head>
@@ -18,14 +11,7 @@
 <div id="wrap">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
-			</div>
-		</div>	
+		<h1 class="logo"><img class="logo" src="tpl/images/logo.png" alt="streamxux 로고"></h1>
 	</div>
 	<div class="container">		
 		<div class="article-box ui-edgebox">			
@@ -72,6 +58,3 @@
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-<script type="text/javascript" src="tpl/js/login.search_result.js"></script>
-</body>
-</html>

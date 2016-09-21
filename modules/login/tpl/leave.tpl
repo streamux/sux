@@ -1,31 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>SUX Board | 회원탈퇴</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
-	<script src="../../common/js/jquery.min.js"></script>
-	<script src="../../common/js/jquery.tmpl.min.js"></script>
-	<script src="../../common/js/jsux-1.0.0.min.js"></script>
-	<script src="../../common/js/jsux.min.js"></script>
-	<!--[if (gte IE 6)&(lte IE 8)]>
-	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
-	<![endif]-->
-	<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
-	<link rel="stylesheet" type="text/css" href="tpl/css/login.leave.css">
-</head>
-<body>
-<div id="wrap">
+{include file="$headerPath"}
+<div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
-			</div>
-		</div>	
+		<h1 class="logo">
+			<img class="logo" src="tpl/images/logo.png" alt="streamxux">	
+		</h1>	
 	</div>
 	<div class="container">		
 		<div class="article-box ui-edgebox">			
@@ -34,16 +13,16 @@
 				<span class="title">회원 탈퇴</span>
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="../member/member.php" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
+				<form name="loginleave">
 				<div class="box ui-edgebox-2px">
 					<div class="login-title">
 						<img src="tpl/images/icon_01.gif" alt="">						
 						<span>비밀번호 확인</span>
 					</div>
-					<div class="login-body">
+					<div class="leave-body">
 						<div class="panel-info">
 							<ul>
-								<li><input type="hidden" name="member" value="{$ljs_member}"><span class="ui-label">아이디</span><span>{$ljs_memberid}</span><input type="hidden" name="memberid" value="{$ljs_memberid}"></li>
+								<li><input type="hidden" name="member" value="{$documentData.sessions.ljs_member}"><span class="ui-label">아이디</span><span>{$documentData.sessions.ljs_memberid}</span><input type="hidden" name="memberid" value="{$documentData.sessions.ljs_memberid}"></li>
 								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
 							</ul>							
 						</div>
@@ -56,7 +35,7 @@
 					</div>																	
 				</div>
 				</form>
-				<div class="panel-login-fail">
+				<div class="panel-fail">
 					<ul>
 						<li><span>아이디와 비밀번호가 일치하지 않습니다.</span></li>
 						<li><span>아이디와 비밀번호를 정확하게 입력해주세요.</span></li>
@@ -78,13 +57,13 @@
 		</div>		
 	</div>
 	<div class="footer">
-		@StreamUX Corp
+		Copyright @ STREAMUX Corp
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
 
 <script type="x-jquery-templete" id="ljsMember_tmpl">
-	<option>${label}</option>
+	<option>{literal}${label}{/literal}</option>
 </script>
 
-<script type="text/javascript" src="tpl/js/login.leave.js"></script>
+{include file="$footerPath"}

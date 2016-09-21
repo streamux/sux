@@ -1,0 +1,19 @@
+
+.wrapper {max-width:1024px}
+.header {z-index:2;width:100%}
+
+/* main visual */
+.visual-device{clear:both;position:relative;margin:0 auto}
+
+@media only screen and (max-width: 479px) {
+	.header .util{display:none}
+	.header .mobile-menu{display:block}
+	.header .gnb-case{display:none}
+	.visual-device .swiper-container{height:270px}
+}
+@media only screen and (min-width: 480px) {
+	.header .util{display:block}
+	.header .mobile-menu{display:none}
+	.header .gnb-case{display:block;top:10px}
+	.visual-device .swiper-container{height:448px}
+}

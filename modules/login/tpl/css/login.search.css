@@ -2,29 +2,29 @@
 .container .article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
 
 /* admin login box */
-.container .article-box .login {word-break:keep-all}
-.container .article-box .login .title{display:block;margin-top:10;font-size:2.5625em;color:#ff6600}
-.container .article-box .login .subtitle{display:block;font-size:1.0625em}
-.container .article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;width:300px;background-color: #FFFFFF;text-align: center}
-.container .article-box .login .box .login-title {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
-.container .article-box .login .box .login-title span{text-align: left;vertical-align: middle;}
-.container .article-box .login .box .login-title img{vertical-align: middle;}
+
+
+
+
+
+
+
 .container .article-box .login .box .login-title .ui-subtitle{font-size:1.0625em;font-weight:bold}
 .container .article-box .login .box .login-title .link-searchinfo{float:right;line-height: 16px;}
+
 .container .article-box .login .box .login-body{margin:0 auto; width:80%;text-align: left}
 .container .article-box .login .box .login-body input {width:63%;text-align: left}
 .container .article-box .login .box .login-body div{margin-top:20px}
+
 .container .article-box .login .box .login-body .panel-info{vertical-align: middle}
 .container .article-box .login .box .login-body .panel-info ul li{line-height: 27px;list-style-type: none}
-.container .article-box .login .box .login-body .panel-info .ui-label{display:inline-block;width:70px}
-.container .article-box .login .box .login-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
+
+
 .container .article-box .login .box .login-body .panel-btn{text-align:center;font-size:1.0625em}
 .container .article-box .login .box .login-body .panel-btn li{display:inline-block;line-height:30px;width:60px;background-color:#ffffff;border:1px solid #e3e3e3;border-radius: 10px;cursor:pointer}
 .container .article-box .login .box .login-body .panel-btn li:hover{background-color:#e3e3e3;}
+
 .container .article-box .login .box .login-body .panel-info-result{margin:0 auto;margin-top:20px;width:80%;text-align:center}
 .container .article-box .login .box .login-body .panel-info-result ul li{line-height: 30px}
 .container .article-box .login .box .login-body .panel-info-result ul li span{font-size:1.5000em}
 
-.container .article-box .login .panel-notice{margin:0 auto;padding:30px 0 30px 0;width:300px;text-align: left;}
-.container .article-box .login .panel-notice ul li{list-style-type: square}
-.container .article-box .login .panel-notice ul li span{color: #de0000}

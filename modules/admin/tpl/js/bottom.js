@@ -57,7 +57,7 @@ $(document).ready(function() {
 	 */
 	var gnbModel = jsux.adminGnb.Model.create();
 	var gnbView   = jsux.adminGnb.Menu.create("#gnb", gnbModel);
-	var gnbIconView = jsux.adminGnb.Icon.create("#gnb_icon", gnbModel);
+	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
 
 	gnbModel.addObserver( gnbView );
 	gnbModel.addObserver( gnbIconView );  

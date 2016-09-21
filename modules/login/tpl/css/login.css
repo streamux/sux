@@ -1,4 +1,11 @@
+
+.header {overflow:hidden}
+.header .logo{clear:both;width:100%;text-align: center;}
+.util{display:block;height: 25px}
+.logo{float:none;margin:0}
+
 /* install */
+.container{padding:0 10px 0 10px}
 .container .article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
 
 /* admin login box */
