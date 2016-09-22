@@ -1,4 +1,29 @@
-{include file="$skinDir/_header.tpl" title="아이디 찾기 - StreamUX"}
+<?php
+/* Smarty version 3.1.30, created on 2016-09-22 08:12:59
+  from "/Applications/MAMP/htdocs/sux/modules/login/tpl/searchid.tpl" */
+
+/* @var Smarty_Internal_Template $_smarty_tpl */
+if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30',
+  'unifunc' => 'content_57e3766b08ca86_77540655',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '173984afdc2ea55545c82474a877c3d41d1011d7' => 
+    array (
+      0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/searchid.tpl',
+      1 => 1474524773,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+),false)) {
+function content_57e3766b08ca86_77540655 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"아이디 찾기 - StreamUX"), 0, true);
+?>
+
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
@@ -49,15 +74,24 @@
 		</div>		
 	</div>
 	<div class="footer">
-		{include file="$copyrightPath"}
+		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+?>
+
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-<script type="text/javascript">
+<?php echo '<script'; ?>
+ type="text/javascript">
 	var loginObj = loginObj || {};
-	loginObj.memberList = {$documentData.group};
-</script>
-<script type="x-jquery-templete" id="ljsMember_tmpl">
-	<option>{literal}${name}{/literal}</option>
-</script>
-{include file="$skinDir/_footer.tpl"}
+	loginObj.memberList = <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
+;
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="x-jquery-templete" id="ljsMember_tmpl">
+	<option>${name}</option>
+<?php echo '</script'; ?>
+>
+<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+}
+}

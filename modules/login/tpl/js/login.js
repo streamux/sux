@@ -58,7 +58,7 @@ jsux.fn.leave = {
 	sendJson: function( f ) {
 
 		var params = "";
-		params = { action: 'record_delete',
+		params = { action: 'recordDelete',
 					table_name: f.member.value,
 					memberid: f.memberid.value,
 					pass: f.pass.value };
@@ -97,8 +97,8 @@ jsux.fn.leave = {
 	}
 };
 
-jsux.fn.result = jsux.fn.result || {};
-jsux.fn.result = {
+jsux.fn.searchresult = jsux.fn.searchresult || {};
+jsux.fn.searchresult = {
 
 	setEvent: function() {
 
@@ -129,18 +129,18 @@ jsux.fn.searchid = {
 	},
 	checkForm: function( f ) {
 
-		var nm = f.check_name.value.length,
-			em = f.check_email.value.length;
+		var nm = f.user_name.value.length,
+			em = f.user_email.value.length;
 
 		if ( nm < 1) {
 			trace("이름을 입력하세요.");
-			f.check_name.focus();
+			f.user_name.focus();
 			return false;				
 		}
 
 		if ( em < 1) {
 			trace("이메일 주소를 입력하세요.");
-			f.check_email.focus();
+			f.user_email.focus();
 			return (false);				
 		}
 		return (true);
@@ -162,7 +162,7 @@ jsux.fn.searchid = {
 	init: function() {
 		this.dispSelectMemberList();
 		this.setEvent();
-		$("input[name=check_name]").focus();
+		$("input[name=user_name]").focus();
 	}
 };
 
@@ -179,25 +179,25 @@ jsux.fn.searchpwd = {
 	},
 	checkForm: function( f ) {
 
-		var nm = f.check_name.value.length,
-			id = f.check_memberid.value.length,
-			email = f.check_email.value.length;
+		var nm = f.user_name.value.length,
+			id = f.user_id.value.length,
+			email = f.user_email.value.length;
 
 		if ( nm < 1) {
 			trace("이름을 입력하세요.");
-			f.check_name.focus();
+			f.user_name.focus();
 			return (false);				
 		}
 
 		if ( id < 1) {
 			trace("아이디를 입력하세요.");
-			f.check_memberid.focus();
+			f.user_id.focus();
 			return (false);				
 		}
 
 		if ( email < 1) {
 			trace("이메일을 입력하세요.");
-			f.check_email.focus();
+			f.user_email.focus();
 			return (false);				
 		}
 		return (true);
@@ -219,6 +219,6 @@ jsux.fn.searchpwd = {
 	init: function() {
 		this.dispSelectMemberList();
 		this.setEvent();
-		$("input[name=check_name]").focus();
+		$("input[name=user_name]").focus();
 	}
 };

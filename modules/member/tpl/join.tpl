@@ -1,38 +1,42 @@
+{include file="$skinDir/_header.tpl" title="회원가입"}
 <div class="container">	
 		<div class="articles ui-edgebox">
 			<div class="member-edit">
-				<h2 class="blind">회원정보수정</h2>
 				<div class="tt">
 					<div class="imgbox">
-						<span>회원정보수정</span>
+						<h1>회원가입</h1>
 					</div>
 				</div>
 				<div class="box">
-					<form type="post">
+					<form name="f_member_join">
 					<dl>
-						<dt>기본정보입력</dt>
+						<dt>
+							<h2>기본정보입력</h2>
+						</dt>
 						<dd>
-							<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-							<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>			
+							<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">
+							<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>
 						</dd>
-					</dl>					
+					</dl>
 					<table summary="회원정보를 수정하세요.">
 						<caption class="blind">회원정보수정</caption>
 						<tbody>
 							<tr>
+								<td><span>회</span>원그룹</td>
 								<td>
-									<span>회</span>원그룹
-									<input type="hidden" name="table_name" value="{$table_name}">
-									<input type="hidden" name="memberid" value="{$memberid}">
-								</td>
-								<td>									
-									{$table_name}
+									<select name="table_name" id="tableList">
+										<!--
+										@ jquery templete
+										@ name 	tableList_tmpl
+										-->										
+									</select>
 								</td>
 							</tr>
 							<tr>
 								<td><span>아</span>이디</td>
 								<td>
-									{$memberid}
+									<input type="text" name="memberid" size="12" maxlength="12" value="">
+									<input type="button" name="checkID" value='중복체크'>
 								</td>
 							</tr>
 							<tr>
@@ -56,7 +60,8 @@
 									<option value="hanmail.com">hanmail.net</option>
 									<option value="gmail.com">gmail.com</option>
 								</select>
-								<input type="text" name="email_tail2" size="12" maxlength="20" value=""> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
+								<input type="text" name="email_tail2" size="12" maxlength="20" value=""> 
+								<span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
 							</tr>
 							<tr>
 								<td><span>휴</span>대폰번호</td>
@@ -83,7 +88,9 @@
 						</tbody>
 					</table>
 					<dl>
-						<dt>기타정보입력</dt>
+						<dt>
+							<h2>기타정보입력</h2>
+						</dt>
 						<dd>
 							<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 							<span class="text-notice">추가 정보를 입력해주세요.</span>			
@@ -95,7 +102,7 @@
 							<tr>
 								<td>직업</td>
 								<td>
-									<select name=job>
+									<select name="job">
 										<option value="">선택하기</option>
 										<option value=프리랜서>프리랜서</option>
 										<option value=교수>교수</option>
@@ -121,9 +128,30 @@
 									<input type="checkbox" name="hobby" value="기타" ><span>기타</span>
 								</td>
 							</tr>
+							<tr>
+								<td>가입경로</td>
+								<td>
+									<select name="path">
+										<option value="">선택하기</option>
+										<option value=네이버검색>키워드검색</option>
+										<option value=다음카페>네이버지식인</option>
+										<option value=다음카페>다음카페</option>
+										<option value=다음카페>학교소개</option>
+										<option value=주변소개>친구소개</option>
+										<option value=다음카페>차량광고</option>
+										<option value=기타>기타</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<td>추천아이디</td>
+								<td>
+									<input type="text" name="proposeid" size="12" maxlength="20" value="">
+								</td>
+							</tr>
 						</tbody>
 					</table>
-					<input type="submit" name="submit" size="10" value="수 정">
+					<input type="submit" name="submit" size="10" value="확 인">
 					<input type="button" name="cancel" value="취 소">
 					</form>
 				</div>
@@ -131,7 +159,8 @@
 		</div>
 	</div>
 </div>
-<script type="jquery-templete" id="memberLabel_tmpl">
-	<span>${label}</span>
+
+<script type="jquery-templete" id="tableList_tmpl">
+	<option>{literal}${name}{/literal}</option>
 </script>
-<script type="text/javascript" src="./tpl/js/modify.js"></script>
+{include file="$skinDir/_footer.tpl"}

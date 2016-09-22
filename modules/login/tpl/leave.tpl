@@ -1,29 +1,32 @@
-{include file="$headerPath"}
+{include file="$skinDir/_header.tpl" title="회원탈퇴 확인 - StreamUX"}
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
 		<h1 class="logo">
-			<img class="logo" src="tpl/images/logo.png" alt="streamxux">	
+			<img src="tpl/images/logo.png" alt="streamxux">	
 		</h1>	
 	</div>
 	<div class="container">		
-		<div class="article-box ui-edgebox">			
-			<h2 class="blind">회원 탈퇴</h2>		
+		<div class="article-box ui-edgebox">				
 			<div class="login">
-				<span class="title">회원 탈퇴</span>
+				<h1 class="title">회원 탈퇴</h1>
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form name="loginleave">
+				<form name="f_loginleave">
 				<div class="box ui-edgebox-2px">
-					<div class="login-title">
+					<div class="leave-header">
 						<img src="tpl/images/icon_01.gif" alt="">						
 						<span>비밀번호 확인</span>
 					</div>
 					<div class="leave-body">
 						<div class="panel-info">
 							<ul>
-								<li><input type="hidden" name="member" value="{$documentData.sessions.ljs_member}"><span class="ui-label">아이디</span><span>{$documentData.sessions.ljs_memberid}</span><input type="hidden" name="memberid" value="{$documentData.sessions.ljs_memberid}"></li>
-								<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
+								<li>
+									<input type="hidden" name="member" value="{$sessionData.ljs_member}"><span class="ui-label">아이디</span><span>{$sessionData.ljs_memberid}</span><input type="hidden" name="memberid" value="{$sessionData.ljs_memberid}">
+								</li>
+								<li>
+									<span class="ui-label"><label for="pass">비밀번호</label></span><input type="password" id="pass" name="pass" maxlength="20">
+								</li>
 							</ul>							
 						</div>
 						<div class="panel-btn">
@@ -57,7 +60,7 @@
 		</div>		
 	</div>
 	<div class="footer">
-		Copyright @ STREAMUX Corp
+		{include file="$copyrightPath"}
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
@@ -65,5 +68,4 @@
 <script type="x-jquery-templete" id="ljsMember_tmpl">
 	<option>{literal}${label}{/literal}</option>
 </script>
-
-{include file="$footerPath"}
+{include file="$skinDir/_footer.tpl"}

@@ -1,51 +1,31 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>SUX Board | 아이디 찾기 결과</title>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
-	<script src="../../common/js/jquery.min.js"></script>
-	<script src="../../common/js/jquery.tmpl.min.js"></script>
-	<script src="../../common/js/jsux-1.0.0.min.js"></script>
-	<script src="../../common/js/jsux.min.js"></script>
-	<!--[if (gte IE 6)&(lte IE 8)]>
-	  <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
-	<![endif]-->
-	<link rel="stylesheet" type="text/css" href="tpl/css/common.css">
-	<link rel="stylesheet" type="text/css" href="tpl/css/login.search.css">
-</head>
-<body>
-<div id="wrap">
+{include file="$skinDir/_header.tpl" title="아이디 찾기 결과 - StreamUX"}
+<div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>
-		</div>	
+		<h1 class="logo">
+			<img src="tpl/images/logo.png" alt="streamxux">
+		</h1>
 	</div>
 	<div class="container">		
-		<div class="article-box ui-edgebox">			
-			<h2 class="blind">아이디 찾기 결과</h2>		
+		<div class="article-box ui-edgebox">
 			<div class="login">
-				<span class="title">아이디 찾기 결과</span>
+				<h1 class="title">아이디 찾기 결과</h1>
 				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="login.php?action=searchid" name="musimsm" method="post" onSubmit="return jsux.fn.checkForm(this);">
 				<div class="box ui-edgebox-2px">
-					<div class="login-title">
+					<div class="leave-header">
 						<img src="tpl/images/icon_01.gif" title="">						
 						<span class="ui-subtitle">조회 결과</span>
 						<span class="link-searchinfo">
 							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
 						</span>
 					</div>
-					<div class="login-body">
+					<div class="leave-body">
 						<div class="panel-info-result">
 							<ul>
 								<li>
-									<p>{$check_name}님의 아이디</p>
-									<p><span>' {$memberid} '</span></p>
+									<p>{$documentData.user_name}님의 아이디</p>
+									<p><span>' {$documentData.user_id} '</span></p>
 								</li>
 							</ul>				
 						</div>
@@ -56,7 +36,6 @@
 						</div>
 					</div>																	
 				</div>
-				</form>
 				<div class="panel-notice">
 					<ul>
 						<li><span>비밀번호를 잊어버렸을 경우 비밀번호 찾기를 이용해 주시기 바랍니다.</span></li>
@@ -67,10 +46,8 @@
 		</div>		
 	</div>
 	<div class="footer">
-		@StreamUX Corp
+		{include file="$copyrightPath"}
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-<script type="text/javascript" src="tpl/js/login.search_result.js"></script>
-</body>
-</html>
+{include file="$skinDir/_footer.tpl"}

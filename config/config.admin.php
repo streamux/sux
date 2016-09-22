@@ -1,6 +1,6 @@
 <?
 $admin_id = 'admin';
 $admin_pwd = '1234';
-$admin_email = '';
+$admin_email = 'streammx@naver.com';
 $yourhome = 'http://';
 ?>

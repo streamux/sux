@@ -5,6 +5,7 @@ class BaseView extends Object {
 	var $class_name = 'base_view';
 	var $model = NULL;
 	var $controller = NULL;
+	var $copyright_path = '';
 
 	function __construct($m=NULL, $c=NULL) {
 		
@@ -16,10 +17,11 @@ class BaseView extends Object {
 
 		$oDB = DB::getInstance();
 
-		$methodName = $className;
+		$methodName = $className;		
 
-		if (preg_match('/(log|fail|leave|searchid|searchpwd)/i', $className)) {
+		if (preg_match('/(log|fail|leave|searchid|searchpwd|join|modify|grouplist|memberfield|[record])/i', $className)) {
 			$methodName = 'display' . ucfirst($methodName);
+			$this->init();
 			$this->{$methodName}();
 		} else {
 			if (strlen(stristr($className, '_')) > 0) {
@@ -39,6 +41,11 @@ class BaseView extends Object {
 		}
 
 		$oDB->close();	
+	}
+
+	function init() {
+
+		$this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
 	}
 
 	function output() {

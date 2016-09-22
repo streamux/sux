@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-21 12:30:00
+/* Smarty version 3.1.30, created on 2016-09-22 08:04:33
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/login.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e261281bb289_58429168',
+  'unifunc' => 'content_57e37471b49538_65011975',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5f921738ee80abe523db0154536e252fb0c13573' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/login.tpl',
-      1 => 1474453680,
+      1 => 1474523826,
       2 => 'file',
     ),
   ),
@@ -20,25 +20,26 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e261281bb289_58429168 (Smarty_Internal_Template $_smarty_tpl) {
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+function content_57e37471b49538_65011975 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원 로그인 - StreamUX"), 0, true);
 ?>
 
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<h1 class="logo"><img src="tpl/images/logo.png" alt="streamxux"></h1>
+		<h1 class="logo">
+			<img src="tpl/images/logo.png" alt="streamxux">
+		</h1>
 	</div>
 	<div class="container">		
-		<div class="article-box ui-edgebox">			
-			<h2 class="blind">회원 로그인</h2>		
+		<div class="article-box ui-edgebox">				
 			<div class="login">
-				<span class="title">회원 로그인</span>
+				<h1 class="title">회원 로그인</h1>
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="login.php?action=logpass" name="musimsm" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
+				<form action="login.php?action=logpass" name="f_login" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
 				<div class="box ui-edgebox-2px">
-					<div class="login-title">
+					<div class="login-header">
 						<img src="tpl/images/icon_01.gif" title="">						
 						<span>회원그룹</span>
 						<select name="member" id="ljsMember">
@@ -82,7 +83,9 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 		</div>		
 	</div>
 	<div class="footer">
-		Copyright @ STREAMUX Corp
+		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+?>
+
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
@@ -99,6 +102,8 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	<option>${name}</option>
 <?php echo '</script'; ?>
 >
-<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['footerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
-}
+<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+?>
+
+<?php }
 }

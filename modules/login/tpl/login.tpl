@@ -1,19 +1,20 @@
-{include file="$headerPath"}
+{include file="$skinDir/_header.tpl" title="회원 로그인 - StreamUX"}
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<h1 class="logo"><img src="tpl/images/logo.png" alt="streamxux"></h1>
+		<h1 class="logo">
+			<img src="tpl/images/logo.png" alt="streamxux">
+		</h1>
 	</div>
 	<div class="container">		
-		<div class="article-box ui-edgebox">			
-			<h2 class="blind">회원 로그인</h2>		
+		<div class="article-box ui-edgebox">				
 			<div class="login">
-				<span class="title">회원 로그인</span>
+				<h1 class="title">회원 로그인</h1>
 				<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="login.php?action=logpass" name="musimsm" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
+				<form action="login.php?action=logpass" name="f_login" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
 				<div class="box ui-edgebox-2px">
-					<div class="login-title">
+					<div class="login-header">
 						<img src="tpl/images/icon_01.gif" title="">						
 						<span>회원그룹</span>
 						<select name="member" id="ljsMember">
@@ -57,7 +58,7 @@
 		</div>		
 	</div>
 	<div class="footer">
-		Copyright @ STREAMUX Corp
+		{include file="$copyrightPath"}
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
@@ -69,4 +70,4 @@
 <script type="x-jquery-templete" id="ljsMember_tmpl">
 	<option>{literal}${name}{/literal}</option>
 </script>
-{include file="$footerPath"}
+{include file="$skinDir/_footer.tpl"}
