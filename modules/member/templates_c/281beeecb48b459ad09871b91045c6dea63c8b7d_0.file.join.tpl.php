@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 11:51:09
+/* Smarty version 3.1.30, created on 2016-09-22 12:06:30
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/join.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e3a98d842f84_20952242',
+  'unifunc' => 'content_57e3ad26130671_29945338',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '281beeecb48b459ad09871b91045c6dea63c8b7d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/join.tpl',
-      1 => 1474537643,
+      1 => 1474538781,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,8 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e3a98d842f84_20952242 (Smarty_Internal_Template $_smarty_tpl) {
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원가입"), 0, true);
+function content_57e3ad26130671_29945338 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원가입 - StreamUX"), 0, true);
 ?>
 
 <div class="container">	

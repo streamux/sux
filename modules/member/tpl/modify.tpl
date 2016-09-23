@@ -1,4 +1,4 @@
-{include file="$skinDir/_header.tpl" title="회원정보수정"}
+{include file="$skinDir/_header.tpl" title="회원정보수정 - StreamUX"}
 <div class="container">	
 		<div class="articles ui-edgebox">
 			<div class="member-edit">

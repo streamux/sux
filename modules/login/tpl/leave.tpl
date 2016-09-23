@@ -1,4 +1,4 @@
-{include file="$skinDir/_header.tpl" title="회원탈퇴 확인 - StreamUX"}
+{include file="$skinDir/_header.tpl" title="회원탈퇴 - StreamUX"}
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>

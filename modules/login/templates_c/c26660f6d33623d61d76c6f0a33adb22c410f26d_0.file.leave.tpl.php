@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 11:14:29
+/* Smarty version 3.1.30, created on 2016-09-22 12:07:00
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/leave.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e3a0f5d94d47_96815306',
+  'unifunc' => 'content_57e3ad4436b915_36568124',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c26660f6d33623d61d76c6f0a33adb22c410f26d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/leave.tpl',
-      1 => 1474523820,
+      1 => 1474538818,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,8 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e3a0f5d94d47_96815306 (Smarty_Internal_Template $_smarty_tpl) {
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원탈퇴 확인 - StreamUX"), 0, true);
+function content_57e3ad4436b915_36568124 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원탈퇴 - StreamUX"), 0, true);
 ?>
 
 <div class="wrapper">

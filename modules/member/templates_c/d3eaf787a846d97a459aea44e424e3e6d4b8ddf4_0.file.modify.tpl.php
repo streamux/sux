@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 11:52:11
+/* Smarty version 3.1.30, created on 2016-09-22 12:06:37
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e3a9cb81d723_77893980',
+  'unifunc' => 'content_57e3ad2dca0e48_84681324',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd3eaf787a846d97a459aea44e424e3e6d4b8ddf4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl',
-      1 => 1474535854,
+      1 => 1474538784,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,8 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e3a9cb81d723_77893980 (Smarty_Internal_Template $_smarty_tpl) {
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보수정"), 0, true);
+function content_57e3ad2dca0e48_84681324 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보수정 - StreamUX"), 0, true);
 ?>
 
 <div class="container">	
