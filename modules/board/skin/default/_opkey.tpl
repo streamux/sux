@@ -1,5 +1,5 @@
 
-	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&action=opkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.boardRead.checkOpkeyForm(this);">
+	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&action=recordOpkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.read.checkOpkeyForm(this);">
 	<table summary="관리자 설정옵션입니다.">
 		<tbody>
 			<tr>

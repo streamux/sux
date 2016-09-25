@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-25 05:04:23
-  from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/delpass.tpl" */
+/* Smarty version 3.1.30, created on 2016-09-25 08:40:42
+  from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e73eb7c01f69_07738455',
+  'unifunc' => 'content_57e7716ad169c7_43276157',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    'b3b66fd700849224b46ba0d9143da310c4284f82' => 
+    '92fb6c0f9f35fdd8d9440cfa6ca89cc6ab3959ad' => 
     array (
-      0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/delpass.tpl',
-      1 => 1474772662,
+      0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl',
+      1 => 1474785262,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e73eb7c01f69_07738455 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e7716ad169c7_43276157 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
@@ -31,13 +31,13 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 <div class="container">		
 	<div class="article-box ui-edgebox">	
 		<div class="login">
-			<h2 class="title">게시물 비밀번호 인증</h2>
+			<h1 class="title">게시물 삭제 비밀번호 인증</h1>
 			<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
 			<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
-&action=record_delete" method="post" name="f_board_delpass" onSubmit="return jsux.fn.deletepass.checkDocumentForm(this);">
+&action=recordDelete" method="post" name="f_board_delpass" onSubmit="return jsux.fn.delete.checkDocumentForm(this);">
 			<div class="box ui-edgebox-2px">
 				<div class="login-title">
 					<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>

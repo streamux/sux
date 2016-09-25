@@ -1,21 +1,17 @@
-<div class="wrap">
+{include file="$skinDir/_header.tpl" title="SUX 설치 : 관리자 기본정보 설정 - StreamUX"}
+<div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
-			</div>
-		</div>	
+		<h1 class="logo">
+			<img class="logo" src="tpl/images/logo.png" alt="streamxux">	
+		</h1>
 	</div>
 	<div class="container">
 		<form>
 		<div class="article-box ui-edgebox">			
 			<table summary="관리자 정보를 입력해주세요.">
 				<caption>
-					<span class="hide">관리자계정 설정</span>
+					<span class="hide">관리자 기본정보 설정입니다.</span>
 				</caption>
 				<colgroup>
 					<col width="40%"></col>
@@ -24,7 +20,7 @@
 				<thead>
 					<tr>
 						<th colspan="2">
-							<span>관리자계정 설정</span>
+							<span>관리자 기본정보 설정</span>
 						</th>
 					</tr>
 				</thead>
@@ -52,7 +48,7 @@
 		</form>
 	</div>
 	<div class="footer">
-		
+		{include file="$copyrightPath"}
 	</div>
 </div>
-<script src="tpl/js/admin_setup.js"></script>
+{include file="$skinDir/_footer.tpl"}

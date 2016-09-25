@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-09 10:15:49
+/* Smarty version 3.1.30, created on 2016-09-25 08:44:41
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_tail.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57d26fb5cd8321_82168389',
+  'unifunc' => 'content_57e77259490503_39022340',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c3e50f7fe370c97fd981c08492204dcc5fc6082b' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_tail.tpl',
-      1 => 1473408836,
+      1 => 1474785879,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57d26fb5cd8321_82168389 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e77259490503_39022340 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	<div class="panel-write">
 		<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
@@ -29,7 +29,7 @@ function content_57d26fb5cd8321_82168389 (Smarty_Internal_Template $_smarty_tpl)
 &igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
 &sid=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['sid'];?>
-&action=record_writetailcomment" method="post" name="f_board_write_tail" onSubmit="return jsux.fn.boardRead.checkTailDocumentForm(this);">
+&action=recordWriteTail" method="post" name="f_board_write_tail" onSubmit="return jsux.fn.read.checkTailDocumentForm(this);">
 		<dl>
 			<dt>댓글 쓰기</dt>
 			<dd class="form-heading">
@@ -70,7 +70,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 &grgid=<?php echo $_smarty_tpl->tpl_vars['item']->value['id'];?>
 &igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
-&action=deletepassgrg">[삭제]</a>
+&action=deleteTail">[삭제]</a>
 			</dd>
 			<?php
 }

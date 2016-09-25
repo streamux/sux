@@ -1,9 +1,10 @@
 <script src="../../common/js/jquery.min.js"></script>
 <script src="../../common/js/jsux.min.js"></script>
-<script src="{$skinPathList.dir}/js/board.js"></script>
-{if $requestData.jscode != ''}
+<script src="tpl/js/install.js"></script>
+
+{if $requestData.action != ''}
 <script type="text/javascript">
-	jsux.fn['{$requestData.jscode}'].init();
+	jsux.fn['{$requestData.action}'].init();
 </script>
 {/if}
 </body>

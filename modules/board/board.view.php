@@ -1,41 +1,73 @@
 <?php
 
-class BoardView extends BaseView {
+class BoardModule extends BaseView {
 
-	var $class_name = 'board_view';
-	
-	// display function is defined in parent class 
+	var $class_name = 'board_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		$smarty = new Smarty;
+		if (is_readable($this->skin_path_list['contents'])) {
+			$smarty->assign('copyrightPath', $this->copyright_path);
+			$smarty->assign('skinPathList', $this->skin_path_list);
+			$smarty->assign('sessionData', $this->session_data);
+			$smarty->assign('requestData', $this->request_data);			
+			$smarty->assign('postData', $this->post_data);
+			$smarty->assign('documentData', $this->document_data);			
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+		
+		$smarty->display( $this->skin_path_list['contents'] );
+	}
 }
 
-class ListPanel extends BaseView {
+class BoardView extends BoardModule {
 
-	var $class_name = 'board_list';
+	var $class_name = 'board_view';
 
-	function init() {
+	function displayList() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();		
+		$requestData = $context->getRequestAll();
 
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'] = $board . '_grg';
-		$passover = $requests['passover'];
-		$page = $requests['page'];
-		$find = $requests['find'];
-		$search = $requests['search'];
-		$action = $requests['action'];
+		$requestData['board_grg'] = $requestData['board'] . '_grg';
+		$passover = $requestData['passover'];
+		$page = $requestData['page'];
+		$find = $requestData['find'];
+		$search = $requestData['search'];
+		$action = $requestData['action']; // useless
+		$requestData['jscode'] = $action;
 		
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
-		$limit = $groupData['listnum'];		
+		$footerPath = $groupData['include3'];
+		$limit = $groupData['listnum'];
 
 		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/list.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
-		$naviSkinPath = _SUX_PATH_ . "modules/board/${skinDir}/_navi.tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/{$skinDir}";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/list.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+		$this->skin_path_list['navi'] = "{$skinPath}/_navi.tpl";
 
 		$this->controller->delete('limitwordFromBoard');
 		
@@ -49,7 +81,7 @@ class ListPanel extends BaseView {
 		}
 
 		$context->set('limit', $limit);
-		$context->set('passover', $passover);		
+		$context->set('passover', $passover);
 
 		$methodString = (isset($search) && $search != '') ? 'fromBoardSearch' : 'fromBoard';
 		$result = $this->controller->select($methodString);		
@@ -63,22 +95,22 @@ class ListPanel extends BaseView {
 			if ($result) {
 
 				$numrows2 = $this->model->getNumRows();
-				$documentData = $this->model->getRows();					
+				$contentData['list'] = $this->model->getRows();					
 				$today = date("Y-m-d");
 
-				for ($i=0; $i<count($documentData); $i++) {
+				for ($i=0; $i<count($contentData['list']); $i++) {
 
-					$sid = $documentData[$i]['id'];
-					$name =htmlspecialchars($documentData[$i]['name']);					
-					$title =htmlspecialchars($documentData[$i]['title']);
-					$opkey =$documentData[$i]['opkey'];
-					$date =$documentData[$i]['date'];
-					$space =$documentData[$i]['space'];
-					$ssunseo =$documentData[$i]['ssunseo'];
-					$hit =$documentData[$i]['see'];
-					$filename =$documentData[$i]['filename'];
-					$filetype =$documentData[$i]['filetype'];					
-					$compareDay =split(' ', $documentData[$i]['date'])[0];
+					$sid = $contentData['list'][$i]['id'];
+					$name =htmlspecialchars($contentData['list'][$i]['name']);					
+					$title =htmlspecialchars($contentData['list'][$i]['title']);
+					$opkey =$contentData['list'][$i]['opkey'];
+					$date =$contentData['list'][$i]['date'];
+					$space =$contentData['list'][$i]['space'];
+					$ssunseo =$contentData['list'][$i]['ssunseo'];
+					$hit =$contentData['list'][$i]['see'];
+					$filename =$contentData['list'][$i]['filename'];
+					$filetype =$contentData['list'][$i]['filetype'];					
+					$compareDay =split(' ', $contentData['list'][$i]['date'])[0];
 					
 					if (isset($search) && $search != '') {	
 
@@ -96,10 +128,10 @@ class ListPanel extends BaseView {
 					}
 
 					$subject = array();
-					$subject['id'] = $documentData[$i]['id'];
-					$subject['igroup'] = $documentData[$i]['igroup'];
-					$subject['ssunseo'] = $documentData[$i]['ssunseo'];
-					$subject['sid'] = $documentData[$i]['id'];
+					$subject['id'] = $contentData['list'][$i]['id'];
+					$subject['igroup'] = $contentData['list'][$i]['igroup'];
+					$subject['ssunseo'] = $contentData['list'][$i]['ssunseo'];
+					$subject['sid'] = $contentData['list'][$i]['id'];
 					$subject['title'] = $title;					
 					$subject['img_name'] = '';
 					$subject['opkey_name'] = '';
@@ -123,11 +155,11 @@ class ListPanel extends BaseView {
 					}
 
 					// 공지글 설정은 개발 예정 
-					/*if (isset($isNotice) && $isNotice != '') {
-						$subject['space'] = '10px';
-						$subject['icon_box'] = '공지';
-						$subject['icon_box_color'] = 'icon-notice-color';
-					}*/
+					// if (isset($isNotice) && $isNotice != '') {
+					// 	$subject['space'] = '10px';
+					// 	$subject['icon_box'] = '공지';
+					// 	$subject['icon_box_color'] = 'icon-notice-color';
+					// }
 
 					$imgname = "";
 					if ($filename){
@@ -158,10 +190,10 @@ class ListPanel extends BaseView {
 					$subject['icon_opkey'] = $opkey;
 					$subject['icon_opkey_color'] = 'icon-opkey-color';
 
-					$documentData[$i]['name'] = $name;
-					$documentData[$i]['hit'] = $hit;
-					$documentData[$i]['date'] = split(' ', $date)[0];
-					$documentData[$i]['subject'] = $subject;
+					$contentData['list'][$i]['name'] = $name;
+					$contentData['list'][$i]['hit'] = $hit;
+					$contentData['list'][$i]['date'] = split(' ', $date)[0];
+					$contentData['list'][$i]['subject'] = $subject;
 
 					$subject = null;
 				}
@@ -178,60 +210,32 @@ class ListPanel extends BaseView {
 		$navi->limit = $limit;
 		$navi->total = $numrows;
 		$navi->init();
-
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
 		
-		if (is_readable($skinPath)) {			
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('naviSkinPath', $naviSkinPath);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);
-			$smarty->assign('documentData', $documentData);			
-			$smarty->assign('naviData', $navi->get());
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
-	}
-}
+		$this->request_data = $requestData;
+		$this->document_data['pagination'] = $navi->get();
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
 
-class SearchlistPanel extends ListPanel {
+		$this->output();
+	} 
 
-	var $class_name = 'search_list';	
-}
-
-class ReadPanel extends BaseView {
-
-	var $class_name = 'board_read';
-
-	function init() {
+	function displayRead() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
+
 		$PHP_SELF = $context->getServer("PHP_SELF");
 
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$action = $requests['action'];
-		$sid = $requests['sid'];		
-		$grade = $sessions['grade'];
-		$ljs_name = $sessions['ljs_name'];
-		$ljs_pass1 = $sessions['ljs_pass1'];
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];		
+		$sid = $requestData['sid'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];
 
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();
@@ -241,17 +245,28 @@ class ReadPanel extends BaseView {
 		$download = strtolower($groupData['download']);
 		$tail = $groupData['tail'];
 		$setup = $groupData['setup'];
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
+		$footerPath = $groupData['include3'];
 		$commentType = $groupData['type'];
 
 		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/read.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
-		$tailSkinPath = _SUX_PATH_ . "modules/board/${skinDir}/_tail.tpl";
-		$opkeySkinPath = _SUX_PATH_ . "modules/board/${skinDir}/_opkey.tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/read.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+		$this->skin_path_list['tail'] =  "{$skinPath}/_tail.tpl";
+		$this->skin_path_list['opkey'] =  "{$skinPath}/_opkey.tpl";
 		
 		if (isset($grade) && $grade != '') {
 			$level = $grade;
@@ -264,7 +279,7 @@ class ReadPanel extends BaseView {
 			exit;
 		}
 
-		// 비회원 권한 
+		// nonmember's authority
 		if ($log_key != 'yes') {
 			if (!isset($ljs_name) && $ljs_name == '') {
 
@@ -288,35 +303,35 @@ class ReadPanel extends BaseView {
 		$this->controller->update('boardSetSee', $hit);
 
 		$this->controller->select('fieldFromBoardWhereId', '*');
-		$documentData = $this->model->getRow();		
-		$documentData['name'] = htmlspecialchars($documentData['name']);
-		$documentData['title'] = htmlspecialchars($documentData['title']);
-		$documentData['hit'] = $documentData['see'];
+		$contentData = $this->model->getRow();		
+		$contentData['name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = htmlspecialchars($contentData['title']);
+		$contentData['hit'] = $contentData['see'];
 
-		$type = trim($documentData['type']);
-		$filename = $documentData['filename'];
-		$filetype = $documentData['filetype'];
+		$type = trim($contentData['type']);
+		$filename = $contentData['filename'];
+		$filetype = $contentData['filetype'];
 
 		switch ($commentType) {
 			case 'all':
 				if ($type =='html'){
-					$documentData['comment'] = htmlspecialchars_decode($documentData['comment']);
+					$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
 				}else if ($type == 'text'){
-					$documentData['comment'] = nl2br(htmlspecialchars($documentData['comment']));
+					$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
 				}
 				break;
 			case 'text':
-				$documentData['comment'] = nl2br(htmlspecialchars($documentData['comment']));
+				$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
 				break;
 			case 'html':
-				$documentData['comment'] = htmlspecialchars_decode($documentData['comment']);
+				$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
 				break;			
 			default:
 				break;
 		}
 
-		$documentData['css_down'] = 'hide';
-		$documentData['css_img'] = 'hide';
+		$contentData['css_down'] = 'hide';
+		$contentData['css_img'] = 'hide';
 
 		$fileupPath = '';
 		if ($filename) {
@@ -324,7 +339,7 @@ class ReadPanel extends BaseView {
 			$fileupPath = "../../board_data/${board}/${filename}";
 			if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
 
-				$documentData['css_down'] = 'show';
+				$contentData['css_down'] = 'show';
 			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
 
 				$image_info = getimagesize($fileupPath);
@@ -337,79 +352,54 @@ class ReadPanel extends BaseView {
 			      } elseif( $image_type == IMAGETYPE_PNG ) {
 			     		$image = imagecreatefrompng($fileupPath);
 				}
-				$documentData['css_img'] = 'show';
-				$documentData['css_img_width'] = imagesx($image) . 'px';
+				$contentData['css_img'] = 'show';
+				$contentData['css_img_width'] = imagesx($image) . 'px';
 			}
-			$documentData['fileup_name'] = $filename;
-			$documentData['fileup_path'] = $fileupPath;
+			$contentData['fileup_name'] = $filename;
+			$contentData['fileup_path'] = $fileupPath;
 		}
 
 		// opkey
-		$documentData['css_opkey'] = 'hide';
+		$contentData['css_opkey'] = 'hide';
 		if ($setup == 'y' || $grade > 9) {
-			$documentData['css_opkey'] = 'show';
+			$contentData['css_opkey'] = 'show';
 		}
 
 		// taill
-		$documentData['css_tail'] = 'hide';
+		$contentData['css_tail'] = 'hide';
 		$tailData = array();		
 		if ($tail == 'y') {
-			$documentData['css_tail'] = 'show';
+			$contentData['css_tail'] = 'show';
 
 			$this->controller->select('fromTailCommentWhere', $sid);
 			$tailData['num'] = $this->model->getNumRows();
 			$tailData['list'] = $this->model->getRows();
 		}
 		
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {					
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('opkeySkinPath', $opkeySkinPath);
-			$smarty->assign('tailSkinPath', $tailSkinPath);			
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);		
-			$smarty->assign('documentData', $documentData);
-			$smarty->assign('tailData', $tailData);			
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+		$this->document_data['tails'] = $tailData;
 
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
+		$this->output();		
 	}
-}
 
-class WritePanel extends BaseView {
-
-	var $class_name = 'board_write';
-
-	function init() {
+	function displayWrite() {
 
 		$context = Context::getInstance();	
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
-		$admin_pass = $context->checkAdminPass();
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
 
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$action = $requests['action'];
-		$grade = $sessions['grade'];
-		$ljs_name = $sessions['ljs_name'];
-		$ljs_pass1 = $sessions['ljs_pass1'];
+		$admin_pass = $context->checkAdminPass();
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+
+
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];
 		$PHP_SELF = $context->getServer("PHP_SELF");		
 
 		$this->controller->select('fromBoardGroup');
@@ -417,29 +407,40 @@ class WritePanel extends BaseView {
 		$log_key = $groupData['log_key'];
 		$r_grade = $groupData["r_grade"];
 		$r_admin = $groupData["r_admin"];
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
+		$footerPath = $groupData['include3'];
 
 		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/write.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		$this->controller->select('fieldFromBoardLimit', 'wall');
-		$documentData = $this->model->getRow();
-		$wall = $documentData['wall'];		
-
-		if ($wall == 'a' || !isset($wall)) {
-			$documentData['wallname'] = "나라사랑";
-			$documentData['wallkey'] = "b";
-		} else if ($wall == 'b') {
-			$documentData['wallname'] = "조국사랑";
-			$documentData['wallkey'] = "a";
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
 		}
 
-		$documentData['comment_type_text'] = 'checked';
-		$documentData['comment_type_html'] = '';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/write.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardLimit', 'wall');
+		$contentData = $this->model->getRow();
+		$wall = $contentData['wall'];		
+
+		if ($wall == 'a' || !isset($wall)) {
+			$contentData['wallname'] = "나라사랑";
+			$contentData['wallkey'] = "b";
+		} else if ($wall == 'b') {
+			$contentData['wallname'] = "조국사랑";
+			$contentData['wallkey'] = "a";
+		}
+
+		$contentData['comment_type_text'] = 'checked';
+		$contentData['comment_type_html'] = '';
 		
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -468,92 +469,75 @@ class WritePanel extends BaseView {
 		}
 
 		if (isset($ljs_name) && $ljs_name != '') {
-			$documentData['css_user_label'] = 'hide';
-			$documentData['user_name_type'] = 'hidden';
-			$documentData['user_pass_type'] = 'hidden';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = $ljs_pass1;
+			$contentData['css_user_label'] = 'hide';
+			$contentData['user_name_type'] = 'hidden';
+			$contentData['user_pass_type'] = 'hidden';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = $ljs_pass1;
 		} else {
-			$documentData['css_user_label'] = 'show';			
-			$documentData['user_name_type'] = 'text';
-			$documentData['user_pass_type'] = 'password';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = '';
+			$contentData['css_user_label'] = 'show';			
+			$contentData['user_name_type'] = 'text';
+			$contentData['user_pass_type'] = 'password';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = '';
 		}
 
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {				
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);	
-			$smarty->assign('documentData', $documentData);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
 	}
-}
 
-class ModifyPanel extends BaseView {
+	function displayModify() {
 
-	var $class_name = 'board_modify';
-
-	function init() {
-		
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
 		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];		
-		$grade = $sessions['grade'];		
-		$ljs_name = $sessions['ljs_name'];
-		$ljs_pass1 = $sessions['ljs_pass1'];		
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];		
+		$grade = $sessionData['grade'];		
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];		
 
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();
 		$r_grade = $groupData['r_grade'];
 		$r_admin = $groupData['r_admin'];
 		$log_key = $groupData['log_key'];
-		$topPath =  $groupData['include1'];
+		$headerPath =  $groupData['include1'];
 		$skinName =  $groupData['include2'];
-		$bottomPath =  $groupData['include3'];
+		$footerPath =  $groupData['include3'];
 
 		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/modify.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/modify.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->controller->select('fieldFromBoardWhereId', '*');
-		$documentData = $this->model->getRow();		
-		$documentData['comment'] = htmlspecialchars($documentData['comment']);
-		$documentData['name'] = htmlspecialchars($documentData['name']);
-		$documentData['title'] = nl2br($documentData['title']);
-		$commentType = $documentData['type'];
-		unset($documentData['pass']);
-
-		if (isset($commentType) && $commentType != '') {
-			$documentData['comment_type_' . $commentType] = 'checked';
-		} else {
-			$documentData['comment_type_text'] = 'checked';
-		}
+		$contentData = $this->model->getRow();		
+		$contentData['comment'] = htmlspecialchars($contentData['comment']);
+		$contentData['user_name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = nl2br($contentData['title']);
+		$commentType = $contentData['type'];
+		unset($contentData['pass']);
 
 		if (isset($grade) && $grade != '') {
 			$level = $grade;
@@ -582,66 +566,36 @@ class ModifyPanel extends BaseView {
 			}
 		}
 
-		if (isset($ljs_name) && $ljs_name != '') {
-			$documentData['css_user_label'] = 'hide';
-			$documentData['user_name_type'] = 'hidden';
-			$documentData['user_pass_type'] = 'hidden';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = $ljs_pass1;
+		if (isset($ljs_name) && $ljs_name != '' && $ljs_name == $contentData['name']) {
+			$contentData['user_name'] = $ljs_name;
 		} else {
-			$documentData['css_user_label'] = 'show';			
-			$documentData['user_name_type'] = 'text';
-			$documentData['user_pass_type'] = 'password';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = '';
+			$contentData['user_name'] = $contentData['name'];
 		}
 
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {	
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);
-			$smarty->assign('documentData', $documentData);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
 	}
-}
 
-class ReplyPanel extends BaseView {
-
-	var $class_name = 'board_reply';
-
-	function init() {
+	function displayReply() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
 		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$action = $requests['action'];
-		$grade = $sessions['grade'];
-		$ljs_name = $sessions['ljs_name'];
-		$ljs_pass1 = $sessions['ljs_pass1'];		
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$action = $requestData['action'];
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];		
 
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();		
@@ -649,44 +603,55 @@ class ReplyPanel extends BaseView {
 		$log_key = $groupData['log_key'];
 		$r_grade = $groupData["r_grade"];
 		$r_admin = $groupData["r_admin"];
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
+		$footerPath = $groupData['include3'];
 
 		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/reply.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/reply.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->controller->select('fieldFromBoardWhereId', '*');
-		$documentData = $this->model->getRow();
-		$type = trim($documentData['type']);
-		$filename = $documentData['filename'];
-		$filetype = $documentData['filetype'];
-		$download = $documentData['download'];
-		$documentData['name'] = htmlspecialchars($documentData['name']);
-		$documentData['title'] = htmlspecialchars($documentData['title']);
+		$contentData = $this->model->getRow();
+		$type = trim($contentData['type']);
+		$filename = $contentData['filename'];
+		$filetype = $contentData['filetype'];
+		$download = $contentData['download'];
+		$contentData['name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = htmlspecialchars($contentData['title']);
 
 		switch ($commentType) {
 			case 'all':
 				if ($type =='html'){
-					$documentData['comment'] = htmlspecialchars_decode($documentData['comment']);
+					$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
 				}else if ($type == 'text'){
-					$documentData['comment'] = nl2br(htmlspecialchars($documentData['comment']));
+					$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
 				}
 				break;
 			case 'text':
-				$documentData['comment'] = nl2br(htmlspecialchars($documentData['comment']));
+				$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
 				break;
 			case 'html':
-				$documentData['comment'] = htmlspecialchars_decode($documentData['comment']);
+				$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
 				break;			
 			default:
 				break;
 		}
 		
-		$documentData['css_down'] = 'hide';
-		$documentData['css_img'] = 'hide';
+		$contentData['css_down'] = 'hide';
+		$contentData['css_img'] = 'hide';
 
 		$fileupPath = '';
 		if ($filename) {
@@ -694,7 +659,7 @@ class ReplyPanel extends BaseView {
 			$fileupPath = "../../board_data/${board}/${filename}";
 			if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
 
-				$documentData['css_down'] = 'show';
+				$contentData['css_down'] = 'show';
 			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
 
 				$image_info = getimagesize($fileupPath);
@@ -707,11 +672,11 @@ class ReplyPanel extends BaseView {
 			      } elseif( $image_type == IMAGETYPE_PNG ) {
 			     		$image = imagecreatefrompng($fileupPath);
 				}
-				$documentData['css_img'] = 'show';
-				$documentData['img_width'] = imagesx($image) . 'px';
+				$contentData['css_img'] = 'show';
+				$contentData['img_width'] = imagesx($image) . 'px';
 			}
-			$documentData['fileup_name'] = $filename;
-			$documentData['fileup_path'] = $fileupPath;
+			$contentData['fileup_name'] = $filename;
+			$contentData['fileup_path'] = $fileupPath;
 		}
 
 		$this->controller->select('fieldFromBoardLimit','wall');
@@ -719,15 +684,15 @@ class ReplyPanel extends BaseView {
 		$wall = $row['wall'];
 
 		if ($wall == 'a' || !isset($wall)) {
-			$documentData['wallname'] = "나라사랑";
-			$documentData['wallkey'] = "b";
+			$contentData['wallname'] = "나라사랑";
+			$contentData['wallkey'] = "b";
 		} else if ($wall == 'b') {
-			$documentData['wallname'] = "조국사랑";
-			$documentData['wallkey'] = "a";
+			$contentData['wallname'] = "조국사랑";
+			$contentData['wallkey'] = "a";
 		}
 
-		$documentData['comment_type_text'] = 'checked';
-		$documentData['comment_type_html'] = '';
+		$contentData['comment_type_text'] = 'checked';
+		$contentData['comment_type_html'] = '';
 		
 		if (isset($grade) && $grade) {
 			$level = $grade;
@@ -751,370 +716,159 @@ class ReplyPanel extends BaseView {
 			} 
 		}
 
-		if (isset($ljs_name) && $ljs_name != '') {
-			$documentData['css_user_label'] = 'hide';
-			$documentData['user_name_type'] = 'hidden';
-			$documentData['user_pass_type'] = 'hidden';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = $ljs_pass1;
-		} else {
-			$documentData['css_user_label'] = 'show';			
-			$documentData['user_name_type'] = 'text';
-			$documentData['user_pass_type'] = 'password';
-			$documentData['user_name'] = $ljs_name;
-			$documentData['user_password'] = '';
-		}
-
 		if ($r_admin == 'n') {
 			if ($admin_pass === FALSE) {
 				Error::alertTo('죄송합니다. 답변 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
+		if (isset($ljs_name) && $ljs_name != '') {
+			$contentData['css_user_label'] = 'hide';
+			$contentData['user_name_type'] = 'hidden';
+			$contentData['user_pass_type'] = 'hidden';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = $ljs_pass1;
 		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {				
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);	
-			$smarty->assign('documentData', $documentData);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
+			$contentData['css_user_label'] = 'show';			
+			$contentData['user_name_type'] = 'text';
+			$contentData['user_pass_type'] = 'password';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = '';
+		}	
+
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
 	}
-}
 
-class DeletepassPanel extends BaseView {
-
-	var $class_name = 'delpass';
-
-	function init() {
+	function displayDelete() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
 		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$id = $requests['id'];
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$id = $requestData['id'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
 
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
+		$footerPath = $groupData['include3'];
 
-		$skinDir = "skin/$skinName";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/delpass.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/delete.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->controller->select('fieldFromBoardWhereId', 'name');
-		$document_data = $this->model->getRow();
+		$contentData = $this->model->getRow();
 
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);
-			$smarty->assign('documentData', $document_data);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
-	}
-}
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
 
-class DeletepassgrgPanel extends BaseView {
-
-	var $class_name = 'delpassgrg';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$sessions = $context->getSessionAll();
-		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-
-		$this->controller->select('fromBoardGroup');
-		$groupData = $this->model->getRow();
-		$topPath = $groupData['include1'];
-		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
-
-		$skinDir = "skin/$skinName";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}/delpass_grg.tpl";
-		$defaultHeaderPath = _SUX_PATH_ . "modules/board/${skinDir}/_header.tpl";
-		$defaultFooterPath = _SUX_PATH_ . "modules/board/${skinDir}/_footer.tpl";
-
-		$this->controller->select('fieldFromBoardWhereId', 'name');
-		$document_data = $this->model->getRow();
-
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);
-			$smarty->assign('documentData', $document_data);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
-	}
-}
-
-/*
-class DownPanel extends BaseView {
-
-	var $class_name = 'down';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$fileupname = $context->getRequest('fileupname');
-		$fileupname = iconv("UTF-8","EUC-KR",$fileupname) ? iconv("UTF-8","EUC-KR",$fileupname) : $fileupname;
-		$filesize = $context->getRequest('filesize');
-		$filetype = $context->getRequest('filetype');
-		$filesdir = _SUX_PATH_ . 'board_data/' . $board . '/';
-		$filespath = $filesdir . $fileupname;
-		$filespath = preg_replace('/ /i', '', $filespath);
-		$filespath = urldecode($filespath);
-
-		//echo $filetype. '<br>' . $filespath . '<br>' . $filesize . '<br>';		
-		$this->download_file($fileupname, $filesdir, $filetype);
+		$this->output();
 	}
 
-	function download_file($file_name, $file_dir, $file_type ) { 
-
-		if (!$file_name || !$file_dir) return 1; 
-		if (preg_match( "\\\\|\.\.|/", $file_name)) return 2; 
-
-		if (file_exists($file_dir.$file_name)) { 
-
-			$fp = fopen($file_dir.$file_name,"r"); 
-			if ($file_type) { 
-				//echo $file_type;
-				header("Content-type: $file_type"); 
-				Header("Content-Length: ".filesize($file_dir.$file_name));    
-				Header("Content-Disposition: attachment; filename=" . $file_name);  
-				Header("Content-Transfer-Encoding: binary"); 
-				header("Expires: 0"); 
-			} else { 
-
-				if(eregi("(MSIE 5.0|MSIE 5.1|MSIE 5.5|MSIE 6.0)", $HTTP_USER_AGENT)) { 
-					//echo 'octet-stream';
-					Header("Content-type: application/octet-stream"); 
-					Header("Content-Length: ".filesize($file_dir.$file_name));    
-					Header("Content-Disposition: attachment; filename=" . $file_name);  
-					Header("Content-Transfer-Encoding: binary");  
-					Header("Expires: 0");  
-				} else {
-					//echo 'unknown';
-					Header("Content-type: file/unknown");    
-					Header("Content-Length: ".filesize($file_dir.$file_name)); 
-					Header("Content-Disposition: attachment; filename=". $file_name); 
-					Header("Content-Description: PHP3 Generated Data"); 
-					Header("Expires: 0"); 
-				}
-			}
-			fpassthru($fp); 
-			fclose($fp); 
-		}  else {
-			return 1; 
-		}
-	} 
-}
-*/
-
-class OpkeyPanel extends BaseView {
-
-	var $class_name = 'opkey';
-
-	function init() {
+	function displayDeleteTail() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requestData = $context->getRequestAll();
 		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-
-		$result = $this->controller->update('recordOpkey');
-		if (!isset($result)) {
-			Error::alertToBack('진행상황 설정을 실패하였습니다.');
-		}
-
-		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
-	}
-}
-
-class DeletecommentPanel extends BaseView {
-
-	var $class_name = 'delete_comment';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-						
-		$board = $requests['board'];
+		$board = $requestData['board'];
 		$board_grg = $requests['board_grg'];
 		$id = $requests['id'];
 		$grgid = $requests['grgid'];
 		$igroup = $requests['igroup'];
 		$passover = $requests['passover'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = 'delete';
 
 		$this->controller->select('fromBoardGroup');
 		$groupData = $this->model->getRow();
-		$topPath = $groupData['include1'];
+		$headerPath = $groupData['include1'];
 		$skinName = $groupData['include2'];
-		$bottomPath = $groupData['include3'];
+		$footerPath = $groupData['include3'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/delete_tail.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->controller->select('fieldFromBoardWhereId', 'name');
-		$documentData = $this->model->getRow();
+		$contentData = $this->model->getRow();
 
-		$skinDir = 'skin/' . $skinName;
-		$skinPath = _SUX_PATH_ . 'modules/board/' . $skinDir . '/delpass_grg.tpl';
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
 
-		$smarty = new Smarty;
-		if (is_readable($topPath)) {
-			$smarty->display( $topPath );
-		} else {
-			$smarty->assign('skinDir', $skinDir);
-			$smarty->display( $defaultHeaderPath );
-			echo '<p>상단 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($skinPath)) {
-			//$smarty->assign('sessionData', $sessions);
-			$smarty->assign('requestData', $requests);
-			$smarty->assign('groupData', $groupData);
-			$smarty->assign('documentData', $documentData);
-			$smarty->display( $skinPath );
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		if (is_readable($bottomPath)) {
-			$smarty->display( $bottomPath );
-		} else {			
-			echo '<p>하단 파일경로를 확인하세요.</p>';
-			$smarty->display( $defaultFooterPath );
-		}
-	}
-}
-
-class RecordBasePanel extends BaseView {
-
-	var $class_name = 'record_base';
-	var $requests;
-	var $posts;
-	var $files;
-
-	function init() {
-
-		$context = Context::getInstance();
-		$this->requests = $context->getRequestAll();
-		$this->sessions = $context->getSessionAll();
-		$this->posts = $context->getPostAll();
-		$this->files = $context->getFiles();
-		$this->checkValidation($this->posts);
-		$this->checkFiles($this->files);
-		
-		$this->record();
+		$this->output();
 	}
 
-	function checkValidation($values) {
+	function _checkValidation( $value ) {
 
-		if (!$values['name']) {
+		if (!$value['name']) {
 			Error::alertToBack('이름을 입력해주세요.');
 			exit;
-		}
-
-		if (!$values['pass']) {
+		} else  if (!$value['pass']) {
 			Error::alertToBack('비밀번호를 입력해주세요.');
 			exit;
-		}
-
-		if (!$values['title']) {
+		} else  if (!$value['title']) {
 			Error::alertToBack('제목을 입력해주세요.');
 			exit;
-		}
-
-		if (!$values['comment']) {
+		} else  if (!$value['comment']) {
 			Error::alertToBack('내용을 입력해주세요.');
 			exit;
 		}
 	}
 
-	function checkFiles($values) {
+	function _checkFiles( $value ) {
 
-		$imageUpName = $values['imgup']['name'];
+		$imageUpName = $value['imgup']['name'];
 
 		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imageUpName)) {
 			Error::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
 			exit;
 		}
 	}
-}
 
-class RecordWritePanel extends RecordBasePanel {
-
-	var $class_name = 'insert_write';
-
-	function record() {
+	function recordWrite() {
 
 		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
 
 		$board = $requests['board'];
 		$board_grg = $requests['board_grg'];
@@ -1150,35 +904,31 @@ class RecordWritePanel extends RecordBasePanel {
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
 	}
-}
 
-class RecordModifyPanel extends RecordBasePanel {
-
-	var $class_name = 'record_modify';
-
-	function record() {
+	function recordModify() {
 
 		$context = Context::getInstance();
-		$requests = $this->requests;
-		$sesstions = $this->sessions;
-		$posts = $this->posts;
-		$files = $this->files;
+		$sesstions = $context->getSessionAll();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
 
 		$id = $requests['id'];
 		$board = $requests['board'];
 		$board_grg = $requests['board_grg'];
 		$pass = substr(md5(trim($posts['pass'])),0,8);
+
 		$admin_pwd = $context->get('db_admin_pwd');
 		$imageUpName = $files['imgup']['name'];
 		$imageUpTempName = $files['imgup']['tmp_name'];
 		$ljs_name = $sesstions['ljs_name'];
 
 		$this->controller->select('fieldFromBoardWhereId', 'pass, igroup, filename');	
-		$row = $this->model->getRow();
-		
-		if (!isset($ljs_name) && $ljs_name == '') { 
-			$pass = substr(md5($pass),0,8);
-		}
+		$row = $this->model->getRow();		
+		$pass = substr(md5($pass),0,8);
 
 		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 
@@ -1217,18 +967,16 @@ class RecordModifyPanel extends RecordBasePanel {
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$row[sid]&igroup=$row[igroup]&action=read");
 	}
-}
 
-class RecordReplyPanel extends RecordBasePanel {
-
-	var $class_name = 'record_reply';
-
-	function record() {
+	function recordReply() {
 
 		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
 
 		$board = $requests['board'];
 		$board_grg = $requests['board_grg'];
@@ -1269,13 +1017,8 @@ class RecordReplyPanel extends RecordBasePanel {
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
 	}
-}
 
-class RecordDeletePanel extends BaseView {
-
-	var $class_name = 'record_delete';
-
-	function init() {
+	function recordDelete() {
 
 		$context = Context::getInstance();
 		$requests =  $context->getRequestAll();
@@ -1288,6 +1031,9 @@ class RecordDeletePanel extends BaseView {
 		$pass = substr(md5(trim($posts['pass'])),0,8);
 		$pass = substr(md5($pass),0,8);
 		$admin_pwd = trim($context->get('db_admin_pwd'));
+
+		$admin_pwd = substr(md5(trim($admin_pwd)),0,8);
+		$admin_pwd = substr(md5($admin_pwd),0,8);
 
 		$this->controller->select('fieldFromBoardWhereId', 'pass,filename');		
 		$row = $this->model->getRow();	
@@ -1315,13 +1061,24 @@ class RecordDeletePanel extends BaseView {
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
 	}
-}
 
-class RecordWritetailcommentPanel extends BaseView {
+	function recordOpkey() {
 
-	var $class_name = 'record_writecomment';
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
 
-	function init() {
+		$result = $this->controller->update('recordOpkey');
+		if (!isset($result)) {
+			Error::alertToBack('진행상황 설정을 실패하였습니다.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+	}
+
+	function recordWriteTail() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -1340,13 +1097,8 @@ class RecordWritetailcommentPanel extends BaseView {
 
 		Utils::goURL("board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read");
 	}
-}
 
-class RecordDeletetailcommentPanel extends BaseView {
-
-	var $class_name = 'record_deletecomment';
-
-	function init() {
+	function recordDeleteTail() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -1376,5 +1128,59 @@ class RecordDeletetailcommentPanel extends BaseView {
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$id&igroup=$igroup&passover=$passover&action=read");
 	}
+
+	/*function displayDownload() {
+
+		$context = Context::getInstance();
+		$board = $context->getRequest('board');
+		$fileupname = $context->getRequest('fileupname');
+		$fileupname = iconv("UTF-8","EUC-KR",$fileupname) ? iconv("UTF-8","EUC-KR",$fileupname) : $fileupname;
+		$filesize = $context->getRequest('filesize');
+		$filetype = $context->getRequest('filetype');
+		$filesdir = _SUX_PATH_ . 'board_data/' . $board . '/';
+		$filespath = $filesdir . $fileupname;
+		$filespath = preg_replace('/ /i', '', $filespath);
+		$filespath = urldecode($filespath);
+
+		//echo $filetype. '<br>' . $filespath . '<br>' . $filesize . '<br>';		
+		$this->download_file($fileupname, $filesdir, $filetype);
+
+		if (!$file_name || !$file_dir) return 1; 
+		if (preg_match( "\\\\|\.\.|/", $file_name)) return 2; 
+
+		if (file_exists($file_dir.$file_name)) { 
+
+			$fp = fopen($file_dir.$file_name,"r"); 
+			if ($file_type) { 
+				//echo $file_type;
+				header("Content-type: $file_type"); 
+				Header("Content-Length: ".filesize($file_dir.$file_name));    
+				Header("Content-Disposition: attachment; filename=" . $file_name);  
+				Header("Content-Transfer-Encoding: binary"); 
+				header("Expires: 0"); 
+			} else { 
+
+				if(eregi("(MSIE 5.0|MSIE 5.1|MSIE 5.5|MSIE 6.0)", $HTTP_USER_AGENT)) { 
+					//echo 'octet-stream';
+					Header("Content-type: application/octet-stream"); 
+					Header("Content-Length: ".filesize($file_dir.$file_name));    
+					Header("Content-Disposition: attachment; filename=" . $file_name);  
+					Header("Content-Transfer-Encoding: binary");  
+					Header("Expires: 0");  
+				} else {
+					//echo 'unknown';
+					Header("Content-type: file/unknown");    
+					Header("Content-Length: ".filesize($file_dir.$file_name)); 
+					Header("Content-Disposition: attachment; filename=". $file_name); 
+					Header("Content-Description: PHP3 Generated Data"); 
+					Header("Expires: 0"); 
+				}
+			}
+			fpassthru($fp); 
+			fclose($fp); 
+		}  else {
+			return 1; 
+		}
+	}*/
 }
 ?>

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-09 10:15:49
+/* Smarty version 3.1.30, created on 2016-09-25 05:54:10
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_opkey.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57d26fb5c933f6_12579473',
+  'unifunc' => 'content_57e74a62d86e61_52121718',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd2a3d5ca2f018e5f4df4cdd42be792bc1ed6a0a7' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_opkey.tpl',
-      1 => 1473408811,
+      1 => 1474775649,
       2 => 'file',
     ),
   ),
@@ -20,13 +20,13 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57d26fb5c933f6_12579473 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e74a62d86e61_52121718 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 
 	<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
-&action=opkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.boardRead.checkOpkeyForm(this);">
+&action=recordOpkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.read.checkOpkeyForm(this);">
 	<table summary="관리자 설정옵션입니다.">
 		<tbody>
 			<tr>

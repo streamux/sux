@@ -13,37 +13,22 @@ class BaseView extends Object {
 		$this->controller = $c;
 	}
 
-	function display($className=NULL) {
+	function display($methodName=NULL) {
 
 		$oDB = DB::getInstance();
 
-		$methodName = $className;		
-
-		if (preg_match('/(log|fail|leave|searchid|searchpwd|join|modify|grouplist|memberfield|[record])/i', $className)) {
-			$methodName = 'display' . ucfirst($methodName);
-			$this->init();
-			$this->{$methodName}();
+		if (preg_match('/^record+/i', $methodName)) {
+			$methodName = $methodName;
 		} else {
-			if (strlen(stristr($className, '_')) > 0) {
-				$tempName = '';
-				$str_arr = split('_', $className);
-
-				for ($i=0; $i<count($str_arr); $i++) {
-					$tempName .= ucfirst($str_arr[$i]);
-				}
-				$className = $tempName . "Panel";
-			} else {
-				$className = ucfirst($className) . "Panel";
-			}
-			
-			$view = new $className($this->model, $this->controller);
-			$view->init();
+			$methodName = 'display' . ucfirst($methodName);
 		}
+		$this->defaultSetting();
+		$this->{$methodName}();	
 
-		$oDB->close();	
+		$oDB->close();
 	}
 
-	function init() {
+	function defaultSetting() {
 
 		$this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
 	}

@@ -1,21 +1,17 @@
-<div class="wrap">
+{include file="$skinDir/_header.tpl" title="SUX 설치 : DB 계정정보 설정 - StreamUX"}
+<div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<div class="gnb-box">
-			<div class="logo">
-				<img class="logo" src="tpl/images/logo.png" alt="streamxux 로고">	
-			</div>			
-			<div class="gnb">
-				
-			</div>
-		</div>	
+		<h1 class="logo">
+			<img class="logo" src="tpl/images/logo.png" alt="streamxux">	
+		</h1>	
 	</div>
 	<div class="container">	
-		<form>	
+		<form name="f_db_setup">	
 		<div class="article-box ui-edgebox">			
 			<table summary="데이터베이스 정보를 입력해주세요." class="db_form">
 				<caption>
-					<span class="hide">데이터베이스 설정</span>
+					<span class="hide">데이터베이스 계정정보 설정입니다.</span>
 				</caption>
 				<colgroup>
 					<col width="30%"></col>
@@ -52,10 +48,8 @@
 		</form>
 	</div>
 	<div class="footer">
-		
+		{include file="$copyrightPath"}
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-
-<script src="tpl/js/db_setup.js"></script>
-
+{include file="$skinDir/_footer.tpl"}

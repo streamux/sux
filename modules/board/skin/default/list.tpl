@@ -1,3 +1,8 @@
+{assign var=groupData value=$documentData.group}
+{assign var=contentData value=$documentData.contents}
+{assign var=headerPath value=$skinPathList.header}
+{assign var=footerPath value=$skinPathList.footer}
+{include file="$headerPath" title="게시물 목록 - StreamUX"}
 <div style="width:{$groupData.width}" class="board-list">
 	<table summary="게시판 리스트입니다.">
 		<thead>
@@ -9,7 +14,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		{foreach from=$documentData  item=$item}
+		{foreach from=$contentData.list  item=$item}
 			{if isset($item)}
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
@@ -18,8 +23,8 @@
 						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
 						<span class="{$item.subject.txt_tail}">({$item.subject.tail_num})</span>
-						<img src="{$skinDir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
-						<img src="{$skinDir}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
+						<img src="{$skinPathList.dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+						<img src="{$skinPathList.dir}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
 						<span class="label label-primary {$item.subject.icon_opkey_color}">{$item.subject.icon_opkey}</span>	
 					</span></a>
 				</td>				
@@ -35,26 +40,27 @@
 		</tbody>
 	</table>	
 </div>
-
 <div  style="width:{$groupData.width}" class="board-page-navi">
-{include file="$naviSkinPath"}
+{if $skinPathList.navi != ''}
+	{assign var=naviSkinPath value=$skinPathList.navi}
+	{include file="$naviSkinPath"}
+{/if}
 </div>
 <div class="board-search ui-inlineblock">
-	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&find={$requestData.find}&search={$requestData.search}&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.boardList.checkSearchForm(this);">
+	<form action="board.php?board={$requestData.board}&find={$requestData.find}&search={$requestData.search}&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.list.checkSearchForm(this);">
 		<select name="find">
 			<option value='title'>제 목</option>
 			<option value='name'>작성자</option>
 			<option value='comment'>내 용</option>
 		</select>
 		<input type="text" name="search" size="15">
-		<input name="imageField" type="image" src="{$skinDir}/images/btn_search.gif" width="51" height="23" border="0">
+		<input name="imageField" type="image" src="{$skinPathList.dir}/images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
 <div  style="width:{$groupData.width}" class="board-list-buttons ui-inlineblock">
-	<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&action=list">
-		<img src="{$skinDir}/images/btn_list.gif" width="51" height="23" border="0">
+	<a href="board.php?board={$requestData.board}&action=list">
+		<img src="{$skinPathList.dir}/images/btn_list.gif" width="51" height="23" border="0">
 	</a>
-	<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$skinDir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+	<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
 </div>
-
-<script type="text/javascript" src="{$skinDir}/js/board.list.js"></script>
+{include file="$footerPath"}

@@ -1,22 +1,24 @@
-{if $naviData.okpage != 'yes'}
-	<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$naviData.prevpassover}&page={$naviData.befopage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">이전</a>	
+{assign var=pagination value=$documentData.pagination}
+
+{if $pagination.okpage != 'yes'}
+	<a href="{$pagination.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$pagination.prevpassover}&page={$pagination.befopage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">이전</a>	
 {/if}
 
-{section name=page start=$naviData.nowpage loop=$naviData.nowpageend}
+{section name=page start=$pagination.nowpage loop=$pagination.nowpageend}
 	{assign var=index value=$smarty.section.page.index}
-	{assign var=nowpassover value=$naviData.limit*($index-1)}
+	{assign var=nowpassover value=$pagination.limit*($index-1)}
 
-	{if $naviData.total > $nowpassover }
-		{if $naviData.passover != $nowpassover }
-			<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$nowpassover}&page={$naviData.page}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">[{$index}]</a>
+	{if $pagination.total > $nowpassover }
+		{if $pagination.passover != $nowpassover }
+			<a href="{$pagination.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$nowpassover}&page={$pagination.page}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">[{$index}]</a>
 		{else}
 			&nbsp;<span class="color-red">{$index}</span>&nbsp
 		{/if}
 	{/if}
 {/section}
 
-{if $naviData.total >= $naviData.hanpassoverpage }
-	<a href="{$naviData.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$naviData.newpassover}&page={$naviData.nextpage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">다음</a>
+{if $pagination.total >= $pagination.hanpassoverpage }
+	<a href="{$pagination.PHP_SELF}?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$pagination.newpassover}&page={$pagination.nextpage}&find={$requestData.find}&search={$requestData.search}&action={$requestData.action}">다음</a>
 {/if}
 
 

@@ -7,9 +7,9 @@
   <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="tpl/js/login.js"></script>
-{if $requestData.action != ''}
+{if $requestData.jscode != ''}
 <script type="text/javascript">
-	jsux.fn['{$requestData.action}'].init();
+	jsux.fn['{$requestData.jscode}'].init();
 </script>
 {/if}
 </body>

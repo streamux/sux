@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 01:57:26
+/* Smarty version 3.1.30, created on 2016-09-23 11:47:29
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e31e66576be7_00155289',
+  'unifunc' => 'content_57e4fa315dd246_84909683',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3b455289258547b65afd0e23a1f65d2af277dbd4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/_footer.tpl',
-      1 => 1474502122,
+      1 => 1474624031,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e31e66576be7_00155289 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e4fa315dd246_84909683 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 
 <?php echo '<script'; ?>
@@ -43,10 +43,10 @@ function content_57e31e66576be7_00155289 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
  type="text/javascript" src="tpl/js/login.js"><?php echo '</script'; ?>
 >
-<?php if ($_smarty_tpl->tpl_vars['requestData']->value['action'] != '') {
+<?php if ($_smarty_tpl->tpl_vars['requestData']->value['jscode'] != '') {
 echo '<script'; ?>
  type="text/javascript">
-	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['requestData']->value['action'];?>
+	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['requestData']->value['jscode'];?>
 '].init();
 <?php echo '</script'; ?>
 >

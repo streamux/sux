@@ -36,19 +36,19 @@ class LoginView extends LoginModule {
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
 		$this->request_data = $context->getRequestAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 		
 		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];
-
+		$ljs_pass1 = $this->session_data['ljs_pass1'];		
 		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$this->document_data = array();
 		if (!$ljs_memberid  || !$ljs_pass1) {
 			$this->controller->select('getMemberGroup');
 			$this->document_data['group'] = $this->model->getJson();
-			$this->skin_path = $this->skin_dir . 'login.tpl';
+			$this->skin_path = $this->skin_dir . 'login.tpl';			
 		} else {
-			$this->request_data['action'] = '';
+			$this->request_data['jscode'] = '';
 			$this->skin_path = $this->skin_dir . 'info.tpl';
 		}
 
@@ -163,7 +163,7 @@ class LoginView extends LoginModule {
 		$this->controller->select('getMemberGroup');		
 		$this->document_data['group'] = $this->model->getJson();		
 		$this->document_data['isLogon'] = false;
-		$this->request_data['action'] = 'login';
+		$this->request_data['jscode'] = 'login';
 
 		$this->output();
 	}
@@ -173,9 +173,11 @@ class LoginView extends LoginModule {
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
 		$this->request_data = $context->getRequestAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 
 		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
 		$this->skin_path = $this->skin_dir . 'leave.tpl';
+
 
 		$this->output();
 	}
@@ -185,6 +187,7 @@ class LoginView extends LoginModule {
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 
 		$checkName = $this->post_data['user_name'];
 		$checkEmail = $this->post_data['user_email'];
@@ -208,7 +211,7 @@ class LoginView extends LoginModule {
 
 				$this->document_data['user_name'] = $checkName;
 				$this->document_data['user_id'] = $memberId;
-				$this->request_data['action'] = 'searchresult';
+				$this->request_data['jscode'] = 'searchresult';				
 
 				$this->skin_path = $this->skin_dir . 'searchid_result.tpl';
 			} else {
@@ -230,6 +233,7 @@ class LoginView extends LoginModule {
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 
 		$checkName = $this->post_data['user_name'];
 		$checkMemberid = $this->post_data['user_id'];
@@ -271,7 +275,7 @@ class LoginView extends LoginModule {
 				$this->document_data['user_email'] = $checkEmail;
 				$this->document_data['memberid'] = $memberId;
 				$this->document_data['password'] = $password;
-				$this->request_data['action'] = 'searchresult';
+				$this->request_data['jscode'] = 'searchresult';
 
 				/*$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
 				$additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';
