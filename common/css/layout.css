@@ -1,6 +1,8 @@
 
-.wrapper {max-width:1024px}
-.header {z-index:2;width:100%}
+.wrapper {margin:0 auto;max-width:1024px}
+.header {z-index:2}
+.container{}
+.footer{}
 
 /* main visual */
 .visual-device{clear:both;position:relative;margin:0 auto}

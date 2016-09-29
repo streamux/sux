@@ -1,5 +1,4 @@
 <?php
-
 class BoardModule extends BaseView {
 
 	var $class_name = 'board_module';
@@ -11,19 +10,22 @@ class BoardModule extends BaseView {
 
 	function output() {
 
-		$smarty = new Smarty;
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
 		if (is_readable($this->skin_path_list['contents'])) {
-			$smarty->assign('copyrightPath', $this->copyright_path);
-			$smarty->assign('skinPathList', $this->skin_path_list);
-			$smarty->assign('sessionData', $this->session_data);
-			$smarty->assign('requestData', $this->request_data);			
-			$smarty->assign('postData', $this->post_data);
-			$smarty->assign('documentData', $this->document_data);			
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);			
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );		
 		} else {
 			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-		
-		$smarty->display( $this->skin_path_list['contents'] );
+		}		
 	}
 }
 

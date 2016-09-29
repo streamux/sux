@@ -1,5 +1,5 @@
 /**
- * Swiper 2.7.6
+ * Swiper 3.3.1
  */
 
 jsux.visual = jsux.visual || {};

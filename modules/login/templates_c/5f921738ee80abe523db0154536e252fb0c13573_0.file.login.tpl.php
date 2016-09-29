@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 08:04:33
+/* Smarty version 3.1.30, created on 2016-09-26 08:03:33
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/login.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e37471b49538_65011975',
+  'unifunc' => 'content_57e8ba3571ebe9_56959763',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5f921738ee80abe523db0154536e252fb0c13573' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/login.tpl',
-      1 => 1474523826,
+      1 => 1474869812,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e37471b49538_65011975 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e8ba3571ebe9_56959763 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원 로그인 - StreamUX"), 0, true);
 ?>
 
@@ -58,7 +58,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->val
 					</div>
 					<div class="login-footer">
 						<span class="link-searchinfo">
-							<a href="../member/member.php?action=join" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchid"><span>아이디</span></a><span>/</span><a href="login.php?action=searchpwd"><span>비밀번호 찾기</span></a>	
+							<a href="../member/member.php?action=join" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchID"><span>아이디</span></a><span>/</span><a href="login.php?action=searchPassword"><span>비밀번호 찾기</span></a>	
 						</span>
 					</div>																
 				</div>

@@ -62,7 +62,7 @@ class Utils extends Object {
 
 	public static function goURL( $url, $delay=0) {
 
-		echo ("<meta http-equiv='Refresh' content='". $delay . "; URL=" . $url . "'>");
+		printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
 	}
 }
 ?>

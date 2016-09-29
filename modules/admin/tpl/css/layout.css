@@ -1,7 +1,8 @@
 
 /* layout */
-.header {z-index:1000;width:100%;text-align: center}
-.container {margin:0 auto;width:98%}
+.wrapper {position: relative}
+.header {z-index:1000;text-align: center}
+.container {position:relative;padding: 0 5px 0 5px}
 .footer{margin-top:20px;height:50px;text-align: center}
 
 /* header */

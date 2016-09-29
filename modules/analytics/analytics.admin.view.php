@@ -1,155 +1,232 @@
 <?php
 
-class AnalyticsAdminView extends BaseView {
+class AnalyticsAdminModule extends BaseView {
+	
+	var $class_name = 'board_admin_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class AnalyticsAdminView extends AnalyticsAdminModule {
 
 	var $class_name = 'analytics_admin_view';
 
-	// display function is defined in parent class 
-}
-
-class AnalyticsAdminModule extends BaseView {
-
-	var $class_name = 'analytics_admin_module';
-	var $file_name = 'defualt.html';
-
-	function init() {
-
-		$this->defaultSetting();
+	function displayConnecterList() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$page_type = $requests['pagetype'];
-		$page_type = $page_type ? $page_type : "main";
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
-		if (is_readable($top_path)) {
-			$contents = new Template($top_path);
-			$contents->set('page_type', $page_type);
-			$contents->load();
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$skin_path = _SUX_PATH_ . 'modules/analytics/tpl/' . $this->file_name;
-		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);
-			foreach ($requests as $key => $value) {
-				$contents->set($key, $value);
-			}
-			$contents->load();			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-		$this->display();
+		$this->output();
 	}
 
-	function defaultSetting() {}
-	function display() {}
-}
+	function displayConnecterAdd() {
 
-class ConnecterlistPanel extends AnalyticsAdminModule {
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	var $class_name = 'analytics_admin_connecter';
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-	function defaultSetting() {
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->file_name = 'admin_connecter_list.html';
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class ConnecteraddPanel extends AnalyticsAdminModule {
+	function displayConnecterDelete() {
 
-	var $class_name = 'admin_connecter_add';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_connecter_add.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class ConnecterdelpassPanel extends AnalyticsAdminModule {
+	function displayConnecterReset() {
 
-	var $class_name = 'admin_connecter_delpass';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_connecter_delpass.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_reset.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class ConnecterresetpassPanel extends AnalyticsAdminModule {
+	function displayPageviewList() {
 
-	var $class_name = 'admin_connecter_resetpass';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_connecter_resetpass.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class PageviewlistPanel extends AnalyticsAdminModule {
+	function displayPageviewAdd() {
 
-	var $class_name = 'analytics_admin_pageviewlist';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_pageview_list.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class PageviewaddPanel extends AnalyticsAdminModule {
+	function displayPageviewDelete() {
 
-	var $class_name = 'admin_pageview_add';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_pageview_add.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class PageviewmodifyPanel extends AnalyticsAdminModule {
+	function displayPageviewReset() {
 
-	var $class_name = 'admin_pageview_modify';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function defaultSetting() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->file_name = 'admin_pageview_modify.html';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_reset.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class PageviewdelpassPanel extends AnalyticsAdminModule {
-
-	var $class_name = 'admin_pageview_delpass';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_pageview_delpass.html';
-	}
-}
-
-class PageviewresetpassPanel extends AnalyticsAdminModule {
-
-	var $class_name = 'admin_pageview_resetpass';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_pageview_resetpass.html';
-	}
-}
-
-class ConnecterlistdataPanel extends BaseView {
-
-	var $class_name = 'connecter_listdata';
-
-	function init() {
+	function displayConnecterListJson() {
 
 		$dataObj = null;
 		$dataList = array();
@@ -187,15 +264,10 @@ class ConnecterlistdataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class PageviewlistdataPanel extends BaseView {
-
-	var $class_name = 'connecter_listdata';
-
-	function init() {
+	function displayPageviewListJson() {
 
 		$dataObj = null;
 		$dataList = array();
@@ -233,15 +305,10 @@ class PageviewlistdataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class ConnecterInsertPanel extends BaseView {
-
-	var $class_name = 'connecter_insert';
-
-	function init() {
+	function recordConnecterAdd() {
 
 		$msg = "";
 		$resultYN = "Y";
@@ -258,16 +325,11 @@ class ConnecterInsertPanel extends BaseView {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class ConnecterDeletePanel extends BaseView {
-
-	var $class_name = 'connecter_delete';
-
-	function init() {
-
+	function recordConnecterDelete() {
+		
 		$msg = "";
 		$resultYN = "Y";
 
@@ -282,17 +344,13 @@ class ConnecterDeletePanel extends BaseView {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class ConnecterResetPanel extends BaseView {
-
-	var $class_name = 'connecter_reset';
-
-	function init() {
-
-		$id = $_POST['id'];
+	function recordConnecterReset() {
+		
+		$context = Context::getInstance();
+		$id = $context->getPost('id');
 
 		$msg = "";
 		$resultYN = "Y";
@@ -309,15 +367,10 @@ class ConnecterResetPanel extends BaseView {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class PageviewInsertPanel extends BaseView {
-
-	var $class_name = 'pageview_insert';
-
-	function init() {
+	function recordPageviewAdd() {
 
 		$msg = "";
 		$resultYN = "Y";
@@ -325,50 +378,20 @@ class PageviewInsertPanel extends BaseView {
 		$result = $this->controller->insert('intoPageview');
 		if ($result) {
 			$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
-			$resultYN = "Y";
+			$resultYN = "Y";		 	
 		} else {
 			$msg = "페이지뷰 키워드 추가를 실패하였습니다.";
-			$resultYN = "N";			
+		 	$resultYN = "N";
 		}
 
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class PageviewResetPanel extends BaseView {
-
-	var $class_name = 'pageview_reset';
-
-	function init() {
-
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->update('fromPageviewWhere');
-		if ($result) {
-			$msg = "페이지뷰 초기화를 성공하였습니다.";
-			$resultYN = "Y";
-		} else {
-			$msg = "페이지뷰 초기화를 실패하였습니다.";
-			$resultYN = "N";			
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo parent::callback($data);
-	}
-}
-
-class PageviewDeletePanel extends BaseView {
-
-	var $class_name = 'pageview_delete';
-
-	function init() {
-
+	function recordPageviewDelete() {
+	
 		$msg = "";
 		$resultYN = "Y";
 
@@ -384,8 +407,27 @@ class PageviewDeletePanel extends BaseView {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);	
+	}
+
+	function recordPageviewReset() {
+		
+		$msg = "";
+		$resultYN = "Y";
+
+		$result = $this->controller->update('fromPageviewWhere');
+		if ($result) {
+			$msg = "페이지뷰 초기화를 성공하였습니다.";
+			$resultYN = "Y";
+		} else {
+			$msg = "페이지뷰 초기화를 실패하였습니다.";
+			$resultYN = "N";			
+		}
+
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		echo $this->callback($data);
 	}
 }
-
 ?>

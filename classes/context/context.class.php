@@ -117,6 +117,11 @@ class Context {
 		return $_POST[$key];
 	}
 
+	function setPost($key, $value) {
+
+		$_POST[$key] = $value;
+	}
+
 	function getPostAll() {
 
 		return $_POST;
@@ -125,6 +130,11 @@ class Context {
 	function getRequest($key) {
 
 		return $_REQUEST[$key];
+	}
+
+	function setRequest($key, $value) {
+
+		$_REQUEST[$key] = $value;
 	}
 
 	function getRequestAll() {

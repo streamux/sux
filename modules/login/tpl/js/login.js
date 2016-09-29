@@ -1,5 +1,4 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.login = jsux.fn.login || {};
 jsux.fn.login = {
 
 	dispSelectMemberList: function() {
@@ -33,8 +32,30 @@ jsux.fn.login = {
 		$("input[name=memberid]").focus();
 	}
 };
+jsux.fn.loginAdmin = {
 
-jsux.fn.leave = jsux.fn.leave || {};
+	checkForm: function( f ) {
+
+		var id = f.user_id.value.length,
+			pwd = f.user_pwd.value.length;
+
+		if ( id < 1) {
+			trace("아이디를 입력하세요.");
+			f.user_id.focus();
+			return (false);				
+		}
+
+		if ( pwd < 1) {
+			trace("비밀번호를 입력하세요.");
+			f.user_pwd.focus();
+			return (false);				
+		}
+		return (true);
+	},
+	init: function() {
+		$("input[name=user_id]").focus();
+	}
+};
 jsux.fn.leave = {
 
 	checkForm: function( f ) {
@@ -96,8 +117,6 @@ jsux.fn.leave = {
 		$("input[name=pass]").focus();
 	}
 };
-
-jsux.fn.searchresult = jsux.fn.searchresult || {};
 jsux.fn.searchresult = {
 
 	setEvent: function() {
@@ -115,9 +134,7 @@ jsux.fn.searchresult = {
 		this.setEvent();
 	}
 };
-
-jsux.fn.searchid = jsux.fn.searchId || {};
-jsux.fn.searchid = {
+jsux.fn.searchID = {
 
 	dispSelectMemberList: function() {
 
@@ -165,9 +182,7 @@ jsux.fn.searchid = {
 		$("input[name=user_name]").focus();
 	}
 };
-
-jsux.fn.searchpwd = jsux.fn.searchPassword || {};
-jsux.fn.searchpwd = {
+jsux.fn.searchPassword = {
 
 	dispSelectMemberList: function() {
 

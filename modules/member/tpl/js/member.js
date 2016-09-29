@@ -163,8 +163,7 @@ jsux.fn.join = {
 	},		
 	checkID: function() {
 
-		var	params =  {	action: 'searchid',
-						table_name: this.getSelectVal('table_name'),
+		var	params =  {	table_name: this.getSelectVal('table_name'),
 						memberid: $('input[name=memberid]').val()};
 
 		if (params.memberid === '') {
@@ -173,7 +172,7 @@ jsux.fn.join = {
 			return;
 		}
 
-		jsux.getJSON('member.php', params, function( e ) {
+		jsux.getJSON('member.php?action=searchID', params, function( e ) {
 			trace( e.msg );
 		});
 	},
@@ -224,7 +223,7 @@ jsux.fn.join = {
 	setLayout: function() {
 
 		var	params = '';
-		params = { action: 'grouplist' };
+		params = { action: 'groupList' };
 		
 		jsux.getJSON('member.php', params, function( e )  {
 			
@@ -459,12 +458,11 @@ jsux.fn.modify = {
 	setLayout: function() {
 
 		var params = {
-			action: 'memberfield',
 			table_name: $("input[name=table_name]").val(),
 			memberid:  $("input[name=memberid]").val()
 		};
 
-		jsux.getJSON("member.php", params, function( e ) {
+		jsux.getJSON("member.php?action=memberField", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",

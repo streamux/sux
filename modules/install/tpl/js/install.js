@@ -1,5 +1,5 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.dbsetup = {
+jsux.fn.DBSetup = {
 
 	checkForm: function( f ) {
 
@@ -39,13 +39,13 @@ jsux.fn.dbsetup = {
 				db_password:f.db_password.value,
 				db_database:f.db_database.value
 			};
-
-		jsux.getJSON("install.php?action=recordDbsetup", params, function( e ) {
+			
+		jsux.getJSON("install.php?action=recordDBSetup", params, function( e ) {
 
 			trace( e.msg );
 
 			if (e.result == "Y") {				
-				jsux.goURL("install.php?action=adminsetup");
+				jsux.goURL("install.php?action=adminSetup");
 			} 
 		});
 	},
@@ -69,7 +69,7 @@ jsux.fn.dbsetup = {
 	}
 };
 jsux.fn = jsux.fn || {};
-jsux.fn.adminsetup = {
+jsux.fn.adminSetup = {
 
 	checkForm: function ( f ) {
 
@@ -91,20 +91,21 @@ jsux.fn.adminsetup = {
 	},
 	createTable: function() {
 
-		jsux.getJSON("install.php?action=recordCreatetable", function(e) {
+		var interval = null,
+			isLoading = false;
+
+		if (isLoading == true) {
+
+			trace( '데이터 생성 중 입니다. 잠시만 기다려주세요.'  );
+		}
+
+		isLoading = true;
+
+		jsux.getJSON("install.php?action=recordCreateTable", function(e) {
 
 			trace( e.msg  );
-
-			if (e.result == "Y") {
-				jsux.goURL("../login/login.php");
-			} else {
-
-				var interval = setInterval(function() {
-
-					jsux.goURL("../login/login.php");
-					clearInterval( interval );
-				}, 1000);
-			}
+			isLoading = false;
+			jsux.goURL("../login/login.php");
 		});
 	},
 	sendAndLoad: function( f ) {
@@ -117,10 +118,9 @@ jsux.fn.adminsetup = {
 				yourhome: f.yourhome.value
 			};
 
-		jsux.getJSON("install.php?action=recordAdminsetup", params, function(e) {
+		jsux.getJSON("install.php?action=recordAdminSetup", params, function(e) {
 
 			trace( e.msg );
-
 			if (e.result =="Y") {
 				self.createTable();
 			}
@@ -131,7 +131,6 @@ jsux.fn.adminsetup = {
 		var self = this;
 
 		$("form").on("submit",function( e ) {
-
 			e.preventDefault();
 
 			var bool = self.checkForm( e.target );

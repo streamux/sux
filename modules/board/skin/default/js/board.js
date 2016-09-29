@@ -1,5 +1,4 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.list = jsux.fn.list || {};
 jsux.fn.list = {
 
 	checkSearchForm: function(f) {
@@ -74,9 +73,6 @@ jsux.fn.read = {
 
 	}
 };
-
-jsux.fn = jsux.fn || {};
-jsux.fn.write = jsux.fn.write || {};
 jsux.fn.write = {
 
 	checkDocumentForm: function (f) {
@@ -128,7 +124,6 @@ jsux.fn.write = {
 		}		
 	}
 };
-jsux.fn.reply = jsux.fn.reply || {};
 jsux.fn.reply = {
 
 	checkDocumentForm: function (f) {
@@ -181,7 +176,6 @@ jsux.fn.reply = {
 		}		
 	}
 };
-jsux.fn.modify = jsux.fn.modify || {};
 jsux.fn.modify = {
 
 	checkDocumentForm: function (f) {
@@ -226,7 +220,6 @@ jsux.fn.modify = {
 		$('input[name=pass]').focus();
 	}
 };
-jsux.fn.delete = jsux.fn.delete || {};
 jsux.fn.delete = {
 
 	checkDocumentForm: function( f ) {

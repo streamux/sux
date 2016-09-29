@@ -1,6 +1,6 @@
 <?php
 
-class InstallModules  extends BaseView {
+class InstallModule  extends BaseView {
 
 	var $class_name = 'install_module';
 	var $skin_dir = '';
@@ -18,34 +18,37 @@ class InstallModules  extends BaseView {
 	 */
 	function display($methodName=NULL) {
 
-		$methodName = 'display' . ucfirst($methodName);
+		if (preg_match('/^record+/i', $methodName)) {
+			$methodName = $methodName;
+		} else {
+			$methodName = 'display' . ucfirst($methodName);
+		}
 		$this->defaultSetting();
 		$this->$methodName();
 	}
 
-	function defaultSetting() {
-
-		$this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
-	}
-
 	function output() {
 
-		$smarty = new Smarty;
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
 		if (is_readable($this->skin_path)) {
-			$smarty->assign('copyrightPath', $this->copyright_path);
-			$smarty->assign('skinDir', $this->skin_dir);
-			$smarty->assign('sessionData', $this->session_data);
-			$smarty->assign('requestData', $this->request_data);
-			$smarty->assign('postData', $this->post_data);
-			$smarty->assign('documentData', $this->document_data);
-			$smarty->display( $this->skin_path );
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path );
 		} else {
 			echo '<p>스킨 파일경로를 확인하세요.</p>';
 		}
 	}
 }
 
-class InstallView extends InstallModules {
+class InstallView extends InstallModule {
 
 	function displayTerms() {
 
@@ -55,7 +58,7 @@ class InstallView extends InstallModules {
 		$this->output();
 	}
 
-	function displayDbsetup() {
+	function displayDBSetup() {
 
 		$context = Context::getInstance();
 		$this->request_data =$context->getRequestAll();
@@ -77,7 +80,7 @@ class InstallView extends InstallModules {
 		$this->output();
 	}
 
-	function displayRecordDbsetup() {
+	function recordDBSetup() {
 
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
@@ -86,13 +89,15 @@ class InstallView extends InstallModules {
 		$db_userid		= trim($posts['db_userid']);
 		$db_password	= trim($posts['db_password']);
 		$db_database 	= trim($posts['db_database']);
-
+		
 		$resultYN = 'Y';
 		$msg = '';
-
+		
 		$file_name = 'config.db.php';
 		$file = '../../config/' . $file_name;
 		$fp = fopen($file, 'w');
+
+		$msg .= $db_hostname;	
 
 		if(!$fp) {
 
@@ -132,7 +137,7 @@ class InstallView extends InstallModules {
 		echo $this->callback($data);
 	}
 
-	function displayRecordAdminsetup() {
+	function recordAdminSetup() {
 
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
@@ -194,7 +199,7 @@ class InstallView extends InstallModules {
 	 * @method displayRecordCreatetable
 	 * 차 후 xml구조 스키마연동 구현 예정 
 	 */
-	function displayRecordCreatetable() {
+	function recordCreateTable() {
 
 		$context = Context::getInstance();
 		$context->init();

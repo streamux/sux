@@ -74,14 +74,10 @@ class BoardAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 
 		$query = new Query();
-		$field = '*';
-		$query->setField($field);
+		$query->setField('*');
 		$query->setTable($group);
 		$query->setWhere(array('name'=>$board));
 
@@ -92,10 +88,7 @@ class BoardAdminModel extends BaseModel {
 	function createTableBoard() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($board);
@@ -129,10 +122,7 @@ class BoardAdminModel extends BaseModel {
 	function insertIntoBoard() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($board);
@@ -150,13 +140,11 @@ class BoardAdminModel extends BaseModel {
 
 	function insertIntoBoardGroup() {
 
-		$context = Context::getInstance();
-		$group = $context->get('db_board_group');
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$str = '';
 
+		$context = Context::getInstance();
+		$group = $context->get('db_board_group');		
+		$board = $context->getRequest('table_name');
 		$posts = $context->getPostAll();
 		foreach ($posts as $key => $value) {
 			${$key} = $value;
@@ -181,10 +169,7 @@ class BoardAdminModel extends BaseModel {
 	function createTableComment() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 		$board_comment = $board . '_grg';
 
 		$query = new Query();
@@ -208,10 +193,7 @@ class BoardAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 
 		$posts = $context->getPostAll();
 		foreach ($posts as $key => $value) {
@@ -260,10 +242,7 @@ class BoardAdminModel extends BaseModel {
 	function dropTableBoard() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($board);
@@ -276,10 +255,7 @@ class BoardAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 		$id = $context->getRequest('id');
 
 		$query = new Query();
@@ -295,10 +271,7 @@ class BoardAdminModel extends BaseModel {
 	function dropTableComment() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 		$board_comment = $board . '_grg';
 
 		$query = new Query();
@@ -312,10 +285,7 @@ class BoardAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
-		}
+		$board = $context->getRequest('table_name');
 		$id = $context->getRequest('id');
 
 		$query = new Query();

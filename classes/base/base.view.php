@@ -23,7 +23,7 @@ class BaseView extends Object {
 			$methodName = 'display' . ucfirst($methodName);
 		}
 		$this->defaultSetting();
-		$this->{$methodName}();	
+		$this->{$methodName}();
 
 		$oDB->close();
 	}

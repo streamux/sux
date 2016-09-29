@@ -12,15 +12,19 @@ class MemberModules extends BaseView {
 
 	function output() {
 
-		$smarty = new Smarty;
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
 		if (is_readable($this->skin_path)) {
-			$smarty->assign('copyrightPath', $this->copyright_path);
-			$smarty->assign('skinDir', $this->skin_dir);
-			$smarty->assign('sessionData', $this->session_data);
-			$smarty->assign('requestData', $this->request_data);
-			$smarty->assign('postData', $this->post_data);
-			$smarty->assign('documentData', $this->document_data);
-			$smarty->display( $this->skin_path );
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path );
 		} else {
 			echo '<p>스킨 파일경로를 확인하세요.</p>';
 		}
@@ -54,7 +58,7 @@ class MemberView extends MemberModules {
 		$this->output();
 	}
 
-	function displayGrouplist() {
+	function displayGroupList() {
 
 		$msg = '데이터 로드를 완료하였습니다.';
 		$result = $this->controller->select('memberListFromGroup');
@@ -69,7 +73,7 @@ class MemberView extends MemberModules {
 		echo $this->callback($data);
 	}
 
-	function displaySearchid() {
+	function displaySearchID() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -114,10 +118,21 @@ class MemberView extends MemberModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 
-	function displayMemberfield() {
+	function didsplaySearchCorp() {
+
+		$msg = "중복회사 체크 작업 중.";
+		$resultYN = "Y";
+
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		echo $this->callback($data);
+	}
+
+	function displayMemberField() {
 
 		$msg = '데이터 로드를 완료하였습니다.';
 		$result = $this->controller->select('fieldFromMember', '*');
@@ -133,10 +148,10 @@ class MemberView extends MemberModules {
 			$msg = '데이터 로드를 실패하였습니다.';
 			$data = array('msg'=>$msg);
 		}
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 
-	function displayRecordJoin() {
+	function recordJoin() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -171,10 +186,10 @@ class MemberView extends MemberModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 
-	function displayRecordModify() {
+	function recordModify() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -204,10 +219,10 @@ class MemberView extends MemberModules {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 
-	function displayRecordDelete() {
+	function recordDelete() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -235,7 +250,7 @@ class MemberView extends MemberModules {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 }
 ?>

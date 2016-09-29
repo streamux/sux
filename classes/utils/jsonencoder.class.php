@@ -12,8 +12,6 @@ class JsonEncoder {
 	private $json_data = array("msg"=>"데이터가 존재하지 않습니다.");
 	private static $je_instance = NULL;
 
-	function JsonEncoder() {}
-
 	public static function getInstance() {
 
 		if (empty(self::$je_instance)) {
@@ -29,7 +27,7 @@ class JsonEncoder {
 
 		if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
 			$result = json_encode($data, JSON_UNESCAPED_UNICODE);	
-		} else {
+		} else {		
 			$result = json_encode($data);	
 		}
 

@@ -1,9 +1,9 @@
 
 /* layout */
-.wrapper {position:relative;margin:0 auto}
+.wrapper {position:relative}
 .header {position:relative}
 .container{position:relative}
-.footer{margin-top:20px;height:50px;text-align: center}
+.footer{position:relative;margin-top:20px;height:50px;text-align: center}
 
 /* header */
 .header .util{display:none;height: 20px}

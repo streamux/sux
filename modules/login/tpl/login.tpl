@@ -33,7 +33,7 @@
 					</div>
 					<div class="login-footer">
 						<span class="link-searchinfo">
-							<a href="../member/member.php?action=join" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchid"><span>아이디</span></a><span>/</span><a href="login.php?action=searchpwd"><span>비밀번호 찾기</span></a>	
+							<a href="../member/member.php?action=join" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchID"><span>아이디</span></a><span>/</span><a href="login.php?action=searchPassword"><span>비밀번호 찾기</span></a>	
 						</span>
 					</div>																
 				</div>

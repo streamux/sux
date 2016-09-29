@@ -1,5 +1,4 @@
 <?
-$resultStr = "Y";
 $msg = "";
 
 $result = mysql_query(	"create table $board_group". 
@@ -28,22 +27,20 @@ $result = mysql_query(	"create table $board_group".
 						"board_name varchar(30),".
 						"type char(4),". 
 						"output char(3))");
-if (!$result) {
-	$msg .= "$board_group [게시판그룹] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
+if ($result) {
+	$msg .= "$board_group [게시판그룹] 테이블 생성을 성공하였습니다.\n";	
 } else {
-	$msg .= "$board_group [게시판그룹] 테이블 생성을 성공하였습니다.\n";
+	$msg .= "$board_group [게시판그룹] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result = mysql_query(	"create table $member_group". 
 						"(id int not null auto_increment primary key,".
 						"name varchar(30) not null,".
 						"date datetime)");
-if (!$result) {
-	$msg .= "$member_group [멤버그룹] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
+if ($result) {
+	$msg .= "$member_group [멤버그룹] 테이블 생성을 성공하였습니다.\n";	
 } else {
-	$msg .= "$member_group [멤버그룹] 테이블 생성을 성공하였습니다.\n";
+	$msg .= "$member_group [멤버그룹] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $question".  
@@ -59,22 +56,21 @@ $result=mysql_query(	"create table $question".
 						"time6 int(4),".
 						"hit int,".
 						"igroup int)");  
-if (!$result) {
-	$msg .= "$question [설문] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$question [설문] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "$question [설문] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $questiont".  
 						"(id int not null auto_increment primary key,".
 						"jilmunno int,".
 						"igroup int)");
-if (!$result) {
-	$msg .= "questiont [총 참가자 수] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "questiont [총 참가자 수] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "questiont [총 참가자 수] 테이블 생성을 실패하였습니다.\n";
+	
 }
 
 $result=mysql_query(	"create table questionc".  
@@ -85,11 +81,10 @@ $result=mysql_query(	"create table questionc".
 						"q_height int(4),".
 						"q_top int(4),".
 						"q_left int(4))");  
-if (!$result) {
-	$msg .= "questionc [설문 설정] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
+if ($result) {
+	$msg .= "questionc [설문 설정] 테이블 생성을 성공하였습니다.\n";	
 } else {
-	$msg .= "questionc [설문 설정] 테이블 생성을 성공하였습니다.\n";
+	$msg .= "questionc [설문 설정] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result=mysql_query(	"create table $popup".
@@ -112,11 +107,10 @@ $result=mysql_query(	"create table $popup".
 						"skin_left int(4),".
 						"skin_right int(4),".
 						"comment text)");		
-if (!$result) {
-	$msg .= "$popup [팝업창] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$popup [팝업창] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "$popup [팝업창] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result = mysql_query(	"create table $calender".  
@@ -127,47 +121,43 @@ $result = mysql_query(	"create table $calender".
 						"comment text,".
 						"ljs_memberid varchar(30),".
 						"date date)");  
-if (!$result) {
+if ($result) {
+	$msg .= "dayman [일정관리] 테이블 생성을 성공하였습니다.\n";
+} else {
 	$msg .= "dayman [일정관리] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
 }
 
 $result = mysql_query(	"create table $connecter_all". 
 						"(hit int,".
 						"checky char(1))");
-if (!$result) {
-	$msg .= "$connecter_all [전체 접속수분석] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {	
+if ($result) {
 	$msg .= "$connecter_all [전체 접속수분석] 테이블 생성을 성공하였습니다.\n";
 
 	$qresult = mysql_query("insert into $connecter_all values ('0','y')");
-	if (!$qresult) {
-		$msg .= "$connecter_real_all [전체 접속수분석] 레코드 등록을 실패하였습니다.\n";
-	} else {
+	if ($qresult) {
 		$msg .= "$connecter_real_all [전체 접속수분석] 레코드 등록을 성공하였습니다.\n";
+	} else {
+		$msg .= "$connecter_real_all [전체 접속수분석] 레코드 등록을 실패하였습니다.\n";
 	}
+} else {
+	$msg .= "$connecter_all [전체 접속수분석] 테이블 생성을 실패하였습니다.\n";	
 }
 
 $result = mysql_query(	"create table $connecter". 
 						"(id int not null auto_increment primary key,".
 						"ip varchar(30),".
 						"date date)");
-if (!$result) {
-	$msg .= "$connecter [접속수분석] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$connecter [접속수분석] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "$connecter [접속수분석] 테이블 생성을 실패하였습니다.\n";	
 }
 
 $result = mysql_query(	"create table $connecter_real_all". 
 						"(hit int,".
 						"checky char(1))");
 
-if (!$result) {
-	$msg .= "$connecter_real_all [전체 실접속자분석] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$connecter_real_all [전체 실접속자분석] 테이블 생성을 성공하였습니다.\n";
 
 	$qresult = mysql_query("insert into $connecter_real_all values ('0','y')");
@@ -176,17 +166,18 @@ if (!$result) {
 	} else {
 		$msg .= "$connecter_real_all [전체 실접속자분석] 레코드 등록을 성공하였습니다.\n";
 	}
+} else {
+	$msg .= "$connecter_real_all [전체 실접속자분석] 테이블 생성을 실패하였습니다.\n";
 }
 
 $result = mysql_query(	"create table $connecter_real". 
 						"(id int not null auto_increment primary key,".
 						"ip varchar(30),".
 						"date date)");
-if (!$result) {
-	$msg .= "$connecter_real [실접속자분석] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$connecter_real [실접속자분석] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "$connecter_real [실접속자분석] 테이블 생성을 실패하였습니다.\n";	
 }
 
 $result=mysql_query(	"create table $connecter_site".
@@ -194,11 +185,10 @@ $result=mysql_query(	"create table $connecter_site".
 						"name varchar(12) not null,".
 						"date datetime,".
 						"hit int)");
-if (!$result) {
-	$msg .= "$connecter_site [접속경로분석] 테이블 생성을 실패하였습니다.\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$connecter_site [접속경로분석] 테이블 생성을 성공하였습니다.\n";
+} else {
+	$msg .= "$connecter_site [접속경로분석] 테이블 생성을 실패하였습니다.\n";	
 }
 
 $result = mysql_query(	"create table $pageview".
@@ -206,18 +196,14 @@ $result = mysql_query(	"create table $pageview".
 						"name varchar(12) not null,".
 						"date datetime,".
 						"hit int)");
-if (!$result) {
-	$msg .= "$pageview [페이지뷰분석] 테이블 생성을 실패하였습니다.\n\n";
-	$resultStr = "N";
-} else {
+if ($result) {
 	$msg .= "$pageview [페이지뷰분석] 테이블 생성을 성공하였습니다.\n\n";
+} else {
+	$msg .= "$pageview [페이지뷰분석] 테이블 생성을 실패하였습니다.\n\n";
+	
 }
 
-if ($resultStr == "N") {
-	$msg .= "확인을 누르면 3초 후 관리자 로그인 페이지로 자동 이동합니다.";
-} else {
-	$msg .= "데이터베이스 테이블  생성을 완료하였습니다.";
-}
+$msg .= "데이터베이스 테이블  생성을 완료하였습니다.";
 
 $json_data = array(	"result"=>$resultYN,
 					"msg"=>$msg);

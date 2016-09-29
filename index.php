@@ -67,7 +67,7 @@
 <script type="text/javascript" src="common/js/common.js"></script>
 <script type="text/javascript" src="common/js/gnb.min.js"></script>
 <script type="text/javascript" src="common/js/app/visual.js"></script>
-<script type="text/javascript" src="common/js/index.js"></script>
+<script type="text/javascript" src="common/js/common_app_stage.js"></script>
 </body>
 </html>
 

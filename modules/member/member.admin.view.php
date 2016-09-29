@@ -1,77 +1,208 @@
 <?php
 
-class MemberAdminView extends BaseView {
+class MemberAdminModule extends BaseView {
+	
+	var $class_name = 'admin_admin_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class MemberAdminView extends MemberAdminModule {
 
 	var $class_name = 'member_admin_view';
 
-	// display function is defined in parent class 
-}
-
-class MemberAdminModule extends BaseView {
-
-	var $class_name = 'member_admin_module';
-	var $file_name = 'default.html';
-
-	function init() {
-
-		$this->defaultSetting();
+	function displayGroupList() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$page_type = $requests['pagetype'];
-		$page_type = $page_type ? $page_type : "main";
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
-		if (is_readable($top_path)) {
-			$contents = new Template($top_path);
-			$contents->set('page_type', $page_type);
-			$contents->load();
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_grouplist.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$skin_path = _SUX_PATH_ . 'modules/member/tpl/' . $this->file_name;
-		if (is_readable($skin_path)) {
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-			$contents = new Template($skin_path);
-			foreach ($requests as $key => $value) {
-				$contents->set($key, $value);
-			}
-			$contents->load();			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$this->output();
+	}	
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+	function displayGroupAdd() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$this->display();
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupadd.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
 
-	function defaultSetting() {}
-	function display() {}
-}
+	function displayGroupDelete() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-class GrouplistPanel extends MemberAdminModule {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-	var $class_name = 'member_admin_grouplist';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupdelete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-	function defaultSetting() {
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-		$this->file_name = 'admin_grouplist.html';
+		$this->output();
 	}
-}
 
-class GrouplistdataPanel extends BaseView {
+	function displayList() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	var $class_name = 'member_admin_grouplistdata';
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-	function init() {
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayAdd() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
+
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayModify() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
+
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayDelete() {
+		
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
+
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayGroupListJson() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -101,49 +232,14 @@ class GrouplistdataPanel extends BaseView {
 			}
 		} 
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
 
-class GroupaddPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_add';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_groupadd.html';
-	}
-}
-
-class GroupdelpassPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_groupdelpass';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_groupdelpass.html';
-	}
-}
-
-class ListPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_list';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_list.html';
-	}
-}
-
-class ListdataPanel extends BaseView {
-
-	var $class_name = 'member_admin_listdata';
-
-	function init() {
+	function displayListJson() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -212,40 +308,15 @@ class ListdataPanel extends BaseView {
 			$msg .= "현재 등록된 회원그룹이 없습니다.";
 		}
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
 
-class AddPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_add';
-
-	function defaultSetting() {
-
-		echo 'member_admin_add';
-	}
-}
-
-class ModifyPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_modify';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_modify.html';
-	}
-}
-
-class ModifydataPanel extends BaseView {
-
-	var $class_name = 'member_admin_modify';
-
-	function init() {
-
+	function displayModifyJson() {
+		
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
 		$table_name = $posts['table_name'];
@@ -278,29 +349,14 @@ class ModifydataPanel extends BaseView {
 			$resultYN = "N";
 		}
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
-	}
-}
+		echo $this->callback($data);
+	}	
 
-class DelpassPanel extends MemberAdminModule {
-
-	var $class_name = 'member_admin_delpass';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_delpass.html';
-	}
-}
-
-class RecordGroupaddPanel extends BaseView {
-
-	var $class_name = 'member_admin_groupadd';
-
-	function init() {
+	function RecordGroupAdd() {
 
 		$context = Context::getInstance();
 		$table_name = $context->getPost('table_name');
@@ -311,12 +367,10 @@ class RecordGroupaddPanel extends BaseView {
 
 		$result = $this->controller->createTable('member');
 		if ($result) {
-			$msg = "${table_name} 테이블 생성을 성공하였습니다.\n";
-			$resultYN = "Y";
 
 			$result = $this->controller->insert('intoMemberGroup');
 			if ($result) {
-				$msg .= "${table_name} 레코드 등록을 완료하여였습니다.";
+				$msg .= "${table_name} 회원그룹을 등록하였습니다.";
 				$resultYN = "Y";				
 			} else {
 				$msg .= "${table_name} 레코드 등록을 실패하였습니다.";
@@ -327,19 +381,14 @@ class RecordGroupaddPanel extends BaseView {
 			$resultYN = "N";			
 		}
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 		
-		echo parent::callback($output);
-	}
-}
+		echo $this->callback($data);
+	}	
 
-class RecordGroupdeletePanel extends BaseView {
-
-	var $class_name = 'member_admin_groupdelete';
-
-	function init() {
+	function RecordGroupDelete() {
 
 		$context = Context::getInstance();
 		$table_name = $context->getPost('table_name');
@@ -353,29 +402,25 @@ class RecordGroupdeletePanel extends BaseView {
 
 			$result = $this->controller->delete('memberGroup');
 			if (!$result) {
+				$resultYN = "Y";
+				$msg = "${table_name} 회원그룹을 삭제하였습니다.";				
+			} else {
 				$msg = "${table_name} 레코드 삭제를 실패하였습니다.";
 				$resultYN = "N";
-			} else {
-				$msg = "${table_name} 레코드 삭제를 성공하였습니다.";
 			}
 		} else {
 			$msg = "${table_name} 테이블 삭제를 실패하였습니다.";
 			$resultYN = "N";			
 		}
 
-		$output = array(	"member"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"member"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 		
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
 
-class RecordModifyPanel extends BaseView {
-
-	var $class_name = 'member_admin_modify';
-
-	function init() {
+	function RecordModify() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -386,24 +431,19 @@ class RecordModifyPanel extends BaseView {
 
 		$result = $this->controller->update('memberWhereId');
 		if ($result) {
-			$msg = "${name} 님의 회원정보 수정을 성공하였습니다.\n";			
+			$msg = "${name} 님의 회원정보를 수정하였습니다.\n";			
 			$resultYN = "Y";	
 		} else {
 			$msg = "${name} 님의 회원정보 수정을 실패하였습니다.\n";
 			$resultYN = "N";	
 		}
-		$output = array(	"result"=>$resultYN,
+		$data = array(	"result"=>$resultYN,
 							"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
-
-class RecordDeletePanel extends BaseView {
-
-	var $class_name = 'member_admin_delete';
-
-	function init() {
+	
+	function RecordDelete() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -415,7 +455,7 @@ class RecordDeletePanel extends BaseView {
 
 		$result = $this->controller->delete('fromMember');
 		if ($result) {
-			$msg = "${memberid} 회원 레코드를 삭제 완료하였습니다.";
+			$msg = "${memberid} 회원정보를 삭제하였습니다.";
 			$resultYN = "Y";
 		} else {
 			
@@ -423,11 +463,11 @@ class RecordDeletePanel extends BaseView {
 		 	$resultYN = "N"; 	
 		 }
 
-		$output = array(	"member"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"member"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
 }
 ?>

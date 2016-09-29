@@ -1,17 +1,90 @@
 <?php
-
+/**
+ * @class Analytics
+ * @description
+ * 페이지뷰 클릭 수 조회 분석기능 
+ * @pageview url - http://streamux.com/sux/modules/analytics/analytics.php?action=recordPageview&keyword=history
+ * @counter url -  http://streamux.com/sux/modules/analytics/analytics.php?action=recordCounter
+ */
 class AnalyticsView extends BaseView {
 
 	var $class_name = 'analytics_view';
 
-	// display function is defined in parent class 
-}
+	function displayCounter() {
 
-class PageviewPanel extends BaseView {
+		$context = Context::getInstance();
+		$now = date('Y-m-d');
+		$msg = '';
+		$resultYN = 'Y';
 
-	var $class_name = 'pageview';
+		// 접속자 수 
+		$where = new QueryWhere();
+		$where->set('date',$now,'=');
+		$query = array();
+		$query['field'] = 'id';
+		$query['where'] = $where;
 
-	function init() {
+		$result = $this->controller->select('fieldFromConnecter', $query);
+		if (!$result) {
+			$msg .= "오늘 접속자 선택을 실패하였습니다.\n";
+		}		
+		$today_num = $this->model->getNumRows();
+
+		$where = new QueryWhere();
+		$where->set('date',$now,'<');
+		$query = array();
+		$query['field'] = 'id';
+		$query['where'] = $where;
+
+		$result = $this->controller->select('fieldFromConnecter', $query);
+		if (!$result) {
+			$msg .= "어제 접속자 선택을 실패하였습니다.\n";
+		}
+		$yesterday_num = $this->model->getNumRows();
+
+		$result = $this->controller->select('fieldFromConnecterAll', '*');
+		if (!$result) {
+			$msg .= "전체 접속자 선택을 실패하였습니다.\n";
+		}
+		$row = $this->model->getRow();
+		$total_num = $row['hit'];
+
+		// 실 접속자 수 
+		$where = new QueryWhere();
+		$where->set('date',$now,'=');
+		$query = array();
+		$query['field'] = 'id';
+		$query['where'] = $where;
+
+		$result = $this->controller->select('fieldFromConnecterReal', $query);
+		if (!$result) {
+			$msg .= "오늘 실접속자 수 선택을 실패하였습니다.\n";
+		}
+		$real_today_num = $this->model->getNumRows();
+
+		$where = new QueryWhere();
+		$where->set('date',$now,'<');
+		$query = array();
+		$query['field'] = 'id';
+		$query['where'] = $where;
+
+		$result = $this->controller->select('fieldFromConnecterReal', $query);
+		if (!$result) {
+			$msg .= "어제 실접속자 수 선택을 실패하였습니다.\n";
+		}
+		$real_yesterday_num = $this->model->getNumRows();
+
+		$result = $this->controller->select('fieldFromConnecterRealAll', '*');
+		if (!$result) {
+			$msg .= "전체 실접속자 수 선택을 실패하였습니다.\n";
+		}
+		$row = $this->model->getRow();
+		$real_total_num = $row['hit'];
+
+		echo 'today : ' . $today_num . ', ' . 'yester : ' . $yesterday_num . ', ' . 'total : ' . $total_num . '<br>real_today : ' . $real_today_num . ', ' . 'real_yester : ' . $real_yesterday_num . ', ' . 'real total : ' . $real_total_num . '<br>';
+	}
+
+	function recordPageview() {
 
 		$context = Context::getInstance();
 		$keyword = $context->getRequest('keyword');
@@ -21,176 +94,77 @@ class PageviewPanel extends BaseView {
 			$result = $this->controller->select('fieldFromPageview', 'id');
 			if ($result) {
 
-				$rownum = $this->model->getNumRows();				
+				$rownum = $this->model->getNumRows();
 				if ($rownum > 0) {
 
-					$result = $this->controller->select('fieldFromPageview', 'hit');
-					$rows = $this->model->getRows();
+					$result = $this->controller->select('fieldFromPageview', 'hit');					
 					if($result) {
-						$rows['hit'] += 1;
-						$result = $this->controller->update('pageviewSetValue', array('hit'=>$rows['hit']));
-						if (!$result) {
-							Error::alertToBack('조회수 업데이트를 실패하였습니다.');
-						}
+
+						$row = $this->model->getRow();
+						$row['hit'] += 1;
+
+						$this->controller->update('pageviewSetValue', array('hit'=>$row['hit']));
 					}					
 				} else {
-
-					$result = $this->controller->insert('insertIntoPageview');
-					if (!$result) {
-						Error::alertToBack('조회수 업데이트를 실패하였습니다.');
-					}
+					$this->controller->insert('intoPageview');
 				}
 			}
 		}
 	}
-}
 
-class CounterPanel extends BaseView {
-
-	var $class_name = 'count';
-
-	function init() {
+	function recordCounter() {
 
 		$context = Context::getInstance();
 		$ip = $context->getServer('REMOTE_ADDR');
-		$now = date('Y-m-d');
+		$now = date('Y-m-d');	
 
-		$connect_check = $context->getSession('connectcheck');
-		if (!$connect_check || $connect_check == '') {
+		$connectCheck = $context->getSession('connectcheck');
+		if (!isset($connectCheck) || $connectCheck === '') {
 
 			// 총 접속수
 			$result = $this->controller->select('fieldFromConnecterAll', 'hit');
 			if ($result) {
-				$rows = $this->model->getRows();			
-				$hit = $rows['hit']+1;
-				$column = array('hit'=>$hit);				
-				$result = $this->controller->update('connecterAllSetValues', $column);
-				if (!$result) {
-					Error::alertToBack('조회수 업데이트를 실패하였습니다.');
-				}
+
+				$row = $this->model->getRow();			
+				$hit = $row['hit']+1;
+				$column = array('hit'=>$hit);
+
+				$this->controller->update('connecterAllSetValues', $column);
 			}
 
 			// 접속자 수
-			$result = $this->controller->delete('fromConnecter');
-			if (!$result) {
-				Error::alertToBack('접속자 삭제를 실패하였습니다.');
-			}
-
-			$result = $this->controller->insert('intoConnecter');
-			if (!$result) {
-				Error::alertToBack('접속자 추가를 실패하였습니다.');
-			}
+			$this->controller->delete('fromConnecter');
+			$this->controller->insert('intoConnecter');
 
 			// 실접속자 수
 			$where = new QueryWhere();
 			$where->set('ip',$ip,'=','and');
 			$where->set('date',$now,'=','and');
-
 			$query = array();
 			$query['field'] = '*';
 			$query['where'] = $where;
 
 			$result = $this->controller->select('fieldFromConnecterReal', $query);
-			if (!$result) {
-				Error::alertToBack('실접속자 조회를 실패하였습니다.');
-			}
+			if ($result) {
+				
+				$numrow = $this->model->getNumRows();
+				if (!$numrow) {
 
-			$numrow = $this->model->getNumRows();
-			if (!$numrow) {
-				$result = $this->controller->delete('fromConnecterReal');
-				if (!$result) {
-					Error::alertToBack('실접속자 삭제를 실패하였습니다.');
-				}
+					$this->controller->delete('fromConnecterReal');
+					$this->controller->insert('intoConnecterReal');
 
-				$result = $this->controller->insert('intoConnecterReal');
-				if (!$result) {
-					Error::alertToBack('실접속자 추가를 실패하였습니다.');
-				}
+					// 전체 실접속자 수
+					$this->controller->select('fieldFromConnecterRealAll', 'hit');
+					$row = $this->model->getRow();
+					$hit = $row['hit']+1;
+					$column = array('hit'=>$hit);
 
-				// 전체 실접속자 수
-				$result = $this->controller->select('fieldFromConnecterRealAll', 'hit');
-				if (!$result) {
-					Error::alertToBack('전체 실접속자 조회를 실패하였습니다.');
+					$this->controller->update('connecterRealAllSetValues', $column);
 				}
-
-				$rows = $this->model->getRows();
-				$hit = $rows['hit']+1;
-				$column = array('hit'=>$hit);
-				$result = $this->controller->update('connecterRealAllSetValues', $column);
-				if (!$result) {
-					Error::alertToBack('전체 실접속자 조회수 업데이트를 실패하였습니다.');
-				}
-			}
+			}			
 
 			$context->setSession('connectcheck', 'yes');
-		}
-
-		// 접속자 수 
-		$where = new QueryWhere();
-		$where->set('date',$now,'=');
-
-		$query = array();
-		$query['field'] = 'id';
-		$query['where'] = $where;
-		$result = $this->controller->select('fieldFromConnecter', $query);
-		if (!$result) {
-			Error::alertToBack('접속자 선택을 실패하였습니다.');
-		}
-		$today_num = $this->model->getNumRows();
-
-		$where = new QueryWhere();
-		$where->set('date',$now,'<');
-
-		$query = array();
-		$query['field'] = 'id';
-		$query['where'] = $where;
-		$result = $this->controller->select('fieldFromConnecter', $query);
-		if (!$result) {
-			Error::alertToBack('접속자 선택을 실패하였습니다.');
-		}
-		$yesterday_num = $this->model->getNumRows();
-
-		$result = $this->controller->select('fieldFromConnecterAll', '*');
-		if (!$result) {
-			Error::alertToBack('접속자 선택을 실패하였습니다.');
-		}
-		$rows = $this->model->getRows();
-		$total_num = $rows['hit'];
-
-		// 실 접속자 수 
-		$where = new QueryWhere();
-		$where->set('date',$now,'=');
-
-		$query = array();
-		$query['field'] = 'id';
-		$query['where'] = $where;
-		$result = $this->controller->select('fieldFromConnecterReal', $query);
-		if (!$result) {
-			Error::alertToBack('실접속자 수 선택을 실패하였습니다.');
-		}
-		$real_today_num = $this->model->getNumRows();
-
-		$where = new QueryWhere();
-		$where->set('date',$now,'<');
-
-		$query = array();
-		$query['field'] = 'id';
-		$query['where'] = $where;
-		$result = $this->controller->select('fieldFromConnecterReal', $query);
-		if (!$result) {
-			Error::alertToBack('실접속자 수 선택을 실패하였습니다.');
-		}
-		$real_yesterday_num = $this->model->getNumRows();
-
-		$result = $this->controller->select('fieldFromConnecterRealAll', '*');
-		if (!$result) {
-			Error::alertToBack('전체 실접속자 수 선택을 실패하였습니다.');
-		}
-		$rows = $this->model->getRows();
-		$real_total_num = $rows['hit'];
-
-		echo 'today : ' . $today_num . ', ' . 'yester : ' . $yesterday_num . ', ' . 'total : ' . $total_num . '<br>';
-		echo 'real_today : ' . $real_today_num . ', ' . 'real_yester : ' . $real_yesterday_num . ', ' . 'real total : ' . $real_total_num . '<br>';
+		}		
 	}
 }
 ?>

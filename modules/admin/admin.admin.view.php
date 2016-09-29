@@ -1,102 +1,113 @@
 <?php
-
-class AdminAdminView extends BaseView {
+class AdminAdminModule extends BaseView {
 	
-	var $class_name = 'admin_admin_view';
+	var $class_name = 'admin_admin_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
 
-	// display function is defined in parent class 
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
 }
 
-class MainPanel extends BaseView {
+class AdminAdminView extends AdminAdminModule {
 
-	var $class_name = 'main';
-	var $file_name = 'main.html';
+	var $class_name = 'admin_admin_view';	
 
-	function init() {
+	function displayMain() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();		
-		$page_type = $requests['pagetype'];
-		$page_type = $page_type ? $page_type : 'main';
+		$requestData = $context->getRequestAll();		
+		$page_type = $requestData['pagetype'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$requestData['pagetype'] = (isset($page_type) || $page_type != '') ? $page_type : 'admin';
 
-		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
-		if (is_readable($top_path)) {
-			$contents = new Template($top_path);
-			$contents->set('page_type', $page_type);
-			$contents->load();
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
+		$skinPath = _SUX_PATH_ . "modules/admin/tpl";
 
-		$skin_path = _SUX_PATH_ . 'modules/admin/tpl/' . $this->file_name;
-		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);
-			foreach ($requests as $key => $value) {
-				$contents->set($key, $value);
-			}
-			$contents->load();		
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_main.tpl";
+		$this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['page_type'] = $page_type;
 
-		$this->display();
+		$this->output();
 	}
-}
 
-class MaindataPanel extends BaseView {
+	function displayConnecterJson() {
 
-	var $class_name = 'main_data';
+		$data = $this->_getConnecterData();
+		echo $this->callback($data);
+	}
 
-	function init() {
+	function displayMainJson() {
 
-		$connecter_data = new ConnecterData($this->model, $this->controller);
-		$connecter_data->init();
-		$connecterArr1 = $connecter_data->get()['data'];
-
-		$connecterreal_data = new ConnecterrealData($this->model, $this->controller);
-		$connecterreal_data->init();
-		$connecterArr2 = $connecterreal_data->get()['data'];
-		$connecterArr = array_merge($connecterArr1, $connecterArr2);
-
-		$pageview_data = new PageviewData($this->model, $this->controller);
-		$pageview_data->init();
-		$pageviewArr = $pageview_data->get()['data'];
-
-		$connectersite_data = new ConnectersiteData($this->model, $this->controller);
-		$connectersite_data->init();
-		$connectersiteArr = $connectersite_data->get()['data'];
-
-		$servie_data = new ServiceData($this->model, $this->controller);
-		$servie_data->init();
-		$serviceConfigArr = $servie_data->get()['data'];
+		$connecterArr1 = $this->_getConnecterData();
+		$connecterArr2 = $this->_getConnecterrealData();
+		$connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
+		$pageviewArr = $this->_getPageviewData();
+		$connectersiteArr = $this->_getConnectersiteData();
+		$serviceConfigArr = $this->_getServiceData();
 
 		$dataObj  = array(	'connecter'=>$connecterArr,
-							'pageview'=>$pageviewArr,
-							'connectersite'=>$connectersiteArr,
-							'serviceConfig'=>$serviceConfigArr);
+							'pageview'=>$pageviewArr['data'],
+							'connectersite'=>$connectersiteArr['data'],
+							'serviceConfig'=>$serviceConfigArr['data']);
 
 		$data = array(	'data'=>$dataObj );
-
-		echo parent::callback($data);
-	}
-}
-
-class ConnecterData extends BaseView {
-
-	var $class_name = 'connecter_data';
-	var $model = null;
-	var $controller = null;
-	var $data = null;
-
-	function init() {
 		
+		echo $this->callback($data);
+	}
+
+	function displayConnecterrealJson() {
+
+		$data = $this->_getConnecterrealData();
+		echo $this->callback($data);
+	}
+
+	function displayPageviewJson() {
+
+		$data = $this->_getPageviewData();
+		echo $this->callback($data);
+	}
+
+	function displayConnectersiteJson() {
+
+		$data = $this->_getConnectersiteData();
+		echo $this->callback($data);
+	}
+
+	function displayServiceJson() {
+
+		$data = $this->_getServiceData();
+		echo $this->callback($data);
+	}
+
+	function _getConnecterData() {
+
 		$msg = '';
 		$resultYN = 'Y';
 		$connecterArr = array();
@@ -141,37 +152,13 @@ class ConnecterData extends BaseView {
 			$resultYN = 'N';
 		}
 
-		$this->data = array(	'data'=>$connecterArr,
-								'result'=>$resultYN,
-								'msg'=>$msg);		
+		$data = array(	'data'=>$connecterArr,
+						'result'=>$resultYN,
+						'msg'=>$msg);	
+		return $data;
 	}
 
-	function get() {
-
-		return $this->data;
-	}
-}
-
-class ConnecterdataPanel extends BaseView {
-
-	var $class_name = 'connecter_data';
-	var $data = null;
-
-	function init() {
-
-		$connecter_data = new ConnecterData($this->model, $this->controller);
-		$connecter_data->init();
-		$data = $connecter_data->get();
-
-		echo parent::callback($data);
-	}
-}
-
-class ConnecterrealData extends BaseView {
-
-	var $class_name = 'connecterreal_data';
-
-	function init() {
+	function _getConnecterrealData() {
 
 		$msg = '';
 		$resultYN = 'Y';
@@ -218,39 +205,14 @@ class ConnecterrealData extends BaseView {
 			$resultYN = 'N';
 		}
 
-		$this->data = array('data'=>$connecterArr,
-							'result'=>$resultYN,
-							'msg'=>$msg);
+		$data = array(	'data'=>$connecterArr,
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
 	}
 
-	function get() {
+	function _getPageviewData() {
 
-		return $this->data;
-	}
-}
-
-class ConnecterrealdataPanel extends BaseView {
-
-	var $class_name = 'connecterreal_data';
-	var $data = null;
-
-	function init() {
-		
-		$connecterreal_data = new ConnecterrealData($this->model, $this->controller);
-		$connecterreal_data->init();
-		$data = $connecterreal_data->get();
-
-		echo parent::callback($data);
-	}
-}
-
-class PageviewData extends BaseView {
-
-	var $class_name = 'pageview_data';
-	var $data = null;
-
-	function init() {
-		
 		$msg = '';
 		$resultYN = 'Y';
 		$pageviewArr = array();
@@ -311,39 +273,15 @@ class PageviewData extends BaseView {
 			$resultYN = 'N';
 		}
 
-		$this->data = array('data'=>$pageviewArr,
-							'mode'=>'pageview',
-							'result'=>$resultYN,
-							'msg'=>$msg);
+		$data = array(	'data'=>$pageviewArr,
+						'mode'=>'pageview',
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
 	}
 
-	function get() {
+	function _getConnectersiteData() {
 
-		return $this->data;
-	}
-}
-
-class PageviewdataPanel extends BaseView {
-
-	var $class_name = 'pageview_data';
-
-	function init() {
-
-		$pageview_data = new pageviewData($this->model, $this->controller);
-		$pageview_data->init();
-		$data = $pageview_data->get();
-
-		echo parent::callback($data);
-	}
-}
-
-class ConnectersiteData extends BaseView {
-
-	var $class_name = 'connectersite_data';
-	var $data = null;
-
-	function init() {
-		
 		$msg = '';
 		$resultYN = 'Y';
 		$analyticsArr = array();
@@ -404,38 +342,14 @@ class ConnectersiteData extends BaseView {
 			$resultYN = 'N';
 		}
 
-		$this->data = array('data'=>$analyticsArr,
-							'mode'=>'connectersite',
-							'result'=>$resultYN,
-							'msg'=>$msg);
+		$data = array(	'data'=>$analyticsArr,
+						'mode'=>'connectersite',
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
 	}
 
-	function get() {
-
-		return $this->data;
-	}
-}
-
-class ConnectersitedataPanel extends BaseView {
-
-	var $class_name = 'connectersite_data';
-
-	function init() {
-
-		$connectersite_data = new ConnectersiteData($this->model, $this->controller);
-		$connectersite_data->init();
-		$data = $connectersite_data->get();
-
-		echo parent::callback($data);
-	}
-}
-
-class ServiceData extends BaseView {
-
-	var $class_name = 'Service_data';
-	var $data = null;
-
-	function init() {
+	function _getServiceData() {
 
 		$msg = '';
 		$resultYN = 'Y';
@@ -501,29 +415,10 @@ class ServiceData extends BaseView {
 			}
 		}
 
-		$this->data = array('data'=>$serviceConfig,
-							'result'=>$resultYN,
-							'msg'=>$msg);
-	}
-
-	function get() {
-
-		return $this->data;
+		$data = array(	'data'=>$serviceConfig,
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
 	}
 }
-
-class ServicedataPanel extends BaseView {
-
-	var $class_name = 'service_data';
-
-	function init() {
-
-		$service_data = new ServiceData($this->model, $this->controller);
-		$service_data->init();
-		$data = $service_data->get();
-
-		echo parent::callback($data);
-	}
-}
-
 ?>

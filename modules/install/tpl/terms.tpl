@@ -32,7 +32,7 @@
 			6. 기타 의문사항은 http://streamux.com 을 이용해 주시기 바랍니다.
 			(질문등에 대한 내용은 메일로 받지 않습니다)</span>				
 		</div>
-		<a href="install.php?action=dbsetup"><img src="tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
+		<a href="install.php?action=DBSetup"><img src="tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
 	</div>
 	<div class="footer">
 		{include file="$copyrightPath"}

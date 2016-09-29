@@ -17,7 +17,7 @@
 						<img src="tpl/images/icon_01.gif" title="">						
 						<span class="ui-subtitle">조회 결과</span>
 						<span class="link-searchinfo">
-							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
+							<a href="login.php?action=searchID">아이디</a> | <a href="login.php?action=searchPassword">비밀번호 찾기</a>	
 						</span>
 					</div>
 					<div class="leave-body">

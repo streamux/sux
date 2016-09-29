@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-23 05:20:46
+/* Smarty version 3.1.30, created on 2016-09-28 03:21:15
   from "/Applications/MAMP/htdocs/sux/modules/install/tpl/terms.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e49f8e833363_82298561',
+  'unifunc' => 'content_57eb1b0b979847_39364558',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f9a010cfd2f912ab890c6dd472ef03d45c75c936' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/install/tpl/terms.tpl',
-      1 => 1474600845,
+      1 => 1475025669,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e49f8e833363_82298561 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57eb1b0b979847_39364558 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX 설치 : 약관동의 - StreamUX"), 0, true);
 ?>
 
@@ -57,7 +57,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->val
 			6. 기타 의문사항은 http://streamux.com 을 이용해 주시기 바랍니다.
 			(질문등에 대한 내용은 메일로 받지 않습니다)</span>				
 		</div>
-		<a href="install.php?action=dbsetup"><img src="tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
+		<a href="install.php?action=DBSetup"><img src="tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
 	</div>
 	<div class="footer">
 		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);

@@ -143,7 +143,7 @@ window.trace = function( str, bool ) {
 		if (!params.data) {
 			params.data = "";
 		}
-
+		
 		if (jQuery) {
 			$.ajax({
 				type: "POST",

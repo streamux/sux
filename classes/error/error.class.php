@@ -1,28 +1,28 @@
 <?php
-
 class Error {
 
 	static function alert($msg) {
 
-		echo '	<script>
-					alert(\''.${msg}.'\');
-				</script>';
+		printf('	<script>
+					alert(\'%s\');
+				</script>', $msg);
 	}
 
 	static function alertToBack($msg) {
 
-		echo '	<script>
-					alert(\''.${msg}.'\');
+		printf('	<script>
+					alert(\'%s\');
 					history.go(-1);
-				</script>';
+				</script>', $msg);
 	}
 
 	static function alertTo($msg, $url=null) {
 
-		echo '	<script>
-					alert(\'' . $msg . '\');
-					location.href=\'' . $url . '\';
-				</script>';
+		printf('	<meta charset="utf-8" />
+				<script>
+					alert(\'%s\');
+					location.href=\'%s\';
+				</script>', $msg, $url);
 	}
 }
 ?>

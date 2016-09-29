@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-22 08:18:06
+/* Smarty version 3.1.30, created on 2016-09-26 08:03:37
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/searchpwd.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e3779e8a5c34_09230807',
+  'unifunc' => 'content_57e8ba39cdd1c9_30050567',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4803f584e0eb19cb80148cd40b8006a10a31b518' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/searchpwd.tpl',
-      1 => 1474525084,
+      1 => 1474869790,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e3779e8a5c34_09230807 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57e8ba39cdd1c9_30050567 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"비밀번호 찾기 - StreamUX"), 0, true);
 ?>
 
@@ -46,7 +46,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->val
 							<!-- templete -->
 						</select>
 						<span class="link-searchinfo">
-							<a href="login.php?action=searchid">아이디</a> | <a href="login.php?action=searchpwd">비밀번호 찾기</a>	
+							<a href="login.php?action=searchID">아이디</a> | <a href="login.php?action=searchPassword">비밀번호 찾기</a>	
 						</span>
 					</div>
 					<div class="leave-body">

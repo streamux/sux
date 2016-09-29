@@ -1,142 +1,146 @@
 <?php
 
-class BoardAdminView extends BaseView {
+class BoardAdminModule extends BaseView {
+	
+	var $class_name = 'board_admin_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() { 
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class BoardAdminView extends BoardAdminModule {
 
 	var $class_name = 'board_admin_view';
 
-	// display function is defined in parent class 
-}
-
-class BoardAdminModule extends BaseView {
-
-	var $class_name = 'board_admin_module';
-	var $file_name = 'admin_list.html';
-
-	function init() {
-
-		$this->defaultSetting();
+	function displayList() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$board = $requests['table_name'];
-		$id = $requests['id'];
-		$page_type = $requests['pagetype'];
-		$page_type = $page_type ? $page_type : "main";
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
-		if (is_readable($top_path)) {
-			$contents = new Template($top_path);
-			$contents->set('page_type', $page_type);
-			$contents->load();
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-		$skin_path = _SUX_PATH_ . 'modules/board/tpl/' . $this->file_name;
-		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);
-			$contents->set('table_name', $board);
-			$contents->set('id', $id);
-			$contents->load();			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-		$this->display();
+		$this->output();
 	}
 
-	function defaultSetting() {}
-	function display() {}
-}
-
-class ListPanel extends BoardAdminModule {
-
-	var $class_name = 'board_admin_list';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_list.html';
-	}	
-}
-
-class AddPanel extends BoardAdminModule {
-
-	var $class_name = 'board_admin_add';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_add.html';
-	}
-}
-
-class ModifyPanel extends BoardAdminModule {
-
-	var $class_name = 'board_admin_modify';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_modify.html';
-	}
-}
-
-class ModifydataPanel extends BaseView {
-
-	var $class_name = 'board_admin_modifydata';
-
-	function init() {
+	function displayAdd() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$table_name = $context->getPost('table_name');
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$dataObj = array('table_name'=>$table_name);
-		$msg = "";
-		$resultYN = "Y";
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-		$result = $this->controller->select('fromBoard');
-		if ($result) {
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-			$row = $this->model->getRow();
-			foreach ($row as $key => $value) {
-				${$key} = $value;
-				$dataObj[$key] = $value;
-			}
-		} else {
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-			$msg = $table_name . "게시판이 존재하지 않습니다.";
-			$resultYN = "Y";
-		}
-
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo parent::callback($data);
+		$this->output();
 	}
-}
 
-class SkinlistPanel extends BaseView {
+	function displayModify() {
 
-	var $class_name = 'board_admin_skin';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function init() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayDelete() {
+
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
+
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displaySkinListJson() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
 
-		$path = _SUX_PATH_ . "modules/board/skin/";
+		$skinDir = _SUX_PATH_ . "modules/board/skin/";
 		
 		$msg = "";
 		$resultYN = "Y";
 
-		$skinList = Utils::getInstance()->readDir($path);
+		$skinList = Utils::getInstance()->readDir($skinDir);
 		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
@@ -146,52 +150,22 @@ class SkinlistPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class DelpassPanel extends BoardAdminModule {
+	function displayListJson() {
 
-	var $class_name = 'board_admin_delpass';
+		$context = Context::getInstance();
+		$board_group = $context->get('db_board_group');
+		$passover = $context->getRequest('passover');
 
-	function defaultSetting() {
-
-		$this->file_name = 'admin_delpass.html';
-	}
-}
-
-class RecordModules extends BaseView {
-
-	var $class_name = 'board_admin_record_modules';
-	var $context;
-	var $requests;
-	var $posts;
-
-	function init() {
-
-		$this->context = Context::getInstance();
-		$this->requests = $this->context->getRequestAll();
-		$this->posts = $this->context->getPostAll();
-		$this->record();
-	}
-}
-class RecordListPanel extends RecordModules {
-
-	var $class_name = 'board_admin_record_list';
-
-	function record() {
-
-		$mysql_db = $this->context->getDBInfo()['db_database'];
-		$board_group = $this->context->get('db_board_group');
-		$passover = $this->requests['passover'];
-
-		$limit = 20;  
+		$limit = 20;
 		if (!$passover) {
 			 $passover = 0;			
 		}
 
-		$this->context->set('passover', $passover);
-		$this->context->set('limit', $limit);
+		$context->set('passover', $passover);
+		$context->set('limit', $limit);
 
 		$dataObj = null;
 		$dataList = array();
@@ -233,21 +207,93 @@ class RecordListPanel extends RecordModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class RecordAddPanel extends RecordModules {
-
-	var $class_name = 'board_admin_record_add';
-
-	function record() {
+	function displayModifyJson() {
 
 		$context = Context::getInstance();
-		$board = $context->getPost('table_name');
-		if (!isset($board) && $board == '') {
-			$board = $context->getRequest('table_name');
+		$requests = $context->getRequestAll();
+		$table_name = $context->getPost('table_name');
+
+		$dataObj = array('table_name'=>$table_name);
+		$msg = "";
+		$resultYN = "Y";
+
+		$result = $this->controller->select('fromBoard');
+		if ($result) {
+
+			$row = $this->model->getRow();
+			foreach ($row as $key => $value) {
+				${$key} = $value;
+				$dataObj[$key] = $value;
+			}
+		} else {
+
+			$msg = $table_name . "게시판이 존재하지 않습니다.";
+			$resultYN = "Y";
 		}
+
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
+
+		echo $this->callback($data);
+	}
+
+	function displayCheckTableName() {
+
+		$context = Context::getInstance();
+		$table_name = $context->getRequest('table_name');
+
+		$dataObj	= "";
+		$msg = "";
+		$resultYN = "Y";
+
+		$msg = "추가 생성 게시판 : ".$table_name."\n";
+
+		if (!isset($table_name) || $table_name == '') {
+
+			$msg = "게시판 이름을 넣고 중복체크를 하십시오.";
+			$resultYN = "N";
+
+			$data = array(	"result"=>$resultYN,
+							"msg"=>$msg);
+
+			echo $this->callback($data);
+			exit;
+		}
+
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $table_name)) {
+
+			$msg .= "테이블명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
+
+			$data = array(	"msg"=>$msg);			
+			echo $this->callback($data);
+			exit;
+		} 
+
+		$result = $this->controller->select('fromBoard');
+		$numrows = $this->model->getNumRows();
+
+		if ($numrows> 0) {
+			$msg = "${table_name}는 이미 존재하는 게시판입니다.";
+			$resultYN = "N";
+		} else {
+			$msg = "${table_name}는 생성할 수 있는 게시판입니다.";
+			$resultYN = "Y";
+		}
+
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		echo $this->callback($data);
+	}
+
+	function recordAdd() {
+
+		$context = Context::getInstance();
+		$board = $context->getRequest('table_name');
 
 		$dir = _SUX_PATH_ . "board_data/";
 
@@ -255,7 +301,7 @@ class RecordAddPanel extends RecordModules {
 
 		if (!is_dir($dir)) {
 			if (@mkdir($dir, 0777)) {
-				$msg = "게시판 자료저장  폴더를 생성하였습니다.\n";
+				$msg = "게시판 디렉토리 관리 폴더를 생성하였습니다.\n";
 				$resultYN = "Y";
 			} else {
 				$msg = "게시판 자료저장  폴더를 생성 실패하였습니다.\n";
@@ -293,26 +339,22 @@ class RecordAddPanel extends RecordModules {
 
 			$dir = $dir . $board;
 			if (!@mkdir( $dir, 0777)) {
-				$msg .= "${board} 디렉토리가 이미 생성되어 있습니다.";
+				$msg .= "${board} 디렉토리가 이미 생성되어 있습니다.\n";
 			} else {
-				$msg .= "${board} 디렉토리 폴더 생성을 성공하였습니다.";
+				$msg .= "${board} 디렉토리 폴더 생성을 성공하였습니다.\n";
 			}
 		}
 
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class RecordModifyPanel extends RecordModules {
+	function recordModify() {
 
-	var $class_name = 'board_admin_record_modify';
-
-	function record() {
-		
-		$table_name = $this->requests['table_name'];
+		$context = Context::getInstance();
+		$table_name = $context->getRequest('table_name');
 
 		$dataObj = array();
 		$resultYN = "Y";
@@ -330,19 +372,17 @@ class RecordModifyPanel extends RecordModules {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class RecordDeletePanel extends RecordModules {
+	function recordDelete() {
 
-	var $class_name = 'board_admin_record_delete';
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
 
-	function record() {
-
-		$table_name = $this->posts['table_name'];
+		$table_name = $posts['table_name'];
 		$table_name_grg =$table_name."_grg";
-		$id = $this->posts['id'];
+		$id = $posts['id'];
 
 		$dir = _SUX_PATH_ . 'board_data/' . $table_name;
 
@@ -384,7 +424,7 @@ class RecordDeletePanel extends RecordModules {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 }
 ?>

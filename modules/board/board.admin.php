@@ -8,6 +8,7 @@ $action = $context->getRequest('action');
 
 $model = new BoardAdminModel();
 $controller = new BoardAdminController($model);
+
 $views = new BoardAdminView($model, $controller);
 
 if (isset($action) && $action) {
