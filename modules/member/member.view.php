@@ -1,138 +1,84 @@
 <?php
 
-class MemberView extends BaseView {
+class MemberModules extends BaseView {
+
+	var $class_name = 'member_module';	
+	var $skin_dir = '';
+	var $skin_path = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path)) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path );
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+
+class MemberView extends MemberModules {
 
 	var $class_name = 'member_view';
 
-	// display function is defined in parent class 
-}
-
-class MemberModules extends BaseView {
-
-	var $class_name = 'member_modules';
-	var $file_name = 'default.html';
-
-	function init() {
-
-		$this->defaultSetting();
+	function displayJoin() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+		$this->request_data = $context->getRequestAll();
 
-		$skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
-		$skin_path = $skin_dir . 'header.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '헤더 파일경로를 확인하세요.<br>';
-		}
-		
-		$skin_path = $skin_dir . $this->file_name;
-		if (is_readable($skin_path)) {			
-			if (preg_match('/modify/', $skin_path)) {
+		$this->skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
+		$this->skin_path = $this->skin_dir . 'join.tpl';
 
-				$contents = new Template($skin_path);
-				foreach ($requests as $key => $value) {
-					$contents->set($key, $value);
-				}
-				$contents->load();
-			} else {
-				include $skin_path;
-			}
-			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$skin_path = $skin_dir . 'footer.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '푸터 파일경로를 확인하세요.<br>';
-		}
+		$this->output();
 	}
 
-	function defaultSetting() {}
-	function display() {}
-}
-class JoinPanel extends MemberModules {
-
-	var $class_name = 'join';
-
-	function defaultSetting() {
-
-		$this->file_name = 'join.html';
-	}
-}
-
-class ModifyPanel extends MemberModules {
-
-	var $class_name = 'modify';
-
-	function defaultSetting() {
-
-		$this->file_name = 'modify.html';
-	}
-}
-
-class GrouplistPanel extends BaseView {
-
-	var $class_name = 'grouplist';
-
-	function init() {
+	function displayModify() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$msg = '';
+		$this->request_data = $context->getRequestAll();
 
+		$this->skin_dir = _SUX_PATH_ . 'modules/member/tpl/';
+		$this->skin_path = $this->skin_dir . 'modify.tpl';
+
+		$this->output();
+	}
+
+	function displayGroupList() {
+
+		$msg = '데이터 로드를 완료하였습니다.';
 		$result = $this->controller->select('memberListFromGroup');
 		if ($result) {
-
 			$data = array(	'data'=>$this->model->getRows(),
 							'msg'=>$msg);
 		} else {
 			$msg = '데이터 로드를 실패하였습니다.';
-			$data = array('msg'=>$msg);
-
-			
+			$data = array('msg'=>$msg);			
 		}
 
-		echo parent::callback($data);	
+		echo $this->callback($data);
 	}
-}
 
-class MemberfieldPanel extends BaseView {
-
-	var $class_name = 'membrfield';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
-		$result = $this->controller->select('fieldFromMember', '*');
-		if ($result) {
-			$rows = $this->model->getRow();
-			$email_arr = split('@', $rows['email']);
-			$rows['email'] = $email_arr[0];
-			$rows['email_tail2'] = $email_arr[1];
-
-			echo parent::callback($rows);
-		} else {
-			echo '데이터 로드를 실패하였습니다.';
-		}
-	}
-}
-
-class SearchidPanel extends BaseView {
-
-	var $class_name = 'searchid';
-
-	function init() {
+	function displaySearchID() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
 		$requests = $context->getRequestAll();
+
 		$table_name = $posts['table_name'];
 		$id = $posts['memberid'];
 
@@ -142,12 +88,12 @@ class SearchidPanel extends BaseView {
 
 		$msg = "신청 아이디 : ".$id."\n";
 
-		if (strlen($id) < 4) {
+		if (!preg_match('/^[a-zA-Z!_][a-zA-Z0-9!_]{3,12}$/i', $id)) {
 
-			$msg .= "아이디명은 4글자 이상 사용하세요.";
+			$msg .= "아이디명은 영문+숫자+특수문자('!','_') 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 
 			$data = array(	"msg"=>$msg);
-			echo parent::callback($rows);
+			echo parent::callback($data);
 			exit;
 		} 
 
@@ -172,85 +118,85 @@ class SearchidPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class SearchcorpPanel extends BaseView {
+	function didsplaySearchCorp() {
 
-	var $class_name = 'searchcorp';
+		$msg = "중복회사 체크 작업 중.";
+		$resultYN = "Y";
 
-	function init() {
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
 
+		echo $this->callback($data);
 	}
-}
 
-class RecordBasePanel extends BaseView {
+	function displayMemberField() {
 
-	var $class_name = 'record_base';
-	var $posts;
-	var $requests;
+		$msg = '데이터 로드를 완료하였습니다.';
+		$result = $this->controller->select('fieldFromMember', '*');
+		if ($result) {
+			$rows = $this->model->getRow();
+			$email_arr = split('@', $rows['email']);
+			$rows['email'] = $email_arr[0];
+			$rows['email_tail2'] = $email_arr[1];
 
-	function init() {
+			$data = array(	'data'=>$rows,
+							'msg'=>$msg);			
+		} else {
+			$msg = '데이터 로드를 실패하였습니다.';
+			$data = array('msg'=>$msg);
+		}
+		echo $this->callback($data);
+	}
+
+	function recordJoin() {
 
 		$context = Context::getInstance();
-		$this->posts = $context->getPostAll();
-		$this->requests = $context->getRequestAll();
-
-		$this->record();
-	}
-}
-
-class RecordAddPanel extends RecordBasePanel {
-
-	var $class_name = 'record_add';
-
-	function record() {
+		$posts = $context->getPostAll();
 
 		$dataObj = '';
 		$msg = '';
 		$resultYN = "Y";
 
-
-		$email = $this->posts['email'];
+		$email = $posts['email'];
 		if (!preg_match('/@/i', $email)) {
-			$msg = "잘못된 E-mail 주소입니다.";
+			$msg .= "잘못된 E-mail 주소입니다.";
 	 		$resultYN = "N";
-		}
-
-		$this->controller->select('fieldFromMember', 'ljs_memberid');
-		$numrows = $this->model->getNumRows();
-		if ($numrows > 0) {
-			$msg = $numrows . "같은 아이디가 존재합니다.";
-			$resultYN = "N";
 		} else {
-			$result = $this->controller->insert('recordAdd');
-			if ($result) {
-				$msg .= '신규회원 가입을 완료하였습니다.';
-				$resultYN = "Y";
-			} else {
-				$msg .= '신규회원 가입을 실패하였습니다.';
+			$this->controller->select('fieldFromMember', 'ljs_memberid');
+			$numrows = $this->model->getNumRows();
+			if ($numrows > 0) {
+				$msg = "아이디가 이미 존재합니다.";
 				$resultYN = "N";
+			} else {
+				$result = $this->controller->insert('recordAdd');
+				if ($result) {
+					$msg .= '신규회원 가입을 완료하였습니다.';
+					$resultYN = "Y";
+				} else {
+					$msg .= '신규회원 가입을 실패하였습니다.';
+					$resultYN = "N";
+				}
 			}
 		}
-		
+				
 		$data = array(	"member"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class RecordEditPanel extends RecordBasePanel {
+	function recordModify() {
 
-	var $class_name = 'record_edit';
-
-	function record() {
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
 
 		$msg = '';
 		$resultYN = "Y";
-		$pwd = trim($this->posts['pwd1']);
+		$pwd = trim($posts['pwd1']);
 
 		$this->controller->select('fieldFromMember', 'ljs_pass1');
 		$rows = $this->model->getRow();
@@ -273,19 +219,17 @@ class RecordEditPanel extends RecordBasePanel {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class RecordDeletePanel extends RecordBasePanel {
+	function recordDelete() {
 
-	var $class_name = 'record_delete';
-
-	function record() {
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
 
 		$msg = '';
 		$resultYN = 'Y';
-		$pass = trim($this->posts['pass']);
+		$pass = trim($posts['pass']);
 		$pass = substr(md5($pass),0,8);
 
 		$this->controller->select('fieldFromMember', 'ljs_pass1');
@@ -306,7 +250,7 @@ class RecordDeletePanel extends RecordBasePanel {
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
 }
 ?>

@@ -1,19 +1,8 @@
-
+jsux.gnb = jsux.gnb || {};
+jsux.gnb.Menu = jsux.View.create();
 (function( app ){
 
-	var GNB;
-
-	function trace( str ) {
-
-		console.log( str );
-	}
-
-	function warn( str ) {
-
-		trace("warn : " + str);
-	}
-
-	GNB = function( p, m ) {
+	var GNB = function( p, m ) {
 
 		var _scope	= this,
 			_stage	= $(p),			
@@ -29,7 +18,7 @@
 			_activateSid		= -1,
 			_timer			= -1;
 
-		this.setData = function( value ) {
+		this.update = function( o,  value ) {
 
 			_data = value;
 			this.setUI();				
@@ -44,14 +33,14 @@
 
 				ty = -1*_data[mindex].sub.length * (34+1);
 
-				_stage.append("<ul class=\"mmenu\">"+
-									"<li data-mid=\"" + mindex + "\" data-sid=\"-1\">" +
-										"<a href=\"#none\"><span>"+_data[mindex].label+"</span></a>"+
-										"<div class=\"sub\">"+
-											"<ul class=\"panel\" style=\"top:"+ ty +"px\"data-startPosY=\""+ ty +"px\"></ul>"+
-										"</div>"+
-									"</li>"+
-								"</ul>");
+				_stage.append('<ul class="mmenu">'+
+									'<li data-mid="' + mindex + '" data-sid="-1">' +
+										'<a href="#none"><span>'+_data[mindex].label+'</span></a>'+
+										'<div class="sub">'+
+											'<ul class="panel" style="top:'+ ty +'px"data-startPosY="'+ ty +'px"></ul>'+
+										'</div>'+
+									'</li>'+
+								'</ul>');
 			});
 
 			this.alignUI();
@@ -60,10 +49,10 @@
 
 				$( _data[mindex].sub ).each(function(sindex) {
 
-					_stage.find(".mmenu:eq("+mindex+") .sub > ul").append(
-						"<li class=\"smenu\" data-mid=\"" + mindex + "\" data-sid=\"" + sindex + "\">"+
-							"<a href=\"#none\"><span>"+_data[mindex].sub[sindex].label+"</span></a>"+
-						"</li>");
+					_stage.find('.mmenu:eq('+mindex+') .sub > ul').append(
+						'<li class="smenu" data-mid="' + mindex + '" data-sid="' + sindex + '">'+
+							'<a href="#none"><span>'+_data[mindex].sub[sindex].label+'</span></a>'+
+						'</li>');
 				});
 			});
 		};
@@ -105,42 +94,46 @@
 
 		this.setEvent = function() {
 
-			_stage.find(".mmenu > li > a").on("mouseover", function(e){
+			_stage.find('.mmenu > li > a').on('mouseover', function(e){
 
+				e.preventDefault();
 				_scope.stopTimer();
-				_m.menuOn( $( this ).parent().attr("data-mid"), -1 );
-				e.preventDefault();
+				_m.menuOn( $( this ).parent().attr('data-mid'), -1 );	
 			});
 
-			_stage.find(".mmenu > li > a").on("mouseout", function(e){
+			_stage.find('.mmenu > li > a').on('mouseout', function(e){
 
+				e.preventDefault();
 				_scope.startTimer();
+				
+			});
+
+			_stage.find('.mmenu > li > a').on('click', function(e){
+
 				e.preventDefault();
 			});
 
-			_stage.find(".mmenu > li > a").on("click", function(e){
+			_stage.find('.smenu > a').on('mouseover', function(e){
 
 				e.preventDefault();
-			});
-
-			_stage.find(".smenu > a").on("mouseover", function(e){
-
 				_scope.stopTimer();
-				_m.menuOn( $( this ).parent().attr("data-mid"), $( this ).parent().attr("data-sid") );
-				e.preventDefault();
+				_m.menuOn( $( this ).parent().attr('data-mid'), $( this ).parent().attr('data-sid') );
+				
 			});
 
-			_stage.find(".smenu > a").on("mouseout", function(e){
+			_stage.find('.smenu > a').on('mouseout', function(e){
 
+				e.preventDefault();
 				_scope.startTimer();
-				e.preventDefault();
+				
 			});
 
-			_stage.find(".smenu > a").on("click", function(e){
+			_stage.find('.smenu > a').on('click', function(e){
 
-				var url = _data[$( this ).parent().attr("data-mid")].sub[$( this ).parent().attr("data-sid")].link;
-				jsuxApp.goURL( url, "_self" );
 				e.preventDefault();
+
+				var url = _data[$( this ).parent().attr('data-mid')].sub[$( this ).parent().attr('data-sid')].link;
+				jsux.goURL( url, '_self' );				
 			});
 		};
 
@@ -164,74 +157,74 @@
 
 			switch(type) {
 
-				case "mouseover" :					
+				case 'mouseover' :					
 
 					if (_mid > -1) menu 	= _list.eq(_mid);
-					if (_sid > -1) submenu 	= menu.find(".sub .smenu").eq(_sid);
+					if (_sid > -1) submenu 	= menu.find('.sub .smenu').eq(_sid);
 
-					if (menu && !menu.hasClass("activate")) {
+					if (menu && !menu.hasClass('activate')) {
 
-						mask 	= menu.find(".sub");
-						panel	= menu.find(".sub .panel");
+						mask 	= menu.find('.sub');
+						panel	= menu.find('.sub .panel');
 						ty 		= 0;
-						th 		= _list.eq(_mid).find(".sub .panel").attr("data-startPosY").replace(/[^(0-9)]/gi, "");
+						th 		= _list.eq(_mid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						menu.addClass("activate");
-						_scope.tween( panel, 10, {"top": ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
+						menu.addClass('activate');
+						_scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 
-							var mh = th - panel.css("top").replace(/[^(0-9)]/gi, "");
-							mask.css("height", mh);
+							var mh = th - panel.css('top').replace(/[^(0-9)]/gi, '');
+							mask.css('height', mh);
 						}});
 					}
 					
-					if (submenu && !submenu.hasClass("activate")) {
-						submenu.addClass("activate");
+					if (submenu && !submenu.hasClass('activate')) {
+						submenu.addClass('activate');
 					}
 
 					if (_oldMid != _mid && _oldMid > -1) {
 
-						oldMask 	= _list.eq(_oldMid).find(".sub");
-						oldPanel	= _list.eq(_oldMid).find(".sub .panel");
-						oldty 		= _list.eq(_oldMid).find(".sub .panel").attr("data-startPosY");
-						oldth 		= _list.eq(_oldMid).find(".sub .panel").attr("data-startPosY").replace(/[^(0-9)]/gi, "");
+						oldMask 	= _list.eq(_oldMid).find('.sub');
+						oldPanel	= _list.eq(_oldMid).find('.sub .panel');
+						oldty 		= _list.eq(_oldMid).find('.sub .panel').attr('data-startPosY');
+						oldth 		= _list.eq(_oldMid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						_list.eq(_oldMid).removeClass("activate");
-						_scope.tween( oldPanel, 10, {"top": oldty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
+						_list.eq(_oldMid).removeClass('activate');
+						_scope.tween( oldPanel, 10, {'top': oldty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 							
-							var mh = oldth - oldPanel.css("top").replace(/[^(0-9)]/gi, "");
-							oldMask.css("height", mh);
+							var mh = oldth - oldPanel.css('top').replace(/[^(0-9)]/gi, '');
+							oldMask.css('height', mh);
 						}});
 					}
 
 					if (_oldSid != _sid && _oldSid > -1) {
-						_list.eq(_oldMid).find(".sub .smenu").eq(_oldSid).removeClass("activate");
+						_list.eq(_oldMid).find('.sub .smenu').eq(_oldSid).removeClass('activate');
 					}					
 
 					_oldMid	= _mid;
 					_oldSid		= _sid;
 					break;
 
-				case "mouseout":
+				case 'mouseout':
 
 					if (_mid > -1) menu 	= _list.eq(_mid);
-					if (_sid > -1) submenu 	= menu.find(".sub .smenu").eq(_sid);
+					if (_sid > -1) submenu 	= menu.find('.sub .smenu').eq(_sid);
 
-					if (menu && menu.hasClass("activate")) {
+					if (menu && menu.hasClass('activate')) {
 
-						panel 	= menu.find(".sub .panel");
-						ty 		= menu.find(".sub .panel").attr("data-startPosY");
-						oldth	= _list.eq(_mid).find(".sub .panel").attr("data-startPosY").replace(/[^(0-9)]/gi, "");
+						panel 	= menu.find('.sub .panel');
+						ty 		= menu.find('.sub .panel').attr('data-startPosY');
+						oldth	= _list.eq(_mid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						menu.removeClass("activate");
-						_scope.tween( panel, 10, {"top": ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
+						menu.removeClass('activate');
+						_scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 						
-							var mh = oldth - $( panel ).css("top").replace(/[^(0-9)]/gi, "");
-							menu.find(".sub").css("height", mh);
+							var mh = oldth - $( panel ).css('top').replace(/[^(0-9)]/gi, '');
+							menu.find('.sub').css('height', mh);
 						}});
 					}
 
-					if (submenu && submenu.hasClass("activate")) {
-						submenu.removeClass("activate");
+					if (submenu && submenu.hasClass('activate')) {
+						submenu.removeClass('activate');
 					}
 					break;
 
@@ -246,12 +239,12 @@
 			_activateSid 	= parseInt(s, 10);
 
 			if (_activateMid <=0 && _activateMid > _data.length) {
-				warn("It not a Avaliable Depth1's Number!");
+				warn('It not a Avaliable Depth1\'s Number!');
 				return;
 			} 
 
 			if (_activateSid <= 0 && _activateSid > _data[mid].sub.length) {
-				warn("It not a Avaliable Depth2's Number!");
+				warn('It not a Avaliable Depth2\'s Number!');
 				return;
 			}
 
@@ -263,12 +256,12 @@
 
 		this.menuOn = function(m, s) {
 
-			_scope.mouseHandler({type:"mouseover"}, {mid: m, sid: s});
+			_scope.mouseHandler({type:'mouseover'}, {mid: m, sid: s});
 		};
 
 		this.menuOff = function() {
 
-			_scope.mouseHandler({type:"mouseout"}, {mid: _mid, sid: _sid});
+			_scope.mouseHandler({type:'mouseout'}, {mid: _mid, sid: _sid});
 		};
 
 		this.tween = function( target, time, obj) {
@@ -292,7 +285,7 @@
 			}
 		};
 
-		this.stopTimer = function() {			
+		this.stopTimer = function() {
 
 			if (_timer) {
 				clearInterval(_timer);
@@ -302,16 +295,16 @@
 
 		this.replaceNumber = function( str ) {
 
-			return str.replace(/[^(0-9)]/gi, "");
+			return str.replace(/[^(0-9)]/gi, '');
 		};
 	};
 
-	app.createGNB = function( path, m ) {
+	app.create = function( path, m ) {
 
 		if ($(path).length<1) {
-			$( document.body ).append("<div id=\"TEMP_GNB_CASE\" class=\"gnb\"></div>");
-			path = "#TEMP_GNB_CASE";
+			$( document.body ).append('<div id="TEMP_GNB_CASE" class="gnb"></div>');
+			path = '#TEMP_GNB_CASE';
 		}
 		return new GNB(path, m);
 	};
-})(jsuxApp);
+})(jsux.gnb.Menu, jQuery);

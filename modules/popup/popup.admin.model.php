@@ -16,6 +16,7 @@ class PopupAdminModel extends BaseModel {
 		$query = new Query();
 		$query->setField('*');
 		$query->setTable($popup);
+		$query->setOrderBy('id desc');
 
 		$result = parent::select($query);
 		return $result;

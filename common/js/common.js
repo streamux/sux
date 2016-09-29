@@ -35,10 +35,10 @@ function closePopup( suxpopname ) {
 	self.close(); 
 }
 
-function openPopup( url, popwinname, left, top, width, height ) {
+function openPopup( url, popwinname, pLeft, pTop, pWidth, pHeight ) {
 
-	if ( getCookie(popwinname) != '__sux_nopopup' ) {		
-		suxpopWindow  =  window.open( url , popwinname ,'\'toolbar=no,location=no,directories=no,status=no,menubar=no,scrollbars=auto,resizable=no,left='+left+',top='+top+',width='+width+',height='+height+'\'');
+	if ( getCookie(popwinname) != '__sux_nopopup' ) {
+		suxpopWindow  =  window.open( url, popwinname,'\'toolbar=no,location=no,status=no,menubar=no,scrollbars=auto,left='+pLeft+'px,top='+pTop+'px,width='+pWidth+'px,height='+pHeight+'px\'');
 		suxpopWindow.opener = self;
 	}
 }
@@ -103,9 +103,7 @@ var popupManager = popupManager || {};
 
 		this.load = function( id ) {
 
-			var params = {
-					'id': id
-				},
+			var params = { 'id': id },
 				loaded = true,
 				url = '';
 
@@ -114,10 +112,9 @@ var popupManager = popupManager || {};
 			}
 			loaded = false;
 
-			url = self.sux_path + '/sux/modules/popup/popup.php?action=openerdata';
-
+			url = self.sux_path + '/sux/modules/popup/popup.php?action=openerJson';
 			jsux.getJSON( url, params, function(e) {
-				
+
 				var result = $.trim(e.result.toLowerCase());
 				if ( result == 'y') {
 
@@ -137,8 +134,7 @@ var popupManager = popupManager || {};
 	app.open = function( id ) {
 		this.popup.load(id);
 	};
-	app.sux_path = function( path='' ) {
+	app.sux_path = function( path ) {
 		this.popup.sux_path = path;
 	};
 })(popupManager);
-

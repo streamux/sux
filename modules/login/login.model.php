@@ -60,13 +60,13 @@ class LoginModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$member = $context->getPost('member');
-		$check_name = $context->getPost('check_name');
+		$user_name = $context->getPost('user_name');
 
 		$query = new Query();
 		$query->setField('ljs_memberid, email');
 		$query->setTable($member);
 		$query->setWhere(array(
-			'name'=>$check_name
+			'name'=>$user_name
 		));
 		parent::select($query);
 	}
@@ -75,14 +75,14 @@ class LoginModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$member = $context->getPost('member');
-		$check_name = $context->getPost('check_name');
-		$check_email = $context->getPost('check_email');
+		$user_name = $context->getPost('user_name');
+		$user_email = $context->getPost('user_email');
 
 		$query = new Query();
 		$query->setField('ljs_memberid, email, ljs_pass1');
 		$query->setTable($member);
 		$query->setWhere(array(
-			'name'=>$check_name
+			'name'=>$user_name
 		));
 		parent::select($query);
 	}

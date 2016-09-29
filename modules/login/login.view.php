@@ -1,80 +1,91 @@
 <?php
 
-class LoginView extends BaseView {
+class LoginModule extends BaseView {
+
+	var $class_name = 'login_module';	
+	var $skin_dir = '';
+	var $skin_path = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path)) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path );
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class LoginView extends LoginModule {
 
 	var $class_name = 'login_view';
 
-	// display function is defined in parent class 
-}
-
-class LoginPanel extends BaseView {
-
-	var $name = 'login_panel';
-	var $skin_path = 'modules/login/tpl/login.html';
-	var $info_skin_path = 'modules/login/tpl/info.html';
-
-	function init() {
+	function displayLogin() {
 
 		$context = Context::getInstance();
-		$ljs_memberid = $context->getSession('ljs_memberid');
-		$ljs_pass1 = $context->getSession('ljs_pass1');	
-
-		if (!$ljs_memberid  || !$ljs_pass1) {		
-			$this->dispLogon($param);	
-		} else {
-			$this->dispLoginInfo();
-		}
-	}
-
-	function dispLogon() {
-
-		$context = Context::getInstance();
-		$this->controller->select('getMemberGroup');
-		$strJson = $this->model->getJson();
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		$contents->set('memberList', $strJson);
-		$contents->load();
-	}
-
-	function dispLoginInfo() {
-
-		$context = Context::getInstance();
-		$session_list = $context->getSessionAll();
-		$contents = new Template(_SUX_PATH_ . $this->info_skin_path);
-		foreach ($session_list as $key => $value) {
-			//echo $key . ' : ' . $value . '<br>';
-			$contents->set($key, $value);
-		}
-		$contents->load();
-	}
-}
-
-class LogpassPanel extends BaseView {
-
-	var $name = 'logpass_panel';
-
-	function init() {
-
-		$context = Context::getInstance();
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 		
-		$member = $context->getSession('ljs_member');
-		if (!isset($member) || $member == '') {
-			$member = $context->getPost('member');
+		$ljs_memberid = $this->session_data['ljs_memberid'];
+		$ljs_pass1 = $this->session_data['ljs_pass1'];		
+		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$this->document_data = array();
+		if (!$ljs_memberid  || !$ljs_pass1) {
+			$this->controller->select('getMemberGroup');
+			$this->document_data['group'] = $this->model->getJson();
+			$this->skin_path = $this->skin_dir . 'login.tpl';			
+		} else {
+			$this->request_data['jscode'] = '';
+			$this->skin_path = $this->skin_dir . 'info.tpl';
 		}
 
-		$memberid = $context->getSession('ljs_memberid');
+		$this->output();
+	}
+
+	function displayLogpass() {
+
+		$context = Context::getInstance();
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();		
+		$this->post_data = $context->getPostAll();
+
+		$ljs_memberid = $this->session_data['ljs_memberid'];
+		$ljs_pass1 = $this->session_data['ljs_pass1'];
+		
+		$ljs_member = $this->session_data['ljs_member'];
+		if (!isset($ljs_member) || $ljs_member == '') {
+			$ljs_member = $this->post_data['member'];
+		}
+
+		$memberid = $this->session_data['ljs_memberid'];
 		if (!isset($memberid) || $memberid == '') {
-			$memberid = $context->getPost('memberid');
+			$memberid = $this->post_data['memberid'];
 		}
 
-		$pass = trim($context->getSession('ljs_pass1'));
+		$pass = trim($this->session_data['ljs_pass1']);
 		if (!isset($pass) || $pass == '') {
-			$pass = trim($context->getPost('pass'));
+			$pass = trim($this->post_data['pass']);
 			$pass = substr(md5($pass),0,8);
 		}
 		
-		$msg = "";
-
+		$msg = '';
 		if (!$memberid) {
 			$msg = "아이디를 입력하세요.";
 		} else if (!$pass) {
@@ -84,12 +95,11 @@ class LogpassPanel extends BaseView {
 		if ($msg) {
 			Error::alertToBack($msg);
 		}
-
-		
+	
 		$this->controller->select('getLogpass');
-		$num = $this->model->getNumRows();
+		$rownum = $this->model->getNumRows();
+		if ($rownum > 0) {		
 
-		if ($num > 0) {			
 			$rows = $this->model->getRow();
 			$ljs_memberid = $rows['ljs_memberid'];
 			$ljs_pass1 = $rows['ljs_pass1'];
@@ -100,9 +110,9 @@ class LogpassPanel extends BaseView {
 				exit;
 			}
 
-			$ljs_conpanyname = $rows['conpany'];
-			if ($ljs_conpanyname) {
-				$ljs_name = $ljs_conpanyname;
+			$conpanyname = $rows['conpany'];
+			if ($conpanyname) {
+				$ljs_name = $conpanyname;
 			}
 
 			$ljs_email = $rows['email'];
@@ -110,27 +120,21 @@ class LogpassPanel extends BaseView {
 			$ljs_point = $rows['point'];
 			$grade = $rows['grade'];
 			$automod1 = "yes";
-			$chatip = $REMOTE_ADDR;
+			$chatip = $context->getServer('REMOTE_ADDR');
 			$ljs_hit = $rows['hit'] + 1;
 
 			$values['hit'] = $ljs_hit;
 			$this->controller->update('getLogpass', $values);
 
-			$_SESSION['ljs_member'] = $member;
-			$_SESSION['ljs_memberid'] = $ljs_memberid;
-			$_SESSION['ljs_pass1'] = $ljs_pass1;
-			$_SESSION['ljs_name'] = $ljs_name;
-			$_SESSION['ljs_email'] = $ljs_email;
-			$_SESSION['ljs_writer'] = $ljs_writer;			
-			$_SESSION['ljs_point'] = $ljs_point;
-			$_SESSION['grade'] = $grade;
-			$_SESSION['automod1'] = $automod1;
-			$_SESSION['chatip'] = $chatip;
-			$_SESSION['ljs_hit'] = $ljs_hit;			
-			
-			if ($ljs_mod == "r_mode") {
+			$session_list = array('ljs_member','ljs_memberid','ljs_pass1','ljs_name','ljs_email','ljs_writer','ljs_point','ljs_member','ljs_hit','grade','automod1','chatip');
+
+			foreach ($session_list as $key => $value) {
+				$context->setSession($value, ${$value});
+			}			
+
+			if ($this->request_data['action'] == "read") {
 				echo ("<meta http-equiv='Refresh' content='0; URL=../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
-			} else if ($ljs_mod == "writer"){
+			} else if ($this->request_data['action'] == "write"){
 				echo ("<meta http-equiv='Refresh' content='0; URL=../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
 			} else {
 				echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
@@ -139,177 +143,153 @@ class LogpassPanel extends BaseView {
 			echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=fail'>");
 		}
 	}
-}
 
-class LogoutPanel extends BaseView {
+	function displayLogout() {
 
-	var $name = 'logout_panel';
-
-	function init($param=NULL) {
-
-		$xml_list = array();
-		$xml_list[] = 'ljs_member';
-		$xml_list[] = 'ljs_memberid';
-		$xml_list[] = 'ljs_pass1';
-		$xml_list[] = 'ljs_writer';
-		$xml_list[] = 'ljs_nickname';
-		$xml_list[] = 'ljs_email';
-		$xml_list[] = 'ljs_hit';
-		$xml_list[] = 'ljs_point';
-		$xml_list[] = 'user';
-		$xml_list[] = 'grade';
-		$xml_list[] = 'chatip';
-		$xml_list[] = 'admin_ok';
-
-		for ($i=0; $i<count($xml_list); $i++) {
-			unset($_SESSION[$xml_list[$i]]);
+		$context = Context::getInstance();
+		$this->session_data = $context->getSessionAll();
+		foreach ($this->session_data as $key => $value) {
+			$context->setSession($key, '');
 		}
 		echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
 	}
-}
 
-class FailPanel extends BaseView {
-
-	var $name = 'fail_panel';
-	var $skin_path = 'modules/login/tpl/login.html';
-	var $footer_skin_path = 'modules/login/tpl/fail.html';
-
-	function init() {
-
-		$this->controller->select('getMemberGroup');
-		$strJson = $this->model->getJson();
-
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		$contents->set('memberList', $strJson);
-		$contents->load();
-
-		$contents = new Template(_SUX_PATH_ . $this->footer_skin_path);
-		$contents->load();
-	}
-}
-
-class LeavePanel extends BaseView {
-
-	var $name = 'leave_panel';
-	var $skin_path = 'modules/login/tpl/leave.html';
-
-	function init($param=NULL) {
-
-		$contents = new Template(_SUX_PATH_ . $this->skin_path);
-		foreach ($_SESSION as $key => $value) {
-			$contents->set($key, $value);
-		}
-		$contents->load();
-	}
-}
-
-class SearchidPanel extends BaseView {
-
-	var $name = 'earchid_panel';
-	var $skin_path = 'modules/login/tpl/searchid.html';
-	var $result_skin_path = 'modules/login/tpl/searchid_result.html';
-
-	function init() {
+	function displayFail() {
 
 		$context = Context::getInstance();
-		$check_name = $context->getPost('check_name');
-		$check_email = $context->getPost('check_email');		
+		$this->request_data = $context->getRequestAll();
+		$this->session_data = $context->getSessionAll();		
 
-		if (isset($check_name) && $check_name){
+		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
+		$this->skin_path = $this->skin_dir . 'login.tpl';
+
+		$this->document_data = array();
+		$this->controller->select('getMemberGroup');		
+		$this->document_data['group'] = $this->model->getJson();		
+		$this->document_data['isLogon'] = false;
+		$this->request_data['jscode'] = 'login';
+
+		$this->output();
+	}
+
+	function displayLeave() {
+
+		$context = Context::getInstance();
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
+
+		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
+		$this->skin_path = $this->skin_dir . 'leave.tpl';
+
+
+		$this->output();
+	}
+
+	function displaySearchID() {
+
+		$context = Context::getInstance();
+		$this->request_data = $context->getRequestAll();
+		$this->post_data = $context->getPostAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
+
+		$checkName = $this->post_data['user_name'];
+		$checkEmail = $this->post_data['user_email'];
+
+		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$this->document_data = array();
+		if (isset($checkName) && $checkName != ''){
 
 			$this->controller->select('getSearchid');
 			$rows = $this->model->getRow();
 
 			if (count($rows) > 0) {
-				$memberid = $rows['ljs_memberid'];
+				$memberId = $rows['ljs_memberid'];
 				$email = $rows['email'];
 
-				if (trim($email) !== $check_email) {
+				if (trim($email) !== $checkEmail) {
 					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
 
-				$contents = new Template(_SUX_PATH_ . $this->result_skin_path);
-				$contents->set('check_name', $check_name);
-				$contents->set('memberid', $memberid);
-				$contents->load();				
+				$this->document_data['user_name'] = $checkName;
+				$this->document_data['user_id'] = $memberId;
+				$this->request_data['jscode'] = 'searchresult';				
+
+				$this->skin_path = $this->skin_dir . 'searchid_result.tpl';
 			} else {
 				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
 				exit;
 			}	
 		} else {
 			$this->controller->select('getMemberGroup');
-			$strJson = $this->model->getJson();
+			$this->document_data['group'] = $this->model->getJson();
 
-			$contents = new Template(_SUX_PATH_ . $this->skin_path);
-			$contents->set('memberList', $strJson);
-			$contents->load();
+			$this->skin_path = $this->skin_dir . 'searchid.tpl';
 		}
+
+		$this->output();
 	}
-}
 
-class SearchpwdPanel extends BaseView {
-
-	var $name = 'searchpwd_panel';
-	var $email_skin_path = 'modules/mail/member/email_skin.html';
-	var $skin_path = 'modules/login/tpl/searchpwd.html';
-	var $result_skin_path = 'modules/login/tpl/searchpwd_result.html';
-
-	function init() {
+	function displaySearchPassword() {
 
 		$context = Context::getInstance();
-		$check_name = $context->getPost('check_name');
-		$check_memberid = $context->getPost('check_memberid');
-		$check_email = $context->getPost('check_email');
-		$admin_name = $context->getPost('adminEmail');
-		$admin_email = $context->getPost('adminName');		
+		$this->request_data = $context->getRequestAll();
+		$this->post_data = $context->getPostAll();
+		$this->request_data['jscode'] = $this->request_data['action'];
 
-		if(isset($check_memberid) && $check_memberid) {
+		$checkName = $this->post_data['user_name'];
+		$checkMemberid = $this->post_data['user_id'];
+		$checkEmail = $this->post_data['user_email'];
+		$adminName = $context->get('db_admin_id');
+		$adminEmail = $context->get('db_admin_email');
+
+		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$this->document_data = array();
+		if(isset($checkMemberid) && $checkMemberid != '') {
 
 			$this->controller->select('getSearchpwd');
-			$rows = $this->model->getRow();
+			$row = $this->model->getRow();
+			if (count($row) > 0) {
+				$memberId = $row['ljs_memberid'];
+				$email = $row['email'];
+				$password = $row['ljs_pass1'];
 
-			if (count($rows) > 0) {
-				$memberid = $rows['ljs_memberid'];
-				$email = $rows['email'];
-				$password = $rows['ljs_pass1'];
-
-				if (trim($memberid) !== $check_memberid) {
+				if (trim($memberId) !== $checkMemberid) {
 					Error::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
 					exit;
 				}
 
-				if (trim($email) !== $check_email) {
+				if (trim($email) !== $checkEmail) {
 					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
 					exit;
 				}
 
-				$contents = new Template(_SUX_PATH_ . $this->result_skin_path);
-				$contents->set('check_name', $check_name);
-				$contents->set('memberid', $memberid);
-				$contents->set('check_email', $check_email);				
-				$contents->load();
+				$this->skin_path = $this->skin_dir . 'searchpwd_result.tpl';
 
-				if (!file_exists(_SUX_PATH_ . $email_skin_path)) {
+				$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
+				if (!file_exists($email_skin_path)) {
 					Error::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
 					exit;
 				}
 
-				$mail_skin = new Template(_SUX_PATH_ . $this->skin_path);
-				$mail_skin->set('check_name', $check_name);
-				$mail_skin->set('memberid', $memberid);
-				$mail_skin->set('password', $password);
-				$mail_skin->load('hide');
+				$this->document_data['user_name'] = $checkName;
+				$this->document_data['user_email'] = $checkEmail;
+				$this->document_data['memberid'] = $memberId;
+				$this->document_data['password'] = $password;
+				$this->request_data['jscode'] = 'searchresult';
 
-				$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
-				$additional_headers = 'From: ' . $admin_name . '<' . $admin_email . '>\n';
-				$additional_headers .= 'Reply-To : ' . $check_email . '\n';
+				/*$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
+				$additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';
+				$additional_headers .= 'Reply-To : ' . $checkEmail . '\n';
 				$additional_headers .= 'MIME-Version: 1.0\n';
 				$additional_headers .= 'Content-Type: text/html; charset=EUC-KR\n';
 				$contents = $mail_skin;
 
-				mail($admin_email, $subject, $contents, $additional_headers);
-				mail($check_email, $subject, $contents, $additional_headers);
+				mail($adminEmail, $subject, $contents, $additional_headers);
+				mail($checkEmail, $subject, $contents, $additional_headers);*/
 			} else {
 				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
 				exit;
@@ -317,12 +297,12 @@ class SearchpwdPanel extends BaseView {
 		}else{
 
 			$this->controller->select('getMemberGroup');
-			$strJson = $this->model->getJson();
+			$this->document_data['group'] = $this->model->getJson();
 
-			$contents = new Template(_SUX_PATH_ . $this->skin_path);
-			$contents->set('memberList', $strJson);
-			$contents->load();
+			$this->skin_path = $this->skin_dir . 'searchpwd.tpl';
 		}
+
+		$this->output();
 	}
 }
 ?>

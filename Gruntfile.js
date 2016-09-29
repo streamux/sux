@@ -13,10 +13,11 @@ module.exports = function(grunt) {
 			minify: [
 				'common/js/jsux.js',
 				'common/js/jsux.min.js',
-				'common/js/gnb.js',
-				'common/js/gnb.min.js',
-				'common/js/visual.js',
-				'common/js/visual.min.js'
+				'common/js/admin_gnb.js',
+				'common/js/admin_gnb.min.js',
+				'common/js/admin_visual.js',
+				'common/js/admin_visual.min.js',
+				'common/js/idangerous.swiper.min.js'
 			]			
 		},
 		concat: {
@@ -30,15 +31,27 @@ module.exports = function(grunt) {
 				],
 				dest: 'common/js/jsux.js'
 			},
+			'common-admin-gnb': {
+				src: [
+					'common/js/app/admin_gnb_*.js'
+				],
+				dest: 'common/js/admin_gnb.js'
+			},
 			'common-gnb': {
 				src: [
 					'common/js/app/gnb_*.js'
 				],
 				dest: 'common/js/gnb.js'
 			},
+			'main-admin-visual': {
+				src: [
+					'common/js/app/admin_visual_*.js'
+				],
+				dest: 'common/js/admin_visual.js'
+			},
 			'main-visual': {
 				src: [
-					'common/js/app/visual_*.js'
+					'common/js/app/visual.js'
 				],
 				dest: 'common/js/visual.js'
 			}
@@ -49,13 +62,15 @@ module.exports = function(grunt) {
 					banner: banner_jsux_js
 				},
 				files: {
-					'common/js/jsux-1.0.0.min.js': ['common/js/jsux/jsux-1.0.0.js'],
-					'common/js/jsux.min.js': ['common/js/jsux.js']
+					'common/js/jsux.min.js': ['common/js/jsux.js'],
+					'common/js/idangerous.swiper.min.js': ['common/js/api/idangerous.swiper.3.3.1.js']
 				}
 			},
 			'common-apps': {
 				files: {
+					'common/js/admin_gnb.min.js':['common/js/admin_gnb.js'],
 					'common/js/gnb.min.js':['common/js/gnb.js'],
+					'common/js/admin_visual.min.js': ['common/js/admin_visual.js'],
 					'common/js/visual.min.js': ['common/js/visual.js'],
 					'common/js/navi.min.js': ['common/js/app/navi.js']
 				}
@@ -96,6 +111,7 @@ module.exports = function(grunt) {
 					'**/jquery-*.js',
 					'**/jquery.*.js',
 					'**/*.min.js',
+					'common/js/idangerous*.js',
 					'common/js/Tween*.js',
 					'common/js/api/*.js',
 					'test/**	'

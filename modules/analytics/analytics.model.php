@@ -17,12 +17,13 @@ class AnalyticsModel extends BaseModel {
 	function selectFieldFromPageview($field) {
 
 		$context = Context::getInstance();
+		$keyword = $context->getRequest('keyword');
 
 		$query = new Query();
 		$query->setField($field);
 		$query->setTable($context->get('db_pageview'));
 		$query->setWhere(array(
-			'name'=>$context->getRequest('keyword')
+			'name'=>$keyword
 		));
 
 		$result = parent::select($query);
@@ -32,12 +33,13 @@ class AnalyticsModel extends BaseModel {
 	function updatePageviewSetValue($column) {
 
 		$context = Context::getInstance();
+		$keyword = $context->getRequest('keyword');
 
 		$query = new Query();
 		$query->setTable($context->get('db_pageview'));
 		$query->setColumn($column);
 		$query->setWhere(array(
-			'name'=>$context->getRequest('keyword')
+			'name'=>$keyword
 		));
 
 		$result = parent::update($query);
@@ -47,12 +49,13 @@ class AnalyticsModel extends BaseModel {
 	function insertIntoPageview() {
 
 		$context = Context::getInstance();
+		$keyword = $context->getRequest('keyword');
 
 		$query = new Query();
 		$query->setTable($context->get('db_pageview'));
 		$query->setColumn(array(
 			'',
-			$context->getRequest('keyword'),
+			$keyword,
 			'now()',
 			1
 		));

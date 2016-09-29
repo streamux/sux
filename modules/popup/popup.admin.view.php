@@ -1,75 +1,136 @@
 <?php
 
-class PopupAdminView extends BaseView {
+class  PopupAdminModule extends BaseView {
+	
+	var $class_name = 'popup_admin_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
 
-	var $class_name = 'popup_view';
+	function output() {
 
-	// display function is defined in parent class 
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
 }
 
-class PopupAdminModule extends BaseView {
+class PopupAdminView extends PopupAdminModule {
 
-	var $class_name = 'popup_admin_module';
-	var $file_name = 'defualt.html';
+	var $class_name = 'popup_admin_view';
 
-	function init() {
-
-		$this->defaultSetting();
+	function displayList() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$page_type = $requests['pagetype'];
-		$page_type = $page_type ? $page_type : "main";
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-		$top_path = _SUX_PATH_ . 'modules/admin/tpl/top.html';
-		if (is_readable($top_path)) {
-			$contents = new Template($top_path);
-			$contents->set('page_type', $page_type);
-			$contents->load();
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-		$skin_path = _SUX_PATH_ . 'modules/popup/tpl/' . $this->file_name;
-		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);
-			foreach ($requests as $key => $value) {
-				$contents->set($key, $value);
-			}
-			$contents->load();			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$bottom_path = _SUX_PATH_ . 'modules/admin/tpl/bottom.html';
-		if (is_readable($bottom_path)) {
-			include $bottom_path;
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
 
-		$this->display();
+		$this->output();
 	}
 
-	function defaultSetting() {}
-	function display() {}
-}
+	function displayAdd() {
 
-class ListPanel extends PopupAdminModule {
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	var $class_name = 'popup_admin_list';
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-	function defaultSetting() {
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->file_name = 'admin_list.html';
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
 	}
-}
 
-class ListdataPanel extends BaseView {
+	function displayModify() {
 
-	var $class_name = 'popup_admin_listdata';
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
 
-	function init() {
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayDelete() {
+
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		$pageType = $requestData['pagetype'];
+
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+
+		$this->output();
+	}
+
+	function displayListJson() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -85,10 +146,10 @@ class ListdataPanel extends BaseView {
 			if ($numrow > 0) {
 
 				$rows = $this->model->getRows();
-				for ($i=0; $i<count($rows); $i++) {
+				for ($i=0; $i<$numrow; $i++) {
 
 					$timeList = array();
-					$dataList = array('no'=>($i+1));
+					$dataList = array('no'=>($numrow - $i));
 					foreach ($rows[$i] as $key => $value) {
 
 						if (preg_match('/(time+)/i', $key)) {
@@ -108,29 +169,14 @@ class ListdataPanel extends BaseView {
 			}
 		} 
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
 
-class AddPanel extends PopupAdminModule {
-
-	var $class_name = 'popup_admin_add';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_add.html';
-	}
-}
-
-class AdddataPanel extends BaseView {
-
-	var $class_name = 'popup_admin_adddata';
-
-	function init() {
+	function displayAddJson() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -150,27 +196,13 @@ class AdddataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class ModifyPanel extends PopupAdminModule {
+	function displayModifyJson() {
 
-	var $class_name = 'popup_admin_modify';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_modify.html';
-	}
-}
-
-class ModifydataPanel extends BaseView {
-
-	var $class_name = 'popup_admin_modifydata';
-
-	function init() {
-
-		$id = $_POST['id'];
+		$context = Context::getInstance();
+		$id = $context->getPost('id');
 
 		$path = _SUX_PATH_ . "modules/popup/skin/";
 
@@ -204,26 +236,15 @@ class ModifydataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
+		echo $this->callback($data);
 	}
-}
 
-class DelpassPanel extends PopupAdminModule {
+	function recordAdd() {
 
-	var $class_name = 'popup_admin_delpass';
-
-	function defaultSetting() {
-
-		$this->file_name = 'admin_delpass.html';
-	}
-}
-
-class RecordAddPanel extends BaseView {
-
-	var $class_name = 'popup_admin_delete';
-
-	function init() {
-
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		$skinName = $posts['skin'];
+		
 		$msg = "";
 		$resultYN = "Y";
 
@@ -233,6 +254,30 @@ class RecordAddPanel extends BaseView {
 			$msg = "팝업창 이름이 이미 존재합니다.";
 			$resultYN = "N";
 		} else {
+
+			$skinImagePath = "skin/{$skinName}/images/bg.jpg";
+			$imageInfo = getimagesize($skinImagePath);
+		      $imageType = $imageInfo[2];
+
+		      if ( $imageType == IMAGETYPE_JPEG ) {
+		      	$image = imagecreatefromjpeg($skinImagePath);
+		      } elseif( $imageType == IMAGETYPE_GIF ) {
+		       	$image = imagecreatefromgif($skinImagePath);
+		      } elseif( $imageType == IMAGETYPE_PNG ) {
+		     		$image = imagecreatefrompng($skinImagePath);
+			}
+
+			$popupWidth = imagesx($image) + 16;
+			$popupHeight = imagesy($image) + 52;
+
+			if (is_readable($skinImagePath) && $posts['popup_width'] < $popupWidth) {
+				$context->setPost('popup_width', $popupWidth);
+			}
+
+			if (is_readable($skinImagePath) && $posts['popup_height'] < $popupHeight) {
+				$context->setPost('popup_height', $popupHeight);
+			}
+
 			$result = $this->controller->insert('intoPopup');
 			if ($result){
 				$msg = "팝업창 입력을 완료하였습니다.";
@@ -242,22 +287,43 @@ class RecordAddPanel extends BaseView {
 				$resultYN = "N";
 			}
 		}
-		$output = array(	"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
 
-}
+	function recordModify() {
 
-class RecordModifyPanel extends BaseView {
-
-	var $class_name = 'popup_admin_modify';
-
-	function init() {		
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		$skinName = $posts['skin'];
 
 		$msg = "";
 		$resultYN = "Y";
+
+		$skinImagePath = "skin/{$skinName}/images/bg.jpg";
+		$imageInfo = getimagesize($skinImagePath);
+	      $imageType = $imageInfo[2];
+
+	      if ( $imageType == IMAGETYPE_JPEG ) {
+	      	$image = imagecreatefromjpeg($skinImagePath);
+	      } elseif( $imageType == IMAGETYPE_GIF ) {
+	       	$image = imagecreatefromgif($skinImagePath);
+	      } elseif( $imageType == IMAGETYPE_PNG ) {
+	     		$image = imagecreatefrompng($skinImagePath);
+		}
+
+		$popupWidth = imagesx($image) + 16;
+		$popupHeight = imagesy($image) + 52;
+
+		if (is_readable($skinImagePath) && $posts['popup_width'] < $popupWidth) {
+			$context->setPost('popup_width', $popupWidth);
+		}
+
+		if (is_readable($skinImagePath) && $posts['popup_height'] < $popupHeight) {
+			$context->setPost('popup_height', $popupHeight);
+		}
 
 		$result = $this->controller->update('fromPopupWhere');
 		if ($result){
@@ -268,18 +334,13 @@ class RecordModifyPanel extends BaseView {
 			$resultYN = "N";
 		}
 
-		$output = array(	"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-}
 
-class RecordDeletePanel extends BaseView {
-
-	var $class_name = 'popup_admin_delete';
-
-	function init() {
+	function recordDelete() {
 
 		$context = Context::getInstance();
 		$title = $context->getRequest('title');
@@ -297,12 +358,11 @@ class RecordDeletePanel extends BaseView {
 			$resultYN = "N";
 		}
 
-		$output = array(	"data"=>$dataObj,
-							"result"=>$resultYN,
-							"msg"=>$msg);
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-		echo parent::callback($output);
+		echo $this->callback($data);
 	}
-
 }
 ?>

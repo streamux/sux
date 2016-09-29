@@ -1,294 +1,148 @@
+/**
+ * Swiper 3.3.1
+ */
 
-(function( app, $ ) {
+jsux.visual = jsux.visual || {};
+jsux.visual.View = jsux.View.create();
+(function( app, $) {
 
-	var IndicatorView;
+	app.create = function() {
 
-	function trace( str ) {
+		var mainVisual = new Swiper('.swiper-container',{
 
-		console.log( str );
-	}
+			/* default */
+			//initialSlide: 1,
+			//direction: 'horizontal',
+			speed: 500,
+			//setWrapperSize: true,
+			//virtualTranslate: true,
+			//width: 100,
+			//height: 300,
+			//autoHeight: true,
+			//roundLengths: true,
+			//nested: true,
 
-	IndicatorView = function(p, m, c) {
+			/* autoplay */
+			autoplay: 5000,
+			//autoplayStopOnLast: true,
+			//autoplayDisableOnInteraction: false,
 
-		var _scope		= this,
-			_stage		= $( p ),			
-			_m			= m,
-			_c 			= c,
-			_data		= null,
+			/* progress */
+			//watchSlidesProgress: true,
+			//watchSlidesVisibility: true,
 
-			_selectId 	= 1,
-			_oldId		= -1;
+			/* free mode */
+			//freeMode: false,
+			//freeModeMomentum: true,
+			//freeModeMomentumRatio: 1,
+			//freeModeMomentumBounce: true,
+			//freeModeMomentumBounceRatio: 1,
+			//freeModeMinimumVelocity: 0.02,
+			//freeModeSticky: false,
 
-		this.setData = function( value ) {
+			/* effects */
+			//Could be "slide", "fade", "cube", "coverflow" or "flip"
+			//effect: 'cube',
+			/*fade: {
+				crossFade: true
+			},*/
+			/*cube: {
+				slideShadows: true,
+				shadow: true,
+				shadowOffset: 20,
+				shadowScale: 0.94
+			},*/
+			/*coverflow: {
+				rotate: 50,
+				stretch: 0,
+				depth: 100,
+				modifier: 1,
+				slideShadows : true
+			},*/
+			/*flip: {
+				slideShadows : true
+				limitRotation: true
+			},*/
 
-			_data = value;
+			/* Parallax */
+			//parallax: true,
 
-			this.setUI();
-			this.setEvent();
-		};
+			/* Slides grid */
+			//spaceBetween: 10,
+			//slidesPerView: 1,
+			//slidesPerColumn: 1,
+			//slidesPerColumnFill: 'column', //or 'row'
+			//slidesPerGroup: 1,
+			//centeredSlides: false,
+			//slidesOffsetBefore: 10,
+			//slidesOffsetAfter: 10,
 
-		this.setUI = function() {
+			/* Grab Cursor */
+			//grabCursor: false,
+			//shortSwipes: true,
+			//longSwipes: true,
+			//longSwipesRatio: 0.5,
+			//longSwipesMs: 300,
+			//followFinger: true,
+			//onlyExternal: false,
+			//threshold: 0,
+			//touchMoveStopPropagation: true,
+			//iOSEdgeSwipeDetection: false,
+			//iOSEdgeSwipeThreshold: 20,
 
-			$( _data ).each(function(index) {
-				_stage.append("<li data-target=\"#myVisual\" data-slide-to=\""+(index+1)+"\"></li> ");
-			});
-		};
+			/* Touches */
+			//touchEventsTarget: 'container',
+			//touchRatio: 1,
+			//touchAngle: 45,
+			//simulateTouch: true,
 
-		this.setEvent = function() {
+			/* Touch Resistance */
+			//resistance: true,
+			//resistanceRatio: 0.85,
 
-			$( _stage ).find("li").on("click",function( e ){
-				
-				_scope.mouseHandler(e, this);
-			});
+			/* Clicks */
+			//preventClicks: true,
+			//preventClicksPropagation: false,
 
+			/* Swiping / No swiping */
+			//allowSwipeToPrev: true,
+			//allowSwipeToNext: true,
+			//noSwiping: true,
+			//noSwipingClass: 'swiper-no-swiping',
+			//swipeHandler: null
 
-			$( _stage ).on("mouseover", function( e ) {
+			/* Navigation Controls */
+			//uniqueNavElements: true,
 
-				_c.setRolling( false );
-				e.preventDefault();
-			});
-			$( _stage ).on("mouseout", function( e ) {
+			/* Pagination */
+			pagination: '.swiper-pagination',
+			//Can be "bullets", "fraction", "progress" or "custom"
+			//paginationType: 'bullets',
+			//paginationHide: true,
+			paginationClickable: true,
+			//paginationElement: 'span',
+			/*paginationBulletRender: function (index, className) {
+				return '<span class="' + className + '">' + (index + 1) + '</span>';
+			},*/
 
-				_c.setRolling( true );
-				e.preventDefault();
-			});
-		};
-
-		this.mouseHandler = function( e, o ) {
-
-			var id 		= $( o ).data("slide-to"),
-				type	= e.type;
-			
-			switch ( type ) {
-				
-				case "click":
-					_m.activate( id );
-					break;
-
-				default:
-					break;
-			}
-		};
-
-		this.indicatorOn = function( id ) {
-			
-			$( _stage ).find("li:eq(\""+id+"\")").addClass("active");
-
-			if (_oldId > -1 && _oldId != id) {
-				this.indicatorOff(_oldId);
-			}
-
-			_oldId = _selectId =id;	
-		};
-
-		this.indicatorOff = function( id ) {
-
-			$( _stage ).find("li:eq(\""+id+"\")").removeClass("active");
-		};
-
-		this.activate = function( id ) {
-
-			var num	= parseInt( id );
-
-			id = (num > 0) ? num - 1 : num;
-			this.indicatorOn( id );
-		};
-
-		this.tick = function() {
-
-			_selectId += 1;
-			_selectId = _selectId%_data.length;
-
-			this.indicatorOn( _selectId );
-		};
+			loop:true,
+			grabCursor: false,
+			 effect: 'cube',
+		        cube: {
+		            shadow: false,
+		            slideShadows: true,
+		            shadowOffset: 20,
+		            shadowScale: 0.94
+		        }	
+		});
+		
+		/*$('.arrow-left').on('click', function(e){
+			e.preventDefault()
+			mySwiper.swipePrev()
+		});
+		$('.arrow-right').on('click', function(e){
+			e.preventDefault()
+			mySwiper.swipeNext()
+		});*/
 	};
-
-	app.createIndicatorView = function( path, m, c ) {
-
-		if ($(path).length < 1) {
-			$( document.body ).append("<ol id=\"TEMP_Indicator\ class=\"Indicator\"></ol>");
-			path = "#TEMP_Indicator";
-		}
-
-		return new IndicatorView(path, m, c);
-	};
-})(jsuxApp, jQuery);
-
-(function( app, $){
-
-	var InnerView;
-
-	function trace( str ) {
-
-		console.log( str );
-	}
-
-	InnerView = function(p, m, c ) {
-
-		var _scope 		= this,
-			_stage 		= $(p),
-			_m 			= m,
-			_c 			= c,
-
-			_data 		= null,
-			_currentId 	= 0,
-			_selectId 	= 0,
-			_list 		= null,
-			_aniList 	= [];
-
-
-		this.setData = function( value ) {
-
-			_data = value;
-
-			this.setUI();
-			this.setEvent();
-		};
-
-		this.setUI = function() {
-
-			_aniList = [];
-
-			_list = _stage.find(".item");
-
-			$(_list).each(function(index) {
-				_aniList.push(this);
-			});
-		};
-
-		this.setEvent = function() {
-
-			$( _stage ).on("mouseover", function( e ) {
-
-				_c.setRolling( false );
-				e.preventDefault();
-			});
-
-			$( _stage ).on("mouseout", function( e ) {
-
-				_c.setRolling( true );
-				e.preventDefault();
-			});
-		};
-
-		this.moveNext = function() {
-
-			var item = _aniList.shift();
-			_aniList.push( item );
-		};
-
-		this.movePrev = function() {
-
-			var item = _aniList.pop();
-			_aniList.unshift( item );
-		};
-
-		this.animateItem = function( gab ) {
-
-			var tx = 0;
-
-			if (gab > 0) {
-				tx  = -100;
-			}
-			if (gab < 0) {
-
-				tx  = 100;
-			}
-
-			$(_aniList).each(function(index) {
-
-				var key = parseInt($(this).data("key"))-1;
-
-				if (key == _selectId) {
-					_scope.tween( _aniList[index], 24, {"left": "0%", ease: Linear.easeInOut, useFrames: true});
-				} else if (key == _currentId) {
-					_scope.tween( _aniList[index], 24, {"left": tx+"%", ease: Linear.easeInOut, useFrames: true});
-				} 				
-			});
-		};
-
-		this.tween = function( target, time, obj) {
-
-			TweenLite.to( target, time, obj);
-		};
-
-		this.nextRolling = function() {
-
-			var gab = 1;
-
-			_selectId += 1;
-
-			_selectId = _selectId%_aniList.length;
-
-			this.swapItem( gab );
-			this.animateItem( gab );
-
-			_currentId = _selectId;
-		};
-
-		this.activate = function( id ) {
-
-			var gab;
-
-			_selectId = parseInt( id ) - 1;
-			gab	 =  _selectId - _currentId;
-
-			this.swapItem( gab );
-			this.animateItem( gab );
-
-			_currentId = _selectId;
-		};
-
-		this.swapItem = function( gab ) {
-
-			var len = Math.abs( gab );		
-
-			for (i=0; i<len; i++) {
-
-				if (gab > 0) { 	// next
-					this.moveNext();
-				}
-
-				if (gab < 0) { 	// prev
-					this.movePrev();
-				}
-			}
-
-			$(_aniList).each(function(index) {
-
-				var key = parseInt($(this).data("key"))-1;
-
-				if (key == _selectId) {
-
-					if (gab > 0) { 
-						$(this).css({"left": "100%","z-index": "101"});
-					} else if (gab < 0) {
-						$(this).css({"left": "-100%","z-index": "101"});
-					} else {
-						$(this).css({"left": "0%","z-index": "101"});
-					}		
-				} else if (key == _currentId) {
-					$(this).css({"left": "0%","z-index": "100"});
-				} else {
-					$(this).css({"z-index": "0"});
-				}
-			});
-		};
-
-		this.tick = function() {
-
-			this.nextRolling();
-		};
-	};
-
-	app.createInnerView = function(path, m, c) {
-
-		if ($(path).length > 0) {
-			$( document.body ).append("<div id=\"inner\" class=\"inner\"></div>");
-			path = "#inner";
-		}
-
-		return new InnerView( path, m, c);
-	};
-
-})( jsuxApp, jQuery);
+})(jsux.visual.View, jQuery);

@@ -1,589 +1,1137 @@
 <?php
+class BoardModule extends BaseView {
 
-class BoardView extends BaseView {
+	var $class_name = 'board_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() {
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);			
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );		
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}		
+	}
+}
+
+class BoardView extends BoardModule {
 
 	var $class_name = 'board_view';
-	
-	// display function is defined in parent class 
-}
 
-class ListPanel extends BaseView {
-
-	var $class_name = 'board_list';
-
-	function init() {
+	function displayList() {
 
 		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$action = $context->getRequest('action');
+		$requestData = $context->getRequestAll();
+
+		$requestData['board_grg'] = $requestData['board'] . '_grg';
+		$passover = $requestData['passover'];
+		$page = $requestData['page'];
+		$find = $requestData['find'];
+		$search = $requestData['search'];
+		$action = $requestData['action']; // useless
+		$requestData['jscode'] = $action;
 		
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-		$download = strtolower($row['download']);
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
+		$limit = $groupData['listnum'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/{$skinDir}";
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/list.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+		$this->skin_path_list['navi'] = "{$skinPath}/_navi.tpl";
 
 		$this->controller->delete('limitwordFromBoard');
-
-		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
-		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
+		
+		// list logic
+		if (!isset($passover) && $passover == '') {
+			 $passover = 0;
 		}
 
-		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/list.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
+		if (!isset($page) &&  $page == '') {
+			 $page =1;
+		}
+
+		$context->set('limit', $limit);
+		$context->set('passover', $passover);
+
+		$methodString = (isset($search) && $search != '') ? 'fromBoardSearch' : 'fromBoard';
+		$result = $this->controller->select($methodString);		
+		if ($result) {
+
+			// use in order to navi
+			$numrows = $this->model->getNumRows();
+
+			$methodString = (isset($search) && $search != '') ? 'fromBoardSearchLimit' : 'fromBoardLimit';
+			$result = $this->controller->select($methodString);
+			if ($result) {
+
+				$numrows2 = $this->model->getNumRows();
+				$contentData['list'] = $this->model->getRows();					
+				$today = date("Y-m-d");
+
+				for ($i=0; $i<count($contentData['list']); $i++) {
+
+					$sid = $contentData['list'][$i]['id'];
+					$name =htmlspecialchars($contentData['list'][$i]['name']);					
+					$title =htmlspecialchars($contentData['list'][$i]['title']);
+					$opkey =$contentData['list'][$i]['opkey'];
+					$date =$contentData['list'][$i]['date'];
+					$space =$contentData['list'][$i]['space'];
+					$ssunseo =$contentData['list'][$i]['ssunseo'];
+					$hit =$contentData['list'][$i]['see'];
+					$filename =$contentData['list'][$i]['filename'];
+					$filetype =$contentData['list'][$i]['filetype'];					
+					$compareDay =split(' ', $contentData['list'][$i]['date'])[0];
+					
+					if (isset($search) && $search != '') {	
+
+						$find_key = strtolower($find);
+						switch ($find_key) {
+							case 'title':
+								$title = str_replace("$search","<span class=\"color-red\">$search</span>",$title);
+								break;
+							case 'name':
+								$name = str_replace("$search","<span class=\"color-red\">$search</span>",$name);
+								break;
+							default:
+								break;
+						}
+					}
+
+					$subject = array();
+					$subject['id'] = $contentData['list'][$i]['id'];
+					$subject['igroup'] = $contentData['list'][$i]['igroup'];
+					$subject['ssunseo'] = $contentData['list'][$i]['ssunseo'];
+					$subject['sid'] = $contentData['list'][$i]['id'];
+					$subject['title'] = $title;					
+					$subject['img_name'] = '';
+					$subject['opkey_name'] = '';
+					$subject['passover'] = $passover;
+					$subject['page'] = $page;
+
+					// 'off' in value is a class name of CSS
+					$subject['space'] = '10px';
+					$subject['icon_box'] = '';
+					$subject['icon_box_type'] = 0;
+					$subject['icon_img'] = 'off';
+					$subject['txt_tail'] = 'off';
+					$subject['tail_num'] = 0;
+					$subject['icon_new'] = 'off';
+					$subject['icon_opkey'] = 'off';
+
+					if ($space) {
+						$subject['space'] = (10+$space*10) . 'px';
+						$subject['icon_box'] = '답변';
+						$subject['icon_box_color'] = 'icon-replay-color';
+					}
+
+					// 공지글 설정은 개발 예정 
+					// if (isset($isNotice) && $isNotice != '') {
+					// 	$subject['space'] = '10px';
+					// 	$subject['icon_box'] = '공지';
+					// 	$subject['icon_box_color'] = 'icon-notice-color';
+					// }
+
+					$imgname = "";
+					if ($filename){
+						if ($filetype =="image/gif" || $filetype =="image/jpeg" || $filetype =="image/x-png" || $filetype =="image/png" || $filetype =="image/bmp"){
+							$imgname = "icon_img.png";
+						} else if ($download == 'y'  && ($filetype=="application/x-zip-compressed" || $filetype=="application/zip")) { 
+							$imgname = "icon_down.png";
+						}
+
+						if ($imgname != '') {
+							$subject['icon_img'] = 'on';
+							$subject['img_name'] = $imgname;
+						}	
+					}				
+
+					$grgresult = $this->controller->select('idFromTailCommentWhere', $sid);
+					$grgnums = $this->model->getNumRows();
+					if ($grgnums) {
+						$subject['txt_tail'] = 'on';
+						$subject['tail_num'] = $grgnums;
+					}
+
+					if ($compareDay == $today){
+						$subject['icon_new'] = 'on';
+						$subject['icon_new_title'] = 'new';
+					}
+					
+					$subject['icon_opkey'] = $opkey;
+					$subject['icon_opkey_color'] = 'icon-opkey-color';
+
+					$contentData['list'][$i]['name'] = $name;
+					$contentData['list'][$i]['hit'] = $hit;
+					$contentData['list'][$i]['date'] = split(' ', $date)[0];
+					$contentData['list'][$i]['subject'] = $subject;
+
+					$subject = null;
+				}
 			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
+				echo '게시물 목록 가져오기를 실패하였습니다.';
 			}
 		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			echo '게시물 전체 목록 가져오기를 실패하였습니다.';
 		}
 
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
-		}
-	}
-}
+		// navi logic
+		$navi = New Navigator();
+		$navi->passover = $passover;
+		$navi->limit = $limit;
+		$navi->total = $numrows;
+		$navi->init();
+		
+		$this->request_data = $requestData;
+		$this->document_data['pagination'] = $navi->get();
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
 
-class SearchlistPanel extends BaseView {
+		$this->output();
+	} 
 
-	var $class_name = 'board_search_list';
-
-	function init() {
+	function displayRead() {
 
 		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$action = $context->getRequest('action');
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
 
-		$find = $context->getPost('find');
-		if (!isset($find) && $find == '') {
-			$find = $context->getRequest('find');
+		$PHP_SELF = $context->getServer("PHP_SELF");
+
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];		
+		$sid = $requestData['sid'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];
+
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$log_key = $groupData['log_key'];
+		$r_grade = $groupData['r_grade'];
+		$r_admin = $groupData['r_admin'];
+		$download = strtolower($groupData['download']);
+		$tail = $groupData['tail'];
+		$setup = $groupData['setup'];
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
+		$commentType = $groupData['type'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
 		}
-		$search = $context->getPost('search');
-		if (!isset($search) && $search == '') {
-			$search = $context->getRequest('search');
-		}
-
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-		$download = strtolower($row['download']);
-		$this->controller->delete('limitwordFromBoard');
-
-		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
-		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}		
-
-		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/search_list.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
 		}
 
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
-		}
-	}
-}
-
-class ReadPanel extends BaseView {
-
-	var $class_name = 'board_read';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$board_grg = $board."_grg";
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$find = $context->getRequest('find');
-		$search = $context->getRequest('search');
-		$action = $context->getRequest('action');		
-		$grade = $context->getSession('grade');
-
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();	
-		$download = strtolower($row['download']);
-		$tail = $row['tail'];
-		$setup = $row['setup'];
-
-		if (isset($grade) && $grade) {
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/read.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+		$this->skin_path_list['tail'] =  "{$skinPath}/_tail.tpl";
+		$this->skin_path_list['opkey'] =  "{$skinPath}/_opkey.tpl";
+		
+		if (isset($grade) && $grade != '') {
 			$level = $grade;
 		} else {
 			$level = 1;
 		}
 
-		if ($level < $row['r_grade']) {
+		if ($level < $r_grade) {
 			Error::alertToBack('죄송합니다. 읽기 권한이 없습니다.');
 			exit;
 		}
 
-		if ($row['log_key'] != 'yes') {
-			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
+		// nonmember's authority
+		if ($log_key != 'yes') {
+			if (!isset($ljs_name) && $ljs_name == '') {
 
-				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
+				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
 				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
-		if ($row["r_admin"] == 'n') {
+		if ($r_admin == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
-				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
+				Error::alertTo('죄송합니다. 읽기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
-		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}		
-
-		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
-		}
-
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
-		}
-	}
-}
-
-class SearchreadPanel extends ReadPanel {
-
-	var $class_name = 'search_read';
-
-	function init() {
-
-		$context = Context::getInstance();	
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
-		$action = $context->getRequest('action');
-
-		$id = $context->getRequest('id');;
-		$igroup = $context->getRequest('igroup');
-		$passover = $context->getRequest('passover');
-		$page = $context->getRequest('page');
-		$sid = $context->getRequest('sid');
-		$find = $context->getRequest('find');
-		$search = $context->getRequest('search');
-
-		$this->controller->select('listFromBoardGroup');
+		// read panel
+		$this->controller->select('fieldFromBoardWhereId', 'see');
 		$row = $this->model->getRow();
-		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
-		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}		
+		$hit = $row['see']+1;
+		$this->controller->update('boardSetSee', $hit);
 
-		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/read.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+		$this->controller->select('fieldFromBoardWhereId', '*');
+		$contentData = $this->model->getRow();		
+		$contentData['name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = htmlspecialchars($contentData['title']);
+		$contentData['hit'] = $contentData['see'];
+
+		$type = trim($contentData['type']);
+		$filename = $contentData['filename'];
+		$filetype = $contentData['filetype'];
+
+		switch ($commentType) {
+			case 'all':
+				if ($type =='html'){
+					$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
+				}else if ($type == 'text'){
+					$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
+				}
+				break;
+			case 'text':
+				$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
+				break;
+			case 'html':
+				$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
+				break;			
+			default:
+				break;
 		}
 
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
+		$contentData['css_down'] = 'hide';
+		$contentData['css_img'] = 'hide';
+
+		$fileupPath = '';
+		if ($filename) {
+
+			$fileupPath = "../../board_data/${board}/${filename}";
+			if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+
+				$contentData['css_down'] = 'show';
+			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+
+				$image_info = getimagesize($fileupPath);
+			      $image_type = $image_info[2];
+
+			      if ( $image_type == IMAGETYPE_JPEG ) {
+			      	$image = imagecreatefromjpeg($fileupPath);
+			      } elseif( $image_type == IMAGETYPE_GIF ) {
+			       	$image = imagecreatefromgif($fileupPath);
+			      } elseif( $image_type == IMAGETYPE_PNG ) {
+			     		$image = imagecreatefrompng($fileupPath);
+				}
+				$contentData['css_img'] = 'show';
+				$contentData['css_img_width'] = imagesx($image) . 'px';
 			}
-		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
+			$contentData['fileup_name'] = $filename;
+			$contentData['fileup_path'] = $fileupPath;
 		}
+
+		// opkey
+		$contentData['css_opkey'] = 'hide';
+		if ($setup == 'y' || $grade > 9) {
+			$contentData['css_opkey'] = 'show';
+		}
+
+		// taill
+		$contentData['css_tail'] = 'hide';
+		$tailData = array();		
+		if ($tail == 'y') {
+			$contentData['css_tail'] = 'show';
+
+			$this->controller->select('fromTailCommentWhere', $sid);
+			$tailData['num'] = $this->model->getNumRows();
+			$tailData['list'] = $this->model->getRows();
+		}
+		
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+		$this->document_data['tails'] = $tailData;
+
+		$this->output();		
 	}
-}
 
-class WritePanel extends BaseView {
-
-	var $class_name = 'board_write';
-
-	function init() {
+	function displayWrite() {
 
 		$context = Context::getInstance();	
-		$action = $context->getRequest('action');
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
 
-		$this->controller->select('fieldFromLimit', 'wall');
-		$row = $this->model->getRow();	
-		if ($row['wall'] == 'a' || !isset($row['wall'])) {
-			$wallname = "나라사랑";
-			$wallkey = "b";
-		} else if ($row['wall'] == 'b') {
-			$wallname = "조국사랑";
-			$wallkey = "a";
-		} 
+		$admin_pass = $context->checkAdminPass();
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
 
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();	
-		$grade = $context->getSession('grade');	
+
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];
+		$PHP_SELF = $context->getServer("PHP_SELF");		
+
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$log_key = $groupData['log_key'];
+		$r_grade = $groupData["r_grade"];
+		$r_admin = $groupData["r_admin"];
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/write.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardLimit', 'wall');
+		$contentData = $this->model->getRow();
+		$wall = $contentData['wall'];		
+
+		if ($wall == 'a' || !isset($wall)) {
+			$contentData['wallname'] = "나라사랑";
+			$contentData['wallkey'] = "b";
+		} else if ($wall == 'b') {
+			$contentData['wallname'] = "조국사랑";
+			$contentData['wallkey'] = "a";
+		}
+
+		$contentData['comment_type_text'] = 'checked';
+		$contentData['comment_type_html'] = '';
+		
 		if (isset($grade) && $grade) {
 			$level = $grade;
 		} else {
 			$level = 1;
 		}
 
-		if ($level < $row['r_grade']) {
+		if ($level < $r_grade) {
 			Error::alertToBack('죄송합니다. 쓰기 권한이 없습니다.');
 			exit;
 		}
 
-		if ($row['log_key'] != 'yes') {
+		if ($log_key != 'yes') {
+			if (!isset($ljs_name) && $ljs_name == '') {
 
-			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
-
-				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
+				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
-
 				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
-		if ($row["r_admin"] == 'n') {
-			if ($context->checkAdminPass() === FALSE) {
-				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
+		if ($r_admin == 'n') {
+			if ($admin_pass === FALSE) {
+				Error::alertTo('죄송합니다. 쓰기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		$top_path = $row['include1'];
-		if (isset($top_path) && $top_path != '') {
-			if (is_readable($top_path)) {
-				include $top_path;
-			} else {
-				echo '상단 파일경로를 확인하세요.<br>';
-			}			
+		if (isset($ljs_name) && $ljs_name != '') {
+			$contentData['css_user_label'] = 'hide';
+			$contentData['user_name_type'] = 'hidden';
+			$contentData['user_pass_type'] = 'hidden';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = $ljs_pass1;
 		} else {
-			echo '상단 파일경로를 입력하세요.<br>';
-		}		
-
-		$main_path = $row['include2'];
-		if (isset($main_path) && $main_path != '') {
-			$skin_dir = 'skin/' . $main_path;
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/write.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			$contentData['css_user_label'] = 'show';			
+			$contentData['user_name_type'] = 'text';
+			$contentData['user_pass_type'] = 'password';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = '';
 		}
 
-		$bottom_path = $row['include3'];
-		if (isset($bottom_path) && $bottom_path != '') {
-			if (is_readable($bottom_path)) {
-				include $bottom_path;
-			} else {
-				echo '하단 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '하단 파일경로를 입력하세요.<br>';
-		}
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
 	}
-}
 
-class ReplyPanel extends BaseView {
-
-	var $class_name = 'board_reply';
-
-	function init() {
+	function displayModify() {
 
 		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
-
-		$this->controller->select('fieldFromId', '*');
-		$row = $this->model->getRow();
-		$storycomment =  nl2br($row['comment']);
-		$m_name = $row['name'];
-		$email = $row['email'];
-		$storytitle = $row['title'];
-		$storytitle = substr(htmlspecialchars($storytitle),0,40);
-		$fileupname = $row['filename'];
-		$type = $row['type'];
-		$hit = $row['see'];
-		$date = $row['date']; 		
-
-		$this->controller->select('fieldFromLimit','wall');
-		$row = $this->model->getRow();		
-		if ($row['wall'] == 'a' || !isset($row['wall'])) {
-			$wallname = "나라사랑";
-			$wallkey = "b";
-		} else if ($row['wall'] == 'b') {
-			$wallname = "조국사랑";
-			$wallkey = "a";
-		} 
-
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-		$grade = $context->getSession('grade');
-		if (isset($grade) && $grade) {
-			$level = $grade;
-		} else {
-			$level = 1;
-		}
-
-		if ($level < $row['r_grade']) {
-			Error::alertToBack('죄송합니다. 답변 권한이 없습니다.');
-			exit;
-		}
-
-		if ($row['log_key'] != 'yes') {
-
-			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
-
-				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
-				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
-
-				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
-			} 
-		}
-
-		if ($row["r_admin"] == 'n') {
-			if ($context->checkAdminPass() === FALSE) {
-				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
-			}
-		}
-
-		if (is_readable($row['include1'])) {
-			include $row['include1'];
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
-
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/reply.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
-		}
-
-		if (is_readable($row['include3'])) {
-			include $row['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
-	}
-}
-
-class ModifyPanel extends BaseView {
-
-	var $class_name = 'board_modify';
-
-	function init() {
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();		
+		$PHP_SELF = $context->getServer("PHP_SELF");
+		$admin_pass = $context->checkAdminPass();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
 		
-		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];		
+		$grade = $sessionData['grade'];		
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];		
 
-		$this->controller->select('fieldFromId', '*');
-		$row = $this->model->getRow();
-		$storycomment = htmlspecialchars($row['comment']);
-		$m_name = htmlspecialchars($row['name']);
-		$storytitle = nl2br($row['title']);
-		$email = $row['email'];
-		$type = $row['type'];
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$r_grade = $groupData['r_grade'];
+		$r_admin = $groupData['r_admin'];
+		$log_key = $groupData['log_key'];
+		$headerPath =  $groupData['include1'];
+		$skinName =  $groupData['include2'];
+		$footerPath =  $groupData['include3'];
 
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-		$grade = $context->getSession('grade');
-		if (isset($grade) && $grade) {
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/modify.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardWhereId', '*');
+		$contentData = $this->model->getRow();		
+		$contentData['comment'] = htmlspecialchars($contentData['comment']);
+		$contentData['user_name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = nl2br($contentData['title']);
+		$commentType = $contentData['type'];
+		unset($contentData['pass']);
+
+		if (isset($grade) && $grade != '') {
 			$level = $grade;
 		} else {
 			$level = 1;
 		}
 
-		if ($level < $row['r_grade']) {
+		if ($level < $r_grade) {
 			Error::alertToBack('죄송합니다. 수정 권한이 없습니다.');
 			exit;
 		}
 
-		if ($row['log_key'] != 'yes') {
+		if ($log_key != 'yes') {
+			if (!isset($ljs_name) && $ljs_name == '') {
 
-			if (!$context->getSession('ljs_name') || !$context->getSession('ljs_pass1')) {
-
-				$returnToURL = $_SERVER['PHP_SELF'] . '?board=' . $board . '&action=' . $action;
+				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
 				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
-		if ($row["r_admin"] == 'n') {
-			if ($context->checkAdminPass() === FALSE) {
-				Error::alertTo('죄송합니다. 이곳은 관리자 전용 게시판 입니다.\n관리자 로그인을 먼저 하세요.' ,'board.php?board=' . $board . '&action=list');
+		if ($r_admin == 'n') {
+			if ($admin_pass === FALSE) {
+				Error::alertTo('죄송합니다. 수정 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
-		if (is_readable($row['include1'])) {
-			include $row['include1'];
+		if (isset($ljs_name) && $ljs_name != '' && $ljs_name == $contentData['name']) {
+			$contentData['user_name'] = $ljs_name;
 		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
+			$contentData['user_name'] = $contentData['name'];
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/modify.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
-		}
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
 
-		if (is_readable($row['include3'])) {
-			include $row['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
+		$this->output();
 	}
-}
 
-class DeletepassPanel extends BaseView {
-
-	var $class_name = 'delpass';
-
-	function init() {
+	function displayReply() {
 
 		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		$board = $context->getRequest('board');
-		$board_grg = $board . '_grg';
+		$sessionData = $context->getSessionAll();
+		$requestData = $context->getRequestAll();
+		$PHP_SELF = $context->getServer("PHP_SELF");
+		$admin_pass = $context->checkAdminPass();
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+		
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$action = $requestData['action'];
+		$grade = $sessionData['grade'];
+		$ljs_name = $sessionData['ljs_name'];
+		$ljs_pass1 = $sessionData['ljs_pass1'];		
 
-		$this->controller->select('fieldFromId', 'name');
-		$row = $this->model->getRow();	
-		$m_name = $row['name'];
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();		
+		$commentType = $groupData["type"];
+		$log_key = $groupData['log_key'];
+		$r_grade = $groupData["r_grade"];
+		$r_admin = $groupData["r_admin"];
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
 
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();		
-		if (is_readable($row['include1'])) {
-			include $row['include1'];
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
 		}
 
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/reply.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardWhereId', '*');
+		$contentData = $this->model->getRow();
+		$type = trim($contentData['type']);
+		$filename = $contentData['filename'];
+		$filetype = $contentData['filetype'];
+		$download = $contentData['download'];
+		$contentData['name'] = htmlspecialchars($contentData['name']);
+		$contentData['title'] = htmlspecialchars($contentData['title']);
+
+		switch ($commentType) {
+			case 'all':
+				if ($type =='html'){
+					$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
+				}else if ($type == 'text'){
+					$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
+				}
+				break;
+			case 'text':
+				$contentData['comment'] = nl2br(htmlspecialchars($contentData['comment']));
+				break;
+			case 'html':
+				$contentData['comment'] = htmlspecialchars_decode($contentData['comment']);
+				break;			
+			default:
+				break;
+		}
+		
+		$contentData['css_down'] = 'hide';
+		$contentData['css_img'] = 'hide';
+
+		$fileupPath = '';
+		if ($filename) {
+
+			$fileupPath = "../../board_data/${board}/${filename}";
+			if ($download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+
+				$contentData['css_down'] = 'show';
+			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+
+				$image_info = getimagesize($fileupPath);
+			      $image_type = $image_info[2];
+
+			      if ( $image_type == IMAGETYPE_JPEG ) {
+			      	$image = imagecreatefromjpeg($fileupPath);
+			      } elseif( $image_type == IMAGETYPE_GIF ) {
+			       	$image = imagecreatefromgif($fileupPath);
+			      } elseif( $image_type == IMAGETYPE_PNG ) {
+			     		$image = imagecreatefrompng($fileupPath);
+				}
+				$contentData['css_img'] = 'show';
+				$contentData['img_width'] = imagesx($image) . 'px';
 			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
+			$contentData['fileup_name'] = $filename;
+			$contentData['fileup_path'] = $fileupPath;
 		}
 
-		if (is_readable($row['include3'])) {
-			include $row['include3'];
+		$this->controller->select('fieldFromBoardLimit','wall');
+		$row = $this->model->getRow();			
+		$wall = $row['wall'];
+
+		if ($wall == 'a' || !isset($wall)) {
+			$contentData['wallname'] = "나라사랑";
+			$contentData['wallkey'] = "b";
+		} else if ($wall == 'b') {
+			$contentData['wallname'] = "조국사랑";
+			$contentData['wallkey'] = "a";
+		}
+
+		$contentData['comment_type_text'] = 'checked';
+		$contentData['comment_type_html'] = '';
+		
+		if (isset($grade) && $grade) {
+			$level = $grade;
 		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
+			$level = 1;
+		}
+
+		if ($level < $r_grade) {
+			Error::alertToBack('죄송합니다. 답변 권한이 없습니다.');
+			exit;
+		}
+
+		// 비회원 허용 유무 
+		if ($log_key != 'yes') {
+			if (!isset($ljs_name) && $ljs_name == '') {
+
+				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
+				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
+
+				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
+			} 
+		}
+
+		if ($r_admin == 'n') {
+			if ($admin_pass === FALSE) {
+				Error::alertTo('죄송합니다. 답변 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
+			}
+		}
+
+		if (isset($ljs_name) && $ljs_name != '') {
+			$contentData['css_user_label'] = 'hide';
+			$contentData['user_name_type'] = 'hidden';
+			$contentData['user_pass_type'] = 'hidden';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = $ljs_pass1;
+		} else {
+			$contentData['css_user_label'] = 'show';			
+			$contentData['user_name_type'] = 'text';
+			$contentData['user_pass_type'] = 'password';
+			$contentData['user_name'] = $ljs_name;
+			$contentData['user_password'] = '';
+		}	
+
+		$this->session_data = $sessionData;
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
+	}
+
+	function displayDelete() {
+
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();		
+		
+		$board = $requestData['board'];
+		$board_grg = $requestData['board_grg'];
+		$id = $requestData['id'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = $action;
+
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/delete.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardWhereId', 'name');
+		$contentData = $this->model->getRow();
+
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
+	}
+
+	function displayDeleteTail() {
+
+		$context = Context::getInstance();
+		$requestData = $context->getRequestAll();
+		
+		$board = $requestData['board'];
+		$board_grg = $requests['board_grg'];
+		$id = $requests['id'];
+		$grgid = $requests['grgid'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+		$action = $requestData['action'];
+		$requestData['jscode'] = 'delete';
+
+		$this->controller->select('fromBoardGroup');
+		$groupData = $this->model->getRow();
+		$headerPath = $groupData['include1'];
+		$skinName = $groupData['include2'];
+		$footerPath = $groupData['include3'];
+
+		$skinDir = "skin/${skinName}";
+		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+		}
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+		}
+
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['contents'] = "{$skinPath}/delete_tail.tpl";
+		$this->skin_path_list['footer'] = $footerPath;
+
+		$this->controller->select('fieldFromBoardWhereId', 'name');
+		$contentData = $this->model->getRow();
+
+		$this->request_data = $requestData;
+		$this->document_data['group'] = $groupData;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
+	}
+
+	function _checkValidation( $value ) {
+
+		if (!$value['name']) {
+			Error::alertToBack('이름을 입력해주세요.');
+			exit;
+		} else  if (!$value['pass']) {
+			Error::alertToBack('비밀번호를 입력해주세요.');
+			exit;
+		} else  if (!$value['title']) {
+			Error::alertToBack('제목을 입력해주세요.');
+			exit;
+		} else  if (!$value['comment']) {
+			Error::alertToBack('내용을 입력해주세요.');
+			exit;
 		}
 	}
-}
 
-/*
-class DownPanel extends BaseView {
+	function _checkFiles( $value ) {
 
-	var $class_name = 'down';
+		$imageUpName = $value['imgup']['name'];
 
-	function init() {
+		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imageUpName)) {
+			Error::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
+			exit;
+		}
+	}
+
+	function recordWrite() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
+
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$wall = trim($posts['wall']);
+		$wallok = trim($posts['wallok']);
+		$imageUpName = $files['imgup']['name'];
+		$imageUpTempName = $files['imgup']['tmp_name'];
+
+		if ($wall != $wallok) {
+			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			exit;
+		}
+
+		$saveDir = _SUX_PATH_ . "board_data/${board}/";
+
+		if (is_uploaded_file($imageUpTempName )) {
+			$mktime = mktime();
+			$imageUpName =$mktime . "_" . $imageUpName;
+			$dest = $saveDir . $imageUpName;
+
+			if (!move_uploaded_file($imageUpTempName , $dest)) {
+				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+			}
+
+			$this->imageUpName = $imageUpName;
+		}
+		$context->set('fileup_name', $imageUpName);
+
+		$result = $this->controller->insert('recordWrite');
+		if (!isset($result)) {
+			Error::alertToBack('글을 저장하는데 실패했습니다.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+	}
+
+	function recordModify() {
+
+		$context = Context::getInstance();
+		$sesstions = $context->getSessionAll();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
+
+		$id = $requests['id'];
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$pass = substr(md5(trim($posts['pass'])),0,8);
+
+		$admin_pwd = $context->get('db_admin_pwd');
+		$imageUpName = $files['imgup']['name'];
+		$imageUpTempName = $files['imgup']['tmp_name'];
+		$ljs_name = $sesstions['ljs_name'];
+
+		$this->controller->select('fieldFromBoardWhereId', 'pass, igroup, filename');	
+		$row = $this->model->getRow();		
+		$pass = substr(md5($pass),0,8);
+
+		if ($pass == $row['pass'] || $pass == $admin_pwd) {
+
+			$delFileName = $row['filename'];
+			$saveDir = _SUX_PATH_ . "board_data/${board}/";
+
+			if ($delFileName) {
+				$delFileName = $saveDir . $delFileName;
+
+				if(!@unlink($delFileName)) {
+					echo "파일삭제에 실패했습니다.";
+				} else {
+					echo "파일 삭제에 성공했습니다.";
+				}
+			}		
+
+			if (is_uploaded_file($imageUpTempName)) {
+				$mktime = mktime();
+				$imageUpName = $mktime."_".$imageUpName;
+				$dest = $saveDir . $imageUpName;
+
+				if (!move_uploaded_file($imageUpTempName, $dest)) {
+					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+				}
+			}
+
+			$context->set('fileup_name', $imageUpName);
+
+			$result = $this->controller->update('recordModify');			
+			if (!isset($result)) {
+				Error::alertToBack('글을 수정하는데 실패했습니다.');
+			}
+		} else {
+			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$row[sid]&igroup=$row[igroup]&action=read");
+	}
+
+	function recordReply() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+		$files = $context->getFiles();
+
+		$this->_checkValidation($posts);
+		$this->_checkFiles($files);
+
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$wall = trim($posts['wall']);
+		$wallok = trim($posts['wallok']);
+		$imageUpName = $files['imgup']['name'];
+		$imageUpTempName = $files['imgup']['tmp_name'];
+
+		if ($wall != $wallok) {
+			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			exit;
+		}
+
+		$saveDir = _SUX_PATH_ . "board_data/${board}/";
+
+		if (is_uploaded_file($imageUpTempName )) {
+			$mktime = mktime();
+			$imageUpName = $mktime . "_" . $imageUpName;
+			$dest = $saveDir . $imageUpName;
+
+			if (!move_uploaded_file($imageUpTempName , $dest)) {
+				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+			}
+
+			$this->imageUpName = $imageUpName;
+		} 
+		$context->set('fileup_name', $imageUpName);
+
+		$result = $this->controller->update('recordSsunseo');
+		if (!isset($result)) {
+			Error::alertToBack('순서를 변경하는데 실패했습니다.');
+		}
+
+		$result = $this->controller->insert('recordReply');
+		if (!isset($result)) {
+			Error::alertToBack('답글을 저장하는데 실패했습니다.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+	}
+
+	function recordDelete() {
+
+		$context = Context::getInstance();
+		$requests =  $context->getRequestAll();
+		$posts =  $context->getPostAll();
+		$files =  $context->getFiles();
+
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+
+		$pass = substr(md5(trim($posts['pass'])),0,8);
+		$pass = substr(md5($pass),0,8);
+		$admin_pwd = trim($context->get('db_admin_pwd'));
+
+		$admin_pwd = substr(md5(trim($admin_pwd)),0,8);
+		$admin_pwd = substr(md5($admin_pwd),0,8);
+
+		$this->controller->select('fieldFromBoardWhereId', 'pass,filename');		
+		$row = $this->model->getRow();	
+		$delFileName = $row['filename'];
+
+		if ($pass == $row['pass'] || $pass == $admin_pwd) {
+
+			if(isset($delFileName) && $delFileName != '') {
+				$delFileName = _SUX_PATH_ . "board_data/$board/$delFileName";
+
+				if(!@unlink($delFileName)) {
+					echo '파일삭제를 실패하였습니다.';
+				} else {
+					echo '파일삭제를 성공하였습니다.';
+				}
+			}
+			
+			$result = $this->controller->delete('recordDelete');
+			if (!isset($result)) {
+				Error::alertToBack('글을 삭제하는데 실패했습니다.');
+			}
+		} else  {
+			Error::alertToBack('비밀번호가 틀렸습니다.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+	}
+
+	function recordOpkey() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+
+		$result = $this->controller->update('recordOpkey');
+		if (!isset($result)) {
+			Error::alertToBack('진행상황 설정을 실패하였습니다.');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+	}
+
+	function recordWriteTail() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+
+		$id = $requests['id'];
+		$board = $requests['board'];		
+		$board_grg = $requests['board_grg'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+		$sid = $requests['sid'];
+
+		$result = $this->controller->insert('recordWriteTailComment');
+		if (!isset($result)) {
+			Error::alertToBack('댓글 입력을 실패하였습니다.');
+		}
+
+		Utils::goURL("board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read");
+	}
+
+	function recordDeleteTail() {
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$posts = $context->getPostAll();
+
+		$pass = trim($posts['pass']);
+		$admin_pwd = $context->get('db_admin_pwd');
+				
+		$board = $requests['board'];
+		$board_grg = $requests['board_grg'];
+		$id = $requests['id'];
+		$grgid = $requests['grgid'];
+		$igroup = $requests['igroup'];
+		$passover = $requests['passover'];
+
+		$this->controller->select('fieldFromTailCommentId', 'pass');
+		$row = $this->model->getRow();
+
+		if ($pass == $row['pass'] || $pass == "$admin_pwd") {
+			$result = $this->controller->delete('recordDeleteTailComment');
+			if (!isset($result)) {
+				Error::alertToBack('댓글 삭제를 실패하였습니다.');
+			}			
+		} else  {
+			Error::alertToBack('비밀번호가 틀립니다');
+		}
+
+		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$id&igroup=$igroup&passover=$passover&action=read");
+	}
+
+	/*function displayDownload() {
 
 		$context = Context::getInstance();
 		$board = $context->getRequest('board');
@@ -598,9 +1146,6 @@ class DownPanel extends BaseView {
 
 		//echo $filetype. '<br>' . $filespath . '<br>' . $filesize . '<br>';		
 		$this->download_file($fileupname, $filesdir, $filetype);
-	}
-
-	function download_file($file_name, $file_dir, $file_type ) { 
 
 		if (!$file_name || !$file_dir) return 1; 
 		if (preg_match( "\\\\|\.\.|/", $file_name)) return 2; 
@@ -638,394 +1183,6 @@ class DownPanel extends BaseView {
 		}  else {
 			return 1; 
 		}
-	} 
-}
-*/
-
-class OpkeyPanel extends BaseView {
-
-	var $class_name = 'opkey';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		$board = $context->getRequest('board');
-		$board_grg = $board . 'grg';
-
-		$result = $this->controller->update('recordOpkey');
-		if (!isset($result)) {
-			Error::alertToBack('진행상황 설정을 실패하였습니다.');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
-	}
-}
-
-class DeletecommentPanel extends BaseView {
-
-	var $class_name = 'delete_comment';
-
-	function init() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
-		$id = $requests['id'];				
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$grgid = $requests['grgid'];
-		$igroup = $requests['igroup'];
-		$passover = $requests['passover'];
-
-		$this->controller->select('listFromBoardGroup');
-		$row = $this->model->getRow();
-
-		$this->controller->select('fieldFromId', 'name');
-		$m_name = $this->model->getRow()['name'];
-
-		if (is_readable($row['include1'])) {
-			include $row['include1'];
-		} else {
-			echo '상단 파일경로를 확인하세요.<br>';
-		}
-
-		if (isset($row['include2']) && $row['include2'] != '') {
-			$skin_dir = 'skin/' . $row['include2'];
-			$skin_path = _SUX_PATH_ . 'modules/board/' . $skin_dir . '/delpass_grg.php';
-			if (is_readable($skin_path)) {
-				include $skin_path;
-			} else {
-				echo '스킨 파일경로를 확인하세요.<br>';
-			}
-		} else {
-			echo '스킨 파일경로를 입력하세요.<br>';
-		}
-
-		if (is_readable($row['include3'])) {
-			include $row['include3'];
-		} else {
-			echo '하단 파일경로를 확인하세요.<br>';
-		}
-	}
-}
-
-class RecordBasePanel extends BaseView {
-
-	var $class_name = 'record_base';
-	var $requests;
-	var $posts;
-	var $files;
-
-	function init() {
-
-		$context = Context::getInstance();
-		$this->requests = $context->getRequestAll();
-		$this->posts = $context->getPostAll();
-		$this->files = $context->getFiles();
-		$this->checkValidation($this->posts);
-		$this->checkFiles($this->files);
-		
-		$this->record();
-	}
-
-	function checkValidation($values) {
-
-		if (!$values['m_name']) {
-			Error::alertToBack('이름을 입력해주세요.');
-			exit;
-		}
-
-		if (!$values['pass']) {
-			Error::alertToBack('비밀번호를 입력해주세요.');
-			exit;
-		}
-
-		if (!$values['storytitle']) {
-			Error::alertToBack('제목을 입력해주세요.');
-			exit;
-		}
-
-		if (!$values['storycomment']) {
-			Error::alertToBack('내용을 입력해주세요.');
-			exit;
-		}
-
-		if (!ereg('@',$values['email'])) {
-			Error::alertToBack('잘못된 E-mail 주소입니다.');
-			exit;
-		}
-	}
-
-	function checkFiles($values) {
-
-		$imgup_name = $values['imgup']['name'];
-
-		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imgup_name)) {
-			Error::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
-			exit;
-		}
-	}
-}
-
-class RecordWritePanel extends RecordBasePanel {
-
-	var $class_name = 'insert_write';
-
-	function record() {
-
-		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
-
-		$board = $requests['board'];
-		$board_grg = $board . '_grg';
-		$wall = trim($posts['wall']);
-		$wallok = trim($posts['wallok']);
-		$imgup_name = $files['imgup']['name'];
-		$imgup_tmpname = $files['imgup']['tmp_name'];
-
-		if ($wall != $wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
-			exit;
-		}
-
-		$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
-
-		if (is_uploaded_file($imgup_tmpname )) {
-			$mktime = mktime();
-			$imgup_name =$mktime . "_" . $imgup_name;
-			$dest = $save_dir . $imgup_name;
-
-			if (!move_uploaded_file($imgup_tmpname , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-			}
-
-			$this->imgup_name = $imgup_name;
-		}
-		$context->set('fileup_name', $imgup_name);
-
-		$result = $this->controller->insert('recordWrite');
-		if (!isset($result)) {
-			Error::alertToBack('글을 저장하는데 실패했습니다.');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
-	}
-}
-
-class RecordReplyPanel extends RecordBasePanel {
-
-	var $class_name = 'record_reply';
-
-	function record() {
-
-		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
-
-		$board = $requests['board'];
-		$board_grg = $board . '_grg';
-		$wall = trim($posts['wall']);
-		$wallok = trim($posts['wallok']);
-		$imgup_name = $files['imgup']['name'];
-		$imgup_tmpname = $files['imgup']['tmp_name'];
-
-		if ($wall != $wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
-			exit;
-		}
-
-		$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
-
-		if (is_uploaded_file($imgup_tmpname )) {
-			$mktime = mktime();
-			$imgup_name = $mktime . "_" . $imgup_name;
-			$dest = $save_dir . $imgup_name;
-
-			if (!move_uploaded_file($imgup_tmpname , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-			}
-
-			$this->imgup_name = $imgup_name;
-		} 
-		$context->set('fileup_name', $imgup_name);
-
-		$result = $this->controller->insert('recordReply');
-		if (!isset($result)) {
-			Error::alertToBack('답글을 저장하는데 실패했습니다.');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
-	}
-}
-
-class RecordModifyPanel extends RecordBasePanel {
-
-	var $class_name = 'record_modify';
-
-	function record() {
-
-		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
-
-		$id = $requests['id'];
-		$board = $requests['board'];
-		$board_grg = $board . '_grg';
-		$pass = $posts['pass'];
-		$admin_pwd = $context->get('db_admin_pwd');
-		$imgup_name = $files['imgup']['name'];
-		$imgup_tmpname = $files['imgup']['tmp_name'];
-
-		$this->controller->select('fieldFromId', 'pass, igroup, filename');	
-		$row = $this->model->getRow();
-
-		if ($pass == $row['pass'] || $pass == $admin_pwd) {
-
-			$del_filename = $row['filename'];
-
-			$save_dir = _SUX_PATH_ . 'board_data/' . $board . '/';
-
-			if ($del_filename) {
-				$del_filename = $save_dir . $del_filename;
-
-				if(!@unlink($del_filename)) {
-					echo "파일삭제에 실패했습니다.";
-				} else {
-					echo "파일 삭제에 성공했습니다.";
-				}
-			}
-
-			if (is_uploaded_file($imgup_tmpname)) {
-				$mktime = mktime();
-				$imgup_name = $mktime."_".$imgup_name;
-				$dest = $save_dir . $imgup_name;
-
-				if (!move_uploaded_file($imgup_tmpname, $dest)) {
-					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
-				}
-			}
-			$context->set('fileup_name', $imgup_name);
-
-			$result = $this->controller->update('recordModify');			
-			if (!isset($result)) {
-				Error::alertToBack('글을 수정하는데 실패했습니다.');
-			}
-		} else {
-			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&board=$board&board_grg=$board_grg&sid=$row[sid]&igroup=$row[igroup]&action=read'>");
-	}
-}
-
-class RecordDeletePanel extends RecordBasePanel {
-
-	var $class_name = 'record_delete';
-
-	function record() {
-
-		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-		$files = $this->files;
-
-		$board = $requests['board'];
-		$board_grg = $board . '_grg';
-		
-		$this->controller->select('fieldFromId', 'pass,filename');
-		
-		$pass = trim($posts['pwd']);
-		$admin_pwd = trim($context->get('db_admin_pwd'));
-		
-		$row = $this->model->getRow();	
-		$del_filename = $row['filename'];
-
-		if ($pass == $row['pass'] || $pass == $admin_pwd) {
-
-			if(isset($del_filename)) {
-				$del_filename = _SUX_PATH_ . 'board_data/' . $board . '/' . $del_filename;
-
-				if(!@unlink($del_filename)) {
-					echo '파일삭제를 실패하였습니다.';
-				} else {
-					echo '파일삭제를 성공하였습니다.';
-				}
-			}
-			
-			$result = $this->controller->delete('recordDelete');
-			if (!isset($result)) {
-				Error::alertToBack('글을 삭제하는데 실패했습니다.');
-			}
-		} else  {
-			Error::alertToBack('비밀번호가 틀렸습니다.');
-		}		
-		
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?board=$board&board_grg=$board_grg&action=list'>");
-	}
-}
-
-class RecordWritecommentPanel extends RecordBasePanel {
-
-	var $class_name = 'record_writecomment';
-
-	function record() {
-
-		$requests = $this->requests;
-
-		$id = $requests['id'];
-		$board = $requests['board'];		
-		$board_grg = $requests['board_grg'];
-		$igroup = $requests['igroup'];
-		$passover = $requests['passover'];
-		$sid = $requests['sid'];
-
-		$result = $this->controller->insert('recordWriteComment');
-		if (!isset($result)) {
-			Error::alertToBack('댓글 입력을 실패하였습니다.');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read'>");
-	}
-}
-
-class RecordDeletecommentPanel extends RecordBasePanel {
-
-	var $class_name = 'record_deletecomment';
-
-	function record() {
-
-		$context = Context::getInstance();
-		$requests = $this->requests;
-		$posts = $this->posts;
-
-		$pass = trim($posts['pwd']);
-		$admin_pwd = $context->get('db_admin_pwd');
-		
-		$id = $requests['id'];
-		$sid = $requests['sid'];
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$igroup = $requests['igroup'];
-		$passover = $requests['passover'];
-
-		$this->controller->select('fieldFromCommentId', 'pass');
-		$row = $this->model->getRow();
-
-		if ($pass == $row['pass'] || $pass == "$admin_pwd") {
-			$result = $this->controller->delete('recordDeleteComment');
-			if (!isset($result)) {
-				Error::alertToBack('댓글 삭제를 실패하였습니다.');
-			}			
-		} else  {
-			Error::alertToBack('비밀번호가 틀립니다');
-		}
-
-		echo ("<meta http-equiv='Refresh' content='0; URL=board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&action=read'>");		
-	}
+	}*/
 }
 ?>

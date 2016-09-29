@@ -1,22 +1,22 @@
 <?php
-
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
-	'JsonEncoder'=>'/classes/utils/jsonencoder.class.php',
-	'Query'=>'/classes/db/query.class.php',
-	'QueryWhere'=>'/classes/db/query.where.class.php',
-	'QuerySchema'=>'/classes/db/query.schema.class.php',
-	'Utils'=>'/classes/utils/utils.class.php',
-	'UtilsString'=>'/classes/utils/utils.string.class.php'
+	'JsonEncoder'=>'classes/utils/jsonencoder.class.php',
+	'Navigator'=>'classes/plugin/navigator.class.php',
+	'Query'=>'classes/db/query.class.php',
+	'QueryWhere'=>'classes/db/query.where.class.php',
+	'QuerySchema'=>'classes/db/query.schema.class.php',
+	'Smarty'=>'libs/smarty/Smarty.class.php',
+	'Utils'=>'classes/utils/utils.class.php',
+	'UtilsString'=>'classes/utils/utils.string.class.php'
 ), CASE_LOWER);
 
 $GLOBALS['__sux_autoload_file_map_directory'] = array('modules', 'classes');
 
 function __sux_autoload($class_name) {
 
-	 if(isset($GLOBALS['__sux_autoload_file_map'][strtolower($class_name)])) {
-
+	if(isset($GLOBALS['__sux_autoload_file_map'][strtolower($class_name)])) {	 
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][strtolower($class_name)];
 		
 	} else if(preg_match('/(^[a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {

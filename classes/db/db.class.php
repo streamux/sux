@@ -97,17 +97,27 @@ class DB extends Object {
 		return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
 	}
 
+	/**
+	 * @method _insertSql
+	 * @notice
+	 * 입력 실패 시 필드값에 사칙 연산자( +,-,*,/)가 포함되어 있는지 확인한다.
+	 * Query class 내의 addQuotation 메서드 확인
+	 * Query Class Path : modules/classes/db/query.class.php
+	 */
 	function _insertSql($query=NULL) {
 
 		$tables = $query->getTable();
 		$priority = $query->getPriority();
+		if ($priority != '') {
+			$priority .= ' ';
+		}
 		$keys = $query->getColumn('key');
 		if ($keys != '') {
 			$keys = ' (' . $keys . ')' ;
 		}
 		$values = $query->getColumn('value');
 
-		return 'INSERT ' . $priority . ' INTO ' . $tables . $keys . ' VALUES (' . $values .')';
+		return 'INSERT ' . $priority . 'INTO ' . $tables . $keys . ' VALUES (' . $values .')';
 	}
 
 	function _updateSql($query=NULL) {

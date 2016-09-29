@@ -1,0 +1,9 @@
+
+/* layout */
+.wrapper {position: relative}
+.header {z-index:1000;text-align: center}
+.container {position:relative;padding: 0 5px 0 5px}
+.footer{margin-top:20px;height:50px;text-align: center}
+
+/* header */
+.header .logo{float:none}

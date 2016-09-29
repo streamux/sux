@@ -117,6 +117,11 @@ class Context {
 		return $_POST[$key];
 	}
 
+	function setPost($key, $value) {
+
+		$_POST[$key] = $value;
+	}
+
 	function getPostAll() {
 
 		return $_POST;
@@ -125,6 +130,11 @@ class Context {
 	function getRequest($key) {
 
 		return $_REQUEST[$key];
+	}
+
+	function setRequest($key, $value) {
+
+		$_REQUEST[$key] = $value;
 	}
 
 	function getRequestAll() {
@@ -147,6 +157,11 @@ class Context {
 		return $_FILES;
 	}
 
+	function getFileAll() {
+
+		return $_FILES;
+	}
+
 	function getSession($key) {
 
 		return $_SESSION[$key];
@@ -165,6 +180,11 @@ class Context {
 	function getServer($key) {
 
 		return $_SERVER[$key];
+	}
+
+	function getServers() {
+
+		return $_SERVER;
 	}
 
 	function getServerAll() {

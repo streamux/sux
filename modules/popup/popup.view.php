@@ -1,17 +1,40 @@
 <?php
 
-class PopupView extends BaseView {
+class PopupModule extends BaseView {
+	
+	var $class_name = 'popup_module';
+	var $skin_path_list = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+
+	function output() { 
+
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinPathList', $this->skin_path_list);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path_list['contents'] );	
+		} else {
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
+		}
+	}
+}
+
+class PopupView extends PopupModule {
 
 	var $class_name = 'popup_view';
 
-	// display function is defined in parent class 
-}
-
-class OpenerdataPanel extends BaseView {
-
-	var $class_name = 'opener';
-
-	function init() {
+	function displayOpenerJson() {
 
 		$dataObj = array();		
 		$msg = "";
@@ -23,7 +46,7 @@ class OpenerdataPanel extends BaseView {
 			$rows = $this->model->getRows();
 			for($i=0; $i<count($rows); $i++) {
 
-				 $timeList = array();
+				$timeList = array();
 				foreach ($rows[$i] as $key => $value) {
 
 					if (preg_match('/(time)+/', $key)) {
@@ -47,34 +70,49 @@ class OpenerdataPanel extends BaseView {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo parent::callback($data);
-	} 
-}
+		echo $this->callback($data);
+	}
 
-class EventPanel extends BaseView {
-
-	var $class_name = 'event';
-
-	function init() {
+	function displayEvent() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$popup_name = $requests['winname'];
-		$skin_name = $requests['skin'];
+		$requestData = $context->getRequestAll();
+		$skin_name = $requestData['skin'];
 
-		$skin_dir = _SUX_PATH_ . 'modules/popup/skin/' . $skin_name . '/';
+		$skinPath = _SUX_PATH_ . 'modules/popup/skin/' . $skin_name;
 
-		$skin_path = $skin_dir . 'index.html';
-		if (is_readable($skin_path)) {
-			$contents = new Template($skin_path);			
-			$contents->set('table_name', $table_name);
-			$contents->set('memberid', $memberid);			
-			$contents->set('id', $id);
-			$contents->set('popup_name', $popup_name);
-			$contents->load();			
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
+		$this->skin_path_list = array();
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/index.tpl";
+		$this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
+
+		$bgimgPath = "skin/{$skin_name}/images/bg.jpg";
+		$image_info = getimagesize($bgimgPath);
+	      $image_type = $image_info[2];
+
+	      if ( $image_type == IMAGETYPE_JPEG ) {
+	      	$image = imagecreatefromjpeg($bgimgPath);
+	      } elseif( $image_type == IMAGETYPE_GIF ) {
+	       	$image = imagecreatefromgif($bgimgPath);
+	      } elseif( $image_type == IMAGETYPE_PNG ) {
+	     		$image = imagecreatefrompng($bgimgPath);
 		}
+
+		$result = $this->controller->select('fieldFromPopupWhere', '*');
+		if ($result) {			
+			$contentData = $this->model->getRow();
+			$contentData['comment'] = nl2br($contentData['comment']);
+		}
+		$contentData['imagesx'] = imagesx($image);
+		$contentData['imagesy'] = imagesy($image);
+
+		$this->request_data = $requestData;
+		$this->document_data = array();
+		$this->document_data['pagetype'] = $pageType;
+		$this->document_data['contents'] = $contentData;
+
+		$this->output();
 	}
 }
 ?>

@@ -1,127 +1,86 @@
 <?php
 
-class InstallView  extends Object {
+class InstallModule  extends BaseView {
 
-	var $class_name = 'install_view';
+	var $class_name = 'install_module';
+	var $skin_dir = '';
+	var $skin_path = '';
+	var $session_data = null;
+	var $request_data = null;
+	var $post_data = null;
+	var $document_data = null;
+	var $copyright_path = '';
 
-	function display($className=NULL) {
+	/**
+	 * @method display
+	 * 현재 상위 클래스에서 'display'메서드에서 DB연결 클래스를 사용하고 있기 때문에
+	 * 아직 DB설정 전 단계인 install 클래스에서는 오버라이드해서 사용한다.
+	 */
+	function display($methodName=NULL) {
 
-		if (strlen(stristr($className, '_')) > 0) {
-			$tempName = '';
-			$str_arr = split('_', $className);
-
-			for ($i=0; $i<count($str_arr); $i++) {
-				$tempName .= ucfirst($str_arr[$i]);
-			}
-			$className = $tempName . "Panel";
+		if (preg_match('/^record+/i', $methodName)) {
+			$methodName = $methodName;
 		} else {
-			$className = ucfirst($className) . "Panel";
+			$methodName = 'display' . ucfirst($methodName);
 		}
-		
-		$view = new $className();
-		$view->init();
+		$this->defaultSetting();
+		$this->$methodName();
 	}
-}
 
-class TermsPanel extends Object {
+	function output() {
 
-	var $class_name = 'terms';
-
-	function init() {
-
-		$skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
-
-		$skin_path = $skin_dir . 'header.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
+		/**
+		 * @class Template
+		 * @brief Template is a Wrapper Class based on Smarty
+		 */
+		$__template = new Template();
+		if (is_readable($this->skin_path)) {
+			$__template->assign('copyrightPath', $this->copyright_path);
+			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('sessionData', $this->session_data);
+			$__template->assign('requestData', $this->request_data);
+			$__template->assign('postData', $this->post_data);
+			$__template->assign('documentData', $this->document_data);
+			$__template->display( $this->skin_path );
 		} else {
-			echo '헤더 파일경로를 확인하세요.<br>';
-		}
-		
-		$skin_path = $skin_dir . 'terms.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$skin_path = $skin_dir . 'footer.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '푸터 파일경로를 확인하세요.<br>';
+			echo '<p>스킨 파일경로를 확인하세요.</p>';
 		}
 	}
 }
 
-class DBSetupPanel extends Object {
+class InstallView extends InstallModule {
 
-	var $class_name = 'dbsetup';
+	function displayTerms() {
 
-	function init() {
+		$this->skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
+		$this->skin_path = $this->skin_dir . 'terms.tpl';
 
-		$skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
-
-		$skin_path = $skin_dir . 'header.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '헤더 파일경로를 확인하세요.<br>';
-		}
-		
-		$skin_path = $skin_dir . 'db_setup.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$skin_path = $skin_dir . 'footer.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '푸터 파일경로를 확인하세요.<br>';
-		}
+		$this->output();
 	}
-}
 
-class AdminSetupPanel extends Object {
+	function displayDBSetup() {
 
-	var $class_name = 'adminsetup';
+		$context = Context::getInstance();
+		$this->request_data =$context->getRequestAll();
 
-	function init() {
+		$this->skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
+		$this->skin_path = $this->skin_dir . 'db_setup.tpl';
 
-		
-		$skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
-
-		$skin_path = $skin_dir . 'header.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '헤더 파일경로를 확인하세요.<br>';
-		}
-		
-		$skin_path = $skin_dir . 'admin_setup.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '스킨 파일경로를 확인하세요.<br>';
-		}
-
-		$skin_path = $skin_dir . 'footer.html';
-		if (is_readable($skin_path)) {
-			include $skin_path;
-		} else {
-			echo '푸터 파일경로를 확인하세요.<br>';
-		}
+		$this->output();
 	}
-}
 
-class RecordDbsetupPanel extends Object {
+	function displayAdminSetup() {
 
-	var $class_name = 'record_dbsetup';
+		$context = Context::getInstance();
+		$this->request_data =$context->getRequestAll();
 
-	function init() {
+		$this->skin_dir = _SUX_PATH_ . 'modules/install/tpl/';
+		$this->skin_path = $this->skin_dir . 'admin_setup.tpl';
+
+		$this->output();
+	}
+
+	function recordDBSetup() {
 
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
@@ -130,13 +89,15 @@ class RecordDbsetupPanel extends Object {
 		$db_userid		= trim($posts['db_userid']);
 		$db_password	= trim($posts['db_password']);
 		$db_database 	= trim($posts['db_database']);
-
+		
 		$resultYN = 'Y';
 		$msg = '';
-
+		
 		$file_name = 'config.db.php';
 		$file = '../../config/' . $file_name;
 		$fp = fopen($file, 'w');
+
+		$msg .= $db_hostname;	
 
 		if(!$fp) {
 
@@ -155,7 +116,7 @@ class RecordDbsetupPanel extends Object {
 			fwrite($fp, $str, strlen($str));
 			fclose($fp);
 
-			$msg = '데이터베이스 설정을 완료하였습니다.\n';
+			$msg = "데이터베이스 설정을 완료하였습니다.\n";
 			$resultYN = 'Y';
 
 			if (file_exists($file)) {
@@ -170,19 +131,13 @@ class RecordDbsetupPanel extends Object {
 			}			
 		}
 
-		$json_data = array(	"result"=>$resultYN,
-							"msg"=>urlencode($msg));
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
 
-		$strJson = json_encode($json_data);
-		echo $_REQUEST['callback'].'('.urldecode($strJson).')';
+		echo $this->callback($data);
 	}
-}
 
-class RecordAdminsetupPanel extends Object {
-
-	var $class_name = 'record_adminsetup';
-
-	function init() {
+	function recordAdminSetup() {
 
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
@@ -219,7 +174,7 @@ class RecordAdminsetupPanel extends Object {
 			fwrite($fp, $str, strlen($str));
 			fclose($fp);
 
-			$msg = '관리자계정 설정을 완료하였습니다.\n';
+			$msg = "관리자계정 설정을 완료하였습니다.\n";
 			$resultYN = 'Y';
 
 			if (file_exists($file)) {
@@ -234,32 +189,29 @@ class RecordAdminsetupPanel extends Object {
 			}
 		}
 
-		$json_data = array(	'result'=>$resultYN,
-							'msg'=>urlencode($msg));
+		$data = array(	'result'=>$resultYN,
+						'msg'=>$msg);
 
-		$strJson = json_encode($json_data);
-		echo $_REQUEST['callback'].'('.urldecode($strJson).')';
+		echo $this->callback($data);
 	}
-}
 
-class RecordCreatetablePanel extends Object {
-
-	var $class_name = 'record createtable';
-
-	function init() {
+	/**
+	 * @method displayRecordCreatetable
+	 * 차 후 xml구조 스키마연동 구현 예정 
+	 */
+	function recordCreateTable() {
 
 		$context = Context::getInstance();
 		$context->init();
 
 		$oDB = DB::getInstance();
 
-		$table_list = $context->getTableList();		
+		$table_list = $context->getTableList();
 		for($i=0; $i < count($table_list); $i++) {
 			${$table_list[$i]} = $table_list[$i];
 		}
 
 		$skin_dir = _SUX_PATH_ . 'modules/install/schemas/';
-
 		$skin_path = $skin_dir . 'create_table.php';
 		if (is_readable($skin_path)) {
 			include $skin_path;
@@ -270,7 +222,7 @@ class RecordCreatetablePanel extends Object {
 		for($i=0; $i < count($table_list); $i++) {
 			unset(${$table_list[$i]});
 		}
-
+		
 		$oDB->close();
 	}
 }
