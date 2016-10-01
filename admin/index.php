@@ -1,2 +1,2 @@
 <?
-header('Location: ../modules/admin/?action=main');
+header('Location: ../modules/admin/index.php?action=main');

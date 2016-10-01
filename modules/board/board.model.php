@@ -7,13 +7,15 @@ class BoardModel extends BaseModel {
 	var	$board_grg;
 	var $id;
 	var $grgid;
+	var	$igroup;
+	var $space;
+	var $ssunseo;
 
 	var	$name;
 	var	$pass;
 	var	$title;
 	var	$storycomment;
-	var	$email;
-	var	$igroup;
+	var	$email;	
 	var	$type;
 	var	$wall;
 	var	$wallok;
@@ -42,6 +44,7 @@ class BoardModel extends BaseModel {
 		$this->id = $requests['id'];
 		$this->grgid = $requests['grgid'];
 		$this->igroup = $requests['igroup'];
+		$this->space = $requests['space'];
 		$this->ssunseo = $requests['ssunseo'];
 
 		$this->name = $posts['name'];
@@ -66,7 +69,7 @@ class BoardModel extends BaseModel {
 		$this->imgup_tmpname = $files['imgup']['tmp_name'];
 	}
 
-	function SelectFromBoardGroup() {
+	function selectFromBoardGroup() {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_board_group');
@@ -82,7 +85,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function DeleteLimitwordFromBoard() {
+	function deleteLimitwordFromBoard() {
 
 		$row = $this->getRow();
 		$limit_word = $row['limit_word'];
@@ -104,7 +107,7 @@ class BoardModel extends BaseModel {
 		}		
 	}
 
-	function SelectFromBoard($query) {
+	function selectFromBoard($query) {
 
 		$query = new Query();
 		$query->setField('*');
@@ -114,7 +117,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFromBoardLimit() {
+	function selectFromBoardLimit() {
 
 		$context = Context::getInstance();		
 		$passover = $context->get('passover');
@@ -130,7 +133,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFromBoardSearch() {
+	function selectFromBoardSearch() {
 
 		$context = Context::getInstance();
 		$find = $context->getRequest('find');
@@ -148,7 +151,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFromBoardSearchLimit() {
+	function selectFromBoardSearchLimit() {
 
 		$context = Context::getInstance();
 		$find = $context->getRequest('find');
@@ -169,7 +172,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFieldFromBoardWhereId($field) {
+	function selectFieldFromBoardWhereId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -182,20 +185,20 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectIdFromBoardWhere($igroup) {
+	function selectIdFromBoardWhere() {
 
 		$query = new Query();
 		$query->setField('id');
 		$query->setTable($this->board);
 		$query->setWhere(array(
-			'igroup' => $igroup
+			'igroup' => $this->igroup
 		));
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function SelectFieldFromBoardLimit($field ) {
+	function selectFieldFromBoardLimit($field ) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -206,7 +209,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function UpdateBoardSetSee( $value ) {
+	function updateBoardSetSee( $value ) {
 
 		$context = Context::getInstance();
 		$query = new Query();
@@ -223,7 +226,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectfieldFromTailCommentId($field) {
+	function selectfieldFromTailCommentId($field) {
 
 		$query = new Query();
 		$query->setField($field);
@@ -234,7 +237,7 @@ class BoardModel extends BaseModel {
 		$result = parent::select($query);
 		return $result;
 	}
-	function SelectidFromTailCommentWhere($sid) {
+	function selectidFromTailCommentWhere($sid) {
 
 		$query = new Query();
 		$query->setField('id');
@@ -246,7 +249,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function SelectFromTailCommentWhere($sid) {
+	function selectFromTailCommentWhere($sid) {
 
 		$query = new Query();
 		$query->setField('*');
@@ -258,7 +261,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function InsertRecordWrite() {
+	function insertRecordWrite() {
 
 		$context = Context::getInstance();
 		$this->SelectFieldFromBoardLimit('id');
@@ -292,7 +295,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function UpdateRecordSsunseo() {
+	function updateRecordSsunseo() {
 
 		$where = new QueryWhere();
 		$where->set('ssunseo', $this->ssunseo, '>');
@@ -310,21 +313,13 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function InsertRecordReply() {
+	function insertRecordReply() {
 
 		$context = Context::getInstance();
-		$this->SelectFieldFromBoardWhereId('id, igroup, space, ssunseo');
-		$row = $this->getRow();
-		$igroup = $row['igroup']; 
-		$space = $row['space']+1;
-		$ssunseo = $row['ssunseo'];
-
-		if ($ssunseo == 0) {
-			$this->SelectIdFromBoardWhere($igroup);
-			$ssunseo = $this->getNumRows();
-		} else {
-			$ssunseo += 1;
-		}
+		
+		$this->igroup = $this->igroup;
+		$this->space = $this->space + 1;
+		$this->ssunseo = $this->ssunseo + 1;
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -339,9 +334,9 @@ class BoardModel extends BaseModel {
 			$_SERVER['REMOTE_ADDR'],
 			0, 
 			'', 
-			$igroup, 
-			$space, 
-			$ssunseo, 
+			$this->igroup, 
+			$this->space, 
+			$this->ssunseo, 
 			$this->wallwd,
 			$context->get('fileup_name'), 
 			$this->imgup_size, 
@@ -354,7 +349,7 @@ class BoardModel extends BaseModel {
 		
 	}
 
-	function UpdateRecordModify() {
+	function updateRecordModify() {
 
 		$context = Context::getInstance();
 		$query = new Query();
@@ -378,7 +373,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function DeleteRecordDelete() {
+	function deleteRecordDelete() {
 
 		$query = new Query();
 		$query->setTable($this->board);
@@ -390,7 +385,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function UpdateRecordOpkey() {
+	function updateRecordOpkey() {
 
 		$context = Context::getInstance();
 		$opkey = $context->getPost('opkey');
@@ -407,7 +402,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function InsertRecordWriteTailComment() {
+	function insertRecordWriteTailComment() {
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
@@ -434,7 +429,7 @@ class BoardModel extends BaseModel {
 		return $result;
 	}
 
-	function DeleteRecordDeleteTailComment() {
+	function deleteRecordDeleteTailComment() {
 
 		$context = Context::getInstance();
 		$grgid = $context->getRequest('grgid');

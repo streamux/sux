@@ -91,8 +91,8 @@ class LoginAdminView extends LoginAdminModule {
 			exit;
 		}
 
-		$context->setSession('admin_id', $adminId);
-		$context->setSession('admin_pwd', $adminPwd);
+		$context->setSession('admin_id', md5($adminId));
+		$context->setSession('admin_pwd', md5($adminPwd));
 
 		Utils::goURL('../admin/index.php?action=main');
 	}

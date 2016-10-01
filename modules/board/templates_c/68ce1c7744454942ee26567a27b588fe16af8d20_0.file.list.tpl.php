@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-27 10:58:19
+/* Smarty version 3.1.30, created on 2016-10-01 07:14:54
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57ea34ab4d6575_10545931',
+  'unifunc' => 'content_57ef464eb797e0_40053329',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1474937275,
+      1 => 1475298880,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57ea34ab4d6575_10545931 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57ef464eb797e0_40053329 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
@@ -54,6 +54,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &id=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['id'];?>
 &igroup=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['igroup'];?>
+&space=<?php echo $_smarty_tpl->tpl_vars['item']->value['space'];?>
 &ssunseo=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['ssunseo'];?>
 &sid=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['sid'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['passover'];?>
@@ -85,7 +86,7 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 				</td>				
 				<td class="date"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['date'];?>
 </span></td>
-				<td class="hit"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['hit'];?>
+				<td class="hit"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['ssunseo'];?>
 </span></td>
 			</tr>
 			<?php } else { ?>

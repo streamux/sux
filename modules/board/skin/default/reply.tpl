@@ -17,7 +17,7 @@
 	</div>		
 </div>
 <div class="board-write" style="width:{$groupData.width}">
-	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&igroup={$requestData.igroup}&ssunseo={$requestData.ssunseo}&action=recordReply" method="post"  name="f_board_reply" enctype="multipart/form-data" onSubmit="return jsux.fn.reply.checkDocumentForm(this);">
+	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&igroup={$requestData.igroup}&space={$requestData.space}&ssunseo={$requestData.ssunseo}&action=recordReply" method="post"  name="f_board_reply" enctype="multipart/form-data" onSubmit="return jsux.fn.reply.checkDocumentForm(this);">
 	<div class="panel-heading">
 		<p>
 			<label for="name" class="{$contentData.css_user_label}">이름</label>

@@ -124,14 +124,18 @@ class BoardAdminModel extends BaseModel {
 		$context = Context::getInstance();
 		$board = $context->getRequest('table_name');
 
+		$testPwd = '12';
+		$testPwd = substr(md5(trim($testPwd)),0,8);
+		$testPwd = substr(md5(trim($testPwd)),0,8);
+
 		$query = new Query();
 		$query->setTable($board);
 		$query->setColumn(array(
-			'','운영자','1234',
+			'','운영자',$testPwd,
 			'게시판 시동 테스트',
 			'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
 			'','now()',$context->getServer('REMOTE_ADDR'),
-			0,'',1,0,0,'a','','','',''
+			0,'',1,0,0,'a','','','','html'
 		));
 
 		$result = parent::insert($query);

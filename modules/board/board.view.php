@@ -1,4 +1,5 @@
 <?php
+
 class BoardModule extends BaseView {
 
 	var $class_name = 'board_module';
@@ -9,6 +10,8 @@ class BoardModule extends BaseView {
 	var $document_data = null;
 
 	function output() {
+
+		echo '<meta charset="utf-8" />';
 
 		/**
 		 * @class Template
@@ -24,7 +27,7 @@ class BoardModule extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );		
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			echo '스킨 파일경로를 확인하세요.';
 		}		
 	}
 }
@@ -74,11 +77,11 @@ class BoardView extends BoardModule {
 		$this->controller->delete('limitwordFromBoard');
 		
 		// list logic
-		if (!isset($passover) && $passover == '') {
+		if (!isset($passover) || $passover === '') {
 			 $passover = 0;
 		}
 
-		if (!isset($page) &&  $page == '') {
+		if (!isset($page) ||  $page === '') {
 			 $page =1;
 		}
 
@@ -112,7 +115,8 @@ class BoardView extends BoardModule {
 					$hit =$contentData['list'][$i]['see'];
 					$filename =$contentData['list'][$i]['filename'];
 					$filetype =$contentData['list'][$i]['filetype'];					
-					$compareDay =split(' ', $contentData['list'][$i]['date'])[0];
+					$compareDayArr = split(' ', $contentData['list'][$i]['date']);
+					$compareDay = $compareDayArr[0];
 					
 					if (isset($search) && $search != '') {	
 
@@ -194,7 +198,9 @@ class BoardView extends BoardModule {
 
 					$contentData['list'][$i]['name'] = $name;
 					$contentData['list'][$i]['hit'] = $hit;
-					$contentData['list'][$i]['date'] = split(' ', $date)[0];
+					$contentData['list'][$i]['space'] = $space;
+					$dateArr = split(' ', $date);
+					$contentData['list'][$i]['date'] = $dateArr[0];
 					$contentData['list'][$i]['subject'] = $subject;
 
 					$subject = null;
@@ -922,15 +928,18 @@ class BoardView extends BoardModule {
 		$board = $requests['board'];
 		$board_grg = $requests['board_grg'];
 		$pass = substr(md5(trim($posts['pass'])),0,8);
+		$pass = substr(md5($pass),0,8);
 
 		$admin_pwd = $context->get('db_admin_pwd');
+		$admin_pwd = substr(md5(trim($admin_pwd)),0,8);
+		$admin_pwd = substr(md5(trim($admin_pwd)),0,8);
+
 		$imageUpName = $files['imgup']['name'];
 		$imageUpTempName = $files['imgup']['tmp_name'];
 		$ljs_name = $sesstions['ljs_name'];
 
 		$this->controller->select('fieldFromBoardWhereId', 'pass, igroup, filename');	
-		$row = $this->model->getRow();		
-		$pass = substr(md5($pass),0,8);
+		$row = $this->model->getRow();
 
 		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 
@@ -1005,6 +1014,7 @@ class BoardView extends BoardModule {
 
 			$this->imageUpName = $imageUpName;
 		} 
+
 		$context->set('fileup_name', $imageUpName);
 
 		$result = $this->controller->update('recordSsunseo');
@@ -1040,6 +1050,8 @@ class BoardView extends BoardModule {
 		$this->controller->select('fieldFromBoardWhereId', 'pass,filename');		
 		$row = $this->model->getRow();	
 		$delFileName = $row['filename'];
+
+		//Error::alert( $pass . ' : ' . $row['pass'] . ' : ' . $admin_pwd );
 
 		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 

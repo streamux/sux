@@ -145,7 +145,8 @@ class BoardAdminView extends BoardAdminModule {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
 		}
-
+		
+		sort($skinList);
 		$data = array(	"data"=>array("list"=>$skinList),
 						"result"=>$resultYN,
 						"msg"=>$msg);

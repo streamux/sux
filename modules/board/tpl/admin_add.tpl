@@ -183,9 +183,9 @@
 								<td>
 									<input type="radio" name="type" value="html">
 									<span>HTML</span>
-									<input type="radio" name="type" value="text" checked>
+									<input type="radio" name="type" value="text">
 									<span>TEXT</span>
-									<input type="radio" name="type" value="all">
+									<input type="radio" name="type" value="all" checked>
 									<span>HTML + TEXT</span>
 								</td>
 							</tr>

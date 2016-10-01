@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-25 08:40:42
+/* Smarty version 3.1.30, created on 2016-10-01 05:57:02
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e7716ad169c7_43276157',
+  'unifunc' => 'content_57ef340e527fb9_91093058',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '92fb6c0f9f35fdd8d9440cfa6ca89cc6ab3959ad' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl',
-      1 => 1474785262,
+      1 => 1475136774,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e7716ad169c7_43276157 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57ef340e527fb9_91093058 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);

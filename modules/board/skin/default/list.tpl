@@ -19,7 +19,7 @@
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
 				<td class="subject">					
-					<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&ssunseo={$item.subject.ssunseo}&sid={$item.subject.sid}&passover={$item.subject.passover}&page={$item.subject.page}&search={$requestData.search}&find={$requestData.find}&action=read"><span style="padding-left:{$item.subject.space}" class="link-area">
+					<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&space={$item.space}&ssunseo={$item.subject.ssunseo}&sid={$item.subject.sid}&passover={$item.subject.passover}&page={$item.subject.page}&search={$requestData.search}&find={$requestData.find}&action=read"><span style="padding-left:{$item.subject.space}" class="link-area">
 						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
 						<span class="{$item.subject.txt_tail}">({$item.subject.tail_num})</span>
@@ -29,7 +29,7 @@
 					</span></a>
 				</td>				
 				<td class="date"><span>{$item.date}</span></td>
-				<td class="hit"><span>{$item.hit}</span></td>
+				<td class="hit"><span>{$item.ssunseo}</span></td>
 			</tr>
 			{else if}
 			<tr>

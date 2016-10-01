@@ -3,14 +3,16 @@ class Error {
 
 	static function alert($msg) {
 
-		printf('	<script>
+		printf('	<meta charset="utf-8" />
+				<script>
 					alert(\'%s\');
 				</script>', $msg);
 	}
 
 	static function alertToBack($msg) {
 
-		printf('	<script>
+		printf('	<meta charset="utf-8" />
+				<script>
 					alert(\'%s\');
 					history.go(-1);
 				</script>', $msg);
