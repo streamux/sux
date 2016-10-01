@@ -4,6 +4,10 @@ include "../../config/config.inc.php";
 $context = Context::getInstance();
 $context->init();
 
+if (!$context->checkAdminPass()) {
+	Utils::goURL('../login/login.admin.php?action=login');
+}
+
 $action = $context->getRequest('action');
 
 $model = new AdminAdminModel();

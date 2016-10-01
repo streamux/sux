@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-25 08:52:19
+/* Smarty version 3.1.30, created on 2016-10-01 07:16:16
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/reply.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e774237b12f2_50805712',
+  'unifunc' => 'content_57ef46a05099d1_12202649',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f3deaf04230037cb55edb27b663eca044b7ba09d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/reply.tpl',
-      1 => 1474786334,
+      1 => 1475298973,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e774237b12f2_50805712 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57ef46a05099d1_12202649 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
@@ -59,6 +59,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
 &igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
+&space=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['space'];?>
 &ssunseo=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['ssunseo'];?>
 &action=recordReply" method="post"  name="f_board_reply" enctype="multipart/form-data" onSubmit="return jsux.fn.reply.checkDocumentForm(this);">
 	<div class="panel-heading">

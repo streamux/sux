@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-25 08:57:36
+/* Smarty version 3.1.30, created on 2016-10-01 07:12:47
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e7756078fed8_71096537',
+  'unifunc' => 'content_57ef45cf152c28_35464870',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bed2a4e6f786db72c31c2b2ebe246a08c4bdb4e4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl',
-      1 => 1474786590,
+      1 => 1475298757,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e7756078fed8_71096537 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57ef45cf152c28_35464870 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('tailData', $_smarty_tpl->tpl_vars['documentData']->value['tails']);
@@ -72,6 +72,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
 &igroup=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['igroup'];?>
+&space=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['space'];?>
 &ssunseo=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['ssunseo'];?>
 &action=reply"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
