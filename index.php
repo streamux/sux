@@ -29,19 +29,19 @@
 		<div class="swiper-container">
 			<div class="swiper-wrapper">				
 				<div class="swiper-slide color-gray-e3">
-					<img data-src="http://localhost/xe/layouts/xedition/img/slider_img.jpg" style="height:100%" class="swiper-lazy">
+					<img data-src="../images/slider_img.jpg" style="height:100%" class="swiper-lazy">
 					<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
 				</div>
 				<div class="swiper-slide color-gray-e3">
-					<img data-src="http://localhost/xe/layouts/xedition/img/slider_img2.jpg" style="height:100%" class="swiper-lazy">
+					<img data-src="../images/slider_img2.jpg" style="height:100%" class="swiper-lazy">
 					<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
 				</div>
 				<div class="swiper-slide color-gray-e3">
-					<img data-src="http://localhost/xe/layouts/xedition/img/slider_img3.jpg" style="height:100%" class="swiper-lazy">
+					<img data-src="../images/slider_img3.jpg" style="height:100%" class="swiper-lazy">
 					<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
 				</div>
 				<div class="swiper-slide color-gray-e3">
-					<img data-src="http://localhost/xe/layouts/xedition/img/slider_img4.jpg" style="height:100%" class="swiper-lazy">
+					<img data-src="../images/slider_img4.jpg" style="height:100%" class="swiper-lazy">
 					<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
 				</div>
 			</div>
@@ -68,6 +68,11 @@
 <script type="text/javascript" src="common/js/gnb.min.js"></script>
 <script type="text/javascript" src="common/js/app/visual.js"></script>
 <script type="text/javascript" src="common/js/common_app_stage.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var visualView = jsux.visual.View.create();
+	});
+</script>
 </body>
 </html>
 

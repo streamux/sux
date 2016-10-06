@@ -37,6 +37,9 @@
 							</tr>         
 						</thead>
 						<tbody id="popupList">
+							<tr>
+								<td colspan="6"></td>
+							</tr>
 							<!--
 							@ jquery templete
 							@ name	popupWarnMsg_tmpl, popupList_tmpl

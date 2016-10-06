@@ -39,6 +39,9 @@
 							</tr>         
 						</thead>
 						<tbody id="boardList">
+							<tr>
+								<td colspan="7"></td>
+							</tr>
 							<!--
 							@ jquery templete
 							@ name	boardWarnMsg_tmpl, boardList_tmpl

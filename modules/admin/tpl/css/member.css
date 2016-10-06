@@ -16,10 +16,10 @@
 .container .articles .list .box table thead {border:2px solid #FFFFFF;border-top: 1px solid #d6d7d6;border-bottom: 1px solid #d6d7d6;background-color:#f6f6f6}
 .container .articles .list .box table thead tr th{height: 29px;line-height: 29px;background:url('../images/verti_line.gif') 100% 50% no-repeat;text-align: center}
 .container .articles .list .box table thead tr th:last-child{background:none}
-.container .articles .list .box tbody {text-align: center}
+.container .articles .list .box table tbody {text-align: center;}
 .container .articles .list .box table tbody tr{border-bottom: 1px dotted #d6d7d6}
 .container .articles .list .box table tbody tr:last-child{border-bottom: none}
-.container .articles .list .box table tbody tr td{overflow:hidden;padding-left:5px;height: 27px;line-height: 27px;text-align:center}
+.container .articles .list .box table tbody tr td{overflow:hidden;padding-left:5px;height: 27px;line-height: 26px;text-align:center}
 .container .articles .list .box table tbody tr td:nth-child(2){text-align:left}
 .container .articles .list .box table tbody tr td img{display:block;margin:0 auto}
 	
@@ -28,7 +28,7 @@
 .container .articles .member-edit .box dl{overflow:hidden;margin-top:25px;margin-bottom:10px;width:100%;text-align: left}
 .container .articles .member-edit .box dl dt{padding-left:5px;height: 20px;font-weight: bold}
 .container .articles .member-edit .box dl dd{padding-left:5px;height: 20px}
-.container .articles .member-edit .box table{margin-bottom:20px;;width:100%;text-align:left}
+.container .articles .member-edit .box table{margin-bottom:20px;width:100%;text-align:left}
 .container .articles .member-edit .box table tr td{height: 24px}
 .container .articles .member-edit .box table tr td:nth-child(1){padding-left:38px;width:120px}
 .container .articles .member-edit .box table tr td:nth-child(1) span{color:#FF0000}
@@ -36,7 +36,7 @@
 
 /* member groupadd */
 .container .articles .group-add .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF;text-align: center}
-.container .articles .group-add .box ul{overflow:hidden;margin-top:30px;margin-bottom:20px;width:100%;;text-align: left}
+.container .articles .group-add .box ul{overflow:hidden;margin-top:30px;margin-bottom:20px;width:100%;text-align: left}
 .container .articles .group-add .box ul li{padding-left:5px}
 .container .articles .group-add .box ul li:nth-child(2){padding:20px 0 10px 38px}
 

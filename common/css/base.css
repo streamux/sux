@@ -47,3 +47,4 @@ input::-ms-clear {display:none}
 .label:empty{display:none}
 .label-primary {background-color:#428bca}
 .label-primary[href]:hover, .label-primary[href]:focus {background-color: #3071a9}
+.clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}

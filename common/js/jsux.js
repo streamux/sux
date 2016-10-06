@@ -2,7 +2,7 @@
 /**!
  * @concat jsux.js 
  * project sux
- * date 20-09-2016
+ * date 05-10-2016
  @brief jsux Common Javascript
  **/
 window.jsux = window.jsux || {};
@@ -143,7 +143,7 @@ window.trace = function( str, bool ) {
 		if (!params.data) {
 			params.data = "";
 		}
-		
+
 		if (jQuery) {
 			$.ajax({
 				type: "POST",

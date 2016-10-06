@@ -111,6 +111,13 @@ jsux.gnb.Menu = jsux.View.create();
 			_stage.find('.mmenu > li > a').on('click', function(e){
 
 				e.preventDefault();
+
+				var url = _data[$( this ).parent().attr('data-mid')].link;
+				if (url === '') {
+					return;
+				}
+
+				jsux.goURL( url, '_self' );	
 			});
 
 			_stage.find('.smenu > a').on('mouseover', function(e){
@@ -124,8 +131,7 @@ jsux.gnb.Menu = jsux.View.create();
 			_stage.find('.smenu > a').on('mouseout', function(e){
 
 				e.preventDefault();
-				_scope.startTimer();
-				
+				_scope.startTimer();				
 			});
 
 			_stage.find('.smenu > a').on('click', function(e){

@@ -40,6 +40,9 @@
 							</tr>         
 						</thead>
 						<tbody id="totallogList">
+							<tr>
+								<td colspan="6"></td>
+							</tr>
 							<!--
 							@ jquery templete
 							@ name	totallogWarnMsg_tmpl, totallogList_tmpl

@@ -169,5 +169,5 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', ['jshint', 'csslint']);
 	grunt.registerTask('lint', ['jshint','csslint','phplint']);
-	grunt.registerTask('minify', ['jshint','csslint','clean','concat','uglify','cssmin']);	
+	grunt.registerTask('minify', ['jshint','clean','concat','uglify','cssmin']);	
 };

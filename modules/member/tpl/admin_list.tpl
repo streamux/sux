@@ -52,6 +52,9 @@
 							</tr>         
 						</thead>
 						<tbody id="memberList">
+							<tr>
+								<td colspan="8"></td>
+							</tr>
 							<!--
 							@ jquery templete
 							@ name	memberWarnMsg_tmpl, memberList_tmpl

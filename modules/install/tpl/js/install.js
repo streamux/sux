@@ -94,7 +94,7 @@ jsux.fn.adminSetup = {
 		var interval = null,
 			isLoading = false;
 
-		if (isLoading == true) {
+		if (isLoading === true) {
 
 			trace( '데이터 생성 중 입니다. 잠시만 기다려주세요.'  );
 		}

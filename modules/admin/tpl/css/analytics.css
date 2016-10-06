@@ -19,7 +19,7 @@
 .container .articles .list .box tbody {text-align: center}
 .container .articles .list .box table tbody tr{border-bottom: 1px dotted #d6d7d6}
 .container .articles .list .box table tbody tr:last-child{border-bottom: none}
-.container .articles .list .box table tbody tr td{overflow:hidden;height: 27px;line-height: 27px;text-align:center}
+.container .articles .list .box table tbody tr td{overflow:hidden;height: 27px;line-height: 26px;text-align:center}
 .container .articles .list .box table tbody tr td:nth-child(2){padding-left:10px;text-align: left}
 .container .articles .list .box table tbody tr td img{display:block;margin:0 auto}
 .container .articles .list .box table tbody tr td .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}

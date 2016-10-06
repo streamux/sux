@@ -12,7 +12,8 @@ jsux.visual.View = jsux.View.create();
 
 			/* default */
 			//initialSlide: 1,
-			//direction: 'horizontal',
+			//Could be "horizontal" or "vertical"
+			direction: 'horizontal',
 			speed: 500,
 			//setWrapperSize: true,
 			//virtualTranslate: true,
@@ -42,7 +43,7 @@ jsux.visual.View = jsux.View.create();
 
 			/* effects */
 			//Could be "slide", "fade", "cube", "coverflow" or "flip"
-			//effect: 'cube',
+			effect: 'slide',
 			/*fade: {
 				crossFade: true
 			},*/
@@ -60,7 +61,7 @@ jsux.visual.View = jsux.View.create();
 				slideShadows : true
 			},*/
 			/*flip: {
-				slideShadows : true
+				slideShadows : true,
 				limitRotation: true
 			},*/
 
@@ -125,15 +126,30 @@ jsux.visual.View = jsux.View.create();
 				return '<span class="' + className + '">' + (index + 1) + '</span>';
 			},*/
 
+			/* Navigation Buttons */
+			/* Scollbar */
+			/* Keyboard / Mousewheel */
+			/* Hash Navigation */
+			/* Images */
+			preloadImages: false,
+			lazyLoading: true,
+
+			/* Loop */
+			/* Controller */
+			nextButton: '.swiper-button-next',
+			prevButton: '.swiper-button-prev',
+			/* Observer */
+			/* Breakpoints */
+			/* Callbacks */
+			/* Properties */
+			/* Methods */
+
 			loop:true,
-			grabCursor: false,
-			 effect: 'cube',
-		        cube: {
-		            shadow: false,
-		            slideShadows: true,
-		            shadowOffset: 20,
-		            shadowScale: 0.94
-		        }	
+			grabCursor: false
+		});
+
+		mainVisual.on('slideChangeStart', function ( e ) {
+			console.log( e.activeIndex + ' : ' +  e.touches.diff );
 		});
 		
 		/*$('.arrow-left').on('click', function(e){

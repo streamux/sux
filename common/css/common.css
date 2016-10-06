@@ -1,25 +1,21 @@
-
 /* layout */
-.wrapper {position:relative}
-.header {position:relative}
-.container{position:relative}
-.footer{position:relative;margin-top:20px;height:50px;text-align: center}
+.footer{margin-top:20px;height:50px;text-align: center}
 
 /* header */
 .header .util{display:none;height: 20px}
-.header .logo{float:left;margin:12px 0 8px 15px}
+.header .logo{float:left}
 
 /* gnb_icon */
-.gnb-icon{clear:both;overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}
+.gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}
 .gnb-icon ul li{float:left;position:relative;height:72px}
 .gnb-icon ul li .g-arrow{position:absolute;top:-80px;z-index:1;width:100%;height:75px;background:url("../images/gnb_icon_arrow.png") 50% 0 no-repeat,#404140}
 .gnb-icon ul li .g-icon{position:absolute;top:0;z-index:2;width:100%;height:75px;background:url("../images/gnb_icon.png") 50% 0 no-repeat}
 
 /* gnb */
-.mobile-menu{float:right;margin: 18px 15px 0 0}
-.mobile-menu .mobile-btn{width:20px;}
-.mobile-menu .btn-hline1{background:#333333;height:2px}
-.mobile-menu .btn-hline2{background:#333333;height:2px;margin-top:4px;}
+.mobile-menu{float:right;height:50px}
+.mobile-menu .mobile-btn{margin:19px 10px 0 0;width:20px;}
+.mobile-menu .mobile-btn .btn-hline1{background:#333333;height:2px}
+.mobile-menu .mobile-btn .btn-hline2{background:#333333;height:2px;margin-top:4px;}
 
 .gnb-case{clear:both;position:relative;height:50px}
 .gnb{position:absolute;width:100%}
@@ -29,7 +25,7 @@
 .gnb .activate{background-color:#404140}
 .gnb .activate a span{color:#FFFFFF}
 
-.gnb .sub{overflow:hidden;width:100%;height:0}
+.gnb .sub{overflow:hidden;height:0}
 .gnb .sub .panel{position:relative;top:0}
 .gnb .sub .smenu{width:100%;border-bottom:1px solid #FFFFFF;text-align:left;line-height:34px;background-color:#EFEFEF}
 .gnb .sub .smenu:last-child{border-bottom:none}

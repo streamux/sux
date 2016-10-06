@@ -60,13 +60,24 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/{$skinDir}";
 
 		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
-
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
+		
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -261,15 +272,28 @@ class BoardView extends BoardModule {
 		$skinDir = "skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
+		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
 
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = $skinDir;
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/read.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
@@ -422,15 +446,28 @@ class BoardView extends BoardModule {
 		$skinDir = "skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
+		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
 
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = $skinDir;
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/write.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
@@ -526,15 +563,28 @@ class BoardView extends BoardModule {
 		$skinDir = "skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
+		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
 
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = $skinDir;
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/modify.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
@@ -618,15 +668,28 @@ class BoardView extends BoardModule {
 		$skinDir = "skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
+		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
 
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = $skinDir;
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/reply.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
@@ -772,15 +835,28 @@ class BoardView extends BoardModule {
 		$skinDir = "skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
+		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
+		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
 		}
 
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = $skinDir;
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/delete.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
@@ -815,18 +891,28 @@ class BoardView extends BoardModule {
 		$skinName = $groupData['include2'];
 		$footerPath = $groupData['include3'];
 
-		$skinDir = "skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
-
-		if (!is_readable($headerPath)) {
-			$headerPath = "{$skinPath}/_header.tpl";
-		}
-		if (!is_readable($footerPath)) {
-			$footerPath = "{$skinPath}/_footer.tpl";
-		}
-
 		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
+
+		$headerPath = $this->skin_path_list['root'] . $headerPath;
+		if (is_readable($headerPath)) {
+			if (!is_file($headerPath)) {
+				$headerPath = "{$skinPath}/_header.tpl";
+			}			
+		} else {
+			echo "상단 파일경로를 확인해주세요.<br>";
+		}
+
+		$footerPath = $this->skin_path_list['root'] . $footerPath;
+		if (is_readable($footerPath)) {
+			if (!is_file($footerPath)) {
+				$footerPath = "{$skinPath}/_footer.tpl";
+			}
+		} else {
+			echo "하단 파일경로를 확인해주세요.<br>";
+		}
+
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/delete_tail.tpl";
 		$this->skin_path_list['footer'] = $footerPath;

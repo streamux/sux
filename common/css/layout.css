@@ -1,21 +1,20 @@
-
 .wrapper {margin:0 auto;max-width:1024px}
-.header {z-index:2}
-.container{}
-.footer{}
+.header {position:relative;z-index:2}
 
 /* main visual */
 .visual-device{clear:both;position:relative;margin:0 auto}
 
 @media only screen and (max-width: 479px) {
 	.header .util{display:none}
+	.header .logo{margin:12px 0 6px 15px}
 	.header .mobile-menu{display:block}
 	.header .gnb-case{display:none}
 	.visual-device .swiper-container{height:270px}
 }
 @media only screen and (min-width: 480px) {
 	.header .util{display:block}
+	.header .logo{margin:5px 0 12px 15px}
 	.header .mobile-menu{display:none}
-	.header .gnb-case{display:block;top:10px}
+	.header .gnb-case{display:block}
 	.visual-device .swiper-container{height:448px}
 }

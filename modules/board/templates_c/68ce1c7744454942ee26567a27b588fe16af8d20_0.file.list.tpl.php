@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-01 07:14:54
+/* Smarty version 3.1.30, created on 2016-10-07 01:13:09
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57ef464eb797e0_40053329',
+  'unifunc' => 'content_57f6da852ae111_01887141',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1475298880,
+      1 => 1475747111,
       2 => 'file',
     ),
   ),
@@ -20,16 +20,17 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57ef464eb797e0_40053329 (Smarty_Internal_Template $_smarty_tpl) {
+function content_57f6da852ae111_01887141 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
+$_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"게시물 목록 - StreamUX"), 0, true);
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>((string)$_smarty_tpl->tpl_vars['boardTitle']->value)." :: 게시물 목록 - StreamUX"), 0, true);
 ?>
 
-<div style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
-" class="board-list">
+<div class="board-list" style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
+">
 	<table summary="게시판 리스트입니다.">
 		<thead>
 			<tr>
@@ -61,8 +62,8 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 &page=<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['page'];?>
 &search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
 &find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
-&action=read"><span style="padding-left:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
-" class="link-area">
+&action=read"><span class="link-area" style="padding-left:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
+">
 						<span class="label label-primary <?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box_color'];?>
 "><?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box'];?>
 </span>						
@@ -103,8 +104,8 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 		</tbody>
 	</table>	
 </div>
-<div  style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
-" class="board-page-navi">
+<div class="board-page-navi" style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
+">
 <?php if ($_smarty_tpl->tpl_vars['skinPathList']->value['navi'] != '') {?>
 	<?php $_smarty_tpl->_assignInScope('naviSkinPath', $_smarty_tpl->tpl_vars['skinPathList']->value['navi']);
 ?>
@@ -128,8 +129,7 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 /images/btn_search.gif" width="51" height="23" border="0">
 	</form>
 </div>	
-<div  style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
-" class="board-list-buttons ui-inlineblock">
+<div class="board-list-buttons">
 	<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &action=list">
 		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>

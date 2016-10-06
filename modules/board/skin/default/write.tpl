@@ -1,8 +1,9 @@
 {assign var=groupData value=$documentData.group}
+{assign var=boardTitle value=$groupData.board_name}
 {assign var=contentData value=$documentData.contents}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="게시물 쓰기 - StreamUX"}
+{include file="$headerPath" title="$boardTitle :: 게시물 쓰기 - StreamUX"}
 <div class="board-write" style="width:{$groupData.width}">
 	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&action=recordWrite" method="post"  name="f_board_write" enctype="multipart/form-data" onSubmit="return jsux.fn.write.checkDocumentForm(this);">
 
