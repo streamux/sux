@@ -17,6 +17,6 @@ $view = new AdminAdminView($model, $controller);
 if (isset($action) && $action != '') {
 	$view->display($action);
 } else {
-	Error::alert('파라미터 값을 확인해주세요.');
+	UIError::alert('파라미터 값을 확인해주세요.');
 }
 ?>

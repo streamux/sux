@@ -140,7 +140,7 @@ class BoardAdminView extends BoardAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$skinList = Utils::getInstance()->readDir($skinDir);
+		$skinList = Utils::readDir($skinDir);
 		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
@@ -414,7 +414,7 @@ class BoardAdminView extends BoardAdminModule {
 		if (trim($table_name) == "") {
 			$msg .= "삭제할 폴더명을 입력해주세요.\n";
 		} else {
-			$resultDir = Utils::getInstance()->deleteDir($dir);
+			$resultDir = Utils::deleteDir($dir);
 			if ($resultDir) {
 				$msg .= "${table_name} 폴더 삭제를 성공하였습니다.";
 			} else {

@@ -77,17 +77,17 @@ class LoginAdminView extends LoginAdminModule {
 		} 
 
 		if ($msg) {
-			Error::alertToBack($msg);
+			UIError::alertToBack($msg);
 		}
 
 		$adminId = $context->get('db_admin_id');
 		$adminPwd = $context->get('db_admin_pwd');
 
 		if ($userId !== $adminId) {
-			Error::alertToBack('아이디가 일치하지 않습니다.');
+			UIError::alertToBack('아이디가 일치하지 않습니다.');
 			exit;
 		} else if ($userPwd !== $adminPwd) {
-			Error::alertToBack('비밀번호가 일치하지 않습니다.');
+			UIError::alertToBack('비밀번호가 일치하지 않습니다.');
 			exit;
 		}
 

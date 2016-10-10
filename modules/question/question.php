@@ -19,6 +19,6 @@ $views = new QuestionView($model, $controller);
 if (isset($action) && $action) {
 	$views->display($action);
 } else {
-	Error::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $index_url . '?action=open');
+	UIError::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $index_url . '?action=open');
 }
 ?>

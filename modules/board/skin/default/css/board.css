@@ -23,7 +23,7 @@
 .board-search input[name=search]{width:120px}
 
 /* read */
-.board-read{padding:0 5px 0 5px;border-top:2px solid #e8eef1}
+.board-read{padding:0 5px 20px 5px;border-top:2px solid #e8eef1}
 .board-read .panel-heading{padding:15px 5px 15px 5px}
 .board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
 .board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}

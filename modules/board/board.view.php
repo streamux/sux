@@ -11,7 +11,10 @@ class BoardModule extends BaseView {
 
 	function output() {
 
-		echo '<meta charset="utf-8" />';
+		$UIError = UIError::getInstance();
+
+		/*$tracer = Tracer::getInstance();
+		$tracer->output();*/
 
 		/**
 		 * @class Template
@@ -26,9 +29,11 @@ class BoardModule extends BaseView {
 			$__template->assign('postData', $this->post_data);
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );		
-		} else {
-			echo '스킨 파일경로를 확인하세요.';
+		} else {			
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}		
+		$UIError->output();	
 	}
 }
 
@@ -37,6 +42,8 @@ class BoardView extends BoardModule {
 	var $class_name = 'board_view';
 
 	function displayList() {
+
+		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$requestData = $context->getRequestAll();
@@ -60,32 +67,30 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/{$skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
-		
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+
+		/**
+		 * @var headerPath
+		 * @descripttion
+		 * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수에 절대경로 처리 함.
+		 */		
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
 
-		$this->skin_path_list['header'] = $headerPath;		
+		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = "{$skinPath}/list.tpl";
 		$this->skin_path_list['footer'] = $footerPath;
 		$this->skin_path_list['navi'] = "{$skinPath}/_navi.tpl";
-
-		$this->controller->delete('limitwordFromBoard');
 		
 		// list logic
 		if (!isset($passover) || $passover === '') {
@@ -217,10 +222,10 @@ class BoardView extends BoardModule {
 					$subject = null;
 				}
 			} else {
-				echo '게시물 목록 가져오기를 실패하였습니다.';
+				$UIError->add('게시물 목록 가져오기를 실패하였습니다.');
 			}
 		} else {
-			echo '게시물 전체 목록 가져오기를 실패하였습니다.';
+			$UIError->add('게시물 전체 목록 가져오기를 실패하였습니다.');
 		}
 
 		// navi logic
@@ -239,6 +244,8 @@ class BoardView extends BoardModule {
 	} 
 
 	function displayRead() {
+
+		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$sessionData = $context->getSessionAll();
@@ -273,25 +280,19 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -307,7 +308,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($level < $r_grade) {
-			Error::alertToBack('죄송합니다. 읽기 권한이 없습니다.');
+			UIError::alertToBack('죄송합니다. 읽기 권한이 없습니다.');
 			exit;
 		}
 
@@ -318,13 +319,13 @@ class BoardView extends BoardModule {
 				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
-				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
+				UIError::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
 		if ($r_admin == 'n') {
 			if ($context->checkAdminPass() === FALSE) {
-				Error::alertTo('죄송합니다. 읽기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
+				UIError::alertTo('죄송합니다. 읽기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
@@ -418,6 +419,8 @@ class BoardView extends BoardModule {
 
 	function displayWrite() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();	
 		$sessionData = $context->getSessionAll();
 		$requestData = $context->getRequestAll();		
@@ -447,25 +450,19 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -494,7 +491,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($level < $r_grade) {
-			Error::alertToBack('죄송합니다. 쓰기 권한이 없습니다.');
+			UIError::alertToBack('죄송합니다. 쓰기 권한이 없습니다.');
 			exit;
 		}
 
@@ -503,13 +500,13 @@ class BoardView extends BoardModule {
 
 				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
-				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
+				UIError::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
 		if ($r_admin == 'n') {
 			if ($admin_pass === FALSE) {
-				Error::alertTo('죄송합니다. 쓰기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
+				UIError::alertTo('죄송합니다. 쓰기 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
@@ -536,6 +533,8 @@ class BoardView extends BoardModule {
 	}
 
 	function displayModify() {
+
+		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$sessionData = $context->getSessionAll();
@@ -564,25 +563,19 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -604,7 +597,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($level < $r_grade) {
-			Error::alertToBack('죄송합니다. 수정 권한이 없습니다.');
+			UIError::alertToBack('죄송합니다. 수정 권한이 없습니다.');
 			exit;
 		}
 
@@ -614,13 +607,13 @@ class BoardView extends BoardModule {
 				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
-				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
+				UIError::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
 		if ($r_admin == 'n') {
 			if ($admin_pass === FALSE) {
-				Error::alertTo('죄송합니다. 수정 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
+				UIError::alertTo('죄송합니다. 수정 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
@@ -639,6 +632,8 @@ class BoardView extends BoardModule {
 	}
 
 	function displayReply() {
+
+		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$sessionData = $context->getSessionAll();
@@ -669,25 +664,19 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -772,7 +761,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($level < $r_grade) {
-			Error::alertToBack('죄송합니다. 답변 권한이 없습니다.');
+			UIError::alertToBack('죄송합니다. 답변 권한이 없습니다.');
 			exit;
 		}
 
@@ -783,13 +772,13 @@ class BoardView extends BoardModule {
 				$returnToURL = $PHP_SELF . '?board=' . $board . '&action=' . $action;
 				$returnToURL = str_replace('&', urlencode('&'), $returnToURL);
 
-				Error::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
+				UIError::alertTo('죄송합니다. 이곳은 회원 전용 게시판 입니다.\n로그인을 먼저 하세요.' , '../login/login.php?action=login&returnToURL=' .  $returnToURL);
 			} 
 		}
 
 		if ($r_admin == 'n') {
 			if ($admin_pass === FALSE) {
-				Error::alertTo('죄송합니다. 답변 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
+				UIError::alertTo('죄송합니다. 답변 권한이 없습니다.' ,'board.php?board=' . $board . '&action=list');
 			}
 		}
 
@@ -817,6 +806,8 @@ class BoardView extends BoardModule {
 
 	function displayDelete() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$requestData = $context->getRequestAll();		
 		
@@ -836,25 +827,19 @@ class BoardView extends BoardModule {
 		$skinPath = _SUX_PATH_ . "modules/board/${skinDir}";
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -872,6 +857,8 @@ class BoardView extends BoardModule {
 	}
 
 	function displayDeleteTail() {
+
+		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$requestData = $context->getRequestAll();
@@ -892,25 +879,19 @@ class BoardView extends BoardModule {
 		$footerPath = $groupData['include3'];
 
 		$this->skin_path_list = array();
-		$this->skin_path_list['root'] = str_replace('/sux/', '', _SUX_PATH_) ;
 		$this->skin_path_list['dir'] = $skinDir;
 
-		$headerPath = $this->skin_path_list['root'] . $headerPath;
-		if (is_readable($headerPath)) {
-			if (!is_file($headerPath)) {
-				$headerPath = "{$skinPath}/_header.tpl";
-			}			
-		} else {
-			echo "상단 파일경로를 확인해주세요.<br>";
+		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
+		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+
+		if (!is_readable($headerPath)) {
+			$headerPath = "{$skinPath}/_header.tpl";
+			$UIError->add('상단 파일경로가 올바르지 않습니다.');
 		}
 
-		$footerPath = $this->skin_path_list['root'] . $footerPath;
-		if (is_readable($footerPath)) {
-			if (!is_file($footerPath)) {
-				$footerPath = "{$skinPath}/_footer.tpl";
-			}
-		} else {
-			echo "하단 파일경로를 확인해주세요.<br>";
+		if (!is_readable($footerPath)) {
+			$footerPath = "{$skinPath}/_footer.tpl";
+			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
 		$this->skin_path_list['header'] = $headerPath;		
@@ -930,16 +911,16 @@ class BoardView extends BoardModule {
 	function _checkValidation( $value ) {
 
 		if (!$value['name']) {
-			Error::alertToBack('이름을 입력해주세요.');
+			UIError::alertToBack('이름을 입력해주세요.');
 			exit;
 		} else  if (!$value['pass']) {
-			Error::alertToBack('비밀번호를 입력해주세요.');
+			UIError::alertToBack('비밀번호를 입력해주세요.');
 			exit;
 		} else  if (!$value['title']) {
-			Error::alertToBack('제목을 입력해주세요.');
+			UIError::alertToBack('제목을 입력해주세요.');
 			exit;
 		} else  if (!$value['comment']) {
-			Error::alertToBack('내용을 입력해주세요.');
+			UIError::alertToBack('내용을 입력해주세요.');
 			exit;
 		}
 	}
@@ -949,7 +930,7 @@ class BoardView extends BoardModule {
 		$imageUpName = $value['imgup']['name'];
 
 		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imageUpName)) {
-			Error::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
+			UIError::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
 			exit;
 		}
 	}
@@ -972,7 +953,7 @@ class BoardView extends BoardModule {
 		$imageUpTempName = $files['imgup']['tmp_name'];
 
 		if ($wall != $wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			UIError::alertToBack('경고! 잘못된 등록키입니다.');
 			exit;
 		}
 
@@ -984,7 +965,7 @@ class BoardView extends BoardModule {
 			$dest = $saveDir . $imageUpName;
 
 			if (!move_uploaded_file($imageUpTempName , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+				UIError::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 			}
 
 			$this->imageUpName = $imageUpName;
@@ -993,7 +974,7 @@ class BoardView extends BoardModule {
 
 		$result = $this->controller->insert('recordWrite');
 		if (!isset($result)) {
-			Error::alertToBack('글을 저장하는데 실패했습니다.');
+			UIError::alertToBack('글을 저장하는데 실패했습니다.');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
@@ -1056,10 +1037,10 @@ class BoardView extends BoardModule {
 
 			$result = $this->controller->update('recordModify');			
 			if (!isset($result)) {
-				Error::alertToBack('글을 수정하는데 실패했습니다.');
+				UIError::alertToBack('글을 수정하는데 실패했습니다.');
 			}
 		} else {
-			Error::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
+			UIError::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$row[sid]&igroup=$row[igroup]&action=read");
@@ -1083,7 +1064,7 @@ class BoardView extends BoardModule {
 		$imageUpTempName = $files['imgup']['tmp_name'];
 
 		if ($wall != $wallok) {
-			Error::alertToBack('경고! 잘못된 등록키입니다.');
+			UIError::alertToBack('경고! 잘못된 등록키입니다.');
 			exit;
 		}
 
@@ -1095,7 +1076,7 @@ class BoardView extends BoardModule {
 			$dest = $saveDir . $imageUpName;
 
 			if (!move_uploaded_file($imageUpTempName , $dest)) {
-				Error::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+				UIError::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
 			}
 
 			$this->imageUpName = $imageUpName;
@@ -1105,12 +1086,12 @@ class BoardView extends BoardModule {
 
 		$result = $this->controller->update('recordSsunseo');
 		if (!isset($result)) {
-			Error::alertToBack('순서를 변경하는데 실패했습니다.');
+			UIError::alertToBack('순서를 변경하는데 실패했습니다.');
 		}
 
 		$result = $this->controller->insert('recordReply');
 		if (!isset($result)) {
-			Error::alertToBack('답글을 저장하는데 실패했습니다.');
+			UIError::alertToBack('답글을 저장하는데 실패했습니다.');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
@@ -1137,7 +1118,7 @@ class BoardView extends BoardModule {
 		$row = $this->model->getRow();	
 		$delFileName = $row['filename'];
 
-		//Error::alert( $pass . ' : ' . $row['pass'] . ' : ' . $admin_pwd );
+		//UIError::alert( $pass . ' : ' . $row['pass'] . ' : ' . $admin_pwd );
 
 		if ($pass == $row['pass'] || $pass == $admin_pwd) {
 
@@ -1153,10 +1134,10 @@ class BoardView extends BoardModule {
 			
 			$result = $this->controller->delete('recordDelete');
 			if (!isset($result)) {
-				Error::alertToBack('글을 삭제하는데 실패했습니다.');
+				UIError::alertToBack('글을 삭제하는데 실패했습니다.');
 			}
 		} else  {
-			Error::alertToBack('비밀번호가 틀렸습니다.');
+			UIError::alertToBack('비밀번호가 틀렸습니다.');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
@@ -1172,7 +1153,7 @@ class BoardView extends BoardModule {
 
 		$result = $this->controller->update('recordOpkey');
 		if (!isset($result)) {
-			Error::alertToBack('진행상황 설정을 실패하였습니다.');
+			UIError::alertToBack('진행상황 설정을 실패하였습니다.');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
@@ -1192,7 +1173,7 @@ class BoardView extends BoardModule {
 
 		$result = $this->controller->insert('recordWriteTailComment');
 		if (!isset($result)) {
-			Error::alertToBack('댓글 입력을 실패하였습니다.');
+			UIError::alertToBack('댓글 입력을 실패하였습니다.');
 		}
 
 		Utils::goURL("board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read");
@@ -1220,10 +1201,10 @@ class BoardView extends BoardModule {
 		if ($pass == $row['pass'] || $pass == "$admin_pwd") {
 			$result = $this->controller->delete('recordDeleteTailComment');
 			if (!isset($result)) {
-				Error::alertToBack('댓글 삭제를 실패하였습니다.');
+				UIError::alertToBack('댓글 삭제를 실패하였습니다.');
 			}			
 		} else  {
-			Error::alertToBack('비밀번호가 틀립니다');
+			UIError::alertToBack('비밀번호가 틀립니다');
 		}
 
 		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$id&igroup=$igroup&passover=$passover&action=read");

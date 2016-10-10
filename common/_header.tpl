@@ -16,7 +16,7 @@
 		<div class="util"></div>
 		<h1 class="logo">
 			<a href="../../index.php"><img src="../../common/images/sux_logo.png" alt="streamxux" width="60px" height="30px"></a>
-		</h1>
+		</h1>		
 		<div class="mobile-menu">
 			<div class="mobile-btn">
 				<div class="btn-hline1"></div>
@@ -29,3 +29,8 @@
 		</div>
 	</div>
 	<div class="container">
+		<div class="article-header">
+			<div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
+			<h1 class="document-title">{$groupData.board_name}</h1>
+		</div>
+		

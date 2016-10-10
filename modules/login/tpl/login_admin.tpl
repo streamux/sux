@@ -22,7 +22,7 @@
 					<div class="login-body">
 						<div class="panel-info">
 							<ul>
-								<li><span class="ui-label">아이디</span><input type="text" name="user_id" maxlength="14" value=""></li>
+								<li><span class="ui-label">아이디</span><input type="text" name="user_id" maxlength="14" value="admin"></li>
 								<li><span class="ui-label">비밀번호</span><input type="password" name="user_pwd" maxlength="20"></li>
 							</ul>							
 						</div><div class="panel-btn">

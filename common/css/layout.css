@@ -9,6 +9,11 @@
 	.header .logo{margin:12px 0 6px 15px}
 	.header .mobile-menu{display:block}
 	.header .gnb-case{display:none}
+	.article-header{position:relative;margin-bottom:10px;background-color: #3b3c3b}
+	.article-header .ui-btn-write{position:absolute;margin:-14px 0 0 5px;top:50%;width:28px;height:28px;line-height: 23px;border:1px solid #e3e3e3;text-align: center;border-radius:0.25em;}
+	.article-header .ui-btn-write a{display:inline-block;width:26px;height:28px;}
+	.article-header .ui-btn-write img{vertical-align: middle}
+	.article-header .document-title{font-size:1.250em;line-height:44px;text-align:center;color:#fff;}
 	.visual-device .swiper-container{height:270px}
 }
 @media only screen and (min-width: 480px) {

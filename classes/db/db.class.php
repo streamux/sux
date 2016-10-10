@@ -181,63 +181,71 @@ class DB extends Object {
 
 	function select($query) {
 
-		$sql = $this->_selectSql($query);	
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);
+		$sql = $this->_selectSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function insert($query) {
 
-		$sql = $this->_insertSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);
+		$sql = $this->_insertSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function update($query) {
 
-		$sql = $this->_updateSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);
+		$sql = $this->_updateSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function delete($query) {
 
-		$sql = $this->_deleteSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);	
+		$sql = $this->_deleteSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function showTables($query) {
 
-		$sql = $this->_showSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);	
+		$sql = $this->_showSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function createTable($query) {
 
-		$sql = $this->_createSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);	
+		$sql = $this->_createSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
 
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
 	function dropTable($query) {
 
-		$sql = $this->_dropSql($query);		
-		$this->query_result = $this->_query($sql);
-		parent::output($sql);	
+		$sql = $this->_dropSql($query);
+		$tracer = Tracer::getInstance();
+		$tracer->setMessage($sql);
+
+		$this->query_result = $this->_query($sql);	
 
 		return $this->query_result;
 	}

@@ -186,7 +186,7 @@ class PopupAdminView extends PopupAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$skinList = Utils::getInstance()->readDir($path);
+		$skinList = Utils::readDir($path);
 		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
@@ -219,7 +219,7 @@ class PopupAdminView extends PopupAdminModule {
 				$dataObj[$key] = $value;
 			}
 
-			$skinList = Utils::getInstance()->readDir($path);
+			$skinList = Utils::readDir($path);
 			if (!$skinList) {
 				$msg = "스킨폴더가 존재하지 않습니다.";
 				$resultYN = "N";

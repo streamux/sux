@@ -93,7 +93,7 @@ class LoginView extends LoginModule {
 		} 
 
 		if ($msg) {
-			Error::alertToBack($msg);
+			UIError::alertToBack($msg);
 		}
 	
 		$this->controller->select('getLogpass');
@@ -106,7 +106,7 @@ class LoginView extends LoginModule {
 			$ljs_name = $rows['name'];
 
 			if ($pass !== $ljs_pass1) {
-				Error::alertToBack('비밀번호가 일치하지 않습니다.');
+				UIError::alertToBack('비밀번호가 일치하지 않습니다.');
 				exit;
 			}
 
@@ -209,7 +209,7 @@ class LoginView extends LoginModule {
 				$email = $rows['email'];
 
 				if (trim($email) !== $checkEmail) {
-					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
+					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
 
@@ -219,7 +219,7 @@ class LoginView extends LoginModule {
 
 				$this->skin_path = $this->skin_dir . 'searchid_result.tpl';
 			} else {
-				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
+				UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
 				exit;
 			}	
 		} else {
@@ -258,12 +258,12 @@ class LoginView extends LoginModule {
 				$password = $row['ljs_pass1'];
 
 				if (trim($memberId) !== $checkMemberid) {
-					Error::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
+					UIError::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
 					exit;
 				}
 
 				if (trim($email) !== $checkEmail) {
-					Error::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
+					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
 					exit;
 				}
 
@@ -271,7 +271,7 @@ class LoginView extends LoginModule {
 
 				$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
 				if (!file_exists($email_skin_path)) {
-					Error::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
+					UIError::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
 					exit;
 				}
 
@@ -291,7 +291,7 @@ class LoginView extends LoginModule {
 				mail($adminEmail, $subject, $contents, $additional_headers);
 				mail($checkEmail, $subject, $contents, $additional_headers);*/
 			} else {
-				Error::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
+				UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
 				exit;
 			}
 		}else{
