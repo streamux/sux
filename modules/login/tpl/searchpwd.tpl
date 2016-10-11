@@ -12,7 +12,7 @@
 				<h1 class="title">비밀번호 찾기</h1>
 				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-				<form action="login.php?action=searchpwd" name="f_searchpwd" method="post" onSubmit="return jsux.fn.searchpwd.checkForm(this);">
+				<form action="login.php?action=searchPassword" name="f_searchpwd" method="post" onSubmit="return jsux.fn.searchPassword.checkForm(this);">
 				<div class="box ui-edgebox-2px">
 					<div class="leave-header">
 						<img src="tpl/images/icon_01.gif" title="">						

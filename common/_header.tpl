@@ -4,8 +4,10 @@
 	<title>{$title}</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=2.0">
-	<link rel="stylesheet" type="text/css" href="../../common/css/default.css" title="루트 CSS" media="all">
-	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.css">
+	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
+	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
+	<link rel="stylesheet" type="text/css" href="../../common/css/sux_layout.min.css">
+	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
 	{if $requestData.jscode != ''}
 		<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/board.css">
 	{/if}

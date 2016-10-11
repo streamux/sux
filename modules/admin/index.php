@@ -8,15 +8,15 @@ if (!$context->checkAdminPass()) {
 	Utils::goURL('../login/login.admin.php?action=login');
 }
 
-$action = $context->getRequest('action');
-
 $model = new AdminAdminModel();
 $controller = new AdminAdminController($model);
 $view = new AdminAdminView($model, $controller);
 
-if (isset($action) && $action != '') {
+$selfURL = $context->getServer('PHP_SELF');
+$action = $context->getRequest('action');
+if (isset($action) && $action) {
 	$view->display($action);
 } else {
-	UIError::alert('파라미터 값을 확인해주세요.');
+	UIError::alertTo('파라미터 값을 확인해주세요.', $selfURL . '?action=main');
 }
 ?>

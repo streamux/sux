@@ -55,6 +55,9 @@
 <div class="footer">
 	Copyright @ STREAMUX Corp
 </div>
+<script type="text/javascript">
+	var is_page = 'main';
+</script>
 <script type="text/javascript" src="common/js/jquery.min.js"></script>	
 <script type="text/javascript" src="common/js/jquery.tmpl.min.js"></script>
 <script type="text/javascript" src="common/js/TweenMax.min.js"></script>
@@ -64,15 +67,8 @@
 	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
 <![endif]-->
 <script type="text/javascript" src="common/js/jsux.min.js"></script>
-<script type="text/javascript" src="common/js/common.js"></script>
-<script type="text/javascript" src="common/js/gnb.min.js"></script>
-<script type="text/javascript" src="common/js/app/visual.js"></script>
-<script type="text/javascript" src="common/js/common_app_stage.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		var visualView = jsux.visual.View.create();
-	});
-</script>
+<script type="text/javascript" src="common/js/jsux_app.min.js"></script>
+<script type="text/javascript" src="common/js/jsux_app_stage.min.js"></script>
 </body>
 </html>
 

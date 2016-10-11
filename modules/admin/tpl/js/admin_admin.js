@@ -240,7 +240,7 @@ jsux.fn.main = {
 					self.reloadData( e.page, self.naviManager.limit, 'pageview');
 				};
 
-				self.naviManager.pageview = new BoardApp.Navi();
+				self.naviManager.pageview = new BoardApp.Pagination();
 				self.naviManager.pageview.setUI({	el: '.pageview .ui-navi',
 													id: '#hitNaviList',
 													tmpl: '#NaviList_tmpl'});	
@@ -259,7 +259,7 @@ jsux.fn.main = {
 					self.reloadData( e.page, self.naviManager.limit, 'connectersite');
 				};
 
-				self.naviManager.analytics = new BoardApp.Navi();
+				self.naviManager.analytics = new BoardApp.Pagination();
 				self.naviManager.analytics.setUI({	el: '.analytics .ui-navi',
 													id: '#analyticsNaviList',
 													tmpl: '#NaviList_tmpl'});

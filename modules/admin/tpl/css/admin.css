@@ -1,36 +1,9 @@
-/* visual */
-.swiper-wrapper{width:100%;height:auto !important;position:relative;-webkit-transition-property:-webkit-transform,left,top;-webkit-transition-duration:0s;-webkit-transform:translate3d(0px,0,0);-webkit-transition-timing-function:ease;-moz-transition-property:-moz-transform,left,top;-moz-transition-duration:0s;-moz-transform:translate3d(0px,0,0);-moz-transition-timing-function:ease;-o-transition-property:-o-transform,left,top;-o-transition-duration:0s;-o-transform:translate(0px,0px);-o-transition-timing-function:ease;-ms-transition-property:-ms-transform,left,top;-ms-transition-duration:0s;-ms-transition-timing-function:ease;transition-property:transform,left,top;transition-duration:0s;transform:translate3d(0px,0,0);transition-timing-function:ease;}
-
-.swiper-free-mode>.swiper-wrapper{margin:0px auto;width:100%;height:auto;-webkit-transition-timing-function:ease-out;-moz-transition-timing-function:ease-out;-o-transition-timing-function:ease-out;-ms-transition-timing-function:ease-out;transition-timing-function:ease-out;}
-
-.swiper-wp8-horizontal{-ms-touch-action:pan-y;}
-.swiper-wp8-vertical{-ms-touch-action:pan-x;}	
-.swiper-container{width:100%;height:auto;}
-.swiper-container img{width:100%;}
-.swiper-slide{width:100%;height:auto !important;float:left;}
- /* .swiper-slide img{width:100%;height:auto;} */
- 
-.visual-device{padding:0 0 0 0;margin:0px auto;width:100% !important;height:auto !important;position:relative;text-align:center}
-.swiper-container{margin:0px;width:100% !important;height:auto !important;overflow:hidden;position:relative;z-index:1;-webkit-backface-visibility:hidden;-moz-backface-visibility:hidden;-ms-backface-visibility:hidden;-o-backface-visibility:hidden;backface-visibility:hidden;}
-.content-slide{padding:0px;color:rgb(255,255,255);}
-
-.title{font-size:25px;}
-.pagination{text-align:center;margin-top:0px;}
-.swiper-pagination-switch{background:#d7d7d7;margin:0px 3px;border-radius:8px;width:8px;height:8px;display:inline-block;cursor:pointer;}
-.swiper-active-switch{background:#555;} 
-
-.swiper-slide .item-panel1{height:200px;background-color: #2e75a5}
-.swiper-slide .item-panel2{height:200px;background-color: #893f53}
-.swiper-slide .item-panel3{height:200px;background-color: #80489a}
-.swiper-slide .title{display:block;padding-top:55px;font-size: 3.5em;color: #FFFFFF}
-.swiper-slide .sub-title{display:block;padding-top:3px;font-size: 1.0625em;color:#FFFFFF;letter-spacing: 0.5em}
-
 /* container common */
 .container{clear:both}
 .container .articles {margin-top:5px;padding:35px 5px 20px  7px;background-color:#fcfcfc}
 .container .articles .tt{text-align: left}
 .container .articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('../images/tt_box_01.gif') 0 0 no-repeat,url('../images/tt_box_03.gif') 100% 0 no-repeat,url('../images/tt_box_02.gif') 0 0 repeat-x;text-align:center}
-.container .articles .tt .imgbox h1{font-size: 1.1875em;font-weight:bold}
+.container .articles h1{font-size: 1.1875em;font-weight:bold}
 .container .articles .p-graph span{font-size:0.0250em}
 
 /* connect */
@@ -49,8 +22,9 @@
 .container .articles .ui-tab-promotion{clear:both;overflow:hidden;margin-top:20px}
 .container .articles .ui-tab-promotion .tab-header .tt{float:left;width:50%;text-align: left;cursor:pointer}
 .container .articles .ui-tab-promotion .tab-header .tt .imgbox-true{padding:4px;height:25px;background:url('../images/tt_box2_01.gif') 0 0 no-repeat,url('../images/tt_box2_03.gif') 100% 0 no-repeat,url('../images/tt_box2_02.gif') 0 0 repeat;text-align:center}
+
 .container .articles .ui-tab-promotion .tab-header .tt .imgbox-false{padding-top:4px;height:25px;background:url('../images/tt_box3_01.gif') 0 0 no-repeat,url('../images/tt_box3_03.gif') 100% 0 no-repeat,url('../images/tt_box3_02.gif') 0 0 repeat;text-align:center}
-.container .articles .ui-tab-promotion .tab-header h1{font-size: 1.1875em;font-weight:bold}
+
 .container .articles .ui-tab-promotion .activate-true{display:block}
 .container .articles .ui-tab-promotion .activate-false{display:none}
 .container .articles .ui-tab-promotion .pageview {clear:both;overflow:hidden;padding-bottom:3px;width:100%;border:1px solid #828382;border-top:none;text-align: center}

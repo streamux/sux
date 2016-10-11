@@ -11,7 +11,7 @@
 			<div class="login">
 				<h1 class="title">아이디 찾기</h1>
 				<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
-				<form action="login.php?action=searchid" name="f_searchid" method="post" onSubmit="return jsux.fn.searchid.checkForm(this);">
+				<form action="login.php?action=searchID" name="f_searchid" method="post" onSubmit="return jsux.fn.searchID.checkForm(this);">
 				<div class="box ui-edgebox-2px">
 					<div class="leave-header">
 						<img src="tpl/images/icon_01.gif" title="">						

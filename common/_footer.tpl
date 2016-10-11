@@ -3,6 +3,9 @@
 		{include file="$copyrightPath"}
 	</div>
 </div>
+<script type="text/javascript">
+	var is_page = 'sub';
+</script>
 <script type="text/javascript" src="../../common/js/jquery.min.js"></script>	
 <script type="text/javascript" src="../../common/js/jquery.tmpl.min.js"></script>
 <script type="text/javascript" src="../../common/js/TweenMax.min.js"></script>
@@ -12,9 +15,9 @@
 	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
 <![endif]-->
 <script type="text/javascript" src="../../common/js/jsux.min.js"></script>
-<script type="text/javascript" src="../../common/js/common.js"></script>
-<script type="text/javascript" src="../../common/js/gnb.min.js"></script>
-<script type="text/javascript" src="../../common/js/common_app_stage.js"></script>
+<script type="text/javascript" src="../../common/js/jsux_common_js.min.js"></script>
+<script type="text/javascript" src="../../common/js/jsux_app.min.js"></script>
+<script type="text/javascript" src="../../common/js/jsux_app_stage.min.js"></script>
 {if $requestData.jscode != ''}
 <script type="text/javascript" src="{$skinPathList.dir}/js/board.js"></script>
 <script type="text/javascript">
