@@ -3,6 +3,27 @@
 		{include file="$copyrightPath"}
 	</div>
 </div>
+<div class="ui-bg-cover"></div>
+<div class="mobile-gnb-case">
+	<div class="header-panel">
+		<div class="ui-user-info">
+			<ul class="clearfix">
+				<li><div class="ui-user-picture"></div></li>
+				<li><span class="ui-user-nickname">Guest</span></li>
+				<li><div class="ui-user-modify"></div></li>
+			</ul>
+		</div>
+		<div class="ui-user-member clearfix">
+			<ul class="clearfix">
+				<li><div class="ui-link-login">로그인</div></li>
+				<li><div class="ui-link-join">회원가입</div></li>
+			</ul>
+		</div>		
+	</div>
+	<div id="mobileGnb" class="body-panel">
+		
+	</div>
+</div>
 <script type="text/javascript">
 	var is_page = 'sub';
 </script>

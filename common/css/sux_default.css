@@ -32,7 +32,6 @@ input::-ms-clear {display:none}
 .show{display: block}
 .show-ib, .ui-inlineblock{display: inline-block}
 .hide{display:none}
-.color-red{color:#FF0000}
 .blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
 .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}
 .no-underline{text-decoration: none !important}
@@ -48,3 +47,6 @@ input::-ms-clear {display:none}
 .label-primary {background-color:#428bca}
 .label-primary[href]:hover, .label-primary[href]:focus {background-color: #3071a9}
 .clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
+.cover-opacity50{-ms-filter:alpha(opacity=0.5);filter:alpha(opacity=0.5);opacity:0.5;}
+.color-red{color:#FF0000}
+.color-opacity50{background-color:rgba( 200,255,255 0.5);}

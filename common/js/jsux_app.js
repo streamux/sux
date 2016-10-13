@@ -1,6 +1,6 @@
 jsux.gnb = jsux.gnb || {};
 jsux.gnb.Menu = jsux.View.create();
-(function( app ){
+(function( app, $ ){
 
 	var GNB = function( p, m ) {
 
@@ -316,7 +316,7 @@ jsux.gnb.Menu = jsux.View.create();
 })(jsux.gnb.Menu, jQuery);
 jsux.gnb = jsux.gnb || {};
 jsux.gnb.Model = jsux.Model.create();
-(function(app){	
+(function(app, $){	
 	app.include({
 
 		sizeList: [],
@@ -395,7 +395,7 @@ jsux.visual.View = jsux.View.create();
 			//nested: true,
 
 			/* autoplay */
-			autoplay: 5000,
+			//autoplay: 5000,
 			//autoplayStopOnLast: true,
 			//autoplayDisableOnInteraction: false,
 

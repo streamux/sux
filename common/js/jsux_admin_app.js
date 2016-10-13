@@ -1,6 +1,6 @@
 jsux.adminGnb = jsux.adminGnb || {};
 jsux.adminGnb.Icon = jsux.View.create();
-(function( app ){
+(function( app, $ ){
 
 	var GNB_ICON;
 
@@ -148,7 +148,7 @@ jsux.adminGnb.Icon = jsux.View.create();
 })(jsux.adminGnb.Icon, jQuery);
 jsux.adminGnb = jsux.adminGnb || {};
 jsux.adminGnb.Menu = jsux.View.create();
-(function( app ){
+(function( app, $ ){
 
 	var GNB = function( p, m ) {
 
@@ -458,7 +458,7 @@ jsux.adminGnb.Menu = jsux.View.create();
 })(jsux.adminGnb.Menu, jQuery);
 jsux.adminGnb = jsux.adminGnb || {};
 jsux.adminGnb.Model = jsux.Model.create();
-(function(app){	
+(function(app, $){	
 	app.include({
 
 		sizeList: [],

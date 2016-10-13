@@ -27,14 +27,15 @@ menuList = [{
 
 $(document).ready(function() {
 		
-	var gnbModel = jsux.gnb.Model.create();
-	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
+	var gnbModel = jsux.gnb.Model.create(),
+		gnbView = jsux.gnb.Menu.create("#gnb", gnbModel),
+		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel);
 
 	gnbModel.addObserver( gnbView );
+	gnbModel.addObserver( mobileGnbView );
 	gnbModel.setData( menuList );
 	//gnbModel.activate( 1, 2 );
 
-	is_page = is_page || 'sub';
 	switch(is_page) {		
 		case 'main':
 			var visualView = jsux.visual.View.create();

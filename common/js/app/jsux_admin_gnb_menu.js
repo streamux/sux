@@ -1,6 +1,6 @@
 jsux.adminGnb = jsux.adminGnb || {};
 jsux.adminGnb.Menu = jsux.View.create();
-(function( app ){
+(function( app, $ ){
 
 	var GNB = function( p, m ) {
 

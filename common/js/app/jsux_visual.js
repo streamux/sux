@@ -24,7 +24,7 @@ jsux.visual.View = jsux.View.create();
 			//nested: true,
 
 			/* autoplay */
-			autoplay: 5000,
+			//autoplay: 5000,
 			//autoplayStopOnLast: true,
 			//autoplayDisableOnInteraction: false,
 

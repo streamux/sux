@@ -1,6 +1,6 @@
 jsux.adminGnb = jsux.adminGnb || {};
 jsux.adminGnb.Icon = jsux.View.create();
-(function( app ){
+(function( app, $ ){
 
 	var GNB_ICON;
 

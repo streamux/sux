@@ -1,6 +1,6 @@
 jsux.gnb = jsux.gnb || {};
 jsux.gnb.Model = jsux.Model.create();
-(function(app){	
+(function(app, $){	
 	app.include({
 
 		sizeList: [],

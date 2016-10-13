@@ -324,7 +324,9 @@ jsux.Observer = jsux.Class.create( jsux.EventDispatcher );
 jsux.Observer.include({
 
 	update: function( o, infoObj ) {
+		
 		// override
+		console.log("use View's update method to override Observer's update method");
 	}
 });
 

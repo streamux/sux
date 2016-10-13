@@ -2,7 +2,7 @@
 /**!
  * @concat jsux.js 
  * project sux
- * date 11-10-2016
+ * date 13-10-2016
  @brief jsux Common Javascript
  **/
 window.jsux = window.jsux || {};
@@ -331,7 +331,9 @@ jsux.Observer = jsux.Class.create( jsux.EventDispatcher );
 jsux.Observer.include({
 
 	update: function( o, infoObj ) {
+		
 		// override
+		console.log("use View's update method to override Observer's update method");
 	}
 });
 
