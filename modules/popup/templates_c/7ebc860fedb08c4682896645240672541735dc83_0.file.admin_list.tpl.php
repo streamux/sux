@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-01 07:43:49
+/* Smarty version 3.1.30, created on 2016-10-14 08:40:59
   from "/Applications/MAMP/htdocs/sux/modules/popup/tpl/admin_list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57ef4d15113f85_16762765',
+  'unifunc' => 'content_58007dfb689dd5_89529310',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '7ebc860fedb08c4682896645240672541735dc83' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/popup/tpl/admin_list.tpl',
-      1 => 1475136774,
+      1 => 1475568472,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57ef4d15113f85_16762765 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58007dfb689dd5_89529310 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX관리자 팝업목록 - StreamUX"), 0, true);
@@ -62,6 +62,9 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 							</tr>         
 						</thead>
 						<tbody id="popupList">
+							<tr>
+								<td colspan="6"></td>
+							</tr>
 							<!--
 							@ jquery templete
 							@ name	popupWarnMsg_tmpl, popupList_tmpl

@@ -19,6 +19,6 @@ $action = $context->getRequest('action');
 if (isset($action) && $action) {
 	$views->display($action);
 } else {
-	UIError::alertTo('파라미터 값을 확인해주세요.\게시판 메인으로 이동합니다.', $selfURL . '?board=' . $board . '&action=list');
+	UIError::alertTo('파라미터 값을 확인해주세요.\n현재 페이지 메인으로 이동합니다.', $selfURL . '?board=' . $board . '&action=list');
 }
 ?>

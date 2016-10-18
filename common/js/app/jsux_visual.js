@@ -8,7 +8,7 @@ jsux.visual.View = jsux.View.create();
 
 	app.create = function() {
 
-		var mainVisual = new Swiper('.swiper-container',{
+		var mainVisual = new Swiper('.swiper-container-visual',{
 
 			/* default */
 			//initialSlide: 1,
@@ -116,7 +116,7 @@ jsux.visual.View = jsux.View.create();
 			//uniqueNavElements: true,
 
 			/* Pagination */
-			pagination: '.swiper-pagination',
+			pagination: '.swiper-pagination-visual',
 			//Can be "bullets", "fraction", "progress" or "custom"
 			//paginationType: 'bullets',
 			//paginationHide: true,
@@ -136,8 +136,8 @@ jsux.visual.View = jsux.View.create();
 
 			/* Loop */
 			/* Controller */
-			nextButton: '.swiper-button-next',
-			prevButton: '.swiper-button-prev',
+			/*nextButton: '.swiper-button-next',
+			prevButton: '.swiper-button-prev',*/
 			/* Observer */
 			/* Breakpoints */
 			/* Callbacks */

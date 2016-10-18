@@ -12,6 +12,7 @@ class LoginModule extends BaseView {
 
 	function output() {
 
+		$UIError = UIError::getInstance();
 		/**
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
@@ -26,8 +27,10 @@ class LoginModule extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path );
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}
+		$UIError->output();	
 	}
 }
 
@@ -215,7 +218,7 @@ class LoginView extends LoginModule {
 
 				$this->document_data['user_name'] = $checkName;
 				$this->document_data['user_id'] = $memberId;
-				$this->request_data['jscode'] = 'searchresult';				
+				$this->request_data['jscode'] = 'searchResult';				
 
 				$this->skin_path = $this->skin_dir . 'searchid_result.tpl';
 			} else {
@@ -279,7 +282,7 @@ class LoginView extends LoginModule {
 				$this->document_data['user_email'] = $checkEmail;
 				$this->document_data['memberid'] = $memberId;
 				$this->document_data['password'] = $password;
-				$this->request_data['jscode'] = 'searchresult';
+				$this->request_data['jscode'] = 'searchResult';
 
 				/*$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
 				$additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';

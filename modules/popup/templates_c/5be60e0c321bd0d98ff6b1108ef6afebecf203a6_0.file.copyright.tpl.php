@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-26 15:43:31
+/* Smarty version 3.1.30, created on 2016-10-14 08:40:59
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/copyright.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e92603a71dc8_22068265',
+  'unifunc' => 'content_58007dfb6e1e81_15850885',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5be60e0c321bd0d98ff6b1108ef6afebecf203a6' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/copyright.tpl',
-      1 => 1474795162,
+      1 => 1476172383,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e92603a71dc8_22068265 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58007dfb6e1e81_15850885 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
-Copyright @ STREAMUX Corp<?php }
+Copyright @ <a href="/sux/index.php">STREAMUX Corp</a><?php }
 }

@@ -55,7 +55,6 @@
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-
 <script type="x-jquery-templete" id="ljsMember_tmpl">
 {literal}
 	<option>${name}</option>

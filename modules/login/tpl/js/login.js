@@ -117,7 +117,7 @@ jsux.fn.leave = {
 		$("input[name=pass]").focus();
 	}
 };
-jsux.fn.searchresult = {
+jsux.fn.searchResult = {
 
 	setEvent: function() {
 

@@ -13,26 +13,24 @@ jsux.mobileGnb.Menu.include({
 		this.setUI();
 		this.setEvent();
 	},
-	setUI: function() {
-
-		var self = this,
-			markup = '',
+	setUI: function() {var self = this, markup = '',
 			menu = null,
 			subMenu = null;
 
 		this._path = jsux.mobileGnb.Menu.path;
 		this._m = jsux.mobileGnb.Menu.m;
 		markup = $('#suxMobileGnbFirstMenu').html();
-		$('.menu-panel > ul').empty();
+		var menu_stage = $(this._path).empty();
 
 		$(this._data).each( function( index ){
-			$('.menu-panel > ul').append( markup );
-			menu = $('.menu-panel > ul > li:eq('+index+')');
+
+			menu_stage.append( markup );
+			menu = menu_stage.find('> li:eq('+index+')');
 			menu.attr('data-code', index);
 			menu.find(' > a').attr('href', self._data[index].link);
-			menu.find(' > a > span').append(self._data[index].label);
+			menu.find(' > a').append(self._data[index].label);
 			
-			if (self._data[index].sub.length > 0) {
+			if (self._data[index].sub.length > 0) {				
 				markup = $('#suxMobileGnbSecondMenuCase').html();
 				menu.append( markup );
 				menu.find('.second-menu > ul').empty();
@@ -47,7 +45,7 @@ jsux.mobileGnb.Menu.include({
 						subMenu.attr('data-code', index);
 						subMenu.attr('data-sub-code', subIndex);
 						subMenu.find(' > a').attr('href', self._data[index].sub[subIndex].link);
-						subMenu.find(' > a > span').append(self._data[index].sub[subIndex].label);
+						subMenu.find(' > a').append(self._data[index].sub[subIndex].label);
 					}						
 				});
 			}
@@ -56,26 +54,51 @@ jsux.mobileGnb.Menu.include({
 	},
 	setEvent: function() {
 
-		var self = this;
+		var self = this,
+			mobileGnbHandler = null;
 
-		$('.mobile-menu .mobile-btn').on('click', function(e) {			
+		mobileGnbHandler = {
+
+			show: function() {
+
+				$('.ui-bg-cover').removeClass('ui-bg-cover-off');
+				$('.ui-bg-cover').addClass('ui-bg-cover-on');
+				$('.mobile-gnb-case').removeClass('mobile-gnb-case-off');	
+				$('.mobile-gnb-case').addClass('mobile-gnb-case-on');
+			},
+			hide: function() {
+
+				$('.ui-bg-cover').removeClass('ui-bg-cover-on');
+				$('.ui-bg-cover').addClass('ui-bg-cover-off');
+				$('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
+				$('.mobile-gnb-case').addClass('mobile-gnb-case-off');
+			},
+			click: function( url ) {
+
+				if (!(url === '#none' || url === '' || url === undefined)){
+					jsux.goURL(url);
+				}				
+			}
+		};
+
+		$('.mobile-menu .mobile-btn').on('click', function(e) {
 			e.preventDefault();
-			$('.ui-bg-cover').show();
-			$('.mobile-gnb-case').show();
+			mobileGnbHandler.show();
 			self._isClick = true;
 		});
 
 		$('.mobile-gnb-case').on('click', function(e) {
-			e.preventDefault();
-			var url = $(e.target).parent().attr('href');
 
-			if ($(e.target).attr('class') === 'mobile-gnb-case') {
-				$('.ui-bg-cover').hide();
-				$('.mobile-gnb-case').hide();
-			} else if (!(url === '#none' || url === '' || url === undefined)){				
-				jsux.goURL(url);
-			}
+			var url = $(e.target).attr('href');
+			e.preventDefault();			
+			mobileGnbHandler.click(url);
 			self._isClick = false;		
+		});
+
+		$('.ui-bg-cover').on('click', function(e) {
+			e.preventDefault();
+			mobileGnbHandler.hide();
+			self._isClick = false;	
 		});
 
 		$(window).on('resize', function(e){
@@ -83,11 +106,9 @@ jsux.mobileGnb.Menu.include({
 			//trace( self._isClick, 1);
 			var tw = e.target.outerWidth;
 			if (tw < 480 && self._isClick === true) {
-				$('.ui-bg-cover').show();
-				$('.mobile-gnb-case').show();
+				mobileGnbHandler.show();
 			} else if (tw > 479) {
-				$('.ui-bg-cover').hide();
-				$('.mobile-gnb-case').hide();				
+				mobileGnbHandler.hide();
 			}
 		});
 	},

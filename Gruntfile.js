@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 			'common-app': {
 				src: [					
 					'common/js/app/jsux_gnb_*.js',
-					/*'common/js/app/jsux_mobile_gnb.js',*/				
+					'common/js/app/jsux_mobile_gnb.js',				
 					'common/js/app/jsux_visual.js'		
 				],
 				dest: 'common/js/jsux_app.js'

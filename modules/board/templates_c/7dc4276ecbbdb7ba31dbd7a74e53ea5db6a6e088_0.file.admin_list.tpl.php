@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-06 12:00:11
+/* Smarty version 3.1.30, created on 2016-10-18 10:39:05
   from "/Applications/MAMP/htdocs/sux/modules/board/tpl/admin_list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57f620ab4f9ad6_44785224',
+  'unifunc' => 'content_5805dfa9808d71_06213283',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '7dc4276ecbbdb7ba31dbd7a74e53ea5db6a6e088' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/tpl/admin_list.tpl',
-      1 => 1475568144,
+      1 => 1476695406,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57f620ab4f9ad6_44785224 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5805dfa9808d71_06213283 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX관리자 게시판 목록 - StreamUX"), 0, true);

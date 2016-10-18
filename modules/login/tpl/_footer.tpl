@@ -1,3 +1,19 @@
+	</div>
+	<div class="footer">
+		{include file="$copyrightPath"}
+	</div>
+</div>
+<div class="ui-panel-msg"></div>
+
+{if $requestData.jscode == 'login' || $requestData.jscode == 'searchID' || $requestData.jscode == 'searchPassword'}
+<script type="text/javascript">
+	var loginObj = loginObj || {};
+	loginObj.memberList = {$documentData.group};
+</script>
+<script type="x-jquery-templete" id="ljsMember_tmpl">
+	<option>{literal}${name}{/literal}</option>
+</script>
+{/if}
 
 <script src="../../common/js/jquery.min.js"></script>
 <script src="../../common/js/jquery.tmpl.min.js"></script>

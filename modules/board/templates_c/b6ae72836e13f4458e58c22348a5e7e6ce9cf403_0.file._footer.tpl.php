@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-12 12:48:48
+/* Smarty version 3.1.30, created on 2016-10-17 05:01:12
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57fe1510d7bcb0_21256813',
+  'unifunc' => 'content_58043ef86010f1_76169826',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1476269325,
+      1 => 1476673269,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57fe1510d7bcb0_21256813 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58043ef86010f1_76169826 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	</div>
 	<div class="footer">
@@ -29,8 +29,9 @@ function content_57fe1510d7bcb0_21256813 (Smarty_Internal_Template $_smarty_tpl)
 
 	</div>
 </div>
+<!-- mobile menu start -->
 <div class="ui-bg-cover"></div>
-<div class="mobile-gnb-case">
+<div class="mobile-gnb-case">	
 	<div class="header-panel">
 		<div class="ui-user-info">
 			<ul class="clearfix">
@@ -39,22 +40,53 @@ function content_57fe1510d7bcb0_21256813 (Smarty_Internal_Template $_smarty_tpl)
 				<li><div class="ui-user-modify"></div></li>
 			</ul>
 		</div>
-		<div class="ui-user-member clearfix">
+		<div class="ui-user-member">
 			<ul class="clearfix">
-				<li><div class="ui-link-login">로그인</div></li>
-				<li><div class="ui-link-join">회원가입</div></li>
+				<li>
+					<div class="ui-link-login"><a href="modules/login/login.php?action=login">로그인</a></div>
+				</li>
+				<li>
+					<div class="ui-link-join"><a href="modules/member/member.php?action=join">회원가입</a></div>
+				</li>
 			</ul>
 		</div>		
-	</div>
+	</div>		
 	<div id="mobileGnb" class="body-panel">
-		
-	</div>
+		<div class="menu-panel">
+			<ul>
+				<!-- display first's depth menu list -->
+			</ul>
+		</div>
+	</div>	
 </div>
+<!-- end -->
+<!-- template start -->
+<?php echo '<script'; ?>
+ type="sux-templete" id="suxMobileGnbFirstMenu">
+	<li data-code=""><a href="#"></a></li>
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="sux-templete" id="suxMobileGnbSecondMenuCase">
+	<div class="second-menu">
+		<ul>
+			/*display second's depth menu list*/
+		</ul>
+	</div>
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="sux-templete" id="suxMobileGnbSecondMenu">
+	<li data-code="" data-sub-code=""><a href="#"></a></li>
+<?php echo '</script'; ?>
+>
+<!-- end -->
 <?php echo '<script'; ?>
  type="text/javascript">
 	var is_page = 'sub';
 <?php echo '</script'; ?>
 >
+
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jquery.min.js"><?php echo '</script'; ?>
 >	
@@ -66,6 +98,9 @@ function content_57fe1510d7bcb0_21256813 (Smarty_Internal_Template $_smarty_tpl)
 >
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/idangerous.swiper.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="text/javascript" src="../../common/js/jquery.mCustomScrollbar.concat.min.js"><?php echo '</script'; ?>
 >
 <!--[if (gte IE 6)&(lte IE 8)]>
 	<?php echo '<script'; ?>
@@ -96,7 +131,21 @@ echo '<script'; ?>
 '].init();
 <?php echo '</script'; ?>
 >
-<?php }?>
+<?php }
+echo '<script'; ?>
+>
+	(function($){
+		$(window).on("load",function(){
+			
+			$("#mobileGnb").mCustomScrollbar({
+				autoHideScrollbar:true,
+				theme:"minimal-dark",
+			});
+			
+		});
+	})(jQuery);
+<?php echo '</script'; ?>
+>
 </body>
 </html><?php }
 }

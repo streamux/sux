@@ -1,5 +1,6 @@
 /* layout */
-.footer{margin-top:20px;height:50px;text-align: center}
+.footer{font-size:0.875em;line-height:45px;text-align: center;background-color:#3e3e3e;color:#fff}
+.footer a{color:#fff;}
 
 /* header */
 .header .util{display:none;height: 20px}

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-10 16:54:35
+/* Smarty version 3.1.30, created on 2016-10-18 10:38:59
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/login_admin.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57fbababa4ebf2_19679172',
+  'unifunc' => 'content_5805dfa3a69450_39441330',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '09c1bbb29580ab901100c78c83c0c85f8e3a27a3' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/login_admin.tpl',
-      1 => 1475797959,
+      1 => 1476340167,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57fbababa4ebf2_19679172 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5805dfa3a69450_39441330 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('skinDir', $_smarty_tpl->tpl_vars['skinPathList']->value['dir']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX관리자 로그인 - StreamUX"), 0, true);
 ?>
@@ -82,7 +82,6 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->val
 	</div>
 </div>
 <div class="ui-panel-msg"></div>
-
 <?php echo '<script'; ?>
  type="x-jquery-templete" id="ljsMember_tmpl">
 

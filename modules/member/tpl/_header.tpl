@@ -8,3 +8,6 @@
 	<link rel="stylesheet" type="text/css" href="tpl/css/layout.css">
 </head>
 <body>
+<div class="wrapper">
+	<div class="header"></div>
+	<div class="container">

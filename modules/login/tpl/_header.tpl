@@ -11,4 +11,7 @@
 {/if}
 </head>
 <body>
+<div class="wrapper">
+	<div class="header"></div>
+	<div class="container">	
 
