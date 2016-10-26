@@ -1,16 +1,41 @@
 html,body{overflow:hidden;height:100%;}
 .wrapper {margin:0 auto;padding:0;max-width:1024px;height:100%}
-.header {position:relative;z-index: 2;}
-.visual-device{clear:both;position:relative;margin:0 auto}
-.container{position:relative;height:100%}
+.header {overflow:hidden;position:relative;z-index: 2}
+.section{position:relative;}
+.footer{overflow:hidden;position:absolute;z-index:100;margin-top: 0;width:100%;}
 
-.header .util{display:none}	
-.header .logo{margin:12px 0 6px 10px}
+.logo{margin:10px 0 6px 10px}
+.header-off{height:0}
+.footer-off{height:0}
 
-/* main visual */
+/* index.php */
+.container{height: 100%}
+.contents-body{word-break:keep-all; padding:10px;height:100%;}
+.about-us h1,
+.user-guide h1{padding:45px 0 30px 0;color:#cda25a}
+.user-guide h2{padding-left:80px;font-size:1.4375em;}
+
+.about-us p[class=title],
+.user-guide p[class=title]{font-size:2.000em;font-weight:bold;}
+.about-us p[class=comment]{padding-top:25px;font-size:1.0625em;line-height:1.687em;color:#9e9e9e;}
+.user-guide{padding-top:35px;}
+.user-guide ul{padding-top:55px;}
+.user-guide ul li{padding-right:15px;width:100%;}
+.user-guide ul li p{padding:20px 0 45px 80px;font-size:1.0625em;line-height:1.687em;color:#9e9e9e}
+
+.user-guide ul li > a{float:left;padding-top:10px;width:50px;height:50px;text-align:center;background-color:#5e5e5e;border-radius: 3.000em}
+.user-guide ul li > a:hover{background-color:#cda25a}
+
+/* swiper - contents, visual, mobilegnb */
 .swiper-container-contents,
+.swiper-container-visual,
 .swiper-container-mobilegnb{height: 100%}
+
+.swiper-container-visual {background-color:#d3d3d3}
+.swiper-container-visual img{height: 100%}
+
 .swiper-slide {height: auto}
+.swiper-slide-size{width:100%;height: 100%}
 
 /*mobile gnb*/
 .mobile-menu .mobile-btn{cursor:pointer;}
@@ -29,7 +54,7 @@ html,body{overflow:hidden;height:100%;}
 .mobile-gnb-case .header-panel .ui-user-info ul li:last-child{float:right;width:32px;height:32px}
 .mobile-gnb-case .header-panel .ui-user-info .ui-user-picture{width:32px;height:32px;background:url('../images/icon_info_picture.png') center center no-repeat #ffffff;background-size: 100%;border-radius: 2em}
 .mobile-gnb-case .header-panel .ui-user-info .ui-user-nickname{padding-left:10px;}
-.mobile-gnb-case .header-panel .ui-user-info .ui-user-modify{margin:0 auto;margin-top:2px;width:25px;height:25px;background:url('../images/icon_info_modify.png') center center no-repeat;background-size: 100%;border-radius: 2em;}
+.mobile-gnb-case .header-panel .ui-user-info .ui-user-modify{margin:0 auto;margin-top:2px;width:25px;height:25px;}
 
 .mobile-gnb-case .header-panel .ui-user-member{overflow:hidden;padding:0 5px 0 5px;text-align:center;height:45px}
 .mobile-gnb-case .header-panel .ui-user-member ul{margin-top:6px;}
@@ -52,21 +77,26 @@ html,body{overflow:hidden;height:100%;}
 @media only screen and (max-width: 479px) {
 	.header .mobile-menu{display:block}
 	.header .gnb-case{display:none}
-	.visual-device .swiper-container{height:270px}
+	.section .swiper-container-visual{height:270px}
 
 	.contents-header{overflow:hidden;position:relative;background-color: #3b3c3b}
 	.contents-header .ui-btn-write{position:absolute;margin:-15px 0 0 10px;top:50%;width:32px;height:30px;line-height: 23px;border:1px solid #e3e3e3;text-align: center;border-radius:0.25em;}
 	.contents-header .ui-btn-write a{display:inline-block;width:32px;height:28px;}
 	.contents-header .ui-btn-write img{vertical-align: middle}
 	.contents-header .document-title{font-size:1.250em;line-height:44px;text-align:center;color:#fff;}
-	.contents-header p{display:none;}	
+	.contents-header p{display:none;}
+
+	.user-guide ul li{clear: both;padding-right:none;width:100%;}
 }
 
 @media only screen and (min-width: 480px) {
 	.header .mobile-menu{display:none}
 	.header .gnb-case{display:block}
-	.visual-device .swiper-container{height:448px}
+	.section .swiper-container-visual{height:448px}
 
 	.contents-header .document-title{padding-left:10px;font-size: 2.00em}
 	.contents-header p{padding:0 0 30px 10px;}
+
+	.user-guide ul li{float: left;width:33%;}
+	.user-guide ul li:nth-child(4){clear:both;}
 }

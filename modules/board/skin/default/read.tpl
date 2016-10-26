@@ -18,20 +18,20 @@
 		</p>
 		<p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
 		<p>{$contentData.comment}</p>
-	</div>		
-</div>
-<div class="board-buttons">
-	<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&find={$requestData.find}&search={$requestData.search}&action=list"><img src="{$skinPathList.dir}/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-	<a href="board.php?&board={$requestData.board}&board_grg={$requestData.board_grg}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&igroup={$requestData.igroup}&space={$requestData.space}&ssunseo={$requestData.ssunseo}&action=reply"><img src="{$skinPathList.dir}/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&sid={$requestData.sid}&action=modify"><img src="{$skinPathList.dir}/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&action=delete"><img src="{$skinPathList.dir}/images/btn_del.gif" width="51" height="23" border="0"></a>
-</div>
+	</div>
+	<div class="board-buttons">
+		<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&find={$requestData.find}&search={$requestData.search}&action=list"><img src="{$skinPathList.dir}/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
+		<a href="board.php?&board={$requestData.board}&board_grg={$requestData.board_grg}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&igroup={$requestData.igroup}&space={$requestData.space}&ssunseo={$requestData.ssunseo}&action=reply"><img src="{$skinPathList.dir}/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&sid={$requestData.sid}&action=modify"><img src="{$skinPathList.dir}/images/btn_edit.gif" border="0"></a>&nbsp;<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&action=delete"><img src="{$skinPathList.dir}/images/btn_del.gif" width="51" height="23" border="0"></a>
+	</div>
 {if $opkeySkinPath != ''}	
-<div class="board-adminsetup {$contentData.css_opkey}" style="width:{$groupData.width}">
-	{include file="$opkeySkinPath"}
-</div>
+	<div class="board-adminsetup {$contentData.css_opkey}" style="width:{$groupData.width}">
+		{include file="$opkeySkinPath"}
+	</div>
 {/if}
 {if $tailSkinPath != ''}
-<div class="board-tail {$contentData.css_tail}" style="width:{$groupData.width}">
-	{include file="$tailSkinPath"}
-</div>
+	<div class="board-tail {$contentData.css_tail}" style="width:{$groupData.width}">
+		{include file="$tailSkinPath"}
+	</div>
 {/if}
+</div>
 {include file="$footerPath"}

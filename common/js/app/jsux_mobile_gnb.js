@@ -12,6 +12,27 @@ jsux.mobileGnb.Menu.include({
 		this._data = value;
 		this.setUI();
 		this.setEvent();
+	},	
+	show: function() {
+
+		$('.ui-bg-cover').removeClass('ui-bg-cover-off');
+		$('.ui-bg-cover').addClass('ui-bg-cover-on');
+		$('.mobile-gnb-case').removeClass('mobile-gnb-case-off');	
+		$('.mobile-gnb-case').addClass('mobile-gnb-case-on');
+	},
+	hide: function() {
+
+		$('.ui-bg-cover').removeClass('ui-bg-cover-on');
+		$('.ui-bg-cover').addClass('ui-bg-cover-off');
+		$('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
+		$('.mobile-gnb-case').addClass('mobile-gnb-case-off');
+	},
+	click: function( url, target) {
+
+		//console.log( 'url : %s / target : %s', url, target);
+		if (!(url === '#none' || url === '' || url === undefined)){
+			jsux.goURL(url, target);
+		}
 	},
 	setUI: function() {var self = this, markup = '',
 			menu = null,
@@ -54,50 +75,31 @@ jsux.mobileGnb.Menu.include({
 	},
 	setEvent: function() {
 
-		var self = this,
-			mobileGnbHandler = null;
-
-		mobileGnbHandler = {
-
-			show: function() {
-
-				$('.ui-bg-cover').removeClass('ui-bg-cover-off');
-				$('.ui-bg-cover').addClass('ui-bg-cover-on');
-				$('.mobile-gnb-case').removeClass('mobile-gnb-case-off');	
-				$('.mobile-gnb-case').addClass('mobile-gnb-case-on');
-			},
-			hide: function() {
-
-				$('.ui-bg-cover').removeClass('ui-bg-cover-on');
-				$('.ui-bg-cover').addClass('ui-bg-cover-off');
-				$('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
-				$('.mobile-gnb-case').addClass('mobile-gnb-case-off');
-			},
-			click: function( url ) {
-
-				if (!(url === '#none' || url === '' || url === undefined)){
-					jsux.goURL(url);
-				}				
-			}
-		};
+		var self = this;
 
 		$('.mobile-menu .mobile-btn').on('click', function(e) {
 			e.preventDefault();
-			mobileGnbHandler.show();
+			self.show();
 			self._isClick = true;
 		});
 
 		$('.mobile-gnb-case').on('click', function(e) {
 
-			var url = $(e.target).attr('href');
-			e.preventDefault();			
-			mobileGnbHandler.click(url);
-			self._isClick = false;		
+			var url = $(e.target).attr('href'),
+				target = $(e.target).attr('target');
+
+			if (!url) {
+				 url = $(e.target).parent().attr('href');
+				 target = $(e.target).parent().attr('target');
+			}
+			e.preventDefault();
+			self.click(url, target);
+			self._isClick = false;	
 		});
 
 		$('.ui-bg-cover').on('click', function(e) {
 			e.preventDefault();
-			mobileGnbHandler.hide();
+			self.hide();
 			self._isClick = false;	
 		});
 
@@ -106,9 +108,9 @@ jsux.mobileGnb.Menu.include({
 			//trace( self._isClick, 1);
 			var tw = e.target.outerWidth;
 			if (tw < 480 && self._isClick === true) {
-				mobileGnbHandler.show();
+				self.show();
 			} else if (tw > 479) {
-				mobileGnbHandler.hide();
+				self.hide();
 			}
 		});
 	},

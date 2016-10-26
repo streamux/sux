@@ -5,7 +5,7 @@
 </div>
 <div class="ui-panel-msg"></div>
 
-{if $requestData.jscode == 'login' || $requestData.jscode == 'searchID' || $requestData.jscode == 'searchPassword'}
+{if $documentData.jscode == 'login' || $documentData.jscode == 'searchID' || $documentData.jscode == 'searchPassword'}
 <script type="text/javascript">
 	var loginObj = loginObj || {};
 	loginObj.memberList = {$documentData.group};
@@ -22,7 +22,7 @@
   <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="tpl/js/login.js"></script>
-{if $requestData.jscode != ''}
+{if $documentData.jscode != ''}
 <script type="text/javascript">
 	jsux.fn['{$requestData.jscode}'].init();
 </script>

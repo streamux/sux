@@ -3,12 +3,11 @@
 class LoginModule extends BaseView {
 
 	var $class_name = 'login_module';	
-	var $skin_dir = '';
-	var $skin_path = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
@@ -18,14 +17,14 @@ class LoginModule extends BaseView {
 		 * @brief Template is a Wrapper Class based on Smarty
 		 */
 		$__template = new Template();
-		if (is_readable($this->skin_path)) {
+		if (is_readable($this->skin_path_list['contents'])) {
 			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinDir', $this->skin_dir);
+			$__template->assign('skinPathList', $this->skin_path_list);
 			$__template->assign('sessionData', $this->session_data);
 			$__template->assign('requestData', $this->request_data);
 			$__template->assign('postData', $this->post_data);
 			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path );
+			$__template->display( $this->skin_path_list['contents'] );
 		} else {
 			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
 			$UIError->useHtml = TRUE;
@@ -40,24 +39,56 @@ class LoginView extends LoginModule {
 
 	function displayLogin() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
 		$this->request_data = $context->getRequestAll();
-		$this->request_data['jscode'] = $this->request_data['action'];
-		
-		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];		
-		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
 
-		$this->document_data = array();
-		if (!$ljs_memberid  || !$ljs_pass1) {
+		/**
+		 * css, js file path handler
+		 */
+		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '회원 로그인';
+		
+		/**
+		 * skin directory path
+		 */
+		$skinDir = 'tpl';
+		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
+		if (!is_readable($headerPath)) {
+			$headerPath = $skinPath . "_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
+		}
+
+		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+		if (!is_readable($footerPath)) {
+			$footerPath = $skinPath . "_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
+		}
+
+		$ljs_memberid = $this->session_data['ljs_memberid'];
+		$ljs_pass1 = $this->session_data['ljs_pass1'];
+
+		/**
+		 * get data from DB
+		 */
+		if (!$ljs_memberid  || !$ljs_pass1) {	
 			$this->controller->select('getMemberGroup');
 			$this->document_data['group'] = $this->model->getJson();
-			$this->skin_path = $this->skin_dir . 'login.tpl';			
+			$contentsPath = $skinPath . 'login.tpl';		
 		} else {
-			$this->request_data['jscode'] = '';
-			$this->skin_path = $this->skin_dir . 'info.tpl';
+			$this->document_data['jscode'] = '';
+			$contentsPath = $skinPath . 'info.tpl';
 		}
+
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;
+		$this->skin_path_list['contents'] = $contentsPath;
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->output();
 	}
@@ -136,14 +167,14 @@ class LoginView extends LoginModule {
 			}			
 
 			if ($this->request_data['action'] == "read") {
-				echo ("<meta http-equiv='Refresh' content='0; URL=../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod'>");
+				Utils::goURL("../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod");
 			} else if ($this->request_data['action'] == "write"){
-				echo ("<meta http-equiv='Refresh' content='0; URL=../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid'>");
+				Utils::goURL("../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid");
 			} else {
-				echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
+				Utils::goURL("login.php?action=login");
 			}
 		} else {
-			echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=fail'>");
+			Utils::goURL("login.php?action=fail");
 		}
 	}
 
@@ -154,54 +185,138 @@ class LoginView extends LoginModule {
 		foreach ($this->session_data as $key => $value) {
 			$context->setSession($key, '');
 		}
-		echo ("<meta http-equiv='Refresh' content='0; URL=login.php?action=login'>");
+		Utils::goURL("login.php?action=login");
 	}
 
 	function displayFail() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
-		$this->session_data = $context->getSessionAll();		
+		$this->session_data = $context->getSessionAll();
 
-		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
-		$this->skin_path = $this->skin_dir . 'login.tpl';
+		/**
+		 * css, js file path handler
+		 */
+		$this->document_data['jscode'] = 'login';
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '회원 로그인';
+		
+		/**
+		 * skin directory path
+		 */
+		$skinDir = 'tpl';
+		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
-		$this->document_data = array();
+		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
+		if (!is_readable($headerPath)) {
+			$headerPath = $skinPath . "_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
+		}
+
+		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+		if (!is_readable($footerPath)) {
+			$footerPath = $skinPath . "_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
+		}
+
+		$ljs_memberid = $this->session_data['ljs_memberid'];
+		$ljs_pass1 = $this->session_data['ljs_pass1'];
+
+		$contentsPath = $skinPath . 'login.tpl';
+
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;
+		$this->skin_path_list['contents'] = $contentsPath;
+		$this->skin_path_list['footer'] = $footerPath;
+
 		$this->controller->select('getMemberGroup');		
 		$this->document_data['group'] = $this->model->getJson();		
 		$this->document_data['isLogon'] = false;
-		$this->request_data['jscode'] = 'login';
-
+		
 		$this->output();
 	}
 
 	function displayLeave() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
 		$this->request_data = $context->getRequestAll();
-		$this->request_data['jscode'] = $this->request_data['action'];
 
-		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
-		$this->skin_path = $this->skin_dir . 'leave.tpl';
+		/**
+		 * css, js file path handler
+		 */
+		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '회원 탈퇴';
+		
+		/**
+		 * skin directory path
+		 */
+		$skinDir = 'tpl';
+		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
+		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
+		if (!is_readable($headerPath)) {
+			$headerPath = $skinPath . "_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
+		}
+
+		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+		if (!is_readable($footerPath)) {
+			$footerPath = $skinPath . "_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
+		}
+
+		$contentsPath = $skinPath . 'leave.tpl';
+
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;
+		$this->skin_path_list['contents'] = $contentsPath;
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->output();
 	}
 
 	function displaySearchID() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
-		$this->request_data['jscode'] = $this->request_data['action'];
+
+		/**
+		 * css, js file path handler
+		 */
+		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '아이디 찾기';
+
+		/**
+		 * skin directory path
+		 */
+		$skinDir = 'tpl';
+		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
+		if (!is_readable($headerPath)) {
+			$headerPath = $skinPath . "_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
+		}
+
+		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+		if (!is_readable($footerPath)) {
+			$footerPath = $skinPath . "_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
+		}
 
 		$checkName = $this->post_data['user_name'];
 		$checkEmail = $this->post_data['user_email'];
 
-		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
-
-		$this->document_data = array();
 		if (isset($checkName) && $checkName != ''){
 
 			$this->controller->select('getSearchid');
@@ -218,9 +333,9 @@ class LoginView extends LoginModule {
 
 				$this->document_data['user_name'] = $checkName;
 				$this->document_data['user_id'] = $memberId;
-				$this->request_data['jscode'] = 'searchResult';				
+				$this->document_data['jscode'] = 'searchResult';				
 
-				$this->skin_path = $this->skin_dir . 'searchid_result.tpl';
+				$contentsPath = $skinPath . 'searchid_result.tpl';
 			} else {
 				UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
 				exit;
@@ -229,18 +344,49 @@ class LoginView extends LoginModule {
 			$this->controller->select('getMemberGroup');
 			$this->document_data['group'] = $this->model->getJson();
 
-			$this->skin_path = $this->skin_dir . 'searchid.tpl';
+			$contentsPath = $skinPath . 'searchid.tpl';
 		}
+
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;
+		$this->skin_path_list['contents'] = $contentsPath;
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->output();
 	}
 
 	function displaySearchPassword() {
 
+		$UIError = UIError::getInstance();
+
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
-		$this->request_data['jscode'] = $this->request_data['action'];
+
+		/**
+		 * css, js file path handler
+		 */
+		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '비밀번호 찾기';
+
+		/**
+		 * skin directory path
+		 */
+		$skinDir = 'tpl';
+		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+
+		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
+		if (!is_readable($headerPath)) {
+			$headerPath = $skinPath . "_header.tpl";
+			$UIError->add("상단 파일경로가 올바르지 않습니다.");
+		}
+
+		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+		if (!is_readable($footerPath)) {
+			$footerPath = $skinPath . "_footer.tpl";
+			$UIError->add("하단 파일경로가 올바르지 않습니다.");
+		}
 
 		$checkName = $this->post_data['user_name'];
 		$checkMemberid = $this->post_data['user_id'];
@@ -248,9 +394,6 @@ class LoginView extends LoginModule {
 		$adminName = $context->get('db_admin_id');
 		$adminEmail = $context->get('db_admin_email');
 
-		$this->skin_dir = _SUX_PATH_ . 'modules/login/tpl/';
-
-		$this->document_data = array();
 		if(isset($checkMemberid) && $checkMemberid != '') {
 
 			$this->controller->select('getSearchpwd');
@@ -270,7 +413,7 @@ class LoginView extends LoginModule {
 					exit;
 				}
 
-				$this->skin_path = $this->skin_dir . 'searchpwd_result.tpl';
+				$contentsPath = $skinPath . 'searchpwd_result.tpl';
 
 				$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
 				if (!file_exists($email_skin_path)) {
@@ -282,7 +425,7 @@ class LoginView extends LoginModule {
 				$this->document_data['user_email'] = $checkEmail;
 				$this->document_data['memberid'] = $memberId;
 				$this->document_data['password'] = $password;
-				$this->request_data['jscode'] = 'searchResult';
+				$this->document_data['jscode'] = 'searchResult';
 
 				/*$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
 				$additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';
@@ -302,8 +445,13 @@ class LoginView extends LoginModule {
 			$this->controller->select('getMemberGroup');
 			$this->document_data['group'] = $this->model->getJson();
 
-			$this->skin_path = $this->skin_dir . 'searchpwd.tpl';
+			$contentsPath = $skinPath . 'searchpwd.tpl';
 		}
+
+		$this->skin_path_list['dir'] = $skinDir;
+		$this->skin_path_list['header'] = $headerPath;
+		$this->skin_path_list['contents'] = $contentsPath;
+		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->output();
 	}

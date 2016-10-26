@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-13 07:53:11
+/* Smarty version 3.1.30, created on 2016-10-24 08:11:58
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/info.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57ff2147115092_13420431',
+  'unifunc' => 'content_580da62eec53e9_91473721',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dcf5b4b3433b8dc8fdb3630559891b91d74694f8' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/info.tpl',
-      1 => 1476337989,
+      1 => 1477287547,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,10 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57ff2147115092_13420431 (Smarty_Internal_Template $_smarty_tpl) {
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보 - StreamUX"), 0, true);
+function content_580da62eec53e9_91473721 (Smarty_Internal_Template $_smarty_tpl) {
+$_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
+$_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보 - StreamUX"), 0, true);
 ?>
 
 <div class="article-box ui-edgebox">
@@ -62,7 +64,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->val
 		</div>					
 	</div>			
 </div>
-<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['footerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 
 <?php }

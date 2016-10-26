@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-26 06:34:18
+/* Smarty version 3.1.30, created on 2016-10-24 10:33:06
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/admin_groupadd.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e8a54aed4a11_10986521',
+  'unifunc' => 'content_580dc7423c4ff8_34060600',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e3f377c828ea26a2dfae9113508e1d18be369f13' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/admin_groupadd.tpl',
-      1 => 1474864457,
+      1 => 1475136774,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e8a54aed4a11_10986521 (Smarty_Internal_Template $_smarty_tpl) {
+function content_580dc7423c4ff8_34060600 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX관리자 회원그룹추가 - StreamUX"), 0, true);

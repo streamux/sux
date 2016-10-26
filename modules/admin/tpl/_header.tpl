@@ -7,7 +7,9 @@
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
 	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/layout.css">
-	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/{$requestData.pagetype}.css">
+	{if $documentData.module_code != ''}
+	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/{$documentData.module_code}.css">
+	{/if}
 </head>
 <body>
 <div class="wrapper">

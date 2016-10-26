@@ -1,9 +1,4 @@
 
-/* layout */
-.container{padding:0 5px 0 5px;}
-.footer{margin-top:20px;height:50px;text-align: center}
-.header .util{height: 20px;border: 0 solid #FF0000}
-
 /* articles */
 .articles {margin-top:5px;padding:35px 7px 20px 7px;background-color:#fcfcfc}
 .articles .tt{text-align: left}

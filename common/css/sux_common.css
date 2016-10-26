@@ -1,10 +1,17 @@
 /* layout */
-.footer{font-size:0.875em;line-height:45px;text-align: center;background-color:#3e3e3e;color:#fff}
-.footer a{color:#fff;}
+.footer{text-align: center;background-color:#4a4a4a;color:#e3e3e3}
+.footer a{color:#e3e3e3;}
+.footer ul{font-size:0.875em;background-color:#505050}
+.footer ul li{float: left;width:33%;line-height:30px;border:1px solid #333333;border-left:none;}
+.footer ul li:last-child{width:34%;border-right: none}
+.footer ul li a{display:inline-block;width:100%;height:100%;text-decoration:none;}
+.footer ul li a:hover{background-color:#3e3e3e}
+.footer p span{font-size:0.750em;line-height:40px;vertical-align:top}
 
 /* header */
 .header .util{display:none;height: 20px}
-.header .logo{float:left}
+.header .logo{float:left;}
+.header .logo img{width:60px;height:30px;}
 
 /* gnb_icon */
 .gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}

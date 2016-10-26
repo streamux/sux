@@ -149,7 +149,7 @@ jsux.visual.View = jsux.View.create();
 		});
 
 		mainVisual.on('slideChangeStart', function ( e ) {
-			console.log( e.activeIndex + ' : ' +  e.touches.diff );
+			//console.log( e.activeIndex + ' : ' +  e.touches.diff );
 		});
 		
 		/*$('.arrow-left').on('click', function(e){

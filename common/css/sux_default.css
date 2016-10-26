@@ -49,4 +49,5 @@ input::-ms-clear {display:none}
 .clearfix:after {content: ".";display: block;height: 0;clear: both;visibility: hidden;}
 .cover-opacity50{-ms-filter:alpha(opacity=0.5);filter:alpha(opacity=0.5);opacity:0.5;}
 .color-red{color:#FF0000}
-.color-opacity50{background-color:rgba( 200,255,255 0.5);}
+.bgcolor-opacity50{background-color:rgba( 200,255,255 0.5);}
+.bgcolor-gray-e3{background-color:#d3d3d3}

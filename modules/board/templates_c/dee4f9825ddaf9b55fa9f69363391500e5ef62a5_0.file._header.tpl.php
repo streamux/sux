@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-11 15:15:01
+/* Smarty version 3.1.30, created on 2016-10-24 11:20:06
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57fce5d55c9822_48563632',
+  'unifunc' => 'content_580dd246444b29_23623972',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dee4f9825ddaf9b55fa9f69363391500e5ef62a5' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl',
-      1 => 1476166976,
+      1 => 1477300746,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57fce5d55c9822_48563632 (Smarty_Internal_Template $_smarty_tpl) {
+function content_580dd246444b29_23623972 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,8 +32,10 @@ function content_57fce5d55c9822_48563632 (Smarty_Internal_Template $_smarty_tpl)
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
 	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/layout.css">
-	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/<?php echo $_smarty_tpl->tpl_vars['requestData']->value['pagetype'];?>
+	<?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {?>
+	<link rel="stylesheet" type="text/css" href="../admin/tpl/css/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
 .css">
+	<?php }?>
 </head>
 <body>
 <div class="wrapper">

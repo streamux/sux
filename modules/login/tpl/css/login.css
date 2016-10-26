@@ -1,11 +1,4 @@
 
-/* layout */
-.container{padding:0 5px 0 5px}
-.footer{margin-top:20px;height:50px;text-align: center}
-
-.util{display:block;height: 25px}
-.logo{clear:both;text-align: center;}
-
 /* admin login */
 .article-box{margin-top:5px;padding:30px 20px 20px 20px;background-color:#fcfcfc}
 .article-box .login {word-break:keep-all;text-align: center;}

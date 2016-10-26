@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-17 05:01:12
+/* Smarty version 3.1.30, created on 2016-10-26 09:46:44
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_58043ef86010f1_76169826',
+  'unifunc' => 'content_58105f64009e95_38344149',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1476673269,
+      1 => 1477463523,
       2 => 'file',
     ),
   ),
@@ -20,42 +20,58 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_58043ef86010f1_76169826 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58105f64009e95_38344149 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
+				</div>				
+			</div>
+			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
+		</div>		
 	</div>
 	<div class="footer">
-		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+		<ul class="clearfix">
+			<li><a href="../login/login.php?action=login">로그인</a></li>
+			<li><a href="../member/member.php?action=join">회원가입</a></li>
+			<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
+		</ul>	
+		<p>
+			<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
-
+</span>
+		</p>
 	</div>
 </div>
 <!-- mobile menu start -->
-<div class="ui-bg-cover"></div>
-<div class="mobile-gnb-case">	
+<div class="ui-bg-cover ui-bg-cover-off"></div>
+<div class="mobile-gnb-case mobile-gnb-case-off">	
 	<div class="header-panel">
 		<div class="ui-user-info">
 			<ul class="clearfix">
 				<li><div class="ui-user-picture"></div></li>
 				<li><span class="ui-user-nickname">Guest</span></li>
-				<li><div class="ui-user-modify"></div></li>
+				<li><a href="/sux/admin" target="_blank"><img src="../../common/images/icon_gear_white.svg" onerror='this.src="../../common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a></li>
 			</ul>
 		</div>
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="/sux/modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="/sux/modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
 		</div>		
 	</div>		
-	<div id="mobileGnb" class="body-panel">
-		<div class="menu-panel">
-			<ul>
-				<!-- display first's depth menu list -->
-			</ul>
+	<div class="body-panel">
+		<div class="swiper-container swiper-container-mobilegnb">
+			<div class="swiper-wrapper">
+				<div class="swiper-slide">
+					<ul id="mobileGnb"" class="menu-panel">
+						<!-- display first's depth menu list -->
+					</ul>
+				</div>		
+			</div>
+			<div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
 		</div>
 	</div>	
 </div>
@@ -80,13 +96,31 @@ function content_58043ef86010f1_76169826 (Smarty_Internal_Template $_smarty_tpl)
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
 >
+
+group : <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
+
+
+<?php if ($_smarty_tpl->tpl_vars['documentData']->value['group']) {
+echo '<script'; ?>
+ type="text/javascript">
+	var loginObj = loginObj || {};
+	loginObj.memberList = <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
+;
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="x-jquery-templete" id="ljsMember_tmpl">
+	<option>${name}</option>
+<?php echo '</script'; ?>
+>
+<?php }?>
 <!-- end -->
 <?php echo '<script'; ?>
  type="text/javascript">
 	var is_page = 'sub';
 <?php echo '</script'; ?>
 >
-
+<!-- api -->
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jquery.min.js"><?php echo '</script'; ?>
 >	
@@ -99,20 +133,13 @@ function content_58043ef86010f1_76169826 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/idangerous.swiper.min.js"><?php echo '</script'; ?>
 >
-<?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jquery.mCustomScrollbar.concat.min.js"><?php echo '</script'; ?>
->
-<!--[if (gte IE 6)&(lte IE 8)]>
-	<?php echo '<script'; ?>
- type="text/javascript" src="tpl/js/selectivizr-min.js"><?php echo '</script'; ?>
->
-	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
-<![endif]-->
+<!-- end -->
+<!-- customize start -->
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jsux_common_js.min.js"><?php echo '</script'; ?>
+ type="text/javascript" src="../../common/js/jsux_common.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux_app.min.js"><?php echo '</script'; ?>
@@ -120,32 +147,22 @@ function content_58043ef86010f1_76169826 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux_app_stage.min.js"><?php echo '</script'; ?>
 >
-<?php if ($_smarty_tpl->tpl_vars['requestData']->value['jscode'] != '') {
+<?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {
 echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/js/board.js"><?php echo '</script'; ?>
+/js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
+.js"><?php echo '</script'; ?>
 >
-<?php echo '<script'; ?>
+<?php }
+if ($_smarty_tpl->tpl_vars['documentData']->value['jscode'] != '') {
+echo '<script'; ?>
  type="text/javascript">
-	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['requestData']->value['jscode'];?>
+	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['documentData']->value['jscode'];?>
 '].init();
 <?php echo '</script'; ?>
 >
-<?php }
-echo '<script'; ?>
->
-	(function($){
-		$(window).on("load",function(){
-			
-			$("#mobileGnb").mCustomScrollbar({
-				autoHideScrollbar:true,
-				theme:"minimal-dark",
-			});
-			
-		});
-	})(jQuery);
-<?php echo '</script'; ?>
->
+<?php }?>
+<!-- end -->
 </body>
 </html><?php }
 }

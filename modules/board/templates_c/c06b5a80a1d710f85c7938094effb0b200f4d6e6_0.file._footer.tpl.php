@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-11 15:15:01
+/* Smarty version 3.1.30, created on 2016-10-24 11:10:50
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57fce5d561db69_44755968',
+  'unifunc' => 'content_580dd01a2ede27_92186924',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c06b5a80a1d710f85c7938094effb0b200f4d6e6' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl',
-      1 => 1476151600,
+      1 => 1477299146,
       2 => 'file',
     ),
   ),
@@ -20,13 +20,17 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57fce5d561db69_44755968 (Smarty_Internal_Template $_smarty_tpl) {
+function content_580dd01a2ede27_92186924 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 
 <div class="footer">
-	<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+	<p>
+		<span>
+			<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 
+		</span>
+	</p>
 </div>
 <?php echo '<script'; ?>
  type="text/javascript">
@@ -63,15 +67,16 @@ function content_57fce5d561db69_44755968 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux_admin_app_stage.min.js"><?php echo '</script'; ?>
 >
-<?php echo '<script'; ?>
- type="text/javascript" src="../<?php echo $_smarty_tpl->tpl_vars['requestData']->value['pagetype'];?>
-/tpl/js/<?php echo $_smarty_tpl->tpl_vars['requestData']->value['pagetype'];?>
+
+<?php if ($_smarty_tpl->tpl_vars['documentData']->value['jscode'] != '') {
+echo '<script'; ?>
+ type="text/javascript" src="../<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
+/tpl/js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
 _admin.js"><?php echo '</script'; ?>
 >
-<?php if ($_smarty_tpl->tpl_vars['requestData']->value['jscode'] != '') {
-echo '<script'; ?>
+<?php echo '<script'; ?>
  type="text/javascript">
-	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['requestData']->value['jscode'];?>
+	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['documentData']->value['jscode'];?>
 '].init();
 <?php echo '</script'; ?>
 >

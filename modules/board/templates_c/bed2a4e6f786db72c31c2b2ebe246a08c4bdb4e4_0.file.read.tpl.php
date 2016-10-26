@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-12 12:56:04
+/* Smarty version 3.1.30, created on 2016-10-19 11:40:28
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57fe16c46915d5_85383961',
+  'unifunc' => 'content_58073f8cd23225_75365632',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bed2a4e6f786db72c31c2b2ebe246a08c4bdb4e4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl',
-      1 => 1475747198,
+      1 => 1476870027,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57fe16c46915d5_85383961 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58073f8cd23225_75365632 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
@@ -55,10 +55,9 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 " width="100%" border="0"></p>
 		<p><?php echo $_smarty_tpl->tpl_vars['contentData']->value['comment'];?>
 </p>
-	</div>		
-</div>
-<div class="board-buttons">
-	<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+	</div>
+	<div class="board-buttons">
+		<a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
 &page=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['page'];?>
@@ -66,7 +65,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 &search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
 &action=list"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-	<a href="board.php?&board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+		<a href="board.php?&board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &action=write"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_write.gif" width="62" height="23" border="0"></a> <a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
@@ -86,25 +85,26 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 &id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
 &action=delete"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_del.gif" width="51" height="23" border="0"></a>
-</div>
+	</div>
 <?php if ($_smarty_tpl->tpl_vars['opkeySkinPath']->value != '') {?>	
-<div class="board-adminsetup <?php echo $_smarty_tpl->tpl_vars['contentData']->value['css_opkey'];?>
+	<div class="board-adminsetup <?php echo $_smarty_tpl->tpl_vars['contentData']->value['css_opkey'];?>
 " style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
 ">
-	<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['opkeySkinPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['opkeySkinPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 
-</div>
+	</div>
 <?php }
 if ($_smarty_tpl->tpl_vars['tailSkinPath']->value != '') {?>
-<div class="board-tail <?php echo $_smarty_tpl->tpl_vars['contentData']->value['css_tail'];?>
+	<div class="board-tail <?php echo $_smarty_tpl->tpl_vars['contentData']->value['css_tail'];?>
 " style="width:<?php echo $_smarty_tpl->tpl_vars['groupData']->value['width'];?>
 ">
-	<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['tailSkinPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+		<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['tailSkinPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 
+	</div>
+<?php }?>
 </div>
-<?php }
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['footerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['footerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 }
 }

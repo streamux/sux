@@ -1,4 +1,6 @@
-{include file="$skinDir/_header.tpl" title="비밀번호 찾기 결과 - StreamUX"}
+{assign var=headerPath value=$skinPathList.header}
+{assign var=footerPath value=$skinPathList.footer}
+{include file="$headerPath" title="비밀번호 찾기 결과 - StreamUX"}
 <div class="article-box ui-edgebox">	
 	<div class="login">
 		<h1 class="title">비밀번호 찾기 결과</h1>
@@ -34,4 +36,4 @@
 		</div>		
 	</div>			
 </div>
-{include file="$skinDir/_footer.tpl"}
+{include file="$footerPath"}

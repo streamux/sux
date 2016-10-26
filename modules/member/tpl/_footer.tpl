@@ -3,7 +3,7 @@
 		{include file="$copyrightPath"}
 	</div>
 </div>
-{if $requestData.action == 'join'}
+{if $documentData.jscode == 'join'}
 <script type="jquery-templete" id="tableList_tmpl">
 {literal}
 	<option>${name}</option>
@@ -18,7 +18,7 @@
   <script type="text/javascript" src="../../common/js/selectivizr-min.js"></script>
 <![endif]-->
 <script type="text/javascript" src="tpl/js/member.js"></script>
-{if $requestData.action != ''}
+{if $documentData.jscode != ''}
 <script type="text/javascript">
 	jsux.fn['{$requestData.action}'].init();
 </script>

@@ -1,4 +1,5 @@
 /* list & search*/
+.board-list{padding-bottom:20px;}
 .board-list table{border-collapse:collapse;border-spacing: 0;width:100%}
 .board-list table thead th{padding-left:10px;height:45px;border-top: 1px solid #e8eef1;border-bottom: 2px solid #e8eef1;text-align:left;font-size: 1.250em;}
 .board-list .author{padding-left:10px;width:90px}
@@ -23,12 +24,12 @@
 .board-search input[name=search]{width:120px}
 
 /* read */
-.board-read{padding:0 5px 20px 5px;border-top:2px solid #e8eef1}
+.board-read{padding:0 10px 20px 10px;border-top:2px solid #e8eef1}
 .board-read .panel-heading{padding:15px 5px 15px 5px}
 .board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
 .board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
 .board-read .panel-body{padding: 5px 5px 30px 5px;min-height:200px;border:1px solid #ececec;line-height: 20px}
-.board-buttons{margin-top:20px;padding:0 10px 0 0px;text-align: right}
+.board-buttons{margin-top:20px;text-align: right}
 
 /* opkey - setup */
 .board-adminsetup{margin-top:20px;padding:0 10px 0 10px}
@@ -56,7 +57,7 @@
 .board-tail .panel-list .date{margin-right:5px}
 
 /* write & rewrite*/
-.board-write{padding:0 10px 0 10px;border-top:2px solid #e8eef1}
+.board-write{padding:0 10px 20px 10px;border-top:2px solid #e8eef1}
 .board-write .ui-label-width{width:20%}
 .board-write .panel-heading{margin-top:20px}
 .board-write .panel-heading p{margin-top:5px;line-height:15px}

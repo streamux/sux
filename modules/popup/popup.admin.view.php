@@ -3,11 +3,11 @@
 class  PopupAdminModule extends BaseView {
 	
 	var $class_name = 'popup_admin_module';
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
@@ -40,23 +40,19 @@ class PopupAdminView extends PopupAdminModule {
 	function displayList() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'popup';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -64,23 +60,19 @@ class PopupAdminView extends PopupAdminModule {
 	function displayAdd() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'popup';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -88,23 +80,19 @@ class PopupAdminView extends PopupAdminModule {
 	function displayModify() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'popup';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -112,23 +100,19 @@ class PopupAdminView extends PopupAdminModule {
 	function displayDelete() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'popup';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}

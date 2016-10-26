@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-18 09:43:04
+/* Smarty version 3.1.30, created on 2016-10-24 10:03:48
   from "/Applications/MAMP/htdocs/sux/sites/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5805d2884d58e9_27367570',
+  'unifunc' => 'content_580dc0643336c8_80648677',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'aa9955986f711a81b30402418824838d3f912892' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/sites/common/_footer.tpl',
-      1 => 1476775641,
+      1 => 1477295815,
       2 => 'file',
     ),
   ),
@@ -20,18 +20,25 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl) {
+function content_580dc0643336c8_80648677 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
-				</div>
+				</div>				
 			</div>
-			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>
-		</div>
-		<div class="footer">
-			<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
+		</div>		
+	</div>
+	<div class="footer">
+		<ul class="clearfix">
+			<li>로그인</li>
+			<li>회원가입</li>
+			<li>사이트 맵</li>
+		</ul>	
+		<p>
+			<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
-
-		</div>
-	</div>	
+</span>
+		</p>
+	</div>
 </div>
 <!-- mobile menu start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
@@ -47,10 +54,10 @@ function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl)
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="/sux/modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="/sux/modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
 		</div>		
@@ -62,90 +69,6 @@ function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl)
 					<ul id="mobileGnb"" class="menu-panel">
 						<!-- display first's depth menu list -->
 					</ul>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 1-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 2-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 3-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 4-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 5-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 6-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 7-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 8-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 9-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 10-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 11-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 12-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 13-------------------</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>aaa</p>
-					<p>---------------------footer 14-------------------</p>
 				</div>		
 			</div>
 			<div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
@@ -173,12 +96,28 @@ function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl)
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
 >
+
+<?php if ($_smarty_tpl->tpl_vars['documentData']->value['jscode'] == 'login' || $_smarty_tpl->tpl_vars['documentData']->value['jscode'] == 'searchID' || $_smarty_tpl->tpl_vars['documentData']->value['jscode'] == 'searchPassword' || $_smarty_tpl->tpl_vars['documentData']->value['jscode'] == 'join') {
+echo '<script'; ?>
+ type="text/javascript">
+	var loginObj = loginObj || {};
+	loginObj.memberList = <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
+;
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="x-jquery-templete" id="ljsMember_tmpl">
+	<option>${name}</option>
+<?php echo '</script'; ?>
+>
+<?php }?>
 <!-- end -->
 <?php echo '<script'; ?>
  type="text/javascript">
 	var is_page = 'sub';
 <?php echo '</script'; ?>
 >
+<!-- api -->
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jquery.min.js"><?php echo '</script'; ?>
 >	
@@ -191,12 +130,8 @@ function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl)
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/idangerous.swiper.min.js"><?php echo '</script'; ?>
 >
-<!--[if (gte IE 6)&(lte IE 8)]>
-	<?php echo '<script'; ?>
- type="text/javascript" src="tpl/js/selectivizr-min.js"><?php echo '</script'; ?>
->
-	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
-<![endif]-->
+<!-- end -->
+<!-- customize start -->
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux.min.js"><?php echo '</script'; ?>
 >
@@ -207,20 +142,24 @@ function content_5805d2884d58e9_27367570 (Smarty_Internal_Template $_smarty_tpl)
  type="text/javascript" src="../../common/js/jsux_app.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jsux_app_stage.js"><?php echo '</script'; ?>
+ type="text/javascript" src="../../common/js/jsux_app_stage.min.js"><?php echo '</script'; ?>
 >
-<?php if ($_smarty_tpl->tpl_vars['requestData']->value['jscode'] != '') {
+<?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {
 echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/js/board.js"><?php echo '</script'; ?>
+/js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
+.js"><?php echo '</script'; ?>
 >
-<?php echo '<script'; ?>
+<?php }
+if ($_smarty_tpl->tpl_vars['documentData']->value['jscode'] != '') {
+echo '<script'; ?>
  type="text/javascript">
-	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['requestData']->value['jscode'];?>
+	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['documentData']->value['jscode'];?>
 '].init();
 <?php echo '</script'; ?>
 >
 <?php }?>
+<!-- end -->
 </body>
 </html><?php }
 }

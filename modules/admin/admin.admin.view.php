@@ -2,11 +2,11 @@
 class AdminAdminModule extends BaseView {
 	
 	var $class_name = 'admin_admin_module';
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
@@ -40,23 +40,18 @@ class AdminAdminView extends AdminAdminModule {
 	function displayMain() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();		
-		$page_type = $requestData['pagetype'];
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$requestData['pagetype'] = (isset($page_type) || $page_type != '') ? $page_type : 'admin';
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'admin';
 
 		$skinPath = _SUX_PATH_ . "modules/admin/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_main.tpl";
 		$this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['page_type'] = $page_type;
 
 		$this->output();
 	}

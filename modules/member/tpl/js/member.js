@@ -1,6 +1,14 @@
 jsux.fn = jsux.fn || {};
 jsux.fn.join = {
 
+	dispSelectMemberList: function() {
+
+		var data = loginObj.memberList,
+			markup = $("#ljsMember_tmpl");
+
+		$("#ljsMember").empty();
+		$(markup).tmpl(data).appendTo("#ljsMember");
+	},
 	getEmailVal: function( id ) {
 
 		var result = $.trim($('select[name='+id+'1]').val());
@@ -222,21 +230,7 @@ jsux.fn.join = {
 	},
 	setLayout: function() {
 
-		var	params = '';
-		params = { action: 'groupList' };
-		
-		jsux.getJSON('member.php', params, function( e )  {
-			
-			var markup = $('#tableList_tmpl');
-
-			$('#tableList').empty();
-			if (e.data.length > 0) {
-				$(markup).tmpl(e.data).appendTo('#tableList');
-			} else {
-				$(markup).tmpl('{name: no data}').appendTo('#tableList');
-			}
-		});
-
+		this.dispSelectMemberList();
 		$("input[name=memberid]").focus();
 	},
 	init: function() {

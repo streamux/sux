@@ -12,35 +12,17 @@ module.exports = function(grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
 			minify: [
-				'common/js/jsux.js',
-				'common/js/jsux.min.js',
-				'common/js/jsux_admin_app.js',
-				'common/js/jsux_admin_app.min.js',
-				'common/js/jsux_app.js',
-				'common/js/jsux_app.min.js',
-				'common/js/jsux_app_stage.min.js',
-				'common/js/jsux_admin_app_stage.min.js',
-				'common/js/idangerous.swiper.min.js'
+				'common/js/jsux*.js'
 			]			
 		},
 		concat: {
-			'common-api': {
-				options: {
-					stripBanners: true,
-					banner: banner_jsux_js
-				},
-				src: [
-					'common/js/jsux/jsux-1.1.0.js'
-				],
-				dest: 'common/js/jsux.js'
-			},
 			'common-js': {
 				src: [
 					'common/js/app/jsux_cookie.js',
 					'common/js/app/jsux_popup.js',
 					'common/js/app/jsux_pagination.js'
 				],
-				dest: 'common/js/jsux_common_js.js'
+				dest: 'common/js/jsux_common.js'
 			},
 			'common-admin-app': {
 				src: [
@@ -63,17 +45,17 @@ module.exports = function(grunt) {
 					banner: banner_jsux_js
 				},
 				files: {
-					'common/js/jsux.min.js': ['common/js/jsux.js'],
+					'common/js/jsux.min.js': ['common/js/jsux/jsux-1.1.0.js'],
 					'common/js/idangerous.swiper.min.js': ['common/js/api/idangerous.swiper.3.3.1.js']
 				}
 			},
 			'common-apps': {
 				files: {
-					'common/js/jsux_common_js.min.js':['common/js/jsux_common_js.js'],
+					'common/js/jsux_common.min.js':['common/js/jsux_common.js'],
 					'common/js/jsux_app.min.js':['common/js/jsux_app.js'],
-					'common/js/jsux_app_stage.min.js': ['common/js/jsux_app_stage.js'],
+					'common/js/jsux_app_stage.min.js': ['common/js/app/jsux_app_stage.js'],
 					'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js'],
-					'common/js/jsux_admin_app_stage.min.js': ['common/js/jsux_admin_app_stage.js']
+					'common/js/jsux_admin_app_stage.min.js': ['common/js/app/jsux_admin_app_stage.js']
 				}
 			}
 		},
@@ -90,7 +72,6 @@ module.exports = function(grunt) {
 		jshint: {
 			files: [
 				'Gruntfile.js',
-				'common/js/*.js',
 				'common/js/app/*.js',
 				'modules/**/tpl/js/*.js',
 				'modules/**/skin/**/js/*.js'

@@ -3,11 +3,11 @@
 class PopupModule extends BaseView {
 	
 	var $class_name = 'popup_module';
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() { 
 
@@ -79,12 +79,15 @@ class PopupView extends PopupModule {
 	function displayEvent() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$skin_name = $requestData['skin'];
+		$this->request_data = $context->getRequestAll();
 
+		$skin_name = $this->request_data['skin'];
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'popup';
+		
 		$skinPath = _SUX_PATH_ . 'modules/popup/skin/' . $skin_name;
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/index.tpl";
@@ -110,9 +113,6 @@ class PopupView extends PopupModule {
 		$contentData['imagesx'] = imagesx($image);
 		$contentData['imagesy'] = imagesy($image);
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 		$this->document_data['contents'] = $contentData;
 
 		$this->output();

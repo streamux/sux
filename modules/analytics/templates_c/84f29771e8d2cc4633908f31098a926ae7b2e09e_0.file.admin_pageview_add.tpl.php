@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-09-27 02:31:17
+/* Smarty version 3.1.30, created on 2016-10-24 11:41:57
   from "/Applications/MAMP/htdocs/sux/modules/analytics/tpl/admin_pageview_add.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_57e9bdd5f28e50_63648992',
+  'unifunc' => 'content_580dd7655f7362_05080957',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '84f29771e8d2cc4633908f31098a926ae7b2e09e' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/analytics/tpl/admin_pageview_add.tpl',
-      1 => 1474900703,
+      1 => 1475136774,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_57e9bdd5f28e50_63648992 (Smarty_Internal_Template $_smarty_tpl) {
+function content_580dd7655f7362_05080957 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX관리자 페이지뷰 추가 - StreamUX"), 0, true);

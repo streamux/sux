@@ -6,11 +6,11 @@
 {assign var=opkeySkinPath value=$skinPathList.opkey}
 {assign var=tailSkinPath value=$skinPathList.tail}
 {include file="$headerPath" title="$boardTitle :: 게시물 댓글삭제 - StreamUX"}
-<div class="article-box ui-edgebox">			
-	<h2 class="blind">댓글 삭제 비밀번호 인증</h2>		
+<div class="article-box ui-edgebox">
 	<div class="login">
-		<span class="title">댓글삭제 비밀번호 인증</span>
-		<span class="subtitle">SUX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
+		<h1 class="title">댓글 삭제 비밀번호 인증</h1>
+		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
+
 		<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&grgid={$requestData.grgid}&igroup={$requestData.igroup}&passover={$requestData.passover}&action=recordDeleteTail" method="post" name="f_board_tail_delpass" onSubmit="return jsux.fn.delete.checkDocumentForm(this);">			
 		<div class="box ui-edgebox-2px">
 			<div class="login-title">

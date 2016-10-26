@@ -39,29 +39,29 @@
 			{/if}
 		{/foreach}
 		</tbody>
-	</table>	
-</div>
-<div class="board-page-navi" style="width:{$groupData.width}">
-{if $skinPathList.navi != ''}
-	{assign var=naviSkinPath value=$skinPathList.navi}
-	{include file="$naviSkinPath"}
-{/if}
-</div>
-<div class="board-search ui-inlineblock">
-	<form action="board.php?board={$requestData.board}&find={$requestData.find}&search={$requestData.search}&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.list.checkSearchForm(this);">
-		<select name="find">
-			<option value='title'>제 목</option>
-			<option value='name'>작성자</option>
-			<option value='comment'>내 용</option>
-		</select>
-		<input type="text" name="search" size="15">
-		<input name="imageField" type="image" src="{$skinPathList.dir}/images/btn_search.gif" width="51" height="23" border="0">
-	</form>
-</div>	
-<div class="board-list-buttons">
-	<a href="board.php?board={$requestData.board}&action=list">
-		<img src="{$skinPathList.dir}/images/btn_list.gif" width="51" height="23" border="0">
-	</a>
-	<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+	</table>
+	<div class="board-page-navi" style="width:{$groupData.width}">
+	{if $skinPathList.navi != ''}
+		{assign var=naviSkinPath value=$skinPathList.navi}
+		{include file="$naviSkinPath"}
+	{/if}
+	</div>
+	<div class="board-search ui-inlineblock">
+		<form action="board.php?board={$requestData.board}&find={$requestData.find}&search={$requestData.search}&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.list.checkSearchForm(this);">
+			<select name="find">
+				<option value='title'>제 목</option>
+				<option value='name'>작성자</option>
+				<option value='comment'>내 용</option>
+			</select>
+			<input type="text" name="search" size="15">
+			<input name="imageField" type="image" src="{$skinPathList.dir}/images/btn_search.gif" width="51" height="23" border="0">
+		</form>
+	</div>	
+	<div class="board-list-buttons">
+		<a href="board.php?board={$requestData.board}&action=list">
+			<img src="{$skinPathList.dir}/images/btn_list.gif" width="51" height="23" border="0">
+		</a>
+		<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+	</div>
 </div>
 {include file="$footerPath"}

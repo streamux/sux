@@ -25,10 +25,7 @@ class MemberAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_member_group');
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setField('*');
@@ -45,10 +42,8 @@ class MemberAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
-
+		$table_name = $context->getRequest('table_name');
+		
 		$query = new Query();
 		$query->setField('*');
 		$query->setTable($table_name);
@@ -60,10 +55,7 @@ class MemberAdminModel extends BaseModel {
 	function selectMemberWhereId() {
 
 		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 		$memberid = $context->getPost('memberid');
 
 		$query = new Query();
@@ -80,10 +72,7 @@ class MemberAdminModel extends BaseModel {
 	function selectMemberLimit() {
 
 		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$passover = $context->get('member_passover');
 		$limit = $context->get('member_limit');
@@ -133,10 +122,7 @@ class MemberAdminModel extends BaseModel {
 	function createTableMember() {
 
 		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -178,10 +164,7 @@ class MemberAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_member_group');
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($group);
@@ -198,10 +181,7 @@ class MemberAdminModel extends BaseModel {
 	function dropTableMember() {
 
 		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -214,10 +194,7 @@ class MemberAdminModel extends BaseModel {
 
 		$context = Context::getInstance();
 		$group = $context->get('db_member_group');
-		$table_name = $context->getPost('table_name');
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $context->getRequest('table_name');
-		}
+		$table_name = $context->getRequest('table_name');
 
 		$query = new Query();
 		$query->setTable($group);

@@ -3,7 +3,7 @@
 .wrapper {position: relative}
 .header {position:relative;z-index:1000;text-align: center}
 .container {position:relative;padding: 0 5px 0 5px}
-.footer{margin-top:20px;height:50px;text-align: center}
+.footer{margin-top:5px;height:50px;text-align: center}
 
 /* header */
 .header .logo{float:none}
