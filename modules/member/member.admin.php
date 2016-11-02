@@ -4,6 +4,11 @@ include "../../config/config.inc.php";
 $context = Context::getInstance();
 $context->init();
 
+if (!$context->checkAdminPass()) {
+	Utils::goURL('../login/login.admin.php?action=login');
+	exit();
+}
+
 $action = $context->getRequest('action');
 if (!isset($action)) {
 	$action = $context->getPost('action');

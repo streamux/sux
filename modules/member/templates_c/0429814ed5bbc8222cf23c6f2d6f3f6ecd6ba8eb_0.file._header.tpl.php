@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-26 07:37:31
+/* Smarty version 3.1.30, created on 2016-10-26 11:54:38
   from "/Applications/MAMP/htdocs/sux/common/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5810411b8b0338_11022051',
+  'unifunc' => 'content_58107d5e9591a2_41776047',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0429814ed5bbc8222cf23c6f2d6f3f6ecd6ba8eb' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_header.tpl',
-      1 => 1477364804,
+      1 => 1477462904,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5810411b8b0338_11022051 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58107d5e9591a2_41776047 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,7 +32,7 @@ function content_5810411b8b0338_11022051 (Smarty_Internal_Template $_smarty_tpl)
 	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_layout.css">	
+	<link rel="stylesheet" type="text/css" href="../../common/css/sux_layout.min.css">	
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /css/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>

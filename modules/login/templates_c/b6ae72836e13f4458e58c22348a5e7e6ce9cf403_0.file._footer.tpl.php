@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-26 07:51:11
+/* Smarty version 3.1.30, created on 2016-10-27 11:43:42
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5810444fef40b7_31676251',
+  'unifunc' => 'content_5811cc4e5ca859_47804197',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1477461034,
+      1 => 1477561417,
       2 => 'file',
     ),
   ),
@@ -20,13 +20,13 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5810444fef40b7_31676251 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5811cc4e5ca859_47804197 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 				</div>				
 			</div>
 			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
 		</div>		
-	</div>
+	</div>	
 	<div class="footer">
 		<ul class="clearfix">
 			<li><a href="../login/login.php?action=login">로그인</a></li>
@@ -96,10 +96,6 @@ function content_5810444fef40b7_31676251 (Smarty_Internal_Template $_smarty_tpl)
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
 >
-
-group : <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
-
-
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['group']) {
 echo '<script'; ?>
  type="text/javascript">
@@ -122,16 +118,32 @@ echo '<script'; ?>
 >
 <!-- api -->
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jquery.min.js"><?php echo '</script'; ?>
->	
-<?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jquery.tmpl.min.js"><?php echo '</script'; ?>
+ src="https://code.jquery.com/jquery-1.12.4.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/TweenMax.min.js"><?php echo '</script'; ?>
+>window.jQuery || document.write('<?php echo '<script'; ?>
+ src="common/js/jquery.min.js"><\/script>')<?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/idangerous.swiper.min.js"><?php echo '</script'; ?>
+ src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.jQuery.tmpl || document.write('<?php echo '<script'; ?>
+ src="common/js/jquery.tmpl.min.js"><\/script>')<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.TweenMax || document.write('<?php echo '<script'; ?>
+ src="common/js/TweenMax.min.js"><\/script>')<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.Swiper || document.write('<?php echo '<script'; ?>
+ src="common/js/idangerous.swiper.min.js"><\/script>')<?php echo '</script'; ?>
 >
 <!-- end -->
 <!-- customize start -->
@@ -145,7 +157,7 @@ echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux_app.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/app/jsux_app_stage.js"><?php echo '</script'; ?>
+ type="text/javascript" src="../../common/js/jsux_app_stage.min.js"><?php echo '</script'; ?>
 >
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {
 echo '<script'; ?>

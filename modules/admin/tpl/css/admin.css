@@ -1,4 +1,4 @@
-.articles {margin-top:5px;padding:35px 5px 20px  7px;background-color:#fcfcfc}
+.articles {padding:35px 5px 20px  7px;background-color:#fcfcfc}
 .articles .tt{text-align: left}
 .articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('../images/tt_box_01.gif') 0 0 no-repeat,url('../images/tt_box_03.gif') 100% 0 no-repeat,url('../images/tt_box_02.gif') 0 0 repeat-x;text-align:center}
 .articles h1{font-size: 1.1875em;font-weight:bold}

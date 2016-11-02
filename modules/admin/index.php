@@ -6,6 +6,7 @@ $context->init();
 
 if (!$context->checkAdminPass()) {
 	Utils::goURL('../login/login.admin.php?action=login');
+	exit();
 }
 
 $model = new AdminAdminModel();

@@ -92,7 +92,7 @@ class BoardView extends BoardModule {
 			$footerPath = "{$skinPath}/_footer.tpl";
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
-		
+	
 		// list logic
 		if (!isset($passover) || $passover === '') {
 			 $passover = 0;

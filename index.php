@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="common/css/swiper.min.css">	
 	<link rel="stylesheet" type="text/css" href="common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="common/css/sux_common.min.css">
-	<link rel="stylesheet" type="text/css" href="common/css/sux_layout.min.css">
+	<link rel="stylesheet" type="text/css" href="common/css/sux_layout.css">
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js">IE7_PNG_SUFFIX=".png";</script>
@@ -176,15 +176,19 @@
 	var is_page = 'main';
 </script>
 <!-- api start -->
-<script type="text/javascript" src="common/js/jquery.min.js"></script>	
-<script type="text/javascript" src="common/js/jquery.tmpl.min.js"></script>
-<script type="text/javascript" src="common/js/TweenMax.min.js"></script>
-<script type="text/javascript" src="common/js/idangerous.swiper.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="common/js/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script>window.jQuery.tmpl || document.write('<script src="common/js/jquery.tmpl.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+<script>window.TweenMax || document.write('<script src="common/js/TweenMax.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
+<script>window.Swiper || document.write('<script src="common/js/idangerous.swiper.min.js"><\/script>')</script>
 <!-- end -->
 <!-- customize start -->
-<script type="text/javascript" src="common/js/jsux.min.js"></script>
-<script type="text/javascript" src="common/js/jsux_app.min.js"></script>
-<script type="text/javascript" src="common/js/jsux_app_stage.min.js"></script>
+<script src="common/js/jsux.min.js"></script>
+<script src="common/js/jsux_app.min.js"></script>
+<script src="common/js/jsux_app_stage.min.js"></script>
 <!-- end -->
 </body>
 </html>

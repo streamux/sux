@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-24 11:10:50
+/* Smarty version 3.1.30, created on 2016-10-27 05:40:03
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_580dd01a2ede27_92186924',
+  'unifunc' => 'content_58117713414dd8_01841063',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c06b5a80a1d710f85c7938094effb0b200f4d6e6' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl',
-      1 => 1477299146,
+      1 => 1477539089,
       2 => 'file',
     ),
   ),
@@ -20,17 +20,18 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_580dd01a2ede27_92186924 (Smarty_Internal_Template $_smarty_tpl) {
+function content_58117713414dd8_01841063 (Smarty_Internal_Template $_smarty_tpl) {
+?>
+	</div>
+	<div class="footer">
+		<p>
+			<span>
+				<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 
-<div class="footer">
-	<p>
-		<span>
-			<?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
-?>
-
-		</span>
-	</p>
+			</span>
+		</p>
+	</div>
 </div>
 <?php echo '<script'; ?>
  type="text/javascript">
@@ -59,7 +60,7 @@ function content_580dd01a2ede27_92186924 (Smarty_Internal_Template $_smarty_tpl)
  type="text/javascript" src="../../common/js/jsux.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jsux_common_js.min.js"><?php echo '</script'; ?>
+ type="text/javascript" src="../../common/js/jsux_common.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux_admin_app.min.js"><?php echo '</script'; ?>

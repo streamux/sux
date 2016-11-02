@@ -2,7 +2,7 @@
 			</div>
 			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
 		</div>		
-	</div>
+	</div>	
 	<div class="footer">
 		<ul class="clearfix">
 			<li><a href="../login/login.php?action=login">로그인</a></li>
@@ -64,9 +64,6 @@
 <script type="sux-templete" id="suxMobileGnbSecondMenu">
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 </script>
-
-group : {$documentData.group}
-
 {if $documentData.group}
 <script type="text/javascript">
 	var loginObj = loginObj || {};
@@ -81,10 +78,14 @@ group : {$documentData.group}
 	var is_page = 'sub';
 </script>
 <!-- api -->
-<script type="text/javascript" src="../../common/js/jquery.min.js"></script>	
-<script type="text/javascript" src="../../common/js/jquery.tmpl.min.js"></script>
-<script type="text/javascript" src="../../common/js/TweenMax.min.js"></script>
-<script type="text/javascript" src="../../common/js/idangerous.swiper.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script>window.jQuery || document.write('<script src="common/js/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script>window.jQuery.tmpl || document.write('<script src="common/js/jquery.tmpl.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
+<script>window.TweenMax || document.write('<script src="common/js/TweenMax.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
+<script>window.Swiper || document.write('<script src="common/js/idangerous.swiper.min.js"><\/script>')</script>
 <!-- end -->
 <!-- customize start -->
 <script type="text/javascript" src="../../common/js/jsux.min.js"></script>

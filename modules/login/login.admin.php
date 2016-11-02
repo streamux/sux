@@ -4,6 +4,11 @@ include "../../config/config.inc.php";
 $context = Context::getInstance();
 $context->init();
 
+if ($context->checkAdminPass()) {
+	Utils::goURL('../admin/index.php?action=main');
+	exit();		
+}
+
 $action = $context->getRequest('action');
 $index_url = $context->getServer('PHP_SELF');
 

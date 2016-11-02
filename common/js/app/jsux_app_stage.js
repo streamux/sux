@@ -61,25 +61,7 @@ $(window).ready(function() {
 				sildeMoveHandler = {},
 				isReachedEnd = false,
 				isReachedBeginning = true,
-				timer = {
-					interval: null,
-					intervalTime: 1000,
-					play: function() {
-						var self = this;
-
-						if (this.interval) return;
-						this.interval = setInterval(self.listener, 1000/24);
-					},
-					stop: function() {
-
-						if (!this.interval) return;
-						clearInterval(this.interval);
-						this.interval = null;
-					},
-					listener: function() {
-						console.log('use override');
-					}
-				};
+				timer = null;
 
 			$(window).on('resize', function(e){
 
@@ -134,7 +116,7 @@ $(window).ready(function() {
 					}
 					scrollState = 'scrollToDown';
 					
-				} else if ((directionY === 'up' && diff > 100) || currentY >= 0) {
+				} else if (directionY === 'up' && currentY >= 0) {
 
 					if (scrollState != 'scrollToUp') {					
 						sildeMoveHandler.show();
@@ -179,6 +161,26 @@ $(window).ready(function() {
 			contentPageSlide.on('transitionEnd', function(swiper) {
 				timer.stop();
 			});
+
+			timer = {
+				interval: null,
+				intervalTime: 1000,
+				play: function() {
+					var self = this;
+
+					if (this.interval) return;
+					this.interval = setInterval(self.listener, 1000/24);
+				},
+				stop: function() {
+
+					if (!this.interval) return;
+					clearInterval(this.interval);
+					this.interval = null;
+				},
+				listener: function() {
+					console.log('use override');
+				}
+			};
 
 			timer.listener = function() {
 				sildeMoveHandler.update( contentPageSlide );

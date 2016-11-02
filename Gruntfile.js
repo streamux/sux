@@ -45,8 +45,7 @@ module.exports = function(grunt) {
 					banner: banner_jsux_js
 				},
 				files: {
-					'common/js/jsux.min.js': ['common/js/jsux/jsux-1.1.0.js'],
-					'common/js/idangerous.swiper.min.js': ['common/js/api/idangerous.swiper.3.3.1.js']
+					'common/js/jsux.min.js': ['common/js/jsux/jsux-1.1.0.js']
 				}
 			},
 			'common-apps': {
@@ -64,8 +63,7 @@ module.exports = function(grunt) {
 				files: {
 					'common/css/sux_common.min.css': ['common/css/sux_common.css'],
 					'common/css/sux_default.min.css': ['common/css/sux_default.css'],					
-					'common/css/sux_layout.min.css': ['common/css/sux_layout.css'],
-					'common/css/swiper.min.css': ['common/css/api/swiper.3.3.1.css']
+					'common/css/sux_layout.min.css': ['common/css/sux_layout.css']
 				}
 			}
 		},

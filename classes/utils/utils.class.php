@@ -30,7 +30,8 @@ class Utils extends Object {
 
 			$rootDirArr = preg_split('/[\/]+/',$convert_url);
 			$rootDirLabel = $rootDirArr[1];
-			if ($rootDirArr[0] !== '') {
+
+			if ($rootDirArr[0] != '') {
 				$rootDirLabel = $rootDirArr[0];
 			}
 			$rootDirLabel =  '\/' . $rootDirLabel;

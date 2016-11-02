@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-24 11:19:15
+/* Smarty version 3.1.30, created on 2016-10-27 09:15:31
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_580dd213c0d4f4_07672267',
+  'unifunc' => 'content_5811a99320c5e1_54044739',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dee4f9825ddaf9b55fa9f69363391500e5ef62a5' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl',
-      1 => 1477300746,
+      1 => 1477542689,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_580dd213c0d4f4_07672267 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5811a99320c5e1_54044739 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -48,5 +48,6 @@ function content_580dd213c0d4f4_07672267 (Smarty_Internal_Template $_smarty_tpl)
 		<div class="gnb-case">					
 			<div id="gnb" class="gnb"></div>
 		</div>
-	</div><?php }
+	</div>
+	<div class="container"><?php }
 }

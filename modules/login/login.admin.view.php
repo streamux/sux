@@ -3,11 +3,11 @@
 class LoginAdminModule extends BaseView {
 
 	var $class_name = 'login_admin_module';	
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
@@ -39,29 +39,25 @@ class LoginAdminView extends LoginAdminModule {
 
 	function displayLogin() {
 
-		$context = Context::getInstance();
-		$sessionData = $context->getSessionAll();
-		$requestData = $context->getRequestAll();		
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action.'Admin';
-		$pageType = $requestData['pagetype'];
+		$context = Context::getInstance();		
+
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action.'Admin';
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '관리자 로그인';
 		
 		$adminId = $this->session_data['admin_id'];
 
-		$skinPath = _SUX_PATH_ . "modules/login/tpl";
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/login/tpl";		
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = $skinPath;
-
-		if (isset($adminId) && $adminId !== '') {
-			Utils::goURL('../admin/index.php?action=main');			
-		} else {
-			$this->skin_path_list['contents'] = "{$skinPath}/login_admin.tpl";
-		}
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
+		$this->skin_path_list['header'] = "{$skinPath}/_header_admin.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/login_admin.tpl";
+		$this->skin_path_list['footer'] = "{$skinPath}/_footer_admin.tpl";
 
 		$this->output();
 	}

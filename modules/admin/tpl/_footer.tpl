@@ -1,10 +1,11 @@
-
-<div class="footer">
-	<p>
-		<span>
-			{include file="$copyrightPath"}
-		</span>
-	</p>
+	</div>
+	<div class="footer">
+		<p>
+			<span>
+				{include file="$copyrightPath"}
+			</span>
+		</p>
+	</div>
 </div>
 <script type="text/javascript">
 	var is_page = 'admin_main';
@@ -18,7 +19,7 @@
 	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
 <![endif]-->
 <script type="text/javascript" src="../../common/js/jsux.min.js"></script>
-<script type="text/javascript" src="../../common/js/jsux_common_js.min.js"></script>
+<script type="text/javascript" src="../../common/js/jsux_common.min.js"></script>
 <script type="text/javascript" src="../../common/js/jsux_admin_app.min.js"></script>
 <script type="text/javascript" src="../../common/js/jsux_admin_app_stage.min.js"></script>
 

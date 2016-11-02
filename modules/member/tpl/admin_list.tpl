@@ -1,68 +1,65 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 회원목록 - StreamUX"}	
-	<div class="container">	
-		<div class="articles ui-edgebox">
-			<div class="list">
-				<div class="tt">
-					<div class="imgbox">						
-						<h1>회원목록</h1>
-						<input type="hidden" name="table_name" value="{$requestData.table_name}">
-					</div>
-				</div>
-				<div class="box">
-					<dl>
-						<dt>
-							<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
-						</dt>
-						<dt>
-							<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>
-						</dt>
-						<dd>							
-							<span id="articleMemberDelTitle" class="button-delall">
-								<!--
-								@ jquery templete
-								@ name articleMemberDelTitle_tmpl
-								-->
-							</span>
-						<dd>
-					</dl>
-					<table summary="회원목록을 보여줍니다." cellspacing="0">
-						<caption><span class="blind">회원목록</span></caption>
-						<colgroup>
-							<col width="8%">
-							<col width="18%">
-							<col width="18%">
-							<col width="20%">
-							<col width="9%">
-							<col width="9%">
-							<col width="9%">
-							<col width="9%">
-						</colgroup>
-						<thead>
-							<tr>
-								<th scope="col"><span>번호</span></th>
-								<th scope="col"><span>아이디</span></th>
-								<th scope="col"><span>이름</span></th>
-								<th scope="col"><span>날자</span></th>
-								<th scope="col"><span>히트</span></th>
-								<th scope="col"><span>레벨</span></th>
-								<th scope="col"><span>수정</span></th>
-								<th scope="col"><span>삭제</span></th>
-							</tr>         
-						</thead>
-						<tbody id="memberList">
-							<tr>
-								<td colspan="8"></td>
-							</tr>
-							<!--
-							@ jquery templete
-							@ name	memberWarnMsg_tmpl, memberList_tmpl
-							-->							
-						</tbody>
-					</table>
-				</div>
+<div class="articles ui-edgebox">
+	<div class="list">
+		<div class="tt">
+			<div class="imgbox">						
+				<h1>회원목록</h1>
+				<input type="hidden" name="table_name" value="{$requestData.table_name}">
 			</div>
+		</div>
+		<div class="box">
+			<dl>
+				<dt>
+					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
+				</dt>
+				<dt>
+					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>
+				</dt>
+				<dd>							
+					<span id="articleMemberDelTitle" class="button-delall">
+						<!--
+						@ jquery templete
+						@ name articleMemberDelTitle_tmpl
+						-->
+					</span>
+				<dd>
+			</dl>
+			<table summary="회원목록을 보여줍니다." cellspacing="0">
+				<caption><span class="blind">회원목록</span></caption>
+				<colgroup>
+					<col width="8%">
+					<col width="18%">
+					<col width="18%">
+					<col width="20%">
+					<col width="9%">
+					<col width="9%">
+					<col width="9%">
+					<col width="9%">
+				</colgroup>
+				<thead>
+					<tr>
+						<th scope="col"><span>번호</span></th>
+						<th scope="col"><span>아이디</span></th>
+						<th scope="col"><span>이름</span></th>
+						<th scope="col"><span>날자</span></th>
+						<th scope="col"><span>히트</span></th>
+						<th scope="col"><span>레벨</span></th>
+						<th scope="col"><span>수정</span></th>
+						<th scope="col"><span>삭제</span></th>
+					</tr>         
+				</thead>
+				<tbody id="memberList">
+					<tr>
+						<td colspan="8"></td>
+					</tr>
+					<!--
+					@ jquery templete
+					@ name	memberWarnMsg_tmpl, memberList_tmpl
+					-->							
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
