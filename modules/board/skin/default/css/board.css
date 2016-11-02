@@ -1,0 +1,105 @@
+/* list & search*/
+.board-list{padding-bottom:20px;}
+.board-list table{border-collapse:collapse;border-spacing: 0;width:100%}
+.board-list table thead th{padding-left:10px;height:45px;border-top: 1px solid #e8eef1;border-bottom: 2px solid #e8eef1;text-align:left;font-size: 1.250em;}
+.board-list .author{padding-left:10px;width:90px}
+.board-list .subject{min-height:35px}
+.board-list .subject .link-area{display:inline-block;padding:7px 0 7px 10px;width:100%;line-height:20px}
+.board-list .subject .off{display: none}
+.board-list .subject .on{display: inline-block}
+.board-list .subject .icon-notice-color{background:#FF0000}
+.board-list .subject .icon-replay-color{background:#fa7000}
+.board-list .subject .icon-opkey-color{background:#428bca}
+
+.board-list .date{padding-left:10px;width:90px}
+.board-list .hit{padding-left:10px;width:70px}
+.board-list table tbody tr td{text-align: left}
+.board-list table tbody tr td img{vertical-align: middle}
+.board-list table tbody tr:last-child {border-bottom: 1px solid #D6D7D6}
+.board-list .warn-subject{padding-left:10px;text-align: left}
+.board-list-buttons{float:right;margin-top:20px;padding:0 10px 0 0px;text-align: right}
+
+.board-page-navi{margin-top:10px;text-align: center}
+.board-search{margin-top:20px}
+.board-search input[name=search]{width:120px}
+
+/* read */
+.board-read{padding:0 10px 20px 10px;border-top:2px solid #e8eef1}
+.board-read .panel-heading{padding:15px 5px 15px 5px}
+.board-read .panel-heading .title{margin-bottom:5px;font-size: 1.6250em;line-height:26px}
+.board-read .panel-heading .sub-info{line-height: 20px;font-size: 0.9375em;color:#aeaeae}
+.board-read .panel-body{padding: 5px 5px 30px 5px;min-height:200px;border:1px solid #ececec;line-height: 20px}
+.board-buttons{margin-top:20px;text-align: right}
+
+/* opkey - setup */
+.board-adminsetup{margin-top:20px;padding:0 10px 0 10px}
+.board-adminsetup table{margin:0 auto;width:100%;background-color: #efefef}
+.board-adminsetup table tr td{padding-left: 10px;line-height: 35px;border-bottom:1px dotted #D6D7D6}
+.board-adminsetup table tr:last-child td{border-bottom:none}
+.board-adminsetup .form-text-tip{margin-top:15px}
+.board-adminsetup .form-submit{text-align: right}
+
+/* comment tail */
+.board-tail{margin-top:20px}
+.board-tail .panel-write dl dt{padding-left:10px;background-color: #efefef;line-height:40px;font-size: 1.500em}
+.board-tail .panel-write .form-heading{padding:10px 0px 5px 10px;line-height: 35px}
+.board-tail .panel-write .form-heading span{font-size: 1.0625em}
+.board-tail .panel-write .form-comment {padding: 0 10px 0 10px}
+.board-tail .panel-write .form-comment textarea{width:100%;min-height:165px;line-height:20px}
+.board-tail .panel-write .form-buttons {padding:10px 10px 10px 0;text-align: right}
+
+
+.board-tail .panel-list{margin-top:10px}
+.board-tail .panel-list dl dt{padding-left:10px;background-color: #efefef;line-height:40px;font-size: 1.500em}
+.board-tail .panel-list dl dd{padding-left:10px;border-bottom:1px dotted #D6D7D6;line-height:40px}
+.board-tail .panel-list dl dd:last-child{border-bottom:1px solid #D6D7D6;}
+.board-tail .panel-list .grgcomment{margin:0 20px 0 0}
+.board-tail .panel-list .date{margin-right:5px}
+
+/* write & rewrite*/
+.board-write{padding:0 10px 20px 10px;border-top:2px solid #e8eef1}
+.board-write .ui-label-width{width:20%}
+.board-write .panel-heading{margin-top:20px}
+.board-write .panel-heading p{margin-top:5px;line-height:15px}
+.board-write .panel-heading input{width:100%}
+.board-write .panel-body{margin-top:30px}
+.board-write .panel-body textarea{margin-top:7px;width:100%;line-height: 22px}
+.board-write .panel-body span{display:inline-block;margin-top:5px}
+.board-write .panel-footer{margin-top:20px}
+.board-write .panel-footer .ui-imgup{height:25px;}
+.board-write .panel-footer .ui-imgup input{width:75%}
+.board-write .panel-footer .ui-wallkey{margin-top:20px}
+.board-write .panel-buttons{margin-top:20px;text-align: right}
+
+/* reply */
+.board-read .panel-body .download-align{margin-right:10px;text-align: right}
+
+/* delpass */
+.article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
+.article-box .login {word-break:keep-all;text-align: center}
+.article-box .login .title{display:block;margin-top:10;font-size:2.5625em;color:#ff6600}
+.article-box .login .subtitle{display:block;font-size:1.0625em}
+.article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;width:300px;background-color: #FFFFFF;text-align: center}
+.article-box .login .box .login-title {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
+.article-box .login .box .login-title span{text-align: left;vertical-align: middle;}
+.article-box .login .box .login-title img{vertical-align: middle;}
+.article-box .login .box .login-title .link-searchinfo{line-height: 20px}
+.article-box .login .box .login-body{margin:0 auto; width:92%;text-align: left}
+.article-box .login .box .login-body input {width:110px;text-align: left}
+.article-box .login .box .login-body div{margin-top:20px}
+.article-box .login .box .login-body .panel-info{width:69%;vertical-align: middle}
+.article-box .login .box .login-body .panel-info ul li{line-height: 27px}
+.article-box .login .box .login-body .panel-info .ui-label{display:inline-block;width:70px}
+.article-box .login .box .login-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
+
+.article-box .login .box .login-body .panel-btn{text-align:center;font-size:1.0625em}
+.article-box .login .box .login-body .panel-btn li{display:inline-block;line-height:30px;width:60px;background-color:#ffffff;border:1px solid #e3e3e3;border-radius: 10px;cursor:pointer}
+.article-box .login .box .login-body .panel-btn li:hover{background-color:#e3e3e3;}
+.article-box .login .panel-notice{margin:30px 0 30px 0;text-align:center}
+.article-box .login .panel-notice dl{display:inline-block;padding:10px;width:43%;text-align: left;vertical-align:top}
+.article-box .login .panel-notice dl dt{height:22px;font-weight: bold}
+.article-box .login .panel-notice dl dd{height:22px}
+
+.article-box .login .panel-login-fail{display:none;margin:0 auto;padding-top:20px;width:300px;text-align: left;}
+.article-box .login .panel-login-fail ul li{list-style-type: square}
+.article-box .login .panel-login-fail ul li span{color: #de0000}

@@ -8,92 +8,68 @@ module.exports = function(grunt) {
 	grunt.file.defaultEncoding = 'utf8';
 
 	grunt.initConfig({
+
 		pkg: grunt.file.readJSON('package.json'),
 		clean: {
 			minify: [
-				'common/js/jsux.js',
-				'common/js/jsux.min.js',
-				'common/js/admin_gnb.js',
-				'common/js/admin_gnb.min.js',
-				'common/js/admin_visual.js',
-				'common/js/admin_visual.min.js',
-				'common/js/idangerous.swiper.min.js'
+				'common/js/jsux*.js'
 			]			
 		},
 		concat: {
 			'common-js': {
-				options: {
-					stripBanners: true,
-					banner: banner_jsux_js
-				},
 				src: [
-					'common/js/jsux/jsux-1.1.0.js'
+					'common/js/app/jsux_cookie.js',
+					'common/js/app/jsux_popup.js',
+					'common/js/app/jsux_pagination.js'
 				],
-				dest: 'common/js/jsux.js'
+				dest: 'common/js/jsux_common.js'
 			},
-			'common-admin-gnb': {
+			'common-admin-app': {
 				src: [
-					'common/js/app/admin_gnb_*.js'
+					'common/js/app/jsux_admin_gnb_*.js'
 				],
-				dest: 'common/js/admin_gnb.js'
+				dest: 'common/js/jsux_admin_app.js'
 			},
-			'common-gnb': {
-				src: [
-					'common/js/app/gnb_*.js'
+			'common-app': {
+				src: [					
+					'common/js/app/jsux_gnb_*.js',
+					'common/js/app/jsux_mobile_gnb.js',				
+					'common/js/app/jsux_visual.js'		
 				],
-				dest: 'common/js/gnb.js'
-			},
-			'main-admin-visual': {
-				src: [
-					'common/js/app/admin_visual_*.js'
-				],
-				dest: 'common/js/admin_visual.js'
-			},
-			'main-visual': {
-				src: [
-					'common/js/app/visual.js'
-				],
-				dest: 'common/js/visual.js'
+				dest: 'common/js/jsux_app.js'
 			}
 		},
 		uglify: {
-			'common-js': {
+			'common-api': {
 				options: {
 					banner: banner_jsux_js
 				},
 				files: {
-					'common/js/jsux.min.js': ['common/js/jsux.js'],
-					'common/js/idangerous.swiper.min.js': ['common/js/api/idangerous.swiper.3.3.1.js']
+					'common/js/jsux.min.js': ['common/js/jsux/jsux-1.1.0.js']
 				}
 			},
 			'common-apps': {
 				files: {
-					'common/js/admin_gnb.min.js':['common/js/admin_gnb.js'],
-					'common/js/gnb.min.js':['common/js/gnb.js'],
-					'common/js/admin_visual.min.js': ['common/js/admin_visual.js'],
-					'common/js/visual.min.js': ['common/js/visual.js'],
-					'common/js/navi.min.js': ['common/js/app/navi.js']
+					'common/js/jsux_common.min.js':['common/js/jsux_common.js'],
+					'common/js/jsux_app.min.js':['common/js/jsux_app.js'],
+					'common/js/jsux_app_stage.min.js': ['common/js/app/jsux_app_stage.js'],
+					'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js'],
+					'common/js/jsux_admin_app_stage.min.js': ['common/js/app/jsux_admin_app_stage.js']
 				}
-			},
-			'modules': {
-				files:{
-					// admin
-					// board
-					// install
-					// login
-					// mail
-					// members
-					// outlogin
-					// popup
-					// promotion
-					// question
+			}
+		},
+		cssmin: {
+			'common': {
+				files: {
+					'common/css/sux_common.min.css': ['common/css/sux_common.css'],
+					'common/css/sux_default.min.css': ['common/css/sux_default.css'],					
+					'common/css/sux_layout.min.css': ['common/css/sux_layout.css']
 				}
 			}
 		},
 		jshint: {
 			files: [
 				'Gruntfile.js',
-				'common/js/*.js',
 				'common/js/app/*.js',
 				'modules/**/tpl/js/*.js',
 				'modules/**/skin/**/js/*.js'
@@ -127,14 +103,21 @@ module.exports = function(grunt) {
 					'duplicate-background-images' : false,
 					'ids' : false,
 					'important' : false,
+					'order-alphabetical' : false,
 					'overqualified-elements' : false,
 					'qualified-headings' : false,
 					'star-property-hack' : false,
-					'underscore-property-hack' : false
+					'underscore-property-hack' : false,
+					'universal-selector' : false,
+					'box-sizing' : false,
+					'compatible-vendor-prefixes' : false
 				},
-				src: [
-					'common/css/*.css',
-					'modules/**/tpl/css/*.css'
+				src: [					
+					'common/css/*.css',		
+					'modules/**/tpl/css/*.css',
+					'!common/css/*.min.css',
+					'!common/css/swiper*.css'	,
+					'!common/css/api/*.css'
 				]
 			}			
 		},
@@ -169,5 +152,5 @@ module.exports = function(grunt) {
 
 	grunt.registerTask('default', ['jshint', 'csslint']);
 	grunt.registerTask('lint', ['jshint','csslint','phplint']);
-	grunt.registerTask('minify', ['jshint','csslint','clean','concat','uglify','cssmin']);	
+	grunt.registerTask('minify', ['jshint','clean','concat','uglify','cssmin']);	
 };

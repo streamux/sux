@@ -1,1 +1,1 @@
-Copyright @ STREAMUX Corp
+Copyright @ <a href="/sux/index.php">STREAMUX Corp</a>

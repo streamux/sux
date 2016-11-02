@@ -9,10 +9,9 @@ window.trace = function( str, bool ) {
 };
 
 
-(function( app, exports ) {
+(function( manager, exports ) {
 
-	var manager = app,
-		Class = null,
+	var Class = null,
 		ReadyManager = null;
 
 	Class = function( parent ) {
@@ -156,10 +155,11 @@ window.trace = function( str, bool ) {
 			trace("링크가 존재하지 않습니다.");
 			return;
 		}
-		exports.location.href = url;
 
 		if (target) {
-			exports.location.target = target;
+			exports.open(url,target);
+		} else {
+			exports.location.href = url;
 		}
 	};
 	
@@ -181,7 +181,7 @@ window.trace = function( str, bool ) {
 	manager.ready = function( o ) {		
 		this.readyManager.ready(o);
 	};
-
+	
 })( jsux, window);
 
 jsux.EventDispatcher = jsux.Class.create();
@@ -324,7 +324,9 @@ jsux.Observer = jsux.Class.create( jsux.EventDispatcher );
 jsux.Observer.include({
 
 	update: function( o, infoObj ) {
+		
 		// override
+		console.log("use View's update method to override Observer's update method");
 	}
 });
 

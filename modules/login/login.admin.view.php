@@ -3,14 +3,15 @@
 class LoginAdminModule extends BaseView {
 
 	var $class_name = 'login_admin_module';	
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
+		$UIError = UIError::getInstance();
 		/**
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
@@ -25,8 +26,10 @@ class LoginAdminModule extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}
+		$UIError->output();	
 	}
 }
 
@@ -36,29 +39,25 @@ class LoginAdminView extends LoginAdminModule {
 
 	function displayLogin() {
 
-		$context = Context::getInstance();
-		$sessionData = $context->getSessionAll();
-		$requestData = $context->getRequestAll();		
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action.'Admin';
-		$pageType = $requestData['pagetype'];
+		$context = Context::getInstance();		
+
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action.'Admin';
+		$this->document_data['module_code'] = 'login';
+		$this->document_data['module_name'] = '관리자 로그인';
 		
 		$adminId = $this->session_data['admin_id'];
 
-		$skinPath = _SUX_PATH_ . "modules/login/tpl";
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/login/tpl";		
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = $skinPath;
-
-		if (isset($adminId) && $adminId !== '') {
-			Utils::goURL('../admin/index.php?action=main');			
-		} else {
-			$this->skin_path_list['contents'] = "{$skinPath}/login_admin.tpl";
-		}
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
+		$this->skin_path_list['header'] = "{$skinPath}/_header_admin.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/login_admin.tpl";
+		$this->skin_path_list['footer'] = "{$skinPath}/_footer_admin.tpl";
 
 		$this->output();
 	}
@@ -77,17 +76,17 @@ class LoginAdminView extends LoginAdminModule {
 		} 
 
 		if ($msg) {
-			Error::alertToBack($msg);
+			UIError::alertToBack($msg);
 		}
 
 		$adminId = $context->get('db_admin_id');
 		$adminPwd = $context->get('db_admin_pwd');
 
 		if ($userId !== $adminId) {
-			Error::alertToBack('아이디가 일치하지 않습니다.');
+			UIError::alertToBack('아이디가 일치하지 않습니다.');
 			exit;
 		} else if ($userPwd !== $adminPwd) {
-			Error::alertToBack('비밀번호가 일치하지 않습니다.');
+			UIError::alertToBack('비밀번호가 일치하지 않습니다.');
 			exit;
 		}
 

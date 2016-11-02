@@ -1,0 +1,48 @@
+
+/* admin login */
+.article-box{margin-top:5px;padding:30px 20px 20px 20px;background-color:#fcfcfc}
+.article-box .login {word-break:keep-all;text-align: center;}
+.article-box .login .title{display:block;margin-top:10;font-size:2.5625em;color:#ff6600}
+.article-box .login .subtitle{display:block;font-size:1.0625em}
+.article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;width:300px;background-color: #FFFFFF}
+.article-box .login .box .login-header {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
+.article-box .login .box .login-header span{text-align: left;vertical-align: middle;}
+.article-box .login .box .login-header img{vertical-align: middle;}
+.article-box .login .box .login-body{margin:0 auto; width:92%;text-align: left}
+.article-box .login .box .login-body input {width:110px;text-align: left}
+.article-box .login .box .login-body div{display:inline-block;margin-top:20px}
+.article-box .login .box .login-body .panel-info{width:69%;vertical-align: middle}
+.article-box .login .box .login-body .panel-info ul li{line-height: 27px}
+.article-box .login .box .login-body .panel-info .ui-label{display:inline-block;width:70px}
+.article-box .login .box .login-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
+.article-box .login .box .login-body .panel-btn{width:29%;vertical-align: middle;text-align: center}
+.article-box .login .box .login-body .panel-btn .login-btn{width:61px;height:57px}
+.article-box .login .box .login-footer{margin:0 auto;margin-top:20px;width: 92%;text-align: center}
+.article-box .login .box .login-footer .link-searchinfo{line-height: 20px}
+.article-box .login .box .login-footer .link-searchinfo .ui-label-join{margin-right:10px}
+.article-box .login .box .login-footer .link-searchinfo span{color:#636363}
+.article-box .login .panel-notice{margin:30px 0 30px 0}
+.article-box .login .panel-notice dl{display:inline-block;padding:10px;width:43%;text-align: left;vertical-align:top}
+.article-box .login .panel-notice dl dt{height:22px;font-weight: bold}
+.article-box .login .panel-notice dl dd{height:22px}
+.article-box .login .panel-fail{display:none;margin:0 auto;padding-top:20px;width:300px;text-align: left;}
+.article-box .login .panel-fail ul li{list-style-type: square}
+.article-box .login .panel-fail ul li span{color: #de0000}
+
+/* admin login - leave and searchid and searchpwd */
+.article-box .login .box .leave-header{padding-left:10px;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
+.article-box .login .box .leave-header img{vertical-align: middle;}
+.article-box .login .box .leave-header span{vertical-align: middle;}
+.article-box .login .box .leave-header .link-searchinfo{float:right;margin-right:15px}
+.article-box .login .box .leave-body{clear:both;padding-left:10px;text-align: left}
+.article-box .login .box .leave-body .panel-info{margin-top:20px;vertical-align: middle}
+.article-box .login .box .leave-body .panel-info input {width:190px;text-align: left}
+.article-box .login .box .leave-body .panel-info ul li{line-height: 27px}
+.article-box .login .box .leave-body .panel-info .ui-label{display:inline-block;width:70px}
+.article-box .login .box .leave-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
+.article-box .login .box .leave-body .panel-info-result{margin:0 auto;margin-top:20px;width:80%;text-align:center}
+.article-box .login .box .leave-body .panel-info-result ul li{line-height: 30px}
+.article-box .login .box .leave-body .panel-info-result ul li span{font-size:1.5000em}
+.article-box .login .box .leave-body .panel-btn{margin-top:20px;text-align:center;font-size:1.0625em}
+.article-box .login .box .leave-body .panel-btn ul li{display:inline-block;line-height:30px;width:60px;background-color:#ffffff;border:1px solid #e3e3e3;border-radius: 10px;cursor:pointer}
+.article-box .login .box .leave-body .panel-btn ul li:hover{background-color:#e3e3e3;}

@@ -29,6 +29,7 @@ class InstallModule  extends BaseView {
 
 	function output() {
 
+		$UIError = UIError::getInstance();
 		/**
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
@@ -43,8 +44,10 @@ class InstallModule  extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path );
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}
+		$UIError->output();	
 	}
 }
 

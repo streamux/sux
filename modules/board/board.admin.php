@@ -4,6 +4,11 @@ include "../../config/config.inc.php";
 $context = Context::getInstance();
 $context->init();
 
+if (!$context->checkAdminPass()) {
+	Utils::goURL('../login/login.admin.php?action=login');
+	exit();
+}
+
 $action = $context->getRequest('action');
 
 $model = new BoardAdminModel();
@@ -14,6 +19,6 @@ $views = new BoardAdminView($model, $controller);
 if (isset($action) && $action) {
 	$views->display($action);
 } else {
-	Error::alertTo('파라미터 값을 확인해주세요.\게시판 메인으로 이동합니다.', 'board.php?board=' . $board . '&action=list');
+	UIError::alertTo('파라미터 값을 확인해주세요.\게시판 메인으로 이동합니다.', 'board.php?board=' . $board . '&action=list');
 }
 ?>

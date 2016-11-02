@@ -3,18 +3,22 @@
 class MemberAdminModule extends BaseView {
 	
 	var $class_name = 'admin_admin_module';
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
 
+		$UIError = UIError::getInstance();
 		/**
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
 		 */
+		/*$tracer = Tracer::getInstance();
+		$tracer->output();*/
+
 		$__template = new Template();
 		if (is_readable($this->skin_path_list['contents'])) {
 			$__template->assign('copyrightPath', $this->copyright_path);
@@ -25,8 +29,10 @@ class MemberAdminModule extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );	
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}
+		$UIError->output();	
 	}
 }
 
@@ -37,23 +43,19 @@ class MemberAdminView extends MemberAdminModule {
 	function displayGroupList() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_grouplist.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}	
@@ -61,23 +63,19 @@ class MemberAdminView extends MemberAdminModule {
 	function displayGroupAdd() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupadd.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -85,10 +83,11 @@ class MemberAdminView extends MemberAdminModule {
 	function displayGroupDelete() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
@@ -99,20 +98,17 @@ class MemberAdminView extends MemberAdminModule {
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupdelete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
 		$this->output();
 	}
 
 	function displayList() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
@@ -123,20 +119,17 @@ class MemberAdminView extends MemberAdminModule {
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
 		$this->output();
 	}
 
 	function displayAdd() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
@@ -147,20 +140,17 @@ class MemberAdminView extends MemberAdminModule {
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
 		$this->output();
 	}
 
 	function displayModify() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
@@ -171,20 +161,17 @@ class MemberAdminView extends MemberAdminModule {
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
 		$this->output();
 	}
 
 	function displayDelete() {
 		
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
@@ -195,19 +182,14 @@ class MemberAdminView extends MemberAdminModule {
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
 		$this->output();
 	}
 
 	function displayGroupListJson() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$dataObj = array();
-		
+
+		$dataObj = array();		
 		$msg = "";
 		$resultYN = "Y";
 
@@ -356,7 +338,7 @@ class MemberAdminView extends MemberAdminModule {
 		echo $this->callback($data);
 	}	
 
-	function RecordGroupAdd() {
+	function recordGroupAdd() {
 
 		$context = Context::getInstance();
 		$table_name = $context->getPost('table_name');
@@ -388,7 +370,7 @@ class MemberAdminView extends MemberAdminModule {
 		echo $this->callback($data);
 	}	
 
-	function RecordGroupDelete() {
+	function recordGroupDelete() {
 
 		$context = Context::getInstance();
 		$table_name = $context->getPost('table_name');
@@ -401,7 +383,7 @@ class MemberAdminView extends MemberAdminModule {
 		if ($result) {
 
 			$result = $this->controller->delete('memberGroup');
-			if (!$result) {
+			if ($result) {
 				$resultYN = "Y";
 				$msg = "${table_name} 회원그룹을 삭제하였습니다.";				
 			} else {
@@ -420,7 +402,7 @@ class MemberAdminView extends MemberAdminModule {
 		echo $this->callback($data);
 	}
 
-	function RecordModify() {
+	function recordModify() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -443,7 +425,7 @@ class MemberAdminView extends MemberAdminModule {
 		echo $this->callback($data);
 	}
 	
-	function RecordDelete() {
+	function recordDelete() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();

@@ -11,6 +11,20 @@ class AnalyticsAdminModel extends BaseModel {
 
 	function init() {}
 	
+	function selectFromConnecterSiteWhere($name) {
+
+		$context = Context::getInstance();
+		$table_name = $context->get('db_connecter_site');
+
+		$query = new Query();
+		$query->setTable($table_name);
+		$query->setField('id');
+		$query->setWhere(array('name'=>$name));
+
+		$result = parent::select($query);
+		return $result;
+	}
+
 	function selectFromConnecterSiteOrderby($orderby) {
 
 		$context = Context::getInstance();
@@ -71,6 +85,20 @@ class AnalyticsAdminModel extends BaseModel {
 		$query->setWhere(array('id'=>$id));
 
 		$result = parent::update($query);
+		return $result;
+	}
+
+	function selectFromPageviewWhere($name) {
+
+		$context = Context::getInstance();
+		$table_name = $context->get('db_pageview');
+
+		$query = new Query();
+		$query->setTable($table_name);
+		$query->setField('id');
+		$query->setWhere(array('name'=>$name));
+
+		$result = parent::select($query);
 		return $result;
 	}
 

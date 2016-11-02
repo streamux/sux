@@ -1,8 +1,9 @@
 {assign var=groupData value=$documentData.group}
+{assign var=boardTitle value=$groupData.board_name}
 {assign var=contentData value=$documentData.contents}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="게시물 답변 - StreamUX"}
+{include file="$headerPath" title="$boardTitle :: 게시물 답변 - StreamUX"}
 <div class="board-read" style="width:{$groupData.width}">
 	<div class="panel-heading">
 		<p class="title">{$contentData.title}</p>

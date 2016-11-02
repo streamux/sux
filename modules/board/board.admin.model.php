@@ -103,7 +103,7 @@ class BoardAdminModel extends BaseModel {
 		$schema->add('date','timestamp');
 		$schema->add('ip','varchar',30);
 		$schema->add('see','int');
-		$schema->add('opkey','char',1);
+		$schema->add('opkey','char',12);
 		$schema->add('igroup','int');
 		$schema->add('space','int');
 		$schema->add('ssunseo','int');

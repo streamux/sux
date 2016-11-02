@@ -3,13 +3,15 @@
 class AnalyticsAdminModule extends BaseView {
 	
 	var $class_name = 'board_admin_module';
-	var $skin_path_list = '';
+	var $skin_path_list = array();
 	var $session_data = null;
 	var $request_data = null;
 	var $post_data = null;
-	var $document_data = null;
+	var $document_data = array();
 
 	function output() {
+
+		$UIError = UIError::getInstance();
 
 		/**
 		 * @class Template
@@ -25,8 +27,10 @@ class AnalyticsAdminModule extends BaseView {
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );	
 		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
+			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
+			$UIError->useHtml = TRUE;
 		}
+		$UIError->output();	
 	}
 }
 
@@ -37,23 +41,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayConnecterList() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_list.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -61,23 +61,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayConnecterAdd() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_add.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -85,23 +81,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayConnecterDelete() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_delete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -109,23 +101,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayConnecterReset() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_reset.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -133,23 +121,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayPageviewList() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_list.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -157,23 +141,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayPageviewAdd() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_add.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -181,23 +161,19 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 	function displayPageviewDelete() {
 
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'analytics';
 
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
-		$this->skin_path_list = array();
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_delete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
 
 		$this->output();
 	}
@@ -228,11 +204,13 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 	function displayConnecterListJson() {
 
+		$context = Context::getInstance();
+
 		$dataObj = null;
 		$dataList = array();
 		$msg = "";
-		$resultYN = "Y";		
-		  
+		$resultYN = "Y";	 
+
 		$result = $this->controller->select('fromConnecterSiteOrderby', 'id desc');
 		if ($result){
 
@@ -310,17 +288,27 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 	function recordConnecterAdd() {
 
-		$msg = "";
-		$resultYN = "Y";
+		$context = Context::getInstance();
+		$keyword = $context->getPost('keyword');
 
-		$result = $this->controller->insert('intoConnecterSite');
-		if ($result) {
-			$msg = "접속키워드 추가를 성공하였습니다.";
-			$resultYN = "Y";		 	
+		$msg = "";
+		$resultYN = "Y";		
+
+		$this->controller->select('fromConnecterSiteWhere', $keyword);
+		$numrow = $this->model->getNumRows();
+		if ($numrow > 0) {
+			$msg = "접속키워드가 이미 존재합니다.";
+			$resultYN = "N";
 		} else {
-			$msg = "접속키워드 추가를 실패하였습니다.";
-		 	$resultYN = "N";
-		}
+			$result = $this->controller->insert('intoConnecterSite');
+			if ($result) {
+				$msg = "$numrow : $keyword 접속키워드 추가를 성공하였습니다.";
+				$resultYN = "Y";		 	
+			} else {
+				$msg = "접속키워드 추가를 실패하였습니다.";
+			 	$resultYN = "N";
+			}			
+		}	
 
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
@@ -372,16 +360,26 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 	function recordPageviewAdd() {
 
+		$context = Context::getInstance();
+		$keyword = $context->getPost('keyword');
+
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->insert('intoPageview');
-		if ($result) {
-			$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
-			$resultYN = "Y";		 	
+		$this->controller->select('fromPageviewWhere', $keyword);
+		$numrow = $this->model->getNumRows();
+		if ($numrow > 0) {
+			$msg = "페이지뷰 키워드가 이미 존재합니다.";
+			$resultYN = "N";
 		} else {
-			$msg = "페이지뷰 키워드 추가를 실패하였습니다.";
-		 	$resultYN = "N";
+			$result = $this->controller->insert('intoPageview');
+			if ($result) {
+				$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
+				$resultYN = "Y";		 	
+			} else {
+				$msg = "페이지뷰 키워드 추가를 실패하였습니다.";
+			 	$resultYN = "N";
+			}
 		}
 
 		$data = array(	"result"=>$resultYN,
