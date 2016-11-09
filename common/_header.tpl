@@ -24,11 +24,11 @@
 <div class="wrapper">
 	<div class="header clearfix">
 		<div class="util"></div>
-		<div class="mobile-menu">
-			<div class="mobile-btn">
-				<div class="btn-hline1"></div>
-				<div class="btn-hline2"></div>
-				<div class="btn-hline2"></div>
+		<div class="mobile-menu-btn">
+			<div class="ui-h-3stick">
+				<div class="hline1"></div>
+				<div class="hline2"></div>
+				<div class="hline3"></div>
 			</div>
 		</div>
 		<h1 class="logo">
@@ -38,15 +38,9 @@
 			<div id="gnb" class="gnb"></div>
 		</div>
 	</div>
-	<div class="section container">
-		<div class="swiper-container swiper-container-contents">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<div class="contents-header">
-						<div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
-						<h1 class="document-title">{$groupData.board_name}</h1>
-						<p>home > {$documentData.module_name}</p>
-					</div>
-		
-				
-		
+	<div class="section container">		
+		<div class="contents-header">
+			<div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
+			<h1 class="document-title">{$groupData.board_name}</h1>
+			<p>home > {$documentData.module_name}</p>
+		</div>	

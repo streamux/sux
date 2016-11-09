@@ -10,22 +10,25 @@
 
 /* header */
 .header .util{display:none;height: 20px}
-.header .logo{float:left;}
 .header .logo img{width:60px;height:30px;}
 
-/* gnb_icon */
+/* ui : icon type */
+.suxic-people{background:url()}
+
+/* ui : button type */
+.ui-h-3stick{margin:19px 10px 0 0;width:20px;}
+.ui-h-3stick .hline1{background-color: #333333;height:2px}
+.ui-h-3stick .hline2,
+.ui-h-3stick .hline3{background-color:#333333;height:2px;margin-top:4px;}
+
+/* gnb icon*/
 .gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}
 .gnb-icon ul li{float:left;position:relative;height:72px}
 .gnb-icon ul li .g-arrow{position:absolute;top:-80px;z-index:1;width:100%;height:75px;background:url("../images/gnb_icon_arrow.png") 50% 0 no-repeat,#404140}
 .gnb-icon ul li .g-icon{position:absolute;top:0;z-index:2;width:100%;height:75px;background:url("../images/gnb_icon.png") 50% 0 no-repeat}
 
 /* gnb */
-.mobile-menu{float:right;height:50px}
-.mobile-menu .mobile-btn{margin:19px 10px 0 0;width:20px;}
-.mobile-menu .mobile-btn .btn-hline1{background:#333333;height:2px}
-.mobile-menu .mobile-btn .btn-hline2{background:#333333;height:2px;margin-top:4px;}
-
-.gnb-case{clear:both;position:relative;height:50px}
+.gnb-case{clear:both;position:relative;width:100%;height:50px}
 .gnb{position:absolute;width:100%}
 .gnb .mmenu{float:left;height:50px;line-height:50px;text-align:center;background-color:#3b3c3b}
 .gnb .mmenu a{text-decoration:none}

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-26 09:46:44
+/* Smarty version 3.1.30, created on 2016-11-09 09:40:45
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_58105f64009e95_38344149',
+  'unifunc' => 'content_5822e10d0e8e12_28054025',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1477463523,
+      1 => 1478680843,
       2 => 'file',
     ),
   ),
@@ -20,29 +20,32 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_58105f64009e95_38344149 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5822e10d0e8e12_28054025 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
-				</div>				
-			</div>
-			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
-		</div>		
-	</div>
-	<div class="footer">
-		<ul class="clearfix">
-			<li><a href="../login/login.php?action=login">로그인</a></li>
-			<li><a href="../member/member.php?action=join">회원가입</a></li>
-			<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
-		</ul>	
-		<p>
-			<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+		<div class="footer">
+			<ul class="clearfix">
+				<li><a href="../login/login.php?action=login">로그인</a></li>
+				<li><a href="../member/member.php?action=join">회원가입</a></li>
+				<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
+			</ul>	
+			<p>
+				<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 </span>
-		</p>
-	</div>
+			</p>
+		</div>
+	</div>	
 </div>
 <!-- mobile menu start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
-<div class="mobile-gnb-case mobile-gnb-case-off">	
+<div class="mobile-gnb-case mobile-gnb-case-off">
+	<div class="menu-btn-close">
+		<div class="ui-h-3stick">
+			<div class="hline1"></div>
+			<div class="hline2"></div>
+			<div class="hline3"></div>
+		</div>
+	</div>
 	<div class="header-panel">
 		<div class="ui-user-info">
 			<ul class="clearfix">
@@ -54,19 +57,19 @@ function content_58105f64009e95_38344149 (Smarty_Internal_Template $_smarty_tpl)
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="/sux/modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="/sux/modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
-		</div>		
-	</div>		
+		</div>
+	</div>
 	<div class="body-panel">
 		<div class="swiper-container swiper-container-mobilegnb">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide">
-					<ul id="mobileGnb"" class="menu-panel">
+					<ul id="mobileGnb" class="menu-panel">
 						<!-- display first's depth menu list -->
 					</ul>
 				</div>		
@@ -96,10 +99,6 @@ function content_58105f64009e95_38344149 (Smarty_Internal_Template $_smarty_tpl)
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
 >
-
-group : <?php echo $_smarty_tpl->tpl_vars['documentData']->value['group'];?>
-
-
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['group']) {
 echo '<script'; ?>
  type="text/javascript">
@@ -122,16 +121,32 @@ echo '<script'; ?>
 >
 <!-- api -->
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jquery.min.js"><?php echo '</script'; ?>
->	
-<?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/jquery.tmpl.min.js"><?php echo '</script'; ?>
+ src="https://code.jquery.com/jquery-1.12.4.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/TweenMax.min.js"><?php echo '</script'; ?>
+>window.jQuery || document.write('<?php echo '<script'; ?>
+ src="common/js/jquery.min.js"><\/script>')<?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="text/javascript" src="../../common/js/idangerous.swiper.min.js"><?php echo '</script'; ?>
+ src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.jQuery.tmpl || document.write('<?php echo '<script'; ?>
+ src="common/js/jquery.tmpl.min.js"><\/script>')<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.TweenMax || document.write('<?php echo '<script'; ?>
+ src="common/js/TweenMax.min.js"><\/script>')<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+>window.Swiper || document.write('<?php echo '<script'; ?>
+ src="common/js/idangerous.swiper.min.js"><\/script>')<?php echo '</script'; ?>
 >
 <!-- end -->
 <!-- customize start -->

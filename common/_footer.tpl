@@ -1,22 +1,25 @@
-				</div>				
-			</div>
-			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
-		</div>		
+		<div class="footer">
+			<ul class="clearfix">
+				<li><a href="../login/login.php?action=login">로그인</a></li>
+				<li><a href="../member/member.php?action=join">회원가입</a></li>
+				<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
+			</ul>	
+			<p>
+				<span>{include file="$copyrightPath"}</span>
+			</p>
+		</div>
 	</div>	
-	<div class="footer">
-		<ul class="clearfix">
-			<li><a href="../login/login.php?action=login">로그인</a></li>
-			<li><a href="../member/member.php?action=join">회원가입</a></li>
-			<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
-		</ul>	
-		<p>
-			<span>{include file="$copyrightPath"}</span>
-		</p>
-	</div>
 </div>
 <!-- mobile menu start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
-<div class="mobile-gnb-case mobile-gnb-case-off">	
+<div class="mobile-gnb-case mobile-gnb-case-off">
+	<div class="menu-btn-close">
+		<div class="ui-h-3stick">
+			<div class="hline1"></div>
+			<div class="hline2"></div>
+			<div class="hline3"></div>
+		</div>
+	</div>
 	<div class="header-panel">
 		<div class="ui-user-info">
 			<ul class="clearfix">
@@ -28,19 +31,19 @@
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="/sux/modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="../../modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="/sux/modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="../../modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
-		</div>		
-	</div>		
+		</div>
+	</div>
 	<div class="body-panel">
 		<div class="swiper-container swiper-container-mobilegnb">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide">
-					<ul id="mobileGnb"" class="menu-panel">
+					<ul id="mobileGnb" class="menu-panel">
 						<!-- display first's depth menu list -->
 					</ul>
 				</div>		
