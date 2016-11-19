@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
@@ -15,7 +16,7 @@
 					<h2>기본정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>			
 				</dd>
 			</dl>					
@@ -25,17 +26,17 @@
 					<tr>
 						<td>
 							<span>회</span>원그룹
-							<input type="hidden" name="table_name" value="{$requestData.table_name}">
-							<input type="hidden" name="memberid" value="{$requestData.memberid}">
+							<input type="hidden" name="table_name" value="{$sessionData.ljs_member}">
+							<input type="hidden" name="memberid" value="{$sessionData.ljs_memberid}">
 						</td>
 						<td>									
-							{$requestData.table_name}
+							{$sessionData.ljs_member}
 						</td>
 					</tr>
 					<tr>
 						<td><span>아</span>이디</td>
 						<td>
-							{$requestData.memberid}
+							{$sessionData.ljs_memberid}
 						</td>
 					</tr>
 					<tr>
@@ -44,7 +45,7 @@
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호 확인</td>
-						<td><input type="password" name="pwd2" size="10" maxlength="12"></td>
+						<td><input type="PassWord" name="pwd2" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
 						<td><span>이</span>름</td>
@@ -90,7 +91,7 @@
 					<h2>기타정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">추가 정보를 입력해주세요.</span>			
 				</dd>
 			</dl>	

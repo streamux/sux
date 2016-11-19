@@ -1,6 +1,6 @@
 <?php
 
-class LoginModule extends BaseView {
+class LoginModule extends View {
 
 	var $class_name = 'login_module';	
 	var $skin_path_list = array();
@@ -16,6 +16,10 @@ class LoginModule extends BaseView {
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
 		 */
+
+		/*$tracer = Tracer::getInstance();
+		$tracer->output();*/
+
 		$__template = new Template();
 		if (is_readable($this->skin_path_list['contents'])) {
 			$__template->assign('copyrightPath', $this->copyright_path);
@@ -29,7 +33,7 @@ class LoginModule extends BaseView {
 			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
 			$UIError->useHtml = TRUE;
 		}
-		$UIError->output();	
+		$UIError->output();
 	}
 }
 
@@ -48,14 +52,15 @@ class LoginView extends LoginModule {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = $context->get('action');
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '회원 로그인';
 		
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/login';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -76,7 +81,7 @@ class LoginView extends LoginModule {
 		/**
 		 * get data from DB
 		 */
-		if (!$ljs_memberid  || !$ljs_pass1) {	
+		if (!$ljs_memberid ) {
 			$this->controller->select('getMemberGroup');
 			$this->document_data['group'] = $this->model->getJson();
 			$contentsPath = $skinPath . 'login.tpl';		
@@ -85,108 +90,14 @@ class LoginView extends LoginModule {
 			$contentsPath = $skinPath . 'info.tpl';
 		}
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
 		$this->skin_path_list['footer'] = $footerPath;
 
 		$this->output();
-	}
-
-	function displayLogpass() {
-
-		$context = Context::getInstance();
-		$this->session_data = $context->getSessionAll();
-		$this->request_data = $context->getRequestAll();		
-		$this->post_data = $context->getPostAll();
-
-		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];
-		
-		$ljs_member = $this->session_data['ljs_member'];
-		if (!isset($ljs_member) || $ljs_member == '') {
-			$ljs_member = $this->post_data['member'];
-		}
-
-		$memberid = $this->session_data['ljs_memberid'];
-		if (!isset($memberid) || $memberid == '') {
-			$memberid = $this->post_data['memberid'];
-		}
-
-		$pass = trim($this->session_data['ljs_pass1']);
-		if (!isset($pass) || $pass == '') {
-			$pass = trim($this->post_data['pass']);
-			$pass = substr(md5($pass),0,8);
-		}
-		
-		$msg = '';
-		if (!$memberid) {
-			$msg = "아이디를 입력하세요.";
-		} else if (!$pass) {
-			$msg = "비밀번호를 입력하세요.";
-		} 
-
-		if ($msg) {
-			UIError::alertToBack($msg);
-		}
-	
-		$this->controller->select('getLogpass');
-		$rownum = $this->model->getNumRows();
-		if ($rownum > 0) {		
-
-			$rows = $this->model->getRow();
-			$ljs_memberid = $rows['ljs_memberid'];
-			$ljs_pass1 = $rows['ljs_pass1'];
-			$ljs_name = $rows['name'];
-
-			if ($pass !== $ljs_pass1) {
-				UIError::alertToBack('비밀번호가 일치하지 않습니다.');
-				exit;
-			}
-
-			$conpanyname = $rows['conpany'];
-			if ($conpanyname) {
-				$ljs_name = $conpanyname;
-			}
-
-			$ljs_email = $rows['email'];
-			$ljs_writer = $rows['writer'];			
-			$ljs_point = $rows['point'];
-			$grade = $rows['grade'];
-			$automod1 = "yes";
-			$chatip = $context->getServer('REMOTE_ADDR');
-			$ljs_hit = $rows['hit'] + 1;
-
-			$values['hit'] = $ljs_hit;
-			$this->controller->update('getLogpass', $values);
-
-			$session_list = array('ljs_member','ljs_memberid','ljs_pass1','ljs_name','ljs_email','ljs_writer','ljs_point','ljs_member','ljs_hit','grade','automod1','chatip');
-
-			foreach ($session_list as $key => $value) {
-				$context->setSession($value, ${$value});
-			}			
-
-			if ($this->request_data['action'] == "read") {
-				Utils::goURL("../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod");
-			} else if ($this->request_data['action'] == "write"){
-				Utils::goURL("../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid");
-			} else {
-				Utils::goURL("login.php?action=login");
-			}
-		} else {
-			Utils::goURL("login.php?action=fail");
-		}
-	}
-
-	function displayLogout() {
-
-		$context = Context::getInstance();
-		$this->session_data = $context->getSessionAll();
-		foreach ($this->session_data as $key => $value) {
-			$context->setSession($key, '');
-		}
-		Utils::goURL("login.php?action=login");
-	}
+	}	
 
 	function displayFail() {
 
@@ -206,7 +117,8 @@ class LoginView extends LoginModule {
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/login';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -226,6 +138,7 @@ class LoginView extends LoginModule {
 
 		$contentsPath = $skinPath . 'login.tpl';
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -244,19 +157,19 @@ class LoginView extends LoginModule {
 
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
-		$this->request_data = $context->getRequestAll();
 
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = $context->get('action');
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '회원 탈퇴';
 		
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/login';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -273,6 +186,7 @@ class LoginView extends LoginModule {
 
 		$contentsPath = $skinPath . 'leave.tpl';
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -281,25 +195,25 @@ class LoginView extends LoginModule {
 		$this->output();
 	}
 
-	function displaySearchID() {
+	function displaySearchId() {
 
 		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
 
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = $context->get('action');
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '아이디 찾기';
 
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/login';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -324,7 +238,7 @@ class LoginView extends LoginModule {
 
 			if (count($rows) > 0) {
 				$memberId = $rows['ljs_memberid'];
-				$email = $rows['email'];
+				$email = $rows['email'];				
 
 				if (trim($email) !== $checkEmail) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
@@ -347,6 +261,7 @@ class LoginView extends LoginModule {
 			$contentsPath = $skinPath . 'searchid.tpl';
 		}
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -360,20 +275,20 @@ class LoginView extends LoginModule {
 		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
 		$this->post_data = $context->getPostAll();
 
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = $context->get('action');
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '비밀번호 찾기';
 
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/login';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -448,6 +363,7 @@ class LoginView extends LoginModule {
 			$contentsPath = $skinPath . 'searchpwd.tpl';
 		}
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -455,5 +371,105 @@ class LoginView extends LoginModule {
 
 		$this->output();
 	}
+
+	function displayLogout() {
+
+		$context = Context::getInstance();
+
+		$rootPath = _SUX_ROOT_;
+		$this->session_data = $context->getSessionAll();
+		foreach ($this->session_data as $key => $value) {
+			$context->setSession($key, '');
+		}
+		Utils::goURL("{$rootPath}login");
+	}
+
+	function recordLogpass() {
+
+		$context = Context::getInstance();
+
+		$rootPath = _SUX_ROOT_;
+		$this->session_data = $context->getSessionAll();
+		$this->request_data = $context->getRequestAll();		
+		$this->post_data = $context->getPostAll();
+
+		$ljs_memberid = $this->session_data['ljs_memberid'];
+		$ljs_pass1 = $this->session_data['ljs_pass1'];
+		
+		$ljs_member = $this->session_data['ljs_member'];
+		if (!isset($ljs_member) || $ljs_member == '') {
+			$ljs_member = $this->post_data['member'];
+		}
+
+		$memberid = $this->session_data['ljs_memberid'];
+		if (!isset($memberid) || $memberid == '') {
+			$memberid = $this->post_data['memberid'];
+		}
+
+		$pass = trim($this->session_data['ljs_pass1']);
+		if (!isset($pass) || $pass == '') {
+			$pass = trim($this->post_data['pass']);
+			$pass = substr(md5($pass),0,8);
+		}
+		
+		if (!$memberid) {
+			$msg = "아이디를 입력하세요.";
+		} else if (!$pass) {
+			$msg = "비밀번호를 입력하세요.";
+		} 
+
+		if (isset($msg) && $msg) {
+			UIError::alertToBack($msg);
+		}
+	
+		$this->controller->select('getLogpass');
+		$rownum = $this->model->getNumRows();
+		if ($rownum > 0) {		
+
+			$rows = $this->model->getRow();
+			$ljs_memberid = $rows['ljs_memberid'];
+			$ljs_pass1 = $rows['ljs_pass1'];
+			$ljs_name = $rows['name'];
+
+			if ($pass !== $ljs_pass1) {
+				UIError::alertTo('비밀번호가 일치하지 않습니다.', $rootPath . 'login/fail');
+				exit;
+			}
+
+			$conpanyname = $rows['conpany'];
+			if ($conpanyname) {
+				$ljs_name = $conpanyname;
+			}
+
+			$ljs_email = $rows['email'];
+			$ljs_writer = $rows['writer'];			
+			$ljs_point = $rows['point'];
+			$grade = $rows['grade'];
+			$automod1 = "yes";
+			$chatip = $context->getServer('REMOTE_ADDR');
+			$ljs_hit = $rows['hit'] + 1;
+
+			$values['hit'] = $ljs_hit;
+			$this->controller->update('getLogpass', $values);
+
+			$session_list = array('ljs_member','ljs_memberid','ljs_pass1','ljs_name','ljs_email','ljs_writer','ljs_point','ljs_member','ljs_hit','grade','automod1','chatip');
+
+			foreach ($session_list as $key => $value) {
+				$context->setSession($value, ${$value});
+			}
+
+			$action = $context->get('action');		
+
+			if ($action == "read") {
+				Utils::goURL("../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod");
+			} else if ($action == "write"){
+				Utils::goURL("../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid");
+			} else {
+				Utils::goURL("{$rootPath}login");
+			}
+		} else {
+			UIError::alertTo('아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다다.', $rootPath . 'login/fail');
+		}
+	}	
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 
-class BaseController extends Object {
+class Controller extends Object {
 
 	var $class_name = "base_controller";
 	var $model = NULL;

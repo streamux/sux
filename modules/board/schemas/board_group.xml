@@ -1,0 +1,28 @@
+<table name="board_group">
+	<column name="id" type="int" size="12" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+	<column name="category" type="varchar" size="30" notnull="not null"/>
+	<column name="group_name" type="varchar" size="30" notnull="not null"/>
+	<column name="summary" type="varchar" size="50"/>	
+	<column name="header_path" type="varchar" size="50"/>
+	<column name="skin_path" type="varchar" size="50"/>
+	<column name="footer_path" type="varchar" size="50"/>	
+	<column name="arrow_nonmember" type="char" size="1" default="y" notnull="not null"/>
+	<column name="is_writable" type="char" size="1" default="y" notnull="not null"/>
+	<column name="is_readable" type="char" size="1" default="y" notnull="not null"/>
+	<column name="is_modifiable" type="char" size="1" default="y" notnull="not null"/>
+	<column name="is_replayable" type="char" size="1" default="y" notnull="not null"/>	
+	<column name="grade_w" type="int" size="1" default="0" notnull="not null"/>
+	<column name="grade_r" type="int" size="1" default="0" notnull="not null"/>
+	<column name="grade_m" type="int" size="1" default="0" notnull="not null"/>
+	<column name="grade_re" type="int" size="1" default="0" notnull="not null"/>
+	<column name="board_width" type="varchar" size="10" notnull="not null"/>
+	<column name="board_type" type="char" size="4"/>	
+	<column name="is_latest" type="char" size="1" default="n" notnull="not null"/>
+	<column name="limit_pagination" type="int" size="2" default="10" notnull="not null"/>
+	<column name="is_comment" type="char" size="1" default="n" notnull="not null"/>
+	<column name="is_download" type="char" size="1" default="n" notnull="not null"/>
+	<column name="is_progress_step" type="char" size="1" default="n" notnull="not null"/>	
+	<column name="limit_choice" type="varchar" size="10"/>
+	<column name="limit_word" type="varchar" size="255"/>
+	<column name="date" type="datetime"/>
+</table>

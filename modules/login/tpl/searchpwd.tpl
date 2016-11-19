@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="비밀번호 찾기 - StreamUX"}
@@ -6,16 +7,16 @@
 		<h1 class="title">비밀번호 찾기</h1>
 		<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-		<form action="login.php?action=searchPassword" name="f_searchpwd" method="post" onSubmit="return jsux.fn.searchPassword.checkForm(this);">
+		<form action="../login/5" name="f_searchpwd" method="post" onSubmit="return jsux.fn.searchPassword.checkForm(this);">
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="tpl/images/icon_01.gif" title="">						
+				<img src="{$skinPathList.dir}/tpl/images/icon_01.gif" title="">						
 				<span>회원그룹</span>
 				<select name="member" id="ljsMember">
 					<!-- templete -->
 				</select>
 				<span class="link-searchinfo">
-					<a href="login.php?action=searchID">아이디</a> | <a href="login.php?action=searchPassword">비밀번호 찾기</a>	
+					<a href="../login/search-id">아이디</a> | <a href="../login/search-password">비밀번호 찾기</a>	
 				</span>
 			</div>
 			<div class="leave-body">

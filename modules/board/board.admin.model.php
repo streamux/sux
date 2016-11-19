@@ -1,6 +1,6 @@
 <?php
 
-class BoardAdminModel extends BaseModel {
+class BoardAdminModel extends Model {
 
 	var $class_name = 'board_admin_model';
 

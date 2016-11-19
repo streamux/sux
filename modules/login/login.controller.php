@@ -1,6 +1,6 @@
 <?php
 
-class LoginController extends BaseController {
+class LoginController extends Controller {
 
 	var $class_name = 'login_controlelr';
 

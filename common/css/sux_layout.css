@@ -1,11 +1,9 @@
 .wrapper {margin:0 auto;padding:0;max-width:1024px;height:100%}
-.wrapper-reposition{padding-right: 15px}
 .header {position:fixed;-webkit-transform: translateZ(0);z-index: 100;width:100%;height:50px;background-color:#fff;}
 .section{position:relative;}
 .footer{overflow:hidden;position:absolute;z-index:100;width:100%;}
 
 .logo{position:absolute;padding:10px 0 6px 0;width:100%;text-align: center}
-.logo-reposition{padding-right: 15px}
 .header-off{height:0}
 .footer-off{height:0}
 .gnb-case{max-width:1024px}
@@ -108,8 +106,8 @@
 
 .mobile-gnb-case .body-panel{position:relative;z-index:1;width:100%;height:100%;background-color:#fff}
 .mobile-gnb-case .body-panel .menu-panel{padding-top:16px;width:100%}
-.mobile-gnb-case .body-panel .menu-panel > li > a{display:inline-block;width:100%;line-height: 36px; text-indent:10px;font-size:1.0625em;font-weight:bold;}
-.mobile-gnb-case .body-panel .second-menu ul > li > a{display:inline-block;width:100%;line-height: 30px;text-indent:25px}
+.mobile-gnb-case .body-panel .menu-panel > li > a{display:inline-block;width:100%;line-height: 46px; text-indent:10px;font-size:1.500em;}
+.mobile-gnb-case .body-panel .second-menu ul > li > a{display:inline-block;width:100%;line-height: 36px;text-indent:25px;font-size: 1.256em}
 
 /**
  * @layout resize

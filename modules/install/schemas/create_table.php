@@ -1,6 +1,5 @@
 <?
 $msg = "";
-
 $result = mysql_query(	"create table $board_group". 
 						"(id int not null auto_increment primary key,".
 						"name varchar(30) not null,".

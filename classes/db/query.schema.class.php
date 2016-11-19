@@ -8,9 +8,9 @@ class QuerySchema extends Object {
 	var $_name = '';
 	var $_type = '';
 	var $_length = 0;
-	var $_notnull = NULL;
-	var $_autoincrement = NULL;
-	var $_primarykey = NULL;
+	var $_notnull = null;
+	var $_autoincrement = null;
+	var $_primarykey = null;
 	var $_counter = 0;
 
 	function __construct() {
@@ -28,25 +28,29 @@ class QuerySchema extends Object {
 		return $this->_schemas;
 	}
 
-	function add($name, $type, $length=0, $notnull=NULL, $autoincrement=NULL, $primarykey) {
+	function add($name, $type, $size=0, $default=null, $notnull=null, $autoincrement=null, $primarykey=null) {
 
 		$str = '';
 		$str .= $name . ' ' . $type;
 
-		if ($length > 0) {
-			$str .=  '(' . $length . ')';
+		if ($size > 0) {
+			$str .=  '(' . $size . ')';
 		}
 
-		if (isset($notnull) || $notnull != '') {
+		if (isset($default) || $default != '' || !is_null($default )) {
+			$str .= " default '" . $default . "'";
+		}
+
+		if (isset($notnull) || $notnull != '' || !is_null($notnull)) {
 			$str .=  ' not null';
 		}
 
-		if (isset($autoincrement) || $autoincrement != '') {
+		if (isset($autoincrement) || $autoincrement != '' || !is_null($autoincrement)) {
 			$str .=  ' auto_increment';
 		}
 
-		if (isset($primarykey) || $primarykey != '') {
-			$str .= ' primary key(' . $name . ')';
+		if (isset($primarykey) || $primarykey != '' || !is_null($primarykey)) {
+			$str .= ' primary key';
 		}
 
 		$this->_schemas[] = $str;

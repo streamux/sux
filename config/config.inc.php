@@ -1,24 +1,28 @@
 <?php
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
+define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	
-	'BaseController'=>'classes/base/base.controller.php',
-	'BaseModel'=>'classes/base/base.model.php',
-	'BaseView'=>'classes/base/base.view.php',
-	'Context'=>'classes/context/context.class.php',
-	'DB'=>'classes/db/db.class.php',
-	'Query'=>'classes/db/query.class.php',
-	'QueryWhere'=>'classes/db/query.where.class.php',
-	'QuerySchema'=>'classes/db/query.schema.class.php',
-	'UIError'=>'classes/error/ui.error.class.php',
-	'Object'=>'classes/object/object.class.php',	
-	'Navigator'=>'classes/plugin/navigator.class.php',
-	'Template'=>'classes/template/template.class.php',
-	'JsonEncoder'=>'classes/utils/jsonencoder.class.php',
-	'Tracer'=>'classes/utils/tracer.class.php',	
-	'Utils'=>'classes/utils/utils.class.php',
-	'UtilsString'=>'classes/utils/utils.string.class.php',
+	'Controller'=>'classes/mvc/Controller.php',
+	'Model'=>'classes/mvc/Model.php',
+	'View'=>'classes/mvc/View.php',
+	'Context'=>'classes/context/Context.class.php',
+	'DB'=>'classes/db/DB.class.php',
+	'Query'=>'classes/db/Query.class.php',
+	'QueryWhere'=>'classes/db/Query.where.class.php',
+	'QuerySchema'=>'classes/db/Query.schema.class.php',
+	'UIError'=>'classes/error/UI.error.class.php',
+	'ModuleHandler'=>'classes/modules/ModuleHandler.class.php',
+	'ModuleURIToMethod'=>'classes/modules/ModuleURIToMethod.class.php',
+	'Object'=>'classes/object/Object.class.php',	
+	'Navigator'=>'classes/plugin/Navigator.class.php',
+	'Template'=>'classes/template/Template.class.php',
+	'JsonEncoder'=>'classes/utils/JsonEncoder.class.php',
+	'Tracer'=>'classes/utils/Tracer.class.php',	
+	'Utils'=>'classes/utils/Utils.class.php',
+	'UtilsString'=>'classes/utils/Utils.string.class.php',
+	'Epi'=>'libs/epiphany/Epi.php',
 	'Smarty'=>'libs/smarty/Smarty.class.php'
 ), CASE_LOWER);
 
@@ -26,7 +30,8 @@ function __sux_autoload($class_name) {
 
 	$classLowerName = strtolower($class_name);
 
-	if (isset($GLOBALS['__sux_autoload_file_map'][$classLowerName])) {	 
+	if (isset($GLOBALS['__sux_autoload_file_map'][$classLowerName])) {
+		//echo $classLowerName . "<br>";
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][$classLowerName];
 		
 	} else if (preg_match('/(^[a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {

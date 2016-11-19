@@ -1,6 +1,6 @@
 <?php
 
-class MemberModel extends BaseModel {
+class MemberModel extends Model {
 
 	var $class_name = 'member_model';
 
@@ -11,7 +11,7 @@ class MemberModel extends BaseModel {
 	function memberListFromGroup() {
 
 		$context = Context::getInstance();
-		$member_group = $context->get('db_member_group');
+		$member_group = $context->getTable('member_group');
 
 		$query = new Query();
 		$query->setField('name');
@@ -132,4 +132,3 @@ class MemberModel extends BaseModel {
 		return $result;
 	}
 }
-?>

@@ -1,5 +1,5 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.DBSetup = {
+jsux.fn.dbSetup = {
 
 	checkForm: function( f ) {
 
@@ -34,18 +34,19 @@ jsux.fn.DBSetup = {
 
 		var self = this,
 			params = {
+				action: 'record-dbsetup',
 				db_hostname: f.db_hostname.value,
 				db_userid:f.db_userid.value,
 				db_password:f.db_password.value,
-				db_database:f.db_database.value
+				db_database:f.db_database.value,
+				db_table_prefix:f.db_table_prefix.value
 			};
-			
-		jsux.getJSON("install.php?action=recordDBSetup", params, function( e ) {
 
-			trace( e.msg );
+		jsux.getJSON( jsux.rootPath + 'install', params, function( e ) {
 
+			alert(e.msg);
 			if (e.result == "Y") {				
-				jsux.goURL("install.php?action=adminSetup");
+				jsux.goURL( jsux.rootPath + "install/admin-setup");
 			} 
 		});
 	},
@@ -60,12 +61,11 @@ jsux.fn.DBSetup = {
 			if ( bool === true) {
 				self.sendAndLoad(e.target);
 			}
-		});
-
-		$("input[name=db_userid]").focus();
+		});		
 	},
 	init: function() {
-		this.setEvent();		
+		this.setEvent();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn = jsux.fn || {};
@@ -92,33 +92,40 @@ jsux.fn.adminSetup = {
 	createTable: function() {
 
 		var interval = null,
-			isLoading = false;
+			isLoading = false,
+			params = {
+				action: 'recordCreateTable'
+			};
 
 		if (isLoading === true) {
-
 			trace( '데이터 생성 중 입니다. 잠시만 기다려주세요.'  );
 		}
 
 		isLoading = true;
+		jsux.getJSON( jsux.rootPath + "install", params, function(e) {
 
-		jsux.getJSON("install.php?action=recordCreateTable", function(e) {
+			isLoading = false;
 
 			trace( e.msg  );
-			isLoading = false;
-			jsux.goURL("../login/login.php");
+			if (e.result.toLowerCase() === 'n') {				
+				return;
+			}
+			
+			jsux.goURL("../login");
 		});
 	},
 	sendAndLoad: function( f ) {
 
 		var self = this,
 			params = {
+				action: 'recordAdminSetup',
 				admin_id: f.admin_id.value,
 				admin_pwd: f.admin_pwd.value,
 				admin_email: f.admin_email.value,				
 				yourhome: f.yourhome.value
 			};
 
-		jsux.getJSON("install.php?action=recordAdminSetup", params, function(e) {
+		jsux.getJSON( jsux.rootPath + "install", params, function(e) {
 
 			trace( e.msg );
 			if (e.result =="Y") {
@@ -134,15 +141,21 @@ jsux.fn.adminSetup = {
 			e.preventDefault();
 
 			var bool = self.checkForm( e.target );
-
 			if ( bool === true) {
 				self.sendAndLoad( e.target );
 			}
 		});
 
-		$("input[name=admin_name]").focus();
+		$("input").each(function(index) {
+			$input = $(this);
+			if ($input.attr('id') && $input.val() === '') {
+				$input.focus();
+				return false;
+			}
+		});
 	},
 	init: function() {
 		this.setEvent();
+		jsux.setAutoFocus();
 	}
 };

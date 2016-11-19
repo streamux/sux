@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원가입 - StreamUX"}
@@ -15,7 +16,7 @@
 					<h2>기본정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">
 					<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>
 				</dd>
 			</dl>
@@ -25,7 +26,7 @@
 					<tr>
 						<td><span>회</span>원그룹</td>
 						<td>
-							<select name="member" id="ljsMember">
+							<select name="table_name" id="ljsMember">
 								<!--
 								@ jquery templete
 								@ name 	tableList_tmpl
@@ -36,40 +37,40 @@
 					<tr>
 						<td><span>아</span>이디</td>
 						<td>
-							<input type="text" name="memberid" size="12" maxlength="12" value="">
+							<input type="text" name="memberid" size="12" maxlength="12" value="test">
 							<input type="button" name="checkID" value='중복체크'>
 						</td>
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호</td>
-						<td><input type="password" name="pwd1" size="10" maxlength="12"></td>
+						<td><input type="password" name="pwd1" size="10" maxlength="12" value="12"></td>
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호 확인</td>
-						<td><input type="password" name="pwd2" size="10" maxlength="12"></td>
+						<td><input type="password" name="pwd2" size="10" maxlength="12" value="12"></td>
 					</tr>
 					<tr>
 						<td><span>이</span>름</td>
-						<td><input type="text" name="name" size="8" maxlength="10" value=""></td>
+						<td><input type="text" name="name" size="8" maxlength="10" value="홍길동"></td>
 					</tr>
 					<tr>
 						<td><span>이</span>메일</td>
-						<td><input type="text" name="email" size="12" maxlength="20">
+						<td><input type="text" name="email" size="12" maxlength="20" value="streamux">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="hanmail.com">hanmail.net</option>
 							<option value="gmail.com">gmail.com</option>
 						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value=""> 
+						<input type="text" name="email_tail2" size="12" maxlength="20" value="naver.com"> 
 						<span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
 					</tr>
 					<tr>
 						<td><span>휴</span>대폰번호</td>
 						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="">
+							<input type="text" name="hp1" size="3" maxlength="3" value="010">-
+							<input type="text" name="hp2" size="4" maxlength="4" value="0000">-
+							<input type="text" name="hp3" size="4" maxlength="4" value="0000">
 						</td>
 					</tr>
 					<tr>
@@ -93,7 +94,7 @@
 					<h2>기타정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">추가 정보를 입력해주세요.</span>			
 				</dd>
 			</dl>	

@@ -1,6 +1,6 @@
 <?php
 
-class MemberModules extends BaseView {
+class MemberModules extends View {
 
 	var $class_name = 'member_module';
 	var $skin_path_list = array();
@@ -38,24 +38,28 @@ class MemberView extends MemberModules {
 
 	var $class_name = 'member_view';
 
+	function displayMember() {
+
+		$this->displayJoin();
+	}
+
 	function displayJoin() {
 
 		$UIError = UIError::getInstance();
-
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
 
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = 'join';
 		$this->document_data['module_code'] = 'member';
 		$this->document_data['module_name'] = '회원 가입';
 		
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/member';
 		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -75,6 +79,7 @@ class MemberView extends MemberModules {
 		$this->controller->select('memberListFromGroup');
 		$this->document_data['group'] = $this->model->getJson();
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -86,19 +91,20 @@ class MemberView extends MemberModules {
 	function displayModify() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+		$this->session_data = $context->getSessionAll();
 
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $this->request_data['action'];
+		$this->document_data['jscode'] = 'modify';
 		$this->document_data['module_code'] = 'member';
 		$this->document_data['module_name'] = '회원 수정';
 		
 		/**
 		 * skin directory path
 		 */
-		$skinDir = 'tpl';
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_ROOT_ . 'modules/member';
 		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -118,6 +124,7 @@ class MemberView extends MemberModules {
 		$this->controller->select('memberListFromGroup');
 		$this->document_data['group'] = $this->model->getJson();
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
 		$this->skin_path_list['contents'] = $contentsPath;
@@ -145,7 +152,6 @@ class MemberView extends MemberModules {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$requests = $context->getRequestAll();
 
 		$table_name = $posts['table_name'];
 		$id = $posts['memberid'];
@@ -321,4 +327,3 @@ class MemberView extends MemberModules {
 		echo $this->callback($data);
 	}
 }
-?>

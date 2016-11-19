@@ -13,9 +13,14 @@ class Tracer extends Object{
 		return self::$otInstance;
 	}
 
-	function setMessage( $message, $type=NULL ) {
+	function setMessage( $message, $type=null ) {
 
-		$this->message .= $message . '<br>';
+		$newline = "<br>"; 
+		$uri = $_SERVER['REQUEST_URI'];
+		if (strstr($uri, 'callback') != -1) {
+			$newline = "\n"; 
+		}
+		$this->message .= $message . $newline;
 	}
 
 	function getMessage() {

@@ -21,6 +21,7 @@ class Utils extends Object {
 			preg_match('/(^[\.\.\/]+)([a-zA-Z0-9_\.\/]*)?$/', $convert_url, $matches);
 			$absoluteDir = preg_split('/[\/]+/',$skin_dir);
 			$headerDir = preg_split('/[\.\.]+/', $matches[1]);
+			
 			$dirLength = count($headerDir)-1;
 			for ($i=0; $i<$dirLength; $i++) {
 				array_pop($absoluteDir);
@@ -73,7 +74,6 @@ class Utils extends Object {
 	public static function readDir( $dir ) {
 
 		$temArr = array();
-
 		if ($handle = opendir($dir)) { 
 			while (false !== ($file = readdir($handle))) { 
 

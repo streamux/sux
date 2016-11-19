@@ -1,6 +1,6 @@
 <?php
 
-class BoardController extends BaseController {
+class BoardController extends Controller {
 
 	var $class_name = 'board_controller';
 

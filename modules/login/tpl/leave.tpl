@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원탈퇴 - StreamUX"}
@@ -9,7 +10,7 @@
 		<form name="f_loginleave">
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="tpl/images/icon_01.gif" alt="">						
+				<img src="{$skinPathList.dir}/tpl/images/icon_01.gif" alt="">						
 				<span>비밀번호 확인</span>
 			</div>
 			<div class="leave-body">

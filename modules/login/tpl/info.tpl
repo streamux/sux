@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원정보 - StreamUX"}
@@ -7,8 +8,8 @@
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 		<div class="box ui-edgebox-2px">
 			<div class="login-header">
-				<img src="tpl/images/icon_01.gif" alt="">
-				<span><a href="../member/member.php?table_name={$sessionData.ljs_member}&memberid={$sessionData.ljs_memberid}&action=modify">회원정보수정</a> | <a href="login.php?action=leave">회원탈퇴</a></span>
+				<img src="{$skinPathList.dir}/tpl/images/icon_01.gif" alt="">
+				<span><a href="{$rootPath}member/modify">회원정보수정</a> | <a href="{$rootPath}login/leave">회원탈퇴</a></span>
 			</div>
 			<div class="login-body">
 				<div class="panel-info">
@@ -18,7 +19,7 @@
 						<li><span class="ui-label">방문횟수</span><span class="ui-value">'{$sessionData.ljs_hit}</span>' 번째 방문</li>
 					</ul>
 				</div><div class="panel-btn">
-					<a href="login.php?action=logout"><img src="tpl/images/btn_logout.gif"></a>
+					<a href="{$rootPath}login/logout"><img src="{$skinPathList.dir}/tpl/images/btn_logout.gif"></a>
 				</div>
 			</div>																	
 		</div>

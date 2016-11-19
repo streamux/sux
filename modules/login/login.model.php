@@ -1,6 +1,6 @@
 <?PHP
 
-class LoginModel extends BaseModel {
+class LoginModel extends Model {
 
 	var $class_name = 'login_model';
 
@@ -16,7 +16,7 @@ class LoginModel extends BaseModel {
 		$context = Context::getInstance();
 		$query = new Query();
 		$query->setField('name');
-		$query->setTable($context->get('db_member_group'));
+		$query->setTable($context->getTable('member_group'));
 		$query->setOrderBy('id asc');	
 		parent::select($query);		
 	}

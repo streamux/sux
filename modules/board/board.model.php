@@ -1,6 +1,6 @@
 <?php
 
-class BoardModel extends BaseModel {
+class BoardModel extends Model {
 
 	var $class_name = 'board_model';
 	var	$board;

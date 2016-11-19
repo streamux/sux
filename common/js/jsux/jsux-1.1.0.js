@@ -148,6 +148,29 @@ window.trace = function( str, bool ) {
 			});
 		}
 	};
+
+	manager.setAutoFocus = function( filters) {
+
+		$filters = filters;
+		$filters = !$filters ? "text|password" : $($filters).toLowerCase();
+		$("form").each(function(index) {
+
+			$inputs = $(this).find('input');
+			$($inputs).each(function(index){
+			
+				$input = $(this);
+				$target = $input.attr('type').toLowerCase();
+				if ($target.match($filters)) {
+					//console.log($input.val());
+					if ($input.val() === '') {
+						$input.focus();
+						return false;
+
+					}						
+				}					
+			});
+		});
+	};
 	
 	manager.goURL = function( url, target ) {
 

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-09 09:30:56
+/* Smarty version 3.1.30, created on 2016-11-10 02:50:09
   from "/Applications/MAMP/htdocs/sux/common/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5822dec0d03e30_05335540',
+  'unifunc' => 'content_5823d2518797c8_20299360',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0429814ed5bbc8222cf23c6f2d6f3f6ecd6ba8eb' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_header.tpl',
-      1 => 1478680255,
+      1 => 1478742327,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5822dec0d03e30_05335540 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5823d2518797c8_20299360 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -29,6 +29,7 @@ function content_5822dec0d03e30_05335540 (Smarty_Internal_Template $_smarty_tpl)
 </title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">

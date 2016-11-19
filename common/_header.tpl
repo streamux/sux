@@ -4,15 +4,16 @@
 	<title>{$title}</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
-	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_layout.min.css">	
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
+	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_default.min.css">
+	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_common.min.css">
+	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css">	
 {if $documentData.module_code != ''}
-	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/{$documentData.module_code}.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/tpl/css/{$documentData.module_code}.css">
 {/if}
 {if $documentData.isLogon === false}
-	<link rel="stylesheet" type="text/css" href="tpl/css/login_fail.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/tpl/css/login_fail.css">
 {/if}
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -32,7 +33,7 @@
 			</div>
 		</div>
 		<h1 class="logo">
-			<a href="/sux/index.php"><img src="../../common/images/sux_logo.svg" onerror='this.src="../../common/images/sux_logo.png"' alt="streamxux"></a>
+			<a href="/"><img src="{$rootPath}common/images/sux_logo.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"></a>
 		</h1>		
 		<div class="gnb-case">
 			<div id="gnb" class="gnb"></div>
@@ -40,7 +41,7 @@
 	</div>
 	<div class="section container">		
 		<div class="contents-header">
-			<div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
+			<div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$rootPath}common/images/icon_write.png" width="18px" height="18px"></a></div>
 			<h1 class="document-title">{$groupData.board_name}</h1>
 			<p>home > {$documentData.module_name}</p>
 		</div>	

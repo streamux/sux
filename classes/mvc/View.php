@@ -1,6 +1,6 @@
 <?php
 
-class BaseView extends Object {
+class View extends Object {
 
 	var $class_name = 'base_view';
 	var $model = NULL;

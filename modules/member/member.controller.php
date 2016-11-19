@@ -1,6 +1,6 @@
 <?php
 
-class MemberController extends BaseController {
+class MemberController extends Controller {
 
 	var $class_name = 'member_conntroller';
 

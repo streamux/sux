@@ -1,6 +1,6 @@
 <?
 
-class BaseModel extends Object {
+class Model extends Object {
 
 	var $class_name = 'model';
 	var $query_sql = '';

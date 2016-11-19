@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-24 10:31:52
+/* Smarty version 3.1.30, created on 2016-11-14 10:30:52
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_580dc6f815ba64_95739853',
+  'unifunc' => 'content_5829844cb1bcd6_79029988',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd3eaf787a846d97a459aea44e424e3e6d4b8ddf4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl',
-      1 => 1477297908,
+      1 => 1479111486,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_580dc6f815ba64_95739853 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5829844cb1bcd6_79029988 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보수정 - StreamUX"), 0, true);
@@ -40,7 +40,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 					<h2>기본정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="../modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>			
 				</dd>
 			</dl>					
@@ -119,7 +119,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 					<h2>기타정보입력</h2>
 				</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="../modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">추가 정보를 입력해주세요.</span>			
 				</dd>
 			</dl>	

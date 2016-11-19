@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-09 09:45:00
+/* Smarty version 3.1.30, created on 2016-11-14 10:30:52
   from "/Applications/MAMP/htdocs/sux/common/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5822e20c0fb186_41680278',
+  'unifunc' => 'content_5829844cb708b1_51971397',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0429814ed5bbc8222cf23c6f2d6f3f6ecd6ba8eb' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_header.tpl',
-      1 => 1478680255,
+      1 => 1479095062,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5822e20c0fb186_41680278 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5829844cb708b1_51971397 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -29,17 +29,19 @@ function content_5822e20c0fb186_41680278 (Smarty_Internal_Template $_smarty_tpl)
 </title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
-	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
-	<link rel="stylesheet" type="text/css" href="../../common/css/sux_layout.min.css">	
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
+	<link rel="stylesheet" type="text/css" href="../common/css/swiper.min.css">
+	<link rel="stylesheet" type="text/css" href="../common/css/sux_default.min.css">
+	<link rel="stylesheet" type="text/css" href="../common/css/sux_common.min.css">
+	<link rel="stylesheet" type="text/css" href="../common/css/sux_layout.min.css">	
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {?>
 	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/css/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
+/tpl/css/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
 .css">
 <?php }
 if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
-	<link rel="stylesheet" type="text/css" href="tpl/css/login_fail.css">
+	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/tpl/css/login_fail.css">
 <?php }?>
 	<!--[if lt IE 9]>
 	<?php echo '<script'; ?>
@@ -65,7 +67,7 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
 			</div>
 		</div>
 		<h1 class="logo">
-			<a href="/sux/index.php"><img src="../../common/images/sux_logo.svg" onerror='this.src="../../common/images/sux_logo.png"' alt="streamxux"></a>
+			<a href="/"><img src="../common/images/sux_logo.svg" onerror='this.src="../common/images/sux_logo.png"' alt="streamxux"></a>
 		</h1>		
 		<div class="gnb-case">
 			<div id="gnb" class="gnb"></div>
@@ -77,7 +79,7 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
 &page=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['page'];?>
-&action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
+&action=write"><img src="../common/images/icon_write.png" width="18px" height="18px"></a></div>
 			<h1 class="document-title"><?php echo $_smarty_tpl->tpl_vars['groupData']->value['board_name'];?>
 </h1>
 			<p>home > <?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_name'];?>

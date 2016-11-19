@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-09 09:40:45
+/* Smarty version 3.1.30, created on 2016-11-10 02:50:09
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5822e10d0e8e12_28054025',
+  'unifunc' => 'content_5823d2518e9fe8_79965225',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1478680843,
+      1 => 1478742605,
       2 => 'file',
     ),
   ),
@@ -20,13 +20,13 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5822e10d0e8e12_28054025 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5823d2518e9fe8_79965225 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 		<div class="footer">
 			<ul class="clearfix">
 				<li><a href="../login/login.php?action=login">로그인</a></li>
 				<li><a href="../member/member.php?action=join">회원가입</a></li>
-				<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
+				<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
 			</ul>	
 			<p>
 				<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
@@ -36,6 +36,7 @@ function content_5822e10d0e8e12_28054025 (Smarty_Internal_Template $_smarty_tpl)
 		</div>
 	</div>	
 </div>
+
 <!-- mobile menu start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
 <div class="mobile-gnb-case mobile-gnb-case-off">
@@ -57,10 +58,10 @@ function content_5822e10d0e8e12_28054025 (Smarty_Internal_Template $_smarty_tpl)
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="../../modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="../../modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
 		</div>
@@ -79,7 +80,8 @@ function content_5822e10d0e8e12_28054025 (Smarty_Internal_Template $_smarty_tpl)
 	</div>	
 </div>
 <!-- end -->
-<!-- template start -->
+
+<!-- js template start -->
 <?php echo '<script'; ?>
  type="sux-templete" id="suxMobileGnbFirstMenu">
 	<li data-code=""><a href="#"></a></li>
@@ -119,7 +121,8 @@ echo '<script'; ?>
 	var is_page = 'sub';
 <?php echo '</script'; ?>
 >
-<!-- api -->
+
+<!-- js api -->
 <?php echo '<script'; ?>
  src="https://code.jquery.com/jquery-1.12.4.min.js"><?php echo '</script'; ?>
 >
@@ -149,7 +152,7 @@ echo '<script'; ?>
  src="common/js/idangerous.swiper.min.js"><\/script>')<?php echo '</script'; ?>
 >
 <!-- end -->
-<!-- customize start -->
+<!-- js customize start -->
 <?php echo '<script'; ?>
  type="text/javascript" src="../../common/js/jsux.min.js"><?php echo '</script'; ?>
 >

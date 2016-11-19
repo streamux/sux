@@ -4,7 +4,7 @@ class Context {
 
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
-	private $table_list;
+	private $table_list = array();
 	public $db_info = NULL;
 	var $class_name = 'context';
 
@@ -24,7 +24,7 @@ class Context {
 		$this->startSession();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
-		$this->setTablesInfo();
+		$this->loadTableInfo();
 	}
 
 	function startSession() {
@@ -47,7 +47,8 @@ class Context {
 		$db_info_list = array(	'db_hostname',
 								'db_userid',
 								'db_password',
-								'db_database');
+								'db_database',
+								'db_table_prefix');
 
 		$db_info = array();
 		for($i=0; $i<count($db_info_list); $i++) {
@@ -71,9 +72,9 @@ class Context {
 		}
 
 		$admin_list = array(	'admin_id',
-								'admin_pwd',
-								'admin_email',
-								'yourhome');
+							'admin_pwd',
+							'admin_email',
+							'yourhome');
 
 		$table_key_prefix = 'db_';
 		for ($i=0; $i<count($admin_list); $i++) {
@@ -87,14 +88,44 @@ class Context {
 		return _SUX_PATH_ . 'config/config.admin.php';
 	}
 
-	function setTablesInfo() {
+	function loadTableInfo() {
 
-		$this->table_list = array('popup','memo','board_group','member_group','question','questiont','questionc','dayman','post','connecter','connecter_real','connecter_real_all','connecter_all','connecter_site','pageview','calender');
-
-		$table_key_prefix = 'db_';
-		for($i=0; $i<count($this->table_list); $i++) {
-			$this->set($table_key_prefix . $this->table_list[$i], $this->table_list[$i]);
+		$table_file = $this->getTableFile();
+		if (is_readable($table_file)) {
+			include $table_file;
 		}
+
+		foreach ($table_list as $key => $value) {
+			$this->setTable($key, $key);
+		}
+
+		unset($table_list);
+	}
+
+	function getTableFile() {
+
+		return _SUX_PATH_ . 'config/config.table.php';
+	}
+
+	function getPrefix() {
+
+		return $this->db_info['db_table_prefix'];
+	}
+
+	function getTable( $key ) {
+
+		return $this->table_list[$key];
+	}
+	
+	/**
+	 * @method setTable
+	 * @param $key
+	 * @param $value 
+	 * 접두사가 붙은 값을 저장한다.
+	 */
+	function setTable( $key, $value ) {
+
+		$this->table_list[$key] = $value;
 	}
 
 	function getDB() {
@@ -140,6 +171,11 @@ class Context {
 	function getRequestAll() {
 
 		return $_REQUEST;
+	}
+
+	function getReqeustMethod() {
+
+		return $_SERVER['REQUEST_METHOD'];
 	}
 
 	function getGet($key) {

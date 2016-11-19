@@ -1,6 +1,6 @@
 <?php
 
-class BoardAdminModule extends BaseView {
+class BoardAdminModule extends View {
 	
 	var $class_name = 'board_admin_module';
 	var $skin_path_list = array();
