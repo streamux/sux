@@ -16,8 +16,8 @@ class Tracer extends Object{
 	function setMessage( $message, $type=null ) {
 
 		$newline = "<br>"; 
-		$uri = $_SERVER['REQUEST_URI'];
-		if (strstr($uri, 'callback') != -1) {
+		$context = Context::getInstance();
+		if ($context->ajax()) {
 			$newline = "\n"; 
 		}
 		$this->message .= $message . $newline;

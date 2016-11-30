@@ -5,11 +5,12 @@
 	<div class="header">
 		<div class="util"></div>
 		<h1 class="logo">
-			<img class="logo" src="../modules/install/tpl/images/logo.png" alt="streamxux">	
+			<img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux">	
 		</h1>
 	</div>
 	<div class="container">
-		<form>
+		<form name="f_setup_admin" action="{$rootPath}setup-admin" method="post">
+		<input type="hidden" name="_method" value="insert">
 		<div class="article-box ui-edgebox">	
 			<h1>관리자 기본정보 설정</h1>
 			<ul>

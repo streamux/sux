@@ -9,10 +9,10 @@
 
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="{$skinPathList.dir}/tpl/images/icon_01.gif" title="">						
+				<img src="{$rootPath}modules/login/tpl/images/icon_01.gif" title="">						
 				<span class="ui-subtitle">조회 결과</span>
 				<span class="link-searchinfo">
-					<a href="../login/search-id">아이디</a> | <a href="../login/search-password">비밀번호 찾기</a>	
+					<a href="{$rootPath}search-id">아이디</a> | <a href="{$rootPath}search-password">비밀번호 찾기</a>	
 				</span>
 			</div>
 			<div class="leave-body">
@@ -25,9 +25,7 @@
 					</ul>				
 				</div>
 				<div class="panel-btn">
-					<ul>
-						<li data-id="confirm">확인</li>
-					</ul>							
+					<input type="button" name="btn_confirm" value="확 인" onclick="location.href='{$rootPath}login'">		
 				</div>
 			</div>																	
 		</div>

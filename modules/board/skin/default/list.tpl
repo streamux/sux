@@ -1,3 +1,6 @@
+{assign var=rootPath value=$skinPathList.root}
+{assign var=category value=$documentData.category}
+{assign var=uri value=$documentData.uri}
 {assign var=groupData value=$documentData.group}
 {assign var=boardTitle value=$groupData.board_name}
 {assign var=contentData value=$documentData.contents}
@@ -20,17 +23,19 @@
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
 				<td class="subject">					
-					<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$item.subject.id}&igroup={$item.subject.igroup}&space={$item.space}&ssunseo={$item.subject.ssunseo}&sid={$item.subject.sid}&passover={$item.subject.passover}&page={$item.subject.page}&search={$requestData.search}&find={$requestData.find}&action=read"><span class="link-area" style="padding-left:{$item.subject.space}">
+					<a href="{$uri}/{$item.subject.id}"><span class="link-area" style="padding-left:{$item.subject.space}">
 						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
 						<span class="{$item.subject.txt_tail}">({$item.subject.tail_num})</span>
+						{if $item.subject.img_name != ''}
 						<img src="{$skinPathList.dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+						{/if}
 						<img src="{$skinPathList.dir}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-						<span class="label label-primary {$item.subject.icon_opkey_color}">{$item.subject.icon_opkey}</span>	
+						<span class="label label-primary {$item.subject.icon_progress_step_color}">{$item.subject.progress_step_name}</span>	
 					</span></a>
 				</td>				
-				<td class="date"><span>{$item.date}</span></td>
-				<td class="hit"><span>{$item.ssunseo}</span></td>
+				<td class="date"><span>{$item.id}</span></td>
+				<td class="hit"><span>{$item.ssunseo_count}</span></td>
 			</tr>
 			{else if}
 			<tr>
@@ -58,10 +63,10 @@
 		</form>
 	</div>	
 	<div class="board-list-buttons">
-		<a href="board.php?board={$requestData.board}&action=list">
+		<a href="{$uri}">
 			<img src="{$skinPathList.dir}/images/btn_list.gif" width="51" height="23" border="0">
 		</a>
-		<a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+		<a href="{$uri}/write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>
 {include file="$footerPath"}

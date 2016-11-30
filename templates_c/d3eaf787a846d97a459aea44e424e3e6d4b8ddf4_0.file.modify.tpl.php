@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-19 12:22:32
+/* Smarty version 3.1.30, created on 2016-11-28 05:11:17
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583035f8c878d3_50252710',
+  'unifunc' => 'content_583bae65238698_98542038',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd3eaf787a846d97a459aea44e424e3e6d4b8ddf4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/modify.tpl',
-      1 => 1479554551,
+      1 => 1480306264,
       2 => 'file',
     ),
   ),
@@ -20,10 +20,11 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583035f8c878d3_50252710 (Smarty_Internal_Template $_smarty_tpl) {
+function content_583bae65238698_98542038 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
+$_smarty_tpl->_assignInScope('fieldData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"회원정보수정 - StreamUX"), 0, true);
 ?>
 
@@ -35,7 +36,9 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 			</div>
 		</div>
 		<div class="box">
-			<form name="f_member_modify">
+			<form name="f_member_modify" action="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+member-modify" method="post">
+			<input type="hidden" name="_method" value="update">
 			<dl>
 				<dt>
 					<h2>기본정보입력</h2>
@@ -50,68 +53,63 @@ modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddl
 				<caption class="blind">회원정보수정</caption>
 				<tbody>
 					<tr>
+						<td>회원그룹</td>
 						<td>
-							<span>회</span>원그룹
-							<input type="hidden" name="table_name" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_member'];?>
-">
-							<input type="hidden" name="memberid" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_memberid'];?>
-">
-						</td>
-						<td>									
-							<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_member'];?>
+							<input type="hidden" name="category" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_category'];?>
+">		
+							<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_category'];?>
 
 						</td>
 					</tr>
 					<tr>
-						<td><span>아</span>이디</td>
+						<td>아이디</td>
 						<td>
-							<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_memberid'];?>
+							<input type="hidden" name="user_id" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_user_id'];?>
+">
+							<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_user_id'];?>
 
 						</td>
 					</tr>
 					<tr>
-						<td><span>비</span>밀번호</td>
-						<td><input type="password" name="pwd1" size="10" maxlength="12"></td>
+						<td>비밀번호</td>
+						<td><input type="password" name="password" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
-						<td><span>비</span>밀번호 확인</td>
-						<td><input type="PassWord" name="pwd2" size="10" maxlength="12"></td>
+						<td>비밀번호 확인</td>
+						<td><input type="password" name="passwordConf" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
-						<td><span>이</span>름</td>
-						<td><input type="text" name="name" size="8" maxlength="10" value=""></td>
+						<td>이름</td>
+						<td><input type="text" name="user_name" size="8" maxlength="10" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['user_name'];?>
+"></td>
 					</tr>
 					<tr>
-						<td><span>이</span>메일</td>
-						<td><input type="text" name="email" size="12" maxlength="20">
+						<td>닉네임</td>
+						<td><input type="text" name="nick_name" size="8" maxlength="10" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['nick_name'];?>
+"></td>
+					</tr>
+					<tr>
+						<td>이메일</td>
+						<td><input type="text" name="email_address" size="12" maxlength="20" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['email'];?>
+">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="hanmail.com">hanmail.net</option>
 							<option value="gmail.com">gmail.com</option>
 						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value=""> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
+						<input type="text" name="email_tail2" size="12" maxlength="20" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['email_tail2'];?>
+"> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
 					</tr>
 					<tr>
 						<td><span>휴</span>대폰번호</td>
 						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="">
-						</td>
-					</tr>
-					<tr>
-						<td>전화번호</td>
-						<td>
-							<input type="text" name="tel1" size="3" maxlength="3" value="">-
-							<input type="text" name="tel2" size="4" maxlength="4" value="">-
-							<input type="text" name="tel3" size="4" maxlength="4" value="">
-						</td>
-					</tr>							
-					<tr>
-						<td>회사이름</td>
-						<td>
-							<input type="text" name="company" size="12" maxlength="16" value="">
+							<input type="text" name="hp1" size="3" maxlength="3" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['hp1'];?>
+">-
+							<input type="text" name="hp2" size="4" maxlength="4" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['hp2'];?>
+">-
+							<input type="text" name="hp3" size="4" maxlength="4" value="<?php echo $_smarty_tpl->tpl_vars['fieldData']->value['hp3'];?>
+">
 						</td>
 					</tr>
 				</tbody>
@@ -132,36 +130,80 @@ modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddl
 					<tr>
 						<td>직업</td>
 						<td>
-							<select name=job>
+							<select name="job">								
 								<option value="">선택하기</option>
-								<option value=프리랜서>프리랜서</option>
-								<option value=교수>교수</option>
-								<option value=교사>교사</option>
-								<option value=학생>학생</option>
-								<option value=기업인>기업인</option>
-								<option value=회사원>회사원</option>
-								<option value=정치인>정치인</option>
-								<option value=주부>주부</option>
-								<option value=농어업>농어업</option>
-								<option value=기타>기타</option>
-						</select>
+								<?php $_smarty_tpl->_assignInScope('jobList', array('프리랜서','교수','교사','학생','기업인','회사원','정치인','주부','농어업','기타'));
+?>
+								<?php
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['jobList']->value, 'value');
+if ($_from !== null) {
+foreach ($_from as $_smarty_tpl->tpl_vars['value']->value) {
+?>							
+									<option value="<?php echo $_smarty_tpl->tpl_vars['value']->value;?>
+" <?php if ($_smarty_tpl->tpl_vars['fieldData']->value['job'] === $_smarty_tpl->tpl_vars['value']->value) {?> selected <?php }?>><?php echo $_smarty_tpl->tpl_vars['value']->value;?>
+</option>
+								<?php
+}
+}
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
+?>
+
+							</select>
 						</td>
 					</tr>
 					<tr>
 						<td>취미</td>
 						<td>
-							<input type="checkbox" name="hobby" value="인터넷"><span>인터넷</span>
-							<input type="checkbox" name="hobby" value="독서" ><span>독서</span>
-							<input type="checkbox" name="hobby" value="여행" ><span>여행</span>
-							<input type="checkbox" name="hobby" value="낚시" ><span>낚시</span>
-							<input type="checkbox" name="hobby" value="바둑" ><span>바둑</span>
-							<input type="checkbox" name="hobby" value="기타" ><span>기타</span>
+							<?php $_smarty_tpl->_assignInScope('hobbyBoxes', array('인터넷','독서','여행','낚시','바둑','기타'));
+?>
+							<?php
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['hobbyBoxes']->value, 'mItem', false, NULL, 'hobby', array (
+  'index' => true,
+));
+if ($_from !== null) {
+foreach ($_from as $_smarty_tpl->tpl_vars['mItem']->value) {
+$_smarty_tpl->tpl_vars['__smarty_foreach_hobby']->value['index']++;
+?>
+								<?php $_smarty_tpl->_assignInScope('index', (isset($_smarty_tpl->tpl_vars['__smarty_foreach_hobby']->value['index']) ? $_smarty_tpl->tpl_vars['__smarty_foreach_hobby']->value['index'] : null));
+?>
+								<?php $_smarty_tpl->_assignInScope('isChecked', '');
+?>
+								<?php
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['fieldData']->value['hobby'], 'compareItem');
+if ($_from !== null) {
+foreach ($_from as $_smarty_tpl->tpl_vars['compareItem']->value) {
+?>
+									<?php if ($_smarty_tpl->tpl_vars['mItem']->value === $_smarty_tpl->tpl_vars['compareItem']->value) {?>
+										<?php $_smarty_tpl->_assignInScope('isChecked', 'checked');
+?>
+									<?php }?>
+								<?php
+}
+}
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
+?>
+
+								<label for="hobby<?php echo $_smarty_tpl->tpl_vars['index']->value;?>
+"></label>
+								<input type="checkbox" id="hobby<?php echo $_smarty_tpl->tpl_vars['index']->value;?>
+" name="hobby<?php echo $_smarty_tpl->tpl_vars['index']->value;?>
+" value="<?php echo $_smarty_tpl->tpl_vars['mItem']->value;?>
+" <?php echo $_smarty_tpl->tpl_vars['isChecked']->value;?>
+><span><?php echo $_smarty_tpl->tpl_vars['mItem']->value;?>
+</span>
+							<?php
+}
+}
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
+?>
+
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<input type="submit" name="submit" size="10" value="수 정">
-			<input type="button" name="cancel" value="취 소">
+			<input type="submit" name="submit" size="10" value="확 인">
+			<input type="button" name="cancel" value="취 소" onclick="location.href='<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+login'">
 			</form>
 		</div>
 	</div>

@@ -14,32 +14,14 @@ class UIError extends Object {
 		return self::$uierror_instance;
 	}
 
-	private function getHtmlLayout( $str ) {
-
-		$htmlUI = "<!doctype>
-		<html>
-		<head>
-			<title>UI 경고 - StreamUX</title>
-			<meta charset='utf-8' />
-			</head>
-		<body>
-			{$str}
-		</body>
-		</html>";
-
-		$htmlUI = preg_replace('/\t|/', '', $htmlUI);
-
-		return $htmlUI;
-	}
-
-	public function __get( $prop ) {
+	public function __get( $prop) {
 
 		 if (property_exists($this, $prop)) {
                 return $this->$prop;
             }
 	}
 
-	public function __set( $prop, $value ) {
+	public function __set( $prop, $value) {
 
 		 if (property_exists($this, $prop)) {
 	            $this->$prop = $value;
@@ -55,7 +37,7 @@ class UIError extends Object {
 
 		$htmlUI = '%s';
 
-		if ($this->useHtml === TRUE) {
+		if (strtolower($this->useHtml) === true) {
 			$htmlUI = $this->getHtmlLayout($htmlUI);
 		}
 
@@ -64,42 +46,110 @@ class UIError extends Object {
 		$this->$msg_list = '';
 	}
 
-	static function alert( $msg, $useHtml = TRUE ) {
+	private function htmlHeader() {
 
-		$htmlUI = 	'<script>
-						alert(\'%s\');
-					</script>';
+		$html = '<!doctype>
+		<html>
+		<head>
+			<title>UI 경고 - StreamUX</title>
+			<meta charset="utf-8" />
+		</head>
+		<body>';
 
-		if ($useHtml === TRUE) {
-			$htmlUI = self::getHtmlLayout( $htmlUI );
-		}
-		printf($htmlUI, $msg);
+		$html = preg_replace('/\t|/', '', $html);
+		return $html;
 	}
 
-	static function alertToBack( $msg, $useHtml = TRUE ) {
+	private function htmlFooter() {
 
-		$htmlUI =	'<script>
-						alert(\'%s\');
-						history.go(-1);
-					</script>';
-
-		if ($useHtml === TRUE) {
-			$htmlUI = self::getHtmlLayout( $htmlUI );
-		}
-		printf($htmlUI, $msg);
+		$html = '</body>
+		</html>';
+		$html = preg_replace('/\t|/', '', $html);
+		return $html;
 	}
 
-	static function alertTo( $msg, $url = NULL, $useHtml = TRUE ) {
+	static function alert( $msg, $useHtml=true) {
 
-		$htmlUI =	'<script>
+		$msg = preg_replace('/<br>/', '\n',$msg);
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$data = array(	'result'=>'N',
+							'msg'=>$msg);
+
+			Object::callback($data);
+		} else {
+			$script = 	'<script>
+							alert(\'%s\');
+						</script>
+						<noscript>
+							%s
+						</noscript>';
+
+			$html = $script;
+			if (strtolower($useHtml) === true) {
+				$html = self::htmlHeader();
+				$html .= $script;
+				$html .= self::htmlFooter();
+			}
+			printf($html, $msg, $msg);
+		}		
+	}
+
+	static function alertToBack( $msg, $useHtml=true) {
+
+		$msg = preg_replace('/<br>/', '\n',$msg);
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$data = array(	'result'=>'N',
+							'msg'=>$msg);
+
+			Object::callback($data);
+		} else {
+			$script =	'<script>
+							alert(\'%s\');
+							history.go(-1);
+						</script>
+						<noscript>
+							%s
+						</noscript>';
+
+			$html = $script;
+			if (strtolower($useHtml) === true) {
+				$html = self::htmlHeader();
+				$html .= $script;
+				$html .= self::htmlFooter();
+			}
+			printf($html, $msg, $msg);
+		}
+	}
+
+	static function alertTo( $msg, $url = NULL, $useHtml=true) {
+
+		$msg = preg_replace('/<br>/', '\n',$msg);
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$data = array(	'alertTo'=>$url,
+							'result'=>'N',
+							'msg'=>$msg);
+
+			Object::callback($data);
+		} else {
+			$script ='<script>
 						alert(\'%s\');
 						location.href=\'%s\';
-					</script>';
+					</script>
+					<noscript>
+						%s
+					</noscript>';
 
-		if ($useHtml === TRUE) {
-			$htmlUI = self::getHtmlLayout( $htmlUI );
+			$html = $script;	
+			if (strtolower($useHtml) === true) {
+
+				$html = self::htmlHeader();
+				$html .= $script;
+				$html .= self::htmlFooter();
+			}
+			printf($html, $msg, $url, $msg);
 		}
-		printf($htmlUI, $msg, $url);
 	}
 }
-?>

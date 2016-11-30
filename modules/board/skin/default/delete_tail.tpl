@@ -1,6 +1,8 @@
 {assign var=contentData value=$documentData.contents}
 {assign var=boardTitle value=$groupData.board_name}
 {assign var=tailData value=$documentData.tails}
+{assign var=uri value=$documentData.uri}
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {assign var=opkeySkinPath value=$skinPathList.opkey}

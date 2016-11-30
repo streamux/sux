@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-18 11:03:22
+/* Smarty version 3.1.30, created on 2016-11-26 09:28:55
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/leave.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_582ed1ea413223_81636772',
+  'unifunc' => 'content_583947c7b173d9_10237184',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c26660f6d33623d61d76c6f0a33adb22c410f26d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/leave.tpl',
-      1 => 1479448681,
+      1 => 1480142696,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_582ed1ea413223_81636772 (Smarty_Internal_Template $_smarty_tpl) {
+function content_583947c7b173d9_10237184 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
@@ -32,32 +32,32 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 		<h1 class="title">회원 탈퇴</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-		<form name="f_loginleave">
+		<form name="f_loginleave" action="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+member" method="post">
+		<input type="hidden" name="_method" value="delete">
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/tpl/images/icon_01.gif" alt="">						
+				<img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+modules/login/tpl/images/icon_01.gif" alt="">						
 				<span>비밀번호 확인</span>
 			</div>
 			<div class="leave-body">
 				<div class="panel-info">
 					<ul>
 						<li>
-							<input type="hidden" name="member" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_member'];?>
-"><span class="ui-label">아이디</span><span><?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_memberid'];?>
-</span><input type="hidden" name="memberid" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['ljs_memberid'];?>
+							<input type="hidden" name="category" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_category'];?>
+"><span class="ui-label">아이디</span><span><?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_user_id'];?>
+</span><input type="hidden" name="user_id" value="<?php echo $_smarty_tpl->tpl_vars['sessionData']->value['sux_user_id'];?>
 ">
 						</li>
 						<li>
-							<span class="ui-label"><label for="pass">비밀번호</label></span><input type="password" id="pass" name="pass" maxlength="20">
+							<span class="ui-label"><label for="password">비밀번호</label></span><input type="password" id="password" name="password" maxlength="20">
 						</li>
 					</ul>							
 				</div>
 				<div class="panel-btn">
-					<ul>
-						<li data-id="send">보내기</li>
-						<li data-id="cancel">취소</li>
-					</ul>
+					<input type="submit" name="btn_confirm" value="확 인">
+					<input type="button" name="btn_cancel" value="취 소" onclick="history.back()">
 				</div>				
 			</div>																	
 		</div>

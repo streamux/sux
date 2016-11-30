@@ -32,6 +32,6 @@ class Controller extends Object {
 
 		$result = $this->model->delete($query);
 		return $result;
-	}
+	}	
 }
 ?>

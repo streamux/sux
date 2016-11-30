@@ -15,9 +15,10 @@
 	<column name="hp3" type="char" size="4"/>	
 	<!-- optional -->
 	<column name="recommend_id" type="varchar" size="12"/>
+	<column name="job" type="varchar" size="40"/>
 	<column name="hobby" type="varchar" size="40"/>
 	<column name="join_path" type="varchar" size="20"/>	
-	<column name="readed_count" type="int"/>	
+	<column name="access_count" type="int" default="0" notnull="not null"/>	
 	<column name="point" type="int" size="12" default="0" notnull="not null"/>
 	<column name="grade" type="int" size="1" default="0" notnull="not null"/>
 	<column name="is_writable" type="char" size="1" default="y" notnull="not null"/>

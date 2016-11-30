@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-18 06:17:17
+/* Smarty version 3.1.30, created on 2016-11-21 08:21:47
   from "/Applications/MAMP/htdocs/sux/modules/install/tpl/terms.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_582e8edd6bfa90_83798918',
+  'unifunc' => 'content_5832a08b06db81_20323874',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'f9a010cfd2f912ab890c6dd472ef03d45c75c936' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/install/tpl/terms.tpl',
-      1 => 1479446228,
+      1 => 1479702325,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_582e8edd6bfa90_83798918 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5832a08b06db81_20323874 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('skinDir', $_smarty_tpl->tpl_vars['skinPathList']->value['skin_dir']);
 $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['skinDir']->value)."/_header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>"SUX 설치 : 약관동의 - StreamUX"), 0, true);
@@ -61,7 +61,7 @@ modules/install/tpl/images/logo.png" alt="streamxux">
 			(질문등에 대한 내용은 메일로 받지 않습니다)</span>				
 		</div>
 		<a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-install/db-setup"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+setup-db"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 modules/install/tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
 	</div>
 	<div class="footer">

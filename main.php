@@ -19,7 +19,7 @@
 <div class="wrapper">
 	<div class="header clearfix">
 		<h1 class="logo">
-			<a href="/sux/index.php"><img src="common/images/sux_logo.svg" onerror='this.src="common/images/sux_logo.png"' alt="streamxux"></a>
+			<a href="/sux/"><img src="common/images/sux_logo.svg" onerror='this.src="common/images/sux_logo.png"' alt="streamxux"></a>
 		</h1>		
 		<div class="mobile-menu-btn">
 			<div class="ui-h-3stick">

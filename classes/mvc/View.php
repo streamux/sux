@@ -13,19 +13,11 @@ class View extends Object {
 		$this->controller = $c;
 	}
 
-	function display($methodName=NULL) {
-
-		$oDB = DB::getInstance();
-
-		if (preg_match('/^record+/i', $methodName)) {
-			$methodName = $methodName;
-		} else {
-			$methodName = 'display' . ucfirst($methodName);
-		}
+	function display( $methodName, $category=null, $mid=-1, $id=-1) {
+		
+		$methodName = 'display' . ucfirst($methodName);
 		$this->defaultSetting();
-		$this->{$methodName}();
-
-		$oDB->close();
+		$this->{$methodName}( $category, $mid, $id);
 	}
 
 	function defaultSetting() {
@@ -35,15 +27,7 @@ class View extends Object {
 
 	function output() {
 
-		echo '이글이 보인다면 상위 클래스 BaseView의 output() 메서드를 오버라이드해서 사용하세요.<br>';
-	}
-
-	function callback($data) {
-
-		$context = Context::getInstance();
-		$callback = $context->getRequest('callback');
-		$strJson = JsonEncoder::parse($data);
-		return $callback . '('.$strJson.')';
-	}
+		echo '이글이 보인다면 상위 클래스 View의 output() 메서드를 오버라이드해서 사용하세요.<br>';
+	}	
 }
 ?>

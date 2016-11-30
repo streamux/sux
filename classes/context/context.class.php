@@ -5,7 +5,10 @@ class Context {
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
 	private $table_list = array();
+	private $module_list = array();
+	private $parameter_list = array();
 	public $db_info = NULL;
+	private $admin_info = Null;
 	var $class_name = 'context';
 
 	function __contruct() {}
@@ -20,7 +23,7 @@ class Context {
 	}
 
 	function init() {
-	
+
 		$this->startSession();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
@@ -55,8 +58,7 @@ class Context {
 			$db_info[$db_info_list[$i]] = ${$db_info_list[$i]};
 			unset(${$db_info_list[$i]});
 		}
-
-		$this->setDbInfo($db_info);
+		$this->db_info = $db_info;
 	}
 
 	function getConfigFile() {
@@ -76,11 +78,13 @@ class Context {
 							'admin_email',
 							'yourhome');
 
-		$table_key_prefix = 'db_';
+		$admin_info = array();
 		for ($i=0; $i<count($admin_list); $i++) {
-			$this->set($table_key_prefix . $admin_list[$i], ${$admin_list[$i]});
+			$admin_info[$admin_list[$i]] = ${$admin_list[$i]};
 			unset(${$admin_list[$i]});
 		}
+
+		$this->admin_info = $admin_info;
 	}
 
 	function getAdminFile() {
@@ -96,7 +100,7 @@ class Context {
 		}
 
 		foreach ($table_list as $key => $value) {
-			$this->setTable($key, $key);
+			$this->setTable($key, $value);
 		}
 
 		unset($table_list);
@@ -128,21 +132,39 @@ class Context {
 		$this->table_list[$key] = $value;
 	}
 
-	function getDB() {
+	function getModule( $key ) {
+
+		return $this->module_list[$key];
+	}
+
+	function setModule( $key, $value) {
+
+		$this->module_list[$key] = $value;
+	}
+
+	function getAdminInfo($key) {
+
+		if (isset($key) && $key) {
+			return $this->admin_info[$key];
+		} else {
+			return $this->admin_info;
+		}
+	}
+
+	function getDB($key) {
 
 		return $this->db_info['db_database'];
 	}
 
-	function getDBInfo() {
+	function getDBInfo($key) {
 
-		return $this->db_info;
+		if (isset($key)) {
+			return $this->db_info[$key];
+		} else {
+			return $this->db_info;
+		}		
 	}
 	
-	function setDbInfo($db_info) {
-
-		$this->db_info = $db_info;
-	}
-
 	function getPost($key) {
 
 		return $_POST[$key];
@@ -248,13 +270,38 @@ class Context {
 		return $this->table_list;
 	}
 
+	function getParameter( $key) {
+
+		return $this->parameter_list[$key];
+	}
+
+	function setParameter( $key, $value) {
+
+		$this->parameter_list[$key] = trim($value);
+	}
+
+	function geParameters() {
+
+		return $this->parameter_list;
+	}
+
 	function checkAdminPass() {
 
 		$is_logged = FALSE;
-		if (md5($this->get('db_admin_id')) == $this->getSession('admin_id')) {
+		if (md5($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
 			$is_logged = TRUE;
 		}
 		return $is_logged;
+	}
+
+	function ajax() {
+
+		$uri =  strtolower($this->getServer('REQUEST_URI'));
+		if (preg_match('/jquery/', $uri)) {
+			return true;
+		}
+
+		return false;
 	}
 }
 ?>

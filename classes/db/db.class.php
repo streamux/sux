@@ -31,7 +31,7 @@ class DB extends Object {
 
 		$db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
 		if (!$db_connect) {		
-			exit('SUX cannot connect to DB');
+			die('SUX cannot connect to DB');
 		}
 
 		if(mysql_error()) {
@@ -49,7 +49,7 @@ class DB extends Object {
 
 		$select = @mysql_select_db($db_info['db_database'], $db_connect);
 		if (!$select) {
-			$warn = '데이터베이스 연결에 실패 했습니다. 데이터베이스명을 확인하세요.';
+			$warn = 'SUX cannot select DB.';
 			die($warn);
 		}
 		mysql_set_charset("utf8");

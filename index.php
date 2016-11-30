@@ -1,5 +1,8 @@
 <?php
 include "config/config.inc.php";
 
-$oModule = new ModuleHandler();
-$oModule->init();
+$context = Context::getInstance();
+$context->init();
+
+$router = ModuleRouter::getInstance();
+$router->init();

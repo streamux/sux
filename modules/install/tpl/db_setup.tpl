@@ -5,12 +5,12 @@
 	<div class="header">
 		<div class="util"></div>
 		<h1 class="logo">
-			<img class="logo" src="../modules/install/tpl/images/logo.png" alt="streamxux">	
+			<img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux">	
 		</h1>	
 	</div>
 	<div class="container">	
-		<form name="f_db_setup">	
-		<input type="hidden" name="_method" value="create">		
+		<form name="f_setup_db" action="{$rootPath}setup-db" method="post">
+		<input type="hidden" name="_method" value="insert">	
 		<div class="article-box ui-edgebox">
 			<h1>데이터 베이스 설정</h1>
 			<ul>

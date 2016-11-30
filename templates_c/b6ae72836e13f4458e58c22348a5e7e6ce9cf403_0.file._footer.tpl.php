@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-18 10:58:23
+/* Smarty version 3.1.30, created on 2016-11-22 06:42:00
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_582ed0bf051844_74744257',
+  'unifunc' => 'content_5833daa83810e1_82724580',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1479463089,
+      1 => 1479793312,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_582ed0bf051844_74744257 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5833daa83810e1_82724580 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 		<div class="footer">
 			<ul class="clearfix">
@@ -114,7 +114,7 @@ echo '<script'; ?>
 <?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- type="x-jquery-templete" id="ljsMember_tmpl">
+ type="x-jquery-templete" id="memberGroupTmpl">
 	<option>${name}</option>
 <?php echo '</script'; ?>
 >
@@ -184,7 +184,7 @@ echo '<script'; ?>
 >
 <?php echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/tpl/js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
+/js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
 .js"><?php echo '</script'; ?>
 >
 <?php }

@@ -92,7 +92,39 @@ class Utils extends Object {
 
 	public static function goURL( $url, $delay=0) {
 
-		printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$data = array(	'url'=>$url,
+							'result'=>'Y');
+
+			Object::callback($data);
+		} else {
+			printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
+		}
+	}
+
+	public static function alertTo( $msg, $url) {
+
+		$msg = preg_replace('/<br>/', '\n',$msg);		
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+					
+			$data = array(	'url'=>$url,
+							'msg'=>$msg,
+							'result'=>'Y');
+
+			Object::callback($data);
+		} else {
+			$htmlUI =	'<script>
+							alert(\'%s\');
+							location.href=\'%s\';
+						</script>';
+
+			if ($useHtml === TRUE) {
+				$htmlUI = self::getHtmlLayout( $htmlUI );
+			}
+			printf($htmlUI, $msg, $url);
+		}
 	}
 }
 ?>

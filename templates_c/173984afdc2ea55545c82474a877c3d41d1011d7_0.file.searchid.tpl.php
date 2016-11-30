@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-18 10:52:54
+/* Smarty version 3.1.30, created on 2016-11-26 08:10:10
   from "/Applications/MAMP/htdocs/sux/modules/login/tpl/searchid.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_582ecf7632b680_04408514',
+  'unifunc' => 'content_583935522627b1_94543650',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '173984afdc2ea55545c82474a877c3d41d1011d7' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/login/tpl/searchid.tpl',
-      1 => 1479462446,
+      1 => 1480144154,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_582ecf7632b680_04408514 (Smarty_Internal_Template $_smarty_tpl) {
+function content_583935522627b1_94543650 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
@@ -31,31 +31,46 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	<div class="login">
 		<h1 class="title">아이디 찾기</h1>
 		<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
-		<form action="../login/4" name="f_searchid" method="post" onSubmit="return jsux.fn.searchID.checkForm(this);">
+		<form action="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+search-id" name="f_searchid" method="post">
+		<input type="hidden" name="_method" value="select">
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/tpl/images/icon_01.gif" title="">						
+				<img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+modules/login/tpl/images/icon_01.gif" title="">						
 				<span>회원그룹</span>
-				<select name="member" id="ljsMember">
-					<!-- templete -->
+				<select name="category" id="memberGroup">
+					<?php
+$_from = $_smarty_tpl->smarty->ext->_foreach->init($_smarty_tpl, $_smarty_tpl->tpl_vars['documentData']->value['group'], 'value');
+if ($_from !== null) {
+foreach ($_from as $_smarty_tpl->tpl_vars['value']->value) {
+?>
+						<option><?php echo $_smarty_tpl->tpl_vars['value']->value['category'];?>
+</option>
+					<?php
+}
+}
+$_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
+?>
+
 				</select>
 				<span class="link-searchinfo">
-					<a href="../login/search-id">아이디</a> | <a href="../login/search-password">비밀번호 찾기</a>	
+					<a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+search-id">아이디</a> | <a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+search-password">비밀번호 찾기</a>	
 				</span>
 			</div>
 			<div class="leave-body">
 				<div class="panel-info">
 					<ul>
 						<li><span class="ui-label">이름</span><input type="text" name="user_name" maxlength="14" value=""></li>
-						<li><span class="ui-label">E-Mail 주소</span><input type="text" name="user_email" maxlength="20"></li>
+						<li><span class="ui-label">E-Mail 주소</span><input type="text" name="email_address" maxlength="20" value=""></li>
 					</ul>				
 				</div>
 				<div class="panel-btn">
-					<ul>
-						<li data-id="send">보내기</li>
-						<li data-id="cancel">취소</li>
-					</ul>							
+					<input type="submit" name="btn_confirm" value="확 인">
+					<input type="button" name="btn_cancel" value="취 소" onclick="location.href='<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+login'">
 				</div>
 			</div>																	
 		</div>

@@ -44,5 +44,5 @@
 .article-box .login .box .leave-body .panel-info-result ul li{line-height: 30px}
 .article-box .login .box .leave-body .panel-info-result ul li span{font-size:1.5000em}
 .article-box .login .box .leave-body .panel-btn{margin-top:20px;text-align:center;font-size:1.0625em}
-.article-box .login .box .leave-body .panel-btn ul li{display:inline-block;line-height:30px;width:60px;background-color:#ffffff;border:1px solid #e3e3e3;border-radius: 10px;cursor:pointer}
-.article-box .login .box .leave-body .panel-btn ul li:hover{background-color:#e3e3e3;}
+.article-box .login .box .leave-body .panel-btn input{line-height:30px;width:60px;border:1px solid #e3e3e3;background-color:#ffffff;border-radius: 10px;cursor:pointer}
+.article-box .login .box .leave-body .panel-btn input:hover{background-color:#e3e3e3;}

@@ -8,18 +8,18 @@
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 		<div class="box ui-edgebox-2px">
 			<div class="login-header">
-				<img src="{$skinPathList.dir}/tpl/images/icon_01.gif" alt="">
-				<span><a href="{$rootPath}member/modify">회원정보수정</a> | <a href="{$rootPath}login/leave">회원탈퇴</a></span>
+				<img src="{$rootPath}modules/login/tpl/images/icon_01.gif" alt="">
+				<span><a href="{$rootPath}member-modify">회원정보수정</a> | <a href="{$rootPath}leave">회원탈퇴</a></span>
 			</div>
 			<div class="login-body">
 				<div class="panel-info">
 					<ul>
-						<li><span class="ui-label">이름</span><span class="ui-value">'{$sessionData.ljs_name}</span>' 님</li>
-						<li><span class="ui-label">적립포인트</span><span class="ui-value">'{$sessionData.ljs_point}</span>' 포인트</li>
-						<li><span class="ui-label">방문횟수</span><span class="ui-value">'{$sessionData.ljs_hit}</span>' 번째 방문</li>
+						<li><span class="ui-label">이름</span><span class="ui-value">'{$sessionData.sux_user_name}</span>' 님</li>
+						<li><span class="ui-label">적립포인트</span><span class="ui-value">'{$sessionData.sux_point}</span>' 포인트</li>
+						<li><span class="ui-label">방문횟수</span><span class="ui-value">'{$sessionData.sux_hit_count}</span>' 번째 방문</li>
 					</ul>
 				</div><div class="panel-btn">
-					<a href="{$rootPath}login/logout"><img src="{$skinPathList.dir}/tpl/images/btn_logout.gif"></a>
+					<a href="{$rootPath}logout?_method=insert"><img src="{$rootPath}modules/login/tpl/images/btn_logout.gif"></a>
 				</div>
 			</div>																	
 		</div>

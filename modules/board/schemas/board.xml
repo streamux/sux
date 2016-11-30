@@ -7,14 +7,14 @@
 	<column name="nick_name" type="varchar" size="75" notnull="not null"/>
 	<column name="password" type="varchar" size="75" notnull="not null"/>
 	<column name="title" type="varchar" size="200" notnull="not null"/>
-	<column name="content" type="text" notnull="not null"/>
+	<column name="contents" type="text" notnull="not null"/>
 	<column name="email_address" type="varchar" size="50" notnull="not null"/>
 	<column name="date" type="datetime"/>
 	<column name="ip" type="varchar" size="30"/>
 	<column name="readed_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="voted_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="blamed_count" type="int" size="12" default="0" notnull="not null"/>
-	<column name="progess_step" type="varchar" size="12" notnull="null"/>
+	<column name="progress_step" type="varchar" size="12" notnull="null"/>
 	<column name="igroup_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="space_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="ssunseo_count" type="int" size="12" default="0" notnull="not null"/>
@@ -22,5 +22,5 @@
 	<column name="filename" type="varchar" size="50"/>
 	<column name="filesize" type="varchar" size="50"/>
 	<column name="filetype" type="varchar" size="50"/>
-	<column name="content_type" type="char" size="4" default="text" notnull="not nul"/>
+	<column name="contents_type" type="char" size="4" default="text" notnull="not nul"/>
 </table>

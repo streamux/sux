@@ -52,7 +52,7 @@ class LoginView extends LoginModule {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $context->get('action');
+		$this->document_data['jscode'] = 'login';
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '회원 로그인';
 		
@@ -60,7 +60,7 @@ class LoginView extends LoginModule {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/login';
+		$skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -75,21 +75,20 @@ class LoginView extends LoginModule {
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
 
-		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];
+		$user_id = $this->session_data['sux_user_id'];
 
 		/**
 		 * get data from DB
 		 */
-		if (!$ljs_memberid ) {
-			$this->controller->select('getMemberGroup');
-			$this->document_data['group'] = $this->model->getJson();
+		if (!$user_id ) {
+			$this->model->selectMemberGroup();
+			$groupData = $this->model->getRows();
 			$contentsPath = $skinPath . 'login.tpl';		
 		} else {
-			$this->document_data['jscode'] = '';
 			$contentsPath = $skinPath . 'info.tpl';
-		}
+		}	
 
+		$this->document_data['group'] = $groupData;
 		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
@@ -99,13 +98,13 @@ class LoginView extends LoginModule {
 		$this->output();
 	}	
 
-	function displayFail() {
+	function displayLoginFail() {
 
 		$UIError = UIError::getInstance();
 
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
-		$this->session_data = $context->getSessionAll();
+		$this->session_data = $context->getSessionAll();		
 
 		/**
 		 * css, js file path handler
@@ -118,7 +117,7 @@ class LoginView extends LoginModule {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/login';
+		$skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -133,9 +132,6 @@ class LoginView extends LoginModule {
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
 
-		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];
-
 		$contentsPath = $skinPath . 'login.tpl';
 
 		$this->skin_path_list['root'] = $rootPath;
@@ -144,8 +140,8 @@ class LoginView extends LoginModule {
 		$this->skin_path_list['contents'] = $contentsPath;
 		$this->skin_path_list['footer'] = $footerPath;
 
-		$this->controller->select('getMemberGroup');		
-		$this->document_data['group'] = $this->model->getJson();		
+		$this->model->selectMemberGroup();
+		$this->document_data['group'] = $this->model->getRows();
 		$this->document_data['isLogon'] = false;
 		
 		$this->output();
@@ -161,7 +157,7 @@ class LoginView extends LoginModule {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $context->get('action');
+		$this->document_data['jscode'] = 'leave';
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '회원 탈퇴';
 		
@@ -169,7 +165,7 @@ class LoginView extends LoginModule {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/login';
+		$skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -205,7 +201,7 @@ class LoginView extends LoginModule {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $context->get('action');
+		$this->document_data['jscode'] = 'searchId';
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '아이디 찾기';
 
@@ -213,7 +209,7 @@ class LoginView extends LoginModule {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/login';
+		$skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -229,24 +225,27 @@ class LoginView extends LoginModule {
 		}
 
 		$checkName = $this->post_data['user_name'];
-		$checkEmail = $this->post_data['user_email'];
+		$checkEmail = $this->post_data['email_address'];
+
+		$context ->setParameter('category', $this->post_data['category']);
+		$context ->setParameter('user_name', $this->post_data['user_name']);
 
 		if (isset($checkName) && $checkName != ''){
 
-			$this->controller->select('getSearchid');
-			$rows = $this->model->getRow();
+			$this->model->selectSearchid();
+			$row = $this->model->getRow();
 
-			if (count($rows) > 0) {
-				$memberId = $rows['ljs_memberid'];
-				$email = $rows['email'];				
+			if (count($row) > 0) {
+				$userId = $row['user_id'];
+				$email = $row['email_address'];	
 
-				if (trim($email) !== $checkEmail) {
+				if (trim($email) !== trim($checkEmail)) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
 
 				$this->document_data['user_name'] = $checkName;
-				$this->document_data['user_id'] = $memberId;
+				$this->document_data['user_id'] = $userId;
 				$this->document_data['jscode'] = 'searchResult';				
 
 				$contentsPath = $skinPath . 'searchid_result.tpl';
@@ -255,8 +254,8 @@ class LoginView extends LoginModule {
 				exit;
 			}	
 		} else {
-			$this->controller->select('getMemberGroup');
-			$this->document_data['group'] = $this->model->getJson();
+			$this->model->selectMemberGroup();
+			$this->document_data['group'] = $this->model->getRows();
 
 			$contentsPath = $skinPath . 'searchid.tpl';
 		}
@@ -280,7 +279,7 @@ class LoginView extends LoginModule {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = $context->get('action');
+		$this->document_data['jscode'] = 'searchPassword';
 		$this->document_data['module_code'] = 'login';
 		$this->document_data['module_name'] = '비밀번호 찾기';
 
@@ -288,7 +287,7 @@ class LoginView extends LoginModule {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/login';
+		$skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/login/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -304,22 +303,23 @@ class LoginView extends LoginModule {
 		}
 
 		$checkName = $this->post_data['user_name'];
-		$checkMemberid = $this->post_data['user_id'];
-		$checkEmail = $this->post_data['user_email'];
-		$adminName = $context->get('db_admin_id');
-		$adminEmail = $context->get('db_admin_email');
+		$checkUserId = $this->post_data['user_id'];
+		$checkEmail = $this->post_data['email_address'];
 
-		if(isset($checkMemberid) && $checkMemberid != '') {
+		$context ->setParameter('category', $this->post_data['category']);
+		$context ->setParameter('user_id', $this->post_data['user_id']);
 
-			$this->controller->select('getSearchpwd');
+		if(isset($checkUserId) && $checkUserId !== '') {
+
+			$this->model->selectSearchpwd();
 			$row = $this->model->getRow();
 			if (count($row) > 0) {
-				$memberId = $row['ljs_memberid'];
-				$email = $row['email'];
-				$password = $row['ljs_pass1'];
+				$userName = $row['user_name'];
+				$email = $row['email_address'];
+				$password = $row['password'];			
 
-				if (trim($memberId) !== $checkMemberid) {
-					UIError::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
+				if (trim($userName) !== $checkName) {
+					UIError::alertToBack('입력하신 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
 					exit;
 				}
 
@@ -336,9 +336,9 @@ class LoginView extends LoginModule {
 					exit;
 				}
 
-				$this->document_data['user_name'] = $checkName;
-				$this->document_data['user_email'] = $checkEmail;
-				$this->document_data['memberid'] = $memberId;
+				$this->document_data['user_id'] = $checkUserId;
+				$this->document_data['user_name'] = $userName;
+				$this->document_data['user_email'] = $email;				
 				$this->document_data['password'] = $password;
 				$this->document_data['jscode'] = 'searchResult';
 
@@ -355,10 +355,9 @@ class LoginView extends LoginModule {
 				UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
 				exit;
 			}
-		}else{
-
-			$this->controller->select('getMemberGroup');
-			$this->document_data['group'] = $this->model->getJson();
+		}else{			
+			$this->model->selectMemberGroup();
+			$this->document_data['group'] = $this->model->getRows();
 
 			$contentsPath = $skinPath . 'searchpwd.tpl';
 		}
@@ -371,105 +370,5 @@ class LoginView extends LoginModule {
 
 		$this->output();
 	}
-
-	function displayLogout() {
-
-		$context = Context::getInstance();
-
-		$rootPath = _SUX_ROOT_;
-		$this->session_data = $context->getSessionAll();
-		foreach ($this->session_data as $key => $value) {
-			$context->setSession($key, '');
-		}
-		Utils::goURL("{$rootPath}login");
-	}
-
-	function recordLogpass() {
-
-		$context = Context::getInstance();
-
-		$rootPath = _SUX_ROOT_;
-		$this->session_data = $context->getSessionAll();
-		$this->request_data = $context->getRequestAll();		
-		$this->post_data = $context->getPostAll();
-
-		$ljs_memberid = $this->session_data['ljs_memberid'];
-		$ljs_pass1 = $this->session_data['ljs_pass1'];
-		
-		$ljs_member = $this->session_data['ljs_member'];
-		if (!isset($ljs_member) || $ljs_member == '') {
-			$ljs_member = $this->post_data['member'];
-		}
-
-		$memberid = $this->session_data['ljs_memberid'];
-		if (!isset($memberid) || $memberid == '') {
-			$memberid = $this->post_data['memberid'];
-		}
-
-		$pass = trim($this->session_data['ljs_pass1']);
-		if (!isset($pass) || $pass == '') {
-			$pass = trim($this->post_data['pass']);
-			$pass = substr(md5($pass),0,8);
-		}
-		
-		if (!$memberid) {
-			$msg = "아이디를 입력하세요.";
-		} else if (!$pass) {
-			$msg = "비밀번호를 입력하세요.";
-		} 
-
-		if (isset($msg) && $msg) {
-			UIError::alertToBack($msg);
-		}
-	
-		$this->controller->select('getLogpass');
-		$rownum = $this->model->getNumRows();
-		if ($rownum > 0) {		
-
-			$rows = $this->model->getRow();
-			$ljs_memberid = $rows['ljs_memberid'];
-			$ljs_pass1 = $rows['ljs_pass1'];
-			$ljs_name = $rows['name'];
-
-			if ($pass !== $ljs_pass1) {
-				UIError::alertTo('비밀번호가 일치하지 않습니다.', $rootPath . 'login/fail');
-				exit;
-			}
-
-			$conpanyname = $rows['conpany'];
-			if ($conpanyname) {
-				$ljs_name = $conpanyname;
-			}
-
-			$ljs_email = $rows['email'];
-			$ljs_writer = $rows['writer'];			
-			$ljs_point = $rows['point'];
-			$grade = $rows['grade'];
-			$automod1 = "yes";
-			$chatip = $context->getServer('REMOTE_ADDR');
-			$ljs_hit = $rows['hit'] + 1;
-
-			$values['hit'] = $ljs_hit;
-			$this->controller->update('getLogpass', $values);
-
-			$session_list = array('ljs_member','ljs_memberid','ljs_pass1','ljs_name','ljs_email','ljs_writer','ljs_point','ljs_member','ljs_hit','grade','automod1','chatip');
-
-			foreach ($session_list as $key => $value) {
-				$context->setSession($value, ${$value});
-			}
-
-			$action = $context->get('action');		
-
-			if ($action == "read") {
-				Utils::goURL("../board.read.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid&find=$find&search=$search&s_mod=$s_mod");
-			} else if ($action == "write"){
-				Utils::goURL("../board.write.php?board=$board&board_grg=$board_grg&id=$id&igroup=$igroup&passover=$passover&page=$page&sid=$sid");
-			} else {
-				Utils::goURL("{$rootPath}login");
-			}
-		} else {
-			UIError::alertTo('아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다다.', $rootPath . 'login/fail');
-		}
-	}	
 }
 ?>

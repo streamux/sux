@@ -20,4 +20,3 @@ if (isset($action) && $action) {
 } else {
 	UIError::alertTo('파라미터 값을 확인해주세요.', $selfURL . '?action=main');
 }
-?>

@@ -40,10 +40,10 @@ class MemberView extends MemberModules {
 
 	function displayMember() {
 
-		$this->displayJoin();
+		$this->displayMemberJoin();
 	}
 
-	function displayJoin() {
+	function displayMemberJoin() {
 
 		$UIError = UIError::getInstance();
 		$context = Context::getInstance();
@@ -59,7 +59,7 @@ class MemberView extends MemberModules {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/member';
+		$skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -76,8 +76,8 @@ class MemberView extends MemberModules {
 
 		$contentsPath = $skinPath . 'join.tpl';
 
-		$this->controller->select('memberListFromGroup');
-		$this->document_data['group'] = $this->model->getJson();
+		$this->model->selectMemberGroup();
+		$this->document_data['group'] = $this->model->getRows();
 
 		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
@@ -88,7 +88,7 @@ class MemberView extends MemberModules {
 		$this->output();
 	}
 
-	function displayModify() {
+	function displayMemberModify() {
 
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
@@ -96,7 +96,7 @@ class MemberView extends MemberModules {
 		/**
 		 * css, js file path handler
 		 */
-		$this->document_data['jscode'] = 'modify';
+		//$this->document_data['jscode'] = 'modify';
 		$this->document_data['module_code'] = 'member';
 		$this->document_data['module_name'] = '회원 수정';
 		
@@ -104,7 +104,7 @@ class MemberView extends MemberModules {
 		 * skin directory path
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/member';
+		$skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
 		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
 		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
@@ -121,9 +121,20 @@ class MemberView extends MemberModules {
 
 		$contentsPath = $skinPath . 'modify.tpl';
 
-		$this->controller->select('memberListFromGroup');
-		$this->document_data['group'] = $this->model->getJson();
+		$context->setParameter('category', $context->getSession('sux_category'));
+		$context->setParameter('user_id', $context->getSession('sux_user_id'));
 
+		$result = $this->model->selectFromMember('*');
+		//Tracer::getInstance()->output();
+		if ($result) {
+			$contentsData = $this->model->getRow();
+			$email_arr = split('@', $contentsData['email_address']);
+			$contentsData['email'] = $email_arr[0];
+			$contentsData['email_tail2'] = $email_arr[1];			
+			$contentsData['hobby'] = explode(',', $contentsData['hobby']);
+		} 
+
+		$this->document_data['contents'] = $contentsData;
 		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
@@ -133,7 +144,7 @@ class MemberView extends MemberModules {
 		$this->output();
 	}
 
-	function displayGroupList() {
+	function displayMemberGroupList() {
 
 		$msg = '데이터 로드를 완료하였습니다.';
 		$result = $this->controller->select('memberListFromGroup');
@@ -145,185 +156,6 @@ class MemberView extends MemberModules {
 			$data = array('msg'=>$msg);			
 		}
 
-		echo $this->callback($data);
-	}
-
-	function displaySearchID() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$table_name = $posts['table_name'];
-		$id = $posts['memberid'];
-
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
-
-		$msg = "신청 아이디 : ".$id."\n";
-
-		if (!preg_match('/^[a-zA-Z!_][a-zA-Z0-9!_]{3,12}$/i', $id)) {
-
-			$msg .= "아이디명은 영문+숫자+특수문자('!','_') 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
-
-			$data = array(	"msg"=>$msg);
-			echo parent::callback($data);
-			exit;
-		} 
-
-		if ($id) {
-
-			$this->controller->select('fieldFromMember', 'name');
-			$numrows = $this->model->getNumRows();
-
-			if ($numrows > 0) {
-				$msg = "'${id}'는 이미 존재하는 아이디입니다.";
-				$resultYN = "N";
-			} else {
-				$msg = "'${id}'는 생성할 수 있는 아이디입니다.";
-				$resultYN = "Y";
-			}
-		}else{
-			$msg = "아이디를 넣고 중복체크를 하세요.";
-			$resultYN = "N";
-		}
-
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function didsplaySearchCorp() {
-
-		$msg = "중복회사 체크 작업 중.";
-		$resultYN = "Y";
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function displayMemberField() {
-
-		$msg = '데이터 로드를 완료하였습니다.';
-		$result = $this->controller->select('fieldFromMember', '*');
-		if ($result) {
-			$rows = $this->model->getRow();
-			$email_arr = split('@', $rows['email']);
-			$rows['email'] = $email_arr[0];
-			$rows['email_tail2'] = $email_arr[1];
-
-			$data = array(	'data'=>$rows,
-							'msg'=>$msg);			
-		} else {
-			$msg = '데이터 로드를 실패하였습니다.';
-			$data = array('msg'=>$msg);
-		}
-		echo $this->callback($data);
-	}
-
-	function recordJoin() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$dataObj = '';
-		$msg = '';
-		$resultYN = "Y";
-
-		$email = $posts['email'];
-		if (!preg_match('/@/i', $email)) {
-			$msg .= "잘못된 E-mail 주소입니다.";
-	 		$resultYN = "N";
-		} else {
-			$this->controller->select('fieldFromMember', 'ljs_memberid');
-			$numrows = $this->model->getNumRows();
-			if ($numrows > 0) {
-				$msg = "아이디가 이미 존재합니다.";
-				$resultYN = "N";
-			} else {
-				$result = $this->controller->insert('recordAdd');
-				if ($result) {
-					$msg .= '신규회원 가입을 완료하였습니다.';
-					$resultYN = "Y";
-				} else {
-					$msg .= '신규회원 가입을 실패하였습니다.';
-					$resultYN = "N";
-				}
-			}
-		}
-				
-		$data = array(	"member"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordModify() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$msg = '';
-		$resultYN = "Y";
-		$pwd = trim($posts['pwd1']);
-
-		$this->controller->select('fieldFromMember', 'ljs_pass1');
-		$rows = $this->model->getRow();
-		$pwd = substr(md5($pwd),0,8);
-
-		if ($pwd != $rows['ljs_pass1']) {
-			$msg = '등록된 비밀번호와 일치하지 않습니다. \n다시 입력해주세요.';
-			$resultYN = "N";
-		} else {
-
-			$result = $this->controller->insert('recordEdit');
-			if ($result) {
-				$msg = '회원정보를 수정하였습니다.';
-				$resultYN = "Y";
-			} else {
-				$msg = '회원정보 수정을 실패하였습니다.';
-				$resultYN = "N";
-			}
-		}
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordDelete() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$msg = '';
-		$resultYN = 'Y';
-		$pass = trim($posts['pass']);
-		$pass = substr(md5($pass),0,8);
-
-		$this->controller->select('fieldFromMember', 'ljs_pass1');
-		$rows = $this->model->getRow();		
-		if ($pass != $rows['ljs_pass1']) {
-			$msg = '비밀번호가 잘못되었습니다.';
-			$resultYN = 'N';
-		} else {
-			$result = $this->controller->delete('recordDelete');
-			if ($result) {
-				$msg = '회원 탈퇴를 완료하였습니다.';
-				$resultYN = 'Y';
-			} else {
-				$msg = '회원 탈퇴를 실패하였습니다.';
-				$resultYN = 'N';
-			}
-		}
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
+		$this->callback($data);
+	}	
 }

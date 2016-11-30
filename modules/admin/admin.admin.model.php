@@ -14,7 +14,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromConnecterall() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_all');
+		$table_name = $context->getTable('connecter_all');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -27,7 +27,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromConnecterWhereNow() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
+		$table_name = $context->getTable('connecter');
 		$del_date = date('Y-m-d', time()-86400);
 
 		$query = new Query();
@@ -42,7 +42,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromConnecterWhereYesterday() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
+		$table_name = $context->getTable('connecter');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -56,7 +56,7 @@ class AdminAdminModel extends BaseModel {
 	function deleteFromConnecterWhereDelday() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
+		$table_name = $context->getTable('connecter');
 		$del_date = date('Y-m-d', time()-86400);
 
 		$query = new Query();
@@ -70,7 +70,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromConnecterrealall() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real_all');
+		$table_name = $context->getTable('connecter_real_all');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -83,7 +83,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromConnecterrealWhereNow() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
+		$table_name = $context->getTable('connecter_real');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -97,7 +97,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromConnecterrealWhereYesterday() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
+		$table_name = $context->getTable('connecter_real');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -111,7 +111,7 @@ class AdminAdminModel extends BaseModel {
 	function deleteFromConnecterrealWhereDelday() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
+		$table_name = $context->getTable('connecter_real');
 		$del_date = date('Y-m-d', time()-86400);
 
 		$query = new Query();
@@ -125,7 +125,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromPageview() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
+		$table_name = $context->getTable('pageview');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -139,7 +139,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromPageviewLimit() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
+		$table_name = $context->getTable('pageview');
 		$passover = $context->get('passover');
 		$limit = $context->get('limit');
 
@@ -156,7 +156,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromConnectersite() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
+		$table_name = $context->getTable('connecter_site');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -171,7 +171,7 @@ class AdminAdminModel extends BaseModel {
 	function selectFromConnectersiteLimit() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
+		$table_name = $context->getTable('connecter_site');
 		$passover = $context->get('passover');
 		$limit = $context->get('limit');
 
@@ -188,7 +188,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromPopupWhere() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_popup');
+		$table_name = $context->getTable('popup');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -202,7 +202,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromBoardgroup() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_board_group');
+		$table_name = $context->getTable('board_group');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -215,7 +215,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromMembergroup() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_member_group');
+		$table_name = $context->getTable('member_group');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -228,7 +228,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromPageview() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
+		$table_name = $context->getTable('pageview');
 
 		$query = new Query();
 		$query->setTable($table_name);
@@ -241,7 +241,7 @@ class AdminAdminModel extends BaseModel {
 	function selectIdFromConnectersite() {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
+		$table_name = $context->getTable('connecter_site');
 
 		$query = new Query();
 		$query->setTable($table_name);

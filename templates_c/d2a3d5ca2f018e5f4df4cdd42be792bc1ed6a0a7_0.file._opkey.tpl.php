@@ -1,5 +1,32 @@
+<?php
+/* Smarty version 3.1.30, created on 2016-11-24 14:31:10
+  from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_opkey.tpl" */
 
-	<form action="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&id={$requestData.id}&action=recordOpkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.read.checkOpkeyForm(this);">
+/* @var Smarty_Internal_Template $_smarty_tpl */
+if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
+  'version' => '3.1.30',
+  'unifunc' => 'content_5836eb9e5c6595_43606358',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'd2a3d5ca2f018e5f4df4cdd42be792bc1ed6a0a7' => 
+    array (
+      0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_opkey.tpl',
+      1 => 1475136773,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+),false)) {
+function content_5836eb9e5c6595_43606358 (Smarty_Internal_Template $_smarty_tpl) {
+?>
+
+	<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
+&id=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['id'];?>
+&action=recordOpkey" method="post"  name="f_board_read_opkey" onSubmit="return jsux.fn.read.checkOpkeyForm(this);">
 	<table summary="관리자 설정옵션입니다.">
 		<tbody>
 			<tr>
@@ -41,3 +68,5 @@
 		<input type="submit" name="submit" size="10" value=" 보내기 ">
 	</div>
 	</form>
+<?php }
+}

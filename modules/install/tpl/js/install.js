@@ -1,5 +1,5 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.dbSetup = {
+jsux.fn.setupDb = {
 
 	checkForm: function( f ) {
 
@@ -33,20 +33,33 @@ jsux.fn.dbSetup = {
 	sendAndLoad: function( f ) {
 
 		var self = this,
+			isLoading = false,
 			params = {
-				action: 'record-dbsetup',
+				_method: f._method.value,
 				db_hostname: f.db_hostname.value,
 				db_userid:f.db_userid.value,
 				db_password:f.db_password.value,
 				db_database:f.db_database.value,
 				db_table_prefix:f.db_table_prefix.value
-			};
+			},
+			url = '';
 
-		jsux.getJSON( jsux.rootPath + 'install', params, function( e ) {
+		url =  f.action;
+		if (!url) {
+			alert('Not Exist URL');
+		}
 
+		if (isLoading === true) {
+			trace( '데이터 생성 중 입니다. 잠시만 기다려주세요.'  );
+		}
+
+		isLoading = true;
+		jsux.getJSON( url, params, function( e ) {
+
+			isLoading= false;
 			alert(e.msg);
 			if (e.result == "Y") {				
-				jsux.goURL( jsux.rootPath + "install/admin-setup");
+				jsux.goURL( jsux.rootPath + "setup-admin");
 			} 
 		});
 	},
@@ -55,8 +68,8 @@ jsux.fn.dbSetup = {
 		var self = this;
 
 		$("form").on("submit", function( e ) {
-
 			e.preventDefault();
+
 			var bool = self.checkForm( e.target );
 			if ( bool === true) {
 				self.sendAndLoad(e.target);
@@ -69,7 +82,7 @@ jsux.fn.dbSetup = {
 	}
 };
 jsux.fn = jsux.fn || {};
-jsux.fn.adminSetup = {
+jsux.fn.setupAdmin = {
 
 	checkForm: function ( f ) {
 
@@ -94,7 +107,7 @@ jsux.fn.adminSetup = {
 		var interval = null,
 			isLoading = false,
 			params = {
-				action: 'recordCreateTable'
+				_method: 'insert'
 			};
 
 		if (isLoading === true) {
@@ -102,31 +115,39 @@ jsux.fn.adminSetup = {
 		}
 
 		isLoading = true;
-		jsux.getJSON( jsux.rootPath + "install", params, function(e) {
+		jsux.getJSON( jsux.rootPath + "create-table", params, function(e) {
 
 			isLoading = false;
-
-			trace( e.msg  );
-			if (e.result.toLowerCase() === 'n') {				
-				return;
-			}
-			
-			jsux.goURL("../login");
+			trace( e.msg  );			
+			jsux.goURL( jsux.rootPath + "login");
 		});
 	},
 	sendAndLoad: function( f ) {
 
 		var self = this,
+			isLoading = false,
 			params = {
-				action: 'recordAdminSetup',
+				_method: f._method.value,
 				admin_id: f.admin_id.value,
 				admin_pwd: f.admin_pwd.value,
 				admin_email: f.admin_email.value,				
 				yourhome: f.yourhome.value
-			};
+			},
+			url = '';
 
-		jsux.getJSON( jsux.rootPath + "install", params, function(e) {
+		url =  f.action;
+		if (!url) {
+			alert('Not Exist URL');
+		}
 
+		if (isLoading === true) {
+			trace( '데이터 생성 중 입니다. 잠시만 기다려주세요.'  );
+		}	
+		isLoading = true;
+
+		jsux.getJSON( url, params, function(e) {
+
+			isLoading = false;
 			trace( e.msg );
 			if (e.result =="Y") {
 				self.createTable();
@@ -143,14 +164,6 @@ jsux.fn.adminSetup = {
 			var bool = self.checkForm( e.target );
 			if ( bool === true) {
 				self.sendAndLoad( e.target );
-			}
-		});
-
-		$("input").each(function(index) {
-			$input = $(this);
-			if ($input.attr('id') && $input.val() === '') {
-				$input.focus();
-				return false;
 			}
 		});
 	},

@@ -1,4 +1,13 @@
 window.jsux = window.jsux || {};
+window.jsux.define = function( var_name, value) {
+
+	if (!jsux.hasOwnProperty(var_name)) {
+		jsux[var_name] = value;
+	} else {
+		console.log(var_name + " : This Properties Already Exists");
+	}
+};
+
 window.trace = function( str, bool ) {
 
 	if (bool) {

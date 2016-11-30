@@ -74,7 +74,7 @@
 	var loginObj = loginObj || {};
 	loginObj.memberList = {$documentData.group};
 </script>
-<script type="x-jquery-templete" id="ljsMember_tmpl">
+<script type="x-jquery-templete" id="memberGroupTmpl">
 	<option>{literal}${name}{/literal}</option>
 </script>
 {/if}
@@ -100,7 +100,7 @@
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
 {if $documentData.module_code != ''}
 <script>	jsux.rootPath = {$rootPath};</script>
-<script type="text/javascript" src="{$skinPathList.dir}/tpl/js/{$documentData.module_code}.js"></script>
+<script type="text/javascript" src="{$skinPathList.dir}/js/{$documentData.module_code}.js"></script>
 {/if}
 {if $documentData.jscode != ''}
 <script type="text/javascript">

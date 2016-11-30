@@ -1,6 +1,7 @@
 {assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
+{assign var=fieldData value=$documentData.contents}
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
 <div class="articles ui-edgebox">
 	<div class="member-edit">
@@ -10,7 +11,8 @@
 			</div>
 		</div>
 		<div class="box">
-			<form name="f_member_modify">
+			<form name="f_member_modify" action="{$rootPath}member-modify" method="post">
+			<input type="hidden" name="_method" value="update">
 			<dl>
 				<dt>
 					<h2>기본정보입력</h2>
@@ -24,64 +26,52 @@
 				<caption class="blind">회원정보수정</caption>
 				<tbody>
 					<tr>
+						<td>회원그룹</td>
 						<td>
-							<span>회</span>원그룹
-							<input type="hidden" name="table_name" value="{$sessionData.ljs_member}">
-							<input type="hidden" name="memberid" value="{$sessionData.ljs_memberid}">
-						</td>
-						<td>									
-							{$sessionData.ljs_member}
+							<input type="hidden" name="category" value="{$sessionData.sux_category}">		
+							{$sessionData.sux_category}
 						</td>
 					</tr>
 					<tr>
-						<td><span>아</span>이디</td>
+						<td>아이디</td>
 						<td>
-							{$sessionData.ljs_memberid}
+							<input type="hidden" name="user_id" value="{$sessionData.sux_user_id}">
+							{$sessionData.sux_user_id}
 						</td>
 					</tr>
 					<tr>
-						<td><span>비</span>밀번호</td>
-						<td><input type="password" name="pwd1" size="10" maxlength="12"></td>
+						<td>비밀번호</td>
+						<td><input type="password" name="password" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
-						<td><span>비</span>밀번호 확인</td>
-						<td><input type="PassWord" name="pwd2" size="10" maxlength="12"></td>
+						<td>비밀번호 확인</td>
+						<td><input type="password" name="passwordConf" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
-						<td><span>이</span>름</td>
-						<td><input type="text" name="name" size="8" maxlength="10" value=""></td>
+						<td>이름</td>
+						<td><input type="text" name="user_name" size="8" maxlength="10" value="{$fieldData['user_name']}"></td>
 					</tr>
 					<tr>
-						<td><span>이</span>메일</td>
-						<td><input type="text" name="email" size="12" maxlength="20">
+						<td>닉네임</td>
+						<td><input type="text" name="nick_name" size="8" maxlength="10" value="{$fieldData['nick_name']}"></td>
+					</tr>
+					<tr>
+						<td>이메일</td>
+						<td><input type="text" name="email_address" size="12" maxlength="20" value="{$fieldData['email']}">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="hanmail.com">hanmail.net</option>
 							<option value="gmail.com">gmail.com</option>
 						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value=""> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
+						<input type="text" name="email_tail2" size="12" maxlength="20" value="{$fieldData['email_tail2']}"> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
 					</tr>
 					<tr>
 						<td><span>휴</span>대폰번호</td>
 						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="">
-						</td>
-					</tr>
-					<tr>
-						<td>전화번호</td>
-						<td>
-							<input type="text" name="tel1" size="3" maxlength="3" value="">-
-							<input type="text" name="tel2" size="4" maxlength="4" value="">-
-							<input type="text" name="tel3" size="4" maxlength="4" value="">
-						</td>
-					</tr>							
-					<tr>
-						<td>회사이름</td>
-						<td>
-							<input type="text" name="company" size="12" maxlength="16" value="">
+							<input type="text" name="hp1" size="3" maxlength="3" value="{$fieldData['hp1']}">-
+							<input type="text" name="hp2" size="4" maxlength="4" value="{$fieldData['hp2']}">-
+							<input type="text" name="hp3" size="4" maxlength="4" value="{$fieldData['hp3']}">
 						</td>
 					</tr>
 				</tbody>
@@ -101,36 +91,36 @@
 					<tr>
 						<td>직업</td>
 						<td>
-							<select name=job>
+							<select name="job">								
 								<option value="">선택하기</option>
-								<option value=프리랜서>프리랜서</option>
-								<option value=교수>교수</option>
-								<option value=교사>교사</option>
-								<option value=학생>학생</option>
-								<option value=기업인>기업인</option>
-								<option value=회사원>회사원</option>
-								<option value=정치인>정치인</option>
-								<option value=주부>주부</option>
-								<option value=농어업>농어업</option>
-								<option value=기타>기타</option>
-						</select>
+								{assign var='jobList' value=['프리랜서','교수','교사','학생','기업인','회사원','정치인','주부','농어업','기타']}
+								{foreach from=$jobList item=value}							
+									<option value="{$value}" {if $fieldData['job'] === $value} selected {/if}>{$value}</option>
+								{/foreach}
+							</select>
 						</td>
 					</tr>
 					<tr>
 						<td>취미</td>
 						<td>
-							<input type="checkbox" name="hobby" value="인터넷"><span>인터넷</span>
-							<input type="checkbox" name="hobby" value="독서" ><span>독서</span>
-							<input type="checkbox" name="hobby" value="여행" ><span>여행</span>
-							<input type="checkbox" name="hobby" value="낚시" ><span>낚시</span>
-							<input type="checkbox" name="hobby" value="바둑" ><span>바둑</span>
-							<input type="checkbox" name="hobby" value="기타" ><span>기타</span>
+							{assign var='hobbyBoxes' value=['인터넷','독서','여행','낚시','바둑','기타']}
+							{foreach from=$hobbyBoxes item=mItem name=hobby}
+								{assign var=index value=$smarty.foreach.hobby.index}
+								{assign var=isChecked value=''}
+								{foreach from=$fieldData['hobby'] item=compareItem}
+									{if $mItem === $compareItem}
+										{assign var=isChecked value='checked'}
+									{/if}
+								{/foreach}
+								<label for="hobby{$index}"></label>
+								<input type="checkbox" id="hobby{$index}" name="hobby{$index}" value="{$mItem}" {$isChecked}><span>{$mItem}</span>
+							{/foreach}
 						</td>
 					</tr>
 				</tbody>
 			</table>
-			<input type="submit" name="submit" size="10" value="수 정">
-			<input type="button" name="cancel" value="취 소">
+			<input type="submit" name="submit" size="10" value="확 인">
+			<input type="button" name="cancel" value="취 소" onclick="location.href='{$rootPath}login'">
 			</form>
 		</div>
 	</div>

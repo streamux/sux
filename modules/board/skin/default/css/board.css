@@ -9,7 +9,7 @@
 .board-list .subject .on{display: inline-block}
 .board-list .subject .icon-notice-color{background:#FF0000}
 .board-list .subject .icon-replay-color{background:#fa7000}
-.board-list .subject .icon-opkey-color{background:#428bca}
+.board-list .subject .icon-progress-step-color{background:#428bca}
 
 .board-list .date{padding-left:10px;width:90px}
 .board-list .hit{padding-left:10px;width:70px}
@@ -92,9 +92,9 @@
 .article-box .login .box .login-body .panel-info .ui-label{display:inline-block;width:70px}
 .article-box .login .box .login-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
 
-.article-box .login .box .login-body .panel-btn{text-align:center;font-size:1.0625em}
-.article-box .login .box .login-body .panel-btn li{display:inline-block;line-height:30px;width:60px;background-color:#ffffff;border:1px solid #e3e3e3;border-radius: 10px;cursor:pointer}
-.article-box .login .box .login-body .panel-btn li:hover{background-color:#e3e3e3;}
+.article-box .login .box .login-body .panel-btn{margin-top:20px;text-align:center;font-size:1.0625em}
+.article-box .login .box .login-body .panel-btn input{line-height:30px;width:60px;text-align:center;border:1px solid #e3e3e3;background-color:#ffffff;border-radius: 10px;cursor:pointer}
+.article-box .login .box .login-body .panel-btn input:hover{background-color:#e3e3e3;}
 .article-box .login .panel-notice{margin:30px 0 30px 0;text-align:center}
 .article-box .login .panel-notice dl{display:inline-block;padding:10px;width:43%;text-align: left;vertical-align:top}
 .article-box .login .panel-notice dl dt{height:22px;font-weight: bold}

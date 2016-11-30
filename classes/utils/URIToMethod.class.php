@@ -1,8 +1,8 @@
 <?php
-class ModuleURIToMethod
+class URIToMethod
 {
 	private static $urlInstance = null;
-	var $methodes = array();
+	var $lists = array();
 
 	public static function getInstance() {
 
@@ -16,15 +16,19 @@ class ModuleURIToMethod
 	function setURI( $uri ) {
 
 		$arr = array();
+
+		$uri = explode('?', $uri);
+		$uri = $uri[0];
 		$uries = explode('/', $uri);
 		for ($i=2; $i<count($uries); $i++) {				
 			if (!is_numeric($uries[$i])) {
 				$arr[] = $uries[$i];
 			}
 		}
-		$action = $this->removeHyphen($arr[1]);		
-		$this->methodes['module'] = $arr[0];
-		$this->methodes['action'] = $action;
+
+		$this->lists['module-key'] = $arr[0];
+		$this->lists['action'] =  empty($arr[1]) ?  $this->removeHyphen($arr[0]) : $this->removeHyphen($arr[1]);
+		$this->lists['category'] = empty($arr[1]) ?  null : $this->removeHyphen($arr[0]);	
 	}
 
 	function removeHyphen( $action ) {
@@ -42,9 +46,9 @@ class ModuleURIToMethod
 	function getMethod( $key) {
 
 		if (isset($key)) {
-			return $this->methodes[$key];
+			return $this->lists[$key];
 		} else {
-			return $this->methodes;
+			return $this->lists;
 		}		
 	}
 }
