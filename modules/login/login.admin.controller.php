@@ -1,6 +1,6 @@
 <?php
 
-class LoginAdminController extends BaseController {
+class LoginAdminController extends Controller {
 
 	var $class_name = 'login_controlelr';
 

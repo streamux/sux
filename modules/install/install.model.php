@@ -1,10 +1,9 @@
 <?php
 
-class InstallModel extends BaseModel {
+class InstallModel {
 
-	var $class_name = 'install_model';
-	
-	function init() {}
+	function __construct()
+	{
+		
+	}
 }
-
-?>

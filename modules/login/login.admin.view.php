@@ -1,6 +1,6 @@
 <?php
 
-class LoginAdminModule extends BaseView {
+class LoginAdminModule extends View {
 
 	var $class_name = 'login_admin_module';	
 	var $skin_path_list = array();

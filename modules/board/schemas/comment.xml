@@ -1,0 +1,10 @@
+<table name="comment">
+	<column name="id" type="int" size="12" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+	<column name="contents_id" type="int" size="12" notnull="not null"/>
+	<column name="nickname" type="varchar" size="75" notnull="not null"/>
+	<column name="password" type="varchar" size="75" notnull="not null"/>
+	<column name="comment" type="text" notnull="not null"/>
+	<column name="voted_count" type="int" size="12" default="0" notnull="not null"/>
+	<column name="blamed_count" type="int" size="12" default="0" notnull="not null"/>
+	<column name="date" type="datetime"/>
+</table>

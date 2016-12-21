@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원 로그인 - StreamUX"}
@@ -5,29 +6,31 @@
 	<div class="login">
 		<h1 class="title">회원 로그인</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
-
-		<form action="login.php?action=logpass" name="f_login" method="post" onSubmit="return jsux.fn.login.checkForm(this);">
+		<form action="{$rootPath}login" name="f_login" method="post">
+		<input type="hidden" name="_method" value="insert">
 		<div class="box ui-edgebox-2px">
 			<div class="login-header">
-				<img src="tpl/images/icon_01.gif" title="">						
+				<img src="{$rootPath}modules/login/tpl/images/icon_01.gif" title="">						
 				<span>회원그룹</span>
-				<select name="member" id="ljsMember">
-					<!-- templete -->
+				<select name="category" id="memberGroup">
+					{foreach from=$documentData.group item=value}
+						<option>{$value['category']}</option>
+					{/foreach}
 				</select>
 			</div>
 			<div class="login-body">
 				<div class="panel-info">
 					<ul>
-						<li><span class="ui-label">아이디</span><input type="text" name="memberid" maxlength="14" value=""class="input-id"></li>
-						<li><span class="ui-label">비밀번호</span><input type="password" name="pass" maxlength="20"class="input-pwd"></li>
+						<li><span class="ui-label">아이디</span><input type="text" name="user_id" maxlength="14" value=""class="input-id"></li>
+						<li><span class="ui-label">비밀번호</span><input type="password" name="password" maxlength="20" class="input-pwd"></li>
 					</ul>							
 				</div><div class="panel-btn">
-					<input type="image" name="imagefield" src="tpl/images/btn_login.gif" title="로그인버튼" class="login-btn">
+					<input type="image" name="imagefield" src="{$rootPath}modules/login/tpl/images/btn_login.gif" title="로그인버튼" class="login-btn">
 				</div>					
 			</div>
 			<div class="login-footer">
 				<span class="link-searchinfo">
-					<a href="../member/member.php?action=join" class="ui-label-join"><span>회원가입</span></a><a href="login.php?action=searchID"><span>아이디</span></a><span>/</span><a href="login.php?action=searchPassword"><span>비밀번호 찾기</span></a>	
+					<a href="{$rootPath}member-join" class="ui-label-join"><span>회원가입</span></a><a href="{$rootPath}search-id"><span>아이디</span></a><span>/</span><a href="{$rootPath}search-password"><span>비밀번호 찾기</span></a>	
 				</span>
 			</div>																
 		</div>

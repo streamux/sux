@@ -31,7 +31,7 @@ jsux.gnb.Menu = jsux.View.create();
 
 			$( _data ).each(function(mindex) {
 
-				ty = -1*_data[mindex].sub.length * (34+1);
+				ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * (34+1) : 0;
 
 				_stage.append('<ul class="mmenu">'+
 									'<li data-mid="' + mindex + '" data-sid="-1">' +
@@ -47,11 +47,10 @@ jsux.gnb.Menu = jsux.View.create();
 
 			$( _data ).each(function(mindex) {
 
-				$( _data[mindex].sub ).each(function(sindex) {
-
+				$( _data[mindex].menu ).each(function(sindex) {						
 					_stage.find('.mmenu:eq('+mindex+') .sub > ul').append(
 						'<li class="smenu" data-mid="' + mindex + '" data-sid="' + sindex + '">'+
-							'<a href="#none"><span>'+_data[mindex].sub[sindex].label+'</span></a>'+
+							'<a href="#none"><span>'+_data[mindex].menu[sindex].label+'</span></a>'+
 						'</li>');
 				});
 			});
@@ -138,7 +137,7 @@ jsux.gnb.Menu = jsux.View.create();
 
 				e.preventDefault();
 
-				var url = _data[$( this ).parent().attr('data-mid')].sub[$( this ).parent().attr('data-sid')].link;
+				var url = _data[$( this ).parent().attr('data-mid')].menu[$( this ).parent().attr('data-sid')].link;
 				jsux.goURL( url, '_self' );				
 			});
 		};
@@ -249,7 +248,7 @@ jsux.gnb.Menu = jsux.View.create();
 				return;
 			} 
 
-			if (_activateSid <= 0 && _activateSid > _data[mid].sub.length) {
+			if (_activateSid <= 0 && _activateSid > _data[mid].menu.length) {
 				warn('It not a Avaliable Depth2\'s Number!');
 				return;
 			}

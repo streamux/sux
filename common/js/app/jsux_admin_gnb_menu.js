@@ -132,7 +132,7 @@ jsux.adminGnb.Menu = jsux.View.create();
 
 				e.preventDefault();
 
-				var url = _data[$( this ).parent().attr('data-mid')].sub[$( this ).parent().attr('data-sid')].link;
+				var url = jsux.rootPath + _data[$( this ).parent().attr('data-mid')].sub[$( this ).parent().attr('data-sid')].link;
 				jsux.goURL( url, '_self' );				
 			});
 		};

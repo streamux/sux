@@ -1,6 +1,6 @@
 <?php
 
-class AnalyticsController extends BaseController {
+class AnalyticsController extends Controller {
 
 	var $class_name = 'analytics_controller';
 

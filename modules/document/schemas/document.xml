@@ -1,0 +1,12 @@
+<table name="document" version="">
+	<column name="id" type="int" size="12" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+	<column name="category" type="varchar" size="30" notnull="not null"/>
+	<column name="document_name" type="varchar" size="30" notnull="not null"/>
+	<column name="summary" type="varchar" size="50"/>
+	<column name="is_readable" type="char" size="1" default="y" notnull="not null"/>
+	<column name="document_width" type="varchar" size="10" notnull="not null"/>
+	<column name="header_path" type="varchar" size="50"/>
+	<column name="contents_path" type="varchar" size="50"/>
+	<column name="footer_path" type="varchar" size="50"/>	
+	<column name="date" type="datetime"/>
+</table>

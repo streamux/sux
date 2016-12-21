@@ -21,6 +21,7 @@ class Utils extends Object {
 			preg_match('/(^[\.\.\/]+)([a-zA-Z0-9_\.\/]*)?$/', $convert_url, $matches);
 			$absoluteDir = preg_split('/[\/]+/',$skin_dir);
 			$headerDir = preg_split('/[\.\.]+/', $matches[1]);
+			
 			$dirLength = count($headerDir)-1;
 			for ($i=0; $i<$dirLength; $i++) {
 				array_pop($absoluteDir);
@@ -50,6 +51,8 @@ class Utils extends Object {
 
 		@chmod($path,0777);
 		$directory = dir($path);
+
+		return false;
 		
 		while(($entry = $directory->read()) !== false) { 
 			
@@ -70,10 +73,21 @@ class Utils extends Object {
 		return true;
 	}
 
+	public static function deleteFile($path) {
+
+		if (!is_file( $path )) {
+			return false;
+		}
+
+		@chmod($path,0777);
+		@UnLink ($path);
+
+		return true; 
+	}
+
 	public static function readDir( $dir ) {
 
 		$temArr = array();
-
 		if ($handle = opendir($dir)) { 
 			while (false !== ($file = readdir($handle))) { 
 
@@ -92,7 +106,39 @@ class Utils extends Object {
 
 	public static function goURL( $url, $delay=0) {
 
-		printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$data = array(	'url'=>$url,
+							'result'=>'Y');
+
+			Object::callback($data);
+		} else {
+			printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
+		}
+	}
+
+	public static function alertTo( $msg, $url) {
+
+		$msg = preg_replace('/<br>/', '\n',$msg);		
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+					
+			$data = array(	'url'=>$url,
+							'msg'=>$msg,
+							'result'=>'Y');
+
+			Object::callback($data);
+		} else {
+			$htmlUI =	'<script>
+							alert(\'%s\');
+							location.href=\'%s\';
+						</script>';
+
+			if ($useHtml === TRUE) {
+				$htmlUI = self::getHtmlLayout( $htmlUI );
+			}
+			printf($htmlUI, $msg, $url);
+		}
 	}
 }
 ?>

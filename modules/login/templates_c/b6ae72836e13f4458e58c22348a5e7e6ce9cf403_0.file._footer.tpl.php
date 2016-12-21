@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-27 11:43:42
+/* Smarty version 3.1.30, created on 2016-11-09 09:44:55
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5811cc4e5ca859_47804197',
+  'unifunc' => 'content_5822e20799e0e3_43266733',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1477561417,
+      1 => 1478681094,
       2 => 'file',
     ),
   ),
@@ -20,29 +20,32 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5811cc4e5ca859_47804197 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5822e20799e0e3_43266733 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
-				</div>				
-			</div>
-			<div class="swiper-scrollbar swiper-scrollbar-contents"></div>			
-		</div>		
-	</div>	
-	<div class="footer">
-		<ul class="clearfix">
-			<li><a href="../login/login.php?action=login">로그인</a></li>
-			<li><a href="../member/member.php?action=join">회원가입</a></li>
-			<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
-		</ul>	
-		<p>
-			<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
+		<div class="footer">
+			<ul class="clearfix">
+				<li><a href="../login/login.php?action=login">로그인</a></li>
+				<li><a href="../member/member.php?action=join">회원가입</a></li>
+				<li><a href="javascript:jsux.mobileGnbView.show();">사이트 맵</a></li>
+			</ul>	
+			<p>
+				<span><?php $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['copyrightPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0, true);
 ?>
 </span>
-		</p>
-	</div>
+			</p>
+		</div>
+	</div>	
 </div>
 <!-- mobile menu start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
-<div class="mobile-gnb-case mobile-gnb-case-off">	
+<div class="mobile-gnb-case mobile-gnb-case-off">
+	<div class="menu-btn-close">
+		<div class="ui-h-3stick">
+			<div class="hline1"></div>
+			<div class="hline2"></div>
+			<div class="hline3"></div>
+		</div>
+	</div>
 	<div class="header-panel">
 		<div class="ui-user-info">
 			<ul class="clearfix">
@@ -54,19 +57,19 @@ function content_5811cc4e5ca859_47804197 (Smarty_Internal_Template $_smarty_tpl)
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="/sux/modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="../../modules/login/login.php?action=login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="/sux/modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="../../modules/member/member.php?action=join">회원가입</a></div>
 				</li>
 			</ul>
-		</div>		
-	</div>		
+		</div>
+	</div>
 	<div class="body-panel">
 		<div class="swiper-container swiper-container-mobilegnb">
 			<div class="swiper-wrapper">
 				<div class="swiper-slide">
-					<ul id="mobileGnb"" class="menu-panel">
+					<ul id="mobileGnb" class="menu-panel">
 						<!-- display first's depth menu list -->
 					</ul>
 				</div>		

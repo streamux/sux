@@ -1,6 +1,6 @@
 <?PHP
 
-class LoginModel extends BaseModel {
+class LoginModel extends Model {
 
 	var $class_name = 'login_model';
 
@@ -11,79 +11,87 @@ class LoginModel extends BaseModel {
 
 	function init() {}
 
-	function getMemberGroup() {
+	function selectMemberGroup() {
 
 		$context = Context::getInstance();
-		$query = new Query();
-		$query->setField('name');
-		$query->setTable($context->get('db_member_group'));
-		$query->setOrderBy('id asc');	
-		parent::select($query);		
-	}
-
-	function getLogpass($params=NULL, $type=NULL) {
-
-		$context = Context::getInstance();
-		$member = $context->getSession('ljs_member');
-		if (!isset($member) || $member == '') {
-			$member = $context->getPost('member');
-		}
-
-		$memberid = $context->getSession('ljs_memberid');
-		if (!isset($memberid) || $memberid == '') {
-			$memberid = $context->getPost('memberid');
-		}
-
-		if ($type === 'select') {
-			$query = new Query();
-			$query->setField('*');
-			$query->setTable($member);
-			$query->setWhere(array(
-				'ljs_memberid'=>$memberid
-			));
-			parent::select($query);
-			
-		} else if ($type === 'update') {
-			$query = new Query();
-			$query->setTable($member);
-			$query->setColumn(array('hit'=>$params['hit']));
-			$query->setWhere(array(
-				'ljs_memberid'=>$memberid
-			));
-			parent::update($query);
-		}
-	}
-
-	function getLogout() {}
-
-	function getSearchid() {
-
-		$context = Context::getInstance();
-		$member = $context->getPost('member');
-		$user_name = $context->getPost('user_name');
+		$tableName = $context->getTable('member_group');
 
 		$query = new Query();
-		$query->setField('ljs_memberid, email');
-		$query->setTable($member);
-		$query->setWhere(array(
-			'name'=>$user_name
-		));
+		$query->setField('*');
+		$query->setTable($tableName);
+		$query->setOrderBy('id asc');
 		parent::select($query);
 	}
 
-	function getSearchpwd() {
+	function selectLogpass($params=NUL) {		
 
 		$context = Context::getInstance();
-		$member = $context->getPost('member');
-		$user_name = $context->getPost('user_name');
-		$user_email = $context->getPost('user_email');
+		$tableName = $context->getTable('member');
+		$category = $context->getParameter('category');
+		$userId = $context->getParameter('user_id');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$where->set('user_id',$userId,'=','and');
 
 		$query = new Query();
-		$query->setField('ljs_memberid, email, ljs_pass1');
-		$query->setTable($member);
-		$query->setWhere(array(
-			'name'=>$user_name
-		));
+		$query->setField('*');
+		$query->setTable($tableName);
+		$query->setWhere($where);
+		parent::select($query);
+	}
+
+	function updateField($params=NULL) {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable('member');
+		$category = $context->getParameter('category');
+		$userId = $context->getParameter('user_id');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$where->set('user_id',$userId,'=','and');
+
+		$query = new Query();
+		$query->setTable($tableName);
+		$query->setColumn(array('hit'=>$params['hit']));
+		$query->setWhere($where);
+		parent::update($query);
+	}
+
+	function selectSearchid() {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable('member');
+		$category = $context->getParameter('category');
+		$userName = $context->getParameter('user_name');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$where->set('user_name',$userName,'=','and');
+
+		$query = new Query();
+		$query->setField('user_id, email_address');
+		$query->setTable($tableName);
+		$query->setWhere($where);
+		parent::select($query);
+	}
+
+	function selectSearchpwd() {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable('member');
+		$category = $context->getParameter('category');
+		$userId = $context->getParameter('user_id');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$where->set('user_id',$userId,'=','and');
+
+		$query = new Query();
+		$query->setField('user_name, email_address, password');
+		$query->setTable($tableName);
+		$query->setWhere($where);
 		parent::select($query);
 	}
 }

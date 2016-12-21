@@ -1,14 +1,6 @@
 jsux.fn = jsux.fn || {};
 jsux.fn.join = {
 
-	dispSelectMemberList: function() {
-
-		var data = loginObj.memberList,
-			markup = $("#ljsMember_tmpl");
-
-		$("#ljsMember").empty();
-		$(markup).tmpl(data).appendTo("#ljsMember");
-	},
 	getEmailVal: function( id ) {
 
 		var result = $.trim($('select[name='+id+'1]').val());
@@ -31,7 +23,7 @@ jsux.fn.join = {
 	getCheckboxVal: function( id ) {
 
 		var result= '',
-			list = $('input:checkbox[name='+id+']:checked'),
+			list = $('input:checkbox[name^='+id+']:checked'),
 			len = list.length;
 
 		$(list).each(function(index){
@@ -50,148 +42,103 @@ jsux.fn.join = {
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = f.memberid.value.length,
-			pwd1 = f.pwd1.value.length,
-			pwd2 = f.pwd2.value.length,
-			name = f.name.value.length,
-			email = f.email.value.length,
-			emailTail = this.getEmailVal('email_tail'),
-			hp1 = f.hp1.value.length,
-			hp2 = f.hp2.value.length,
-			hp3 = f.hp3.value.length;
+		var labelList = ['아이디','비밀번호','비밀번호 확인','이름','닉네임','e-mail','핸드폰 앞자리','핸드폰 가운데 자리', '핸드폰 뒷자리'];
+		var checkList = ['user_id','password','passwordConf','user_name','nick_name','email_address','hp1','hp2','hp3'];
+		var email = f.email_address.value.length + this.getEmailVal('email_tail');
+		var result = true;
 
-		if ( memberid < 1 ) {
-			trace('아이디를 입력 하세요.');
-			f.memberid.focus();
-			return (false);
-		}
+		$.each( checkList, function( index, item) {
 
-		if (this.checkLangKor( f.memberid.value)) {
-			trace('아이디에 한글이 포함되어 있습니다.');
-			f.memberid.focus();
-			return (false);
-		}
-
-		if ( pwd1 < 1) {
-			trace('비밀번호를 입력 하세요.');
-			f.pwd1.focus();
-			return (false);
-		}
-
-		if ( pwd2 < 1) {
-			trace('확인번호를 입력 하세요.');
-			f.pwd2.focus();
-			return (false);
-		}
-
-		if ( name < 1 ) {
-			trace('이름을 입력 하세요.');
-			f.name.focus();
-			return (false);
-		}
-
-		if ( email < 1 ) {
-			trace('e-mail을 입력하세요.');
-			f.email.focus();
-			return (false);
-		}
-
-		if ( emailTail < 1 ) {
-			trace('e-mail서비스 주소를 입력하세요.');
-
-			if (this.getEmailVal('email_tail') === '') {
-				f.email_tail2.focus();
+			var $input = f[item];
+			if ($input.value.length < 1) {
+				trace(labelList[index] + '을(를) 입력 하세요.');
+				$input.focus();
+				result = false;
+				return false;
 			}
-			return (false);
-		}
+		});
 
-		if ( hp1 < 3 ) {
-			trace('핸드폰 첫번째 자리 번호를 입력해 주세요.');
-			f.hp1.focus();
-			return (false);
-		}
-
-		if ( hp2 < 3 ) {
-			trace('핸드폰 두번째 자리 번호를 입력해 주세요.');
-			f.hp2.focus();
-			return (false);
-		}
-
-		if ( hp3 < 4 ) {
-			trace('핸드폰 세번째 자리 번호를 입력해 주세요.');
-			f.hp3.focus();
-			return (false);
-		}
-
-		return (true);
+		return result;	
 	},
 	sendJson: function( f ) {
 
-		var params = '';
-		params = {	action: 'recordJoin',
-					table_name: this.getSelectVal('table_name'),
-					memberid: f.memberid.value,
-					pwd1: f.pwd1.value,
-					pwd2: f.pwd2.value,
-					name: f.name.value,
-					email: f.email.value+'@'+this.getEmailVal('email_tail'),
-					hp1: f.hp1.value,
-					hp2: f.hp2.value,
-					hp3: f.hp3.value,
-					tel1: f.tel1.value,
-					tel2: f.tel2.value,
-					tel3: f.tel3.value,
-					company: f.company.value,
-					job: f.job.value,
-					hobby: this.getCheckboxVal('hobby'),
-					path: f.path.value,
-					proposeid: f.proposeid.value };
+		var self = this;
+		var params = {};
+		var datas = $('form')[0];
+		var indexCheckbox = 0;
+		var url = '';
 
-		jsux.getJSON('member.php', params, function( e ) {
+		$.each(datas, function( index, item ) {
 
-			trace( e.msg );
-			
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
+			var glue ='';
+
+			if (item.nodeName.toLowerCase() === 'select') {
+				item.value = self.getSelectVal(item.name);
+				params[item.name] = item.value;
+			} else {
+
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}
+
+			if (type === 'checkbox' && item.checked) {
+				if (indexCheckbox === 0) {
+					var name = item.name.substr(0, item.name.length-1);
+					params[item.name] = self.getCheckboxVal(name);
+				} 
+				indexCheckbox++;					
+			}
+		});
+
+		/*$.each(params, function( index, item ) {
+			console.log(index + ' : ' + item);
+		});*/
+
+		if (!f.action) {
+			alert('Not Exists URL');
+		}
+		url = f.action;
+
+		jsux.getJSON( url, params, function( e ) {
+
+			trace( e.msg );			
 			if (e.result == 'Y') {
-				jsux.goURL('../login/login.php?action=login');
+				jsux.goURL( jsux.rootPath + 'login');
 			}
 		});
 	},
 	checkPWD: function() {
 
-		if ($('input[name=pwd1]').val() != $('input[name=pwd2]').val()) {
+		if ($('input[name=passowrd]').val() != $('input[name=passowrdConf]').val()) {
 
 			trace('비밀번호가 일치하지 않습니다.');
 
-			$('input[name=pwd1]').val('');
-			$('input[name=pwd2]').val('');
-			$('input[name=pwd1]').focus();
+			$('input[name=passowrd]').val('');
+			$('input[name=passowrdConf]').val('');
+			$('input[name=passowrd]').focus();
 
 			return(false);
 		}
 	},		
 	checkID: function() {
 
-		var	params =  {	table_name: this.getSelectVal('table_name'),
-						memberid: $('input[name=memberid]').val()};
+		var	params =  {
+			_method: 'insert',
+			category: this.getSelectVal('category'),
+			user_id: $('input[name=user_id]').val()
+		};
 
-		if (params.memberid === '') {
+		if (params.user_id === '') {
 			trace('아이디를 입력해주세요');
 			$('input[name=memberid]').focus();
 			return;
 		}
 
-		jsux.getJSON('member.php?action=searchID', params, function( e ) {
-			trace( e.msg );
-		});
-	},
-	checkCorpName: function() {
-
-		var	params = '';
-		params = {	action: 'searchcorp',
-					table_name: $('select[name=table_name]').val(),
-					company: $('input[name=company]').val()};
-
-		jsux.getJSON('member.php', params, function( e ) {
+		jsux.getJSON( jsux.rootPath + 'check-id', params, function( e ) {
 			trace( e.msg );
 		});
 	},
@@ -199,39 +146,38 @@ jsux.fn.join = {
 
 		var self = this;
 		$('form').on('submit', function( e ) {
-
 			e.preventDefault();
-			var bool  = self.checkFormVal( e.target );			
+
+			var bool  = self.checkFormVal( this);
 			if (bool === true) {
 				self.sendJson( e.target );
 			}
 		});
 		$('input[name=cancel]').on('click', function(e) {
-
-			jsux.goURL( '../login/login.php?action=login' );
+			jsux.goURL( jsux.rootPath + 'login' );
 		});
 
-		$('input[name=pwd2]').on('blur', function() {
-
+		$('input[name=passowrdConf]').on('blur', function() {
 			self.checkPWD();
 		});	
 		$('input[name=checkID]').on('click',function(e) {
-
 			self.checkID();
 		});
 		$('input[name=checkCorpName]').on('click',function(e) {
-
 			self.checkCorpName();
 		});
 		$('select[name=email_tail1]').on('change', function() {
 
-			$('input[name=email_tail2').val('');
+			if ($(this).val() === '직접입력') {
+				$('input[name=email_tail2').show();
+			} else {
+				$('input[name=email_tail2').val('').hide();
+			}			
 		});	
 	},
 	setLayout: function() {
 
-		this.dispSelectMemberList();
-		$("input[name=memberid]").focus();
+		jsux.setAutoFocus();
 	},
 	init: function() {
 
@@ -245,10 +191,10 @@ jsux.fn.modify = {
 
 	getEmailVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"1]").val());
+		var result = $.trim($('select[name='+id+'1]').val());
 
-		if ( result == "직접입력") {
-			result = $("input[name="+id+"2]").val();
+		if ( result == '직접입력') {
+			result = $('input[name='+id+'2]').val();
 		}
 		result = result.replace(/@/i, '');
 
@@ -256,25 +202,25 @@ jsux.fn.modify = {
 	},
 	getSelectVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"]").val());
+		var result = $.trim($('select[name='+id+']').val());
 
 		return result;
 	},
 	setSelectVal:function( id, value ) {
 
-		$("select[name="+id+"]").val( value );
+		$('select[name='+id+']').val( value );
 	},
 	getCheckboxVal: function( id ) {
 
-		var result= "",
-			list = $("input:checkbox[name="+id+"]:checked"),
+		var result= '',
+			list = $('input:checkbox[name^='+id+']:checked'),
 			len = list.length;
 
 		$(list).each(function(index){
 			result += list[index].value;
 
 			if (index < len-1) {
-				result += ",";
+				result += ',';
 			}
 		});
 		return result;
@@ -287,136 +233,95 @@ jsux.fn.modify = {
 	},
 	checkPWD: function() {
 
-		if ($("input[name=pwd1]").val() != $("input[name=pwd2]").val()) {
+		if ($('input[name=password]').val() != $('input[name=passwordConf]').val()) {
 
-			trace("비밀번호가 일치하지 않습니다.");
+			trace('비밀번호가 일치하지 않습니다.');
 
-			$("input[name=pwd1]").val("");
-			$("input[name=pwd2]").val("");
-			$("input[name=pwd1]").focus();
+			$('input[name=password]').val('');
+			$('input[name=passwordConf]').val('');
+			$('input[name=password]').focus();
 
 			return(false);
 		}
-	},		
-	checkID: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					memberid: $("input[name=memberid]").val()};
-
-		jsux.getJSON("../search_id.php", params, function( e ) {
-
-			trace( e.msg );
-		});
-	},
-	checkCorpName: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					company: $("input[name=company]").val()};
-
-		jsux.getJSON("../search_companyname.php", params, function( e ) {
-
-			trace( e.msg );
-		});
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = $("input[name=memberid]").val(),
-			pwd1 = f.pwd1.value.length,
-			pwd2 = f.pwd2.value.length,
-			name = f.name.value.length,
-			email = f.email.value.length,
-			emailTail = this.getEmailVal("email_tail"),
-			hp1 = f.hp1.value.length,
-			hp2 = f.hp2.value.length,
-			hp3 = f.hp3.value.length;
+		var labelList = ['아이디','비밀번호','비밀번호 확인','이름','닉네임','e-mail','핸드폰 앞자리','핸드폰 가운데 자리', '핸드폰 뒷자리'];
+		var checkList = ['user_id','password','passwordConf','user_name','email_address','hp1','hp2','hp3'];
+		var email = f.email.value.length + this.getEmailVal('email_tail');
+		var result = true;
 
-		if ( memberid < 1 ) {
-			trace("아이디를 입력 하세요.");
-			f.memberid.focus();
-			return (false);
-		}
+		$.each( checkList, function( index, item) {
 
-		if ( pwd1 < 1) {
-			trace("비밀번호를 입력 하세요.");
-			f.pwd1.focus();
-			return (false);
-		}
-
-		if ( pwd2 < 1) {
-			trace("확인번호를 입력 하세요.");
-			f.pwd2.focus();
-			return (false);
-		}
-
-		if ( name < 1 ) {
-			trace("이름을 입력 하세요.");
-			f.name.focus();
-			return (false);
-		}
-
-		if ( email < 1 ) {
-			trace("e-mail을 입력하세요.");
-			f.email.focus();
-			return (false);
-		}
-
-		if ( emailTail < 1 ) {
-			trace("e-mail서비스 주소를 입력하세요.");
-
-			if (this.getEmailVal("email_tail") === "") {
-				f.email_tail2.focus();
+			var $input = f[item];
+			if ($input.value.length < 1) {
+				trace(labelList[index] + '을(를) 입력 하세요.');
+				$input.focus();
+				result = false;
+				return false;
 			}
-			return (false);
-		}
+		});
 
-		if ( hp1 < 3 ) {
-			trace("핸드폰 첫번째 자리 번호를 입력해 주세요.");
-			f.hp1.focus();
-			return (false);
-		}
-
-		if ( hp2 < 3 ) {
-			trace("핸드폰 두번째 자리 번호를 입력해 주세요.");
-			f.hp2.focus();
-			return (false);
-		}
-
-		if ( hp3 < 4 ) {
-			trace("핸드폰 세번째 자리 번호를 입력해 주세요.");
-			f.hp3.focus();
-			return (false);
-		}
-
-		return (true);
+		return result;	
 	},
 	sendJson: function( f ) {
 
-		var params = "";
-		params = { action: 'recordModify',
-					table_name: f.table_name.value,
-					memberid: f.memberid.value,
-					pwd1: f.pwd1.value,
-					pwd2: f.pwd2.value,
-					name: f.name.value,
-					email: f.email.value+"@"+this.getEmailVal("email_tail"),
-					hp1: f.hp1.value,
-					hp2: f.hp2.value,
-					hp3: f.hp3.value,
-					tel1: f.tel1.value,
-					tel2: f.tel2.value,
-					tel3: f.tel3.value,
-					company: f.company.value,
-					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby") };
+		var self = this;
+		var params = {};
+		var datas = $('form')[0];
+		var indexCheckbox = 0;
 
-		jsux.getJSON("member.php", params, function( e ) {
+		$.each(datas, function( index, item ) {
+
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
+			var glue ='';
+
+			if (item.nodeName.toLowerCase() === 'select') {
+				item.value = self.getSelectVal(item.name);
+				params[item.name] = item.value;
+			} else {
+
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}
+
+			if (type === 'checkbox' && item.checked) {
+				if (indexCheckbox === 0) {
+					var name = item.name.substr(0, item.name.length-1);
+					params[name] = self.getCheckboxVal(name);
+				} 
+				indexCheckbox++;					
+			}
+		});
+
+		/*$.each(params, function( index, item ) {
+			console.log(index + ' : ' + item);
+		});*/
+
+		if (!f.action) {
+			alert('Not Exists URL');
+		}
+		url = f.action;
+
+		var updateLoginHandler = function( url ) {
+
+			var params = {_method:'insert'};
+			jsux.getJSON( url, params, function(e) {
+
+				if  (e.result.toLowerCase() == 'y') {
+					jsux.goURL( jsux.rootPath + 'login');
+				}
+			});
+		};
+
+		jsux.getJSON( url, params, function( e ) {
 
 			trace( e.msg );
-
-			if (e.result == "Y") {
-				jsux.goURL('../login/login.php?action=logpass');
+			if (e.result.toLowerCase() == 'y') {
+				updateLoginHandler( jsux.rootPath + 'login');
 			}
 		});
 	},
@@ -424,7 +329,7 @@ jsux.fn.modify = {
 
 		var self = this;
 		
-		$("form").on("submit", function( e ) {
+		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
 			var bool  = self.checkFormVal( e.target );			
@@ -433,90 +338,26 @@ jsux.fn.modify = {
 			}
 		});
 
-		$("input[name=cancel]").on("click", function(e) {			
-			jsux.goURL( '../login/login.php?action=login' );
+		$('input[name=cancel]').on('click', function(e) {			
+			jsux.goURL( jsux.rootPath + 'login' );
 		});
 
-		$("input[name=pwd2]").on("blur", function() {
+		$('input[name=password]').on('blur', function() {
 			self.checkPWD();
 		});	
 
-		$("input[name=checkCorpName]").on("click",function(e) {
-			self.checkCorpName();
-		});
+		$('select[name=email_tail1]').on('change', function() {
 
-		$("select[name=email_tail1]").on("change", function() {
-			$("input[name=email_tail2").val("");
+			if ($(this).val() === '직접입력') {
+				$('input[name=email_tail2').show();
+			} else {
+				$('input[name=email_tail2').val('').hide();
+			}
 		});
 	},
 	setLayout: function() {
 
-		var params = {
-			table_name: $("input[name=table_name]").val(),
-			memberid:  $("input[name=memberid]").val()
-		};
-
-		jsux.getJSON("member.php?action=memberField", params, function( e ) {
-
-			var formLists = null,
-				checkedVal = "",
-				markup = null,
-				labelList = null,
-				data = e.data;
-
-			if (data) {
-
-				formLists = $("input[type=text]");
-				$(formLists).each(function(index) {
-
-					if (data[this.name]) {
-						this.value = data[this.name];
-					}
-				});
-
-				formLists = $("select");
-				$(formLists).each(function(index) {
-
-					if (data[this.name]) {
-						this.value = data[this.name];
-					}						
-				});
-
-				if (data.hobby) {
-
-					formLists = $("input[type=checkbox]");
-					checkedVal = data.hobby.split(",");
-					$(formLists).each(function(index){
-
-						var self = this;
-						$(checkedVal).each(function(sIndex){
-							if (checkedVal[sIndex]) {
-								if( self.value === checkedVal[sIndex]) {
-									self.checked = true;
-								}
-							}
-						});
-					});
-				}
-
-				labelList = $("table tr").find(".view-type-textfield");
-
-				markup = $("#memberLabel_tmpl");
-				$(labelList).each(function(index) {
-
-					var label = "",
-						data = "";
-
-					label = $(labelList[index]).attr("id");						
-					data = {label: data[label]};
-
-					$("#"+label).empty();
-					$(markup).tmpl( data ).appendTo($("#"+label));
-				});
-			} else {
-				trace( e.msg );
-			}
-		});
+		jsux.setAutoFocus();
 	},		
 	init: function() {
 

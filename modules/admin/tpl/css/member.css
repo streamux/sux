@@ -37,8 +37,9 @@
 /* member groupadd */
 .articles .group-add .box{margin-bottom:20px;padding-bottom:20px;width:100%;border:2px solid #d6d7d6;background-color:#FFFFFF;text-align: center}
 .articles .group-add .box ul{overflow:hidden;margin-top:30px;margin-bottom:20px;width:100%;text-align: left}
-.articles .group-add .box ul li{padding-left:5px}
-.articles .group-add .box ul li:nth-child(2){padding:20px 0 10px 38px}
+.articles .group-add .box ul li{padding:10px 20px 10px 38px}
+.articles .group-add .box ul li input[type=text]{width:100%;}
+.articles .group-add .box ul li input[name=category]{width:50%}
 
 /* member del pass*/
 .articles .del .box{margin-bottom:20px;padding-top:30px;padding-bottom:30px;width:100%;border:2px solid #d6d7d6;text-align: left}

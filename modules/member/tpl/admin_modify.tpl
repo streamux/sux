@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 회원정보수정 - StreamUX"}	
@@ -13,7 +14,7 @@
 			<dl>
 				<dt>기본정보입력</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>			
 				</dd>
 			</dl>					
@@ -22,36 +23,36 @@
 				<tbody>
 					<tr>
 						<td>
-							<span>회</span>원그룹
-							<input type="hidden" name="table_name" value="{$requestData.table_name}">
-							<input type="hidden" name="memberid" value="{$requestData.memberid}">
-							<input type="hidden" name="id" value="{$requestData.id}">
+							<span>회</span>원그룹							
+							<input type="hidden" name="user_id" value="{$documentData.user_id}">
+							<input type="hidden" name="category_id" value="{$documentData.category_id}">
+							<input type="hidden" name="id" value="{$documentData.id}">
 						</td>
 						<td>										
-							{$requestData.table_name}
+							{$documentData.category}
 						</td>
 					</tr>
 					<tr>
 						<td><span>아</span>이디</td>
 						<td>
-							{$requestData.memberid}
+							{$documentData.user_id}
 						</td>
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호</td>
-						<td><input type="password" name="ljs_pass1" size="10" maxlength="12"></td>
+						<td><input type="password" name="password" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
 						<td><span>비</span>밀번호 확인</td>
-						<td><input type="password" name="ljs_pass2" size="10" maxlength="12"></td>
+						<td><input type="password" name="passwordConf" size="10" maxlength="12"></td>
 					</tr>
 					<tr>
 						<td><span>이</span>름</td>
-						<td><input type="text" name="name" size="8" maxlength="10" value=""></td>
+						<td><input type="text" name="user_name" size="8" maxlength="10" value=""></td>
 					</tr>
 					<tr>
 						<td><span>이</span>메일</td>
-						<td><input type="text" name="email" size="12" maxlength="20">
+						<td><input type="text" name="email_address" size="12" maxlength="20">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
@@ -68,26 +69,12 @@
 							<input type="text" name="hp3" size="4" maxlength="4" value="">
 						</td>
 					</tr>
-					<tr>
-						<td>전화번호</td>
-						<td>
-							<input type="text" name="tel1" size="3" maxlength="3" value="">-
-							<input type="text" name="tel2" size="4" maxlength="4" value="">-
-							<input type="text" name="tel3" size="4" maxlength="4" value="">
-						</td>
-					</tr>							
-					<tr>
-						<td>회사이름</td>
-						<td>
-							<input type="text" name="company" size="12" maxlength="16" value="">
-						</td>
-					</tr>
 				</tbody>
 			</table>
 			<dl>
 				<dt>기타정보입력</dt>
 				<dd>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">추가 정보를 입력해주세요.</span>			
 				</dd>
 			</dl>	
@@ -126,7 +113,7 @@
 					<tr>
 						<td>가입경로</td>
 						<td>
-							<select name="path">
+							<select name="join_path">
 								<option value="">선택하기</option>
 								<option value=네이버검색>키워드검색</option>
 								<option value=다음카페>네이버지식인</option>
@@ -141,7 +128,7 @@
 					<tr>
 						<td>추천아이디</td>
 						<td>
-							<input type="text" name="proposeid" size="12" maxlength="20" value="">
+							<input type="text" name="recommend_id" size="12" maxlength="20" value="">
 						</td>
 					</tr>
 					<tr>
@@ -156,9 +143,18 @@
 					<tr>
 						<td>쓰기허용</td>
 						<td>
-							<select name="writer">
+							<select name="is_writable">
 								<option>yes</option>
 								<option>no</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>추방유무</td>
+						<td>
+							<select name="is_kickout">
+								<option>no</option>
+								<option>yes</option>								
 							</select>
 						</td>
 					</tr>

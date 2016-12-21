@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<menu>
+		<label><![CDATA[Download]]></label>
+		<link><![CDATA[download]]></link>
+	</menu>
+	<menu>
+		<label><![CDATA[User Guide]]></label>
+		<link><![CDATA[userguide]]></link>
+	</menu>
+	<menu>
+		<label><![CDATA[Portfolio]]></label>
+		<link><![CDATA[portfolio]]></link>
+	</menu>
+	<menu>
+		<label><![CDATA[Support]]></label>
+		<link><![CDATA[community]]></link>
+		<menu>
+			<label><![CDATA[공지사항]]></label>
+			<link><![CDATA[notice]]></link>
+		</menu>
+		<menu>
+			<label><![CDATA[커뮤니티]]></label>
+			<link><![CDATA[community]]></link>
+		</menu>
+		<menu>
+			<label><![CDATA[자주묻는질문]]></label>
+			<link><![CDATA[faq]]></link>
+		</menu>
+		<menu>
+			<label><![CDATA[버그신고]]></label>
+			<link><![CDATA[bug_reporting]]></link>
+		</menu>
+	</menu>
+</root>

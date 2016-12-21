@@ -1,6 +1,6 @@
 <?php
 
-class PopupController extends BaseController {
+class PopupController extends Controller {
 
 	var $class_name = 'popup_controller';
 

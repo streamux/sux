@@ -1,9 +1,11 @@
+{assign var=rootPath value=$skinPathList.root}
+{assign var=skinDir value=$skinPathList.skin_dir}
 {include file="$skinDir/_header.tpl" title="SUX 설치 : 약관동의 - StreamUX"}
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
 		<h1 class="logo">
-			<img class="logo" src="tpl/images/logo.png" alt="streamxux">	
+			<img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux">	
 		</h1>	
 	</div>
 	<div class="container">
@@ -32,7 +34,7 @@
 			6. 기타 의문사항은 http://streamux.com 을 이용해 주시기 바랍니다.
 			(질문등에 대한 내용은 메일로 받지 않습니다)</span>				
 		</div>
-		<a href="install.php?action=DBSetup"><img src="tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
+		<a href="{$rootPath}setup-db"><img src="{$rootPath}modules/install/tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
 	</div>
 	<div class="footer">
 		{include file="$copyrightPath"}

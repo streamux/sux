@@ -1,4 +1,13 @@
 window.jsux = window.jsux || {};
+window.jsux.define = function( var_name, value) {
+
+	if (!jsux.hasOwnProperty(var_name)) {
+		jsux[var_name] = value;
+	} else {
+		console.log(var_name + " : This Properties Already Exists");
+	}
+};
+
 window.trace = function( str, bool ) {
 
 	if (bool) {
@@ -147,6 +156,28 @@ window.trace = function( str, bool ) {
 				}
 			});
 		}
+	};
+
+	manager.setAutoFocus = function( filters) {
+
+		$filters = filters;
+		$filters = !$filters ? "text|password" : $($filters).toLowerCase();
+		$("form").each(function(index) {
+
+			$inputs = $(this).find('input');
+			$($inputs).each(function(index){
+			
+				$input = $(this);
+				$target = $input.attr('type').toLowerCase();
+				if ($target.match($filters)) {
+					//console.log($input.attr('name'), $input.val());
+					if ($input.val() === '') {
+						$input.focus();
+						return false;
+					}						
+				}					
+			});
+		});
 	};
 	
 	manager.goURL = function( url, target ) {

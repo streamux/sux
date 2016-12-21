@@ -8,6 +8,8 @@ class DB extends Object {
 	var $is_connected = FALSE;
 	var $master_db = NULL;
 	var $query_result = NULL;
+	var $errno = 0;
+	var $errstr = '';
 
 	function DB() {
 	
@@ -20,7 +22,7 @@ class DB extends Object {
 	public static function &getInstance() {
 
 		if (empty(self::$aInstance)) {
-			self::$aInstance = new self;
+			self::$aInstance = new DB;
 		}
 		return self::$aInstance;
 	}
@@ -28,9 +30,16 @@ class DB extends Object {
 	function _connect($db_info) {
 
 		$db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
-		if (!$db_connect) {
-			 die('서버 연결에 실패 했습니다. 계정 또는 패스워드를 확인하세요.');
-		}		
+		if (!$db_connect) {		
+			die('SUX cannot connect to DB');
+		}
+
+		if(mysql_error()) {
+
+			$this->setError(mysql_errno(), mysql_error());
+			return;
+		}
+
 		$master_db = 'MYSQL';		
 
 		return $db_connect;
@@ -40,7 +49,8 @@ class DB extends Object {
 
 		$select = @mysql_select_db($db_info['db_database'], $db_connect);
 		if (!$select) {
-			die('데이터베이스 연결에 실패 했습니다. 데이터베이스명을 확인하세요.');
+			$warn = 'SUX cannot select DB.';
+			die($warn);
 		}
 		mysql_set_charset("utf8");
 
@@ -245,8 +255,7 @@ class DB extends Object {
 		$tracer = Tracer::getInstance();
 		$tracer->setMessage($sql);
 
-		$this->query_result = $this->_query($sql);	
-
+		$this->query_result = $this->_query($sql);
 		return $this->query_result;
 	}
 
@@ -260,6 +269,17 @@ class DB extends Object {
 		$this->query_result;
 
 		return$this->_numRows($this->query_result);
+	}
+
+	function setError($errno = 0, $errstr = 'success') {
+
+		$this->errno = $errno;
+		$this->errstr = $errstr;
+	}
+
+	function getError() {
+
+		return array('no'=>$this->errno, 'msg'=>$this->errstr);
 	}
 }
 ?>

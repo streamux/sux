@@ -1,6 +1,6 @@
 <?php
 
-class PopupModule extends BaseView {
+class PopupModule extends View {
 	
 	var $class_name = 'popup_module';
 	var $skin_path_list = array();

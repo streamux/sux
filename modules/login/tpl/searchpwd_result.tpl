@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="비밀번호 찾기 결과 - StreamUX"}
@@ -8,10 +9,10 @@
 		
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="tpl/images/icon_01.gif" title="">						
+				<img src="{$rootPath}modules/login/tpl/images/icon_01.gif" title="">						
 				<span>조회 결과</span>
 				<span class="link-searchinfo">
-					<a href="login.php?action=searchID">아이디</a> | <a href="login.php?action=searchPassword">비밀번호 찾기</a>	
+					<a href="{$rootPath}search-id">아이디</a> | <a href="{$rootPath}search-password">비밀번호 찾기</a>	
 				</span>
 			</div>
 			<div class="leave-body">
@@ -23,9 +24,7 @@
 					</ul>				
 				</div>
 				<div class="panel-btn">
-					<ul>
-						<li data-id="confirm">확인</li>
-					</ul>							
+					<input type="button" name="btn_confirm" value="확 인" onclick="location.href='{$rootPath}login'">		
 				</div>
 			</div>																	
 		</div>

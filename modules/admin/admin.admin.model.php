@@ -1,254 +1,184 @@
 <?php
 
-class AdminAdminModel extends BaseModel {
-
-	var $class_name = 'admin_admin_model';
-
-	function  __construct() {
-
-		parent::__construct();
-	}
-
-	function init() {}
-
-	function selectFromConnecterall() {
+class AdminAdminModel extends Model
+{
+	
+	function selectFromConnecterday( $field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_all');
+		$table_name = $context->getTable('connecter_day');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
+		$query->setField($field);
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectIdFromConnecterWhereNow() {
+	function selectFromConnecter($field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
-		$del_date = date('Y-m-d', time()-86400);
+		$table_name = $context->getTable('connecter');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('id');
-		$query->setWhere(array('date'=>'now()'), '=');
+		$query->setField($field);
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectIdFromConnecterWhereYesterday() {
+	function deleteFromConnecter($where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
+		$table_name = $context->getTable('connecter');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('id');
-		$query->setWhere(array('date'=>'now()'), '<');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function deleteFromConnecterWhereDelday() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter');
-		$del_date = date('Y-m-d', time()-86400);
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setWhere(array('date'=>$del_date), '<');
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::delete($query);
 		return $result;
 	}
 
-	function selectFromConnecterrealall() {
+	function selectFromConnecterreal($field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real_all');
+		$table_name = $context->getTable('connecter_real');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
+		$query->setField($field);
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectIdFromConnecterrealWhereNow() {
+	function deleteFromConnecterreal($where) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
+		$table_name = $context->getTable('connecter_real');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('id');
-		$query->setWhere(array('date'=>'now()'), '=');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectIdFromConnecterrealWhereYesterday() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setField('id');
-		$query->setWhere(array('date'=>'now()'), '<');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function deleteFromConnecterrealWhereDelday() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_real');
-		$del_date = date('Y-m-d', time()-86400);
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setWhere(array('date'=>$del_date), '<');
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::delete($query);
 		return $result;
 	}
 
-	function selectFromPageview() {
+	function selectFromPageview($field='*', $where=null, $orderby=null, $passover=null, $limit=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
+		$table_name = $context->getTable('pageview');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
-		$query->setOrderBy('id asc');
+		$query->setField($field);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}	
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectFromPageviewLimit() {
+	function selectFromConnectsite($field='*', $where=null, $orderby=null, $passover=null, $limit=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
-		$passover = $context->get('passover');
-		$limit = $context->get('limit');
+		$table_name = $context->getTable('connect_site');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
-		$query->setOrderBy('id desc');
-		$query->setLimit($passover, $limit);
+		$query->setField($field);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectFromConnectersite() {
+	function selectFromPopup($field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
+		$table_name = $context->getTable('popup');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
-		$query->setOrderBy('id asc');
+		$query->setField($field);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-
-	function selectFromConnectersiteLimit() {
+	function selectFromBoardgroup($field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
-		$passover = $context->get('passover');
-		$limit = $context->get('limit');
+		$table_name = $context->getTable('board_group');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('*');
-		$query->setOrderBy('id desc');
-		$query->setLimit($passover, $limit);
+		$query->setField($field);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 
-	function selectIdFromPopupWhere() {
+	function selectFromMembergroup($field='*', $where=null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->get('db_popup');
+		$table_name = $context->getTable('member_group');
 
 		$query = new Query();
 		$query->setTable($table_name);
-		$query->setField('id');
-		$query->setWhere(array('choice'=>'y'));
+		$query->setField($field);
 
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectIdFromBoardgroup() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_board_group');
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setField('id');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectIdFromMembergroup() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_member_group');
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setField('id');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectIdFromPageview() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_pageview');
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setField('id');
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectIdFromConnectersite() {
-
-		$context = Context::getInstance();
-		$table_name = $context->get('db_connecter_site');
-
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setField('id');
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
 		$result = parent::select($query);
 		return $result;
 	}
 }
-?>

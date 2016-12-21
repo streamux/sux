@@ -3,8 +3,8 @@ jsux.fn.list = {
 
 	setLayout: function() {
 
-		jsux.getJSON("board.admin.php?action=listJson&pagetype=board", function( e )  {
-
+		jsux.getJSON(jsux.rootPath + "board-admin/list-json", function( e )  {
+			
 			var 	func = {
 					editDate: function( value ) {
 						var list = value.split(" ");
@@ -13,8 +13,8 @@ jsux.fn.list = {
 				},
 				markup = "";
 
+			// data에러가 나는 경우 서버 필드에 날자가 등록되어 있는지 확인한다.
 			$("#boardList").empty();
-
 			if (e.result == "Y") {
 				markup = $("#boardList_tmpl");
 				$(markup).tmpl(e.data.list, func).appendTo("#boardList");				
@@ -76,18 +76,18 @@ jsux.fn.add = {
 	},
 	checkFormVal: function( f ) {
 
-		var table_name = f.table_name.value.length,
+		var category = f.category.value.length,
 			board_name = f.board_name.value.length;
 
-		if ( table_name < 1 ) {
+		if ( category < 1 ) {
 			trace("게시판 테이블이름을 입력하세요.");
-			f.table_name.focus();
+			f.category.focus();
 			return (false);
 		}
 
-		if (this.checkLangKor( f.table_name.value)) {
+		if (this.checkLangKor( f.category.value)) {
 			trace("테이블 이름에 한글이 포함되어 있습니다.");
-			f.table_name.focus();
+			f.category.focus();
 			return (false);
 		}
 
@@ -101,57 +101,57 @@ jsux.fn.add = {
 	},
 	checkTableName: function() {
 
-		var	params = {	table_name: $("input[name=table_name]").val()};
+		var	params = {	category: $("input[name=category]").val()};
 
-		if (params.table_name === "") {
-			trace("게시판 테이블 이름을 입력해 주세요.");
+		if (params.category === "") {
+			trace("카테고리명을 입력해 주세요.");
+			$("input[name=category]").focus();
 			return;
 		}
 
-		jsux.getJSON("board.admin.php?action=checkTableName", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + "board-admin/check-board", params, function( e ) {
 
 			trace( e.msg );
 		});
 	},
 	sendJson:  function( f ) {
 
-		var params = "";
+		var self = this,
+			params = {},
+			indexCheckbox = 0;
 
-		params = {	table_name: f.table_name.value,
-					
-					width: f.width.value,
-					include1: f.include1.value,
-					include2: this.getSelectVal("include2"),
-					include3: f.include3.value,
-					
-					w_grade: this.getSelectVal("w_grade"),
-					r_grade: this.getSelectVal("r_grade"),
-					rw_grade: this.getSelectVal("rw_grade"),
-					re_grade: this.getSelectVal("re_grade"),
-					
-					listnum: f.listnum.value,
-					tail: f.tail.value,
-					download: f.download.value,
-					setup: f.setup.value,
+		$.each(f, function(index, item) {
 
-					w_admin: f.w_admin.value,
-					r_admin: f.r_admin.value,
-					rw_admin: f.rw_admin.value,
-					re_admin: f.re_admin.value,
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+			var glue ='';
 
-					log_key: f.log_key.value,
-					limit_choice: this.getRadioVal("limit_choice"),
-					limit_word: f.limit_word.value,
-					board_name: f.board_name.value,
-					type: this.getRadioVal("type"),
-					output: this.getRadioVal("output") };
+			if (item.nodeName.toLowerCase() === 'select') {
+				//console.log(item.name + ' : ' + item.value);
+				item.value = self.getSelectVal(item.name);					
+				params[item.name] = item.value;
+			} else if (type === 'radio' && item.checked) {
+				//console.log(item.name + ' : ' + item.value);
+				params[item.name] = item.value;				
+			} else {
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}			
+		});
 
-		jsux.getJSON("board.admin.php?action=recordAdd", params, function( e ) {
+		var url = f.action;
+		if (!url) {
+			trace('Action URL Not Exists');
+			return false;
+		}
+
+		jsux.getJSON( url, params, function( e ) {
 
 			trace( e.msg );
-
 			if (e.result == "Y") {
-				jsux.goURL(menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 			} 
 		});
 	},
@@ -160,19 +160,16 @@ jsux.fn.add = {
 		var self = this;
 
 		$("form").on("submit",function( e ) {
-
 			e.preventDefault();
 
 			var bool = self.checkFormVal( e.target );
-
 			if (bool === true) {
-
 				self.sendJson( e.target );
 			}
 		});
 		$("input[name=cancel]").on("click", function(e) {
 
-			jsux.goURL(menuList[1].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 		});
 		$("input[name=checkID]").on("click",function(e) {				
 
@@ -181,19 +178,18 @@ jsux.fn.add = {
 	},
 	setLayout: function() {
 
-		jsux.getJSON("board.admin.php?action=skinListJson", function( e ) {
+		jsux.getJSON(jsux.rootPath + "board-admin/skin-json", function( e ) {
 
 			markup = $("#skinList_tmpl");
 			$("#skinList").empty();
 			$(markup).tmpl(e.data.list).appendTo("#skinList");
 		});
-
-		$('input[name=table_name]').focus();
 	},
 	init: function() {
 
 		this.setLayout();
 		this.setEvent();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.modify = {
@@ -269,40 +265,42 @@ jsux.fn.modify = {
 	},
 	sendJson: function( f ) {
 
-		var params = "";
+		var self = this,
+			params = {},
+			indexCheckbox = 0;
 
-		params = {	table_name: $("input[name=table_name]").val(),
-					id: $("input[name=id]").val(),
-					board_name: f.board_name.value,
-					width: f.width.value,
-					include1: f.include1.value,
-					include2: this.getSelectVal("include2"),
-					include3: f.include3.value,
-					log_key: this.getSelectVal("log_key"),
-					w_grade: this.getSelectVal("w_grade"),
-					r_grade: this.getSelectVal("r_grade"),
-					rw_grade: this.getSelectVal("rw_grade"),
-					re_grade: this.getSelectVal("re_grade"),
-					w_admin: f.w_admin.value,
-					r_admin: f.r_admin.value,
-					rw_admin: f.rw_admin.value,
-					re_admin: f.re_admin.value,
-					listnum: f.listnum.value,
-					tail: f.tail.value,
-					download: f.download.value,
-					setup: f.setup.value,
-					output: this.getRadioVal("output"),
-					type: this.getRadioVal("type"),
-					limit_choice: this.getRadioVal("limit_choice"),
-					limit_word: this.getTextAreaVal("limit_word")};
+		$.each(f, function(index, item) {
 
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+			var glue ='';
 
-		jsux.getJSON("board.admin.php?action=recordModify", params, function( e ) {
+			if (item.nodeName.toLowerCase() === 'select') {
+				//console.log(item.name + ' : ' + item.value);
+				item.value = self.getSelectVal(item.name);					
+				params[item.name] = item.value;
+			} else if (type === 'radio' && item.checked) {
+				//console.log(item.name + ' : ' + item.value);
+				params[item.name] = item.value;				
+			} else {
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}			
+		});
 
-			trace( e.msg );
-			
+		var url = f.action;
+		if (!url) {
+			trace('Action URL Not Exists');
+			return false;
+		}
+
+		jsux.getJSON(url, params, function( e ) {
+
+			trace( e.msg );			
 			if (e.result == "Y") {
-				jsux.goURL(menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 			}
 		});
 	},
@@ -311,7 +309,6 @@ jsux.fn.modify = {
 		var self = this;
 
 		$("form").on("submit", function( e ) {
-
 			e.preventDefault();
 
 			var bool  = self.checkFormVal( e.target );
@@ -322,17 +319,17 @@ jsux.fn.modify = {
 
 		$("input[name=cancel]").on("click", function(e) {
 
-			jsux.goURL(menuList[1].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 		});
 	},
 	setLayout: function() {
 
 		var self = this,
 			params = {
-				table_name: $("input[name=table_name]").val()
+				id: $("input[name=id]").val()
 			};
 
-		jsux.getJSON("board.admin.php?action=modifyJson", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + "board-admin/modify-json", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
@@ -347,14 +344,15 @@ jsux.fn.modify = {
 					if (e.data[this.name]) {
 						this.value = e.data[this.name];
 					}
+					//console.log(this.name, e.data[this.name]);
 				});
 
 				formLists = $("select");
 				$(formLists).each(function(index) {
 
+					//console.log(this.name, e.data[this.name]);
 					if (e.data[this.name]) {
 						this.value = e.data[this.name];
-						
 					}						
 				});
 
@@ -367,19 +365,14 @@ jsux.fn.modify = {
 			} else {
 				trace( e.msg );
 			}
-		});
 
-		jsux.getJSON("board.admin.php?action=skinListJson", function( e ) {
-
-			markup = $("#skinList_tmpl");
-			$("#skinList").empty();
-			$(markup).tmpl(e.data.list).appendTo("#skinList");
-		});
+			jsux.setAutoFocus();
+		});		
 	},
 	init: function() {
 
 		this.setLayout();
-		this.setEvent();
+		this.setEvent();		
 	}
 };
 jsux.fn.delete = {
@@ -387,16 +380,16 @@ jsux.fn.delete = {
 	sendJson: function() {
 
 		var params = {
-			table_name: $("input[name=table_name]").val(),
+			_method:$("input[name=_method]").val(),
+			category:$("input[name=category]").val(),
 			id:$("input[name=id]").val()
 		};
 
-		jsux.getJSON("board.admin.php?action=recordDelete",params, function( e )  {
+		jsux.getJSON(jsux.rootPath + "board-admin/delete",params, function( e )  {
 
 			trace( e.msg );
-
 			if (e.result == "Y") {
-				jsux.goURL(menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 			}
 		});
 	},
@@ -405,7 +398,6 @@ jsux.fn.delete = {
 		var self = this;
 
 		$(".articles .del .box ul > li > a").on("click", function( e ) {
-
 			e.preventDefault();
 
 			var key = $(this).data("key");
@@ -413,7 +405,7 @@ jsux.fn.delete = {
 			if (key == "del") {
 				self.sendJson();
 			} else if (key == "back") {
-				jsux.goURL(menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
 			}				
 		});
 	},

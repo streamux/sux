@@ -1,6 +1,6 @@
 <?php
 
-class PopupModel extends BaseModel {
+class PopupModel extends Model {
 
 	var $class_name = 'popup_model';
 

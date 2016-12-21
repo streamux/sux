@@ -1,215 +1,253 @@
 jsux.fn = jsux.fn || {};
 jsux.fn.login = {
 
-	dispSelectMemberList: function() {
-
-		var data = loginObj.memberList,
-			markup = $("#ljsMember_tmpl");
-
-		$("#ljsMember").empty();
-		$(markup).tmpl(data).appendTo("#ljsMember");
-	},
 	checkForm: function( f ) {
 
-		var id = f.memberid.value.length,
-			pwd = f.pass.value.length;
+		var id = f.user_id.value.length,
+			pwd = f.password.value.length;
 
 		if ( id < 1) {
-			trace("아이디를 입력하세요.");
-			f.memberid.focus();
+			trace('아이디를 입력하세요.');
+			f.user_id.focus();
 			return (false);				
 		}
 
 		if ( pwd < 1) {
-			trace("비밀번호를 입력하세요.");
-			f.pass.focus();
+			trace('비밀번호를 입력하세요.');
+			f.password.focus();
 			return (false);				
 		}
 		return (true);
 	},
+	sendJson: function(f) {
+
+		var params = '',
+			url = '';
+			
+		params = {
+			_method: f._method.value,
+			category: f.category.value,
+			user_id: f.user_id.value,
+			password: f.password.value
+		};
+		
+		if (!f.action) {
+			alert('Not Exists URL');
+		}
+		url = f.action;
+
+		jsux.getJSON( url, params, function( e ) {
+			
+			if (e.result.toLowerCase() == 'y') {
+				jsux.goURL(jsux.rootPath + 'login');
+			} else {
+				trace( e.msg );
+				jsux.goURL(jsux.rootPath + 'login-fail');
+			}
+		});
+	},
+	event: function() {
+
+		var self = this;
+		$('form').submit( function(e) {
+			e.preventDefault();
+			var bool = self.checkForm(this);
+			if (bool) {
+				self.sendJson(this);
+			}
+		});
+
+		$('.panel-btn > a').on('click', function(e) {
+			e.preventDefault();
+
+			var url = $(this).attr('href');
+			if (!url) {
+				alert('Not Exists URL');
+			}
+			var params = {_method:'insert'};
+			jsux.getJSON( url, params, function( e ) {
+				
+				if (e.result.toLowerCase() === 'y') {
+					jsux.goURL(jsux.rootPath + 'login');
+				}
+			});			
+		});
+	},
 	init: function() {
-		this.dispSelectMemberList();
-		$('input[name=memberid]').focus();
+		this.event();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.leave = {
 
 	checkForm: function( f ) {
 
-		var id = f.memberid.value.length,
-			pwd = f.pass.value.length;
+		var id = f.user_id.value.length,
+			pwd = f.password.value.length;
 
 		if ( id < 1) {
-			trace("아이디를 입력하세요.");
-			f.memberid.focus();
+			trace('아이디를 입력하세요.');
+			f.user_id.focus();
 			return (false);				
 		}
 
 		if ( pwd < 1) {
-			trace("비밀번호를 입력하세요.");
-			f.pass.focus();
+			trace('비밀번호를 입력하세요.');
+			f.password.focus();
 			return (false);				
 		}
 		return (true);
 	},
 	sendJson: function( f ) {
 
-		var params = "";
-		params = { action: 'recordDelete',
-					table_name: f.member.value,
-					memberid: f.memberid.value,
-					pass: f.pass.value };
+		var params = '',
+			url = '';
+		params = {
+			_method: f._method.value,
+			category: f.category.value,
+			user_id: f.user_id.value,
+			password: f.password.value
+		};
 
-		jsux.getJSON("../member/member.php", params, function( e ) {
+		if (!f.action) {
+			alert('Not Exists URL');
+		}
+		url = f.action;
+
+		var logoutHandler = function( url ) {
+
+			var params = {_method:'insert'};
+			jsux.getJSON( url, params, function( e ) {
+				
+				if (e.result.toLowerCase() === 'y') {
+					jsux.goURL(jsux.rootPath + 'login');
+				}
+			});
+		};
+
+		jsux.getJSON( url, params, function( e ) {
 
 			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL('../login/login.php?action=logout');
+			if (e.result.toUpperCase() == 'Y') {
+				logoutHandler(jsux.rootPath + 'logout');
 			}
-		});
+		});		
 	},
 	setEvent: function() {
 
 		var self = this;
-		$(".panel-btn ul li").on("click",function(e) {
+		$('.panel-btn input').on('click',function(e) {
+			e.preventDefault();
 
-			var form = $("form")[0],
-				key = $(this).data("id");
+			var form = $('form')[0],
+				key = $(this).attr('name');
 
-			if (key == "send") {
-
+			if (key == 'btn_confirm') {
 				var bool = self.checkForm(form);
 				if (!bool) {
 					return;
 				}
 				self.sendJson(form);
-			} else if (key == "cancel") {
-				jsux.goURL("login.php?action=login");
-			}
+			} 
 		});
 	},
 	init: function() {
 		this.setEvent();
-		$("input[name=pass]").focus();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.searchResult = {
 
-	setEvent: function() {
-
-		$(".panel-btn ul li").on("click",function(e) {
-
-			var key = $(this).data("id");
-
-			if (key == "confirm") {
-				jsux.goURL("login.php?action=login");
-			}
-		});
-	},
-	init: function() {
-		this.setEvent();
-	}
+	init: function() {}
 };
-jsux.fn.searchID = {
+jsux.fn.searchId = {
 
-	dispSelectMemberList: function() {
-
-		var data = loginObj.memberList,
-			markup = $("#ljsMember_tmpl");
-
-		$("#ljsMember").empty();
-		$(markup).tmpl(data).appendTo("#ljsMember");
-	},
 	checkForm: function( f ) {
 
 		var nm = f.user_name.value.length,
-			em = f.user_email.value.length;
+			em = f.email_address.value.length;
 
 		if ( nm < 1) {
-			trace("이름을 입력하세요.");
+			trace('이름을 입력하세요.');
 			f.user_name.focus();
 			return false;				
 		}
 
 		if ( em < 1) {
-			trace("이메일 주소를 입력하세요.");
-			f.user_email.focus();
+			trace('이메일 주소를 입력하세요.');
+			f.email_address.focus();
 			return (false);				
 		}
 		return (true);
 	},
 	setEvent: function() {
 
-		$(".panel-btn ul li").on("click",function(e) {
+		var self = this;
 
-			var form = $("form")[0],
-				key = $(this).data("id");
+		$('.panel-btn input').on('click',function(e) {
+			e.preventDefault();
 
-			if (key == "send") {
-				$(form).submit();
-			} else if (key == "cancel") {
-				jsux.goURL("login.php?action=login");
-			}
+			var form = $('form')[0],
+				key = $(this).attr('name');
+
+			if (key == 'btn_confirm') {
+				if (self.checkForm(form)) {
+					$(form).submit();
+				}				
+			} 
 		});
 	},
 	init: function() {
-		this.dispSelectMemberList();
 		this.setEvent();
-		$("input[name=user_name]").focus();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.searchPassword = {
 
-	dispSelectMemberList: function() {
-
-		var data = loginObj.memberList,
-			markup = $("#ljsMember_tmpl");
-
-		$("#ljsMember").empty();
-		$(markup).tmpl(data).appendTo("#ljsMember");
-	},
 	checkForm: function( f ) {
 
 		var nm = f.user_name.value.length,
 			id = f.user_id.value.length,
-			email = f.user_email.value.length;
+			email = f.email_address.value.length;
 
 		if ( nm < 1) {
-			trace("이름을 입력하세요.");
+			trace('이름을 입력하세요.');
 			f.user_name.focus();
 			return (false);				
 		}
 
 		if ( id < 1) {
-			trace("아이디를 입력하세요.");
+			trace('아이디를 입력하세요.');
 			f.user_id.focus();
 			return (false);				
 		}
 
 		if ( email < 1) {
-			trace("이메일을 입력하세요.");
-			f.user_email.focus();
+			trace('이메일을 입력하세요.');
+			f.email_address.focus();
 			return (false);				
 		}
 		return (true);
 	},
 	setEvent: function() {
 
-		$(".panel-btn ul li").on("click",function(e) {
+		var self = this;
 
-			var form = $("form")[0],
-				key = $(this).data("id");
+		$('.panel-btn input').on('click',function(e) {
+			e.preventDefault();
 
-			if (key == "send") {
-				$(form).submit();
-			} else if (key == "cancel") {
-				jsux.goURL("login.php?action=login");
-			}
+			var form = $('form')[0],
+				key = $(this).attr('name');
+
+			if (key == 'btn_confirm') {
+				if (self.checkForm(form)) {
+					$(form).submit();
+				}
+			} 
 		});
 	},
 	init: function() {
-		this.dispSelectMemberList();
 		this.setEvent();
-		$("input[name=user_name]").focus();
+		jsux.setAutoFocus();
 	}
 };

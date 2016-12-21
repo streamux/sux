@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원탈퇴 - StreamUX"}
@@ -6,28 +7,27 @@
 		<h1 class="title">회원 탈퇴</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-		<form name="f_loginleave">
+		<form name="f_loginleave" action="{$rootPath}member" method="post">
+		<input type="hidden" name="_method" value="delete">
 		<div class="box ui-edgebox-2px">
 			<div class="leave-header">
-				<img src="tpl/images/icon_01.gif" alt="">						
+				<img src="{$rootPath}modules/login/tpl/images/icon_01.gif" alt="">						
 				<span>비밀번호 확인</span>
 			</div>
 			<div class="leave-body">
 				<div class="panel-info">
 					<ul>
 						<li>
-							<input type="hidden" name="member" value="{$sessionData.ljs_member}"><span class="ui-label">아이디</span><span>{$sessionData.ljs_memberid}</span><input type="hidden" name="memberid" value="{$sessionData.ljs_memberid}">
+							<input type="hidden" name="category" value="{$sessionData.sux_category}"><span class="ui-label">아이디</span><span>{$sessionData.sux_user_id}</span><input type="hidden" name="user_id" value="{$sessionData.sux_user_id}">
 						</li>
 						<li>
-							<span class="ui-label"><label for="pass">비밀번호</label></span><input type="password" id="pass" name="pass" maxlength="20">
+							<span class="ui-label"><label for="password">비밀번호</label></span><input type="password" id="password" name="password" maxlength="20">
 						</li>
 					</ul>							
 				</div>
 				<div class="panel-btn">
-					<ul>
-						<li data-id="send">보내기</li>
-						<li data-id="cancel">취소</li>
-					</ul>
+					<input type="submit" name="btn_confirm" value="확 인">
+					<input type="button" name="btn_cancel" value="취 소" onclick="history.back()">
 				</div>				
 			</div>																	
 		</div>

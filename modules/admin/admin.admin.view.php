@@ -1,5 +1,5 @@
 <?php
-class AdminAdminModule extends BaseView {
+class AdminAdminModule extends View {
 	
 	var $class_name = 'admin_admin_module';
 	var $skin_path_list = array();
@@ -35,7 +35,12 @@ class AdminAdminModule extends BaseView {
 
 class AdminAdminView extends AdminAdminModule {
 
-	var $class_name = 'admin_admin_view';	
+	var $class_name = 'admin_admin_view';
+
+	function displayAdminAdmin() {
+
+		$this->displayMain();
+	}
 
 	function displayMain() {
 
@@ -43,11 +48,13 @@ class AdminAdminView extends AdminAdminModule {
 		$this->request_data = $context->getRequestAll();
 
 		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'main';
 		$this->document_data['module_code'] = 'admin';
 
+		$rootPath = _SUX_ROOT_;
 		$skinPath = _SUX_PATH_ . "modules/admin/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_main.tpl";
@@ -56,73 +63,81 @@ class AdminAdminView extends AdminAdminModule {
 		$this->output();
 	}
 
-	function displayConnecterJson() {
-
-		$data = $this->_getConnecterData();
-		echo $this->callback($data);
-	}
-
 	function displayMainJson() {
 
 		$connecterArr1 = $this->_getConnecterData();
 		$connecterArr2 = $this->_getConnecterrealData();
 		$connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
 		$pageviewArr = $this->_getPageviewData();
-		$connectersiteArr = $this->_getConnectersiteData();
+		$connectsiteArr = $this->_getConnectsiteData();
 		$serviceConfigArr = $this->_getServiceData();
 
 		$dataObj  = array(	'connecter'=>$connecterArr,
 							'pageview'=>$pageviewArr['data'],
-							'connectersite'=>$connectersiteArr['data'],
+							'connectersite'=>$connectsiteArr['data'],
 							'serviceConfig'=>$serviceConfigArr['data']);
 
-		$data = array(	'data'=>$dataObj );
+		$data = array(	'data'=>$dataObj,
+						'msg'=>'출력완료' );
 		
-		echo $this->callback($data);
+		$this->callback($data);
+	}
+
+	function displayConnecterJson() {
+
+		$data = $this->_getConnecterData();
+		$this->callback($data);
 	}
 
 	function displayConnecterrealJson() {
 
 		$data = $this->_getConnecterrealData();
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function displayPageviewJson() {
 
 		$data = $this->_getPageviewData();
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
-	function displayConnectersiteJson() {
+	function displayConnectsiteJson() {
 
-		$data = $this->_getConnectersiteData();
-		echo $this->callback($data);
+		$data = $this->_getConnectsiteData();
+		$this->callback($data);
 	}
 
 	function displayServiceJson() {
 
 		$data = $this->_getServiceData();
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function _getConnecterData() {
 
 		$msg = '';
 		$resultYN = 'Y';
-		$connecterArr = array();
-
-		$result = $this->controller->select('fromConnecterall');
+		$connecterArr = array('today'=>0, 'yester'=>0,'total'=>0,);
+		
+		$result = $this->model->selectFromConnecterday();
 		if ($result) {
-			$row = $this->model->getRow();
-			$connecterArr['total'] = $row['hit'];
+			$rows = $this->model->getRows();
+			for ($i=0; $i<count($rows); $i++) {
+				$connecterArr['total'] += $rows[$i]['total_count'];
+			}			
 
-			$result = $this->controller->delete('fromConnecterWhereDelday');
+			$where = new QueryWhere();
+			$where->set('date', date('Y-m-d', time()-86400), '<');
+			$result = $this->model->deleteFromConnecter($where);
 			if (!$result) {
 				$msg .= '24시 이전 접속통계 레코드 삭제를 실패하였습니다.';
 				$resultYN = 'N';
-			}		
+			}
 
-			$result = $this->controller->select('idFromConnecterWhereNow');
+			// today
+			$where->reset();
+			$where->set('date', date('Y-m-d'), '=');
+			$result = $this->model->selectFromConnecter('id', $where);
 			if ($result) {
 				$today = $this->model->getNumRows();
 				if (!$today) {
@@ -134,7 +149,10 @@ class AdminAdminView extends AdminAdminModule {
 				$resultYN = 'N';
 			}
 
-			$result = $this->controller->select('idFromConnecterWhereYesterday');
+			// yester day
+			$where->reset();
+			$where->set('date', date('Y-m-d', time()-86400), '=');
+			$result = $this->model->selectFromConnecter('id', $where);
 			if ($result) {
 				$yesterday = $this->model->getNumRows();
 				if (!$yesterday) {
@@ -150,7 +168,7 @@ class AdminAdminView extends AdminAdminModule {
 			$msg .= '접속통계 테이블 접근을 실패하였습니다.';
 			$resultYN = 'N';
 		}
-
+		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$connecterArr,
 						'result'=>$resultYN,
 						'msg'=>$msg);	
@@ -161,20 +179,27 @@ class AdminAdminView extends AdminAdminModule {
 
 		$msg = '';
 		$resultYN = 'Y';
-		$connecterArr = array();
+		$connecterArr = array('real_today'=>0, 'real_yester'=>0,'real_total'=>0,);
 
-		$result = $this->controller->select('fromConnecterrealall');
+		$result = $this->model->selectFromConnecterday();
 		if ($result) {
-			$row = $this->model->getRow();
-			$connecterArr['real_total'] = $row['hit'];
+			$rows = $this->model->getRows();
+			for ($i=0; $i<count($rows); $i++) {
+				$connecterArr['real_total'] += $rows[$i]['real_count'];
+			}
 
-			$result = $this->controller->delete('fromConnecterrealWhereDelday');
+			$where = new QueryWhere();
+			$where->set('date', date('Y-m-d', time()-86400), '<');
+			$result = $this->model->deleteFromConnecterreal($where);
 			if (!$result) {
 				$msg .= '24시 이전 실접속통계 레코드 삭제를 실패하였습니다.';
 				$resultYN = 'N';
-			}		
+			}
 
-			$result = $this->controller->select('idFromConnecterrealWhereNow');
+			// today
+			$where->reset();
+			$where->set('date', date('Y-m-d'), '=');
+			$result = $this->model->selectFromConnecterreal('id', $where);
 			if ($result) {
 				$real_totay = $this->model->getNumRows();
 				if (!$real_totay) {
@@ -187,7 +212,10 @@ class AdminAdminView extends AdminAdminModule {
 				$resultYN = 'N';
 			}			
 
-			$result = $this->controller->select('idFromConnecterrealWhereYesterday');
+			// yester day
+			$where->reset();
+			$where->set('date', date('Y-m-d', time()-86400), '=');
+			$result = $this->model->selectFromConnecterreal('id', $where);
 			if ($result) {
 				$real_yester = $this->model->getNumRows();
 				if (!$real_yester) {
@@ -203,7 +231,7 @@ class AdminAdminView extends AdminAdminModule {
 			$msg .= '실접속통계 테이블 접근을 실패하였습니다.';
 			$resultYN = 'N';
 		}
-
+		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$connecterArr,
 						'result'=>$resultYN,
 						'msg'=>$msg);
@@ -221,7 +249,7 @@ class AdminAdminView extends AdminAdminModule {
 		$limit = $context->getPost('limit');
 		$passover = $context->getPost('passover');
 
-		$result = $this->controller->select('fromPageview');
+		$result = $this->model->selectFromPageview('*');
 		if ($result) {
 			
 			$numrows = $this->model->getNumRows();
@@ -230,7 +258,7 @@ class AdminAdminView extends AdminAdminModule {
 				$total = 0;
 				$rows = $this->model->getRows();				
 				for($i=0; $i<$numrows; $i++) {
-					$total += $rows['hit'];
+					$total += $rows['hit_count'];
 				}				
 
 				if (!$limit) {
@@ -240,10 +268,7 @@ class AdminAdminView extends AdminAdminModule {
 					$passover = 0;
 				}
 
-				$context->set('limit', $limit);
-				$context->set('passover', $passover);
-
-				$result = $this->controller->select('fromPageviewLimit');
+				$result = $this->model->selectFromPageview('*', null, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$a = $numrows - $passover;
@@ -253,7 +278,7 @@ class AdminAdminView extends AdminAdminModule {
 						$pageViewList[] = array(
 							'no'=>$a,
 							'name'=>$rows_limit[$i]['name'],
-							'hit'=>$rows_limit[$i]['hit'],
+							'hit'=>$rows_limit[$i]['hit_count'],
 							'total'=>$total
 						);
 						$a--;
@@ -271,7 +296,7 @@ class AdminAdminView extends AdminAdminModule {
 			$msg = '페이지뷰등록 테이블이 존재하지 않습니다.\n';
 			$resultYN = 'N';
 		}
-
+		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$pageviewArr,
 						'mode'=>'pageview',
 						'result'=>$resultYN,
@@ -279,7 +304,7 @@ class AdminAdminView extends AdminAdminModule {
 		return $data;
 	}
 
-	function _getConnectersiteData() {
+	function _getConnectsiteData() {
 
 		$msg = '';
 		$resultYN = 'Y';
@@ -290,7 +315,7 @@ class AdminAdminView extends AdminAdminModule {
 		$limit = $context->getPost('limit');
 		$passover = $context->getPost('passover');
 
-		$result = $this->controller->select('fromConnectersite');
+		$result = $this->model->selectFromConnectsite('*');
 		if ($result) {
 			
 			$numrows = $this->model->getNumRows();
@@ -299,7 +324,7 @@ class AdminAdminView extends AdminAdminModule {
 				$total = 0;
 				$rows = $this->model->getRows();				
 				for($i=0; $i<$numrows; $i++) {
-					$total += $rows['hit'];
+					$total += $rows['hit_count'];
 				}				
 
 				if (!$limit) {
@@ -309,10 +334,7 @@ class AdminAdminView extends AdminAdminModule {
 					$passover = 0;
 				}
 
-				$context->set('limit', $limit);
-				$context->set('passover', $passover);
-
-				$result = $this->controller->select('fromConnectersiteLimit');
+				$result = $this->model->selectFromConnectsite('*', null, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$a = $numrows - $passover;
@@ -322,7 +344,7 @@ class AdminAdminView extends AdminAdminModule {
 						$connecterList[] = array(
 							'no'=>$a,
 							'name'=>$rows_limit[$i]['name'],
-							'hit'=>$rows_limit[$i]['hit'],
+							'hit'=>$rows_limit[$i]['hit_count'],
 							'total'=>$total
 						);
 						$a--;
@@ -340,9 +362,9 @@ class AdminAdminView extends AdminAdminModule {
 			$msg = '접속경로분석 테이블이 존재하지 않습니다.';
 			$resultYN = 'N';
 		}
-
+		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$analyticsArr,
-						'mode'=>'connectersite',
+						'mode'=>'connectsite',
 						'result'=>$resultYN,
 						'msg'=>$msg);
 		return $data;
@@ -352,68 +374,59 @@ class AdminAdminView extends AdminAdminModule {
 
 		$msg = '';
 		$resultYN = 'Y';
-		$serviceConfig = array();
+		$serviceConfig = array(	'popupIcon'=>'inactivate', 'popupNum'=>0,
+								'boardIcon'=>'inactivate', 'boardNum'=>0,
+								'memberIcon'=>'inactivate', 'memberNum'=>0,
+								'pageviewIcon'=>'inactivate', 'pageviewNum'=>0,
+								'analysisIcon'=>'inactivate', 'analysisNum'=>0);
 
-		$result = $this->controller->select('idFromPopupWhere');
+		$where = new QueryWhere();
+		$where->set('choice', 'y');
+		$result = $this->model->selectFromPopup('id', $where);
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
-				$serviceConfig['popupIcon']	= 'activate';
+				$serviceConfig['popupIcon']		= 'activate';
 				$serviceConfig['popupNum']	= $numrows;
-			} else {
-				$serviceConfig['popupIcon']	= 'inactivate';
-				$serviceConfig['popupNum']	= 0;
 			}
 		}
 
-		$result = $this->controller->select('idFromBoardgroup');
+		$result = $this->model->selectFromBoardgroup('id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
 				$serviceConfig['boardIcon']	= 'activate';
 				$serviceConfig['boardNum']	= $numrows;
-			} else {
-				$serviceConfig['boardIcon']	= 'inactivate';
-				$serviceConfig['boardNum']	= 0;
-			}
+			} 
 		}
 
-		$result = $this->controller->select('idFromMembergroup');
+		$result = $this->model->selectFromMembergroup('id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
 				$serviceConfig['memberIcon']	= 'activate';
 				$serviceConfig['memberNum']	= $numrows;
-			} else {
-				$serviceConfig['memberIcon']	= 'inactivate';
-				$serviceConfig['memberNum']	= 0;
 			}
 		}
 
-		$result = $this->controller->select('idFromPageview');
+		$result = $this->model->selectFromPageview('id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
-				$serviceConfig['pageviewIcon']		= 'activate';
+				$serviceConfig['pageviewIcon']	= 'activate';
 				$serviceConfig['pageviewNum']	= $numrows;
-			} else {
-				$serviceConfig['pageviewIcon']		= 'inactivate';
-				$serviceConfig['pageviewNum']	= 0;
 			}
 		}
 
-		$result = $this->controller->select('idFromConnectersite');
+		$result = $this->model->selectFromConnectsite('id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
 				$serviceConfig['analysisIcon']	= 'activate';
 				$serviceConfig['analysisNum']	= $numrows;
-			} else {
-				$serviceConfig['analysisIcon']	= 'inactivate';
-				$serviceConfig['analysisNum']	= 0;
 			}
 		}
-
+		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$serviceConfig,
 						'result'=>$resultYN,
 						'msg'=>$msg);

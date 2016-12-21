@@ -1,6 +1,7 @@
 <?php
 
-class  PopupAdminModule extends BaseView {
+class  PopupAdminModule extends View
+{
 	
 	var $class_name = 'popup_admin_module';
 	var $skin_path_list = array();
@@ -33,22 +34,29 @@ class  PopupAdminModule extends BaseView {
 	}
 }
 
-class PopupAdminView extends PopupAdminModule {
+class PopupAdminView extends PopupAdminModule
+{
 
 	var $class_name = 'popup_admin_view';
+
+	function displayPopupAdmin() {
+
+		$this->displayList();
+	}
 
 	function displayList() {
 
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'list';
 		$this->document_data['module_code'] = 'popup';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
@@ -62,13 +70,21 @@ class PopupAdminView extends PopupAdminModule {
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'add';
 		$this->document_data['module_code'] = 'popup';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
+		$path = _SUX_PATH_ . "modules/popup/skin/";
+		$skinList = Utils::readDir($path);
+		if (!$skinList) {
+			$skinList['file_name'] = 'not exists';
+		}		
+		$this->document_data['skin_list'] = $skinList;
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
@@ -80,15 +96,24 @@ class PopupAdminView extends PopupAdminModule {
 	function displayModify() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+		$id = $context->getParameter('id');
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'modify';
 		$this->document_data['module_code'] = 'popup';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
+		$path = _SUX_PATH_ . "modules/popup/skin/";
+		$skinList = Utils::readDir($path);
+		if (!$skinList) {
+			$skinList['file_name'] = 'not exists';
+		}
+		$this->document_data['id'] = $id;
+		$this->document_data['skin_list'] = $skinList;
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
@@ -100,15 +125,25 @@ class PopupAdminView extends PopupAdminModule {
 	function displayDelete() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+		$id = $context->getParameter('id');
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'delete';
 		$this->document_data['module_code'] = 'popup';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromPopup('id, popup_name', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}		
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
@@ -119,14 +154,11 @@ class PopupAdminView extends PopupAdminModule {
 
 	function displayListJson() {
 
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
 		$dataObj = array();		
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fromPopup');
+		$result = $this->model->selectFromPopup('*', null, 'id desc');
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
@@ -146,8 +178,8 @@ class PopupAdminView extends PopupAdminModule {
 						}
 						
 					}
-					$dataList['date'] = $timeList['time6'] . '-' . $timeList['time4'] . '-' . $timeList['time5'];
-					$dataList['time'] = $timeList['time1'] . ':' . $timeList['time2'] . ':' . $timeList['time3'];
+					$dataList['date'] = $timeList['time_year'] . '-' . $timeList['time_month'] . '-' . $timeList['time_day'];
+					$dataList['time'] = $timeList['time_hours'] . ':' . $timeList['time_minutes'] . ':' . $timeList['time_seconds'];
 					$dataObj[] = $dataList;
 				}				
 			} else {
@@ -160,30 +192,7 @@ class PopupAdminView extends PopupAdminModule {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
-	}
-
-	function displayAddJson() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
-		$path = _SUX_PATH_ . "modules/popup/skin/";
-		
-		$msg = "";
-		$resultYN = "Y";
-
-		$skinList = Utils::readDir($path);
-		if (!$skinList) {
-			$msg = "스킨폴더가 존재하지 않습니다.";
-			$resultYN = "N";
-		}
-
-		$data = array(	"data"=>array("list"=>$skinList),
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function displayModifyJson() {
@@ -198,22 +207,15 @@ class PopupAdminView extends PopupAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fromPopupWhere');
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$result = $this->model->selectFromPopup('*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();
 			foreach ($row as $key => $value) {
 				$dataObj[$key] = $value;
 			}
-
-			$skinList = Utils::readDir($path);
-			if (!$skinList) {
-				$msg = "스킨폴더가 존재하지 않습니다.";
-				$resultYN = "N";
-			}
-
-			$dataObj['skinList'] = $skinList;
-
 		} else {
 			$msg = "팝업이 존재하지 않습니다.";
 			$resultYN = "N";
@@ -223,133 +225,6 @@ class PopupAdminView extends PopupAdminModule {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
-	}
-
-	function recordAdd() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$skinName = $posts['skin'];
-		
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->select('nameFromPopupWhere');
-		$numrow = $this->model->getNumRows();
-		if ($numrow > 0) {
-			$msg = "팝업창 이름이 이미 존재합니다.";
-			$resultYN = "N";
-		} else {
-
-			$skinImagePath = "skin/{$skinName}/images/bg.jpg";
-			$imageInfo = getimagesize($skinImagePath);
-		      $imageType = $imageInfo[2];
-
-		      if ( $imageType == IMAGETYPE_JPEG ) {
-		      	$image = imagecreatefromjpeg($skinImagePath);
-		      } elseif( $imageType == IMAGETYPE_GIF ) {
-		       	$image = imagecreatefromgif($skinImagePath);
-		      } elseif( $imageType == IMAGETYPE_PNG ) {
-		     		$image = imagecreatefrompng($skinImagePath);
-			}
-
-			$popupWidth = imagesx($image) + 16;
-			$popupHeight = imagesy($image) + 52;
-
-			if (is_readable($skinImagePath) && $posts['popup_width'] < $popupWidth) {
-				$context->setPost('popup_width', $popupWidth);
-			}
-
-			if (is_readable($skinImagePath) && $posts['popup_height'] < $popupHeight) {
-				$context->setPost('popup_height', $popupHeight);
-			}
-
-			$result = $this->controller->insert('intoPopup');
-			if ($result){
-				$msg = "팝업창 입력을 완료하였습니다.";
-				$resultYN = "Y";				
-			}else{
-				$msg = "팝업창 입력을 실패하였습니다.";
-				$resultYN = "N";
-			}
-		}
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordModify() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$skinName = $posts['skin'];
-
-		$msg = "";
-		$resultYN = "Y";
-
-		$skinImagePath = "skin/{$skinName}/images/bg.jpg";
-		$imageInfo = getimagesize($skinImagePath);
-	      $imageType = $imageInfo[2];
-
-	      if ( $imageType == IMAGETYPE_JPEG ) {
-	      	$image = imagecreatefromjpeg($skinImagePath);
-	      } elseif( $imageType == IMAGETYPE_GIF ) {
-	       	$image = imagecreatefromgif($skinImagePath);
-	      } elseif( $imageType == IMAGETYPE_PNG ) {
-	     		$image = imagecreatefrompng($skinImagePath);
-		}
-
-		$popupWidth = imagesx($image) + 16;
-		$popupHeight = imagesy($image) + 52;
-
-		if (is_readable($skinImagePath) && $posts['popup_width'] < $popupWidth) {
-			$context->setPost('popup_width', $popupWidth);
-		}
-
-		if (is_readable($skinImagePath) && $posts['popup_height'] < $popupHeight) {
-			$context->setPost('popup_height', $popupHeight);
-		}
-
-		$result = $this->controller->update('fromPopupWhere');
-		if ($result){
-			$msg = "팝업창 수정을 성공하였습니다.";
-			$resultYN = "Y";			
-		}else{
-			$msg = "팝업창 수정을 실패하였습니다.";
-			$resultYN = "N";
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordDelete() {
-
-		$context = Context::getInstance();
-		$title = $context->getRequest('title');
-
-		$dataObj = array();		
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->delete('fromPopup');
-		if ($result) {
-			$msg .= $title . '팝업 레코드를 삭제 완료하였습니다.';
-			$resultYN = "Y";
-		} else {
-			$msg .= $title . '팝업 레코드를 삭제 실패하였습니다.';
-			$resultYN = "N";
-		}
-
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
+		$this->callback($data);
+	}	
 }
-?>

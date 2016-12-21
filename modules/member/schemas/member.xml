@@ -1,0 +1,27 @@
+<table name="member">
+	<!-- essential -->
+	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+	<column name="category" type="varchar" size="30" notnull="not null"/>
+	<column name="user_id" type="varchar" size="30" notnull="not null"/>
+	<column name="password" type="varchar" size="30" notnull="not null"/>
+	<column name="user_name" type="varchar" size="50" notnull="not null"/>
+	<column name="nick_name" type="varchar" size="50"/>
+	<column name="email_address" type="varchar" size="125" notnull="not null"/>
+	<column name="forget_asking" type="varchar" size="125"/>
+	<column name="forget_answer" type="varchar" size="125"/>
+	<column name="hp1" type="char" size="3"/>
+	<column name="hp2" type="char" size="4"/>
+	<column name="hp3" type="char" size="4"/>	
+	<!-- optional -->
+	<column name="recommend_id" type="varchar" size="30"/>
+	<column name="job" type="varchar" size="40"/>
+	<column name="hobby" type="varchar" size="40"/>
+	<column name="join_path" type="varchar" size="125"/>	
+	<column name="access_count" type="int" default="0" notnull="not null"/>	
+	<column name="point" type="int" size="12" default="0" notnull="not null"/>
+	<column name="grade" type="int" size="1" default="1" notnull="not null"/>
+	<column name="is_writable" type="char" size="1" default="y" notnull="not null"/>
+	<column name="is_kickout" type="char" size="1" default="n" notnull="not null"/>
+	<column name="date" type="datetime"/>
+	<column name="ip" type="varchar" size="30"/>
+</table>

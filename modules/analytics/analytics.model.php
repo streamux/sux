@@ -1,6 +1,6 @@
 <?php
 
-class AnalyticsModel extends BaseModel {
+class AnalyticsModel extends Model {
 
 	var $class_name = 'analytics_model';
 

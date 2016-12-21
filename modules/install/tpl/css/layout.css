@@ -12,16 +12,12 @@
 .ui-panel-msg{margin:0 auto;}
 
 /* install */
-.container .article-box{margin-bottom:20px;padding:40px 20px 30px 40px;background-color:#fcfcfc;text-align:left}
+.container .article-box{margin-bottom:20px;padding:40px 20px 30px 20px;background-color:#fcfcfc;text-align:left}
 .container .article-box p{padding-top:7px;padding-bottom:7px}
-.container .article-box span{line-height:25px;}
-
-.container .article-box table{width:100%;font-size: 0.875em}
-.container .article-box table th{padding-bottom:10px}
-.container .article-box table th span{margin: 10px 0 20px 0;font-size:1.250em;text-align:center;font-weight: bold;}
-.container .article-box table td{padding:5px 10px 5px 10px; border:1px solid #e3e3e3;text-align: left}
-.container .article-box table td span{color:#FF0000}
-.container .article-box input{width:100%}
+.container .article-box h1{font-size: 1.250em;font-weight: bold}
+.container .article-box ul{width:100%;border:1px solid #e3e3e3;}
+.container .article-box ul li{padding:7px 10px 7px 10px;line-height: 20px;}
+.container .article-box input{width:100%;}
 .container .btn-submit{margin-top: 20px}
 
 

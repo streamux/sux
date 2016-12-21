@@ -13,9 +13,14 @@ class Tracer extends Object{
 		return self::$otInstance;
 	}
 
-	function setMessage( $message, $type=NULL ) {
+	function setMessage( $message, $type=null ) {
 
-		$this->message .= $message . '<br>';
+		$newline = "<br>"; 
+		$context = Context::getInstance();
+		if ($context->ajax()) {
+			$newline = "\n"; 
+		}
+		$this->message .= $message . $newline;
 	}
 
 	function getMessage() {

@@ -165,16 +165,16 @@ jsux.fn.main = {
 			params = {
 				passover: (page-1) * limit,
 				limit: limit
-			},
-			mode = mod + 'Json';
-
+			};
+		
 		if (self.isLoading === true) {
 			return;
 		}
 		self.isLoading = true;		
 
-		jsux.getJSON('index.php?action='+mode, params, function( e )  {
+		jsux.getJSON( jsux.rootPath + 'admin-admin/' + mod + '-json', params, function( e )  {
 
+			console.log(e.mode);
 			if ( e.mode == 'pageview' ) {
 				self.setDataPageview( e.data );
 				self.animatePageview();
@@ -194,7 +194,7 @@ jsux.fn.main = {
 				limit: this.naviManager.limit
 			};
 
-		jsux.getJSON('index.php?action=mainJson', params,function( e )  {
+		jsux.getJSON( jsux.rootPath + 'admin-admin/main-json', params,function( e )  {
 
 			var markup = '',
 				list = '',
@@ -217,7 +217,6 @@ jsux.fn.main = {
 			$(list).each(function( index ) {
 
 				markup = $('#textfield_tmpl');
-
 				self.convertJsonToObj( markup, this.id, e.data.serviceConfig[this.id], {
 					getUnit: function(label) {
 						return label+'개';
@@ -256,7 +255,7 @@ jsux.fn.main = {
 			if (e.data.connectersite.list.length > 0) {	
 
 				listener.changeAnalyticsHandler = function( e ) {									
-					self.reloadData( e.page, self.naviManager.limit, 'connectersite');
+					self.reloadData( e.page, self.naviManager.limit, 'connectsite');
 				};
 
 				self.naviManager.analytics = new BoardApp.Pagination();

@@ -1,6 +1,6 @@
 <?
 $admin_id = 'admin';
 $admin_pwd = '1234';
-$admin_email = 'streammx@naver.com';
-$yourhome = 'http://www.streamux.com/sux/';
+$admin_email = 'streamux@naver.com';
+$yourhome = 'http://localhost';
 ?>

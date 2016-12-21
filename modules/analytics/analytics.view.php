@@ -6,7 +6,8 @@
  * @pageview url - http://streamux.com/sux/modules/analytics/analytics.php?action=recordPageview&keyword=history
  * @counter url -  http://streamux.com/sux/modules/analytics/analytics.php?action=recordCounter
  */
-class AnalyticsView extends BaseView {
+class AnalyticsView extends View
+{ 
 
 	var $class_name = 'analytics_view';
 

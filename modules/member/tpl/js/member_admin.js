@@ -3,30 +3,30 @@ jsux.fn.groupList = {
 
 	setLayout: function() {
 
-		jsux.getJSON("member.admin.php?action=groupListJson", function( e )  {
+		jsux.getJSON( jsux.rootPath + 'member-admin/group-json', function( e )  {
 
 			var 	func = {
 					editDate: function( value ) {
-						var list = value.split(" ");
+						var list = value.split(' ');
 						return list[0];
 					}
 				},
-				markup = "";
+				markup = '';
 
-			$("#memberList").empty();
+			$('#memberList').empty();
 
-			if (e.result == "Y") {
+			if (e.result == 'Y') {
 
 				if (e.data.length > 0) {
-					markup = $("#memberList_tmpl");
-					$(markup).tmpl(e.data, func).appendTo("#memberList");
+					markup = $('#memberList_tmpl');
+					$(markup).tmpl(e.data, func).appendTo('#memberList');
 				} else {						
-					markup = $("#memberWarnMsg_tmpl");
-					$(markup).tmpl( e ).appendTo("#memberList");
+					markup = $('#memberWarnMsg_tmpl');
+					$(markup).tmpl( e ).appendTo('#memberList');
 				}						
 			} else {
-				markup = $("#memberWarnMsg_tmpl");
-				$(markup).tmpl( e ).appendTo("#memberList");
+				markup = $('#memberWarnMsg_tmpl');
+				$(markup).tmpl( e ).appendTo('#memberList');
 			}
 		});
 	},
@@ -45,11 +45,11 @@ jsux.fn.groupAdd = {
 	},
 	checkFormVal: function( f ) {
 
-		var groupName = f.table_name.value.length;
+		var groupName = f.category.value.length;
 
 		if ( groupName < 1 ) {
-			trace("그룹 이름을 입력 하세요.");
-			f.table_name.focus();
+			trace('그룹 이름을 입력 하세요.');
+			f.category.focus();
 			return (false);
 		}
 
@@ -57,16 +57,31 @@ jsux.fn.groupAdd = {
 	},
 	sendAndLoad: function() {
 
-		var param = {
-			table_name: $("input[name=table_name]").val()
-		};
+		var params = {};
+		var datas = $('form');
 
-		jsux.getJSON("member.admin.php?action=recordGroupAdd", param, function( e )  {
+		$.each(datas[0], function(index, item) {
+
+			var filters = 'checkbox|button|submit|select';
+			var $input = $(item);
+			var type = $input.attr('type') ? $input.attr('type') : item.nodeName;
+			if (!type.match(filters)) {
+				params[$input.attr('name')] = $input.val();
+				//console.log( $input.attr('name'), $input.val());
+			}
+		});
+
+		var url = datas.attr('action');
+		if (!url || url == '#') {
+			trace('주소를 입력해주세요.');
+			return;
+		}
+
+		jsux.getJSON( url, params, function( e )  {
 
 			trace( e.msg );
-
-			if (e.result == "Y") {
-				jsux.goURL(menuList[0].sub[0].link);
+			if (e.result == 'Y') {
+				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
 			}
 		});
 	},
@@ -74,7 +89,7 @@ jsux.fn.groupAdd = {
 
 		var self = this;
 
-		$("form").on("submit", function( e ) {
+		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
 
@@ -82,23 +97,23 @@ jsux.fn.groupAdd = {
 			
 			if (bool === true) {
 
-				if ( self.checkLang( e.target.table_name.value)) {
-					trace("회원그룹명에 한글이 포함되어 있습니다.");						
+				if ( self.checkLang( e.target.category.value)) {
+					trace('회원그룹명에 한글이 포함되어 있습니다.');						
 				} else {
 					self.sendAndLoad();
 				}
 			}				
 		});			
 
-		$("input[name=cancel]").on("click", function(e) {
+		$('input[name=cancel]').on('click', function(e) {
 
-			jsux.goURL(menuList[0].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[0].sub[0].link);
 		});
 	},
 	init: function() {
 
 		this.setEvent();
-		$('input[name=table_name]').focus();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.groupDelete = {
@@ -106,30 +121,29 @@ jsux.fn.groupDelete = {
 	sendJSON: function() {
 
 		var params = {
-			table_name: $("input[name=table_name]").val()
+			_method: 'delete',
+			id: $('input[name=id]').val()
 		};
 
-		jsux.getJSON("member.admin.php?action=recordGroupDelete", params, function( e )  {
+		jsux.getJSON( jsux.rootPath + 'member-admin/group-delete', params, function( e )  {
 
 			trace( e.msg );
 
-			if (e.result == "Y") {
-				jsux.goURL(menuList[0].sub[0].link);
+			if (e.result == 'Y') {
+				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
 			} 
 		});
 	},
 	setEvent: function() {
 
 		var self = this;
+		$('.articles .del .box ul > li > a').on('click', function( e ) {
 
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
-
-			var key = $(this).data("key");
-
-			if (key == "del") {
+			var key = $(this).data('key');
+			if (key == 'del') {
 				self.sendJSON();
-			} else if (key == "back") {
-				jsux.goURL(menuList[0].sub[0].link);
+			} else if (key == 'back') {
+				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
 			}
 			e.preventDefault();
 		});
@@ -144,33 +158,33 @@ jsux.fn.list = {
 	setLayout: function() {
 
 		var params = {
-			table_name: $("input[name=table_name]").val()
+			category: $('input[name=category]').val()
 		};
 
-		jsux.getJSON("member.admin.php?action=listJson", params, function( e )  {
+		jsux.getJSON( jsux.rootPath + 'member-admin/list-json', params, function( e )  {
 
 			var 	func = {
 					editDate: function( value ) {
-						var list = value.split(" ");
+						var list = value.split(' ');
 						return list[0];
 					}
 				},
-				markup = "";
+				markup = '';
 
-			$("#memberList").empty();
+			$('#memberList').empty();
 
-			if (e.result == "Y") {
+			if (e.result == 'Y') {
 
 				if (e.data.list.length > 0) {
-					markup = $("#memberList_tmpl");
-					$(markup).tmpl(e.data.list, func).appendTo("#memberList");
+					markup = $('#memberList_tmpl');
+					$(markup).tmpl(e.data.list, func).appendTo('#memberList');
 				} else {						
-					markup = $("#memberWarnMsg_tmpl");
-					$(markup).tmpl( e ).appendTo("#memberList");
+					markup = $('#memberWarnMsg_tmpl');
+					$(markup).tmpl( e ).appendTo('#memberList');
 				}			
 			} else {
-				markup = $("#memberWarnMsg_tmpl");
-				$(markup).tmpl( e ).appendTo("#memberList");
+				markup = $('#memberWarnMsg_tmpl');
+				$(markup).tmpl( e ).appendTo('#memberList');
 			}
 		});
 	},
@@ -183,35 +197,35 @@ jsux.fn.add = {
 
 	getEmailVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"1]").val());
+		var result = $.trim($('select[name='+id+'1]').val());
 
-		if ( result == "직접입력") {
-			result = $("input[name="+id+"2]").val();
+		if ( result == '직접입력') {
+			result = $('input[name='+id+'2]').val();
 		}
 
 		return result;
 	},
 	getSelectVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"]").val());
+		var result = $.trim($('select[name='+id+']').val());
 
 		return result;
 	},
 	setSelectVal:function( id, value ) {
 
-		$("select[name="+id+"]").val( value );
+		$('select[name='+id+']').val( value );
 	},
 	getCheckboxVal: function( id ) {
 
-		var result= "",
-			list = $("input:checkbox[name="+id+"]:checked"),
+		var result= '',
+			list = $('input:checkbox[name='+id+']:checked'),
 			len = list.length;
 
 		$(list).each(function(index){
 			result += list[index].value;
 
 			if (index < len-1) {
-				result += ",";
+				result += ',';
 			}
 		});
 		return result;
@@ -224,75 +238,75 @@ jsux.fn.add = {
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = f.memberid.value.length,
-			pwd1 = f.pwd1.value.length,
-			pwd2 = f.pwd2.value.length,
-			name = f.name.value.length,
-			email = f.email.value.length,
-			emailTail = this.getEmailVal("email_tail"),
+		var user_id = f.user_id.value.length,
+			password = f.password.value.length,
+			passwordConf = f.passwordConf.value.length,
+			user_name = f.user_name.value.length,
+			email_address = f.email_address.value.length,
+			emailTail = this.getEmailVal('email_tail'),
 			hp1 = f.hp1.value.length,
 			hp2 = f.hp2.value.length,
 			hp3 = f.hp3.value.length;
 
 		if ( memberid < 1 ) {
-			trace("아이디를 입력 하세요.");
+			trace('아이디를 입력 하세요.');
 			f.memberid.focus();
 			return (false);
 		}
 
 		if (this.checkLangKor( f.memberid.value)) {
-			trace("아이디에 한글이 포함되어 있습니다.");
+			trace('아이디에 한글이 포함되어 있습니다.');
 			f.memberid.focus();
 			return (false);
 		}
 
-		if ( pwd1 < 1) {
-			trace("비밀번호를 입력 하세요.");
-			f.pwd1.focus();
+		if ( password < 1) {
+			trace('비밀번호를 입력 하세요.');
+			f.password.focus();
 			return (false);
 		}
 
-		if ( pwd2 < 1) {
-			trace("확인번호를 입력 하세요.");
-			f.pwd2.focus();
+		if ( passwordConf < 1) {
+			trace('확인번호를 입력 하세요.');
+			f.passwordConf.focus();
 			return (false);
 		}
 
-		if ( name < 1 ) {
-			trace("이름을 입력 하세요.");
-			f.name.focus();
+		if ( user_name < 1 ) {
+			trace('이름을 입력 하세요.');
+			f.user_name.focus();
 			return (false);
 		}
 
-		if ( email < 1 ) {
-			trace("e-mail을 입력하세요.");
-			f.email.focus();
+		if ( email_address < 1 ) {
+			trace('e-mail을 입력하세요.');
+			f.email_address.focus();
 			return (false);
 		}
 
 		if ( emailTail < 1 ) {
-			trace("e-mail서비스 주소를 입력하세요.");
+			trace('e-mail서비스 주소를 입력하세요.');
 
-			if (this.getEmailVal("email_tail") === "") {
+			if (this.getEmailVal('email_tail') === '') {
 				f.email_tail2.focus();
 			}
 			return (false);
 		}
 
 		if ( hp1 < 3 ) {
-			trace("핸드폰 첫번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 첫번째 자리 번호를 입력해 주세요.');
 			f.hp1.focus();
 			return (false);
 		}
 
 		if ( hp2 < 3 ) {
-			trace("핸드폰 두번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 두번째 자리 번호를 입력해 주세요.');
 			f.hp2.focus();
 			return (false);
 		}
 
 		if ( hp3 < 4 ) {
-			trace("핸드폰 세번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 세번째 자리 번호를 입력해 주세요.');
 			f.hp3.focus();
 			return (false);
 		}
@@ -301,74 +315,58 @@ jsux.fn.add = {
 	},
 	sendJson: function( f ) {
 
-		var params = "";
+		var params = '';
 
-		params = { table_name: this.getSelectVal("table_name"),
-					memberid: f.memberid.value,
-					pwd1: f.pwd1.value,
-					pwd2: f.pwd2.value,
-					name: f.name.value,
-					email: f.email.value+"@"+this.getEmailVal("email_tail"),
+		params = {	user_id: f.user_id.value,
+					password: f.password.value,
+					user_name: f.user_name.value,
+					email_address: f.email_address.value+'@'+this.getEmailVal('email_tail'),
 					hp1: f.hp1.value,
 					hp2: f.hp2.value,
 					hp3: f.hp3.value,
-					tel1: f.tel1.value,
-					tel2: f.tel2.value,
-					tel3: f.tel3.value,
-					companyname: f.companyname.value,
 					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby"),
-					path: f.path.value,
-					proposeid: f.proposeid.value,
-					writer: this.getSelectVal("writer"),
+					hobby: this.getCheckboxVal('hobby'),
+					join_path: f.join_path.value,
+					recommend_id: f.recommend_id.value,
+					is_writable: this.getSelectVal('is_writable'),
+					is_kickout: this.getSelectVal('is_kickout'),
 					point: f.point.value,
 					grade: f.grade.value };
 
-		jsux.getJSON("member.add.insert.php", params, function( e ) {
+		jsux.getJSON('member.add.insert.php', params, function( e ) {
 
 			trace( e.msg );
 
-			if (e.result == "Y") {
+			if (e.result == 'Y') {
 				jsux.goURL(menuList[0].sub[0].link);
 			}
 		});
 	},
 	checkPassword: function() {
 
-		if ($("input[name=pwd1]").val() != $("input[name=pwd2]").val()) {
+		if ($('input[name=password]').val() != $('input[name=passwordConf]').val()) {
 
-			trace("비밀번호가 일치하지 않습니다.");
+			trace('비밀번호가 일치하지 않습니다.');
 
-			$("input[name=pwd1]").val("");
-			$("input[name=pwd2]").val("");
-			$("input[name=pwd1]").focus();
+			$('input[name=password]').val('');
+			$('input[name=passwordConf]').val('');
+			$('input[name=password]').focus();
 
 			return(false);
 		}
 	},		
 	checkID: function() {
 
-		var	params =  {	table_name: this.getSelectVal("table_name"),
-						memberid: $("input[name=memberid]").val()};
+		var	params =  {	category_id: $('input[name=category_id]').val(),
+						user_id: $('input[name=user_id]').val()};
 
 
-		if (params.memberid === "") {
-			trace("아이디를 입력해주세요");
+		if (params.user_id === '') {
+			trace('아이디를 입력해주세요');
 			return;
 		}
 
-		jsux.getJSON("member.php?action=searchID", params, function( e ) {
-
-			trace( e.msg );
-		});
-	},
-	checkCorp: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					companyname: $("input[name=companyname]").val()};
-
-		jsux.getJSON("member.php?action=searchCorp", params, function( e ) {
+		jsux.getJSON('member.php?action=searchID', params, function( e ) {
 
 			trace( e.msg );
 		});
@@ -377,7 +375,7 @@ jsux.fn.add = {
 
 		var self = this;
 
-		$("form").on("submit", function( e ) {
+		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
 
@@ -387,41 +385,37 @@ jsux.fn.add = {
 				self.sendJson( e.target );
 			}
 		});
-		$("input[name=cancel]").on("click", function(e) {
+		$('input[name=cancel]').on('click', function(e) {
 
 			jsux.goURL(menuList[0].sub[0].link);
 		});
 
-		$("input[name=pwd2]").on("blur", function() {
+		$('input[name=passwordConf]').on('blur', function() {
 
 			self.checkPassword();
 		});	
-		$("input[name=checkID]").on("click",function(e) {
+		$('input[name=checkID]').on('click',function(e) {
 
 			self.checkID();
 		});
-		$("input[name=checkCorpName]").on("click",function(e) {
+		$('select[name=email_tail1]').on('change', function() {
 
-			self.checkCorp();
-		});
-		$("select[name=email_tail1]").on("change", function() {
-
-			$("input[name=email_tail2").val("");
+			$('input[name=email_tail2').val('');
 		});	
 	},
 	setLayout: function() {
 
-		jsux.getJSON("member.add.json.php", function( e )  {
+		jsux.getJSON('member.add.json.php', function( e )  {
 
-			var markup = $("#tableList_tmpl");
+			var markup = $('#tableList_tmpl');
 
-			if (e.result == "Y") {
-				$("#tableList").empty();
+			if (e.result == 'Y') {
+				$('#tableList').empty();
 
 				if (e.data.list.length > 0) {
-					$("#tableList_tmpl").tmpl(e.data.list).appendTo("#tableList");
+					$('#tableList_tmpl').tmpl(e.data.list).appendTo('#tableList');
 				} else {
-					$("#tableList_tmpl").tmpl("{name: no data}").appendTo("#tableList");
+					$('#tableList_tmpl').tmpl('{name: no data}').appendTo('#tableList');
 				}
 			}
 		});
@@ -436,40 +430,40 @@ jsux.fn.modify = {
 
 	returnToURL: function () {
 
-		var table_name = $('input[name=table_name]').val(),
-			url = 'member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
+		var id = $('input[name=category_id]').val(),
+			url = jsux.rootPath + 'member-admin/' + id + '/list';
 		return url;
 	},
 	getEmailVal: function( id ) {
 
-		var result = "";
+		var result = '';
 
-		result = $.trim($("select[name="+id+"1]").val());
-		if ( result == "직접입력") {
-			result = $("input[name="+id+"2]").val();
+		result = $.trim($('select[name='+id+'1]').val());
+		if ( result == '직접입력') {
+			result = $('input[name='+id+'2]').val();
 		}
 		return result;
 	},
 	getSelectVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"]").val());
+		var result = $.trim($('select[name='+id+']').val());
 		return result;
 	},
 	setSelectVal:function( id, value ) {
 
-		$("select[name="+id+"]").val( value );
+		$('select[name='+id+']').val( value );
 	},
 	getCheckboxVal: function( id ) {
 
-		var result= "",
-			list = $("input:checkbox[name="+id+"]:checked"),
+		var result= '',
+			list = $('input:checkbox[name='+id+']:checked'),
 			len = list.length;
 
 		$(list).each(function(index){
 			result += list[index].value;
 
 			if (index < len-1) {
-				result += ",";
+				result += ',';
 			}
 		});
 		return result;
@@ -481,100 +475,74 @@ jsux.fn.modify = {
 	},
 	checkPassword: function() {
 
-		if ($("input[name=ljs_pass1]").val() != $("input[name=ljs_pass2]").val()) {
+		if ($('input[name=password]').val() != $('input[name=passwordConf]').val()) {
 
-			trace("비밀번호가 일치하지 않습니다.");
-			$("input[name=ljs_pass1]").val("");
-			$("input[name=ljs_pass2]").val("");
-			$("input[name=ljs_pass1]").focus();
+			trace('비밀번호가 일치하지 않습니다.');
+			$('input[name=password]').val('');
+			$('input[name=passwordConf]').val('');
+			$('input[name=password]').focus();
 			return(false);
 		}
-	},		
-	checkID: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					memberid: $("input[name=memberid]").val()};
-
-		jsux.getJSON("member.php?action=searchID", params, function( e ) {			
-			trace( e.msg );
-		});
-	},
-	checkCorpName: function() {
-
-		var	params = "";
-		params = {	table_name: $("select[name=table_name]").val(),
-					company: $("input[name=company]").val()};
-
-		jsux.getJSON("member.searchcorp.json.php", params, function( e ) {
-			trace( e.msg );
-		});
 	},
 	checkFormVal: function( f ) {
 
-		var memberid = $("input[name=memberid]").val(),
-			ljs_pass1 = f.ljs_pass1.value.length,
-			ljs_pass2 = f.ljs_pass2.value.length,
-			name = f.name.value.length,
-			email = f.email.value.length,
-			emailTail = this.getEmailVal("email_tail"),
+		var id = $('input[name=id]').val(),
+			password = f.password.value.length,
+			passwordConf = f.passwordConf.value.length,
+			user_name = f.user_name.value.length,
+			email_address = f.email_address.value.length,
+			emailTail = this.getEmailVal('email_tail'),
 			hp1 = f.hp1.value.length,
 			hp2 = f.hp2.value.length,
 			hp3 = f.hp3.value.length;
 
-		if ( memberid < 1 ) {
-			trace("아이디를 입력 하세요.");
-			f.memberid.focus();
+		if ( password < 1) {
+			trace('비밀번호를 입력 하세요.');
+			f.password.focus();
 			return (false);
 		}
 
-		if ( ljs_pass1 < 1) {
-			trace("비밀번호를 입력 하세요.");
-			f.ljs_pass1.focus();
+		if ( passwordConf < 1) {
+			trace('확인번호를 입력 하세요.');
+			f.passwordConf.focus();
 			return (false);
 		}
 
-		if ( ljs_pass2 < 1) {
-			trace("확인번호를 입력 하세요.");
-			f.ljs_pass2.focus();
+		if ( user_name < 1 ) {
+			trace('이름을 입력 하세요.');
+			f.user_name.focus();
 			return (false);
 		}
 
-		if ( name < 1 ) {
-			trace("이름을 입력 하세요.");
-			f.name.focus();
-			return (false);
-		}
-
-		if ( email < 1 ) {
-			trace("e-mail을 입력하세요.");
-			f.email.focus();
+		if ( email_address < 1 ) {
+			trace('e-mail을 입력하세요.');
+			f.email_address.focus();
 			return (false);
 		}
 
 		if ( emailTail < 1 ) {
-			trace("e-mail서비스 주소를 입력하세요.");
+			trace('e-mail서비스 주소를 입력하세요.');
 
-			if (this.getEmailVal("email_tail") === "") {
+			if (this.getEmailVal('email_tail') === '') {
 				f.email_tail2.focus();
 			}
 			return (false);
 		}
 
 		if ( hp1 < 3 ) {
-			trace("핸드폰 첫번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 첫번째 자리 번호를 입력해 주세요.');
 			f.hp1.focus();
 			return (false);
 		}
 
 		if ( hp2 < 3 ) {
-			trace("핸드폰 두번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 두번째 자리 번호를 입력해 주세요.');
 			f.hp2.focus();
 			return (false);
 		}
 
 		if ( hp3 < 4 ) {
-			trace("핸드폰 세번째 자리 번호를 입력해 주세요.");
+			trace('핸드폰 세번째 자리 번호를 입력해 주세요.');
 			f.hp3.focus();
 			return (false);
 		}
@@ -583,35 +551,30 @@ jsux.fn.modify = {
 	},
 	sendJson: function( f ) {
 
-		var params = "",
+		var params = '',
 			self = this;
 
-		params = {	table_name: f.table_name.value,
-					memberid: f.memberid.value,
+		params = {	_method: 'update',
 					id: f.id.value,
-					ljs_pass1: f.ljs_pass1.value,
-					ljs_pass2: f.ljs_pass2.value,
-					name: f.name.value,
-					email: f.email.value+"@"+this.getEmailVal("email_tail"),
+					password: f.password.value,
+					user_name: f.user_name.value,
+					email_address: f.email_address.value+'@'+this.getEmailVal('email_tail'),
 					hp1: f.hp1.value,
 					hp2: f.hp2.value,
 					hp3: f.hp3.value,
-					tel1: f.tel1.value,
-					tel2: f.tel2.value,
-					tel3: f.tel3.value,
-					company: f.company.value,
 					job: f.job.value,
-					hobby: this.getCheckboxVal("hobby"),
-					path: f.path.value,
-					proposeid: f.proposeid.value,
-					writer: this.getSelectVal("writer"),
+					hobby: this.getCheckboxVal('hobby'),
+					join_path: f.join_path.value,
+					recommend_id: f.recommend_id.value,
+					is_writable: this.getSelectVal('is_writable'),
+					is_kickout: this.getSelectVal('is_kickout'),
 					point: f.point.value,
 					grade: f.grade.value };
 
-		jsux.getJSON("member.admin.php?action=recordModify", params, function( e ) {
+		jsux.getJSON( jsux.rootPath + 'member-admin/modify', params, function( e ) {
 
 			trace( e.msg );
-			if (e.result == "Y") {
+			if (e.result == 'Y') {
 				jsux.goURL( self.returnToURL() );
 			}
 		});
@@ -620,7 +583,7 @@ jsux.fn.modify = {
 
 		var self = this;
 
-		$("form").on("submit", function( e ) {
+		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
 
@@ -630,84 +593,79 @@ jsux.fn.modify = {
 			}
 		});
 
-		$("input[name=cancel]").on("click", function(e) {
+		$('input[name=cancel]').on('click', function(e) {
 			jsux.goURL( self.returnToURL() );
 		});
 
-		$("input[name=ljs_pass2]").on("blur", function() {
+		$('input[name=passwordConf]').on('blur', function() {
 			self.checkPassword();
 		});
 
-		$("input[name=checkCorpName]").on("click",function(e) {
-			self.checkCorp();
-		});
-
-		$("select[name=email_tail1]").on("change", function() {
-			$("input[name=email_tail2").val("");
+		$('select[name=email_tail1]').on('change', function() {
+			$('input[name=email_tail2').val('');
 		});
 	},
 	setLayout: function() {
 
 		var params = {
-			table_name: $("input[name=table_name]").val(),
-			memberid:  $("input[name=memberid]").val()
+			id:  $('input[name=id]').val()
 		};
 
-		jsux.getJSON("member.admin.php?action=modifyJson", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + 'member-admin/modify-json', params, function( e ) {
 
 			var formLists = null,
-				checkedVal = "",
+				checkedVal = '',
 				markup = null,
 				labelList = null;
 
-			if (e.result == "Y") {
+			if (e.result == 'Y') {
 
-				formLists = $("input[type=text]");
+				formLists = $('input[type=text]');
 				$(formLists).each(function(index) {
-
 					if (e.data[this.name]) {
 						this.value = e.data[this.name];
 					}
 				});
 
-				formLists = $("select");
+				formLists = $('select');
 				$(formLists).each(function(index) {
 
 					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+						this.value = e.data[this.name] === 'y' ? 'yes' : 'no';
 					}						
 				});
 
-				formLists = $("input[type=checkbox]");
-				checkedVal = e.data.hobby.split(",");
+				formLists = $('input[type=checkbox]');
+				if (e.data.hobby) {
+					checkedVal = e.data.hobby.split(',');
+					$(formLists).each(function(index){
 
-				$(formLists).each(function(index){
+						var self = this;
 
-					var self = this;
+						$(checkedVal).each(function(sIndex){
 
-					$(checkedVal).each(function(sIndex){
-
-						if (checkedVal[sIndex]) {
-							if( self.value === checkedVal[sIndex]) {
-								self.checked = true;
+							if (checkedVal[sIndex]) {
+								if( self.value === checkedVal[sIndex]) {
+									self.checked = true;
+								}
 							}
-						}
+						});
 					});
-				});
+				}				
 
-				labelList = $("table tr").find(".view-type-textfield");
+				labelList = $('table tr').find('.view-type-textfield');
 
-				markup = $("#memberLabel_tmpl");
+				markup = $('#memberLabel_tmpl');
 				$(labelList).each(function(index) {
 
-					var label = "",
-						data = "";
+					var label = '',
+						data = '';
 
-					label = $(labelList[index]).attr("id");						
+					label = $(labelList[index]).attr('id');						
 					data = {label: e.data[label]};
 
-					$("#"+label).empty();
-					$(markup).tmpl( data ).appendTo($("#"+label));
+					$('#'+label).empty();
+					$(markup).tmpl( data ).appendTo($('#'+label));
 				});
 			} else {
 				trace( e.msg );
@@ -718,14 +676,15 @@ jsux.fn.modify = {
 
 		this.setLayout();
 		this.setEvent();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.delete = {
 
 	returnToURL: function () {
 
-		var table_name = $('input[name=table_name]').val(),
-			url = 'member.admin.php?table_name=' + table_name + '&action=list&pagetype=member';
+		var id = $('input[name=category_id]').val(),
+			url = jsux.rootPath + 'member-admin/' + id + '/list';
 
 		return url;
 	},
@@ -734,12 +693,11 @@ jsux.fn.delete = {
 
 		var self = this,
 			params = {
-				table_name: $('input[name=table_name]').val(),
-				memberid: $('input[name=memberid]').val(),
+				_method:'delete',
 				id :$('input[name=id]').val()
-			};	
+			};
 
-		jsux.getJSON('member.admin.php?action=recordDelete', params, function( e )  {
+		jsux.getJSON(jsux.rootPath + 'member-admin/delete', params, function( e )  {
 
 			trace( e.msg );
 

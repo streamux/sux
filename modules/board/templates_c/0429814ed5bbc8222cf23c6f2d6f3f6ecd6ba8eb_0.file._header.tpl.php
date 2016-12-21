@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-10-26 08:25:39
+/* Smarty version 3.1.30, created on 2016-11-10 02:50:09
   from "/Applications/MAMP/htdocs/sux/common/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_58104c635b46e8_25478778',
+  'unifunc' => 'content_5823d2518797c8_20299360',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0429814ed5bbc8222cf23c6f2d6f3f6ecd6ba8eb' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_header.tpl',
-      1 => 1477462904,
+      1 => 1478742327,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_58104c635b46e8_25478778 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5823d2518797c8_20299360 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -29,6 +29,7 @@ function content_58104c635b46e8_25478778 (Smarty_Internal_Template $_smarty_tpl)
 </title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/swiper.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="../../common/css/sux_common.min.css">
@@ -57,11 +58,11 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
 <div class="wrapper">
 	<div class="header clearfix">
 		<div class="util"></div>
-		<div class="mobile-menu">
-			<div class="mobile-btn">
-				<div class="btn-hline1"></div>
-				<div class="btn-hline2"></div>
-				<div class="btn-hline2"></div>
+		<div class="mobile-menu-btn">
+			<div class="ui-h-3stick">
+				<div class="hline1"></div>
+				<div class="hline2"></div>
+				<div class="hline3"></div>
 			</div>
 		</div>
 		<h1 class="logo">
@@ -71,22 +72,16 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
 			<div id="gnb" class="gnb"></div>
 		</div>
 	</div>
-	<div class="section container">
-		<div class="swiper-container swiper-container-contents">
-			<div class="swiper-wrapper">
-				<div class="swiper-slide">
-					<div class="contents-header">
-						<div class="ui-btn-write"><a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
+	<div class="section container">		
+		<div class="contents-header">
+			<div class="ui-btn-write"><a href="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
 &board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
 &passover=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['passover'];?>
 &page=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['page'];?>
 &action=write"><img src="../../common/images/icon_write.png" width="18px" height="18px"></a></div>
-						<h1 class="document-title"><?php echo $_smarty_tpl->tpl_vars['groupData']->value['board_name'];?>
+			<h1 class="document-title"><?php echo $_smarty_tpl->tpl_vars['groupData']->value['board_name'];?>
 </h1>
-						<p>home > <?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_name'];?>
+			<p>home > <?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_name'];?>
 </p>
-					</div>
-		
-				
-		<?php }
+		</div>	<?php }
 }

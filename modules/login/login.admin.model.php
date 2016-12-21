@@ -1,6 +1,6 @@
 <?PHP
 
-class LoginAdminModel extends BaseModel {
+class LoginAdminModel extends Model {
 
 	var $class_name = 'login_admin_model';
 
