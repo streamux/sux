@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-28 05:24:39
+/* Smarty version 3.1.30, created on 2016-12-19 09:08:56
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/join.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583bb1874dca51_33338912',
+  'unifunc' => 'content_585795988f2155_26412206',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '281beeecb48b459ad09871b91045c6dea63c8b7d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/join.tpl',
-      1 => 1480306494,
+      1 => 1481873009,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583bb1874dca51_33338912 (Smarty_Internal_Template $_smarty_tpl) {
+function content_585795988f2155_26412206 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);

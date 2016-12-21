@@ -1,40 +1,157 @@
 <?php
 
-class PopupAdminController extends BaseController {
+class PopupAdminController extends Controller
+{
 
-	var $class_name = 'popup_controller';
+	function insertAdd() {
 
-	function __construct($m=NULL) {
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		$popupName = $posts['popup_name'];
+		$skinName = $posts['skin'];
 		
-		$this->model = $m;
+		$msg = "";
+		$resultYN = "Y";
+
+		$where = new QueryWhere();
+		$where->set('popup_name', $popupName);
+		$result = $this->model->selectFromPopup('id',$where);
+
+		$numrow = $this->model->getNumRows();
+		if ($numrow > 0) {
+			$msg = "팝업창 이름이 이미 존재합니다.";
+			$resultYN = "N";
+		} else {
+
+			$skinImagePath = "skin/{$skinName}/images/bg.jpg";
+			$imageInfo = getimagesize($skinImagePath);
+		      $imageType = $imageInfo[2];
+
+		      if ( $imageType == IMAGETYPE_JPEG ) {
+		      	$image = imagecreatefromjpeg($skinImagePath);
+		      } elseif( $imageType == IMAGETYPE_GIF ) {
+		       	$image = imagecreatefromgif($skinImagePath);
+		      } elseif( $imageType == IMAGETYPE_PNG ) {
+		     		$image = imagecreatefrompng($skinImagePath);
+			}
+
+			$popupWidth = imagesx($image) + 16;
+			$popupHeight = imagesy($image) + 52;
+
+			if (is_readable($skinImagePath) && ($posts['popup_width'] < $popupWidth)) {
+				$posts['popup_width'] = $popupWidth;
+			}
+
+			if (is_readable($skinImagePath) && ($posts['popup_height'] < $popupHeight)) {
+				$posts['popup_height'] = $popupHeight;
+			}
+
+			$column = array('');
+			$items	= array_slice($posts, 1);
+			foreach ($items as $key => $value) {
+				$column[] = $value;
+			}
+			$column[] = 'now()';
+
+			$result = $this->model->insertIntoPopup($column);
+			if ($result){
+				$msg = "팝업창 입력을 완료하였습니다.";
+				$resultYN = "Y";				
+			}else{
+				$msg = "팝업창 입력을 실패하였습니다.";
+				$resultYN = "N";
+			}
+		}
+		//$msg = Tracer::getInstance()->getMessage();
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		$this->callback($data);
 	}
 
-	function select($handler, $values=NULL) {
+	function updateModify() {
 
-		$method = 'select' . ucfirst($handler);
-		$result = $this->model->{$method}($values);
-		return $result;
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
+		$skinName = $posts['skin'];
+
+		$msg = "";
+		$resultYN = "Y";
+
+		$skinImagePath = "skin/{$skinName}/images/bg.jpg";
+		$imageInfo = getimagesize($skinImagePath);
+	      $imageType = $imageInfo[2];
+
+	      if ( $imageType == IMAGETYPE_JPEG ) {
+	      	$image = imagecreatefromjpeg($skinImagePath);
+	      } elseif( $imageType == IMAGETYPE_GIF ) {
+	       	$image = imagecreatefromgif($skinImagePath);
+	      } elseif( $imageType == IMAGETYPE_PNG ) {
+	     		$image = imagecreatefrompng($skinImagePath);
+		}
+
+		$popupWidth = imagesx($image) + 16;
+		$popupHeight = imagesy($image) + 52;
+
+		if (is_readable($skinImagePath) && $posts['popup_width'] < $popupWidth) {
+			$posts['popup_width'] = $popupWidth;
+		}
+
+		if (is_readable($skinImagePath) && $posts['popup_height'] < $popupHeight) {
+			$posts['popup_height'] = $popupHeight;
+		}
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+
+		$column = array();
+		$items = array_slice($posts, 2);
+		foreach ($items as $key => $value) {
+			$column[$key] = $value;
+		}
+
+		$result = $this->model->updatePopup($column, $where);
+		if ($result){
+			$msg = "팝업정보 수정을 성공하였습니다.";
+			$resultYN = "Y";			
+		}else{
+			$msg = "팝업정보 수정을 실패하였습니다.";
+			$resultYN = "N";
+		}
+		//$msg = Tracer::getInstance()->getMessage();
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		$this->callback($data);
 	}
 
-	function insert($handler, $values=NULL) {
+	function deleteDelete() {
 
-		$method = 'insert' . ucfirst($handler);
-		$result = $this->model->{$method}($values);
-		return $result;
-	}
+		$context = Context::getInstance();
+		$id = $context->getPost('id');
+		$popupName = $context->getPost('popup_name');
 
-	function update($handler, $values=NULL) {
+		$dataObj = array();		
+		$msg = "";
+		$resultYN = "Y";
 
-		$method = 'update' . ucfirst($handler);
-		$result = $this->model->{$method}($values);
-		return $result;
-	}
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$result = $this->model->deleteFromPopup($where);
+		if ($result) {
+			$msg .= $popupName . ' 팝업삭제를 성공하였습니다.';
+			$resultYN = "Y";
+		} else {
+			$msg .= $popupName . ' 팝업삭제를 실패하였습니다.';
+			$resultYN = "N";
+		}
+		//$msg .= Tracer::getInstance()->getMessage();
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
 
-	function delete($handler, $values=NULL) {
-
-		$method = 'delete' . ucfirst($handler);
-		$result = $this->model->{$method}($values);
-		return $result;
+		$this->callback($data);
 	}
 }
 ?>

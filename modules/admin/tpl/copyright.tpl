@@ -1,1 +1,1 @@
-Copyright @ <a href="/sux/index.php">STREAMUX Corp</a>
+Copyright @ <a href="{$rootPath}">STREAMUX Corp</a>

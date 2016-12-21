@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 게시판 목록 - StreamUX"}
@@ -11,7 +12,7 @@
 		<div class="box">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>			
 				</li>
 			</ul>
@@ -58,23 +59,25 @@
 {/literal}
 </script>
 <script type="jquery-templete" id="boardList_tmpl">
-{literal}
 	<tr>
-		<td><span>${no}</span></td>
-		<td><a href="../board/board.php?board=${name}&action=list" target="_blank"><span>${board_name}</span></a></td>								
-		<td><span>${$item.editDate(date)}</span></td>
-		<td><span>${log_key}</span></td>						
-		<td><span>${width}</span></td>
+		<td><span>{literal}${no}{/literal}</span></td>
 		<td>
-			<a href="board.admin.php?id=${id}&table_name=${name}&pagetype=board&action=modify">
-				<img src="../admin/tpl/images/btn_edit.gif" alt="수정버튼">
+			<a href="{$rootPath}{literal}${category}{/literal}" target="_blank"><span>{literal}${board_name}{/literal}</span></a>
+		</td>
+		{literal}								
+		<td><span>${$item.editDate(date)}</span></td>		
+		<td><span>${allow_nonmember}</span></td>						
+		<td><span>${board_width}</span></td>
+		{/literal}
+		<td>
+			<a href="{$rootPath}board-admin/{literal}${id}{/literal}/modify">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_edit.gif" alt="수정버튼">
 			</a></td>
 		<td>
-			<a href="board.admin.php?id=${id}&table_name=${name}&pagetype=board&action=delete">
-				<img src="../admin/tpl/images/btn_del.gif" alt="삭제버튼">
+			<a href="{$rootPath}board-admin/{literal}${id}{/literal}/delete">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
 			</a>
 		</td>
 	</tr>
-{/literal}
 </script>
 {include file="$footerPath"}

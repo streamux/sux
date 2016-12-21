@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 팝업 삭제 - StreamUX"}
@@ -11,9 +12,10 @@
 		<div class="box">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon">
-					<span class="title1">{$requestData.popup_name} 팝업을 정말로 삭제 하시겠습니까?</span>
-					<input type="hidden" name="id" value="{$requestData.id}">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon">
+					<span class="title1">{$documentData.popup_name} 팝업을 정말로 삭제 하시겠습니까?</span>
+					<input type="hidden" name="id" value="{$documentData.id}">
+					<input type="hidden" name="popup_name" value="{$documentData.popup_name}">	
 				</li>
 				<li>
 					<span class="title2">다시한번 잘 확인해 주세요.</span>

@@ -4,8 +4,9 @@
 *  @class ModuleHandler
 */
 class ModuleHandler
-{	
-	function display( $id)
+{
+
+	function display( $id, $sid)
 	{
 		$context = Context::getInstance();
 
@@ -17,13 +18,20 @@ class ModuleHandler
 		$category = $uriMethod->getMethod('category');
 		$action = $uriMethod->getMethod('action');	
 
+		/**
+		 * @route uri's construct
+		 * type 1 - your ste / action
+		 * type 2 - your site / category / action 
+		 */
+
+		// action값이 uri 값에 없을 때 document 클래스의 index 화면을 보여준다. 
 		if (empty($action)) {
-			$className = 'home';
+			$className = 'Document';
 		} else {
 			$className = $context->getModule($moduleKey);
 		}
 		
-		if ($context->getDB() || strtolower($className) === 'install') {		
+		if ($context->getDB() || strtolower($className) === 'install') {
 			
 			$ModelClass = $className . 'Model';
 			$ControllerClass = $className . 'Controller';
@@ -37,24 +45,39 @@ class ModuleHandler
 			$controller = new $ControllerClass( $model);
 			$view = new $ViewClass( $model, $controller);
 
-			$context->setParameter('category', $category);
-			$context->setParameter('action', $action);
-			$context->setParameter('id', $id);
-
-			// @var httpMethod is 'create' || 'insert' || 'put' || 'update' || 'delete'
+			/**
+			 * @var httpMethod
+			 * receive 'create' || 'insert' || 'put' || 'update' || 'delete'
+			 */
 			$httpMethod = strtolower($context->getRequest('_method'));
 			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
-			if (preg_match('/^(create|insert|put|update|delete)+/', $httpMethod)) {		
+			if (preg_match('/^(create|insert|put|update|delete)+/', $httpMethod)) {
 				$controller->{$httpMethod.ucfirst($action)}();
 				//$controller->tester($httpMethod . ucfirst($action), 'js');
 			} else {
-				if (preg_match('/^(board|document)+/i', $className)) {					
+
+				if (preg_match('/^(board|document)+/i', $className)) {
 					if (empty($category)) {
-						$category = $action;
-						$context->setParameter('category', $category);						
-						$action = isset($id) ? 'read' : 'list';
+						if (empty($action)) {
+							$category = 'home';
+							$action = 'contents';
+						} else {
+							$category = $action;
+							$context->setParameter('category', $category);
+							if (preg_match('/^(board|documentadmin)+/i', $className)) {
+								$action = isset($id) ? 'read' : 'list';
+							} else {
+								$action = 'contents';
+							}
+						}
 					}
-				}		
+				}
+
+				$context->setParameter('category', $category);
+				$context->setParameter('action', $action);
+				$context->setParameter('id', $id);
+				$context->setParameter('sid', $sid);
+
 				$view->display($action, $category, $id);
 			}
 
@@ -64,26 +87,5 @@ class ModuleHandler
 		} else {
 			Utils::goURL('/sux/install');
 		}
-	}
-}
-
-class HomeModel extends Model
-{
-	function init() {}
-}
-
-class HomeController extends Controller
-{
-
-}
-
-/**
-* @class HomeView
-*/
-class HomeView extends View
-{	
-	function __construct() {
-
-		echo '<a href="/sux/">home</a><br><a href="/sux/login">로그인</a><br><a href="/sux/notice">공지사항</a>';
 	}
 }

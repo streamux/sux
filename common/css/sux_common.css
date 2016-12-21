@@ -6,7 +6,7 @@
 .footer ul li:last-child{width:34%;border-right: none}
 .footer ul li a{display:inline-block;width:100%;height:100%;text-decoration:none;}
 .footer ul li a:hover{background-color:#3e3e3e}
-.footer p span{font-size:0.750em;line-height:40px;vertical-align:top}
+.footer p span{font-size:0.750em;line-height:40px;vertical-align:middle}
 
 /* header */
 .header .util{display:none;height: 20px}

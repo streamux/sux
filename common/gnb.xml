@@ -2,34 +2,34 @@
 <root>
 	<menu>
 		<label><![CDATA[Download]]></label>
-		<link><![CDATA[/sux/modules/board/board.php?board=sux_download&action=list]]></link>
+		<link><![CDATA[download]]></link>
 	</menu>
 	<menu>
 		<label><![CDATA[User Guide]]></label>
-		<link><![CDATA[/sux/modules/board/board.php?board=sux_userguide&action=list]]></link>
+		<link><![CDATA[userguide]]></link>
 	</menu>
 	<menu>
 		<label><![CDATA[Portfolio]]></label>
-		<link><![CDATA[/sux/modules/board/board.php?board=sux_portfolio&action=list]]></link>
+		<link><![CDATA[portfolio]]></link>
 	</menu>
 	<menu>
 		<label><![CDATA[Support]]></label>
-		<link><![CDATA[/sux/modules/board/board.php?board=sux_download&action=list]]></link>
+		<link><![CDATA[community]]></link>
 		<menu>
 			<label><![CDATA[공지사항]]></label>
-			<link><![CDATA[/sux/modules/board/board.php?board=sux_notice&action=list]]></link>
+			<link><![CDATA[notice]]></link>
 		</menu>
 		<menu>
 			<label><![CDATA[커뮤니티]]></label>
-			<link><![CDATA[/sux/modules/board/board.php?board=sux_community&action=list]]></link>
+			<link><![CDATA[community]]></link>
 		</menu>
 		<menu>
-			<label><![CDATA[묻고답하기]]></label>
-			<link><![CDATA[/sux/modules/board/board.php?board=sux_notice&action=list]]></link>
+			<label><![CDATA[자주묻는질문]]></label>
+			<link><![CDATA[faq]]></link>
 		</menu>
 		<menu>
 			<label><![CDATA[버그신고]]></label>
-			<link><![CDATA[/sux/modules/board/board.php?board=sux_bugreporting&action=list]]></link>
+			<link><![CDATA[bug_reporting]]></link>
 		</menu>
 	</menu>
 </root>

@@ -170,11 +170,10 @@ window.trace = function( str, bool ) {
 				$input = $(this);
 				$target = $input.attr('type').toLowerCase();
 				if ($target.match($filters)) {
-					//console.log($input.val());
+					//console.log($input.attr('name'), $input.val());
 					if ($input.val() === '') {
 						$input.focus();
 						return false;
-
 					}						
 				}					
 			});

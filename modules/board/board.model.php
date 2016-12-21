@@ -266,14 +266,16 @@ class BoardModel extends Model {
 		return $result;
 	}
 
-	function selectFromCommentWhere($sid) {
+	function selectFromCommentWhere($filed, $where) {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable('comment');
+		$id = $context->getParameter('id');
 
 		$query = new Query();
-		$query->setField('*');
-		$query->setTable($this->board_grg);
-		$query->setWhere(array(
-			'storyid' => $sid
-		));
+		$query->setField($filed);
+		$query->setTable($tableName);
+		$query->setWhere($where);
 		$result = parent::select($query);
 		return $result;
 	}
@@ -307,7 +309,7 @@ class BoardModel extends Model {
 			0,
 			0,
 			0,
-			'n',
+			'',
 			$igroup_count,
 			0,
 			0,
@@ -371,7 +373,7 @@ class BoardModel extends Model {
 			0,
 			0,
 			0,
-			'n',
+			'',
 			$this->igroup_count,
 			$this->space_count,
 			$this->ssunseo_count,
@@ -430,60 +432,63 @@ class BoardModel extends Model {
 		return $result;
 	}
 
-	function updateOpkey() {
+	function updateProgressStep() {
 
 		$context = Context::getInstance();
-		$opkey = $context->getPost('opkey');
+		$tableName = $context->getTable('board');		
+		$id = $context->getParameter('id');
+		$progressStep = $context->getPost('progress_step');
 
 		$query = new Query();
-		$query->setTable($this->board);
+		$query->setTable($tableName);
 		$query->setColumn(array(
-			'opkey'=>$opkey
+			'progress_step'=>$progressStep
 		));
 		$query->setWhere(array(
-			'id'=>$this->id
+			'id'=>$id
 		));
 		$result = parent::update($query);
 		return $result;
 	}
 
-	function insertWriteComment() {
+	function insertComment() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
 		$posts = $context->getPostAll();
-		$board_grg = $requests['board_grg'];
-		$id = $requests['id'];
+
+		$tableName = $context->getTable('comment');
+		$contentId = $context->getParameter('id');
 
 		$name = $posts['nickname'];
-		$pass = $posts['pass'];
+		$pass = $posts['password'];
 		$comment = $posts['comment'];
 
 		$query = new Query();
-		$query->setTable($board_grg);
+		$query->setTable($tableName);
 		$query->setColumn(array(
 			'',
-			$id,
+			$contentId,
 			$name,
 			$pass,
 			$comment,
+			0,
+			0,
 			'now()'
 		));
 		$result = parent::insert($query);
 		return $result;
 	}
 
-	function deleteDeletelComment() {
+	function deleteComment() {
 
 		$context = Context::getInstance();
-		$grgid = $context->getRequest('grgid');
-		$board_grg = $context->getRequest('board_grg');	
+		$tableName = $context->getTable('comment');
+		$id = $context->getParameter('sid');
 
 		$query = new Query();
-		$query->setTable($board_grg);
+		$query->setTable($tableName);
 		$query->setWhere(array(
-			'id'=>$grgid
+			'id'=>$id
 		));
 		$result = parent::delete($query);
 		return $result;

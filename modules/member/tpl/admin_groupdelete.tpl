@@ -1,6 +1,7 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="SUX관리자 회원그룹삭제 - StreamUX"}	
+{include file="$headerPath" title="SUX관리자 회원그룹삭제 - StreamUX"}
 <div class="articles ui_edgebox">
 	<div class="del">
 		<div class="tt">
@@ -11,9 +12,9 @@
 		<div class="box">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon">
 					<span class="title1">{$id} 회원그룹을 정말로 삭제 하시겠습니까?</span>
-					<input type="hidden" name="table_name" value="{$requestData.table_name}">
+					<input type="hidden" name="id" value="{$requestData.id}">
 				</li>
 				<li>
 					<span class="title2">다시한번 잘 확인해 주세요.</span>

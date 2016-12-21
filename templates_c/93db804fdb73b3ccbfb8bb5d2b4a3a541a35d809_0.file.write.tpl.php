@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-30 02:27:04
+/* Smarty version 3.1.30, created on 2016-12-02 05:09:54
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/write.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583e2ae81b50b2_80827676',
+  'unifunc' => 'content_5840f412350887_96386639',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '93db804fdb73b3ccbfb8bb5d2b4a3a541a35d809' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/write.tpl',
-      1 => 1480469211,
+      1 => 1480651789,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583e2ae81b50b2_80827676 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5840f412350887_96386639 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
@@ -89,8 +89,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	</div>
 	<div class="panel-buttons">
 		<input name="imageField" type="image" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="#" onclick="location.href='<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
-'"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="#" onclick="history.back();"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>

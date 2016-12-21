@@ -53,20 +53,22 @@ class Navigator extends Object {
 		$context = Context::getInstance();
 		$result = array();
 
-		if (!$this->page) {
-			$this->page = 1;
-		}
-
 		$passoverpage = $this->limit * 10;
+		if ($this->passover == $passoverpage || $this->passover == 0) {
+			$this->page = ceil($this->passover/$passoverpage)+1;
+		} else {
+			$this->page = ceil($this->passover/$passoverpage);
+		}
+		
 		$this->nextpage = $this->page+1;
 		$this->befopage = $this->page-1;
 		$this->prevpassover = ($this->befopage * $passoverpage)-$passoverpage; 
 		$this->hanpassoverpage = $this->page*$passoverpage;
 		$this->newpassover = ($this->nextpage * $passoverpage)-$passoverpage; 
 		$this->nowpage = ($this->page*10)-9;
-		$this->nowpageend = $this->page*10;
+		$this->nowpageend = $this->page*11;
 
-		if ($this->page ==1) {
+		if ($this->page == 1) {
 			$this->okpage ='yes';
 		}
 

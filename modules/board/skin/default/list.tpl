@@ -22,11 +22,16 @@
 			{if isset($item)}
 			<tr>
 				<td class="author"><span>{$item.name}</span></td>
-				<td class="subject">					
-					<a href="{$uri}/{$item.subject.id}"><span class="link-area" style="padding-left:{$item.subject.space}">
+				<td class="subject">
+					{if $requestData.search != ''}
+						<a href="{$uri}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
+					{else}
+						<a href="{$uri}/{$item.subject.id}">
+					{/if}			
+					<span class="link-area" style="padding-left:{$item.subject.space}">
 						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
-						<span class="{$item.subject.txt_tail}">({$item.subject.tail_num})</span>
+						<span class="{$item.subject.css_comment}">({$item.subject.comment_num})</span>
 						{if $item.subject.img_name != ''}
 						<img src="{$skinPathList.dir}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
 						{/if}
@@ -52,7 +57,8 @@
 	{/if}
 	</div>
 	<div class="board-search ui-inlineblock">
-		<form action="board.php?board={$requestData.board}&find={$requestData.find}&search={$requestData.search}&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.list.checkSearchForm(this);">
+		<form action="{$uri}" method="post" name="f_board_list_search">
+			<input type="hidden" name="_method" value="select">
 			<select name="find">
 				<option value='title'>제 목</option>
 				<option value='name'>작성자</option>
@@ -63,10 +69,12 @@
 		</form>
 	</div>	
 	<div class="board-list-buttons">
-		<a href="{$uri}">
-			<img src="{$skinPathList.dir}/images/btn_list.gif" width="51" height="23" border="0">
-		</a>
-		<a href="{$uri}/write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+		{if $requestData.search != ''}
+			<a href="{$uri}/write?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}/write">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>
 {include file="$footerPath"}

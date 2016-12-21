@@ -1,19 +1,19 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.connecterList = {
+jsux.fn.connectSiteList = {
 
 	setLayout: function() {
 
-		jsux.getJSON("analytics.admin.php?action=connecterListJson", function( e )  {
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-list-json', function( e )  {
 
-			var markup = "";
-			$("#totallogList").empty();
+			var markup = '';
+			$('#totallogList').empty();
 
-			if (e.result == "Y") {
-				markup = $("#totallogList_tmpl");
-				$(markup).tmpl(e.data.list).appendTo("#totallogList");
+			if (e.result == 'Y') {
+				markup = $('#totallogList_tmpl');
+				$(markup).tmpl(e.data.list).appendTo('#totallogList');
 			} else {
-				markup = $("#totallogWarnMsg_tmpl");
-				$(markup).tmpl( e ).appendTo("#totallogList");
+				markup = $('#totallogWarnMsg_tmpl');
+				$(markup).tmpl( e ).appendTo('#totallogList');
 			}
 		});
 	},
@@ -22,14 +22,14 @@ jsux.fn.connecterList = {
 		this.setLayout();
 	}
 };
-jsux.fn.connecterAdd = {
+jsux.fn.connectSiteAdd = {
 
 	checkFormVal: function( f ) {
 
 		var keyword = f.keyword.value.length;
 
 		if ( keyword < 1 ) {
-			trace("접속키워드를 입력하세요.");
+			trace('접속키워드 이름을 입력하세요.');
 			f.keyword.focus();
 			return (false);
 		}
@@ -39,15 +39,21 @@ jsux.fn.connecterAdd = {
 	sendJson: function( f ) {
 
 		var params = {
-			"keyword": f.keyword.value
+			'_method':f._method.value,
+			'keyword': f.keyword.value
 		};
 
-		jsux.getJSON("analytics.admin.php?action=recordConnecterAdd", params, function( e ) {
+		var url = f.action;
+		if (!url) {
+			trace("Action URL Don't Exists");
+			return;
+		}
+
+		jsux.getJSON(url, params, function( e ) {
 
 			trace( e.msg );
-
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[0].link);
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
 			}
 		});
 	},
@@ -55,8 +61,7 @@ jsux.fn.connecterAdd = {
 
 		var self = this;
 
-		$("form").on("submit", function( e ) {
-
+		$('form').on('submit', function( e ) {
 			e.preventDefault();
 
 			var bool = self.checkFormVal( e.target );
@@ -65,68 +70,32 @@ jsux.fn.connecterAdd = {
 				self.sendJson( e.target );
 			}				
 		});
-		$("input[name=cancel]").on("click", function() {
-			jsux.goURL(menuList[3].sub[0].link);
+		$('input[name=cancel]').on('click', function() {
+			jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
 		});
 	},
 	init: function() {
 
 		this.setEvent();
-		$("input[name=keyword]").focus();
+		jsux.setAutoFocus();
 	}
 };
-jsux.fn.connecterDelete = {
 
-	sendJSON: function() {
-
-		var params = {
-			"id": $("input[name=id]").val()
-		};
-
-		jsux.getJSON("analytics.admin.php?action=recordConnecterDelete", params, function( e ) {
-
-			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[0].link);
-			}
-		});
-	},
-	setEvent: function() {
-
-		var self = this;
-
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
-
-			var key = $(this).data("key");
-
-			if (key == "del") {
-
-				self.sendJSON();
-			} else if (key == "back") {
-
-				jsux.goURL(menuList[3].sub[0].link);
-			}
-			e.preventDefault();
-		});
-	},
-	init: function() {
-
-		this.setEvent();
-	}
-};
-jsux.fn.connecterReset = {
+jsux.fn.connectSiteReset = {
 	
 	sendJSON: function() {
 
 		var params = {
-			"id": $("input[name=id]").val()
+			'_method': 'update',
+			'id': $('input[name=id]').val(),
+			'keyword': $('input[name=keyword]').val()
 		};
 
-		jsux.getJSON("analytics.admin.php?action=recordConnecterReset", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-reset', params, function( e ) {
 
 			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[0].link);
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
 			}
 		});
 	},
@@ -134,14 +103,13 @@ jsux.fn.connecterReset = {
 
 		var self = this;
 
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
+		$('.articles .del .box ul > li > a').on('click', function( e ) {
 
-			var key = $(this).data("key");
-
-			if (key == "reset") {					
+			var key = $(this).data('key');
+			if (key == 'reset') {					
 				self.sendJSON();
-			} else if (key == "back") {
-				jsux.goURL(menuList[3].sub[0].link);
+			} else if (key == 'back') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
 			}
 			e.preventDefault();
 		});
@@ -151,21 +119,64 @@ jsux.fn.connecterReset = {
 		this.setEvent();
 	}
 };
+
+jsux.fn.connectSiteDelete = {
+
+	sendJSON: function() {
+
+		var params = {
+			'_method': 'delete',
+			'id': $('input[name=id]').val(),
+			'keyword': $('input[name=keyword]').val()
+		};
+
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-delete', params, function( e ) {
+
+			trace( e.msg );
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+			}
+		});
+	},
+	setEvent: function() {
+
+		var self = this;
+
+		$('.articles .del .box ul > li > a').on('click', function( e ) {
+
+			var key = $(this).data('key');
+
+			if (key == 'del') {
+
+				self.sendJSON();
+			} else if (key == 'back') {
+
+				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+			}
+			e.preventDefault();
+		});
+	},
+	init: function() {
+
+		this.setEvent();
+	}
+};
+
 jsux.fn.pageviewList = {
 
 	setLayout: function() {
 
-		jsux.getJSON("analytics.admin.php?action=pageviewListJson", function( e )  {
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-list-json', function( e )  {
 
-			var markup = "";
-			$("#totallogList").empty();
+			var markup = '';
+			$('#totallogList').empty();
 
-			if (e.result == "Y") {
-				markup = $("#totallogList_tmpl");
-				$(markup).tmpl(e.data.list).appendTo("#totallogList");
+			if (e.result == 'Y') {
+				markup = $('#totallogList_tmpl');
+				$(markup).tmpl(e.data.list).appendTo('#totallogList');
 			} else {
-				markup = $("#totallogWarnMsg_tmpl");
-				$(markup).tmpl( e ).appendTo("#totallogList");
+				markup = $('#totallogWarnMsg_tmpl');
+				$(markup).tmpl( e ).appendTo('#totallogList');
 			}
 		});
 	},
@@ -181,7 +192,7 @@ jsux.fn.pageviewAdd = {
 		var keyword = f.keyword.value.length;
 
 		if ( keyword < 1 ) {
-			trace("페이지뷰 키워드를 입력하세요.");
+			trace('페이지뷰 키워드를 입력하세요.');
 			f.keyword.focus();
 			return (false);
 		}
@@ -191,15 +202,21 @@ jsux.fn.pageviewAdd = {
 	sendJson: function( f ) {
 
 		var params = {
-			"keyword": f.keyword.value
+			'_method': 'insert',
+			'keyword': f.keyword.value
 		};
 
-		jsux.getJSON("analytics.admin.php?action=recordPageviewAdd", params, function( e ) {
+		var url = f.action;
+		if (!url) {
+			trace("Action URL Don't Exists");
+			return;
+		}
+
+		jsux.getJSON( url, params, function( e ) {
 
 			trace( e.msg );
-
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[2].link);
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 			}
 		});
 	},
@@ -207,7 +224,7 @@ jsux.fn.pageviewAdd = {
 
 		var self = this;
 
-		$("form").on("submit", function( e ) {
+		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
 
@@ -218,30 +235,31 @@ jsux.fn.pageviewAdd = {
 				self.sendJson( e.target );
 			}				
 		});
-		$("input[name=cancel]").on("click", function() {
-			jsux.goURL(menuList[3].sub[2].link);
+		$('input[name=cancel]').on('click', function() {
+			jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 		});
 	},
 	init: function() {
 
 		this.setEvent();
-		$("input[name=keyword]").focus();
+		$('input[name=keyword]').focus();
 	}
 };
-jsux.fn.pageviewDelete = {
-
+jsux.fn.pageviewReset = {
+	
 	sendJSON: function() {
 
 		var params = {
-			"id": $("input[name=id]").val()
+			'_method': 'update',
+			'id': $('input[name=id]').val(),
+			'keyword': $('input[name=keyword]').val()
 		};
 
-		jsux.getJSON("analytics.admin.php?action=recordPageviewDelete", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-reset', params, function( e ) {
 
 			trace( e.msg );
-
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[2].link);
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 			}
 		});
 	},
@@ -249,16 +267,15 @@ jsux.fn.pageviewDelete = {
 
 		var self = this;
 
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
+		$('.articles .del .box ul > li > a').on('click', function( e ) {
 
-			var key = $(this).data("key");
+			var key = $(this).data('key');
 
-			if (key == "del") {
-
+			if (key == 'reset') {					
 				self.sendJSON();
-			} else if (key == "back") {
-
-				jsux.goURL(menuList[3].sub[2].link);
+			} else if (key == 'back') {
+				trace('aa', true);
+				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 			}
 			e.preventDefault();
 		});
@@ -268,19 +285,24 @@ jsux.fn.pageviewDelete = {
 		this.setEvent();
 	}
 };
-jsux.fn.pageviewReset = {
-	
+
+
+jsux.fn.pageviewDelete = {
+
 	sendJSON: function() {
 
 		var params = {
-			"id": $("input[name=id]").val()
+			'_method': 'delete',
+			'id': $('input[name=id]').val(),
+			'keyword': $('input[name=keyword]').val()
 		};
 
-		jsux.getJSON("analytics.admin.php?action=recordPageviewReset", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-delete', params, function( e ) {
 
 			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL(menuList[3].sub[2].link);
+
+			if (e.result == 'Y') {
+				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 			}
 		});
 	},
@@ -288,15 +310,16 @@ jsux.fn.pageviewReset = {
 
 		var self = this;
 
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
+		$('.articles .del .box ul > li > a').on('click', function( e ) {
 
-			var key = $(this).data("key");
+			var key = $(this).data('key');
 
-			if (key == "reset") {					
+			if (key == 'del') {
+
 				self.sendJSON();
-			} else if (key == "back") {
-				trace("aa", true);
-				jsux.goURL(menuList[3].sub[2].link);
+			} else if (key == 'back') {
+
+				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
 			}
 			e.preventDefault();
 		});

@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 팝업목록 - StreamUX"}
@@ -11,7 +12,7 @@
 		<div class="box">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>			
 				</li>
 			</ul>
@@ -55,23 +56,23 @@
 	</tr>
 	{/literal}
 </script>
-<script type="jquery-templete" id="popupList_tmpl">
-	{literal}
+<script type="jquery-templete" id="popupList_tmpl">	
 	<tr>
+		{literal}
 		<td><span>${no}</span></td>
-		<td data-key="td"><span class="popup"><a href="#" data-key="${id}">${popup_name}</a></span></td>								
+		<td data-key="td"><span class="popup"><a href="#" data-key="${id}">${popup_name}</a></span></td>
 		<td><span class="ui-date">${date}</span><span class="ui-time">${time}</span></td>
 		<td><span>${skin}</span></td>
+		{/literal}
 		<td>
-			<a href="popup.admin.php?id=${id}&action=modify&pagetype=popup">
-				<img src="../admin/tpl/images/btn_edit.gif" alt="수정버튼">
+			<a href="{$rootPath}popup-admin/{literal}${id}{/literal}/modify">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_edit.gif" alt="수정버튼">
 			</a></td>
 		<td>
-			<a href="popup.admin.php?id=${id}&popup_name=${popup_name}&action=delete&pagetype=popup">
-				<img src="../admin/tpl/images/btn_del.gif" alt="삭제버튼">
+			<a href="{$rootPath}popup-admin/{literal}${id}{/literal}/delete">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
 			</a>
 		</td>
-	</tr>
-	{/literal}
+	</tr>	
 </script>
 {include file="$footerPath"}

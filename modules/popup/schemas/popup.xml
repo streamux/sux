@@ -1,6 +1,7 @@
 <table name="popup">
 	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-	<column name="name" type="varchar" size="30" notnull="not null"/>
+	<column name="popup_name" type="varchar" size="30" notnull="not null"/>
+	<column name="popup_title" type="varchar" size="75" notnull="not null"/>	
 	<column name="is_usable" type="char" size="1" default="y" notnull="not null"/>
 	<column name="time_year" type="int" size="4" default="0" notnull="not null"/>
 	<column name="time_month" type="int" size="2" default="0" notnull="not null"/>
@@ -8,15 +9,14 @@
 	<column name="time_hours" type="int" size="2" default="0" notnull="not null"/>
 	<column name="time_minutes" type="int" size="2" default="0" notnull="not null"/>
 	<column name="time_seconds" type="int" size="2" default="0" notnull="not null"/>
-	<column name="popup_title" type="varchar" size="75" notnull="not null"/>	
+	<column name="skin" type="varchar" size="75" notnull="not null"/>
 	<column name="popup_width" type="int" size="12" default="0" notnull="not null"/>
 	<column name="popup_height" type="int" size="12" default="0" notnull="not null"/>
 	<column name="popup_top" type="int" size="12" default="0" notnull="not null"/>
-	<column name="popup_left" type="int" size="12" default="0" notnull="not null"/>
-	<column name="skin" type="varchar" size="74" notnull="not null"/>
+	<column name="popup_left" type="int" size="12" default="0" notnull="not null"/>	
 	<column name="skin_top" type="int" size="12" default="0" notnull="not null"/>
 	<column name="skin_left" type="int" size="12" default="0" notnull="not null"/>
 	<column name="skin_right" type="int" size="12" default="0" notnull="not null"/>
-	<column name="content" type="text" notnull="not null"/>
+	<column name="contents" type="text" notnull="not null"/>
 	<column name="date" type="datetime"/>
 </table>

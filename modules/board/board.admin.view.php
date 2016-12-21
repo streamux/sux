@@ -1,6 +1,7 @@
 <?php
 
-class BoardAdminModule extends View {
+class BoardAdminModule extends View
+{
 	
 	var $class_name = 'board_admin_module';
 	var $skin_path_list = array();
@@ -30,22 +31,27 @@ class BoardAdminModule extends View {
 	}
 }
 
-class BoardAdminView extends BoardAdminModule {
+class BoardAdminView extends BoardAdminModule
+{
 
-	var $class_name = 'board_admin_view';
+	function displayBoardAdmin() {
+
+		$this->displayList();
+	}
 
 	function displayList() {
 
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'list';
 		$this->document_data['module_code'] = 'board';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
@@ -59,13 +65,14 @@ class BoardAdminView extends BoardAdminModule {
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'add';
 		$this->document_data['module_code'] = 'board';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
@@ -77,15 +84,34 @@ class BoardAdminView extends BoardAdminModule {
 	function displayModify() {
 
 		$context = Context::getInstance();
+		$id = $context->getParameter('id');		
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'modify';
 		$this->document_data['module_code'] = 'board';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromBoardGroup('category, id', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$skinDir = _SUX_PATH_ . "modules/board/skin/";
+		$skinList = Utils::readDir($skinDir);
+		if (!$skinList) {
+			$msg = "스킨폴더가 존재하지 않습니다.";
+			$resultYN = "N";
+		}
+		$this->document_data['skin_list'] = $skinList;
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
@@ -96,16 +122,28 @@ class BoardAdminView extends BoardAdminModule {
 
 	function displayDelete() {
 
+		
 		$context = Context::getInstance();
+		$id = $context->getParameter('id');
 		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'delete';
 		$this->document_data['module_code'] = 'board';
+		
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromBoardGroup('id, category', $where);
 
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/board/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
@@ -114,10 +152,7 @@ class BoardAdminView extends BoardAdminModule {
 		$this->output();
 	}
 
-	function displaySkinListJson() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
+	function displaySkinJson() {
 
 		$skinDir = _SUX_PATH_ . "modules/board/skin/";
 		
@@ -135,281 +170,126 @@ class BoardAdminView extends BoardAdminModule {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function displayListJson() {
-
-		$context = Context::getInstance();
-		$board_group = $context->get('db_board_group');
-		$passover = $context->getRequest('passover');
-
-		$limit = 20;
-		if (!$passover) {
-			 $passover = 0;			
-		}
-
-		$context->set('passover', $passover);
-		$context->set('limit', $limit);
 
 		$dataObj = null;
 		$dataList = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$searchYN = $this->controller->searchTables($board_group);
-		if ($searchYN) {
+		$this->model->selectFromBoardGroup('*', null, 'id desc');
+		$numrows = $this->model->getNumRows();
+		if ($numrows > 0){
 
-			$this->controller->select('fromBoardGroup');
-			$numrows = $this->model->getNumRows();
-			if ($numrows > 0){
+			$a = $numrows;
+			$rows = $this->model->getRows();
+			foreach ($rows as $key => $row) {
 
-				$a = $numrows - $passover;				
-				$this->controller->select('fromBoardGroupLimit');
-				$rows = $this->model->getRows();	
-				foreach ($rows as $key => $row) {
-
-					$fields = array('no'=>$a);
-					foreach ($row as $key => $value) {
-						$fields[$key] = $value;
-					}
-
-					$dataList[] = $fields;
-					$a--;
+				$fields = array('no'=>$a);
+				foreach ($row as $key => $value) {
+					$fields[$key] = $value;
 				}
 
-				$dataObj = array("list"=>$dataList);
-			} else {
-				$msg = "게시판이 존재하지 않습니다.";
-				$resultYN = "N";
+				$dataList[] = $fields;
+				$a--;
 			}
+
+			$dataObj = array("list"=>$dataList);
 		} else {
-			$msg = "그룹테이블이 존재하지 않습니다.";
+			$msg = "게시판이 존재하지 않습니다.";
 			$resultYN = "N";
 		}
-
+		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function displayModifyJson() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$table_name = $context->getPost('table_name');
+		$id = $context->getPost('id');
 
-		$dataObj = array('table_name'=>$table_name);
+		$dataObj = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fromBoard');
-		if ($result) {
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromBoardGroup('*', $where);
 
+		$numrows = $this->model->getNumRows();
+		if ($numrows > 0) {
 			$row = $this->model->getRow();
 			foreach ($row as $key => $value) {
-				${$key} = $value;
 				$dataObj[$key] = $value;
 			}
-		} else {
-
-			$msg = $table_name . "게시판이 존재하지 않습니다.";
 			$resultYN = "Y";
+		} else {
+			$resultYN = "N";
+			$msg = '게시판이 존재하지 않습니다.';
 		}
-
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
-	function displayCheckTableName() {
+	function displayCheckBoard() {
 
 		$context = Context::getInstance();
-		$table_name = $context->getRequest('table_name');
+		$category = $context->getPost('category');
 
 		$dataObj	= "";
 		$msg = "";
 		$resultYN = "Y";
 
-		$msg = "추가 생성 게시판 : ".$table_name."\n";
+		$msg = "추가 생성 게시판 : ".$category."\n";
 
-		if (!isset($table_name) || $table_name == '') {
+		if (!isset($category) || $category == '') {
 
-			$msg = "게시판 이름을 넣고 중복체크를 하십시오.";
+			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
 			$resultYN = "N";
 
 			$data = array(	"result"=>$resultYN,
 							"msg"=>$msg);
 
-			echo $this->callback($data);
+			$this->callback($data);
 			exit;
 		}
 
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $table_name)) {
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $category)) {
 
-			$msg .= "테이블명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
+			$msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 
 			$data = array(	"msg"=>$msg);			
-			echo $this->callback($data);
+			$this->callback($data);
 			exit;
 		} 
 
-		$result = $this->controller->select('fromBoard');
-		$numrows = $this->model->getNumRows();
+		$where = new QueryWhere();
+		$where->set('category', $category);
+		$this->model->selectFromBoardGroup('id', $where);
 
+		$numrows = $this->model->getNumRows();
 		if ($numrows> 0) {
-			$msg = "${table_name}는 이미 존재하는 게시판입니다.";
+			$msg = "${category}는 이미 존재하는 게시판입니다.";
 			$resultYN = "N";
 		} else {
-			$msg = "${table_name}는 생성할 수 있는 게시판입니다.";
+			$msg = "${category}는 생성할 수 있는 게시판입니다.";
 			$resultYN = "Y";
 		}
 
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
-	}
-
-	function recordAdd() {
-
-		$context = Context::getInstance();
-		$board = $context->getRequest('table_name');
-
-		$dir = _SUX_PATH_ . "board_data/";
-
-		$resultYN = "Y";
-
-		if (!is_dir($dir)) {
-			if (@mkdir($dir, 0777)) {
-				$msg = "게시판 디렉토리 관리 폴더를 생성하였습니다.\n";
-				$resultYN = "Y";
-			} else {
-				$msg = "게시판 자료저장  폴더를 생성 실패하였습니다.\n";
-				$resultYN = "N";
-			}	
-		} 
-
-		$result = $this->controller->createTable('board');
-		if (!$result) {
-			$msg .= "${board} 테이블이 이미 생성 되었습니다.\n";
-			$resultYN = "N";
-		} else {
-			$msg .= "${board} 테이블 생성을 성공하였습니다.\n";
-
-			$result = $this->controller->insert('intoBoard');
-			if (!$result) {
-				$msg .= "${board} 테이블에 시동 게시글 등록을 실패하였습니다.\n";		
-			} else {
-				$msg .= "${board} 테이블에 시동 게시글이 정상적으로 등록되었습니다.\n";
-			}	
-
-			$result = $this->controller->insert('intoBoardGroup');
-			if (!$result) {
-				$msg .= "${board} 테이블이 그룹테이블 등록에 실패하였습니다.\n";
-			}else{
-				$msg .= "${board} 테이블이 그룹테이블에 정상적으로 등록되었습니다.\n";		
-			}
-
-			$result = $this->controller->createTable('comment');
-			if (!$result) {
-				$msg .= "${board}_grg 꼬리글 테이블 생성을 실패하였습니다.\n";
-			} else {
-				$msg .= "${board}_grg 꼬리글 테이블 생성을 성공하였습니다.\n";
-			}
-
-			$dir = $dir . $board;
-			if (!@mkdir( $dir, 0777)) {
-				$msg .= "${board} 디렉토리가 이미 생성되어 있습니다.\n";
-			} else {
-				$msg .= "${board} 디렉토리 폴더 생성을 성공하였습니다.\n";
-			}
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordModify() {
-
-		$context = Context::getInstance();
-		$table_name = $context->getRequest('table_name');
-
-		$dataObj = array();
-		$resultYN = "Y";
-		$msg = "";
-
-		$result = $this->controller->update('recordModify');
-		if (!$result) {
-			$msg = "$table_name 테이블 수정을 실패하였습니다.";
-			$resultYN = "N";	
-		} else {
-			$msg = "$table_name 테이블 수정을 완료하였습니다.";
-		}
-
-		$data = array(	"member"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordDelete() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$table_name = $posts['table_name'];
-		$table_name_grg =$table_name."_grg";
-		$id = $posts['id'];
-
-		$dir = _SUX_PATH_ . 'board_data/' . $table_name;
-
-		$resultYN = "Y";
-		$msg = "";
-
-		$result = $this->controller->dropTable('board');
-		if (!$result) {
-			$msg .= "${table_name} 테이블 삭제를 실패하였습니다.\n";
-		} else {
-			$msg .= "${table_name} 테이블 삭제를 성공하였습니다.\n";
-		}
-
-		$result = $this->controller->delete('boardFromGroup');
-		if (!$result) {
-			$msg .= "${table_name} 레코드를 게시판그룹에서 삭제 실패하였습니다.\n";
-		} else {
-			$msg .= "${table_name} 레코드를 게시판그룹에서 삭제 성공하였습니다.\n";
-		}
-		
-		$result = $this->controller->dropTable('comment');
-		if (!$result) {
-			$msg .= "${table_name_grg} 꼬리글 테이블 삭제를 실패하였습니다.\n";
-		} else {
-			$msg .= "${table_name_grg} 꼬리글 테이블 삭제를 성공하였습니다.\n";
-		}
-
-		if (trim($table_name) == "") {
-			$msg .= "삭제할 폴더명을 입력해주세요.\n";
-		} else {
-			$resultDir = Utils::deleteDir($dir);
-			if ($resultDir) {
-				$msg .= "${table_name} 폴더 삭제를 성공하였습니다.";
-			} else {
-				$msg .= "${table_name} 폴더 삭제를 실패하였습니다.";
-			}
-		}		
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
+		$this->callback($data);
+	}	
 }
 ?>

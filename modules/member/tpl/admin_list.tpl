@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 회원목록 - StreamUX"}	
@@ -6,13 +7,14 @@
 		<div class="tt">
 			<div class="imgbox">						
 				<h1>회원목록</h1>
-				<input type="hidden" name="table_name" value="{$requestData.table_name}">
+				<input type="hidden" name="category" value="{$documentData.category}">
+				<input type="hidden" name="id" value="{$documentData.id}">
 			</div>
 		</div>
 		<div class="box">
 			<dl>
 				<dt>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
 				</dt>
 				<dt>
 					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>
@@ -65,7 +67,7 @@
 </div>
 <script type="jquery-templete" id="articleMemberDelTitle_tmpl">
 {literal}
-	<a href="member.groupdelpass.php?table_name=${table_name}&pagetype=member">${table_name}<span>회원그룹삭제</span></a>
+	<a href="member.groupdelpass.php?table_name=${table_name}&pagetype=member">${category}<span>회원그룹삭제</span></a>
 {/literal}
 </script>
 <script type="jquery-templete" id="memberWarnMsg_tmpl">
@@ -76,24 +78,25 @@
 {/literal}
 </script>
 <script type="jquery-templete" id="memberList_tmpl">
-{literal}
 	<tr>
+		{literal}
 		<td><span>${no}</span></td>
-		<td><span>${memberid}</span></td>
-		<td><span>${name}</span></td>
+		<td><span>${user_id}</span></td>
+		<td><span>${user_name}</span></td>
 		<td><span>${$item.editDate(date)}</span></td>							
-		<td><span>${hit}</span></td>
+		<td><span>${access_count}</span></td>
 		<td><span>${grade}</span></td>
+		{/literal}
 		<td>
-			<a href="member.admin.php?id=${id}&memberid=${memberid}&table_name=${table_name}&action=modify&pagetype=member">
-				<img src="../admin/tpl/images/btn_edit.gif" alt="수정버튼">
-			</a></td>
+			<a href="{$rootPath}member-admin/{$documentData.id}/modify/{literal}${id}{/literal}">
+				<img src="{$rootPath}/modules/admin/tpl/images/btn_edit.gif" alt="수정버튼">
+			</a>
+		</td>
 		<td>
-			<a href="member.admin.php?id=${id}&memberid=${memberid}&table_name=${table_name}&action=delete&pagetype=member">
-				<img src="../admin/tpl/images/btn_del.gif" alt="삭제버튼">
+			<a href="{$rootPath}member-admin/{$documentData.id}/delete/{literal}${id}{/literal}">
+				<img src="{$rootPath}/modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
 			</a>
 		</td>
 	</tr>
-{/literal}
 </script>
 {include file="$footerPath"}

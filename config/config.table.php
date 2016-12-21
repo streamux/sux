@@ -8,6 +8,7 @@ $table_list = array(
 'board'=>'sux_board',
 'board_group'=>'sux_board_group',
 'comment'=>'sux_comment',
+'document'=>'sux_document',
 'member'=>'sux_member',
 'member_group'=>'sux_member_group',
 'popup'=>'sux_popup'

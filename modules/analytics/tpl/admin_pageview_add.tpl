@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 페이지뷰 추가 - StreamUX"}
@@ -9,10 +10,10 @@
 			</div>
 		</div>
 		<div class="box">
-			<form name="f_pageview_add">
+			<form action="{$rootPath}analytics-admin/pageview-add" name="f_pageview_add" method="post">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_refer.gif" width="30" height="13" align="absmiddle" alt="참고아이콘" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_refer.gif" width="30" height="13" align="absmiddle" alt="참고아이콘" class="icon-notice">
 				</li>
 				<li>
 					<span>페이지뷰를 생성하면 각 메뉴별 클릭 조회수를 알 수 있습니다.<span>

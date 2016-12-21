@@ -220,7 +220,7 @@ class InstallController extends Controller {
 		} else {
 			$index = 0;
 			$str = "";
-			$str .= "<?\n";
+			$str .= "<?php\n";
 			$str .= "\$table_list = array(\n";
 			foreach ($tableList as $key => $value) {
 				$str .= ($index === 0) ? "" : ",\n";
@@ -242,7 +242,7 @@ class InstallController extends Controller {
 					$resultYN = 'N';
 				}
 			} else {
-				$msg .= $file_name . ' 파일이 이미 존재하지 않습니다.';
+				$msg .= $file_name . ' 파일이 존재하지 않습니다.';
 				$resultYN = 'N';
 			}			
 		}

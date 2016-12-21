@@ -13,6 +13,7 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'QueryWhere'=>'classes/db/Query.where.class.php',
 	'QuerySchema'=>'classes/db/Query.schema.class.php',
 	'UIError'=>'classes/error/UI.error.class.php',
+	'ModuleCache'=>'classes/modules/ModuleCache.class.php',
 	'ModuleHandler'=>'classes/modules/ModuleHandler.class.php',
 	'ModuleRouter'=>'classes/modules/ModuleRouter.class.php',	
 	'Object'=>'classes/object/Object.class.php',	
@@ -42,8 +43,8 @@ function __sux_autoload($class_name) {
 		if (isset($matches[2]) && $matches[2]) $candidate_filename[] = 'admin';
 		$candidate_filename[] = (isset($matches[3]) && $matches[3]) ? strtolower($matches[3]) : 'class';
 		$candidate_filename[] = 'php';
-
 		$candidate_filename = implode('.', $candidate_filename);
+
 		if(file_exists(_SUX_PATH_ . $candidate_filename)) {
 			require _SUX_PATH_ . $candidate_filename;
 		}	

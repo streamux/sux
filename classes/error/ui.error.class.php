@@ -95,9 +95,12 @@ class UIError extends Object {
 		}		
 	}
 
-	static function alertToBack( $msg, $useHtml=true) {
+	static function alertToBack( $msg, $useHtml=true, $options=null) {
 
 		$msg = preg_replace('/<br>/', '\n',$msg);
+		$url = isset($options['url']) ? $options['url'] : null;
+		$delay = isset($options['delay']) ? $options['delay'] : 3;
+
 		$context = Context::getInstance();
 		if ($context->ajax()) {
 			$data = array(	'result'=>'N',
@@ -110,7 +113,9 @@ class UIError extends Object {
 							history.go(-1);
 						</script>
 						<noscript>
-							%s
+							%s<br>
+							[ %s ]초 후에 이전 페이지로 자동 전환됩니다.
+							<meta http-equiv="Refresh" content="%s; URL=%s">
 						</noscript>';
 
 			$html = $script;
@@ -119,13 +124,16 @@ class UIError extends Object {
 				$html .= $script;
 				$html .= self::htmlFooter();
 			}
-			printf($html, $msg, $msg);
+			printf($html, $msg, $msg, $delay, $delay, $url);
 		}
 	}
 
-	static function alertTo( $msg, $url = NULL, $useHtml=true) {
+	static function alertTo( $msg, $useHtml=true, $options=null) {
 
 		$msg = preg_replace('/<br>/', '\n',$msg);
+		$url = isset($options['url']) ? $options['url'] : null;
+		$delay = isset($options['delay']) ? $options['delay'] : 3;
+		
 		$context = Context::getInstance();
 		if ($context->ajax()) {
 			$data = array(	'alertTo'=>$url,
@@ -139,7 +147,9 @@ class UIError extends Object {
 						location.href=\'%s\';
 					</script>
 					<noscript>
-						%s
+						%s<br>
+						[ %s ]초 후에 이전 페이지로 자동 전환됩니다.
+						<meta http-equiv="Refresh" content="%s; URL=%s">
 					</noscript>';
 
 			$html = $script;	
@@ -149,7 +159,7 @@ class UIError extends Object {
 				$html .= $script;
 				$html .= self::htmlFooter();
 			}
-			printf($html, $msg, $url, $msg);
+			printf($html, $msg, $url, $msg, $delay, $delay, $url);
 		}
 	}
 }

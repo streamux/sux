@@ -53,7 +53,6 @@ class MemberModel extends Model {
 			$posts['category'],
 			$posts['user_id'],
 			$posts['password'],
-			$posts['passwordConf'],
 			$posts['user_name'],
 			$posts['nick_name'],
 			$posts['email_address'],
@@ -67,8 +66,8 @@ class MemberModel extends Model {
 			$posts['hobby'],
 			$posts['join_path'],
 			$posts['access_count'],
-			0,
-			0,
+			1000,
+			1,
 			'y',			
 			'n',
 			'now()',
@@ -95,7 +94,6 @@ class MemberModel extends Model {
 		$query->setTable($table_name);
 		$query->setColumn(array(
 			'password'=>$posts['password'],
-			'passwordConf'=>$posts['passwordConf'],
 			'user_name'=>$posts['user_name'],
 			'nick_name'=>$posts['nick_name'],
 			'email_address'=>$posts['email_address'],

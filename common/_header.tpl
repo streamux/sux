@@ -20,6 +20,10 @@
 	<script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js">IE7_PNG_SUFFIX=".png";</script>
 	<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
 	<![endif]-->
+	<script type="text/javascript">
+		// 컨텐츠 내 값 설정
+		var is_page = '';	
+	</script>
 </head>
 <body>
 <div class="wrapper">
@@ -33,7 +37,7 @@
 			</div>
 		</div>
 		<h1 class="logo">
-			<a href="/"><img src="{$rootPath}common/images/sux_logo.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"></a>
+			<a href="{$rootPath}"><img src="{$rootPath}common/images/sux_logo.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"></a>
 		</h1>		
 		<div class="gnb-case">
 			<div id="gnb" class="gnb"></div>

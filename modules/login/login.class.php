@@ -5,5 +5,19 @@ class Login
 	 * @var  action
 	 * They're value is used as a route uri of get method and a name of class's method
 	 */
-	static $action = array('login', 'login-fail', 'leave', 'search-id', 'search-password','logout');
+	public static function getRoute($key) {
+
+		$file = _SUX_PATH_ . 'caches/login.cache.php';
+		$tempList = preg_split('/\//', $file);
+		$fileName = $tempList[count($tempList)-1];
+		if (file_exists($file)) {
+			include($file);
+			$result = ${$key};
+			unset(${$key});
+		} else {
+			printf("[ %s ] Cache File don't exist<br>", $fileName);
+		}
+		
+		return $result;
+	}
 }

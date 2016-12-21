@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-30 07:47:43
+/* Smarty version 3.1.30, created on 2016-12-02 07:33:29
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/modify.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583e760f4e4743_89692707',
+  'unifunc' => 'content_584115b9034430_24275675',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e38ec79f3293514559975873e3431a919573932e' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/modify.tpl',
-      1 => 1480488459,
+      1 => 1480651825,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583e760f4e4743_89692707 (Smarty_Internal_Template $_smarty_tpl) {
+function content_584115b9034430_24275675 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
@@ -76,7 +76,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	</div>
 	<div class="panel-buttons">
 		<input name="imageField" type="image" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="javascript:history.back();"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="#" onclick="history.back();"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_cancel.gif" width="51" height="23" border="0"></a>
 	</div>
 	</form>

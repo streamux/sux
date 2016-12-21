@@ -1,6 +1,6 @@
 <?php
 
-class MemberAdminModule extends BaseView {
+class MemberAdminModule extends View {
 	
 	var $class_name = 'admin_admin_module';
 	var $skin_path_list = array();
@@ -40,25 +40,32 @@ class MemberAdminView extends MemberAdminModule {
 
 	var $class_name = 'member_admin_view';
 
-	function displayGroupList() {
+	function displayMemberAdmin() {
+
+		$this->displayGroup();
+	}
+
+	function displayGroup() {
 
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
 		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'groupList';
 		$this->document_data['module_code'] = 'member';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_grouplist.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
 		$this->output();
-	}	
+	}
 
 	function displayGroupAdd() {
 		
@@ -66,12 +73,14 @@ class MemberAdminView extends MemberAdminModule {
 		$this->request_data = $context->getRequestAll();
 
 		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'groupAdd';
 		$this->document_data['module_code'] = 'member';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupadd.tpl";
@@ -84,15 +93,16 @@ class MemberAdminView extends MemberAdminModule {
 		
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
+		$this->request_data['id'] = $context->getParameter('id');
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'groupDelete';
 		$this->document_data['module_code'] = 'member';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/member/tpl";
 
-		$this->skin_path_list = array();
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
 		$this->skin_path_list['contents'] = "{$skinPath}/admin_groupdelete.tpl";
@@ -101,91 +111,7 @@ class MemberAdminView extends MemberAdminModule {
 		$this->output();
 	}
 
-	function displayList() {
-		
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'member';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/member/tpl";
-
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayAdd() {
-		
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'member';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/member/tpl";
-
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayModify() {
-		
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'member';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/member/tpl";
-
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayDelete() {
-		
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'member';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/member/tpl";
-
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayGroupListJson() {
+	function displayGroupJson() {
 
 		$context = Context::getInstance();
 
@@ -193,7 +119,7 @@ class MemberAdminView extends MemberAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fromMemberGroup');
+		$result = $this->model->selectFromMemberGroup();
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
@@ -218,238 +144,220 @@ class MemberAdminView extends MemberAdminModule {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
+	}
+
+	function displayList() {
+		
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromMemberGroup('category', $where);
+		$row = $this->model->getRow();
+		$this->document_data['id'] = $id;
+		$this->document_data['category'] = $row['category'];
+
+		$this->document_data['jscode'] = 'list';
+		$this->document_data['module_code'] = 'member';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayAdd() {
+		
+		$context = Context::getInstance();
+		$this->request_data = $context->getRequestAll();
+
+		$action = $this->request_data['action'];
+		$this->document_data['jscode'] = $action;
+		$this->document_data['module_code'] = 'member';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayModify() {
+		
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+		$sid = $context->getParameter('sid');
+
+		$this->document_data['jscode'] = 'modify';
+		$this->document_data['module_code'] = 'member';
+
+		$where = new QueryWhere();
+		$where->set('id', $sid);
+		$this->model->selectFromMember('category, user_id, user_name', $where);
+		$row = $this->model->getRow();
+
+		$this->document_data['category'] = $row['category'];
+		$this->document_data['user_id'] = $row['user_id'];
+		$this->document_data['user_name'] = $row['user_name'];
+		$this->document_data['category_id'] = $id;
+		$this->document_data['id'] = $sid;		
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayDelete() {
+		
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+		$sid = $context->getParameter('sid');
+
+		$this->document_data['jscode'] = 'delete';
+		$this->document_data['module_code'] = 'member';
+
+		$where = new QueryWhere();
+		$where->set('id', $sid);
+		$this->model->selectFromMember('user_id', $where);
+		$row = $this->model->getRow();
+
+		$this->document_data['user_id'] = $row['user_id'];
+		$this->document_data['category_id'] = $id;
+		$this->document_data['id'] = $sid;		
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
 	}
 
 	function displayListJson() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$posts = $context->getPostAll();
-
-		$group = $context->get('db_member_group');	
-		$table_name = $posts["table_name"];
-		if (!isset($table_name) && $table_name == '') {
-			$table_name = $requests['table_name'];
-		}
-		$passover = $requests['passover'];
+		$category = $context->getRequest('category');
 		
 		$dataObj = array();
 		$dataList = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('memberFromMemberGroup');
-		if ($result){
+		$where = new QueryWhere();
+		$where->set('category', $category);
+		$result = $this->model->selectFromMember('*', $where);
+		if ($result) {
 
-			$result = $this->controller->select('member');
-			if ($result) {
+			$numrows = $this->model->getNumRows();
+			if ($numrows > 0){
 
-				$numrows = $this->model->getNumRows();
-				if ($numrows > 0){
+				$limit = 10;  
+				if (!$passover) {
+					$passover = 0;
+				}
+				$a = $numrows - $passover;
 
-					$limit = 10;  
-					if (!$passover) {
-						$passover = 0;
-					}
-					$a = $numrows - $passover;
+				$context->set('member_passover', $passover);
+				$context->set('member_limit', $limit);
 
-					$context->set('member_passover', $passover);
-					$context->set('member_limit', $limit);
+				$result = $this->model->selectFromMember('*', $where, 'id desc', $passover, $limit);
+				if ($result) {
 
-					$result = $this->controller->select('memberLimit');
-					if ($result) {
+					$rows = $this->model->getRows();
 
-						$rows = $this->model->getRows();
+					for ($i=0; $i<count($rows); $i++) {
 
-						for ($i=0; $i<count($rows); $i++) {				
-							$adm_id = $rows[$i]["id"];
-							$adm_name = $rows[$i]["name"];
-							$adm_memberid = $rows[$i]["ljs_memberid"];
-							$adm_company = $rows[$i]["company"];
-							$adm_day = $rows[$i]["date"];
-							$adm_point = $rows[$i]["point"];
-							$adm_grade = $rows[$i]["grade"];
-							$adm_hit = $rows[$i]["hit"];
-							$adm_ip = $rows[$i]["ip"];
+						$obj = array();
+						$obj['no'] = $a;
 
-							array_push($dataList, array("no"=>$a,"id"=>$adm_id,"memberid"=>$adm_memberid,"name"=>$adm_name,"date"=>$adm_day,"hit"=>$adm_hit,"grade"=>$adm_grade,"table_name"=>$table_name));
-
-							$a--;
+						foreach ($rows[$i] as $key => $value) {
+							$obj[$key] = $value;
 						}
 
-						$dataObj = array("table_name"=>$table_name, "list"=>$dataList);
-					}				
-				} else {
+						$dataList[] = $obj;
 
-					$dataObj = array("table_name"=>$table_name, "list"=>$dataList);
-					$msg .= "현재 등록된 회원이 없습니다.";
-				}
-			}			
-		} else {
-			$msg .= "현재 등록된 회원그룹이 없습니다.";
+						$a--;
+					}
+
+					$dataObj = array('category'=>$category, 'list'=>$dataList);
+				}				
+			} else {
+
+				$dataObj = array('category'=>$category, 'list'=>$dataList);
+				$msg .= '현재 등록된 회원이 없습니다.';
+			}
 		}
+		//$msg = Tracer::getInstance()->getMessage();
+		$data = array(	'data'=>$dataObj,
+						'result'=>$resultYN,
+						'msg'=>$msg);
 
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
 	function displayModifyJson() {
 		
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$table_name = $posts['table_name'];
-		$memberid = $posts['memberid'];
+		$id = $context->getPost('id');
 
-		$dataObj = array(
-			'table_name'=>$table_name
-		);
+		$dataObj = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('memberWhereId');
+		$where = new QueryWhere();
+		$where->set('id', $id);
+
+		$result = $this->model->selectFromMember('*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();
 			foreach ($row as $key => $value) {
 
-				if (preg_match('/ljs_pass/', $key)) {
+				if (preg_match('/password/', $key)) {
 
 				} else if (preg_match('/email/', $key)) {
 					$emailList = split("@", $value );
-					$dataObj['email'] = $emailList[0];
+					$dataObj['email_address'] = $emailList[0];
 					$dataObj['email_tail2'] = $emailList[1];
 				} else {
 					$dataObj[$key] = $value;
 				}			
 			}
-		} else {
-			$msg = "$memberid 회원이 존재하지 않습니다.";
-			$resultYN = "N";
-		}
+		} 
 
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
 	}	
-
-	function recordGroupAdd() {
-
-		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->createTable('member');
-		if ($result) {
-
-			$result = $this->controller->insert('intoMemberGroup');
-			if ($result) {
-				$msg .= "${table_name} 회원그룹을 등록하였습니다.";
-				$resultYN = "Y";				
-			} else {
-				$msg .= "${table_name} 레코드 등록을 실패하였습니다.";
-				$resultYN = "N";		
-			}
-		} else {
-			$msg = "${table_name} 테이블 생성을 실패하였습니다.";
-			$resultYN = "N";			
-		}
-
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-		
-		echo $this->callback($data);
-	}	
-
-	function recordGroupDelete() {
-
-		$context = Context::getInstance();
-		$table_name = $context->getPost('table_name');
-
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->dropTable('member');
-		if ($result) {
-
-			$result = $this->controller->delete('memberGroup');
-			if ($result) {
-				$resultYN = "Y";
-				$msg = "${table_name} 회원그룹을 삭제하였습니다.";				
-			} else {
-				$msg = "${table_name} 레코드 삭제를 실패하였습니다.";
-				$resultYN = "N";
-			}
-		} else {
-			$msg = "${table_name} 테이블 삭제를 실패하였습니다.";
-			$resultYN = "N";			
-		}
-
-		$data = array(	"member"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-		
-		echo $this->callback($data);
-	}
-
-	function recordModify() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$name = $posts['name'];
-
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->update('memberWhereId');
-		if ($result) {
-			$msg = "${name} 님의 회원정보를 수정하였습니다.\n";			
-			$resultYN = "Y";	
-		} else {
-			$msg = "${name} 님의 회원정보 수정을 실패하였습니다.\n";
-			$resultYN = "N";	
-		}
-		$data = array(	"result"=>$resultYN,
-							"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-	
-	function recordDelete() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$memberid = $posts['memberid'];
-
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->delete('fromMember');
-		if ($result) {
-			$msg = "${memberid} 회원정보를 삭제하였습니다.";
-			$resultYN = "Y";
-		} else {
-			
-			$msg = "${memberid} 회원 레코드를 삭제 실패하였습니다.";
-		 	$resultYN = "N"; 	
-		 }
-
-		$data = array(	"member"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
 }
 ?>

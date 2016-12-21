@@ -18,7 +18,6 @@ class Model extends Object {
 
 	function init() {
 		
-		echo '이글이 보인다면 상위 클래스 Model의 init() 메서드를 오버라이드해서 사용하세요';
 	}
 
 	function select($query=NULL) {

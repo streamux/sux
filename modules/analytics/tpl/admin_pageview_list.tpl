@@ -1,3 +1,4 @@
+{assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 게시판 삭제 - StreamUX"}
@@ -11,7 +12,7 @@
 		<div class="box">
 			<ul>
 				<li>
-					<img src="../admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
 					한번 삭제 시 모든 자료가 사라집니다. 주의하세요.	
 				</li>
 				<li>
@@ -59,22 +60,22 @@
 {/literal}
 </script>
 <script type="jquery-templete" id="totallogList_tmpl">
-{literal}
 	<tr>
+		{literal}
 		<td><span>${no}</span></td>
 		<td><span>${name}</span></td>								
-		<td><span>${hit}</span></td>
+		<td><span>${hit_count}</span></td>
 		<td><span>${percent}</span></td>
+		{/literal}
 		<td>
-			<a href="analytics.admin.php?id=${id}&name=${name}&action=pageviewReset&pagetype=analytics">
-				<img src="../admin/tpl/images/btn_reset.gif" alt="초기화버튼">
+			<a href="{$rootPath}analytics-admin/{literal}${id}{/literal}/pageview-reset">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_reset.gif" alt="초기화버튼">
 			</a></td>
 		<td>
-			<a href="analytics.admin.php?id=${id}&name=${name}&action=pageviewDelete&pagetype=analytics">
-				<img src="../admin/tpl/images/btn_del.gif" alt="삭제버튼">
+			<a href="{$rootPath}analytics-admin/{literal}${id}{/literal}/pageview-delete">
+				<img src="{$rootPath}modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
 			</a>
 		</td>
 	</tr>
-{/literal}
 </script>
 {include file="$footerPath"}

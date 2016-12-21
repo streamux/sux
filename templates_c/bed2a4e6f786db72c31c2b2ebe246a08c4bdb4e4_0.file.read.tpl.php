@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-29 03:28:31
+/* Smarty version 3.1.30, created on 2016-12-02 05:05:15
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583ce7cf5b4319_67419052',
+  'unifunc' => 'content_5840f2fba85b92_16728431',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bed2a4e6f786db72c31c2b2ebe246a08c4bdb4e4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl',
-      1 => 1480386502,
+      1 => 1480651514,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583ce7cf5b4319_67419052 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5840f2fba85b92_16728431 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
@@ -58,21 +58,69 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 		<p><?php echo $_smarty_tpl->tpl_vars['contentData']->value['contents'];?>
 </p>
 	</div>
+	<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+
 	<div class="board-buttons">
-		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
-"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
-/write"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/write?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/write">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/images/btn_write.gif" width="62" height="23" border="0"></a>
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
 /<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
-/reply"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/reply?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
 /<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
-/modify"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_edit.gif" border="0"></a>&nbsp;<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/reply">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
 /<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
-/delete"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/modify?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
+/modify">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+/images/btn_edit.gif" border="0"></a>&nbsp;
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
+/delete?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>
+/delete">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_del.gif" width="51" height="23" border="0"></a>
 	</div>
 <?php if ($_smarty_tpl->tpl_vars['progressStepSkinPath']->value != '') {?>	

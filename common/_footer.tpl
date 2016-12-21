@@ -26,16 +26,16 @@
 			<ul class="clearfix">
 				<li><div class="ui-user-picture"></div></li>
 				<li><span class="ui-user-nickname">Guest</span></li>
-				<li><a href="/sux/admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a></li>
+				<li><a href="/sux/admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a></li>
 			</ul>
 		</div>
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="../modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="{$rootPath}login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="../modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="{$rootPath}member-join">회원가입</a></div>
 				</li>
 			</ul>
 		</div>
@@ -78,10 +78,6 @@
 	<option>{literal}${name}{/literal}</option>
 </script>
 {/if}
-<!-- end -->
-<script type="text/javascript">
-	var is_page = 'sub';
-</script>
 
 <!-- js api -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>

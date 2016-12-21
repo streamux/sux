@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-22 06:42:00
+/* Smarty version 3.1.30, created on 2016-12-19 09:09:53
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5833daa83810e1_82724580',
+  'unifunc' => 'content_585795d133e630_38731652',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1479793312,
+      1 => 1482134991,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5833daa83810e1_82724580 (Smarty_Internal_Template $_smarty_tpl) {
+function content_585795d133e630_38731652 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 		<div class="footer">
 			<ul class="clearfix">
@@ -54,7 +54,7 @@ member/member.php?action=join">회원가입</a></li>
 			<ul class="clearfix">
 				<li><div class="ui-user-picture"></div></li>
 				<li><span class="ui-user-nickname">Guest</span></li>
-				<li><a href="/sux/admin" target="_blank"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+				<li><a href="/sux/admin-admin" target="_blank"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/images/icon_gear_white.svg" onerror='this.src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a></li>
 			</ul>
@@ -62,10 +62,12 @@ common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정
 		<div class="ui-user-member">
 			<ul class="clearfix">
 				<li>
-					<div class="ui-link-login"><a href="../modules/login/login.php?action=login">로그인</a></div>
+					<div class="ui-link-login"><a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+login">로그인</a></div>
 				</li>
 				<li>
-					<div class="ui-link-join"><a href="../modules/member/member.php?action=join">회원가입</a></div>
+					<div class="ui-link-join"><a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+member-join">회원가입</a></div>
 				</li>
 			</ul>
 		</div>
@@ -119,12 +121,6 @@ echo '<script'; ?>
 <?php echo '</script'; ?>
 >
 <?php }?>
-<!-- end -->
-<?php echo '<script'; ?>
- type="text/javascript">
-	var is_page = 'sub';
-<?php echo '</script'; ?>
->
 
 <!-- js api -->
 <?php echo '<script'; ?>

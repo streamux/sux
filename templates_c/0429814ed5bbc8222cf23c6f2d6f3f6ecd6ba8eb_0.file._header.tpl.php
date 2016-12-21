@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-21 10:08:53
+/* Smarty version 3.1.30, created on 2016-12-18 07:06:13
   from "/Applications/MAMP/htdocs/sux/common/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5832b9a56d67b3_52225478',
+  'unifunc' => 'content_5856275545b381_15629040',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0429814ed5bbc8222cf23c6f2d6f3f6ecd6ba8eb' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_header.tpl',
-      1 => 1479719330,
+      1 => 1482041156,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5832b9a56d67b3_52225478 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5856275545b381_15629040 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -58,6 +58,12 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
  src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"><?php echo '</script'; ?>
 >
 	<![endif]-->
+	<?php echo '<script'; ?>
+ type="text/javascript">
+		// 컨텐츠 내 값 설정
+		var is_page = '';	
+	<?php echo '</script'; ?>
+>
 </head>
 <body>
 <div class="wrapper">
@@ -71,7 +77,8 @@ if ($_smarty_tpl->tpl_vars['documentData']->value['isLogon'] === false) {?>
 			</div>
 		</div>
 		<h1 class="logo">
-			<a href="/"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+"><img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/images/sux_logo.svg" onerror='this.src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/images/sux_logo.png"' alt="streamxux"></a>
 		</h1>		

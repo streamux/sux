@@ -21,12 +21,7 @@ class BoardController extends Controller {
 		foreach ($checkList as $key => $value) {			
 			if (empty($datas[$value])) {
 				$msg = $checkLabel[$index] . '을(를) 입력해주세요';
-				$resultYN = 'N';
-		 		$data = array(	'url'=>$returnURL,
-								'result'=>$resultYN,
-								'msg'=>$msg);
-
-				$this->callback($data);
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 				$bool = false;
 				exit;
 			}
@@ -41,7 +36,8 @@ class BoardController extends Controller {
 		$imageUpName = $value['imgup']['name'];
 
 		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imageUpName)) {
-			UIError::alertToBack('실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.');
+			$msg = '실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
 	}
@@ -57,6 +53,9 @@ class BoardController extends Controller {
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$category = $context->getParameter('category');
+
+		$msg = '';
+		$resultYN = 'Y';
 		
 		$wall = trim($posts['wall']);
 		$wallok = trim($posts['wallok']);
@@ -65,12 +64,7 @@ class BoardController extends Controller {
 
 		if ($wall !== $wallok) {
 			$msg = '경고! 잘못된 등록키입니다.';
-			$resultYN = 'N';
-	 		$data = array(	'url'=>$returnURL,
-							'result'=>$resultYN,
-							'msg'=>$msg);
-
-			$this->callback($data);
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
 
@@ -83,13 +77,8 @@ class BoardController extends Controller {
 			$dest = $saveDir . $imageUpName;
 
 			if (!move_uploaded_file($imageUpTempName , $dest)) {
-				$msg = '파일을 지정한 디렉토리에 저장하는데 실패했습니다.';
 				$resultYN = 'N';
-		 		$data = array(	'url'=>$returnURL,
-								'result'=>$resultYN,
-								'msg'=>$msg);
-
-				$this->callback($data); 
+				$msg .= '파일을 지정한 디렉토리에 저장하는데 실패했습니다.';
 			}
 			$this->imageUpName = $imageUpName;
 		}
@@ -97,10 +86,10 @@ class BoardController extends Controller {
 
 		$result = $this->model->insertWrite();
 		if (!isset($result)) {
-			$msg = '글을 저장하는데 실패했습니다.';
+			$resultYN = 'N';
+			$msg .= '글을 저장하는데 실패했습니다.';
 		}
-
-		$resultYN = 'N';
+		
  		$data = array(	'url'=>$rootPath . $category,
 						'result'=>$resultYN,
 						'msg'=>$msg,
@@ -119,6 +108,7 @@ class BoardController extends Controller {
 		$this->_checkValidation($posts);
 		$this->_checkFiles($files);
 
+		$returnURL = $context->getServer('REQUEST_URI');
 		$user_name = $sesstions['sux_user_name'];
 		$pass = substr(md5(trim($posts['password'])),0,8);
 		$pass = substr(md5($pass),0,8);
@@ -146,10 +136,9 @@ class BoardController extends Controller {
 			if ($delFileName) {
 				$delFileName = $saveDir . $delFileName;
 				if(!@unlink($delFileName)) {
-					echo "파일삭제에 실패했습니다.";
-				} else {
-					echo "파일 삭제에 성공했습니다.";
-				}
+					$resultYN = 'N';
+					$msg .= "파일삭제에 실패했습니다.";
+				} 
 			}		
 
 			if (is_uploaded_file($imageUpTempName)) {
@@ -157,7 +146,8 @@ class BoardController extends Controller {
 				$imageUpName = $mktime."_".$imageUpName;
 				$dest = $saveDir . $imageUpName;
 				if (!move_uploaded_file($imageUpTempName, $dest)) {
-					die("파일을 지정한 디렉토리에 저장하는데 실패했습니다.");      
+					$resultYN = 'N';
+					$msg .= "파일을 지정한 디렉토리에 저장하는데 실패했습니다.";  
 				}
 			}
 			$context->set('fileup_name', $imageUpName);
@@ -165,10 +155,14 @@ class BoardController extends Controller {
 			$result = $this->model->updateModify();	
 			//Tracer::getInstance()->output();
 			if (!isset($result)) {
-				UIError::alertToBack('글을 수정하는데 실패했습니다.');
+				$msg .= '글을 수정하는데 실패했습니다.';
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+				exit();
 			}
 		} else {
-			UIError::alertToBack('비밀번호가 틀립니다.\n비밀번호를 확인하세요.');
+			$msg = '비밀번호가 틀립니다.\n비밀번호를 확인하세요.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit();
 		}
 
 		$data = array(	'url'=>$rootPath . $category,
@@ -191,13 +185,15 @@ class BoardController extends Controller {
 		$resultYN = 'Y';
 		$msg = '';
 
+		$returnURL = $context->getServer('REQUEST_URI');
 		$wall = trim($posts['wall']);
 		$wallok = trim($posts['wallok']);
 		$imageUpName = $files['imgup']['name'];
 		$imageUpTempName = $files['imgup']['tmp_name'];
 
 		if ($wall != $wallok) {
-			UIError::alertToBack('경고! 잘못된 등록키입니다.');
+			$msg = '경고! 잘못된 등록키입니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
 
@@ -211,25 +207,25 @@ class BoardController extends Controller {
 			$dest = $saveDir . $imageUpName;
 
 			if (!move_uploaded_file($imageUpTempName , $dest)) {
-				UIError::alertToBack("파일을 지정한 디렉토리에 저장하는데 실패했습니다."); 
-				exit;
+				$resultYN = 'N';
+				$msg .= '파일을 지정한 디렉토리에 저장하는데 실패했습니다.'; 
 			}
-
 			$this->imageUpName = $imageUpName;
 		} 
 
 		$context->set('fileup_name', $imageUpName);
 		$result = $this->model->updateSsunseoCount();
 		if (!isset($result)) {
-			UIError::alertToBack('순서를 변경하는데 실패했습니다.');
-			exit;
+			$resultYN = 'N';
+			$msg .= '순서를 변경하는데 실패했습니다'; 
 		}
 
 		$result = $this->model->insertReply();
 		/*Tracer::getInstance()->output();
 		return;*/
 		if (!isset($result)) {
-			UIError::alertToBack('답글을 저장하는데 실패했습니다.');
+			$msg .= '답글을 저장하는데 실패했습니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
 		
@@ -247,14 +243,18 @@ class BoardController extends Controller {
 		$posts =  $context->getPostAll();
 		$files =  $context->getFiles();
 
+		$returnURL = $context->getServer('REQUEST_URI');		
 		$pass = trim($posts['password']);
 		if (empty($pass)) {
-			UIError::alertToBack('비밀번호를 입력해주세요.');
+			$msg .= '비밀번호를 입력해주세요.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
 
 		$category = $context->getParameter('category');
 		$rootPath = _SUX_ROOT_;
+		$msg = '';
+		$resultYN = 'Y';
 
 		$pass = substr(md5(trim($pass)),0,8);
 		$pass = substr(md5($pass),0,8);
@@ -274,88 +274,142 @@ class BoardController extends Controller {
 				$delFileName = _SUX_PATH_ . "board_data/$delFileName";
 
 				if(!@unlink($delFileName)) {
-					echo '파일삭제를 실패하였습니다.';
-				} else {
-					echo '파일삭제를 성공하였습니다.';
-				}
+					$resultYN = 'N';
+					$msg .= '파일삭제를 실패하였습니다.';
+				} 
 			}
 			
 			$result = $this->model->deleteDelete();
 			if (!isset($result)) {
-				UIError::alertToBack('글을 삭제하는데 실패했습니다.');
+				$msg .= '글을 삭제하는데 실패했습니다.';
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+				exit;
 			}
 		} else  {
-			UIError::alertToBack('비밀번호가 틀렸습니다.');
+			$msg .= '비밀번호가 맞지 않습니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+			exit;
 		}
 
-		Utils::goURL($rootPath . $category);
+		$data = array(	'url'=>$rootPath . $category,
+						'result'=>$resultYN,
+						'msg'=>$msg,
+						'delay'=>0);
+
+		$this->callback($data);
 	}
 
-	function recordOpkey() {
+	function updateProgressStep() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
 
-		$result = $this->controller->update('recordOpkey');
+		$returnURL = $context->getServer('REQUEST_URI');
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+		$rootPath = _SUX_ROOT_;
+		$msg = '';
+		$resultYN = 'Y';
+
+		$result = $this->model->updateProgressStep();
 		if (!isset($result)) {
-			UIError::alertToBack('진행상황 설정을 실패하였습니다.');
+			$msg .= '진행상황 설정을 실패하였습니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
 		}
 
-		Utils::goURL("board.php?board=$board&board_grg=$board_grg&action=list");
+		$data = array(	'url'=>$rootPath . $category . '/' . $id,
+						'result'=>$resultYN,
+						'msg'=>$msg,
+						'delay'=>0);
+
+		$this->callback($data);
 	}
 
-	function recordWriteComment() {
+	function insertComment() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-
-		$id = $requests['id'];
-		$board = $requests['board'];		
-		$board_grg = $requests['board_grg'];
-		$igroup = $requests['igroup'];
-		$passover = $requests['passover'];
-		$sid = $requests['sid'];
-
-		$result = $this->controller->insert('recordWriteComment');
-		if (!isset($result)) {
-			UIError::alertToBack('댓글 입력을 실패하였습니다.');
-		}
-
-		Utils::goURL("board.php?id=$id&sid=$id&board=$board&board_grg=$board_grg&igroup=$igroup&passover=$passover&sid=$sid&action=read");
-	}
-
-	function recordDeleteComment() {
-
-		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
 		$posts = $context->getPostAll();
 
-		$pass = trim($posts['pass']);
-		$admin_pwd = $context->get('db_admin_pwd');
-				
-		$board = $requests['board'];
-		$board_grg = $requests['board_grg'];
-		$id = $requests['id'];
-		$grgid = $requests['grgid'];
-		$igroup = $requests['igroup'];
-		$passover = $requests['passover'];
+		$returnURL = $context->getServer('REQUEST_URI');
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+		$rootPath = _SUX_ROOT_;
+		$msg = '';
+		$resultYN = 'Y';
 
-		$this->controller->select('fieldFromCommentId', 'pass');
-		$row = $this->model->getRow();
+		$checkLabel = array('이름을', '비밀번호를', '내용을');
+		$checkList = array('nickname', 'password', 'comment');
 
-		if ($pass == $row['pass'] || $pass == "$admin_pwd") {
-			$result = $this->controller->delete('recordDeleteComment');
-			if (!isset($result)) {
-				UIError::alertToBack('댓글 삭제를 실패하였습니다.');
-			}			
-		} else  {
-			UIError::alertToBack('비밀번호가 틀립니다');
+		$index = 0;
+		foreach ($checkList as $key => $value) {			
+			if (isset($posts[$value]) && $posts[$value] === '') {
+				$msg = $checkLabel[$index] . ' 입력해주세요.';
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+				return false;
+			}
+			$index++;
+		}	
+
+		$result = $this->model->insertComment();
+		//Tracer::getInstance()->output();
+		if (!isset($result)) {
+			$msg .= '댓글 입력을 실패하였습니다.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit();
 		}
 
-		Utils::goURL("board.php?board=$board&board_grg=$board_grg&id=$id&sid=$id&igroup=$igroup&passover=$passover&action=read");
+		$data = array(	'url'=>$rootPath . $category . '/' . $id,
+						'result'=>$resultYN,
+						'msg'=>$msg,
+						'delay'=>0);
+
+		$this->callback($data);
+	}
+
+	function deleteDeleteComment() {
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();		
+
+		$returnURL = $context->getServer('REQUEST_URI');
+		$pass = trim($posts['password']);
+		if (!(isset($pass) && $pass)) {
+			$msg .= '비밀번호를 입력해주세요.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+		}
+		$adminPwd = $context->getAdminInfo('admin_pwd');
+
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+		$sid = $context->getParameter('sid');
+		$rootPath = _SUX_ROOT_;
+		$msg = '';
+		$resultYN = 'Y';
+
+		$this->model->selectFromCommentWhere('password', array('id'=>$sid));
+		$row = $this->model->getRow();
+		//Tracer::getInstance()->output();
+		if ($pass == $row['password'] || $pass == $adminPwd) {
+			$result = $this->model->deleteComment();
+			if (!isset($result)) {
+				$msg .= '댓글 삭제를 실패하였습니다.';
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+				exit;
+			}			
+		} else  {
+			$msg .= '비밀번호가 맞지 않습니다..';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+		}
+
+		$data = array(	'url'=>$rootPath . $category . '/' . $id,
+						'result'=>$resultYN,
+						'msg'=>$msg,
+						'delay'=>0);
+
+		$this->callback($data);
 	}
 }
 ?>

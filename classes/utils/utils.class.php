@@ -51,6 +51,8 @@ class Utils extends Object {
 
 		@chmod($path,0777);
 		$directory = dir($path);
+
+		return false;
 		
 		while(($entry = $directory->read()) !== false) { 
 			
@@ -69,6 +71,18 @@ class Utils extends Object {
 		@rmdir($path);
 
 		return true;
+	}
+
+	public static function deleteFile($path) {
+
+		if (!is_file( $path )) {
+			return false;
+		}
+
+		@chmod($path,0777);
+		@UnLink ($path);
+
+		return true; 
 	}
 
 	public static function readDir( $dir ) {

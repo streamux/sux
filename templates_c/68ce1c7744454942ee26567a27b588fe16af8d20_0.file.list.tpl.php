@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-29 12:34:44
+/* Smarty version 3.1.30, created on 2016-12-02 08:37:02
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583d67d4a20af5_44199003',
+  'unifunc' => 'content_5841249edfa9d9_27258671',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '68ce1c7744454942ee26567a27b588fe16af8d20' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/list.tpl',
-      1 => 1480419283,
+      1 => 1480664219,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583d67d4a20af5_44199003 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5841249edfa9d9_27258671 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('category', $_smarty_tpl->tpl_vars['documentData']->value['category']);
 $_smarty_tpl->_assignInScope('uri', $_smarty_tpl->tpl_vars['documentData']->value['uri']);
@@ -53,18 +53,27 @@ foreach ($_from as $_smarty_tpl->tpl_vars['item']->value) {
 			<tr>
 				<td class="author"><span><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
 </span></td>
-				<td class="subject">					
-					<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+				<td class="subject">
+					<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+						<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
 /<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['id'];?>
-"><span class="link-area" style="padding-left:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
+?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
+">
+					<?php } else { ?>
+						<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['id'];?>
+">
+					<?php }?>			
+					<span class="link-area" style="padding-left:<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['space'];?>
 ">
 						<span class="label label-primary <?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box_color'];?>
 "><?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['icon_box'];?>
 </span>						
 						<?php echo nl2br($_smarty_tpl->tpl_vars['item']->value['subject']['title']);?>
 
-						<span class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['txt_tail'];?>
-">(<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['tail_num'];?>
+						<span class="<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['css_comment'];?>
+">(<?php echo $_smarty_tpl->tpl_vars['item']->value['subject']['comment_num'];?>
 )</span>
 						<?php if ($_smarty_tpl->tpl_vars['item']->value['subject']['img_name'] != '') {?>
 						<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
@@ -110,10 +119,9 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 	<?php }?>
 	</div>
 	<div class="board-search ui-inlineblock">
-		<form action="board.php?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
-&find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
-&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
-&action=list" method="post" name="f_board_list_search" onSubmit="return jsux.fn.list.checkSearchForm(this);">
+		<form action="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+" method="post" name="f_board_list_search">
+			<input type="hidden" name="_method" value="select">
 			<select name="find">
 				<option value='title'>제 목</option>
 				<option value='name'>작성자</option>
@@ -125,13 +133,16 @@ $_smarty_tpl->smarty->ext->_foreach->restore($_smarty_tpl);
 		</form>
 	</div>	
 	<div class="board-list-buttons">
-		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+		<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/write?find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
+&search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
 ">
-			<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
-/images/btn_list.gif" width="51" height="23" border="0">
-		</a>
-		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
-/write"><img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
+		<?php } else { ?>
+			<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+/write">
+		<?php }?>
+		<img src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /images/btn_write.gif" width="62" height="23" border="0"></a>
 	</div>
 </div>

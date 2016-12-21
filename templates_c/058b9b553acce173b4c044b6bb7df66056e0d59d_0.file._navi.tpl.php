@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-19 16:04:34
+/* Smarty version 3.1.30, created on 2016-12-13 09:02:06
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_navi.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_58306a021e64a5_65845247',
+  'unifunc' => 'content_584faafea29c51_83189873',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '058b9b553acce173b4c044b6bb7df66056e0d59d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_navi.tpl',
-      1 => 1475136773,
+      1 => 1481616124,
       2 => 'file',
     ),
   ),
@@ -20,20 +20,20 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_58306a021e64a5_65845247 (Smarty_Internal_Template $_smarty_tpl) {
+function content_584faafea29c51_83189873 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('pagination', $_smarty_tpl->tpl_vars['documentData']->value['pagination']);
-?>
-
-<?php if ($_smarty_tpl->tpl_vars['pagination']->value['okpage'] != 'yes') {?>
-	<a href="<?php echo $_smarty_tpl->tpl_vars['pagination']->value['PHP_SELF'];?>
-?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
-&passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['prevpassover'];?>
-&page=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['befopage'];?>
+if ($_smarty_tpl->tpl_vars['pagination']->value['okpage'] != 'yes') {?>
+	<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['prevpassover'];?>
 &find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
 &search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
-&action=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['action'];?>
-">이전</a>	
+">이전</a>
+	<?php } else { ?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['prevpassover'];?>
+">이전</a>
+	<?php }?>		
 <?php }?>
 
 <?php
@@ -52,16 +52,19 @@ for ($__section_page_0_iteration = 1, $_smarty_tpl->tpl_vars['__smarty_section_p
 
 	<?php if ($_smarty_tpl->tpl_vars['pagination']->value['total'] > $_smarty_tpl->tpl_vars['nowpassover']->value) {?>
 		<?php if ($_smarty_tpl->tpl_vars['pagination']->value['passover'] != $_smarty_tpl->tpl_vars['nowpassover']->value) {?>
-			<a href="<?php echo $_smarty_tpl->tpl_vars['pagination']->value['PHP_SELF'];?>
-?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
-&passover=<?php echo $_smarty_tpl->tpl_vars['nowpassover']->value;?>
-&page=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['page'];?>
+			<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+				<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['nowpassover']->value;?>
 &find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
 &search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
-&action=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['action'];?>
 ">[<?php echo $_smarty_tpl->tpl_vars['index']->value;?>
 ]</a>
+			<?php } else { ?>
+				<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['nowpassover']->value;?>
+">[<?php echo $_smarty_tpl->tpl_vars['index']->value;?>
+]</a>
+			<?php }?>	
 		<?php } else { ?>
 			&nbsp;<span class="color-red"><?php echo $_smarty_tpl->tpl_vars['index']->value;?>
 </span>&nbsp
@@ -74,18 +77,18 @@ $_smarty_tpl->tpl_vars['__smarty_section_page'] = $__section_page_0_saved;
 }
 ?>
 
-<?php if ($_smarty_tpl->tpl_vars['pagination']->value['total'] >= $_smarty_tpl->tpl_vars['pagination']->value['hanpassoverpage']) {?>
-	<a href="<?php echo $_smarty_tpl->tpl_vars['pagination']->value['PHP_SELF'];?>
-?board=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board'];?>
-&board_grg=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['board_grg'];?>
-&passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['newpassover'];?>
-&page=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['nextpage'];?>
+<?php if ($_smarty_tpl->tpl_vars['pagination']->value['total'] > $_smarty_tpl->tpl_vars['pagination']->value['hanpassoverpage']) {?>
+	<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['newpassover'];?>
 &find=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['find'];?>
 &search=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['search'];?>
-&action=<?php echo $_smarty_tpl->tpl_vars['requestData']->value['action'];?>
 ">다음</a>
-<?php }?>
-
-
-<?php }
+	<?php } else { ?>
+		<a href="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
+?passover=<?php echo $_smarty_tpl->tpl_vars['pagination']->value['newpassover'];?>
+">다음</a>
+	<?php }
+}
+}
 }

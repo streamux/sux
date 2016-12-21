@@ -21,9 +21,38 @@
 		<p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
 		<p>{$contentData.contents}</p>
 	</div>
+	{$requestData.search}
 	<div class="board-buttons">
-		<a href="{$uri}"><img src="{$skinPathList.dir}/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
-		<a href="{$uri}/write"><img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a> <a href="{$uri}/{$contentData.id}/reply"><img src="{$skinPathList.dir}/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;<a href="{$uri}/{$contentData.id}/modify"><img src="{$skinPathList.dir}/images/btn_edit.gif" border="0"></a>&nbsp;<a href="{$uri}/{$contentData.id}/delete"><img src="{$skinPathList.dir}/images/btn_del.gif" width="51" height="23" border="0"></a>
+		{if $requestData.search != ''}
+			<a href="{$uri}?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_list.gif" width="51px" height="23px" border="0px"></a>
+		{if $requestData.search != ''}
+			<a href="{$uri}/write?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}/write">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_write.gif" width="62" height="23" border="0"></a>
+		{if $requestData.search != ''}
+			<a href="{$uri}/{$contentData.id}/reply?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}/{$contentData.id}/reply">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_answer.gif" width="51" height="23" border="0"></a>&nbsp;
+		{if $requestData.search != ''}
+			<a href="{$uri}/{$contentData.id}/modify?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}/{$contentData.id}/modify">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_edit.gif" border="0"></a>&nbsp;
+		{if $requestData.search != ''}
+			<a href="{$uri}/{$contentData.id}/delete?find={$requestData.find}&search={$requestData.search}">
+		{else}
+			<a href="{$uri}/{$contentData.id}/delete">
+		{/if}
+		<img src="{$skinPathList.dir}/images/btn_del.gif" width="51" height="23" border="0"></a>
 	</div>
 {if $progressStepSkinPath != ''}	
 	<div class="board-adminsetup {$contentData.css_progress_step}" style="width:{$groupData.width}">

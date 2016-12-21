@@ -2,9 +2,7 @@ jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 		
 	setEvent: function() {
-
 		//popupManager.open();
-
 		var self = this;
 		$(".popup > a").bind("click", function(e) {
 
@@ -15,14 +13,13 @@ jsux.fn.list = {
 	setLayout: function() {
 
 		var self = this;
-		jsux.getJSON("popup.admin.php?action=listJson", function( e )  {
+		jsux.getJSON(jsux.rootPath + "popup-admin/list-json", function( e )  {
 		
 			var markup = "";
 			$("#popupList").empty();
 
 			if (e.result == "Y") {
 				markup = $("#popupList_tmpl");
-
 				$(markup).tmpl(e.data).appendTo("#popupList");				
 			} else {
 				markup = $("#popupWarnMsg_tmpl");
@@ -33,7 +30,6 @@ jsux.fn.list = {
 		});
 	},
 	init: function() {
-
 		this.setLayout();		
 	}
 };
@@ -77,33 +73,42 @@ jsux.fn.add = {
 	},
 	sendJson: function( f ) {
 
-		var params = "";
+		var self = this,
+			params = {},
+			indexCheckbox = 0;
 
-		params = { 	popup_name: f.popup_name.value,
-					choice: this.getSelectVal("choice"),
-					time1: f.time1.value,
-					time2: f.time2.value,
-					time3: f.time3.value,
-					time4: f.time4.value,
-					time5: f.time5.value,
-					time6: f.time6.value,
-					popup_title: f.popup_title.value,
-					popup_width: f.popup_width.value,
-					popup_height: f.popup_height.value,
-					popup_top: f.popup_top.value,
-					popup_left: f.popup_left.value,
-					skin: this.getSelectVal("skin"),
-					skin_top: f.skin_top.value,
-					skin_left: f.skin_left.value,
-					skin_right: f.skin_right.value,
-					comment: this.getTextAreaVal("comment")};
+		$.each(f, function(index, item) {
 
-		jsux.getJSON("popup.admin.php?action=recordAdd", params, function( e ) {
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+			var glue ='';
+
+			if (item.nodeName.toLowerCase() === 'select') {
+				//console.log(item.name + ' : ' + item.value);
+				item.value = self.getSelectVal(item.name);					
+				params[item.name] = item.value;
+			} else if (type === 'radio' && item.checked) {
+				//console.log(item.name + ' : ' + item.value);
+				params[item.name] = item.value;				
+			} else {
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}			
+		});
+
+		var url = f.action;
+		if (!url) {
+			trace('Action URL Not Exists');
+			return false;
+		}
+
+		jsux.getJSON( url, params, function( e ) {
 
 			trace( e.msg );
-
 			if (e.result == "Y") {
-				jsux.goURL(menuList[2].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 			}
 		});
 	},
@@ -119,32 +124,17 @@ jsux.fn.add = {
 			bool = self.chechFormVal( e.target );
 			if (bool === true) {
 				self.sendJson( e.target );
-			}
-			
+			}			
 		});
 
 		$("input[name=cancel]").on("click", function() {
-
-			jsux.goURL(menuList[2].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 		});
-	},
-	setLayout: function() {
-
-		var self = this;
-
-		jsux.getJSON("popup.admin.php?action=addJson", function( e ) {
-
-			markup = $("#skinList_tmpl");
-			$("#skinList").empty();
-			$(markup).tmpl(e.data.list).appendTo("#skinList");
-		});
-
-		$('input[name=popup_name]').focus();
 	},
 	init: function() {
 
-		this.setLayout();
 		this.setEvent();
+		jsux.setAutoFocus();
 	}
 };
 jsux.fn.modify = {
@@ -174,34 +164,43 @@ jsux.fn.modify = {
 	},
 	sendJson: function( f ) {
 
-		var params = "";
+		var self = this,
+			params = {},
+			indexCheckbox = 0;
 
-		params = { 	id: $("input[name=id]").val(),
-					popup_name: f.popup_name.value,
-					choice: this.getSelectVal("choice"),
-					time1: f.time1.value,
-					time2: f.time2.value,
-					time3: f.time3.value,
-					time4: f.time4.value,
-					time5: f.time5.value,
-					time6: f.time6.value,
-					popup_title: f.popup_title.value,
-					popup_width: f.popup_width.value,
-					popup_height: f.popup_height.value,
-					popup_top: f.popup_top.value,
-					popup_left: f.popup_left.value,
-					skin: this.getSelectVal("skin"),
-					skin_top: f.skin_top.value,
-					skin_left: f.skin_left.value,
-					skin_right: f.skin_right.value,
-					comment: this.getTextAreaVal("comment")};
+		$.each(f, function(index, item) {
 
-		jsux.getJSON("popup.admin.php?action=recordModify", params, function( e ) {
+			var filters = 'checkbox|button|submit';
+			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+			var glue ='';
+
+			if (item.nodeName.toLowerCase() === 'select') {
+				//console.log(item.name + ' : ' + item.value);
+				item.value = self.getSelectVal(item.name);					
+				params[item.name] = item.value;
+			} else if (type === 'radio' && item.checked) {
+				//console.log(item.name + ' : ' + item.value);
+				params[item.name] = item.value;				
+			} else {
+				 if (!type.match(filters)) {
+					//console.log(item.name + ' : ' + item.value);					
+					params[item.name] = item.value;
+				}
+			}			
+		});
+
+		var url = f.action;
+		if (!url) {
+			trace('Action URL Not Exists');
+			return false;
+		}
+
+		jsux.getJSON(url, params, function( e ) {
 
 			trace( e.msg );
 
 			if (e.result == "Y") {
-				jsux.goURL(menuList[2].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 			}
 		});
 	},
@@ -218,7 +217,7 @@ jsux.fn.modify = {
 
 		$("input[name=cancel]").on("click", function() {
 
-			jsux.goURL(menuList[2].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 		});
 	},
 	setLayout: function() {
@@ -228,7 +227,7 @@ jsux.fn.modify = {
 				id: $("input[name=id]").val()
 			};
 
-		jsux.getJSON("popup.admin.php?action=modifyJson", params, function( e ) {
+		jsux.getJSON(jsux.rootPath + "popup-admin/modify-json", params, function( e ) {
 
 			var formLists = null,
 				checkedVal = "",
@@ -236,10 +235,6 @@ jsux.fn.modify = {
 				labelList = null;
 
 			if (e.result == "Y") {
-
-				markup = $("#skinList_tmpl");
-				$("#skinList").empty();
-				$(markup).tmpl(e.data.skinList).appendTo("#skinList");
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
@@ -272,10 +267,12 @@ jsux.fn.modify = {
 					$(markup).tmpl( data ).appendTo("#"+label);
 				});
 
-				self.setTextAreaVal("comment", e.data.comment);	
+				self.setTextAreaVal("contents", e.data.contents);	
 			} else {
 				trace( e.msg );
 			}
+
+			jsux.setAutoFocus();
 		});
 	},
 	init: function() {
@@ -289,13 +286,15 @@ jsux.fn.delete = {
 	sendJSON: function() {
 
 		var params = {
-			id : $("input[name=id]").val()
+			_method: 'delete',
+			id : $("input[name=id]").val(),
+			popup_name : $("input[name=popup_name]").val()
 		};
-		jsux.getJSON("popup.admin.php?action=recordDelete", params, function( e )  {
+		jsux.getJSON(jsux.rootPath + "popup-admin/delete", params, function( e )  {
 
 			trace( e.msg );
 			if (e.result == "Y") {
-				jsux.goURL(menuList[2].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 			}
 		});
 	},
@@ -311,7 +310,7 @@ jsux.fn.delete = {
 			if (key == "del") {
 				self.sendJSON();
 			} else if (key == "back") {
-				jsux.goURL(menuList[2].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[2].sub[0].link);
 			}
 		});			
 	},

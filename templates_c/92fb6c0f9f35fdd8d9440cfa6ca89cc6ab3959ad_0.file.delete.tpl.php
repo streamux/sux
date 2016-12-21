@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-11-29 13:09:33
+/* Smarty version 3.1.30, created on 2016-12-16 06:48:47
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583d6ffdd31924_99247128',
+  'unifunc' => 'content_5853803f706637_04567311',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '92fb6c0f9f35fdd8d9440cfa6ca89cc6ab3959ad' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/delete.tpl',
-      1 => 1480421359,
+      1 => 1480757491,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583d6ffdd31924_99247128 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5853803f706637_04567311 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);
@@ -35,7 +35,6 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	<div class="login">
 		<h1 class="title">게시물 삭제 비밀번호 인증</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
-
 		<form action="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;
 echo $_smarty_tpl->tpl_vars['contentData']->value['category'];?>
 /<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>

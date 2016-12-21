@@ -1,6 +1,7 @@
 <?php
 
-class AnalyticsAdminModule extends BaseView {
+class AnalyticsAdminModule extends View
+{
 	
 	var $class_name = 'board_admin_module';
 	var $skin_path_list = array();
@@ -36,173 +37,112 @@ class AnalyticsAdminModule extends BaseView {
 
 class AnalyticsAdminView extends AnalyticsAdminModule {
 
-	var $class_name = 'analytics_admin_view';
+	function displayConnectSite() {
 
-	function displayConnecterList() {
+		$this->displayConnectSiteList();
+	}
+
+	function displayConnectSiteList() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'connectSiteList';
 		$this->document_data['module_code'] = 'analytics';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_list.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_list.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
 		$this->output();
 	}
 
-	function displayConnecterAdd() {
+	function displayConnectSiteAdd() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'connectSiteAdd';
 		$this->document_data['module_code'] = 'analytics';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_add.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_add.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
 		$this->output();
 	}
 
-	function displayConnecterDelete() {
+	function displayConnectSiteReset() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+		$id = $context->getParameter('id');
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] ='connectSiteReset';
 		$this->document_data['module_code'] = 'analytics';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromConnectSite('id, name', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_delete.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_reset.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
 		$this->output();
 	}
 
-	function displayConnecterReset() {
+	function displayConnectSiteDelete() {
 
 		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+		$id = $context->getParameter('id');
 
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
+		$this->document_data['jscode'] = 'connectSiteDelete';
 		$this->document_data['module_code'] = 'analytics';
 
+		$rootPath = _SUX_ROOT_;
 		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
 		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromConnectSite('id, name', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = '';
 		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_connecter_reset.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_delete.tpl";
 		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
 		$this->output();
 	}
 
-	function displayPageviewList() {
-
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'analytics';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
-
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_list.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayPageviewAdd() {
-
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'analytics';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
-
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_add.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayPageviewDelete() {
-
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
-
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'analytics';
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
-
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_delete.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->output();
-	}
-
-	function displayPageviewReset() {
-
-		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
-		$action = $requestData['action'];
-		$requestData['jscode'] = $action;
-		$pageType = $requestData['pagetype'];
-
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
-
-		$this->skin_path_list = array();
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_reset.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-		$this->request_data = $requestData;
-		$this->document_data = array();
-		$this->document_data['pagetype'] = $pageType;
-
-		$this->output();
-	}
-
-	function displayConnecterListJson() {
+	function displayConnectSiteListJson() {
 
 		$context = Context::getInstance();
 
@@ -211,7 +151,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 		$msg = "";
 		$resultYN = "Y";	 
 
-		$result = $this->controller->select('fromConnecterSiteOrderby', 'id desc');
+		$result = $this->model->selectFromConnectSite('*', null, 'id desc');//Orderby', 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -237,12 +177,117 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 				$resultYN = "N";
 			}
 		}
-
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
+	}
+
+	function displayPageview() {
+
+		$this->displayPageviewList();
+	}
+
+	function displayPageviewList() {
+
+		$context = Context::getInstance();
+
+		$this->document_data['jscode'] = 'pageviewList';
+		$this->document_data['module_code'] = 'analytics';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_list.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayPageviewAdd() {
+
+		$context = Context::getInstance();
+
+		$this->document_data['jscode'] = 'pageviewAdd';
+		$this->document_data['module_code'] = 'analytics';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_add.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayPageviewReset() {
+
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+
+		$this->document_data['jscode'] = 'pageviewReset';
+		$this->document_data['module_code'] = 'analytics';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromPageview('id, name', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_reset.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
+	}
+
+	function displayPageviewDelete() {
+
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+
+		$this->document_data['jscode'] = 'pageviewDelete';
+		$this->document_data['module_code'] = 'analytics';
+
+		$rootPath = _SUX_ROOT_;
+		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+		$skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->selectFromPageview('id, name', $where);
+
+		$row = $this->model->getRow();
+		foreach ($row as $key => $value) {
+			$this->document_data[$key] = $value;
+		}
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['dir'] = '';
+		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_delete.tpl";
+		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+		$this->output();
 	}
 
 	function displayPageviewListJson() {
@@ -252,7 +297,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fromPageviewOrderby', 'id desc');
+		$result = $this->model->selectFromPageview('*', null, 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -278,154 +323,11 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 				$resultYN = "N";
 			}
 		}
-
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
-	}
-
-	function recordConnecterAdd() {
-
-		$context = Context::getInstance();
-		$keyword = $context->getPost('keyword');
-
-		$msg = "";
-		$resultYN = "Y";		
-
-		$this->controller->select('fromConnecterSiteWhere', $keyword);
-		$numrow = $this->model->getNumRows();
-		if ($numrow > 0) {
-			$msg = "접속키워드가 이미 존재합니다.";
-			$resultYN = "N";
-		} else {
-			$result = $this->controller->insert('intoConnecterSite');
-			if ($result) {
-				$msg = "$numrow : $keyword 접속키워드 추가를 성공하였습니다.";
-				$resultYN = "Y";		 	
-			} else {
-				$msg = "접속키워드 추가를 실패하였습니다.";
-			 	$resultYN = "N";
-			}			
-		}	
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordConnecterDelete() {
-		
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->delete('fromConnecterSiteWhere');
-		if (!$result) {
-			$msg = "접속키워드 삭제를 실패하였습니다.";
-			$resultYN = "N";
-		} else {
-			$msg = "접속키워드 삭제를 성공하였습니다.";	
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordConnecterReset() {
-		
-		$context = Context::getInstance();
-		$id = $context->getPost('id');
-
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->update('fromConnecterSiteWhere');
-		if ($result) {
-			$msg = "접속키워드 초기화를 성공하였습니다.";
-			$resultYN = "Y";			
-		} else {
-			$msg = "접속키워드 초기화를 실패하였습니다.";
-			$resultYN = "N";
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordPageviewAdd() {
-
-		$context = Context::getInstance();
-		$keyword = $context->getPost('keyword');
-
-		$msg = "";
-		$resultYN = "Y";
-
-		$this->controller->select('fromPageviewWhere', $keyword);
-		$numrow = $this->model->getNumRows();
-		if ($numrow > 0) {
-			$msg = "페이지뷰 키워드가 이미 존재합니다.";
-			$resultYN = "N";
-		} else {
-			$result = $this->controller->insert('intoPageview');
-			if ($result) {
-				$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
-				$resultYN = "Y";		 	
-			} else {
-				$msg = "페이지뷰 키워드 추가를 실패하였습니다.";
-			 	$resultYN = "N";
-			}
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
-	}
-
-	function recordPageviewDelete() {
-	
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->delete('fromPageviewWhere');
-		if ($result) {
-			$msg = "페이지뷰 키워드 삭제를 성공하였습니다.";	
-			$resultYN = "Y";			
-		} else {
-			$msg = "페이지뷰 키워드 삭제를 실패하였습니다.";
-			$resultYN = "N";
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);	
-	}
-
-	function recordPageviewReset() {
-		
-		$msg = "";
-		$resultYN = "Y";
-
-		$result = $this->controller->update('fromPageviewWhere');
-		if ($result) {
-			$msg = "페이지뷰 초기화를 성공하였습니다.";
-			$resultYN = "Y";
-		} else {
-			$msg = "페이지뷰 초기화를 실패하였습니다.";
-			$resultYN = "N";			
-		}
-
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
-
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 }
-?>
