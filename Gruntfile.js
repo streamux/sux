@@ -9,7 +9,7 @@ module.exports = function(grunt) {
 
 	grunt.initConfig({
 
-		pkg: grunt.file.readJSON('package.json'),
+		pkg: grunt.file.readJSON('package-grunt.json'),
 		clean: {
 			minify: [
 				'common/js/jsux*.js'
