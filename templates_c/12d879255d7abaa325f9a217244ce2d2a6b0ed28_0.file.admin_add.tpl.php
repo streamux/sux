@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-20 11:15:41
+/* Smarty version 3.1.30, created on 2016-12-22 13:03:18
   from "/Applications/MAMP/htdocs/sux/modules/document/tpl/admin_add.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_585904cd3acbf0_78518434',
+  'unifunc' => 'content_585bc1062e6284_39549655',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '12d879255d7abaa325f9a217244ce2d2a6b0ed28' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/document/tpl/admin_add.tpl',
-      1 => 1482228939,
+      1 => 1482408196,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_585904cd3acbf0_78518434 (Smarty_Internal_Template $_smarty_tpl) {
+function content_585bc1062e6284_39549655 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
@@ -52,7 +52,7 @@ modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddl
 					<tr>
 						<td><label for="category">*카테고리 이름</label></td>
 						<td>
-							<input type="text" id="category" name="category" size="20" maxlength="20" value="userguide">
+							<input type="text" id="category" name="category" size="20" maxlength="20" value="otherPage">
 							<input type="button" name="checkID" value='중복체크'>
 							<span>※ 반드시 영문으로 작성해주세요.</span>
 						</td>
@@ -60,7 +60,7 @@ modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddl
 					<tr>
 						<td><label for="document_name">*페이지 이름</label></td>
 						<td>
-							<input type="text" id="document_name" name="document_name" size="20" maxlength="20" value="사용자 가이드">
+							<input type="text" id="document_name" name="document_name" size="20" maxlength="20" value="기타페이지">
 						</td>
 					</tr>
 					<tr>

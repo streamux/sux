@@ -25,7 +25,7 @@
 					<tr>
 						<td><label for="category">*카테고리 이름</label></td>
 						<td>
-							<input type="text" id="category" name="category" size="20" maxlength="20" value="userguide">
+							<input type="text" id="category" name="category" size="20" maxlength="20" value="otherPage">
 							<input type="button" name="checkID" value='중복체크'>
 							<span>※ 반드시 영문으로 작성해주세요.</span>
 						</td>
@@ -33,7 +33,7 @@
 					<tr>
 						<td><label for="document_name">*페이지 이름</label></td>
 						<td>
-							<input type="text" id="document_name" name="document_name" size="20" maxlength="20" value="사용자 가이드">
+							<input type="text" id="document_name" name="document_name" size="20" maxlength="20" value="기타페이지">
 						</td>
 					</tr>
 					<tr>

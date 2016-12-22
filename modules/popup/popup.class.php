@@ -7,7 +7,7 @@ class Popup
 	 */
 	public static function getRoute($key) {
 
-		$file = _SUX_PATH_ . 'caches/popup.cache.php';
+		$file = _SUX_PATH_ . 'caches/routes/popup.cache.php';
 		$tempList = preg_split('/\//', $file);
 		$fileName = $tempList[count($tempList)-1];
 		if (file_exists($file)) {

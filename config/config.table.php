@@ -1,4 +1,4 @@
-<?
+<?php
 $table_list = array(
 'connect_site'=>'sux_connect_site',
 'connecter'=>'sux_connecter',

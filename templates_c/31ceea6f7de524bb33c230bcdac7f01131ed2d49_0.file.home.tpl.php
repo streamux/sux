@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-20 03:06:22
+/* Smarty version 3.1.30, created on 2016-12-21 10:31:44
   from "/Applications/MAMP/htdocs/sux/modules/document/contents/home.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5858921eaa9f50_45598516',
+  'unifunc' => 'content_585a4c00a0ee06_79912254',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '31ceea6f7de524bb33c230bcdac7f01131ed2d49' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/document/contents/home.tpl',
-      1 => 1482148028,
+      1 => 1482312605,
       2 => 'file',
     ),
   ),
@@ -20,12 +20,12 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5858921eaa9f50_45598516 (Smarty_Internal_Template $_smarty_tpl) {
+function content_585a4c00a0ee06_79912254 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('title', $_smarty_tpl->tpl_vars['groupData']->value['document_name']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
-$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>((string)$_smarty_tpl->tpl_vars['title']->value)." :: 홈 - StreamUX"), 0, true);
+$_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->value), $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('title'=>((string)$_smarty_tpl->tpl_vars['title']->value)." :: 홈 - STREAMUX"), 0, true);
 ?>
 
 <div class="header-contents">

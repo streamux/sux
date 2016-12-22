@@ -664,7 +664,8 @@ class BoardView extends BoardModule {
 
 		if ($is_modifiable === 'n') {
 			if ($admin_pass === false) {
-				UIError::alertTo('죄송합니다. 이곳은 관리자 전용 게시판입니다.');
+				$msg = '죄송합니다. 이곳은 관리자 전용 게시판입니다.';
+				UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
 			}
 		}
 

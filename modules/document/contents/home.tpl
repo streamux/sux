@@ -2,7 +2,7 @@
 {assign var=title value=$groupData.document_name}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="$title :: 홈 - StreamUX"}
+{include file="$headerPath" title="$title :: 홈 - STREAMUX"}
 <div class="header-contents">
 	<div class="swiper-container swiper-container-visual">
 		<div class="swiper-wrapper">			

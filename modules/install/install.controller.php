@@ -155,12 +155,12 @@ class InstallController extends Controller {
 		$context = Context::getInstance();
 		$context->init();
 
-
 		$query = new Query();
 		$schemas = new QuerySchema();
+		$cacheFile = CacheFile::getInstance();
 
 		// 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
-		$oDB = DB::getInstance();
+		$oDB = DB::getInstance();		
 
 		$tablePrefix = $context->getPrefix();
 		$moduleList = Utils::readDir('./modules');
@@ -183,6 +183,7 @@ class InstallController extends Controller {
 						$tableName = $tablePrefix . '_' . $table['name'];
 						$query->setTable($tableName);											
 
+						$cacheColumn = array();
 						$columns = $table[0]->column;
 						foreach ($columns as $key => $value) {
 
@@ -194,7 +195,13 @@ class InstallController extends Controller {
 							$autoincrement = isset($value['auto_increment']) ? $value['auto_increment'] : null;
 							$primarykey = isset($value['primary_key']) ? $value['primary_key'] : null;
 							$schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
+
+							$cacheColumn[] = $name;
 						}
+
+						// setup query's columns-cache-file
+						$cachePath = _SUX_PATH_ . 'caches/queries/' . $table['name'] . '.getColumns.cache.php';
+						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
 
 						$keyName = (string) $table['name'];	
 						$tableList[$keyName] = $tableName;
@@ -205,7 +212,7 @@ class InstallController extends Controller {
 							$resultYN = 'N';
 							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
 							//$msg .= $tracer->getMessage();
-						} else {																			
+						} else {																
 							$msg .= '@ table->' . $tableName . " [ result : success ] ----<br>";
 						}
 					}

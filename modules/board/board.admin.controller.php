@@ -64,7 +64,7 @@ class BoardAdminController extends Controller
 			$msg .= "시동 게시글이 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/board.cache.php';
+			$filePath = _SUX_PATH_ . 'caches/routes/board.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -77,8 +77,8 @@ class BoardAdminController extends Controller
 				}
 			}
 
-			$modueCache = ModuleCache::getInstance();
-			$modueCache->saveCacheForRoute($filePath, $routes);			
+			$cacheFile = CacheFile::getInstance();
+			$cacheFile->saveRoute($filePath, $routes);		
 		}	
 
 		$data = array(	"result"=>$resultYN,
@@ -166,7 +166,7 @@ class BoardAdminController extends Controller
 			$msg .= "${category} 게시판을 삭제하였습니다.<br>";
 
 			// 라우트 카테고리 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/board.cache.php';
+			$filePath = _SUX_PATH_ . 'caches/routes/board.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -184,8 +184,8 @@ class BoardAdminController extends Controller
 				}
 			}
 
-			$modueCache = ModuleCache::getInstance();
-			$modueCache->saveCacheForRoute($filePath, $routes);
+			$cacheFile = CacheFile::getInstance();
+			$cacheFile->saveRoute($filePath, $routes);
 		}		
 
 		//$msg .= Tracer::getInstance()->getMessage();
