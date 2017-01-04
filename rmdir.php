@@ -1,6 +1,6 @@
 <?PHP
 
-$dirPath = './sux';
+$dirPath = '.';
 
 function deleteDir($dirPath)
 {
