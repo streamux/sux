@@ -12,18 +12,19 @@ class ModuleRouter
 	}
 
 	function init() 
-	{
+	{		
 		$context = Context::getInstance();
 		Epi::setPath('base','libs/epiphany');
 		Epi::setSetting('exceptions', false);
-		Epi::init('route');
+		Epi::init('route');		
+		
 		// Epi::init('base','cache','session');
 		// Epi::init('base','cache-apc','session-apc');
 		// Epi::init('base','cache-memcached','session-apc');
 
-		getRoute()->get('/', array( 'ModuleHandler', 'display'));
-		
+		getRoute()->get('/', array( 'ModuleHandler', 'display'));		
 		$moduleList = Utils::readDir('modules');
+
 		foreach ($moduleList as $key => $value) {
 			$dirName = strtolower($value['file_name']);
 			$ClassName = ucfirst($dirName);
@@ -99,8 +100,8 @@ class ModuleRouter
 					}
 				}
 			}			
-		 }
-		  getRoute()->run();
+		}
+		getRoute()->run();
 	}
 
 	function addRoute( $route, $class)
