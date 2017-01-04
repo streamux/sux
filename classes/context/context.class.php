@@ -1,6 +1,6 @@
 <?php
 
-class Context {
+class Context { 
 
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
