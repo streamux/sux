@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-14 08:06:10
+/* Smarty version 3.1.30, created on 2017-01-04 07:24:56
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/admin_main.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5850ef6242f4f3_70281590',
+  'unifunc' => 'content_586c9538351a74_21807807',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '968294dffeb4ed5793fdd3f49cbcacd4ae441d2f' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/admin_main.tpl',
-      1 => 1481699168,
+      1 => 1483065785,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5850ef6242f4f3_70281590 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c9538351a74_21807807 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
@@ -104,7 +104,7 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 				</div>
 			</li>
 		</ui>
-		<div class="pageview activate-false">       
+		<div class="pageview activate-true">       
 			<table summary="페이지 별 클릭 수 정보를 제공합니다.">
 				<caption><span class="blind">페이지 별 클릭 수</span></caption>
 				<colgroup>

@@ -1,44 +1,10 @@
-var menuList = null;
-
-menuList = [{
-	label: "회원관리",
-	link: "#none",
-	//link: "member_01.html",
-	sub: [	{label: "그룹목록", link:"member-admin"},
-			{label: "그룹추가", link:"member-admin/group-add"}]
-},
-{
-	label: "게시판관리",
-	link: "#none",
-	//link:"board_01.html",
-	sub: [	{label: "게시판목록",  link:"board-admin"},
-			{label: "게시판추가",  link:"board-admin/add"}]
-},
-{
-	label: "페이지관리",
-	link: "#none",
-	//link:"board_01.html",
-	sub: [	{label: "페이지목록",  link:"document-admin"},
-			{label: "페이지추가",  link:"document-admin/add"}]
-},
-
-{
-	label: "팝업관리",
-	link: "#none",
-	//link: "popup_01.html",
-	sub: [	{label: "팝업목록",  link:"popup-admin"},
-			{label: "팝업추가",  link:"popup-admin/add"}]
-			//{label: "팝업스킨", link:"popup.skin.php?pagetype=popup"}]
-},
-{
-	label: "통계관리",
-	link: "#none",
-	//link: "totallog_01.html",
-	sub: [	{label: "접속키워드목록",  link:"analytics-admin/connect-site"},
-			{label: "접속키워드추가",  link:"analytics-admin/connect-site-add"},
-			{label: "페이지뷰목록", link:"analytics-admin/pageview"},
-			{label: "페이지뷰추가", link:"analytics-admin/pageview-add"}]
-}];
+/**
+ * author	streamux@naver.com
+ * date 		2016.04.12
+ * update	2016.12.30
+ *
+ * project-name 	Admin App Stage
+ */
 
 $(document).ready(function() {
 		
@@ -47,11 +13,56 @@ $(document).ready(function() {
 	 * Model에서 상속받아 사용하는 구조로 만든다.
 	 */
 	var gnbModel = jsux.adminGnb.Model.create();
-	var gnbView   = jsux.adminGnb.Menu.create("#gnb", gnbModel);
+	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
+	//gnbView.setActivateClass('activate-admin');
 	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
+	var xmlPath = '/sux/common/gnb_admin.xml';
+	var pageAppHandler = {};
 
 	gnbModel.addObserver( gnbView );
 	gnbModel.addObserver( gnbIconView );  
-	gnbModel.setData( menuList );
 	//gnbModel.activate( 1, 2 );
+
+	pageAppHandler.xmlLoader = {
+
+		load: function( path ) {
+
+			$.ajax({
+				url: path,
+				dataType : "xml",
+				success:function( data ) {
+
+					if (!$(data).children().context || $(data).children().length  === 0) return;
+					menuList = [];
+
+					var menu = $(data).find('root > menu');
+					if (menu.length > 0) {
+
+						$(menu).each(function(index) {
+							menuList.push({
+								label: $(this).find('> label').text(),
+								link: $(this).find('> link').text()
+							});
+
+							if ($(this).find('> menu').length > 0) {
+								menuList[index].menu = [];								
+								menu = $(this).find('> menu');
+								$(menu).each(function(subIndex) {
+									menuList[index].menu.push({
+										label: $(this).find('> label').text(),
+										link: $(this).find('> link').text()
+									});
+								});
+							}	
+						});						
+					}
+
+					gnbModel.setData( menuList );
+					//gnbModel.activate( 1, 2 );
+				}
+			});
+		}		
+	};
+
+	pageAppHandler.xmlLoader.load(xmlPath);
 });

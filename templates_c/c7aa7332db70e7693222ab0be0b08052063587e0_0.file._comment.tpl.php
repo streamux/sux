@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-02 05:08:02
+/* Smarty version 3.1.30, created on 2017-01-04 07:23:53
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_comment.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5840f3a22d9b46_39445447',
+  'unifunc' => 'content_586c94f9d21ab2_84919366',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c7aa7332db70e7693222ab0be0b08052063587e0' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_comment.tpl',
-      1 => 1480651680,
+      1 => 1482303296,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5840f3a22d9b46_39445447 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c94f9d21ab2_84919366 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	<div class="panel-write">
 		<form action="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>

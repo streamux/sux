@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-01 05:46:51
+/* Smarty version 3.1.30, created on 2017-01-04 07:23:53
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_progress_step.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_583fab3b9037c7_29563450',
+  'unifunc' => 'content_586c94f9ce6c41_86959362',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '859b5b51b7fa5cb6b63f1c7f51af7bd4acf3aae6' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_progress_step.tpl',
-      1 => 1480567604,
+      1 => 1482303296,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_583fab3b9037c7_29563450 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c94f9ce6c41_86959362 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	<form action="<?php echo $_smarty_tpl->tpl_vars['uri']->value;?>
 /<?php echo $_smarty_tpl->tpl_vars['contentData']->value['id'];?>

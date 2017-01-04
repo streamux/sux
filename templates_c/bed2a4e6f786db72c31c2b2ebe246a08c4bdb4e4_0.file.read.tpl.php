@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-02 05:05:15
+/* Smarty version 3.1.30, created on 2017-01-04 07:23:53
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5840f2fba85b92_16728431',
+  'unifunc' => 'content_586c94f9c3d6a4_13022168',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bed2a4e6f786db72c31c2b2ebe246a08c4bdb4e4' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/read.tpl',
-      1 => 1480651514,
+      1 => 1482303296,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5840f2fba85b92_16728431 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c94f9c3d6a4_13022168 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('groupData', $_smarty_tpl->tpl_vars['documentData']->value['group']);
 $_smarty_tpl->_assignInScope('boardTitle', $_smarty_tpl->tpl_vars['groupData']->value['board_name']);
 $_smarty_tpl->_assignInScope('contentData', $_smarty_tpl->tpl_vars['documentData']->value['contents']);

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-15 08:31:04
+/* Smarty version 3.1.30, created on 2017-01-04 07:24:56
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_585246b83ba481_84015613',
+  'unifunc' => 'content_586c95383a0ad2_81451020',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'c06b5a80a1d710f85c7938094effb0b200f4d6e6' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_footer.tpl',
-      1 => 1481787062,
+      1 => 1482997499,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_585246b83ba481_84015613 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c95383a0ad2_81451020 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 	</div>
 	<div class="footer">
@@ -38,6 +38,29 @@ function content_585246b83ba481_84015613 (Smarty_Internal_Template $_smarty_tpl)
 	var is_page = 'admin_main';
 <?php echo '</script'; ?>
 >
+
+<!-- js template start -->
+<?php echo '<script'; ?>
+ type="sux-templete" id="gnbFirstMenu">
+	<ul class="mmenu">
+		<li data-mid="" data-sid="">
+			<a href="#none"><span></span></a>
+			<div class="sub">
+				<ul class="panel" style="" data-startPosY=""></ul>
+			</div>
+		</li>
+	</ul>
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="sux-templete" id="gnbSecondMenu">
+	<li class="smenu" data-mid="" data-sid="">
+		<a href="#none"><span></span></a>
+	</li>
+<?php echo '</script'; ?>
+>
+
+
 <!-- js api -->
 <?php echo '<script'; ?>
  src="https://code.jquery.com/jquery-1.12.4.min.js"><?php echo '</script'; ?>

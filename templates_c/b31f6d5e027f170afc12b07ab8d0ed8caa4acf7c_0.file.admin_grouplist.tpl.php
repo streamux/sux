@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-16 06:13:05
+/* Smarty version 3.1.30, created on 2017-01-04 07:25:04
   from "/Applications/MAMP/htdocs/sux/modules/member/tpl/admin_grouplist.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_585377e1d32e89_97432911',
+  'unifunc' => 'content_586c9540d868b1_02441512',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b31f6d5e027f170afc12b07ab8d0ed8caa4acf7c' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/member/tpl/admin_grouplist.tpl',
-      1 => 1481865184,
+      1 => 1483063400,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_585377e1d32e89_97432911 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c9540d868b1_02441512 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
 $_smarty_tpl->_assignInScope('footerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['footer']);
@@ -35,23 +35,13 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 			</div>
 		</div>
 		<div class="box">
-			<dl>
-				<dt>
+			<ul>
+				<li>
 					<img src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
-				</dt>
-				<dt>
-					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>
-				</dt>
-				<dd>							
-					<span id="articleMemberDelTitle" class="button-delall">
-						<!--
-						@ jquery templete
-						@ name articleMemberDelTitle_tmpl
-						-->
-					</span>
-				<dd>
-			</dl>
+modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>			
+				</li>
+			</ul>
 			<table summary="회원목록을 보여줍니다." cellspacing="0">
 				<caption><span class="blind">회원목록</span></caption>
 				<colgroup>

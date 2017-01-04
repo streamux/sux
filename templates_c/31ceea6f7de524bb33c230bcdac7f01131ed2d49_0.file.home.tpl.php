@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-21 10:31:44
+/* Smarty version 3.1.30, created on 2017-01-04 07:24:28
   from "/Applications/MAMP/htdocs/sux/modules/document/contents/home.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_585a4c00a0ee06_79912254',
+  'unifunc' => 'content_586c951cbc6770_18699554',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '31ceea6f7de524bb33c230bcdac7f01131ed2d49' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/document/contents/home.tpl',
-      1 => 1482312605,
+      1 => 1483089214,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_585a4c00a0ee06_79912254 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c951cbc6770_18699554 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('rootPath', $_smarty_tpl->tpl_vars['skinPathList']->value['root']);
 $_smarty_tpl->_assignInScope('title', $_smarty_tpl->tpl_vars['groupData']->value['document_name']);
 $_smarty_tpl->_assignInScope('headerPath', $_smarty_tpl->tpl_vars['skinPathList']->value['header']);
@@ -32,21 +32,21 @@ $_smarty_tpl->_subTemplateRender(((string)$_smarty_tpl->tpl_vars['headerPath']->
 	<div class="swiper-container swiper-container-visual">
 		<div class="swiper-wrapper">			
 			<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img2.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img3.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img4.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
+				<img data-src="modules/document/tpl/images/slider_img.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img2.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img3.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img4.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
 		</div>
 		<div class="swiper-pagination swiper-pagination-visual"></div>
 	</div>

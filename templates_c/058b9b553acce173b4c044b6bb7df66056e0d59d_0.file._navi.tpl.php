@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-13 09:02:06
+/* Smarty version 3.1.30, created on 2017-01-04 07:24:43
   from "/Applications/MAMP/htdocs/sux/modules/board/skin/default/_navi.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_584faafea29c51_83189873',
+  'unifunc' => 'content_586c952b81b674_28830043',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '058b9b553acce173b4c044b6bb7df66056e0d59d' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/board/skin/default/_navi.tpl',
-      1 => 1481616124,
+      1 => 1482303296,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_584faafea29c51_83189873 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c952b81b674_28830043 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_assignInScope('pagination', $_smarty_tpl->tpl_vars['documentData']->value['pagination']);
 if ($_smarty_tpl->tpl_vars['pagination']->value['okpage'] != 'yes') {?>
 	<?php if ($_smarty_tpl->tpl_vars['requestData']->value['search'] != '') {?>

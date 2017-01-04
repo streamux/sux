@@ -7,21 +7,21 @@
 	<div class="swiper-container swiper-container-visual">
 		<div class="swiper-wrapper">			
 			<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img2.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img3.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
-					<div class="swiper-slide swiper-slide-size">
-						<img data-src="modules/document/tpl/images/slider_img4.jpg" class="swiper-lazy">
-						<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
-					</div>
+				<img data-src="modules/document/tpl/images/slider_img.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img2.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img3.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
+			<div class="swiper-slide swiper-slide-size">
+				<img data-src="modules/document/tpl/images/slider_img4.jpg" class="swiper-lazy">
+				<div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
+			</div>
 		</div>
 		<div class="swiper-pagination swiper-pagination-visual"></div>
 	</div>

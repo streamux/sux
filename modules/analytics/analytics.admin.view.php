@@ -126,7 +126,13 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromConnectSite('id, name', $where);
+		$result = $this->model->selectFromConnectSite('id, name', $where);	
+
+		/*while($rows = $this->model->getMySqlFetchArray($result)) {
+			foreach ($rows as $key => $value) {
+				echo $key . ' : ' . $value;
+			}
+		}*/
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {

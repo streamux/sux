@@ -1,0 +1,6 @@
+#generated files 
+node_modules/
+
+#test files
+*.backup
+*.back

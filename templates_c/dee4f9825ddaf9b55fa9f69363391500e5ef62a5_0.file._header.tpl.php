@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-18 07:06:38
+/* Smarty version 3.1.30, created on 2017-01-04 07:24:56
   from "/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_5856276e254b66_09622205',
+  'unifunc' => 'content_586c9538376632_28124557',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dee4f9825ddaf9b55fa9f69363391500e5ef62a5' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/modules/admin/tpl/_header.tpl',
-      1 => 1482041194,
+      1 => 1483001507,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5856276e254b66_09622205 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c9538376632_28124557 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 <!DOCTYPE html>
 <html lang="ko">
@@ -32,7 +32,7 @@ function content_5856276e254b66_09622205 (Smarty_Internal_Template $_smarty_tpl)
 	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-common/css/sux_common.min.css">
+common/css/sux_common.css">
 	<link rel="stylesheet" type="text/css" href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 modules/admin/tpl/css/layout.css">
 	<?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {?>

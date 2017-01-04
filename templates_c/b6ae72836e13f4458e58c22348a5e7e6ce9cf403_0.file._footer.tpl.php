@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.30, created on 2016-12-19 09:09:53
+/* Smarty version 3.1.30, created on 2017-01-04 07:23:53
   from "/Applications/MAMP/htdocs/sux/common/_footer.tpl" */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.30',
-  'unifunc' => 'content_585795d133e630_38731652',
+  'unifunc' => 'content_586c94f9d69ff9_33161280',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b6ae72836e13f4458e58c22348a5e7e6ce9cf403' => 
     array (
       0 => '/Applications/MAMP/htdocs/sux/common/_footer.tpl',
-      1 => 1482134991,
+      1 => 1483073807,
       2 => 'file',
     ),
   ),
@@ -20,14 +20,14 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_585795d133e630_38731652 (Smarty_Internal_Template $_smarty_tpl) {
+function content_586c94f9d69ff9_33161280 (Smarty_Internal_Template $_smarty_tpl) {
 ?>
 		<div class="footer">
 			<ul class="clearfix">
 				<li><a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-login/login.php?action=login">로그인</a></li>
+login">로그인</a></li>
 				<li><a href="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-member/member.php?action=join">회원가입</a></li>
+member-join">회원가입</a></li>
 				<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
 			</ul>	
 			<p>
@@ -39,7 +39,7 @@ member/member.php?action=join">회원가입</a></li>
 	</div>	
 </div>
 
-<!-- mobile menu start -->
+<!-- mobile gnb start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
 <div class="mobile-gnb-case mobile-gnb-case-off">
 	<div class="menu-btn-close">
@@ -89,6 +89,26 @@ member-join">회원가입</a></div>
 
 <!-- js template start -->
 <?php echo '<script'; ?>
+ type="sux-templete" id="gnbFirstMenu">
+	<ul class="mmenu">
+		<li data-mid="" data-sid="">
+			<a href="#none"><span></span></a>
+			<div class="sub">
+				<ul class="panel" style="" data-startPosY=""></ul>
+			</div>
+		</li>
+	</ul>
+<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ type="sux-templete" id="gnbSecondMenu">
+	<li class="smenu" data-mid="" data-sid="">
+		<a href="#none"><span></span></a>
+	</li>
+<?php echo '</script'; ?>
+>
+
+<?php echo '<script'; ?>
  type="sux-templete" id="suxMobileGnbFirstMenu">
 	<li data-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
@@ -107,6 +127,7 @@ member-join">회원가입</a></div>
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 <?php echo '</script'; ?>
 >
+
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['group']) {
 echo '<script'; ?>
  type="text/javascript">
@@ -162,6 +183,10 @@ common/js/idangerous.swiper.min.js"><\/script>')<?php echo '</script'; ?>
 common/js/jsux.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
+>	jsux.rootPath = <?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
+;<?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
 common/js/jsux_common.min.js"><?php echo '</script'; ?>
 >
@@ -175,10 +200,6 @@ common/js/jsux_app_stage.min.js"><?php echo '</script'; ?>
 >
 <?php if ($_smarty_tpl->tpl_vars['documentData']->value['module_code'] != '') {
 echo '<script'; ?>
->	jsux.rootPath = <?php echo $_smarty_tpl->tpl_vars['rootPath']->value;?>
-;<?php echo '</script'; ?>
->
-<?php echo '<script'; ?>
  type="text/javascript" src="<?php echo $_smarty_tpl->tpl_vars['skinPathList']->value['dir'];?>
 /js/<?php echo $_smarty_tpl->tpl_vars['documentData']->value['module_code'];?>
 .js"><?php echo '</script'; ?>
@@ -186,7 +207,7 @@ echo '<script'; ?>
 <?php }
 if ($_smarty_tpl->tpl_vars['documentData']->value['jscode'] != '') {
 echo '<script'; ?>
- type="text/javascript">
+ type="text/javascript">	
 	jsux.fn['<?php echo $_smarty_tpl->tpl_vars['documentData']->value['jscode'];?>
 '].init();
 <?php echo '</script'; ?>
