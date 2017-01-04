@@ -5,4 +5,4 @@ $context = Context::getInstance();
 $context->init();
 
 $router = ModuleRouter::getInstance();
-$router->init();
+$router->init(); 
