@@ -151,7 +151,7 @@ jsux.fn.add = {
 
 			trace( e.msg );
 			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 			} 
 		});
 	},
@@ -169,7 +169,7 @@ jsux.fn.add = {
 		});
 		$("input[name=cancel]").on("click", function(e) {
 
-			jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 		});
 		$("input[name=checkID]").on("click",function(e) {				
 
@@ -300,7 +300,7 @@ jsux.fn.modify = {
 
 			trace( e.msg );			
 			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 			}
 		});
 	},
@@ -319,7 +319,7 @@ jsux.fn.modify = {
 
 		$("input[name=cancel]").on("click", function(e) {
 
-			jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 		});
 	},
 	setLayout: function() {
@@ -389,7 +389,7 @@ jsux.fn.delete = {
 
 			trace( e.msg );
 			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 			}
 		});
 	},
@@ -405,7 +405,7 @@ jsux.fn.delete = {
 			if (key == "del") {
 				self.sendJson();
 			} else if (key == "back") {
-				jsux.goURL(jsux.rootPath + menuList[1].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 			}				
 		});
 	},

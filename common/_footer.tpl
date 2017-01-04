@@ -1,7 +1,7 @@
 		<div class="footer">
 			<ul class="clearfix">
-				<li><a href="{$rootPath}login/login.php?action=login">로그인</a></li>
-				<li><a href="{$rootPath}member/member.php?action=join">회원가입</a></li>
+				<li><a href="{$rootPath}login">로그인</a></li>
+				<li><a href="{$rootPath}member-join">회원가입</a></li>
 				<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
 			</ul>	
 			<p>
@@ -11,7 +11,7 @@
 	</div>	
 </div>
 
-<!-- mobile menu start -->
+<!-- mobile gnb start -->
 <div class="ui-bg-cover ui-bg-cover-off"></div>
 <div class="mobile-gnb-case mobile-gnb-case-off">
 	<div class="menu-btn-close">
@@ -56,6 +56,22 @@
 <!-- end -->
 
 <!-- js template start -->
+<script type="sux-templete" id="gnbFirstMenu">
+	<ul class="mmenu">
+		<li data-mid="" data-sid="">
+			<a href="#none"><span></span></a>
+			<div class="sub">
+				<ul class="panel" style="" data-startPosY=""></ul>
+			</div>
+		</li>
+	</ul>
+</script>
+<script type="sux-templete" id="gnbSecondMenu">
+	<li class="smenu" data-mid="" data-sid="">
+		<a href="#none"><span></span></a>
+	</li>
+</script>
+
 <script type="sux-templete" id="suxMobileGnbFirstMenu">
 	<li data-code=""><a href="#"></a></li>
 </script>
@@ -69,6 +85,7 @@
 <script type="sux-templete" id="suxMobileGnbSecondMenu">
 	<li data-code="" data-sub-code=""><a href="#"></a></li>
 </script>
+
 {if $documentData.group}
 <script type="text/javascript">
 	var loginObj = loginObj || {};
@@ -91,15 +108,15 @@
 <!-- end -->
 <!-- js customize start -->
 <script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
+<script>	jsux.rootPath = {$rootPath};</script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
 {if $documentData.module_code != ''}
-<script>	jsux.rootPath = {$rootPath};</script>
 <script type="text/javascript" src="{$skinPathList.dir}/js/{$documentData.module_code}.js"></script>
 {/if}
 {if $documentData.jscode != ''}
-<script type="text/javascript">
+<script type="text/javascript">	
 	jsux.fn['{$documentData.jscode}'].init();
 </script>
 {/if}

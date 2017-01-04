@@ -10,6 +10,25 @@
 <script type="text/javascript">
 	var is_page = 'admin_main';
 </script>
+
+<!-- js template start -->
+<script type="sux-templete" id="gnbFirstMenu">
+	<ul class="mmenu">
+		<li data-mid="" data-sid="">
+			<a href="#none"><span></span></a>
+			<div class="sub">
+				<ul class="panel" style="" data-startPosY=""></ul>
+			</div>
+		</li>
+	</ul>
+</script>
+<script type="sux-templete" id="gnbSecondMenu">
+	<li class="smenu" data-mid="" data-sid="">
+		<a href="#none"><span></span></a>
+	</li>
+</script>
+
+
 <!-- js api -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script>window.jQuery || document.write('<script src="{$rootPath}common/js/jquery.min.js"><\/script>')</script>

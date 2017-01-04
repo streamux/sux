@@ -29,31 +29,23 @@ class InstallController extends Controller {
 			$resultYN = 'N';
 		}else{
 
-			$str = "";
-			$str .= "<?\n";
-			$str .= "\$db_hostname = '$db_hostname';\n";
-			$str .= "\$db_userid = '$db_userid';\n";
-			$str .= "\$db_password = '$db_password';\n";
-			$str .= "\$db_database = '$db_database';\n";
-			$str .= "\$db_table_prefix = '$db_table_prefix';\n";
-			$str .= "?>";
+			$content = array();	
+			$content[] = "<?php";
+			$content[] = "\$db_hostname = '$db_hostname';";
+			$content[] = "\$db_userid = '$db_userid';";
+			$content[] = "\$db_password = '$db_password';";
+			$content[] = "\$db_database = '$db_database';";
+			$content[] = "\$db_table_prefix = '$db_table_prefix';";
+			$content[] = "?>";
 
-			fwrite($fp, $str, strlen($str));
+			$buffer = implode(PHP_EOL, $content);
+			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
 
-			$msg = "데이터베이스 설정을 완료하였습니다.<br>";
-			$resultYN = 'Y';
+			@chmod($file,0644);
 
-			if (file_exists($file)) {
-				$result = @chmod($file,0777);
-				if (!$result) {
-					$msg .= $file_name . ' 권한설정을 실패하였습니다.';
-					$resultYN = 'N';
-				}
-			} else {
-				$msg .= $file_name . ' 파일이 존재하지 않습니다.';
-				$resultYN = 'N';
-			}			
+			$msg .= " DB 설정을 완료하였습니다.<br>";
+			$resultYN = 'Y';
 		}
 
 		if ($resultYN == 'N') {
@@ -95,30 +87,22 @@ class InstallController extends Controller {
 				$yourhome	 = 'http://'.$yourhome	;
 			}
 
-			$str = "";
-			$str .= "<?\n";
-			$str .= "\$admin_id = '$admin_id';\n";
-			$str .= "\$admin_pwd = '$admin_pwd';\n";
-			$str .= "\$admin_email = '$admin_email';\n";	
-			$str .= "\$yourhome = '$yourhome';\n";
-			$str .= "?>";
+			$content = array();	
+			$content[] = "<?";
+			$content[] = "\$admin_id = '$admin_id';";
+			$content[] = "\$admin_pwd = '$admin_pwd';";
+			$content[] = "\$admin_email = '$admin_email';";	
+			$content[] = "\$yourhome = '$yourhome';";
+			$content[] = "?>";
 
-			fwrite($fp, $str, strlen($str));
+			$buffer = implode(PHP_EOL, $content);
+			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
+
+			@chmod($file,0644);
 
 			$msg = "관리자계정 설정을 완료하였습니다.<br>";
 			$resultYN = 'Y';
-
-			if (file_exists($file)) {
-				$result = @chmod($file,0777);
-				if (!$result) {
-					$msg .= $file_name . ' 권한설정을 실패하였습니다.';
-					$resultYN = 'N';
-				}
-			} else {
-				$msg .= $file_name . ' 파일이 존재하지 않습니다.';
-				$resultYN = 'N';
-			}
 		}
 
 		if ($resultYN == 'N') {
@@ -141,6 +125,12 @@ class InstallController extends Controller {
 
 		$resultYN = 'Y';
 		$msg = '';
+
+		$queriesPath = _SUX_PATH_ . 'caches/queries';
+		if (!file_exists($queriesPath)) {
+			@mkdir($queriesPath);
+		}
+
 		$tableList = array();
 
 		$file_name = 'config.table.php';
@@ -155,12 +145,12 @@ class InstallController extends Controller {
 		$context = Context::getInstance();
 		$context->init();
 
-
 		$query = new Query();
 		$schemas = new QuerySchema();
+		$cacheFile = CacheFile::getInstance();
 
 		// 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
-		$oDB = DB::getInstance();
+		$oDB = DB::getInstance();		
 
 		$tablePrefix = $context->getPrefix();
 		$moduleList = Utils::readDir('./modules');
@@ -183,6 +173,7 @@ class InstallController extends Controller {
 						$tableName = $tablePrefix . '_' . $table['name'];
 						$query->setTable($tableName);											
 
+						$cacheColumn = array();
 						$columns = $table[0]->column;
 						foreach ($columns as $key => $value) {
 
@@ -194,7 +185,13 @@ class InstallController extends Controller {
 							$autoincrement = isset($value['auto_increment']) ? $value['auto_increment'] : null;
 							$primarykey = isset($value['primary_key']) ? $value['primary_key'] : null;
 							$schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
+
+							$cacheColumn[] = $name;
 						}
+
+						// setup query's columns-cache-file
+						$cachePath = _SUX_PATH_ . 'caches/queries/' . $table['name'] . '.getColumns.cache.php';
+						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
 
 						$keyName = (string) $table['name'];	
 						$tableList[$keyName] = $tableName;
@@ -205,7 +202,7 @@ class InstallController extends Controller {
 							$resultYN = 'N';
 							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
 							//$msg .= $tracer->getMessage();
-						} else {																			
+						} else {																
 							$msg .= '@ table->' . $tableName . " [ result : success ] ----<br>";
 						}
 					}
@@ -218,33 +215,26 @@ class InstallController extends Controller {
 			$msg .= '파일을 여는데 실패했습니다.';
 			$resultYN = 'N';
 		} else {
+			$content = array();	
+			$content[] = "<?php";
+
+			$str = "\$table_list = array(";
 			$index = 0;
-			$str = "";
-			$str .= "<?php\n";
-			$str .= "\$table_list = array(\n";
 			foreach ($tableList as $key => $value) {
-				$str .= ($index === 0) ? "" : ",\n";
+				$str .= ($index === 0) ? "" : ",";
 				$str .= "'".$key."'=>'".$value."'";
 				$index++;
 			}
-			$str .= "\n);\n";
-			$str .= "?>";
+			$str .= ");";
+			$content[] = $str;
 
-			fwrite($fp, $str, strlen($str));
+			$buffer = implode(PHP_EOL, $content);
+			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
 
-			$msg .= "테이블 리스트 설정을 완료하였습니다.<br>";
+			@chmod($file,0644);
 
-			if (file_exists($file)) {
-				$result = @chmod($file,0777);
-				if (!$result) {
-					$msg .= $file_name . ' 권한설정을 실패하였습니다.';
-					$resultYN = 'N';
-				}
-			} else {
-				$msg .= $file_name . ' 파일이 존재하지 않습니다.';
-				$resultYN = 'N';
-			}			
+			$msg .= "테이블 리스트 설정을 완료하였습니다.<br>";		
 		}
 
 		$data = array(	'msg'=>$msg,

@@ -3,27 +3,26 @@ define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/'
 define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
-	
+	'CacheFile'=>'classes/caches/CacheFile.class.php',
 	'Controller'=>'classes/mvc/Controller.php',
 	'Model'=>'classes/mvc/Model.php',
 	'View'=>'classes/mvc/View.php',
 	'Context'=>'classes/context/Context.class.php',
-	'DB'=>'classes/db/DB.class.php',
-	'Query'=>'classes/db/Query.class.php',
-	'QueryWhere'=>'classes/db/Query.where.class.php',
-	'QuerySchema'=>'classes/db/Query.schema.class.php',
-	'UIError'=>'classes/error/UI.error.class.php',
-	'ModuleCache'=>'classes/modules/ModuleCache.class.php',
+	'DB'=>'classes/db/DB.class.php',	
+	'UIError'=>'classes/error/UIError.class.php',	
 	'ModuleHandler'=>'classes/modules/ModuleHandler.class.php',
 	'ModuleRouter'=>'classes/modules/ModuleRouter.class.php',	
 	'Object'=>'classes/object/Object.class.php',	
 	'Navigator'=>'classes/plugin/Navigator.class.php',
+	'Query'=>'classes/queries/Query.class.php',
+	'QueryWhere'=>'classes/queries/QueryWhere.class.php',
+	'QuerySchema'=>'classes/queries/QuerySchema.class.php',
 	'Template'=>'classes/template/Template.class.php',
 	'JsonEncoder'=>'classes/utils/JsonEncoder.class.php',
 	'Tracer'=>'classes/utils/Tracer.class.php',	
 	'URIToMethod'=>'classes/utils/URIToMethod.class.php',
 	'Utils'=>'classes/utils/Utils.class.php',
-	'UtilsString'=>'classes/utils/Utils.string.class.php',
+	'UtilsString'=>'classes/utils/UtilsString.class.php',
 	'Epi'=>'libs/epiphany/Epi.php',
 	'Smarty'=>'libs/smarty/Smarty.class.php'
 ), CASE_LOWER);
