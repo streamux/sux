@@ -13,11 +13,12 @@ class InstallModule  extends View {
 	function output() {
 
 		$UIError = UIError::getInstance();
+
 		/**
 		 * @class Template
 		 * @brief Template is a Wrapper Class based on Smarty
 		 */
-		$__template = new Template();
+		$__template = new Template();		
 		if (is_readable($this->skin_path_list['contents'])) {
 			$__template->assign('copyrightPath', $this->copyright_path);
 			$__template->assign('skinPathList', $this->skin_path_list);
