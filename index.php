@@ -8,8 +8,3 @@ echo _SUX_PATH_;
 
 $router = ModuleRouter::getInstance();
 $router->init();
-<<<<<<< HEAD
-
-=======
-*/
->>>>>>> develop-20161221
