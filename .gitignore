@@ -10,3 +10,4 @@ config.table.php
 #test files
 *.backup
 *.back
+rmdir.php
