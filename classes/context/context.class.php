@@ -9,9 +9,6 @@ class Context {
 	private $parameter_list = array();
 	public $db_info = NULL;
 	private $admin_info = Null;
-	var $class_name = 'context';
-
-	function __contruct() {}
 
 	public static function &getInstance() {
 

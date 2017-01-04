@@ -6,3 +6,4 @@ $context->init();
 
 $router = ModuleRouter::getInstance();
 $router->init();
+
