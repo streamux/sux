@@ -1,5 +1,10 @@
-#generated files 
+#generated directory
 node_modules/
+templates_c/
+
+#config files
+config.admin.php
+config.db.php
 
 #test files
 *.backup
