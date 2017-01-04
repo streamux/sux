@@ -79,7 +79,7 @@
 				</div>
 			</li>
 		</ui>
-		<div class="pageview activate-false">       
+		<div class="pageview activate-true">       
 			<table summary="페이지 별 클릭 수 정보를 제공합니다.">
 				<caption><span class="blind">페이지 별 클릭 수</span></caption>
 				<colgroup>

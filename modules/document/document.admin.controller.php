@@ -32,25 +32,42 @@ class DocumentAdminController extends Controller
 			}
 		}
 
-		$filters = '/(id|contents|_method)+$/i';
-		$column = array('');
-		foreach ($posts as $key => $value) {
-			if (!(preg_match($filters, $key))) {
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = _SUX_PATH_ . 'caches/queries/document.getColumns.cache.php';
+		$cacheFile = CacheFile::getInstance();
+		$cacheColumns = $cacheFile->readColumnsForQuery($cachePath);
+
+		$columns = array();
+		for($i=0; $i<count($cacheColumns); $i++) {
+			$key = $cacheColumns[$i];
+			$value = $posts[$key];
+
+			if (isset($value) && $value) {
 				if ($key === 'contents_path') {
 					if (!preg_match('/(.tpl+)$/i', $value)) {
-						$value = $value . $category . '.tpl';
-						$contents_path = $value;
+						$value = $value . $category . '.tpl';						
 					}
+					$contents_path = $value;
 				}
-
-				$column[] = $value;			
-			}			
+				$columns[] = $value;
+			} else {
+				if ($key === 'date') {
+					$columns[] = 'now()';
+				} else if ($key === 'ip') {
+					$columns[] = $_SEVER['REMOTE_ADDR'];
+				}  else {
+					$columns[] = '';
+				}				
+			}						
 		}
-		$column[] = 'now()';
+		// end of page
 
-		$result = $this->model->insertIntoDocument($column);
+		$result = $this->model->insertIntoDocument($columns);
 		if (!$result) {
-			$msg .= "${category}페이지 등록을 실패하였습니다.<br>";
+			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
 		}else{
 
 			//  컨텐츠 내용 저장 
@@ -61,7 +78,7 @@ class DocumentAdminController extends Controller
 			$msg .= "${category}페이지가 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/document.cache.php';
+			$filePath = _SUX_PATH_ . 'caches/routes/document.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -74,8 +91,8 @@ class DocumentAdminController extends Controller
 				}
 			}
 
-			$modueCache = ModuleCache::getInstance();
-			$modueCache->saveCacheForRoute($filePath, $routes);
+			$cacheFile = CacheFile::getInstance();
+			$cacheFile->saveRoute($filePath, $routes);
 		}		
 		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"result"=>$resultYN,
@@ -98,29 +115,40 @@ class DocumentAdminController extends Controller
 		$msg = "";
 		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
 		
-		$filters = '/(id|category|contents|_method)+$/';
-		$column = array();
-		foreach ($posts as $key => $value) {			
-			if (!(preg_match($filters, $key))) {
-				$column[$key] = $value;			
-			}			
-		}
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = _SUX_PATH_ . 'caches/queries/document.getColumns.cache.php';
+		$cacheFile = CacheFile::getInstance();
+		$cacheColumns = $cacheFile->readColumnsForQuery($cachePath);
 
-		if (!preg_match('/(.tpl+)$/i', $contents_path)) {
-			$column['contents_path'] = $contents_path . $category . '.tpl';
-		} else {
-			$column['contents_path'] = $contents_path;
-		}		
+		$columns = array();
+		for($i=2; $i<count($cacheColumns); $i++) {
+			$key = $cacheColumns[$i];
+			$value = $posts[$key];
+
+			if (isset($value) && $value) {
+				if ($key === 'contents_path') {
+					if (!preg_match('/(.tpl+)$/i', $value)) {
+						$value = $value . $category . '.tpl';						
+					}
+					$contents_path = $value;
+				}
+				$columns[$key] = $value;
+			} 					
+		}
+		// end of page	
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->updateDocument($column, $where);
+		$result = $this->model->updateDocument($columns, $where);
 		if (!$result) {
 			$msg .= "$category 페이지 수정을 실패하였습니다.";
 			$resultYN = "N";	
 		} else {
 
-			$contentsPath =Utils::convertAbsolutePath($column['contents_path'], $contentsPath);
+			$contentsPath =Utils::convertAbsolutePath($columns['contents_path'], $contentsPath);
 			$fp = fopen($contentsPath, "w");
 			fwrite($fp, $contents);
 			fclose($fp);
@@ -164,7 +192,7 @@ class DocumentAdminController extends Controller
 			}
 
 			// 라우트 카테고리 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/document.cache.php';
+			$filePath = _SUX_PATH_ . 'caches/routes/document.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -182,8 +210,8 @@ class DocumentAdminController extends Controller
 				}
 			}
 
-			$modueCache = ModuleCache::getInstance();
-			$modueCache->saveCacheForRoute($filePath, $routes);
+			$cacheFile = CacheFile::getInstance();
+			$cacheFile->saveRoute($filePath, $routes);
 		}
 		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"result"=>$resultYN,

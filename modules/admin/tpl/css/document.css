@@ -32,10 +32,14 @@
 .articles .add .box dl dt{padding-left:5px;height: 20;font-weight: bold}
 .articles .add .box dl dd{padding-left:5px;height: 20px}
 .articles .add .box table{margin-bottom:20px;width:100%;text-align:left}
-.articles .add .box table tr td{height: 24px}
-.articles .add .box table tr td:nth-child(1){padding-left:38px;width:120px}
-.articles .add .box table tr td:nth-child(1) span{color:#FF0000}
-.articles .add .box table tr td:nth-child(2) span{display:inline-block}
+.articles .add .box table tr td{height: 34px}
+.articles .add .box table tr td:nth-child(1){padding-left:38px;width:130px}
+.articles .add .box table tr td:nth-child(2){padding-right:20px;}
+.articles .add .box table tr td:nth-child(2) span{display:inline-block;}
+.articles .add .box table tr td input[name=header_path]{width:100%;}
+.articles .add .box table tr td input[name=contents_path]{width:100%;}
+.articles .add .box table tr td input[name=footer_path]{width:100%;}
+.articles .add .box table tr td textarea{width:100%;}
 
 /* del */
 .articles .del .tt {position: relative}

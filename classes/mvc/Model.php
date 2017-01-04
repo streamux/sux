@@ -22,10 +22,10 @@ class Model extends Object {
 
 	function select($query=NULL) {
 
-		$result = $this->db->select($query);
+		$this->result = $this->db->select($query);
 		$this->setFetchArray();
 		$this->setNumRows();
-		return $result;
+		return $this->result;
 	}
 
 	function insert($query=NULL) {
@@ -64,6 +64,16 @@ class Model extends Object {
 
 		$result = $this->db->dropTable($query);
 		return $result;
+	}
+
+	function getMysqlFetchArray($result) {
+
+		return $this->db->getFetchArray($result);
+	}
+
+	function getMysqlNumrows($result) {
+
+		return $this->db->getNumRows($result);
 	}
 
 	function setFetchArray() {

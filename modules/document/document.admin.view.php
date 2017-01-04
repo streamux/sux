@@ -1,5 +1,4 @@
 <?php
-
 class DocumentModule extends View {
 
 	var $class_name = 'document_module';

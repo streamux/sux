@@ -1,4 +1,8 @@
-/* layout */
+/* header */
+.header .util{display:none;height: 20px}
+.header .logo img{width:48px;height:24px;}
+
+/* footer */
 .footer{text-align: center;background-color:#4a4a4a;color:#e3e3e3}
 .footer a{color:#e3e3e3;}
 .footer ul{font-size:0.875em;background-color:#505050}
@@ -7,10 +11,6 @@
 .footer ul li a{display:inline-block;width:100%;height:100%;text-decoration:none;}
 .footer ul li a:hover{background-color:#3e3e3e}
 .footer p span{font-size:0.750em;line-height:40px;vertical-align:middle}
-
-/* header */
-.header .util{display:none;height: 20px}
-.header .logo img{width:60px;height:30px;}
 
 /* ui : icon type */
 .suxic-people{background:url()}
@@ -22,25 +22,25 @@
 .ui-h-3stick .hline3{background-color:#333333;height:2px;margin-top:4px;}
 
 /* gnb icon*/
-.gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x}
+.gnb-icon{overflow:hidden;position:relative;background:url("../images/gnb_icon_bg.png") 0 0 repeat-x;height:75px;}
 .gnb-icon ul li{float:left;position:relative;height:72px}
 .gnb-icon ul li .g-arrow{position:absolute;top:-80px;z-index:1;width:100%;height:75px;background:url("../images/gnb_icon_arrow.png") 50% 0 no-repeat,#404140}
 .gnb-icon ul li .g-icon{position:absolute;top:0;z-index:2;width:100%;height:75px;background:url("../images/gnb_icon.png") 50% 0 no-repeat}
 
 /* gnb */
-.gnb-case{clear:both;position:relative;width:100%;height:50px}
-.gnb{position:absolute;width:100%}
-.gnb .mmenu{float:left;height:50px;line-height:50px;text-align:center;background-color:#3b3c3b}
+.gnb-case{clear:both;position:relative;width:100%;height:50px;background-color:#ffffff;border-bottom: 1px solid #e3e3e3;}
+.gnb{overflow:hidden;position:absolute;width:100%}
+.gnb .mmenu{float:left;line-height:50px;text-align:center}
 .gnb .mmenu a{text-decoration:none}
-.gnb .mmenu span{display:block;width:100%;height:50px;color:#FFFFFF;font-size:1.0625em}
-.gnb .activate{background-color:#404140}
+.gnb .mmenu span{display:block;width:100%;height:50px;color:#333333;font-size:1.250em;}
+.gnb .activate{background-color:#3e3e3e}
 .gnb .activate a span{color:#FFFFFF}
 
 .gnb .sub{overflow:hidden;height:0}
-.gnb .sub .panel{position:relative;top:0}
+.gnb .sub .panel{position:relative;top:100px}
 .gnb .sub .smenu{width:100%;border-bottom:1px solid #FFFFFF;text-align:left;line-height:34px;background-color:#EFEFEF}
-.gnb .sub .smenu:last-child{border-bottom:none}
 .gnb .sub .smenu span{display:block;padding-left:13%;height:34px;color:#333333;font-size:1em}
+
 .gnb .sub .activate{background-color:#999999}
 .gnb .sub .activate a span{color:#FFFFFF}
 

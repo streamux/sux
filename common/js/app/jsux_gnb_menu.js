@@ -16,7 +16,8 @@ jsux.gnb.Menu = jsux.View.create();
 			_oldSid			= -1,
 			_activateMid	= -1,
 			_activateSid		= -1,
-			_timer			= -1;
+			_timer			= -1,
+			_activate = 'activate';
 
 		this.update = function( o,  value ) {
 
@@ -25,22 +26,29 @@ jsux.gnb.Menu = jsux.View.create();
 			this.setEvent();
 		};
 
+		this.setActivateClass = function( className) {
+
+			_activate = className;
+		};
+
 		this.setUI = function() {
 
 			var ty = 0;
+			var markup = $('#gnbFirstMenu').html();
+			var subMarkup = $('#gnbSecondMenu').html();
 
 			$( _data ).each(function(mindex) {
 
 				ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * (34+1) : 0;
-
-				_stage.append('<ul class="mmenu">'+
-									'<li data-mid="' + mindex + '" data-sid="-1">' +
-										'<a href="#none"><span>'+_data[mindex].label+'</span></a>'+
-										'<div class="sub">'+
-											'<ul class="panel" style="top:'+ ty +'px"data-startPosY="'+ ty +'px"></ul>'+
-										'</div>'+
-									'</li>'+
-								'</ul>');
+			
+				_stage.append(markup);
+				var menu = _stage.find('.mmenu:eq('+mindex+') > li');
+				menu.attr('data-mid', mindex);
+				menu.attr('data-sid', -1);
+				menu.find('> a > span').text(_data[mindex].label);
+				menu.find('> a').attr('href', _data[mindex].link);
+				menu.find('.sub > .panel').attr('data-startPosY', ty+'px');
+				menu.find('.sub > .panel').css('top', ty+'px');
 			});
 
 			this.alignUI();
@@ -48,10 +56,13 @@ jsux.gnb.Menu = jsux.View.create();
 			$( _data ).each(function(mindex) {
 
 				$( _data[mindex].menu ).each(function(sindex) {						
-					_stage.find('.mmenu:eq('+mindex+') .sub > ul').append(
-						'<li class="smenu" data-mid="' + mindex + '" data-sid="' + sindex + '">'+
-							'<a href="#none"><span>'+_data[mindex].menu[sindex].label+'</span></a>'+
-						'</li>');
+					_stage.find('.mmenu:eq('+mindex+') .sub > ul').append(subMarkup);
+
+					var subMenu = _stage.find('.mmenu:eq('+mindex+') .sub > ul > li:eq('+sindex+')');
+					subMenu.attr('data-mid', mindex);
+					subMenu.attr('data-sid', sindex);
+					subMenu.find('> a').attr('href', _data[mindex].menu[sindex].link);
+					subMenu.find('> a > span').text(_data[mindex].menu[sindex].label);
 				});
 			});
 		};
@@ -97,6 +108,7 @@ jsux.gnb.Menu = jsux.View.create();
 
 				e.preventDefault();
 				_scope.stopTimer();
+
 				_m.menuOn( $( this ).parent().attr('data-mid'), -1 );	
 			});
 
@@ -116,7 +128,9 @@ jsux.gnb.Menu = jsux.View.create();
 					return;
 				}
 
-				jsux.goURL( url, '_self' );	
+				console.log(jsux.rootPath);
+
+				jsux.goURL( jsux.rootPath + url, '_self' );	
 			});
 
 			_stage.find('.smenu > a').on('mouseover', function(e){
@@ -138,7 +152,7 @@ jsux.gnb.Menu = jsux.View.create();
 				e.preventDefault();
 
 				var url = _data[$( this ).parent().attr('data-mid')].menu[$( this ).parent().attr('data-sid')].link;
-				jsux.goURL( url, '_self' );				
+				jsux.goURL( jsux.rootPath + url, '_self' );				
 			});
 		};
 
@@ -167,14 +181,14 @@ jsux.gnb.Menu = jsux.View.create();
 					if (_mid > -1) menu 	= _list.eq(_mid);
 					if (_sid > -1) submenu 	= menu.find('.sub .smenu').eq(_sid);
 
-					if (menu && !menu.hasClass('activate')) {
+					if (menu && !menu.hasClass(_activate)) {
 
 						mask 	= menu.find('.sub');
 						panel	= menu.find('.sub .panel');
 						ty 		= 0;
 						th 		= _list.eq(_mid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						menu.addClass('activate');
+						menu.addClass(_activate);
 						_scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 
 							var mh = th - panel.css('top').replace(/[^(0-9)]/gi, '');
@@ -182,8 +196,8 @@ jsux.gnb.Menu = jsux.View.create();
 						}});
 					}
 					
-					if (submenu && !submenu.hasClass('activate')) {
-						submenu.addClass('activate');
+					if (submenu && !submenu.hasClass(_activate)) {
+						submenu.addClass(_activate);
 					}
 
 					if (_oldMid != _mid && _oldMid > -1) {
@@ -193,7 +207,7 @@ jsux.gnb.Menu = jsux.View.create();
 						oldty 		= _list.eq(_oldMid).find('.sub .panel').attr('data-startPosY');
 						oldth 		= _list.eq(_oldMid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						_list.eq(_oldMid).removeClass('activate');
+						_list.eq(_oldMid).removeClass(_activate);
 						_scope.tween( oldPanel, 10, {'top': oldty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 							
 							var mh = oldth - oldPanel.css('top').replace(/[^(0-9)]/gi, '');
@@ -202,7 +216,7 @@ jsux.gnb.Menu = jsux.View.create();
 					}
 
 					if (_oldSid != _sid && _oldSid > -1) {
-						_list.eq(_oldMid).find('.sub .smenu').eq(_oldSid).removeClass('activate');
+						_list.eq(_oldMid).find('.sub .smenu').eq(_oldSid).removeClass(_activate);
 					}					
 
 					_oldMid	= _mid;
@@ -214,13 +228,13 @@ jsux.gnb.Menu = jsux.View.create();
 					if (_mid > -1) menu 	= _list.eq(_mid);
 					if (_sid > -1) submenu 	= menu.find('.sub .smenu').eq(_sid);
 
-					if (menu && menu.hasClass('activate')) {
+					if (menu && menu.hasClass(_activate)) {
 
 						panel 	= menu.find('.sub .panel');
 						ty 		= menu.find('.sub .panel').attr('data-startPosY');
 						oldth	= _list.eq(_mid).find('.sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
 
-						menu.removeClass('activate');
+						menu.removeClass(_activate);
 						_scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
 						
 							var mh = oldth - $( panel ).css('top').replace(/[^(0-9)]/gi, '');
@@ -228,8 +242,8 @@ jsux.gnb.Menu = jsux.View.create();
 						}});
 					}
 
-					if (submenu && submenu.hasClass('activate')) {
-						submenu.removeClass('activate');
+					if (submenu && submenu.hasClass(_activate)) {
+						submenu.removeClass(_activate);
 					}
 					break;
 

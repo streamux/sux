@@ -26,6 +26,7 @@ module.exports = function(grunt) {
 			},
 			'common-admin-app': {
 				src: [
+					'common/js/app/jsux_gnb_menu.js',
 					'common/js/app/jsux_admin_gnb_*.js'
 				],
 				dest: 'common/js/jsux_admin_app.js'

@@ -81,7 +81,7 @@ jsux.fn.groupAdd = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
+				jsux.goURL( jsux.rootPath + menuList[0].menu[0].link);
 			}
 		});
 	},
@@ -107,7 +107,7 @@ jsux.fn.groupAdd = {
 
 		$('input[name=cancel]').on('click', function(e) {
 
-			jsux.goURL(jsux.rootPath + menuList[0].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[0].menu[0].link);
 		});
 	},
 	init: function() {
@@ -130,7 +130,7 @@ jsux.fn.groupDelete = {
 			trace( e.msg );
 
 			if (e.result == 'Y') {
-				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
+				jsux.goURL( jsux.rootPath + menuList[0].menu[0].link);
 			} 
 		});
 	},
@@ -143,7 +143,7 @@ jsux.fn.groupDelete = {
 			if (key == 'del') {
 				self.sendJSON();
 			} else if (key == 'back') {
-				jsux.goURL( jsux.rootPath + menuList[0].sub[0].link);
+				jsux.goURL( jsux.rootPath + menuList[0].menu[0].link);
 			}
 			e.preventDefault();
 		});
@@ -338,7 +338,7 @@ jsux.fn.add = {
 			trace( e.msg );
 
 			if (e.result == 'Y') {
-				jsux.goURL(menuList[0].sub[0].link);
+				jsux.goURL(menuList[0].menu[0].link);
 			}
 		});
 	},
@@ -387,7 +387,7 @@ jsux.fn.add = {
 		});
 		$('input[name=cancel]').on('click', function(e) {
 
-			jsux.goURL(menuList[0].sub[0].link);
+			jsux.goURL(menuList[0].menu[0].link);
 		});
 
 		$('input[name=passwordConf]').on('blur', function() {

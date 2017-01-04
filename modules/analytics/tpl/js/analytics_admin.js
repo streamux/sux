@@ -53,7 +53,7 @@ jsux.fn.connectSiteAdd = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 			}
 		});
 	},
@@ -71,7 +71,7 @@ jsux.fn.connectSiteAdd = {
 			}				
 		});
 		$('input[name=cancel]').on('click', function() {
-			jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+			jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 		});
 	},
 	init: function() {
@@ -95,7 +95,7 @@ jsux.fn.connectSiteReset = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 			}
 		});
 	},
@@ -109,7 +109,7 @@ jsux.fn.connectSiteReset = {
 			if (key == 'reset') {					
 				self.sendJSON();
 			} else if (key == 'back') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 			}
 			e.preventDefault();
 		});
@@ -134,7 +134,7 @@ jsux.fn.connectSiteDelete = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 			}
 		});
 	},
@@ -151,7 +151,7 @@ jsux.fn.connectSiteDelete = {
 				self.sendJSON();
 			} else if (key == 'back') {
 
-				jsux.goURL(jsux.rootPath + menuList[3].sub[0].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
 			}
 			e.preventDefault();
 		});
@@ -216,7 +216,7 @@ jsux.fn.pageviewAdd = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 			}
 		});
 	},
@@ -236,7 +236,7 @@ jsux.fn.pageviewAdd = {
 			}				
 		});
 		$('input[name=cancel]').on('click', function() {
-			jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+			jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 		});
 	},
 	init: function() {
@@ -259,7 +259,7 @@ jsux.fn.pageviewReset = {
 
 			trace( e.msg );
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 			}
 		});
 	},
@@ -275,7 +275,7 @@ jsux.fn.pageviewReset = {
 				self.sendJSON();
 			} else if (key == 'back') {
 				trace('aa', true);
-				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 			}
 			e.preventDefault();
 		});
@@ -302,7 +302,7 @@ jsux.fn.pageviewDelete = {
 			trace( e.msg );
 
 			if (e.result == 'Y') {
-				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 			}
 		});
 	},
@@ -319,7 +319,7 @@ jsux.fn.pageviewDelete = {
 				self.sendJSON();
 			} else if (key == 'back') {
 
-				jsux.goURL(jsux.rootPath + menuList[3].sub[2].link);
+				jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
 			}
 			e.preventDefault();
 		});

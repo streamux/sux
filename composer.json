@@ -1,0 +1,16 @@
+{
+    "name": "streamux/sux-cms",
+    "license": "GNU LGPL",
+    "authors": [
+        {
+            "name": "STREAMUX",
+            "email": "streamux@naver.com"
+        }
+    ],
+    "require": {
+        "monolog/monolog": "^1.22",
+        "firephp/firephp-core": "^0.4.0",
+        "pear/console_table": "^1.3",
+        "pear/pear_exception": "^1.0"
+    }
+}

@@ -259,14 +259,20 @@ class DB extends Object {
 		return $this->query_result;
 	}
 
-	function getFetchArray() {
+	function getFetchArray($result) {
 
+		if (isset($result) && $result) {
+			$this->query_result = $result;
+		}
+		//echo $this->query_result;
 		return $this->_fetchArray($this->query_result);
 	}
 
-	function getNumRows() {
+	function getNumRows($result) {
 
-		$this->query_result;
+		if (isset($result) && $result) {
+			$this->query_result = $result;
+		}
 
 		return$this->_numRows($this->query_result);
 	}

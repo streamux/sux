@@ -7,7 +7,7 @@ class Member
 	 */
 	public static function getRoute($key) {
 
-		$file = _SUX_PATH_ . 'caches/member.cache.php';
+		$file = _SUX_PATH_ . 'caches/routes/member.cache.php';
 		$tempList = preg_split('/\//', $file);
 		$fileName = $tempList[count($tempList)-1];
 		if (file_exists($file)) {
