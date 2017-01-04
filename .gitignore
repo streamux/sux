@@ -5,6 +5,7 @@ templates_c/
 #config files
 config.admin.php
 config.db.php
+config.table.php
 
 #test files
 *.backup
