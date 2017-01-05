@@ -18,16 +18,37 @@ class InstallController extends Controller {
 
 		$rootPath = _SUX_ROOT_;
 		
+		$dirPath = 'config';
 		$file_name = 'config.db.php';
-		$file = 'config/' . $file_name;
-		$fp = fopen($file, 'w');
+		$dir = $dirPath . '/'. $file_name;
 
-		$msg .= $db_hostname;	
+		/*if (is_dir($dirPath)) {			
+			$ftp_server = 'freekr3.nayana.kr';
+			$ftp_user = 'streamuxcom';
+			$ftp_pass = 'n25722572!';
+			$conn_id = ftp_connect($ftp_server) or die("Couldn't connect to $ftp_server"); 
 
-		if(!$fp) {
+			if (@ftp_login($conn_id, $ftp_user, $ftp_pass)) {
+				$msg .= "Connected as $ftp_user@$ftp_server\n";
+			} else {
+				$msg .= "Couldn't connect as $ftp_user\n";
+			}
+
+			if (ftp_chmod($conn_id, 0777, _SUX_PATH_ . $dirPath) !== false) {
+				$msg .= "$dirPath chmoded successfully to 644\n";
+			} else {
+				$msg .= _SUX_PATH_ . $dirPath . " could not chmod $dirPath\n";
+			}
+			ftp_close($conn_id); 
+		}*/
+
+		$fp = fopen($dir, 'w');
+
+		$msg .= $db_hostname;
+		if (!$fp) {
 			$msg .= '파일을 여는데 실패했습니다.';
 			$resultYN = 'N';
-		}else{
+		} else {
 
 			$content = array();	
 			$content[] = "<?php";
@@ -41,8 +62,6 @@ class InstallController extends Controller {
 			$buffer = implode(PHP_EOL, $content);
 			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
-
-			@chmod($file,0644);
 
 			$msg .= " DB 설정을 완료하였습니다.<br>";
 			$resultYN = 'Y';
@@ -74,9 +93,10 @@ class InstallController extends Controller {
 
 		$rootPath = _SUX_ROOT_;
 
+		$dirPath = 'config/';
 		$file_name = 'config.admin.php';
-		$file = 'config/' . $file_name;
-		$fp = fopen($file, 'w');
+		$dir = $dirPath . $file_name;
+		$fp = fopen($dir, 'w');
 
 		if(!$fp) {
 			$msg = "파일을 여는데 실패했습니다.";

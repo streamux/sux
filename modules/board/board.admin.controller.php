@@ -64,7 +64,7 @@ class BoardAdminController extends Controller
 			$msg .= "시동 게시글이 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/routes/board.cache.php';
+			$filePath = _SUX_PATH_ . 'caches/routes/board.getColumns.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
