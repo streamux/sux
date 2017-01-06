@@ -32,8 +32,8 @@ class BoardAdminController extends Controller
 			'', 
 			$category,
 			$board_name, $summary,$header_path, $skin_path, $footer_path, $allow_nonmember,
-			$is_writable, $is_readable, $is_modifiable, $is_repliable,
-			$grade_w, $grade_r, $grade_m, $grade_re,$board_width,
+			$is_readable, $is_writable, $is_modifiable, $is_repliable,
+			$grade_r, $grade_w, $grade_m, $grade_re,$board_width,
 			$board_type,$is_latest,$limit_pagination,
 			$is_comment, $is_download, $is_progress_step,
 			$limit_choice, $limit_word, 'now()'
@@ -64,7 +64,7 @@ class BoardAdminController extends Controller
 			$msg .= "시동 게시글이 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/routes/board.getColumns.cache.php';
+			$filePath = _SUX_PATH_ . 'files/caches/routes/board.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -166,7 +166,7 @@ class BoardAdminController extends Controller
 			$msg .= "${category} 게시판을 삭제하였습니다.<br>";
 
 			// 라우트 카테고리 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/routes/board.cache.php';
+			$filePath = _SUX_PATH_ . 'files/caches/routes/board.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);

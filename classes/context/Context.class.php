@@ -22,6 +22,8 @@ class Context {
 	function init() {
 
 		$this->startSession();
+		$this->makeFilesDir();
+		$this->makeRouteCaches();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
 		$this->loadTableInfo();
@@ -35,6 +37,56 @@ class Context {
 	function stopSession() {
 
 		session_destroy();
+	}
+
+	function makeFilesDir() {
+
+		$dirList = array('files', 'files/config', 'files/caches', 'files/caches/queries', 'files/caches/routes');
+		foreach ($dirList as $key => $value) {
+			$dir = _SUX_PATH_ . $value;
+			FileHandler::makeDir($dir);
+		}
+	}
+
+	function makeRouteCaches() {
+
+		$moduleList = Utils::readDir('./modules');
+		foreach ($moduleList as $key => $value) {
+			$module = $value['file_name'];
+
+			$classList = array();
+			$classList[] = array(
+				'class'=>ucfirst($module) . 'Admin',
+				'class_path'=>_SUX_PATH_ . 'modules/' . $module . '/' . $module . '.admin.class.php',
+				'route_path'=>_SUX_PATH_ . 'files/caches/routes/' . $module . '.admin.cache.php'
+				);
+			$classList[] = array(
+				'class'=>ucfirst($module),
+				'class_path'=>_SUX_PATH_ . 'modules/' . $module . '/' . $module . '.class.php',
+				'route_path'=>_SUX_PATH_ . 'files/caches/routes/' . $module . '.cache.php'
+				);
+
+			foreach ($classList as $key => $value) {
+				$classPath = $value['class_path'];
+				$routePath = $value['route_path'];
+				//echo file_exists($routePath) . "<br>";
+
+				if (!file_exists($routePath)) {
+					if (file_exists($classPath)) {
+						$Class = $value['class'];
+						$routes = array();
+
+						if (isset($Class::$categories) && $Class::$categories) {
+							$routes['categories'] = $Class::$categories;
+						}
+						if (isset($Class::$action) && $Class::$action) {
+							$routes['action'] = $Class::$action;
+						} 
+						CacheFile::saveRoute( $routePath, $routes);
+					}
+				}
+			}
+		}
 	}
 
 	function loadDBInfo() {
@@ -58,9 +110,9 @@ class Context {
 		$this->db_info = $db_info;
 	}
 
-	function getConfigFile() {
+	function getConfigFile() {		
 
-		return _SUX_PATH_ . 'config/config.db.php';
+		return _SUX_PATH_ . 'files/config/config.db.php';
 	}
 
 	function loadAdminInfo() {
@@ -86,7 +138,7 @@ class Context {
 
 	function getAdminFile() {
 
-		return _SUX_PATH_ . 'config/config.admin.php';
+		return _SUX_PATH_ . 'files/config/config.admin.php';
 	}
 
 	function loadTableInfo() {
@@ -105,7 +157,7 @@ class Context {
 
 	function getTableFile() {
 
-		return _SUX_PATH_ . 'config/config.table.php';
+		return _SUX_PATH_ . 'files/config/config.table.php';
 	}
 
 	function getPrefix() {

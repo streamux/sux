@@ -16,6 +16,7 @@
 	<column name="grade_m" type="int" size="1" default="1" notnull="not null"/>
 	<column name="grade_re" type="int" size="1" default="1" notnull="not null"/>
 	<column name="board_width" type="varchar" size="10" notnull="not null"/>
+	<column name="board_type" type="varchar" size="4" notnull="not null"/>
 	<column name="is_latest" type="char" size="1" default="n" notnull="not null"/>
 	<column name="limit_pagination" type="int" size="2" default="10" notnull="not null"/>
 	<column name="is_comment" type="char" size="1" default="n" notnull="not null"/>

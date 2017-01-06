@@ -17,30 +17,9 @@ class InstallController extends Controller {
 		$msg = '';
 
 		$rootPath = _SUX_ROOT_;
-		
-		$dirPath = 'config';
+		$dirPath = 'files/config';
 		$file_name = 'config.db.php';
 		$dir = $dirPath . '/'. $file_name;
-
-		/*if (is_dir($dirPath)) {			
-			$ftp_server = 'freekr3.nayana.kr';
-			$ftp_user = 'streamuxcom';
-			$ftp_pass = 'n25722572!';
-			$conn_id = ftp_connect($ftp_server) or die("Couldn't connect to $ftp_server"); 
-
-			if (@ftp_login($conn_id, $ftp_user, $ftp_pass)) {
-				$msg .= "Connected as $ftp_user@$ftp_server\n";
-			} else {
-				$msg .= "Couldn't connect as $ftp_user\n";
-			}
-
-			if (ftp_chmod($conn_id, 0777, _SUX_PATH_ . $dirPath) !== false) {
-				$msg .= "$dirPath chmoded successfully to 644\n";
-			} else {
-				$msg .= _SUX_PATH_ . $dirPath . " could not chmod $dirPath\n";
-			}
-			ftp_close($conn_id); 
-		}*/
 
 		$fp = fopen($dir, 'w');
 
@@ -93,9 +72,9 @@ class InstallController extends Controller {
 
 		$rootPath = _SUX_ROOT_;
 
-		$dirPath = 'config/';
+		$dirPath = 'files/config';
 		$file_name = 'config.admin.php';
-		$dir = $dirPath . $file_name;
+		$dir = $dirPath . '/' . $file_name;
 		$fp = fopen($dir, 'w');
 
 		if(!$fp) {
@@ -146,21 +125,10 @@ class InstallController extends Controller {
 		$resultYN = 'Y';
 		$msg = '';
 
-		$queriesPath = _SUX_PATH_ . 'caches/queries';
-		if (!file_exists($queriesPath)) {
-			@mkdir($queriesPath);
-		}
+		$file_name = 'config.table.php';
+		$tableDir = 'files/config/' . $file_name;
 
 		$tableList = array();
-
-		$file_name = 'config.table.php';
-		$file = 'config/' . $file_name;
-
-		if (file_exists($file)) {
-			include_once $file;
-			$tableList = $table_list;
-		}
-
 		$tracer = Tracer::getInstance();
 		$context = Context::getInstance();
 		$context->init();
@@ -210,7 +178,7 @@ class InstallController extends Controller {
 						}
 
 						// setup query's columns-cache-file
-						$cachePath = _SUX_PATH_ . 'caches/queries/' . $table['name'] . '.getColumns.cache.php';
+						$cachePath = _SUX_PATH_ . 'files/caches/queries/' . $table['name'] . '.getColumns.cache.php';
 						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
 
 						$keyName = (string) $table['name'];	
@@ -227,10 +195,10 @@ class InstallController extends Controller {
 						}
 					}
 				}
-			}
-		}
-		
-		$fp = fopen($file, 'w');
+			}			
+		}		
+
+		$fp = fopen($tableDir, 'w');
 		if (!$fp) {
 			$msg .= '파일을 여는데 실패했습니다.';
 			$resultYN = 'N';
@@ -252,7 +220,7 @@ class InstallController extends Controller {
 			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
 
-			@chmod($file,0644);
+			@chmod($tableDir,0644);
 
 			$msg .= "테이블 리스트 설정을 완료하였습니다.<br>";		
 		}

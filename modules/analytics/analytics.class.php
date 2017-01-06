@@ -5,19 +5,6 @@ class Analytics
 	 * @var  categories, action
 	 * They're value is used as a route uri of get method and a name of class's method
 	 */
-	public static function getRoute($key) {
-
-		$file = _SUX_PATH_ . 'caches/routes/analytics.cache.php';
-		$tempList = preg_split('/\//', $file);
-		$fileName = $tempList[count($tempList)-1];
-		if (file_exists($file)) {
-			include($file);
-			$result = ${$key};
-			unset(${$key});
-		} else {
-			printf("[ %s ] Cache File don't exist<br>", $fileName);
-		}
-		
-		return $result;
-	}
+	static $categories = array('analytics');
+	static $action = array('connect-site','connect-site-list','connect-site-list-json','connect-site-add','connect-site-reset','connect-site-delete','pageview','pageview-list','pageview-list-json','pageview-add','pageview-reset','pageview-delete');
 }

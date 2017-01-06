@@ -36,7 +36,7 @@ class DocumentAdminController extends Controller
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
 		 */
-		$cachePath = _SUX_PATH_ . 'caches/queries/document.getColumns.cache.php';
+		$cachePath = _SUX_PATH_ . 'files/caches/queries/document.getColumns.cache.php';
 		$cacheFile = CacheFile::getInstance();
 		$cacheColumns = $cacheFile->readColumnsForQuery($cachePath);
 
@@ -78,7 +78,7 @@ class DocumentAdminController extends Controller
 			$msg .= "${category}페이지가 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/routes/document.cache.php';
+			$filePath = _SUX_PATH_ . 'files/caches/routes/document.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
@@ -119,7 +119,7 @@ class DocumentAdminController extends Controller
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
 		 */
-		$cachePath = _SUX_PATH_ . 'caches/queries/document.getColumns.cache.php';
+		$cachePath = _SUX_PATH_ . 'files/caches/queries/document.getColumns.cache.php';
 		$cacheFile = CacheFile::getInstance();
 		$cacheColumns = $cacheFile->readColumnsForQuery($cachePath);
 
@@ -192,7 +192,7 @@ class DocumentAdminController extends Controller
 			}
 
 			// 라우트 카테고리 키 저장 
-			$filePath = _SUX_PATH_ . 'caches/routes/document.cache.php';
+			$filePath = _SUX_PATH_ . 'files/caches/routes/document.cache.php';
 			$routes = array();
 			if (is_readable($filePath)) {
 				include($filePath);
