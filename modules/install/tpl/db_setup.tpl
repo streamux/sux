@@ -23,7 +23,7 @@
 				<li>
 					<fieldset>
 						<label for="db_userid">* 사용자계정</label>
-						<input type="text" id="db_userid" name="db_userid" value="root">
+						<input type="text" id="db_userid" name="db_userid" value="streamuxcom">
 					</fieldset>
 				</li>
 				<li>

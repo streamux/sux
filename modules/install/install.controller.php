@@ -17,17 +17,17 @@ class InstallController extends Controller {
 		$msg = '';
 
 		$rootPath = _SUX_ROOT_;
-		
+		$dirPath = 'files/config';
 		$file_name = 'config.db.php';
-		$file = 'config/' . $file_name;
-		$fp = fopen($file, 'w');
+		$dir = $dirPath . '/'. $file_name;
 
-		$msg .= $db_hostname;	
+		$fp = fopen($dir, 'w');
 
-		if(!$fp) {
+		$msg .= $db_hostname;
+		if (!$fp) {
 			$msg .= '파일을 여는데 실패했습니다.';
 			$resultYN = 'N';
-		}else{
+		} else {
 
 			$content = array();	
 			$content[] = "<?php";
@@ -41,8 +41,6 @@ class InstallController extends Controller {
 			$buffer = implode(PHP_EOL, $content);
 			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
-
-			@chmod($file,0644);
 
 			$msg .= " DB 설정을 완료하였습니다.<br>";
 			$resultYN = 'Y';
@@ -74,9 +72,10 @@ class InstallController extends Controller {
 
 		$rootPath = _SUX_ROOT_;
 
+		$dirPath = 'files/config';
 		$file_name = 'config.admin.php';
-		$file = 'config/' . $file_name;
-		$fp = fopen($file, 'w');
+		$dir = $dirPath . '/' . $file_name;
+		$fp = fopen($dir, 'w');
 
 		if(!$fp) {
 			$msg = "파일을 여는데 실패했습니다.";
@@ -126,21 +125,10 @@ class InstallController extends Controller {
 		$resultYN = 'Y';
 		$msg = '';
 
-		$queriesPath = _SUX_PATH_ . 'caches/queries';
-		if (!file_exists($queriesPath)) {
-			@mkdir($queriesPath);
-		}
+		$file_name = 'config.table.php';
+		$tableDir = 'files/config/' . $file_name;
 
 		$tableList = array();
-
-		$file_name = 'config.table.php';
-		$file = 'config/' . $file_name;
-
-		if (file_exists($file)) {
-			include_once $file;
-			$tableList = $table_list;
-		}
-
 		$tracer = Tracer::getInstance();
 		$context = Context::getInstance();
 		$context->init();
@@ -190,7 +178,7 @@ class InstallController extends Controller {
 						}
 
 						// setup query's columns-cache-file
-						$cachePath = _SUX_PATH_ . 'caches/queries/' . $table['name'] . '.getColumns.cache.php';
+						$cachePath = _SUX_PATH_ . 'files/caches/queries/' . $table['name'] . '.getColumns.cache.php';
 						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
 
 						$keyName = (string) $table['name'];	
@@ -207,10 +195,10 @@ class InstallController extends Controller {
 						}
 					}
 				}
-			}
-		}
-		
-		$fp = fopen($file, 'w');
+			}			
+		}		
+
+		$fp = fopen($tableDir, 'w');
 		if (!$fp) {
 			$msg .= '파일을 여는데 실패했습니다.';
 			$resultYN = 'N';
@@ -232,7 +220,7 @@ class InstallController extends Controller {
 			fwrite($fp, $buffer, strlen($buffer));
 			fclose($fp);
 
-			@chmod($file,0644);
+			@chmod($tableDir,0644);
 
 			$msg .= "테이블 리스트 설정을 완료하였습니다.<br>";		
 		}

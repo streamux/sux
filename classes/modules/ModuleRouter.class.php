@@ -35,20 +35,18 @@ class ModuleRouter
 			// module class and admin class
 			$classList = array();
 			$classList[] = array( 'class'=>$ClassName,
-								'path'=>'modules/'.$dirName.'/'.$dirName.'.class.php');
+								'path'=>'files/caches/routes/' . $dirName . '.cache.php');
 			$classList[] = array( 'class'=>$ClassName."Admin",
-								'path'=>'modules/'.$dirName.'/'.$dirName.'.admin.class.php');
+								'path'=>'files/caches/routes/' . $dirName . '.admin.cache.php');
 
 			for($i=0; $i<count($classList); $i++) {
 
-				if (file_exists($classList[$i]['path'])) {
+				$cachePath = _SUX_PATH_ . $classList[$i]['path'];				
+				if (file_exists($cachePath)) {
+					
+					//echo $cachePath . "<br>";
 					$Class = $classList[$i]['class'];
-					/*if ($Class) {
-						echo $Class . "<br>";
-						print_r($Class::getRoute('categories')) . "<br>";
-						print_r($Class::getRoute('action'));
-					}*/
-					$actionList = $Class::getRoute('action');
+					$actionList = $this->getRoute('action', $cachePath);
 					if ($actionList !== null &&  count($actionList) > 0) {						
 			
 						foreach ($actionList as $key => $value) {			
@@ -58,9 +56,9 @@ class ModuleRouter
 							// 빈배열제거 
 							$routeKeys = array_values(array_filter(array_map('trim',$tempArr)));
 							$context->setModule($routeKeys[0], $Class)	;
-							//echo $routeKeys[0] . ' : ' . $Class . "<br>";
+							//echo  $Class . ' : ' . $routeKeys[0] . "<br>";
 
-							$categoryList = $Class::getRoute('categories');
+							$categoryList = $this->getRoute('categories', $cachePath);
 							if ($categoryList !== null &&  count($categoryList) > 0){							
 								foreach ($categoryList as $key => $value) {
 
@@ -70,7 +68,7 @@ class ModuleRouter
 										$shotKeys[0] = $value;
 									}
 									$context->setModule($shotKeys[0], $Class)	;
-									//echo $shotKeys[0] . ' : ' . $shotKeys[1] . "<br>";
+									//echo $Class . ' : ' . $shotKeys[0] . ' : ' . $shotKeys[1] . "<br>";
 
 									$this->addRoute( sprintf('/%s', $shotKeys[0]), array( 'ModuleHandler', 'display'));
 									$this->addRoute( sprintf('/%s/(\d+)', $shotKeys[0]), array( 'ModuleHandler', 'display'));
@@ -109,5 +107,21 @@ class ModuleRouter
 		//echo $route . "<br>";
 		getRoute()->get( $route, $class);
 		getRoute()->post( $route, $class);
+	}
+
+	function getRoute($key, $cache_path) {
+
+		$file = $cache_path;
+		$tempList = preg_split('/\//', $file);
+		$fileName = $tempList[count($tempList)-1];
+		if (file_exists($file)) {
+			include($file);
+			$result = ${$key};
+			unset(${$key});
+		} else {
+			printf("[ %s ] Cache File don't exist<br>", $fileName);
+		}
+		
+		return $result;
 	}
 }
