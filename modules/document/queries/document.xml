@@ -1,0 +1,17 @@
+<query id="insertDocument" action="insert">
+	<tables>
+		<table name="document"></table>
+	</tables>
+	<columns>
+		<column name="id" type="int"></column>
+		<column name="category" type="varchar">home</column>
+		<column name="document_name" type="varchar"><![CDATA[메인]]></column>
+		<column name="summary" type="varchar"><![CDATA[메인페이지 입니다.]]></column>
+		<column name="is_readable" type="char">y</column>
+		<column name="document_width" type="varchar"><![CDATA[100%]]></column>
+		<column name="header_path" type="varchar"><![CDATA[common/_header.tpl]]></column>
+		<column name="contents_path" type="varchar"><![CDATA[modules/document/tpl/home.tpl]]></column>
+		<column name="footer_path" type="varchar"><![CDATA[common/_footer.tpl]]></column>
+		<column name="date" type="datetime"><![CDATA[now()]]></column>				
+	</columns>	
+</query>

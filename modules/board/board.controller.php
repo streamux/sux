@@ -69,7 +69,7 @@ class BoardController extends Controller {
 		}
 
 		$rootPath = _SUX_ROOT_;
-		$saveDir = _SUX_PATH_ . "board_data/";
+		$saveDir = _SUX_PATH_ . "files/board";
 
 		if (is_uploaded_file($imageUpTempName )) {
 			$mktime = mktime();
@@ -123,6 +123,7 @@ class BoardController extends Controller {
 		$msg = '';
 		$resultYN = 'Y';
 		$rootPath = _SUX_ROOT_;
+		$saveDir = _SUX_PATH_ . "files/board/";
 		
 		$category = $context->getParameter('category');
 		$id = $context->getParameter('id');
@@ -131,7 +132,6 @@ class BoardController extends Controller {
 		$row = $this->model->getRow();
 
 		if ($pass == $row['password'] || $pass == $adminPwd) {			
-			$saveDir = _SUX_PATH_ . "board_data/";
 			$delFileName = $row['filename'];
 			if ($delFileName) {
 				$delFileName = $saveDir . $delFileName;
@@ -199,7 +199,7 @@ class BoardController extends Controller {
 
 		$category = $context->getParameter('category');
 		$rootPath = _SUX_ROOT_;
-		$saveDir = _SUX_PATH_ . "board_data/";
+		$saveDir = _SUX_PATH_ . "files/board/";
 
 		if (is_uploaded_file($imageUpTempName )) {			
 			$mktime = mktime();
@@ -253,6 +253,7 @@ class BoardController extends Controller {
 
 		$category = $context->getParameter('category');
 		$rootPath = _SUX_ROOT_;
+		$deletePath = _SUX_PATH_ . "files/board/";
 		$msg = '';
 		$resultYN = 'Y';
 
@@ -271,9 +272,9 @@ class BoardController extends Controller {
 		if ($pass == $row['password'] || $pass == $admin_pwd) {
 
 			if(isset($delFileName) && $delFileName != '') {
-				$delFileName = _SUX_PATH_ . "board_data/$delFileName";
+				$deletePath = $deletePath . $delFileName;
 
-				if(!@unlink($delFileName)) {
+				if(!@unlink($deletePath)) {
 					$resultYN = 'N';
 					$msg .= '파일삭제를 실패하였습니다.';
 				} 

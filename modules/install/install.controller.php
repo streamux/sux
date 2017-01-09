@@ -122,6 +122,7 @@ class InstallController extends Controller {
 	 */
 	function insertCreateTable() {
 
+		$rootPath = _SUX_ROOT_;
 		$resultYN = 'Y';
 		$msg = '';
 
@@ -141,28 +142,28 @@ class InstallController extends Controller {
 		$oDB = DB::getInstance();		
 
 		$tablePrefix = $context->getPrefix();
-		$moduleList = Utils::readDir('./modules');
+		$moduleList = FileHandler::readDir('./modules');
 		foreach ($moduleList as $key => $value) {
 			$module = $value['file_name'];
-			$dir = './modules/' . $module . '/schemas';
 
-			$fileList = Utils::readDir($dir);
-			foreach ($fileList as $key => $value) {
-
+			// create table and make cache's column file'
+			$shemasDir = './modules/' . $module . '/schemas';
+			$schemasList = FileHandler::readDir($shemasDir);
+			foreach ($schemasList as $key => $value) {
 				if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 
-					$xmlPath = $dir . '/' . $value['file_name'];
+					$xmlPath = $shemasDir . '/' . $value['file_name'];
 					if (file_exists($xmlPath)) {
 
 						$query->resetSchema();
 						$schemas->reset();
 
-						$table = simplexml_load_file($xmlPath);
-						$tableName = $tablePrefix . '_' . $table['name'];
+						$tableXml = simplexml_load_file($xmlPath);
+						$tableName = $tablePrefix . '_' . $tableXml['name'];
 						$query->setTable($tableName);											
 
 						$cacheColumn = array();
-						$columns = $table[0]->column;
+						$columns = $tableXml[0]->column;
 						foreach ($columns as $key => $value) {
 
 							$name = $value['name'];
@@ -178,10 +179,10 @@ class InstallController extends Controller {
 						}
 
 						// setup query's columns-cache-file
-						$cachePath = _SUX_PATH_ . 'files/caches/queries/' . $table['name'] . '.getColumns.cache.php';
+						$cachePath = _SUX_PATH_ . 'files/caches/queries/' . $tableXml['name'] . '.getColumns.cache.php';
 						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
 
-						$keyName = (string) $table['name'];	
+						$keyName = (string) $tableXml['name'];	
 						$tableList[$keyName] = $tableName;
 
 						$query->setSchema($schemas);
@@ -195,9 +196,65 @@ class InstallController extends Controller {
 						}
 					}
 				}
-			}			
-		}		
+			}
 
+			// add start's value'
+			$queryDir = './modules/' . $module . '/queries';				
+			$queryList = FileHandler::readDir($queryDir);
+			if ($queryList) {
+
+				//$msg .= "${module}---------------<br>";
+				foreach ($queryList as $key => $value) {
+					if (preg_match('/(.xml+)$/', $value['file_name'] )) {
+						$xmlPath = $queryDir . '/' . $value['file_name'];
+						if (file_exists($xmlPath)) {
+							$query = new Query();
+							$columns = array();							
+							$queryXml = simplexml_load_file($xmlPath);	
+							$tableName = $tablePrefix . '_' . $queryXml[0]->tables[0]->table['name'];		
+							$query->setTable($tableName);
+							$queryColumns = $queryXml[0]->columns[0]->column;
+							foreach ($queryColumns as $key => $value) {
+
+								$nodeValue = (string) $value;
+								if (preg_match('/((header|contents|footer)_path)+$/i', $value['name']) == true) {
+									$nodeValue = $rootPath . $nodeValue;
+								}
+
+								if ($value['name'] == 'category') {
+									$where = array('category'=>$nodeValue);
+								}
+
+								if ($value['name'] == 'contents_path') {
+									$contentsPath = $nodeValue;					
+								}
+
+								$columns[] = $nodeValue;
+							}							
+
+							if (isset($where) && $where) {
+								$query->setField('id');
+								$query->setWhere($where);
+								$oDB->select($query);
+								$numrows = $oDB->getNumRows() . PHP_EOL;
+							}
+
+							if (isset($numrows) && $numrows == 0) {
+								$query->setColumn($columns);
+								$oDB->insert($query);
+
+								if (file_exists($contentsPath)) {
+									$tplPath = _SUX_PATH_ . $contentsPath;
+								}
+							}		
+						}
+					}
+				} // end of foreach		
+			} // end of if
+		} // end of foreach
+
+		//$msg .= Tracer::getInstance()->getMessage();
+		// write table list
 		$fp = fopen($tableDir, 'w');
 		if (!$fp) {
 			$msg .= '파일을 여는데 실패했습니다.';
@@ -227,7 +284,7 @@ class InstallController extends Controller {
 
 		$data = array(	'msg'=>$msg,
 						'result'=>$resultYN,
-						'url'=>$rootPath . 'login');
+						'url'=>$rootPath);
 
 		$this->callback($data);
 

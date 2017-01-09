@@ -82,6 +82,8 @@ class CacheFile
 		$context = Context::getInstance();
 		$returnURL = $context->getServer('REQUEST_URI');
 
+		$path = self::getRealPath($path);
+
 		if ($sources === null || count($sources) === 0) {
 			$msg = 'Route List is not available';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -120,9 +122,8 @@ class CacheFile
 			$buffer = implode(PHP_EOL, $content);
 			fwrite($fp, $buffer, strlen($buffer));
 
-			@chmod($path,0777);
 			unset($categories);
-			unset($action);		
+			unset($action);
 		}		
 		fclose($fp);
 		$fp = null;

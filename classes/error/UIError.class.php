@@ -37,7 +37,7 @@ class UIError extends Object {
 
 		$htmlUI = '%s';
 
-		if (strtolower($this->useHtml) === true) {
+		if (strtolower($this->useHtml) == true) {
 			$htmlUI = $this->getHtmlLayout($htmlUI);
 		}
 
@@ -49,12 +49,12 @@ class UIError extends Object {
 	private function htmlHeader() {
 
 		$html = '<!doctype>
-		<html>
-		<head>
-			<title>UI 경고 - StreamUX</title>
-			<meta charset="utf-8" />
-		</head>
-		<body>';
+				<html>
+				<head>
+					<title>UI 경고 - StreamUX</title>
+					<meta charset="utf-8" />
+				</head>
+				<body>';
 
 		$html = preg_replace('/\t|/', '', $html);
 		return $html;
@@ -75,7 +75,6 @@ class UIError extends Object {
 		if ($context->ajax()) {
 			$data = array(	'result'=>'N',
 							'msg'=>$msg);
-
 			Object::callback($data);
 		} else {
 			$script = 	'<script>
@@ -86,7 +85,7 @@ class UIError extends Object {
 						</noscript>';
 
 			$html = $script;
-			if (strtolower($useHtml) === true) {
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();
@@ -119,7 +118,7 @@ class UIError extends Object {
 						</noscript>';
 
 			$html = $script;
-			if (strtolower($useHtml) === true) {
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();
@@ -139,9 +138,9 @@ class UIError extends Object {
 			$data = array(	'alertTo'=>$url,
 							'result'=>'N',
 							'msg'=>$msg);
-
 			Object::callback($data);
 		} else {
+
 			$script ='<script>
 						alert(\'%s\');
 						location.href=\'%s\';
@@ -153,8 +152,7 @@ class UIError extends Object {
 					</noscript>';
 
 			$html = $script;	
-			if (strtolower($useHtml) === true) {
-
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();

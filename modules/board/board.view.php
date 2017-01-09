@@ -1,5 +1,4 @@
 <?php
-
 class BoardModule extends View {
 
 	var $class_name = 'board_module';
@@ -378,7 +377,7 @@ class BoardView extends BoardModule {
 		$fileupPath = '';
 		if ($filename) {
 
-			$fileupPath = $rootPath . "board_data/${filename}";
+			$fileupPath = $rootPath . "files/board/${filename}";
 			if ($is_download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
 
 				$contentData['css_down'] = 'show';
@@ -455,7 +454,7 @@ class BoardView extends BoardModule {
 			$returnURL .= "?find=${find}&search=${search}";
 		}
 		
-		//$this->document_data['jscode'] = 'write';
+		$this->document_data['jscode'] = 'write';
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 쓰기';
 
@@ -520,8 +519,9 @@ class BoardView extends BoardModule {
 			$level = 0;
 		}
 
+		//echo '<meta charset="utf-8" />';
 		if ($level < $grade_w) {
-			$msg = '죄송합니다. 쓰기 권한이 없습니다.';
+			$msg .= '죄송합니다. 쓰기 권한이 없습니다.';		
 			UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}
@@ -599,7 +599,7 @@ class BoardView extends BoardModule {
 
 		$this->model->selectFromBoardGroup();
 		$groupData = $this->model->getRow();
-		$grade_r = $groupData['grade_r'];
+		$grade_m = $groupData['grade_m'];
 		$nonemember = $groupData['allow_nonmember'];
 		$is_modifiable = $groupData['is_modifiable'];
 		$is_progress_step = $groupData['is_progress_step'];
@@ -711,7 +711,7 @@ class BoardView extends BoardModule {
 		$this->model->selectFromBoardGroup();
 		$groupData = $this->model->getRow();
 		$is_progress_step = $groupData['is_progress_step'];
-		$grade_r = $groupData["grade_r"];
+		$grade_re = $groupData["grade_re"];
 		$is_repliable = $groupData["is_repliable"];
 		$headerPath = $groupData['header_path'];
 		$skinName = $groupData['skin_path'];
@@ -764,7 +764,7 @@ class BoardView extends BoardModule {
 		$fileupPath = '';
 		if ($filename) {
 
-			$fileupPath = $rootPath . "board_data/${filename}";
+			$fileupPath = $rootPath . "files/board/${filename}";
 			if ($is_download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
 
 				$contentData['css_down'] = 'show';
@@ -976,7 +976,7 @@ class BoardView extends BoardModule {
 		$fileupname = iconv("UTF-8","EUC-KR",$fileupname) ? iconv("UTF-8","EUC-KR",$fileupname) : $fileupname;
 		$filesize = $context->getRequest('filesize');
 		$filetype = $context->getRequest('filetype');
-		$filesdir = _SUX_PATH_ . 'board_data/' . $board . '/';
+		$filesdir = _SUX_PATH_ . 'files/board/' . $board . '/';
 		$filespath = $filesdir . $fileupname;
 		$filespath = preg_replace('/ /i', '', $filespath);
 		$filespath = urldecode($filespath);

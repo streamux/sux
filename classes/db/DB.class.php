@@ -203,7 +203,7 @@ class DB extends Object {
 
 		$sql = $this->_insertSql($query);
 		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+		$tracer->setMessage($sql);	
 
 		$this->query_result = $this->_query($sql);
 		return $this->query_result;
@@ -243,7 +243,7 @@ class DB extends Object {
 
 		$sql = $this->_createSql($query);
 		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+		//$tracer->setMessage($sql);
 
 		$this->query_result = $this->_query($sql);
 		return $this->query_result;

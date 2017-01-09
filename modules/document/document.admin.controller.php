@@ -11,7 +11,7 @@ class DocumentAdminController extends Controller
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$resultYN = 'Y';
-		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';				
+		$contentsPath = _SUX_PATH_ . 'files/document/';				
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
@@ -94,7 +94,7 @@ class DocumentAdminController extends Controller
 			$cacheFile = CacheFile::getInstance();
 			$cacheFile->saveRoute($filePath, $routes);
 		}		
-		//$msg = Tracer::getInstance()->getMessage();
+		$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
@@ -113,7 +113,7 @@ class DocumentAdminController extends Controller
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
-		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
+		$contentsPath = _SUX_PATH_ . 'files/document/';
 		
 		/**
 		 * @cache's columns 
@@ -172,7 +172,7 @@ class DocumentAdminController extends Controller
 
 		$resultYN = "Y";
 		$msg = "";
-		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
+		$contentsPath = _SUX_PATH_ . 'files/document/';
 
 		$where = new QueryWhere();
 		$where->set('id', $id);

@@ -290,9 +290,9 @@ class Query extends Object {
 	function addQuotation($value) {
 
 		$temp_value = '';
-		if (((is_string($value) && strpos($value, '()') === FALSE) || !isset($value)) && !preg_match('/[+|-|*]+/', $value)) {
+		if (is_string($value) && (preg_match('/\(\)+$/', $value) == false) && (preg_match('/[+|-|*]+$/', $value) == false)) {
 			$temp_value = '\'' . $value. '\'';
-		} else {
+		} else {			
 			$temp_value = $value;
 		}
 

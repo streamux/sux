@@ -41,16 +41,24 @@ class Context {
 
 	function makeFilesDir() {
 
-		$dirList = array('files', 'files/config', 'files/caches', 'files/caches/queries', 'files/caches/routes');
-		foreach ($dirList as $key => $value) {
-			$dir = _SUX_PATH_ . $value;
-			FileHandler::makeDir($dir);
+		$dirList = array(
+			'./files',
+			'./files/config',
+			'./files/caches',
+			'./files/caches/queries',
+			'./files/caches/routes',
+			'./files/board',
+			'./files/document'
+		);
+
+		foreach ($dirList as $key => $dir) {
+			FileHandler::makeDir($dir, false);
 		}
 	}
 
 	function makeRouteCaches() {
 
-		$moduleList = Utils::readDir('./modules');
+		$moduleList = FileHandler::readDir('./modules');
 		foreach ($moduleList as $key => $value) {
 			$module = $value['file_name'];
 
@@ -68,22 +76,19 @@ class Context {
 
 			foreach ($classList as $key => $value) {
 				$classPath = $value['class_path'];
-				$routePath = $value['route_path'];
-				//echo file_exists($routePath) . "<br>";
+				$routePath = $value['route_path'];				
+				if (file_exists($classPath)) {
+					//echo $classPath . "<br>";
+					$Class = $value['class'];
+					$routes = array();
 
-				if (!file_exists($routePath)) {
-					if (file_exists($classPath)) {
-						$Class = $value['class'];
-						$routes = array();
-
-						if (isset($Class::$categories) && $Class::$categories) {
-							$routes['categories'] = $Class::$categories;
-						}
-						if (isset($Class::$action) && $Class::$action) {
-							$routes['action'] = $Class::$action;
-						} 
-						CacheFile::saveRoute( $routePath, $routes);
+					if (isset($Class::$categories) && $Class::$categories) {
+						$routes['categories'] = $Class::$categories;
 					}
+					if (isset($Class::$action) && $Class::$action) {
+						$routes['action'] = $Class::$action;
+					} 
+					CacheFile::saveRoute( $routePath, $routes);
 				}
 			}
 		}

@@ -119,7 +119,7 @@ jsux.fn.setupAdmin = {
 
 			isLoading = false;
 			trace( e.msg  );			
-			jsux.goURL( jsux.rootPath + "/");
+			jsux.goURL( jsux.rootPath);
 		});
 	},
 	sendAndLoad: function( f ) {
