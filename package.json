@@ -1,7 +1,7 @@
 {
   "name": "sux",
   "version": "1.0.0",
-  "description": "this is board for a People to need add's  Logger",
+  "description": "this is sux cms for a People to need add's  Logger",
   "main": "Gruntfile.js",
   "directories": {
     "test": "test"

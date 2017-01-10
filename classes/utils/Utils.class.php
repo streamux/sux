@@ -12,6 +12,10 @@ class Utils extends Object {
 		return self::$aInstance;
 	}
 
+	/**
+	 * @param $convert_url '외부에서 불러지는 상대경로 주소'
+	 * @param $skin_dir 'Real Path'
+	 **/
 	public static function convertAbsolutePath( $convert_url, $skin_dir ) {
 
 		$result = $convert_url;

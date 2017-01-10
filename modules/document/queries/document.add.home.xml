@@ -1,4 +1,4 @@
-<query id="insertDocument" action="insert">
+<query id="insertDocument" action="insert" module="install">
 	<tables>
 		<table name="document"></table>
 	</tables>
@@ -10,8 +10,8 @@
 		<column name="is_readable" type="char">y</column>
 		<column name="document_width" type="varchar"><![CDATA[100%]]></column>
 		<column name="header_path" type="varchar"><![CDATA[common/_header.tpl]]></column>
-		<column name="contents_path" type="varchar"><![CDATA[modules/document/tpl/home.tpl]]></column>
+		<column name="contents_path" type="varchar"><![CDATA[files/document/home.tpl]]></column>
 		<column name="footer_path" type="varchar"><![CDATA[common/_footer.tpl]]></column>
 		<column name="date" type="datetime"><![CDATA[now()]]></column>				
-	</columns>	
+	</columns>
 </query>

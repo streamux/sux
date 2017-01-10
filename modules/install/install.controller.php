@@ -7,41 +7,23 @@ class InstallController extends Controller {
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
 
-		$db_hostname	= trim($posts['db_hostname']);
-		$db_userid		= trim($posts['db_userid']);
-		$db_password	= trim($posts['db_password']);
-		$db_database 	= trim($posts['db_database']);
-		$db_table_prefix = trim($posts['db_table_prefix']);
+		$db_info = array('db_hostname', 'db_userid', 'db_password', 'db_database','db_table_prefix');
 		
 		$resultYN = 'Y';
 		$msg = '';
 
 		$rootPath = _SUX_ROOT_;
-		$dirPath = 'files/config';
-		$file_name = 'config.db.php';
-		$dir = $dirPath . '/'. $file_name;
+		$filePath = './files/config/config.db.php';
 
-		$fp = fopen($dir, 'w');
-
-		$msg .= $db_hostname;
-		if (!$fp) {
-			$msg .= '파일을 여는데 실패했습니다.';
+		$buffer = array();
+		foreach ($db_info as $key => $value) {
+			$buffer['db_info'][$value] = $posts[$value];
+		}
+		$result = CacheFile::writeFile($filePath, $buffer);
+		if (!$result) {
+			$msg .= 'DB 설정을 실패했습니다.';
 			$resultYN = 'N';
 		} else {
-
-			$content = array();	
-			$content[] = "<?php";
-			$content[] = "\$db_hostname = '$db_hostname';";
-			$content[] = "\$db_userid = '$db_userid';";
-			$content[] = "\$db_password = '$db_password';";
-			$content[] = "\$db_database = '$db_database';";
-			$content[] = "\$db_table_prefix = '$db_table_prefix';";
-			$content[] = "?>";
-
-			$buffer = implode(PHP_EOL, $content);
-			fwrite($fp, $buffer, strlen($buffer));
-			fclose($fp);
-
 			$msg .= " DB 설정을 완료하였습니다.<br>";
 			$resultYN = 'Y';
 		}
@@ -62,44 +44,22 @@ class InstallController extends Controller {
 		$context = Context::getInstance();
 		$posts =$context->getPostAll();
 
-		$admin_id		= trim($posts['admin_id']);
-		$admin_pwd	= trim($posts['admin_pwd']);
-		$admin_email	= trim($posts['admin_email']);
-		$yourhome		= trim($posts['yourhome']);
+		$admin_info = array('admin_id','admin_pwd','admin_email','yourhome');
 
 		$resultYN = 'Y';
 		$msg = '';
 
 		$rootPath = _SUX_ROOT_;
-
-		$dirPath = 'files/config';
-		$file_name = 'config.admin.php';
-		$dir = $dirPath . '/' . $file_name;
-		$fp = fopen($dir, 'w');
-
-		if(!$fp) {
-			$msg = "파일을 여는데 실패했습니다.";
+		$filePath = 'files/config/config.admin.php';
+		$buffer = array();
+		foreach ($admin_info as $key => $value) {
+			$buffer['admin_info'][$value] = $posts[$value];
+		}
+		$result = CacheFile::writeFile($filePath, $buffer);
+		if(!$result) {
+			$msg = "관리자 설정을 실패했습니다.";
 			$resultYN = "N";
 		} else {
-
-			if (strlen(stristr($yourhome, 'http://')) == 0) {
-				$yourhome	 = 'http://'.$yourhome	;
-			}
-
-			$content = array();	
-			$content[] = "<?";
-			$content[] = "\$admin_id = '$admin_id';";
-			$content[] = "\$admin_pwd = '$admin_pwd';";
-			$content[] = "\$admin_email = '$admin_email';";	
-			$content[] = "\$yourhome = '$yourhome';";
-			$content[] = "?>";
-
-			$buffer = implode(PHP_EOL, $content);
-			fwrite($fp, $buffer, strlen($buffer));
-			fclose($fp);
-
-			@chmod($file,0644);
-
 			$msg = "관리자계정 설정을 완료하였습니다.<br>";
 			$resultYN = 'Y';
 		}
@@ -122,12 +82,10 @@ class InstallController extends Controller {
 	 */
 	function insertCreateTable() {
 
+		$realPath = _SUX_PATH_;
 		$rootPath = _SUX_ROOT_;
 		$resultYN = 'Y';
 		$msg = '';
-
-		$file_name = 'config.table.php';
-		$tableDir = 'files/config/' . $file_name;
 
 		$tableList = array();
 		$tracer = Tracer::getInstance();
@@ -176,11 +134,14 @@ class InstallController extends Controller {
 							$schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
 
 							$cacheColumn[] = $name;
-						}
+						} // end of foreach
 
 						// setup query's columns-cache-file
-						$cachePath = _SUX_PATH_ . 'files/caches/queries/' . $tableXml['name'] . '.getColumns.cache.php';
-						$cacheFile->writeColumnsForQuery($cachePath, $cacheColumn);
+						$queryCachePath = './files/caches/queries/' . $tableXml['name'] . '.getColumns.cache.php';
+
+						$buffer = array();
+						$buffer['columns'] = $cacheColumn;
+						$cacheFile->writeFile($queryCachePath, $buffer);
 
 						$keyName = (string) $tableXml['name'];	
 						$tableList[$keyName] = $tableName;
@@ -196,22 +157,27 @@ class InstallController extends Controller {
 						}
 					}
 				}
-			}
+			} // end of foreach
 
 			// add start's value'
 			$queryDir = './modules/' . $module . '/queries';				
 			$queryList = FileHandler::readDir($queryDir);
 			if ($queryList) {
 
-				//$msg .= "${module}---------------<br>";
 				foreach ($queryList as $key => $value) {
 					if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 						$xmlPath = $queryDir . '/' . $value['file_name'];
 						if (file_exists($xmlPath)) {
 							$query = new Query();
-							$columns = array();							
+							$columns = array();				
 							$queryXml = simplexml_load_file($xmlPath);	
-							$tableName = $tablePrefix . '_' . $queryXml[0]->tables[0]->table['name'];		
+
+							$moduleType = (string) gettype($queryXml['module']);					
+							if (strpos(strtolower($moduleType),'install') !== false) {
+								continue;
+							}
+
+							$tableName = $tablePrefix . '_' . $queryXml[0]->tables[0]->table['name'];
 							$query->setTable($tableName);
 							$queryColumns = $queryXml[0]->columns[0]->column;
 							foreach ($queryColumns as $key => $value) {
@@ -228,58 +194,56 @@ class InstallController extends Controller {
 								if ($value['name'] == 'contents_path') {
 									$contentsPath = $nodeValue;					
 								}
-
 								$columns[] = $nodeValue;
-							}							
+							}
 
 							if (isset($where) && $where) {
 								$query->setField('id');
 								$query->setWhere($where);
 								$oDB->select($query);
-								$numrows = $oDB->getNumRows() . PHP_EOL;
+								$numrows = $oDB->getNumRows();
 							}
 
 							if (isset($numrows) && $numrows == 0) {
 								$query->setColumn($columns);
 								$oDB->insert($query);
 
-								if (file_exists($contentsPath)) {
-									$tplPath = _SUX_PATH_ . $contentsPath;
-								}
-							}		
+								// write template'file to file's dir to read from module's template file
+								if ($module == 'document') {
+									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+									//$msg .= $tplPath;
+									//  read and write contents
+									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
+									$buff = FileHandler::readFile($contentsPath);
+
+									$result = FileHandler::writeFile($cachePath, $buff);
+									if (!$result) {
+										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+									} else {
+										$msg .= "${category} 페이지가 정상적으로 등록되었습니다.<br>";
+									}
+								}								
+							}	
 						}
 					}
 				} // end of foreach		
-			} // end of if
+			}
 		} // end of foreach
 
 		//$msg .= Tracer::getInstance()->getMessage();
 		// write table list
-		$fp = fopen($tableDir, 'w');
-		if (!$fp) {
-			$msg .= '파일을 여는데 실패했습니다.';
+		$tableDir = './files/config/config.table.php';
+		$pathinfo = pathinfo($tableDir);
+
+		$buffer = array();
+		$buffer['table_list'] = $tableList;		
+		$result = CacheFile::writeFile($tableDir, $buffer);
+		if (!$result) {
+			$msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
 			$resultYN = 'N';
 		} else {
-			$content = array();	
-			$content[] = "<?php";
-
-			$str = "\$table_list = array(";
-			$index = 0;
-			foreach ($tableList as $key => $value) {
-				$str .= ($index === 0) ? "" : ",";
-				$str .= "'".$key."'=>'".$value."'";
-				$index++;
-			}
-			$str .= ");";
-			$content[] = $str;
-
-			$buffer = implode(PHP_EOL, $content);
-			fwrite($fp, $buffer, strlen($buffer));
-			fclose($fp);
-
-			@chmod($tableDir,0644);
-
-			$msg .= "테이블 리스트 설정을 완료하였습니다.<br>";		
+			$msg .= $pathinfo['filename'] . " 설정을 완료하였습니다.<br>";
+			$resultYN = 'Y';
 		}
 
 		$data = array(	'msg'=>$msg,
@@ -288,6 +252,6 @@ class InstallController extends Controller {
 
 		$this->callback($data);
 
-		$oDB->close();
+		//$oDB->close();
 	}
 }

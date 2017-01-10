@@ -64,12 +64,11 @@ class BoardAdminController extends Controller
 			$msg .= "시동 게시글이 정상적으로 등록되었습니다.<br>";
 
 			// 라우트 키 저장 
-			$filePath = _SUX_PATH_ . 'files/caches/routes/board.cache.php';
-			$routes = array();
-			if (is_readable($filePath)) {
-				include($filePath);
-				$routes['categories'] = $categories;
-				$routes['action'] = $action;
+			$filePath = './files/caches/routes/board.cache.php';
+			$routes = CacheFile::readFile($filePath);
+			if (isset($routes) && $routes) {
+				$routes['categories'] = $routes['categories'];
+				$routes['action'] = $routes['action'];
 
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
@@ -78,7 +77,7 @@ class BoardAdminController extends Controller
 			}
 
 			$cacheFile = CacheFile::getInstance();
-			$cacheFile->saveRoute($filePath, $routes);		
+			$cacheFile->writeFile($filePath, $routes);		
 		}	
 
 		$data = array(	"result"=>$resultYN,

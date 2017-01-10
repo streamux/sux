@@ -65,30 +65,33 @@ class Context {
 			$classList = array();
 			$classList[] = array(
 				'class'=>ucfirst($module) . 'Admin',
-				'class_path'=>_SUX_PATH_ . 'modules/' . $module . '/' . $module . '.admin.class.php',
-				'route_path'=>_SUX_PATH_ . 'files/caches/routes/' . $module . '.admin.cache.php'
+				'class_path'=>'./modules/' . $module . '/' . $module . '.admin.class.php',
+				'route_path'=>'./files/caches/routes/' . $module . '.admin.cache.php'
 				);
 			$classList[] = array(
 				'class'=>ucfirst($module),
-				'class_path'=>_SUX_PATH_ . 'modules/' . $module . '/' . $module . '.class.php',
-				'route_path'=>_SUX_PATH_ . 'files/caches/routes/' . $module . '.cache.php'
+				'class_path'=>'./modules/' . $module . '/' . $module . '.class.php',
+				'route_path'=>'./files/caches/routes/' . $module . '.cache.php'
 				);
 
 			foreach ($classList as $key => $value) {
 				$classPath = $value['class_path'];
-				$routePath = $value['route_path'];				
+				$routePath = $value['route_path'];
+
+				if (file_exists($routePath)) {
+					continue;
+				}
+
 				if (file_exists($classPath)) {
-					//echo $classPath . "<br>";
 					$Class = $value['class'];
 					$routes = array();
-
 					if (isset($Class::$categories) && $Class::$categories) {
 						$routes['categories'] = $Class::$categories;
 					}
 					if (isset($Class::$action) && $Class::$action) {
 						$routes['action'] = $Class::$action;
 					} 
-					CacheFile::saveRoute( $routePath, $routes);
+					CacheFile::writeFile( $routePath, $routes);
 				}
 			}
 		}
@@ -96,23 +99,12 @@ class Context {
 
 	function loadDBInfo() {
 
-		$config_file = $this->getConfigFile();
-		if (is_readable($config_file)) {
-			include $config_file;
-		}
-
-		$db_info_list = array(	'db_hostname',
-								'db_userid',
-								'db_password',
-								'db_database',
-								'db_table_prefix');
-
-		$db_info = array();
-		for($i=0; $i<count($db_info_list); $i++) {
-			$db_info[$db_info_list[$i]] = ${$db_info_list[$i]};
-			unset(${$db_info_list[$i]});
-		}
-		$this->db_info = $db_info;
+		$filename = $this->getConfigFile();
+		if (is_readable($filename)) {
+			$result = include $filename;			
+			$this->db_info = $result['db_info'];
+			unset($result);
+		}		
 	}
 
 	function getConfigFile() {		
@@ -124,21 +116,10 @@ class Context {
 
 		$admin_file = $this->getAdminFile();
 		if (is_readable($admin_file)) {
-			include $admin_file;
+			$result = include $admin_file;
+			$this->admin_info = $result['admin_info'];
+			unset($result);
 		}
-
-		$admin_list = array(	'admin_id',
-							'admin_pwd',
-							'admin_email',
-							'yourhome');
-
-		$admin_info = array();
-		for ($i=0; $i<count($admin_list); $i++) {
-			$admin_info[$admin_list[$i]] = ${$admin_list[$i]};
-			unset(${$admin_list[$i]});
-		}
-
-		$this->admin_info = $admin_info;
 	}
 
 	function getAdminFile() {
@@ -148,16 +129,14 @@ class Context {
 
 	function loadTableInfo() {
 
-		$table_file = $this->getTableFile();
-		if (is_readable($table_file)) {
-			include $table_file;
-		}
-
-		foreach ($table_list as $key => $value) {
-			$this->setTable($key, $value);
-		}
-
-		unset($table_list);
+		$filename = $this->getTableFile();
+		if (is_readable($filename)) {
+			$result = include $filename;
+			foreach ($result['table_list'] as $key => $value) {
+				$this->setTable($key, $value);
+			}
+			unset($result);
+		}		
 	}
 
 	function getTableFile() {

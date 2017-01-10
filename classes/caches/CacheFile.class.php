@@ -20,114 +20,42 @@ class CacheFile
 		return $path;
 	}
 
-	function readColumnsForQuery($path) {
+	function readFile($path, $key=null) {
 
-		if (!file_exists($path)) {
-			$msg = "QueryCacheFile Dont Exists";
-			UIError::alert($msg);
-			exit();
+		$filename = self::getRealPath($path);
+		if (!file_exists($filename)) {
+			return false;
 		}
 
-		$contents = include($path);
-		return $contents;
+		$result = include($filename);
+		return (isset($key) && $key) ? $result[$key] : $result;
 	}
 
-	function writeColumnsForQuery($path, $souces=null) {
+	function writeFile($path, $buff, $mode="w") {
 
-		$context = Context::getInstance();
-		$returnURL = $context->getServer('REQUEST_URI');
-
-		if ($souces === null || count($souces) === 0) {
-			$msg = 'Souces is not available';
-			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-			exit();
-		}
-
-		$pregSplit = preg_split('/[\/]/i', $path);
-		$fileName = $pregSplit[count($pregSplit)-1];
-		$fp = fopen($path, 'w');
-		if (!$fp) {
-
-			$msg .= $fileName . ' is failed to open';
-			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-			exit();
-		} else {
-		
-			$content = array();	
-			$content[] = "<?php";
-			$str = "\$columns = array(";
+		$contents = array();	
+		$contents[] = "<?php";
+		$contents[] = "\$result = array();";
+		foreach ($buff as $key => $sources) {
+			$str = "\$" . $key . " = array(";
 			$index = 0;
-			foreach ($souces as $key => $value) {
+			foreach ($sources as $item => $value) {
 				$str .= ($index === 0) ? "" : ",";
-				$str .= "'".$value."'";
+				if (is_int($item)) {
+					$str .= "'".$value."'";
+				} else {
+					$str .= "'".$item."'=>'".$value."'";
+				}				
 				$index++;
 			}
-			$str .= ");";
-			$content[] = $str;
-			$content[] = "return \$columns;";
-			$content[] = "?>";
-
-			$buffer = implode(PHP_EOL, $content);
-			@file_put_contents($path, $buffer);
-			@chmod($path, 0644);
-		}		
-		fclose($fp);
-		$fp = null;
-
-		return true;
-	}
-
-	function saveRoute($path, $sources=null) {
-
-		$context = Context::getInstance();
-		$returnURL = $context->getServer('REQUEST_URI');
-
-		$path = self::getRealPath($path);
-
-		if ($sources === null || count($sources) === 0) {
-			$msg = 'Route List is not available';
-			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-			exit();
+			$str .= ");";			
+			$contents[] = $str;
+			$contents[] = "\$result['" . $key ."'] = \$" . $key . ";";
 		}
-
-		$pregSplit = preg_split('/[\/]/i', $path);
-		$fileName = $pregSplit[count($pregSplit)-1];
-		$fp = fopen($path, 'w');
-		if (!$fp) {
-
-			$msg .= $fileName . ' is failed to open';
-			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-			exit();
-		} else {
-
-			$content = array();	
-			$content[] = "<?php";
-			$content[] = "/**";
-			$content[] = " * @var  categories, action";
-			$content[] = " * They're value is used as a route uri of get method and a name of class\'s method";
-			$content[] = " */";
-
-			foreach ($sources as $key => $source) {
-
-				$str = "\$".$key." = array(";
-				$index = 0;
-				foreach ($source as $key => $value) {
-					$str .= ($index === 0) ? "" : ",";
-					$str .= "'".$value."'";
-					$index++;
-				}
-				$str .= ");";
-				$content[] = $str;
-			}
-			$buffer = implode(PHP_EOL, $content);
-			fwrite($fp, $buffer, strlen($buffer));
-
-			unset($categories);
-			unset($action);
-		}		
-		fclose($fp);
-		$fp = null;
-
-		return true;
+		$contents[] = "return \$result;";
+		
+		$buff = implode(PHP_EOL, $contents);
+		$result = FileHandler::writeFile($path, $buff);
+		return $result;
 	}
 }

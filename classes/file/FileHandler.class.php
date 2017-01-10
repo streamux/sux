@@ -3,12 +3,36 @@ class FileHandler
 {
 	function getRealPath($source)
 	{
-		if(strlen($source) >= 2 && substr_compare($source, './', 0, 2) === 0)
-		{
+		if(strlen($source) >= 2 && substr_compare($source, './', 0, 2) === 0) {
 			return _SUX_PATH_ . substr($source, 2);
 		}
 
 		return $source;
+	}
+
+	function readFile($filename) {
+
+		if(file_exists($filename) == false || filesize($filename) < 1) {
+			return;
+		}
+		return @file_get_contents($filename);
+	}
+
+	function writeFile($path, $buff, $mode="w") {
+
+		$filename = self::getRealPath($path);
+		$pathinfo = pathinfo($filename);
+		self::makeDir($pathinfo['dirname']);
+
+		$fiags = 0;
+		if (strtolower($mode) == 'a') {
+			$flags = FILE_APPEND;
+		}
+
+		$result = @file_put_contents($filename, $buff, $flags|LOCK_EX);
+		@chmod($filename, 0644);
+
+		return $result;
 	}
 
 	function readDir( $dir ) {
@@ -29,19 +53,21 @@ class FileHandler
 			return $temArr;
 		}	
 			
-		return null;
+		return false;
 	}
 
 	function makeDir($path, $is_safe=true)
 	{
 		$dirPath = self::getRealPath($path);
-		if (!$is_safe)
-		{
+
+		if (file_exists($dirPath) != false) {
+			return true;
+		}
+
+		if (!$is_safe) {
 			@mkdir($dirPath, 0755, true);
 			@chmod($dirPath, 0755);
-		}
-		else
-		{
+		} else {
 			$ftp_server = '127.0.0.1';
 			$ftp_port = 21;
 			$ftp_user = 'root';
