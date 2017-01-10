@@ -108,6 +108,7 @@ class InstallController extends Controller {
 			$shemasDir = './modules/' . $module . '/schemas';
 			$schemasList = FileHandler::readDir($shemasDir);
 			foreach ($schemasList as $key => $value) {
+
 				if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 
 					$xmlPath = $shemasDir . '/' . $value['file_name'];
@@ -151,7 +152,6 @@ class InstallController extends Controller {
 						if (!$result) {
 							$resultYN = 'N';
 							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
-							//$msg .= $tracer->getMessage();
 						} else {																
 							$msg .= '@ table->' . $tableName . " [ result : success ] ----<br>";
 						}
@@ -165,9 +165,12 @@ class InstallController extends Controller {
 			if ($queryList) {
 
 				foreach ($queryList as $key => $value) {
+
 					if (preg_match('/(.xml+)$/', $value['file_name'] )) {
+
 						$xmlPath = $queryDir . '/' . $value['file_name'];
 						if (file_exists($xmlPath)) {
+
 							$query = new Query();
 							$columns = array();				
 							$queryXml = simplexml_load_file($xmlPath);	
@@ -211,7 +214,6 @@ class InstallController extends Controller {
 								// write template'file to file's dir to read from module's template file
 								if ($module == 'document') {
 									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-									//$msg .= $tplPath;
 									//  read and write contents
 									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
 									$buff = FileHandler::readFile($contentsPath);
@@ -219,9 +221,7 @@ class InstallController extends Controller {
 									$result = FileHandler::writeFile($cachePath, $buff);
 									if (!$result) {
 										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-									} else {
-										$msg .= "${category} 페이지가 정상적으로 등록되었습니다.<br>";
-									}
+									} 
 								}								
 							}	
 						}
@@ -249,9 +249,7 @@ class InstallController extends Controller {
 		$data = array(	'msg'=>$msg,
 						'result'=>$resultYN,
 						'url'=>$rootPath);
-
 		$this->callback($data);
-
-		//$oDB->close();
+		$oDB->close();
 	}
 }

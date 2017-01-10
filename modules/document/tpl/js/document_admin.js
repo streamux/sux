@@ -77,7 +77,8 @@ jsux.fn.add = {
 	checkFormVal: function( f ) {
 
 		var category = f.category.value.length,
-			document_name = f.document_name.value.length;
+			document_name = f.document_name.value.length,
+			contents = f.contents.value.length;
 
 		if ( category < 1 ) {
 			trace("카테고리 이름을 입력하세요.");
@@ -97,9 +98,9 @@ jsux.fn.add = {
 			return (false);
 		}
 
-		if ( document_name < 1) {
+		if ( contents < 1) {
 			trace("컨텐츠 내용을 입력하세요.");
-			f.document_name.focus();
+			f.contents.focus();
 			return (false);
 		}
 
@@ -182,18 +183,8 @@ jsux.fn.add = {
 			self.checkTableName();
 		});
 	},
-	setLayout: function() {
-
-		jsux.getJSON(jsux.rootPath + "board-admin/skin-json", function( e ) {
-
-			markup = $("#skinList_tmpl");
-			$("#skinList").empty();
-			$(markup).tmpl(e.data.list).appendTo("#skinList");
-		});
-	},
 	init: function() {
-
-		this.setLayout();
+		
 		this.setEvent();
 		jsux.setAutoFocus();
 	}

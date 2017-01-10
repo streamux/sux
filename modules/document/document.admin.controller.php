@@ -7,7 +7,8 @@ class DocumentAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$category = $posts['category'];		
+		$category = $posts['category'];
+		$contentDatas = $post['contents'];
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$resultYN = 'Y';
@@ -47,7 +48,7 @@ class DocumentAdminController extends Controller
 				$value = $posts[$key];
 
 				if (isset($value) && $value) {
-					if ($key === 'contents_path') {
+					if (strpos($key,'contents_path') !== false) {
 						if (!preg_match('/(.tpl+)$/i', $value)) {
 							$value = $value . $category . '.tpl';						
 						}
@@ -72,16 +73,20 @@ class DocumentAdminController extends Controller
 		}else{
 
 			//  read and write contents
-			$contentsPath = _SUX_PATH_ . 'modules/document/tpl/home.tpl';
-			$buff = FileHandler::readFile($contentsPath);
+			/*$contentsPath = _SUX_PATH_ . 'modules/document/tpl/home.tpl';
+			$buff = FileHandler::readFile($contentsPath);*/
+
+			$msg .= $contentDatas;
+			$realPath = $realPath . 'files/document/';
+			$buff = $contentDatas;
 
 			$realPath = _SUX_PATH_;
 			$filePath =Utils::convertAbsolutePath($contents_path, $realPath);
 			$result = FileHandler::writeFile($filePath, $buff);
 			if (!$result) {
-				$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+				$msg .= "${category} 템플릿 파일 등록을 실패하였습니다.<br>";
 			} else {
-				$msg .= "${category} 페이지가 정상적으로 등록되었습니다.<br>";
+				$msg .= "${category} 템플릿 파일이 정상적으로 등록되었습니다.<br>";
 			}
 
 			// write route's key
