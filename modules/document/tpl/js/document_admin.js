@@ -77,8 +77,7 @@ jsux.fn.add = {
 	checkFormVal: function( f ) {
 
 		var category = f.category.value.length,
-			document_name = f.document_name.value.length,
-			contents = f.contents.value.length;
+			document_name = f.document_name.value.length;
 
 		if ( category < 1 ) {
 			trace("카테고리 이름을 입력하세요.");
@@ -95,12 +94,6 @@ jsux.fn.add = {
 		if ( document_name < 1) {
 			trace("페이지 이름을 입력하세요.");
 			f.document_name.focus();
-			return (false);
-		}
-
-		if ( contents < 1) {
-			trace("컨텐츠 내용을 입력하세요.");
-			f.contents.focus();
 			return (false);
 		}
 
@@ -184,7 +177,7 @@ jsux.fn.add = {
 		});
 	},
 	init: function() {
-		
+
 		this.setEvent();
 		jsux.setAutoFocus();
 	}

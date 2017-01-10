@@ -7,8 +7,7 @@ class DocumentAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$category = $posts['category'];
-		$contentDatas = $post['contents'];
+		$category = $posts['category'];		
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$resultYN = 'Y';
@@ -37,8 +36,7 @@ class DocumentAdminController extends Controller
 		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
 		 */
 		$cachePath = './files/caches/queries/document.getColumns.cache.php';
-		$cacheFile = CacheFile::getInstance();
-		$columnCaches = $cacheFile->readFile($cachePath, 'columns');
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
 		if (!$columnCaches) {
 			$msg .= "QueryCacheFile Do Not Exists<br>";
 		} else {
@@ -73,15 +71,17 @@ class DocumentAdminController extends Controller
 		}else{
 
 			//  read and write contents
-			/*$contentsPath = _SUX_PATH_ . 'modules/document/tpl/home.tpl';
-			$buff = FileHandler::readFile($contentsPath);*/
-
-			$msg .= $contentDatas;
-			$realPath = $realPath . 'files/document/';
-			$buff = $contentDatas;
-
-			$realPath = _SUX_PATH_;
+			$realPath = _SUX_PATH_ . 'files/document/';
 			$filePath =Utils::convertAbsolutePath($contents_path, $realPath);
+
+			$buff = $posts['contents'];
+			if (empty($buff)) {
+				$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
+				$buff = FileHandler::readFile($contentsPath);
+				if (!$buff) {
+					$buff = $category . ' 내용을 설정해주세요.';
+				}
+			}			
 			$result = FileHandler::writeFile($filePath, $buff);
 			if (!$result) {
 				$msg .= "${category} 템플릿 파일 등록을 실패하였습니다.<br>";
@@ -122,19 +122,17 @@ class DocumentAdminController extends Controller
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
-		$contentsPath = _SUX_PATH_ . 'files/document/';
-		
+				
 		/**
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
 		 */
 		$cachePath = './files/caches/queries/document.getColumns.cache.php';
-		$cacheFile = CacheFile::getInstance();
-		$cacheColumns = $cacheFile->readFile($cachePath);
+		$cacheColumns = CacheFile::readFile($cachePath);
 
 		$columns = array();
-		for($i=2; $i<count($cacheColumns); $i++) {
-			$key = $cacheColumns[$i];
+		for($i=2; $i<count($cacheColumns['columns']); $i++) {
+			$key = $cacheColumns['columns'][$i];
 			$value = $posts[$key];
 
 			if (isset($value) && $value) {
@@ -152,18 +150,32 @@ class DocumentAdminController extends Controller
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$result = $this->model->updateDocument($columns, $where);
+		//$msg .= Tracer::getInstance()->getMessage();
 		if (!$result) {
 			$msg .= "$category 페이지 수정을 실패하였습니다.";
 			$resultYN = "N";	
 		} else {
 
-			$contentsPath =Utils::convertAbsolutePath($columns['contents_path'], $contentsPath);
-			$fp = fopen($contentsPath, "w");
-			fwrite($fp, $contents);
-			fclose($fp);
+			$realPath = _SUX_PATH_ . 'files/document/';
+			$contentsPath =Utils::convertAbsolutePath($columns['contents_path'], $realPath);
 
-			$msg .= "$category 페이지 수정을 완료하였습니다.";
-			$resultYN = "Y";
+			$buff = $posts['contents'];
+			if (empty($buff)) {
+				$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
+				$buff = FileHandler::readFile($contentsPath);
+				if (!$buff) {
+					$buff = $category . ' 내용을 설정해주세요.';
+				}
+			}
+
+			$result = FileHandler::writeFile($contentsPath, $buff);
+			if (!$result) {
+				$msg .= "$category 템플릿 파일 수정을 실패하였습니다.";
+				$resultYN = "Y";
+			} else {
+				$msg .= "$category 템플릿 파일 수정을 완료하였습니다.";
+				$resultYN = "Y";
+			}			
 		}
 		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"member"=>$dataObj,
@@ -180,8 +192,7 @@ class DocumentAdminController extends Controller
 		$id = $context->getPost('id');
 
 		$resultYN = "Y";
-		$msg = "";
-		$contentsPath = _SUX_PATH_ . 'files/document/';
+		$msg = "";	
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
@@ -194,33 +205,29 @@ class DocumentAdminController extends Controller
 		} else {
 			$msg .= "${category} 페이지을 삭제하였습니다.<br>";
 
-			$contentsPath =Utils::convertAbsolutePath($row['contents_path'], $contentsPath);
-			$result = Utils::deleteFile($contentsPath);
+			$realPath = _SUX_PATH_ . 'files/document/';
+			$contentsPath =Utils::convertAbsolutePath($row['contents_path'], $realPath);
+			$result = FileHandler::deleteFile($contentsPath);
 			if (!$result) {
 				$msg .= "$category 컨텐츠파일 삭제를 실패하였습니다.<br>";
 			}
 
 			// 라우트 카테고리 키 저장 
 			$filePath = './files/caches/routes/document.cache.php';
-			$routes = array();
-			if (is_readable($filePath)) {
-				include($filePath);
-				$routes['categories'] = $categories;
-				$routes['action'] = $action;
-
-				$len = count($routes['categories']);
-				for($i=0; $i<$len; $i++) {
-					$input = $routes['categories'][$i];
-					//$msg .= $input . '  ';
-					if (strcmp($input, $category) === 0) {
-						array_splice($routes['categories'], $i, 1);
-						break;
-					}
+			$routes = CacheFile::readFile($filePath);
+			$len = count($routes['categories']);
+			for($i=0; $i<$len; $i++) {
+				$input = $routes['categories'][$i];
+				if (strcmp($input, $category) === 0) {
+					array_splice($routes['categories'], $i, 1);
+					break;
 				}
 			}
 
-			$cacheFile = CacheFile::getInstance();
-			$cacheFile->saveRoute($filePath, $routes);
+			$result = CacheFile::writeFile($filePath, $routes);
+			if (!$sesult) {
+				$msg = "라우트 파일 재설정을 완료하였습니다.";
+			}
 		}
 		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"result"=>$resultYN,

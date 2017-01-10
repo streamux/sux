@@ -96,7 +96,7 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('category, id', $where);
+		$this->model->select('board_group','category, id', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -104,7 +104,7 @@ class BoardAdminView extends BoardAdminModule
 		}
 
 		$skinDir = _SUX_PATH_ . "modules/board/skin/";
-		$skinList = Utils::readDir($skinDir);
+		$skinList = FileHandler::readDir($skinDir);
 		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
@@ -132,7 +132,7 @@ class BoardAdminView extends BoardAdminModule
 		
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('id, category', $where);
+		$this->model->select('board_group', 'id, category', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -180,7 +180,7 @@ class BoardAdminView extends BoardAdminModule
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->selectFromBoardGroup('*', null, 'id desc');
+		$this->model->select('board_group','*', null, 'id desc');
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -221,7 +221,7 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('*', $where);
+		$this->model->select('board_group','*', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
@@ -275,15 +275,24 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->selectFromBoardGroup('id', $where);
+		$this->model->select('board_group','id', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows> 0) {
 			$msg = "${category}는 이미 존재하는 게시판입니다.";
 			$resultYN = "N";
 		} else {
-			$msg = "${category}는 생성할 수 있는 게시판입니다.";
-			$resultYN = "Y";
+			$where = new QueryWhere();
+			$where->set('category', $category);
+			$this->model->select('document','id', $where);
+			$numrows = $this->model->getNumRows();
+			if ($numrows> 0) {
+				$msg = "${category} 이름은 페이지관리에서 이미 사용하고 있습니다.<br>다른 이름을 사용해주세요.";
+				$resultYN = "N";
+			} else {
+				$msg = "${category}는 사용할 수 있는 카테고리명 입니다.";
+				$resultYN = "Y";
+			}
 		}
 
 		$data = array(	"result"=>$resultYN,

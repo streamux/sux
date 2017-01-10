@@ -35,9 +35,21 @@ class FileHandler
 		return $result;
 	}
 
-	function readDir( $dir ) {
+	function deleteFile($path) {
 
-		$dirPath = self::getRealPath($dir);
+		$dirPath = self::getRealPath($path);
+		if (!is_file( $dirPath )) {
+			return false;
+		}
+
+		$result = @unLink($path);
+
+		return $result;
+	}
+
+	function readDir( $path ) {
+
+		$dirPath = self::getRealPath($path);
 		if (!is_dir($dirPath)) {
 			return false;
 		}

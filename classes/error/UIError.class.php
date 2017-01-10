@@ -70,13 +70,13 @@ class UIError extends Object {
 
 	static function alert( $msg, $useHtml=true) {
 
-		$msg = preg_replace('/<br>/', '\n',$msg);
 		$context = Context::getInstance();
 		if ($context->ajax()) {
 			$data = array(	'result'=>'N',
 							'msg'=>$msg);
 			Object::callback($data);
 		} else {
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script = 	'<script>
 							alert(\'%s\');
 						</script>
@@ -96,7 +96,6 @@ class UIError extends Object {
 
 	static function alertToBack( $msg, $useHtml=true, $options=null) {
 
-		$msg = preg_replace('/<br>/', '\n',$msg);
 		$url = isset($options['url']) ? $options['url'] : null;
 		$delay = isset($options['delay']) ? $options['delay'] : 3;
 
@@ -107,6 +106,7 @@ class UIError extends Object {
 
 			Object::callback($data);
 		} else {
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script =	'<script>
 							alert(\'%s\');
 							history.go(-1);
@@ -128,8 +128,7 @@ class UIError extends Object {
 	}
 
 	static function alertTo( $msg, $useHtml=true, $options=null) {
-
-		$msg = preg_replace('/<br>/', '\n',$msg);
+		
 		$url = isset($options['url']) ? $options['url'] : null;
 		$delay = isset($options['delay']) ? $options['delay'] : 3;
 		
@@ -140,7 +139,7 @@ class UIError extends Object {
 							'msg'=>$msg);
 			Object::callback($data);
 		} else {
-
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script ='<script>
 						alert(\'%s\');
 						location.href=\'%s\';
