@@ -28,7 +28,7 @@ class InstallController extends Controller {
 			$resultYN = 'Y';
 		}
 
-		if ($resultYN == 'N') {
+		if ($resultYN === 'N') {
 			UIError::alertToBack($msg);
 		} else {
 			$data = array(	'msg'=>$msg,
@@ -64,7 +64,7 @@ class InstallController extends Controller {
 			$resultYN = 'Y';
 		}
 
-		if ($resultYN == 'N') {
+		if ($resultYN === 'N') {
 			UIError::alertToBack($msg);
 		} else {
 			$data = array(
@@ -175,26 +175,28 @@ class InstallController extends Controller {
 							$columns = array();				
 							$queryXml = simplexml_load_file($xmlPath);	
 
-							$moduleType = (string) gettype($queryXml['module']);					
-							if (strpos(strtolower($moduleType),'install') !== false) {
+							$moduleType = (string) gettype($queryXml['execution']);					
+							if (strpos(strtolower($moduleType),'once') !== false) {
 								continue;
 							}
 
-							$tableName = $tablePrefix . '_' . $queryXml[0]->tables[0]->table['name'];
+							$propTableName = $queryXml[0]->tables[0]->table['name'];
+							$tableName = $tablePrefix . '_' . $propTableName;
 							$query->setTable($tableName);
 							$queryColumns = $queryXml[0]->columns[0]->column;
 							foreach ($queryColumns as $key => $value) {
 
 								$nodeValue = (string) $value;
-								if (preg_match('/((header|contents|footer)_path)+$/i', $value['name']) == true) {
+								$propValue = (string) $value['name'];
+								if (preg_match('/((header|contents|footer)_path)+$/i', $propValue) !== false) {
 									$nodeValue = $rootPath . $nodeValue;
 								}
 
-								if ($value['name'] == 'category') {
+								if ($propValue === 'category') {
 									$where = array('category'=>$nodeValue);
 								}
 
-								if ($value['name'] == 'contents_path') {
+								if ($propValue === 'contents_path') {
 									$contentsPath = $nodeValue;					
 								}
 								$columns[] = $nodeValue;
@@ -207,7 +209,7 @@ class InstallController extends Controller {
 								$numrows = $oDB->getNumRows();
 							}
 
-							if (isset($numrows) && $numrows == 0) {
+							if (isset($numrows) && $numrows === 0) {
 								$query->setColumn($columns);
 								$oDB->insert($query);
 

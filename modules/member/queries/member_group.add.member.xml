@@ -1,4 +1,4 @@
-<query id="insertMemberGroup" action="insert" module="install">
+<query id="insertMemberGroup" action="insert" execution="once">
 	<tables>
 		<table name="member_group"></table>
 	</tables>

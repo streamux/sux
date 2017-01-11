@@ -13,12 +13,7 @@ class Model extends Object {
 	function __construct() {
 
 		$this->db = DB::getInstance();
-		$this->init();
 	}	
-
-	function init() {
-		
-	}
 
 	function select($query=NULL) {
 

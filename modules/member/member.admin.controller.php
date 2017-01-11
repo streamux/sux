@@ -95,7 +95,7 @@ class MemberAdminController extends Controller
 		foreach ($column_data as $key => $value) {			
 			if ($value != '') {
 				if (preg_match('/password/', $key)) {	
-					$column[$key] = substr(md5($value),0,8);
+					$column[$key] = $context->getPassowordHash($value);
 				} else {
 					$column[$key] = $value;
 				}	
@@ -132,8 +132,6 @@ class MemberAdminController extends Controller
 		$row = $this->model->getRow();
 		$user_id = $row['user_id'];
 
-		$where = new QueryWhere();
-		$where->set('id', $id);
 		$result = $this->model->deleteFromMember($where);
 		if ($result) {
 			$msg = "${user_id} 회원정보를 삭제하였습니다.";

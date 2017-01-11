@@ -27,11 +27,11 @@ class PopupAdminController extends Controller
 			$imageInfo = getimagesize($skinImagePath);
 		      $imageType = $imageInfo[2];
 
-		      if ( $imageType == IMAGETYPE_JPEG ) {
+		      if ( $imageType === IMAGETYPE_JPEG ) {
 		      	$image = imagecreatefromjpeg($skinImagePath);
-		      } elseif( $imageType == IMAGETYPE_GIF ) {
+		      } elseif( $imageType === IMAGETYPE_GIF ) {
 		       	$image = imagecreatefromgif($skinImagePath);
-		      } elseif( $imageType == IMAGETYPE_PNG ) {
+		      } elseif( $imageType === IMAGETYPE_PNG ) {
 		     		$image = imagecreatefrompng($skinImagePath);
 			}
 
@@ -83,11 +83,11 @@ class PopupAdminController extends Controller
 		$imageInfo = getimagesize($skinImagePath);
 	      $imageType = $imageInfo[2];
 
-	      if ( $imageType == IMAGETYPE_JPEG ) {
+	      if ( $imageType === IMAGETYPE_JPEG ) {
 	      	$image = imagecreatefromjpeg($skinImagePath);
-	      } elseif( $imageType == IMAGETYPE_GIF ) {
+	      } elseif( $imageType === IMAGETYPE_GIF ) {
 	       	$image = imagecreatefromgif($skinImagePath);
-	      } elseif( $imageType == IMAGETYPE_PNG ) {
+	      } elseif( $imageType === IMAGETYPE_PNG ) {
 	     		$image = imagecreatefrompng($skinImagePath);
 		}
 

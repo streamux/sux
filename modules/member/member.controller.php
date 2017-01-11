@@ -108,16 +108,16 @@ class MemberController extends Controller {
 		$index = 0;
 		foreach ($posts as $key => $value) {
 			if (preg_match('/^hobby+/', $key)) {
-				$hobby .= ($index == 0) ? $value : ',' . $value;
+				$hobby .= ($index === 0) ? $value : ',' . $value;
 				$index++;
 			}			
 		}	
 
 		// email validation
 		$email = $posts['email_address'];
-		$email .= !($posts['email_tail1'] === '직접입력') ? '@' . $posts['email_tail1'] : '';
+		$email .= ($posts['email_tail1'] !== '직접입력') ? '@' . $posts['email_tail1'] : '';
 		if ($posts['email_tail1'] === '직접입력') {
-			$email .= !empty($posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
+			$email .= (isset($posts['email_tail2']) && $posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
 		}
 		
 		if (!preg_match('/@/i', $email)) {
@@ -131,11 +131,11 @@ class MemberController extends Controller {
 			exit;
 		}
 
-		$pwd = trim(substr(md5($posts['password']),0,8));
-		$pwdConf =  trim(substr(md5($posts['passwordConf']),0,8));
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		$passwordHashConf = $context->getPasswordHash($posts['passwordConf']);
 
-		$context->setPost('password', $pwd);
-		$context->setPost('passwordConf', $pwdConf);		
+		$context->setPost('password', $passwordHash);
+		$context->setPost('passwordConf', $passwordHashConf);		
 		$context->setPost('email_address', $email);
 		$context->setPost('hobby', $hobby);
 
@@ -195,9 +195,9 @@ class MemberController extends Controller {
 
 		// email validation
 		$email = $posts['email_address'];
-		$email .= !($posts['email_tail1'] === '직접입력') ? '@' . $posts['email_tail1'] : '';
+		$email .= ($posts['email_tail1'] !== '직접입력') ? '@' . $posts['email_tail1'] : '';
 		if ($posts['email_tail1'] === '직접입력') {
-			$email .= !empty($posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
+			$email .= (isset($posts['email_tail2']) && $posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
 		}
 	
 		if (!preg_match('/@/i', $email)) {
@@ -216,20 +216,20 @@ class MemberController extends Controller {
 		$index = 0;
 		foreach ($posts as $key => $value) {
 			if (preg_match('/^hobby+/', $key)) {
-				$hobby .= ($index == 0) ? $value : ',' . $value;
+				$hobby .= ($index === 0) ? $value : ',' . $value;
 				$index++;
 			}			
 		}
 
 		$resultYN = "Y";
-		$pwd = trim(substr(md5($posts['password']),0,8));
-		$pwdConf =  trim(substr(md5($posts['passwordConf']),0,8));
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		$passwordHashConf = $context->getPasswordHash($posts['passwordConf']);				
 
 		$context->setParameter('category', $posts['category']);
 		$context->setParameter('user_id', $posts['user_id']);
 
-		$context->setPost('password', $pwd);
-		$context->setPost('passwordConf', $pwdConf);
+		$context->setPost('password', $passwordHash);
+		$context->setPost('passwordConf', $passwordHashConf);
 		$context->setPost('email_address', $email);
 		$context->setPost('hobby', $hobby);
 
@@ -266,8 +266,8 @@ class MemberController extends Controller {
 		$msg = '';
 		$resultYN = 'Y';		
 
-		$pass = substr(md5(trim($posts['password'])),0,8);
-		if (empty($pass)) {
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		if (empty($passwordHash)) {
 			UIError::alertToBack('비밀번호를 입력해주세요.');
 			exit();
 		}
@@ -278,7 +278,7 @@ class MemberController extends Controller {
 		$this->model->selectFromMember('password');	
 		$row = $this->model->getRow();
 
-		if ($pass != $row['password']) {
+		if ($passwordHash != $row['password']) {
 			$msg = '비밀번호가 잘못되었습니다.';
 			$resultYN = 'N';
 		} else {

@@ -47,6 +47,18 @@ class FileHandler
 		return $result;
 	}
 
+	function hasContent($path) {
+
+		$filename = self::getRealPath($path);
+		return (is_readable($filename) && (filesize($filename) > 0));
+	}
+
+	function exists($path) {
+
+		$filename = self::getRealPath($path);
+		return file_exists($filename) ? $filename : false;
+	}
+
 	function readDir( $path ) {
 
 		$dirPath = self::getRealPath($path);

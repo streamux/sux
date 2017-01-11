@@ -120,7 +120,7 @@ class AnalyticsView extends View
 		$now = date('Y-m-d');	
 
 		$connectCheck = $context->getSession('connectcheck');
-		if (!isset($connectCheck) || $connectCheck === '') {
+		if (empty($connectcheck)) {
 
 			// 총 접속수
 			$result = $this->controller->select('fieldFromConnecterAll', 'hit');

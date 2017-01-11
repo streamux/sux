@@ -73,12 +73,9 @@ class BoardAdminController extends Controller
 			$resultYN = 'N';
 		} 
 
-		$testPwd = '12';
-		$testPwd = substr(md5(trim($testPwd)),0,8);
-		$testPwd = substr(md5(trim($testPwd)),0,8);
-
+		$passwordHash = $context->getPasswordHash('12');
 		$columns = array(
-			'',$category,'n',$adminId,'운영자','운영자',$testPwd,
+			'',$category,'n',$adminId,'운영자','운영자',$passwordHash,
 			'게시판 시동 테스트',
 			'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
 			$adminEmail,'now()',$context->getServer('REMOTE_ADDR'),
@@ -108,7 +105,7 @@ class BoardAdminController extends Controller
 			}
 		}
 
-		if ($resultYN == 'Y') {
+		if ($resultYN === 'Y') {
 			$msg = $category . ' 게시판이 성공적으로 생성되었습니다.';
 		}
 
@@ -131,7 +128,7 @@ class BoardAdminController extends Controller
 		$posts = $context->getPostAll();
 		$column = array();
 		foreach ($posts as $key => $value) {			
-			if (!($key == 'id' || $key == 'category' || $key == '_method')) {
+			if ($key !== ('id' || 'category' ||'_method')) {
 				$column[$key] = $value;
 			}			
 		}
@@ -144,7 +141,7 @@ class BoardAdminController extends Controller
 			$resultYN = "N";	
 		}
 
-		if ($resultYN == 'Y') {
+		if ($resultYN === 'Y') {
 			$msg = $category . ' 게시판이 수정되었습니다.';
 		}
 		//$msg = Tracer::getInstance()->getMessage();
@@ -199,14 +196,14 @@ class BoardAdminController extends Controller
 			$resultYN = "N";
 		} else {
 
-			// 라우트 카테고리 키 저장 
+			// 라우트 카테고리 키 삭제  
 			$filePath = _SUX_PATH_ . 'files/caches/routes/board.cache.php';
 			$routes = CacheFile::readFile($filePath);
 			$len = count($routes['categories']);
 			for($i=0; $i<$len; $i++) {
 				$input = $routes['categories'][$i];
 				//$msg .= $input . '  ';
-				if (strcmp($input, $category) === 0) {
+				if ($input === $category) {
 					array_splice($routes['categories'], $i, 1);
 					break;
 				}
@@ -219,7 +216,7 @@ class BoardAdminController extends Controller
 			}
 		}
 
-		if ($resultYN == 'Y') {
+		if ($resultYN ==='Y') {
 			$msg = $category . ' 게시판이 성공적으로 삭제되었습니다.';
 		}	
 		//$msg .= Tracer::getInstance()->getMessage();

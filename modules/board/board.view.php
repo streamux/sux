@@ -1,45 +1,5 @@
 <?php
-class BoardModule extends View {
-
-	var $class_name = 'board_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance(); 
-		/*
-		 * @class Tracer
-		 * @brief Tracer를 이용해서 코드의 흐름을 파악할 수 있다.
-		 */
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
-
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);			
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );		
-		} else {			
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}		
-		$UIError->output();	
-	}
-}
-
-class BoardView extends BoardModule {
+class BoardView extends ModuleView {
 
 	var $class_name = 'board_view';
 
@@ -104,14 +64,14 @@ class BoardView extends BoardModule {
 		$context->setParameter('limit', $limit);
 		$context->setParameter('passover', $passover);
 
-		$methodString = (isset($search) && $search !== '') ? 'selectFromBoardSearch' : 'selectFromBoard';
+		$methodString = (isset($search) && $search) ? 'selectFromBoardSearch' : 'selectFromBoard';
 		$result = $this->model->{$methodString}('*');
 		if ($result) {
 
 			// use in order to navi
 			$numrows = $this->model->getNumRows();
 
-			$methodString = (isset($search) && $search !== '') ? 'selectFromBoardSearchLimit' : 'selectFromBoardLimit';
+			$methodString = (isset($search) && $search) ? 'selectFromBoardSearchLimit' : 'selectFromBoardLimit';
 			$result = $this->model->{$methodString}('*');
 			if ($result) {
 				$numrows2 = $this->model->getNumRows();
@@ -162,7 +122,7 @@ class BoardView extends BoardModule {
 					$subject['icon_new'] = 'off';
 					$subject['icon_opkey'] = 'off';
 
-					if ($space) {
+					if (isset($space) && $space) {
 						$subject['space'] = (10+$space*10) . 'px';
 						$subject['icon_box'] = '답변';
 						$subject['icon_box_color'] = 'icon-replay-color';
@@ -176,13 +136,13 @@ class BoardView extends BoardModule {
 					}*/
 
 					if ($filename){
-						if ($filetype =="image/gif" || $filetype =="image/jpeg" || $filetype =="image/x-png" || $filetype =="image/png" || $filetype =="image/bmp"){
+						if ($filetype === ("image/gif" || "image/jpeg" || "image/x-png" || "image/png" || "image/bmp")) {
 							$imgname = "icon_img.png";
-						} else if ($download == 'y'  && ($filetype=="application/x-zip-compressed" || $filetype=="application/zip")) { 
+						} else if ($download == 'y'  && ($filetype=="application/x-zip-compressed" || "application/zip")) { 
 							$imgname = "icon_down.png";
 						}
 
-						if (isset($imgname)) {
+						if (isset($imgname) && $imgname) {
 							$subject['icon_img'] = 'on';
 							$subject['img_name'] = $imgname;
 						}	
@@ -322,7 +282,7 @@ class BoardView extends BoardModule {
 
 		// nonmember's authority
 		if ($nonmember != 'y') {
-			if (!isset($user_name) && $user_name == '') {
+			if (empty($user_name)) {
 				$returnToURL = $rootPath . $category . '/'. $id ;
 				$msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
 				UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
@@ -355,9 +315,9 @@ class BoardView extends BoardModule {
 
 		switch ($contentsType) {
 			case 'all':
-				if ($conType =='html'){
+				if ($conType ==='html'){
 					$contentData['conetents'] = htmlspecialchars_decode($contentData['conetents']);
-				}else if ($conType == 'text'){
+				}else if ($conType === 'text'){
 					$contentData['conetents'] = nl2br(htmlspecialchars($contentData['conetents']));
 				}
 				break;
@@ -378,19 +338,19 @@ class BoardView extends BoardModule {
 		if ($filename) {
 
 			$fileupPath = $rootPath . "files/board/${filename}";
-			if ($is_download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+			if (($is_download === 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
 
 				$contentData['css_down'] = 'show';
-			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+			} else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
 
 				$image_info = getimagesize($fileupPath);
 			      $image_type = $image_info[2];
 
-			      if ( $image_type == IMAGETYPE_JPEG ) {
-			      	$image = imagecreatefromjpeg($fileupPath);
-			      } elseif( $image_type == IMAGETYPE_GIF ) {
+			      if ( $image_type === IMAGETYPE_JPEG ) {
+			      		$image = imagecreatefromjpeg($fileupPath);
+			      } elseif( $image_type === IMAGETYPE_GIF ) {
 			       	$image = imagecreatefromgif($fileupPath);
-			      } elseif( $image_type == IMAGETYPE_PNG ) {
+			      } elseif( $image_type === IMAGETYPE_PNG ) {
 			     		$image = imagecreatefrompng($fileupPath);
 				}
 				$contentData['css_img'] = 'show';
@@ -402,7 +362,7 @@ class BoardView extends BoardModule {
 
 		// opkey
 		$contentData['css_progress_step'] = 'hide';
-		if ($is_progress_step == 'y' || $grade > 9) {
+		if (($is_progress_step === 'y') || ($grade > 9)) {
 			$contentData['css_progress_step'] = 'show';
 
 			$progressSteps = array('진행완료'=>'progress_step_done', '진행중'=>'progress_step_ing', '입금완료'=>'progress_step_charged', '미입금'=>'progress_step_nocharged' , '메일발송'=>'progress_step_sended', '초기화'=>'progress_step_reset');
@@ -414,7 +374,7 @@ class BoardView extends BoardModule {
 		// comment
 		$contentData['css_comment'] = 'hide';
 		$commentData = array();		
-		if ($is_comment == 'y') {
+		if ($is_comment === 'y') {
 			$contentData['css_comment'] = 'show';
 
 			$this->model->selectFromComment('*');
@@ -502,10 +462,10 @@ class BoardView extends BoardModule {
 		$contentData = $this->model->getRow();
 		$wall = $contentData['wall'];		
 
-		if ($wall == 'a' || !isset($wall)) {
+		if ($wall === 'a' || !isset($wall)) {
 			$contentData['wallname'] = "나라사랑";
 			$contentData['wallkey'] = "b";
-		} else if ($wall == 'b') {
+		} else if ($wall === 'b') {
 			$contentData['wallname'] = "조국사랑";
 			$contentData['wallkey'] = "a";
 		}
@@ -527,7 +487,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($nonemember === 'n') {
-			if (!isset($user_name) && $user_name === '') {
+			if (empty($user_name)) {
 				$returnToURL = $rootPath . $category . '/write';
 				$msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
 				UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
@@ -542,7 +502,7 @@ class BoardView extends BoardModule {
 			}
 		}
 
-		if (isset($user_name) && $user_name != '') {
+		if (isset($user_name) && $user_name) {
 			$contentData['css_user_label'] = 'hide';
 			$contentData['user_name_type'] = 'hidden';
 			$contentData['user_pass_type'] = 'hidden';
@@ -655,7 +615,7 @@ class BoardView extends BoardModule {
 		}
 
 		if ($nonemember === 'n') {
-			if (!isset($user_name) && $user_name === '') {
+			if (empty($user_name)) {
 				$returnToURL = $rootPath . $category . ' / '. $id . '/modify';
 				$msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
 				UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
@@ -752,9 +712,9 @@ class BoardView extends BoardModule {
 		$filename = $contentData['filename'];
 		$filetype = $contentData['filetype'];
 		
-		if ($contentsType =='html'){
+		if ($contentsType === 'html'){
 			$contentData['contents'] = htmlspecialchars_decode($contentData['contents']);
-		}else if ($contentsType == 'text'){
+		}else if ($contentsType === 'text'){
 			$contentData['contents'] = nl2br(htmlspecialchars($contentData['contents']));
 		}
 		
@@ -765,19 +725,19 @@ class BoardView extends BoardModule {
 		if ($filename) {
 
 			$fileupPath = $rootPath . "files/board/${filename}";
-			if ($is_download == 'y' && ($filetype =="application/x-zip-compressed" || $filetype =="application/zip")) {
+			if (($is_download == 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
 
 				$contentData['css_down'] = 'show';
-			} else if (!($filetype =="application/x-zip-compressed" || $filetype =="application/zip")){
+			} else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
 
 				$image_info = getimagesize($fileupPath);
 			      $image_type = $image_info[2];
 
-			      if ( $image_type == IMAGETYPE_JPEG ) {
+			      if ( $image_type === IMAGETYPE_JPEG ) {
 			      	$image = imagecreatefromjpeg($fileupPath);
-			      } elseif( $image_type == IMAGETYPE_GIF ) {
+			      } elseif( $image_type === IMAGETYPE_GIF ) {
 			       	$image = imagecreatefromgif($fileupPath);
-			      } elseif( $image_type == IMAGETYPE_PNG ) {
+			      } elseif( $image_type === IMAGETYPE_PNG ) {
 			     		$image = imagecreatefrompng($fileupPath);
 				}
 				$contentData['css_img'] = 'show';
@@ -791,10 +751,10 @@ class BoardView extends BoardModule {
 		$row = $this->model->getRow();			
 		$wall = $row['wall'];
 
-		if ($wall == 'a' || !isset($wall)) {
+		if ($wall === 'a' || !isset($wall)) {
 			$contentData['wallname'] = "나라사랑";
 			$contentData['wallkey'] = "b";
-		} else if ($wall == 'b') {
+		} else if ($wall === 'b') {
 			$contentData['wallname'] = "조국사랑";
 			$contentData['wallkey'] = "a";
 		}
@@ -823,7 +783,7 @@ class BoardView extends BoardModule {
 			} 
 		}
 
-		if ($is_repliable == 'n') {
+		if ($is_repliable === 'n') {
 			if ($admin_pass === FALSE) {
 				$msg = '죄송합니다. 이곳은 관리지 전용게시판입니다.';
 				UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -831,7 +791,7 @@ class BoardView extends BoardModule {
 			}
 		}
 
-		if (isset($user_name) && $user_name != '') {
+		if (empty($user_name)) {
 			$contentData['css_user_label'] = 'hide';
 			$contentData['user_name_type'] = 'hidden';
 			$contentData['user_pass_type'] = 'hidden';

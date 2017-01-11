@@ -1,37 +1,6 @@
 <?php
 
-class BoardAdminModule extends View
-{
-	
-	var $class_name = 'board_admin_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() { 
-
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-	}
-}
-
-class BoardAdminView extends BoardAdminModule
+class BoardAdminView extends ModuleAdminView
 {
 
 	function displayBoardAdmin() {
@@ -252,7 +221,7 @@ class BoardAdminView extends BoardAdminModule
 
 		$msg = "추가 생성 게시판 : ".$category."\n";
 
-		if (!isset($category) || $category == '') {
+		if (empty($category)) {
 
 			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
 			$resultYN = "N";
@@ -264,7 +233,7 @@ class BoardAdminView extends BoardAdminModule
 			exit;
 		}
 
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $category)) {
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,}$/i', $category)) {
 
 			$msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 

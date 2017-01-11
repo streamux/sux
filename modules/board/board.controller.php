@@ -110,12 +110,10 @@ class BoardController extends Controller {
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$user_name = $sesstions['sux_user_name'];
-		$pass = substr(md5(trim($posts['password'])),0,8);
-		$pass = substr(md5($pass),0,8);
+		$passwordHash = $context->getPasswordHash($posts['password']);
 
-		$adminPwd = $context->getAdminInfo('admin_pwd');
-		$adminPwd = substr(md5(trim($adminPwd)),0,8);
-		$adminPwd = substr(md5(trim($adminPwd)),0,8);
+		$adminPassword = $context->getAdminInfo('admin_pwd');
+		$adminPasswordHash = $context->getPasswordHash($adminPassword);
 
 		$imageUpName = $files['imgup']['name'];
 		$imageUpTempName = $files['imgup']['tmp_name'];
@@ -131,7 +129,7 @@ class BoardController extends Controller {
 		$this->model->selectFromBoardWhere('password, igroup_count, filename', array('id'=>$id));
 		$row = $this->model->getRow();
 
-		if ($pass == $row['password'] || $pass == $adminPwd) {			
+		if ($passwordHash === ($row['password'] || $adminPasswordHash)) {			
 			$delFileName = $row['filename'];
 			if ($delFileName) {
 				$delFileName = $saveDir . $delFileName;
@@ -244,8 +242,8 @@ class BoardController extends Controller {
 		$files =  $context->getFiles();
 
 		$returnURL = $context->getServer('REQUEST_URI');		
-		$pass = trim($posts['password']);
-		if (empty($pass)) {
+		$password = trim($posts['password']);
+		if (empty($password)) {
 			$msg .= '비밀번호를 입력해주세요.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
@@ -257,19 +255,15 @@ class BoardController extends Controller {
 		$msg = '';
 		$resultYN = 'Y';
 
-		$pass = substr(md5(trim($pass)),0,8);
-		$pass = substr(md5($pass),0,8);
-
-		$admin_pwd = trim($context->getAdminInfo('admin_pwd'));
-		$admin_pwd = substr(md5($admin_pwd),0,8);
-		$admin_pwd = substr(md5($admin_pwd),0,8);
-
+		$passwordHash = $context->getPasswordHash($password);
+		$adminPassword = $context->getAdminInfo('admin_pwd');
+		$adminPasswordHash = $context->getPasswordHash($adminPassword);
+		
 		$this->model->selectFromBoardWhere('password,filename');		
 		$row = $this->model->getRow();	
 		$delFileName = $row['filename'];
 
-		//UIError::alert( $pass . ' : ' . $row['password'] . ' : ' . $admin_pwd );
-		if ($pass == $row['password'] || $pass == $admin_pwd) {
+		if ($passwordHash == ($row['password'] || $adminPasswordHash)) {
 
 			if(isset($delFileName) && $delFileName != '') {
 				$deletePath = $deletePath . $delFileName;
@@ -344,7 +338,7 @@ class BoardController extends Controller {
 
 		$index = 0;
 		foreach ($checkList as $key => $value) {			
-			if (isset($posts[$value]) && $posts[$value] === '') {
+			if (empty($posts[$value])) {
 				$msg = $checkLabel[$index] . ' 입력해주세요.';
 				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 				return false;
@@ -374,8 +368,8 @@ class BoardController extends Controller {
 		$posts = $context->getPostAll();		
 
 		$returnURL = $context->getServer('REQUEST_URI');
-		$pass = trim($posts['password']);
-		if (!(isset($pass) && $pass)) {
+		$password = trim($posts['password']);
+		if (!(isset($password) && $password)) {
 			$msg .= '비밀번호를 입력해주세요.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
@@ -392,7 +386,7 @@ class BoardController extends Controller {
 		$this->model->selectFromCommentWhere('password', array('id'=>$sid));
 		$row = $this->model->getRow();
 		//Tracer::getInstance()->output();
-		if ($pass == $row['password'] || $pass == $adminPwd) {
+		if ($password === ($row['password'] || $adminPwd)) {
 			$result = $this->model->deleteComment();
 			if (!isset($result)) {
 				$msg .= '댓글 삭제를 실패하였습니다.';

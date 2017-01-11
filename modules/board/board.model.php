@@ -43,13 +43,7 @@ class BoardModel extends Model {
 		$this->user_id = $posts['user_id'];
 		$this->user_name = $posts['user_name'];
 		$this->nick_name = $posts['nick_name'];
-		$this->password = substr(md5(trim($posts['password'])),0,8);
-
-		$user_name = $sesstions['sux_user_name'];
-		if (!isset($user_name) && $user_name == '') { 
-			$this->user_name = $posts['user_name'];
-			$this->password = substr(md5($this->password),0,8);
-		}
+		$this->password = $context->getPassowrdHash($posts['password']);
 
 		$this->email_address = $posts['email_address'];	
 		$this->content_type = $posts['content_type'];

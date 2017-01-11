@@ -1,4 +1,4 @@
-<query id="insertDocument" action="insert" module="install">
+<query id="insertDocument" action="insert" execution="once">
 	<tables>
 		<table name="document"></table>
 	</tables>

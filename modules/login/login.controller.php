@@ -20,26 +20,25 @@ class LoginController extends Controller {
 			$category = trim($this->post_data['category']);
 		}
 
-		$user_id = trim($this->session_data['sux_user_id']);
-		if (empty($user_id)) {
-			$user_id = trim($this->post_data['user_id']);
+		$userId = trim($this->session_data['sux_user_id']);		
+		if (empty($userId)) {
+			$userId = trim($this->post_data['user_id']);
 		}
 
-		$pass = trim($this->session_data['sux_password']);
-		if (!isset($pass) || $pass == '') {
-
-			$pass = trim($this->post_data['password']);
-			if (isset($pass) && $pass) {
-				$pass = substr(md5($pass),0,8);
+		$password = trim($this->session_data['sux_password']);
+		if (empty($password)) {
+			$password = trim($this->post_data['password']);
+			if (isset($password) && $password) {
+				$passwordHash = $context->getPasswordHash($password);
 			}			
 		}
 
 		$rootPath = _SUX_ROOT_;
 
-		if (!$user_id) {
-			$msg = '아이디를 입력하세요.';
-		} else if (!$pass) {
-			$msg = '비밀번호를 입력하세요.';
+		if (empty($userId)) {
+			$msg .= '아이디를 입력하세요.';
+		} else if (empty($passwordHash)) {
+			$msg .= '비밀번호를 입력하세요.';
 		} 
 
 		if (isset($msg) && $msg) {
@@ -48,7 +47,7 @@ class LoginController extends Controller {
 		}
 
 		$context->setParameter('category', $category);
-		$context->setParameter('user_id', $user_id);
+		$context->setParameter('user_id', $userId);
 
 		$this->model->selectLogpass();		
 		$rownum = $this->model->getNumRows();
@@ -58,7 +57,7 @@ class LoginController extends Controller {
 
 			$row = $this->model->getRow();
 			$password = $row['password'];
-			if ($pass !== $password) {
+			if ($passwordHash !== $password) {
 				$msg = '비밀번호가 일치하지 않습니다.';
 				UIError::alertTo($msg, $rootPath . 'login-fail');
 				exit;
@@ -97,6 +96,9 @@ class LoginController extends Controller {
 		$rootPath = _SUX_ROOT_;
 		$this->session_data = $context->getSessionAll();
 		foreach ($this->session_data as $key => $value) {
+			if (strpos($key, 'admin_ok') !== false) {
+				continue;
+			}
 			$context->setSession($key, '');
 		}
 

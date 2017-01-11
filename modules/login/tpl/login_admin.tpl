@@ -7,20 +7,25 @@
 		<h1 class="title">관리자 로그인</h1>
 		<span class="subtitle">SUX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 
-		<form action="login.admin.php?action=logpass" name="f_login_admin" method="post" onSubmit="return jsux.fn.loginAdmin.checkForm(this);">
+		<form action="{$rootPath}login-admin" name="f_login_admin" method="post" onSubmit="return jsux.fn.loginAdmin.checkForm(this);">
+		<input type="hidden" name="_method" value="insert">
 		<div class="box ui-edgebox-2px">
 			<div class="login-header">
-				<img src="tpl/images/icon_01.gif" title="">						
+				<img src="{$rootPath}modules/admin/tpl/images/icon_01.gif" title="">						
 				<span>관리자 확인</span>
 			</div>
 			<div class="login-body">
 				<div class="panel-info">
 					<ul>
-						<li><span class="ui-label">아이디</span><input type="text" name="user_id" maxlength="14" value="admin"></li>
-						<li><span class="ui-label">비밀번호</span><input type="password" name="user_pwd" maxlength="20"></li>
+						<li>
+							<span class="ui-label">아이디</span><input type="text" name="user_id" maxlength="14" value="admin">
+						</li>
+						<li>
+							<span class="ui-label">비밀번호</span><input type="password" name="user_pwd" maxlength="20">
+						</li>
 					</ul>							
 				</div><div class="panel-btn">
-					<input type="image" name="imagefield" src="tpl/images/btn_login.gif" title="로그인버튼" class="login-btn">
+					<input type="image" name="imagefield" src="{$rootPath}modules/admin/tpl/images/btn_login.gif" title="로그인버튼" class="login-btn">
 				</div>					
 			</div>													
 		</div>

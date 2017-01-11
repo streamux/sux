@@ -236,7 +236,7 @@ class DocumentAdminView extends DocumentModule
 
 		$msg = "추가 생성 페이지 : ".$category."\n";
 
-		if (!isset($category) || $category == '') {
+		if (empty($category)) {
 
 			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
 			$resultYN = "N";

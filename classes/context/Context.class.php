@@ -318,11 +318,16 @@ class Context {
 		return $this->parameter_list;
 	}
 
+	function getPasswordHash($password) {
+
+		return md5($password);
+	}
+
 	function checkAdminPass() {
 
-		$is_logged = FALSE;
-		if (md5($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
-			$is_logged = TRUE;
+		$is_logged = false;
+		if ($this->getPasswordHash($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
+			$is_logged = true;
 		}
 		return $is_logged;
 	}

@@ -1,43 +1,6 @@
 <?php
 
-class LoginModule extends View {
-
-	var $class_name = 'login_module';	
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance();
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
-
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();
-	}
-}
-
-class LoginView extends LoginModule {
+class LoginView extends ModuleView {
 
 	var $class_name = 'login_view';
 
@@ -239,7 +202,7 @@ class LoginView extends LoginModule {
 				$userId = $row['user_id'];
 				$email = $row['email_address'];	
 
-				if (trim($email) !== trim($checkEmail)) {
+				if ($email !== $checkEmail) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
@@ -309,7 +272,7 @@ class LoginView extends LoginModule {
 		$context ->setParameter('category', $this->post_data['category']);
 		$context ->setParameter('user_id', $this->post_data['user_id']);
 
-		if(isset($checkUserId) && $checkUserId !== '') {
+		if(isset($checkUserId) && $checkUserId) {
 
 			$this->model->selectSearchpwd();
 			$row = $this->model->getRow();
@@ -318,12 +281,12 @@ class LoginView extends LoginModule {
 				$email = $row['email_address'];
 				$password = $row['password'];			
 
-				if (trim($userName) !== $checkName) {
+				if ($userName !== $checkName) {
 					UIError::alertToBack('입력하신 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
 					exit;
 				}
 
-				if (trim($email) !== $checkEmail) {
+				if ($email !== $checkEmail) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
 					exit;
 				}

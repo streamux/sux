@@ -9,14 +9,36 @@ class ModuleHandler
 	function display( $id, $sid)
 	{
 		$context = Context::getInstance();
+		$returnURL = $context->getServer('REQUEST_URI');
 
 		$uriMethod = URIToMethod::getInstance();
-		$uriMethod->setURI($context->getServer('REQUEST_URI'));
+		$uriMethod->setURI($returnURL);
 
 		// Module Router 클래스 내에서 값이 세팅된다.
 		$moduleKey = $uriMethod->getMethod('module-key');
 		$category = $uriMethod->getMethod('category');
 		$action = $uriMethod->getMethod('action');	
+
+		$errorKey = '';
+		$isInvalid = null;
+		if ($moduleKey && !preg_match("/^([a-z0-9\_\-]+)$/i", $moduleKey)) {
+			$errorKey = 'module_key';
+			$isInvalid = true;
+		}
+		if ($category && !preg_match("/^([a-z0-9\_\-]+)$/i", $category)) {
+			$errorKey = 'category_key';
+			$isInvalid = true;
+		}
+		if ($action && !preg_match("/^([a-z0-9\_\-]+)$/i", $action)) {
+			$errorKey = 'action_key';
+			$isInvalid = true;
+		}
+
+		if ($isInvalid) {
+			$msg = $errorKey . ' is not available';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+		}
 
 		/**
 		 * @route uri's construct
