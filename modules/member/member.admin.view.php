@@ -88,16 +88,15 @@ class MemberAdminView extends ModuleAdminView {
 
 			$numrow = $this->model->getNumRows();
 			if ($numrow > 0) {
-
-				$rows = $this->model->getRows();
-				for ($i=0; $i<count($rows); $i++) {
-
-					$dataList = array('no'=>($i+1));
-					foreach ($rows[$i] as $key => $value) {
+				$i = 1;
+				foreach ($this->model->getRows() as $row) {
+					$dataList['no'] = $i;
+					foreach ($row as $key => $value) {
 						$dataList[$key] = $value;
 					}
 					$dataObj[] = $dataList;
-				}				
+					$i++;		
+				}
 			} else {
 				$msg = "회원그룹이 존재하지 않습니다.";
 				$resultYN = "N";

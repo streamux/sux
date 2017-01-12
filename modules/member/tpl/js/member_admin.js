@@ -55,6 +55,26 @@ jsux.fn.groupAdd = {
 
 		return (true);
 	},
+	checkGroupID: function(f) {
+
+		var $category = $('input[name=category]'),
+			params = {
+			_method: 'insert',
+			category: $category.val()
+		};
+
+		if (params.category === '') {
+			trace('카테고리 이름을 입력해주세요.')
+			$category.focus();
+			return;
+		}
+
+		var url = jsux.rootPath + 'member-admin/group-checkid';
+
+		jsux.getJSON( url, params, function(e) {
+			trace( e.msg );
+		});
+	},
 	sendAndLoad: function() {
 
 		var params = {};
@@ -92,21 +112,21 @@ jsux.fn.groupAdd = {
 		$('form').on('submit', function( e ) {
 
 			e.preventDefault();
-
-			var bool  = self.checkFormVal( e.target );
-			
+			var bool  = self.checkFormVal( e.target );			
 			if (bool === true) {
-
 				if ( self.checkLang( e.target.category.value)) {
 					trace('회원그룹명에 한글이 포함되어 있습니다.');						
 				} else {
 					self.sendAndLoad();
 				}
 			}				
-		});			
+		});
+
+		$('input[name=check-member-group]').on('click', function(e) {
+			self.checkGroupID();
+		});
 
 		$('input[name=cancel]').on('click', function(e) {
-
 			jsux.goURL(jsux.rootPath + menuList[0].menu[0].link);
 		});
 	},

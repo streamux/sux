@@ -18,47 +18,43 @@ class Model extends Object {
 	function select($query=NULL) {
 
 		$this->result = $this->db->select($query);
-		$this->setFetchArray();
-		$this->setNumRows();
 		return $this->result;
 	}
 
 	function insert($query=NULL) {
 
-		$result = $this->db->insert($query);
-		return $result;
+		$this->result = $this->db->insert($query);
+		return $this->result;
 	}
 
 	function update($query=NULL) {
 
-		$result = $this->db->update($query);
-		return $result;
+		$this->result = $this->db->update($query);
+		return $this->result;
 	}
 
 	function delete($query=NULL) {
 
-		$result = $this->db->delete($query);
-		return $result;
+		$this->result = $this->db->delete($query);
+		return $this->result;
 	}
 
 	function showTables($query) {
 
-		$result = $this->db->showTables($query);
-		$this->setFetchArray();
-		$this->setNumRows();
-		return $result;
+		$this->result = $this->db->showTables($query);
+		return $this->result;
 	}
 
 	function createTable($query) {
 
-		$result = $this->db->createTable($query);
-		return $result;
+		$this->result = $this->db->createTable($query);
+		return $this->result;
 	}
 
 	function dropTable($query) {
 
-		$result = $this->db->dropTable($query);
-		return $result;
+		$this->result = $this->db->dropTable($query);
+		return $this->result;
 	}
 
 	function getMysqlFetchArray($result) {
@@ -71,68 +67,30 @@ class Model extends Object {
 		return $this->db->getNumRows($result);
 	}
 
-	function setFetchArray() {
-
-		$this->fetchArrayList = array();
-		while($rows = $this->db->getFetchArray()) {
-
-			$fields = array();
-			foreach ($rows as $key => $value) {
-
-				if (gettype($key) == 'string' && isset($value) && $value != '' ) {
-					$fields[$key]=$value;
-				} else if (gettype($key) == 'string'){
-					$fields[$key]=$value;
-				}
-				$fields[$key]=$value;
-			}
-			$this->fetchArrayList[]=$fields;
-		}	
-	}
-
-	function getFetchArray($ignore=NULL) {
-
-		$rows_data = array();		
-		$i=0;
-
-		while ($i < count($this->fetchArrayList)) {
-
-			$fields = array();
-			$rows = $this->fetchArrayList[$i];
-
-			foreach ($rows as $key => $value) {
-				if (($ignore === 'true' || $ignore === TRUE) && gettype($key) == 'string' && isset($value) && $value != '' ) {
-					$fields[$key]=$value;
-				} else if (($ignore != 'true' || $ignore != TRUE) && gettype($key) == 'string'){
-					$fields[$key]=$value;
-				}
-			}
-			$rows_data[]=$fields;
-			$i++;
-		}
-
-		return $rows_data;
-	}
-
-	function setNumRows() {
-
-		$this->rownum = $this->db->getNumRows();
-	}
-
 	function getNumRows() {
 
-		return $this->rownum;
+		return $this->db->getNumRows($this->result);
 	}
 
-	function getRows($ignore=TRUE) {
+	function getRows() {
 
-		$rows = $this->getFetchArray($ignore);
-		return $rows;
+		$datas = array();
+		while($rows = $this->db->getFetchArray($this->result)) {		
+
+			$fields = array();
+			foreach ($rows as $key => $value) {
+				if (is_string($key) !== false) {
+					$fields[$key] = $value;
+				}				
+			}
+			$datas[] = $fields;
+		}
+		return $datas;
 	}
 
 	function getRow() {
 
-		$rows = $this->getFetchArray($ignore);
+		$rows = $this->getRows();
 		return $rows[0];
 	}
 
@@ -140,9 +98,9 @@ class Model extends Object {
 
 		$numrow = $this->getNumRows();
 		if ($numrow > 1) {
-			$str_data = $this->getRows($ignore);
+			$str_data = $this->getRows();
 		} else {
-			$str_data = $this->getRow($ignore);
+			$str_data = $this->getRow();
 		}		
 		return JsonEncoder::getInstance()->parse($str_data);
 	}

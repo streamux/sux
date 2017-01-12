@@ -48,7 +48,47 @@ class MemberAdminController extends Controller
 						"msg"=>$msg);
 		
 		$this->callback($data);
-	}	
+	}
+
+	function insertGroupCheckid() {
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$category = $posts['category'];
+		$msg = "카테고리 그룹 이름 : ".$category."\n";	
+		
+		if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_]{3,}$/i', $category)) {
+
+			$msg .= "카테고리 명은 영문,숫자,특수문자('_') 단어만 사용가능합니다.<br>첫글자가 영문 시작되는 4글자 이상 단어를 사용하세요.";
+
+			$data = array(	"result"=>$resultYN,
+							"msg"=>$msg);
+
+			$this->callback($data);
+			exit;
+		} 
+		
+		if (isset($category)) {
+			$this->model->selectFromMember('user_name');
+			$numrows = $this->model->getNumRows();
+			if ($numrows > 0) {
+				$msg = "'${category}'는 이미 존재하는 카테고리 이름입니다.";
+				$resultYN = "N";
+			} else {
+				$msg = "'${category}'는 사용할 수 있는 카테고리 이름입니다.";
+				$resultYN = "Y";
+			}
+		}else{
+			$msg = "카테고리 이름을 넣고 중복체크를 하세요.";
+			$resultYN = "N";
+		}
+
+		$data = array(	"result"=>$resultYN,
+						"msg"=>$msg);
+
+		$this->callback($data);
+	}
 
 	function deleteGroupDelete() {
 

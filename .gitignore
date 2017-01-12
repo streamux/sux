@@ -2,6 +2,7 @@
 files/
 node_modules/
 templates_c/
+layout/
 
 #config files
 config.admin.php

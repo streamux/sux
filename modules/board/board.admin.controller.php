@@ -47,25 +47,27 @@ class BoardAdminController extends Controller
 		$columnCaches = CacheFile::readFile($cachePath, 'columns');
 		if (!$columnCaches) {
 			$msg .= "QueryCacheFile Do Not Exists<br>";
-		} else {
-			$columns = array();
-			for($i=0; $i<count($columnCaches); $i++) {
-				$key = $columnCaches[$i];
-				$value = $posts[$key];
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+		}
 
-				if (isset($value) && $value) {
-					$columns[] = $value;
-				} else {
-					if ($key === 'date') {
-						$columns[] = 'now()';
-					} else if ($key === 'ip') {
-						$columns[] = $_SEVER['REMOTE_ADDR'];
-					}  else {
-						$columns[] = '';
-					}				
-				}						
-			}
-		} // end of if
+		$columns = array();
+		for($i=0; $i<count($columnCaches); $i++) {
+			$key = $columnCaches[$i];
+			$value = $posts[$key];
+
+			if (isset($value) && $value) {
+				$columns[] = $value;
+			} else {
+				if ($key === 'date') {
+					$columns[] = 'now()';
+				} else if ($key === 'ip') {
+					$columns[] = $_SEVER['REMOTE_ADDR'];
+				}  else {
+					$columns[] = '';
+				}				
+			}						
+		}
 
 		$result = $this->model->insert('board_group', $columns);
 		if (!$result) {
@@ -119,30 +121,45 @@ class BoardAdminController extends Controller
 	function updateModify() {
 
 		$context = Context::getInstance();
-		$id = $context->getPost('id');
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
+		$category = $posts['category'];
+		$returnURL = $context->getServer('REQUEST_URI');
 
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
 
-		$posts = $context->getPostAll();
-		$column = array();
-		foreach ($posts as $key => $value) {			
-			if ($key !== ('id' || 'category' ||'_method')) {
-				$column[$key] = $value;
-			}			
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/board_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
+		}
+
+		$columns = array();
+		$postsCopy = array_slice($posts, 2);
+		foreach ($columnCaches as $key => $value) {
+			if (isset($postsCopy[$value]) && $postsCopy[$value]) {
+				$columns[$value] = $postsCopy[$value];	
+			}				
 		}
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->update('board_group', $column, $where);
+		$result = $this->model->update('board_group', $columns, $where);
 		if (!$result) {
-			$msg = "$category 게시판 수정을 실패하였습니다.";
+			$msg .= "$category 게시판 수정을 실패하였습니다.";
 			$resultYN = "N";	
 		}
 
 		if ($resultYN === 'Y') {
-			$msg = $category . ' 게시판이 수정되었습니다.';
+			$msg .= $category . ' 게시판이 수정되었습니다.';
 		}
 		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"member"=>$dataObj,

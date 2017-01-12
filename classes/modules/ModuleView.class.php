@@ -10,13 +10,7 @@ class ModuleView extends View {
 
 	function output() {
 
-		$UIError = UIError::getInstance(); 
-		/*
-		 * @class Tracer
-		 * @brief Tracer를 이용해서 코드의 흐름을 파악할 수 있다.
-		 */
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
+		$UIError = UIError::getInstance(); 		
 
 		/**
 		 * @class Template
