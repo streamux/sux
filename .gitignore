@@ -1,9 +1,10 @@
 #generated directory
 files/
 node_modules/
-node_modules/templates_c/
-node_modules/layout/
-node_modules/mail/
+templates_c/
+layout/
+mail/
+*_backup/
 
 #config files
 config.admin.php
