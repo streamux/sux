@@ -35,10 +35,14 @@ class UIError extends Object {
 
 	public function output() {
 
-		$htmlUI = '%s';
+		
 
 		if (strtolower($this->useHtml) == true) {
-			$htmlUI = $this->getHtmlLayout($htmlUI);
+			$htmlUI = $this->htmlHeader();
+			$htmlUI .= '%s';
+			$htmlUI .= $this->htmlFooter();
+		} else {
+			$htmlUI = '%s';
 		}
 
 		printf($htmlUI, $this->msg_list);

@@ -165,7 +165,6 @@ class InstallController extends Controller {
 			if ($queryList) {
 
 				foreach ($queryList as $key => $value) {
-
 					if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 
 						$xmlPath = $queryDir . '/' . $value['file_name'];
@@ -175,58 +174,60 @@ class InstallController extends Controller {
 							$columns = array();				
 							$queryXml = simplexml_load_file($xmlPath);	
 
-							$moduleType = (string) gettype($queryXml['execution']);					
-							if (strpos(strtolower($moduleType),'once') !== false) {
-								continue;
-							}
+							$moduleType = (string) $queryXml['execution'];	
+							$actionType = (string) $queryXml['action'];
+							if (($actionType === 'insert') && ($moduleType === 'once')) {
 
-							$propTableName = $queryXml[0]->tables[0]->table['name'];
-							$tableName = $tablePrefix . '_' . $propTableName;
-							$query->setTable($tableName);
-							$queryColumns = $queryXml[0]->columns[0]->column;
-							foreach ($queryColumns as $key => $value) {
+								$propTableName = $queryXml[0]->tables[0]->table['name'];
+								$tableName = $tablePrefix . '_' . $propTableName;
+								$query->setTable($tableName);
+								$queryColumns = $queryXml[0]->columns[0]->column;
+								foreach ($queryColumns as $key => $value) {
 
-								$nodeValue = (string) $value;
-								$propValue = (string) $value['name'];
-								if (preg_match('/((header|contents|footer)_path)+$/i', $propValue) !== false) {
-									$nodeValue = $rootPath . $nodeValue;
+									$nodeValue = (string) $value;
+									$propValue = (string) $value['name'];
+									if ($propValue === 'category') {
+										$where = array('category'=>$nodeValue);
+									}
+
+									$msg .= $propValue . "<br>";						
+							
+									if (preg_match('/^((header|contents|footer)_path)+$/i', $propValue)) {
+										$nodeValue = $rootPath . $nodeValue;
+									}							
+
+									if ($propValue === 'contents_path') {
+										$contentsPath = $nodeValue;					
+									}
+									$columns[] = $nodeValue;
 								}
 
-								if ($propValue === 'category') {
-									$where = array('category'=>$nodeValue);
+								if (isset($where) && $where) {
+									$query->setField('id');
+									$query->setWhere($where);
+									$oDB->select($query);
+									$numrows = $oDB->getNumRows();
 								}
 
-								if ($propValue === 'contents_path') {
-									$contentsPath = $nodeValue;					
+								if (isset($numrows) && $numrows === 0) {
+									$query->setColumn($columns);
+									$oDB->insert($query);
+
+									// write template'file to file's dir to read from module's template file
+									if ($module == 'document') {
+										$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+										//  read and write contents
+										$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
+										$buff = FileHandler::readFile($contentsPath);
+
+										$result = FileHandler::writeFile($cachePath, $buff);
+										if (!$result) {
+											$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+										} 
+									}								
 								}
-								$columns[] = $nodeValue;
 							}
-
-							if (isset($where) && $where) {
-								$query->setField('id');
-								$query->setWhere($where);
-								$oDB->select($query);
-								$numrows = $oDB->getNumRows();
-							}
-
-							if (isset($numrows) && $numrows === 0) {
-								$query->setColumn($columns);
-								$oDB->insert($query);
-
-								// write template'file to file's dir to read from module's template file
-								if ($module == 'document') {
-									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-									//  read and write contents
-									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
-									$buff = FileHandler::readFile($contentsPath);
-
-									$result = FileHandler::writeFile($cachePath, $buff);
-									if (!$result) {
-										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-									} 
-								}								
-							}	
-						}
+						} // end of if (file_exists)
 					}
 				} // end of foreach		
 			}

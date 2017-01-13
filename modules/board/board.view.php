@@ -57,7 +57,7 @@ class BoardView extends ModuleView {
 			$footerPath = "{$skinPath}/_footer.tpl";
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
-	
+
 		// list logic
 		$context->setParameter('find', $find);
 		$context->setParameter('search', $search);

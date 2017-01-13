@@ -25,7 +25,7 @@ class ModuleView extends View {
 			$__template->assign('postData', $this->post_data);
 			$__template->assign('documentData', $this->document_data);
 			$__template->display( $this->skin_path_list['contents'] );		
-		} else {			
+		} else {
 			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
 			$UIError->useHtml = TRUE;
 		}		

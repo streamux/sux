@@ -86,7 +86,7 @@ class DocumentAdminController extends Controller
 			if (!$result) {
 				$msg .= "${category} 템플릿 파일 등록을 실패하였습니다.<br>";
 			} else {
-				$msg .= "${category} 템플릿 파일이 정상적으로 등록되었습니다.<br>";
+				$msg .= "${category} 템플릿 파일을 정상적으로 등록하였습니다.<br>";
 			}
 
 			// write route's key
@@ -226,7 +226,7 @@ class DocumentAdminController extends Controller
 
 			$result = CacheFile::writeFile($filePath, $routes);
 			if (!$sesult) {
-				$msg = "라우트 파일 재설정을 완료하였습니다.";
+				$msg .= "라우트 파일 재설정을 완료하였습니다.";
 			}
 		}
 		//$msg .= Tracer::getInstance()->getMessage();
