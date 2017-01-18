@@ -103,7 +103,7 @@ class MemberController extends Controller {
 			exit;
 		}
 
-		// hobe data
+		// hoby data
 		$hobby = '';
 		$index = 0;
 		foreach ($posts as $key => $value) {
@@ -132,10 +132,7 @@ class MemberController extends Controller {
 		}
 
 		$passwordHash = $context->getPasswordHash($posts['password']);
-		$passwordHashConf = $context->getPasswordHash($posts['passwordConf']);
-
-		$context->setPost('password', $passwordHash);
-		$context->setPost('passwordConf', $passwordHashConf);		
+		$context->setPost('password', $passwordHash);	
 		$context->setPost('email_address', $email);
 		$context->setPost('hobby', $hobby);
 
@@ -152,22 +149,46 @@ class MemberController extends Controller {
 			$this->callback($data);
 			exit;
 		}
-
-		$result = $this->model->insertMemberJoin();
-		if (!$result) {
-			$msg .= '신규회원 가입을 실패하였습니다.';
-			$resultYN = "N";
-
-			$data = array(	'url'=>$returnURL,
-							'result'=>$resultYN,
-							'msg'=>$msg);
-
-			$this->callback($data);
+		
+		$cachePath = './files/caches/queries/member.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
-		} 
+		}
 
-		$msg .= '신규회원 가입을 완료하였습니다.';
-		$resultYN = "Y";
+		$columns = array();
+		for($i=0; $i<count($columnCaches); $i++) {
+			$key = $columnCaches[$i];
+			$value = $posts[$key];
+
+			if (isset($value) && $value) {
+				if ($key === 'password') {
+					$value = md5($value);
+				}
+				$columns[] = $value;
+			} else {
+				if ($key === 'date') {
+					$columns[] = 'now()';
+				} else if ($key === 'ip') {
+					$columns[] = $context->getServer('REMOTE_ADDR');
+				}  else {
+					$columns[] = '';
+				}				
+			}						
+		}
+
+		$result = $this->model->insert('member', $columns);
+		if ($result) {
+			$msg .= '신규회원 가입을 완료하였습니다.' . PHP_EOL;
+			$resultYN = "Y";
+		}  else {
+			$msg .= '신규회원 가입을 실패하였습니다.' . PHP_EOL;
+			$resultYN = "N";			
+		}
+
+		//$msg .= Tracer::getInstance()->getMessage();		
 		$data = array(	'url'=>$rootPath . 'login',
 						'result'=>$resultYN,
 						'msg'=>$msg);

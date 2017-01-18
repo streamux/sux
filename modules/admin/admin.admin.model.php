@@ -141,7 +141,7 @@ class AdminAdminModel extends Model
 		$query->setField($field);
 
 		if (isset($where) && $where) {
-			$query->setWhere($where);
+			$query->setWhere($where); 
 		}
 
 		$result = parent::select($query);

@@ -4,10 +4,6 @@ class MemberModel extends Model {
 
 	var $class_name = 'member_model';
 
-	function init() {
-		
-	}
-
 	function selectMemberGroup() {
 
 		$context = Context::getInstance();
@@ -24,8 +20,8 @@ class MemberModel extends Model {
 
 		$context = Context::getInstance();
 		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
+		$category = $context->getPost('category');
+		$userId = $context->getPost('user_id');
 
 		$where = new QueryWhere();
 		$where->set('category',$category,'=');
@@ -37,45 +33,18 @@ class MemberModel extends Model {
 		$query->setWhere($where);
 		$result = parent::select($query);
 		return $result;
-	}	
+	}
 
-	function insertMemberJoin() {
+	function insert($table_name, $columns = null) {
 
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$remote_addr = $context->getServer('REMOTE_ADDR');
-		$table_name = $context->getTable('member');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($table_name);
-		$query->setColumn(array(
-			'',
-			$posts['category'],
-			$posts['user_id'],
-			$posts['password'],
-			$posts['user_name'],
-			$posts['nick_name'],
-			$posts['email_address'],
-			'',
-			'',
-			$posts['hp1'],
-			$posts['hp2'],
-			$posts['hp3'],
-			'',
-			$posts['job'],
-			$posts['hobby'],
-			$posts['join_path'],
-			$posts['access_count'],
-			1000,
-			1,
-			'y',			
-			'n',
-			'now()',
-			$remote_addr
-		));
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::insert($query);
-		return $result;
+		return parent::insert($query);
 	}
 
 	function updateMemberModify() {

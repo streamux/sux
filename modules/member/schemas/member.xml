@@ -3,7 +3,7 @@
 	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
 	<column name="category" type="varchar" size="30" notnull="not null"/>
 	<column name="user_id" type="varchar" size="30" notnull="not null"/>
-	<column name="password" type="varchar" size="30" notnull="not null"/>
+	<column name="password" type="varchar" size="75" notnull="not null"/>
 	<column name="user_name" type="varchar" size="50" notnull="not null"/>
 	<column name="nick_name" type="varchar" size="50"/>
 	<column name="email_address" type="varchar" size="125" notnull="not null"/>

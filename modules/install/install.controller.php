@@ -189,8 +189,6 @@ class InstallController extends Controller {
 									if ($propValue === 'category') {
 										$where = array('category'=>$nodeValue);
 									}
-
-									$msg .= $propValue . "<br>";						
 							
 									if (preg_match('/^((header|contents|footer)_path)+$/i', $propValue)) {
 										$nodeValue = $rootPath . $nodeValue;
@@ -212,19 +210,18 @@ class InstallController extends Controller {
 								if (isset($numrows) && $numrows === 0) {
 									$query->setColumn($columns);
 									$oDB->insert($query);
+								}
 
-									// write template'file to file's dir to read from module's template file
-									if ($module == 'document') {
-										$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-										//  read and write contents
-										$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
-										$buff = FileHandler::readFile($contentsPath);
-
-										$result = FileHandler::writeFile($cachePath, $buff);
-										if (!$result) {
-											$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-										} 
-									}								
+								// write template'file to file's dir to read from module's template file
+								if ($module == 'document') {
+									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+									//  read and write contents
+									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
+									$buff = FileHandler::readFile($contentsPath);
+									$result = FileHandler::writeFile($cachePath, $buff);
+									if (!$result) {
+										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+									} 
 								}
 							}
 						} // end of if (file_exists)
