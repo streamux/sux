@@ -1,9 +1,6 @@
 <?php
 
-class InstallModel {
-
-	function __construct()
-	{
-		
-	}
+class InstallModel
+{
+	// code
 }

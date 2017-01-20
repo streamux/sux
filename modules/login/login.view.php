@@ -1,6 +1,6 @@
 <?php
 
-class LoginView extends ModuleView {
+class LoginView extends View {
 
 	var $class_name = 'login_view';
 

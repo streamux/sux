@@ -12,6 +12,8 @@
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
 		<form action="{$rootPath}{$contentData.category}/{$contentData.id}/delete" method="post" name="f_board_delpass">
 		<input type="hidden" name="_method" value="delete">
+		<input type="hidden" name="category" value="{$documentData.category}">
+		<input type="hidden" name="id" value="{$documentData.id}">
 		<div class="box ui-edgebox-2px">
 			<div class="login-title">
 				<img src="{$skinPathList.dir}/images/icon_01.gif" title="" alt="">			

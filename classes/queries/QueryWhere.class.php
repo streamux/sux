@@ -15,16 +15,16 @@ class QueryWhere extends Object {
 		return $this->sql;
 	}
 
-	function set($field,$value,$glue='=', $cond='and') {
+	function set($field,$value,$cond='=', $glue='and') {
 
-		if ($cond != '' && $this->counter > 0) {
-			$this->sql .= ' ' . $cond . ' ';
+		if ($glue != '' && $this->counter > 0) {
+			$this->sql .= ' ' . $glue . ' ';
 		}
 
-		if (preg_match('/like/i', $glue)) {
+		if (preg_match('/like/i', $cond)) {
 			$this->sql .= $field . ' LIKE \'%' . $value . '%\'';
 		} else {
-			$this->sql .= $field . $glue . '\'' . $value . '\'';
+			$this->sql .= $field . $cond . '\'' . $value . '\'';
 		}
 
 		$this->counter++;

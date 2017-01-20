@@ -49,15 +49,13 @@ class LoginController extends Controller {
 		$context->setParameter('category', $category);
 		$context->setParameter('user_id', $userId);
 
-		$this->model->selectLogpass();		
-		$rownum = $this->model->getNumRows();
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
-		if ($rownum > 0) {		
+		$this->model->selectLogpass();
 
+		$rownum = $this->model->getNumRows();
+		if ($rownum > 0) {
 			$row = $this->model->getRow();
 			$password = $row['password'];
-			if ($passwordHash !== $password) {
+			if ($password !== $passwordHash) {
 				$msg = '비밀번호가 일치하지 않습니다.';
 				UIError::alertTo($msg, $rootPath . 'login-fail');
 				exit;

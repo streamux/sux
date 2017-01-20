@@ -1,6 +1,7 @@
 <?php
 
-class InstallView extends ModuleView {
+class InstallView extends View
+{
 
 	function displayInstall() {
 

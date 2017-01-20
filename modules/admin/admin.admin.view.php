@@ -86,7 +86,7 @@ class AdminAdminView extends ModuleAdminView {
 		$resultYN = 'Y';
 		$connecterArr = array('today'=>0, 'yester'=>0,'total'=>0,);
 		
-		$result = $this->model->selectFromConnecterday();
+		$result = $this->model->select('connecter_day');
 		if ($result) {
 			$rows = $this->model->getRows();
 			for ($i=0; $i<count($rows); $i++) {
@@ -95,7 +95,7 @@ class AdminAdminView extends ModuleAdminView {
 
 			$where = new QueryWhere();
 			$where->set('date', date('Y-m-d', time()-86400), '<');
-			$result = $this->model->deleteFromConnecter($where);
+			$result = $this->model->delete('connecter' , $where);
 			if (!$result) {
 				$msg .= '24시 이전 접속통계 레코드 삭제를 실패하였습니다.';
 				$resultYN = 'N';
@@ -104,7 +104,7 @@ class AdminAdminView extends ModuleAdminView {
 			// today
 			$where->reset();
 			$where->set('date', date('Y-m-d'), '=');
-			$result = $this->model->selectFromConnecter('id', $where);
+			$result = $this->model->select('connecter', 'id', $where);
 			if ($result) {
 				$today = $this->model->getNumRows();
 				if (!$today) {
@@ -119,7 +119,7 @@ class AdminAdminView extends ModuleAdminView {
 			// yester day
 			$where->reset();
 			$where->set('date', date('Y-m-d', time()-86400), '=');
-			$result = $this->model->selectFromConnecter('id', $where);
+			$result = $this->model->select('connecter', 'id', $where);
 			if ($result) {
 				$yesterday = $this->model->getNumRows();
 				if (!$yesterday) {
@@ -148,7 +148,7 @@ class AdminAdminView extends ModuleAdminView {
 		$resultYN = 'Y';
 		$connecterArr = array('real_today'=>0, 'real_yester'=>0,'real_total'=>0,);
 
-		$result = $this->model->selectFromConnecterday();
+		$result = $this->model->select('connecter_day');
 		if ($result) {
 			$rows = $this->model->getRows();
 			for ($i=0; $i<count($rows); $i++) {
@@ -157,7 +157,7 @@ class AdminAdminView extends ModuleAdminView {
 
 			$where = new QueryWhere();
 			$where->set('date', date('Y-m-d', time()-86400), '<');
-			$result = $this->model->deleteFromConnecterreal($where);
+			$result = $this->model->delete('connecter_real', $where);
 			if (!$result) {
 				$msg .= '24시 이전 실접속통계 레코드 삭제를 실패하였습니다.';
 				$resultYN = 'N';
@@ -166,7 +166,7 @@ class AdminAdminView extends ModuleAdminView {
 			// today
 			$where->reset();
 			$where->set('date', date('Y-m-d'), '=');
-			$result = $this->model->selectFromConnecterreal('id', $where);
+			$result = $this->model->select('connecter_real', 'id', $where);
 			if ($result) {
 				$real_totay = $this->model->getNumRows();
 				if (!$real_totay) {
@@ -182,7 +182,7 @@ class AdminAdminView extends ModuleAdminView {
 			// yester day
 			$where->reset();
 			$where->set('date', date('Y-m-d', time()-86400), '=');
-			$result = $this->model->selectFromConnecterreal('id', $where);
+			$result = $this->model->select('connecter_real', 'id', $where);
 			if ($result) {
 				$real_yester = $this->model->getNumRows();
 				if (!$real_yester) {
@@ -216,7 +216,7 @@ class AdminAdminView extends ModuleAdminView {
 		$limit = $context->getPost('limit');
 		$passover = $context->getPost('passover');
 
-		$result = $this->model->selectFromPageview('*');
+		$result = $this->model->select('pageview', '*');
 		if ($result) {
 			
 			$numrows = $this->model->getNumRows();
@@ -235,7 +235,7 @@ class AdminAdminView extends ModuleAdminView {
 					$passover = 0;
 				}
 
-				$result = $this->model->selectFromPageview('*', null, 'id desc', $passover, $limit);
+				$result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$a = $numrows - $passover;
@@ -282,7 +282,7 @@ class AdminAdminView extends ModuleAdminView {
 		$limit = $context->getPost('limit');
 		$passover = $context->getPost('passover');
 
-		$result = $this->model->selectFromConnectsite('*');
+		$result = $this->model->select('connect_site', '*');
 		if ($result) {
 			
 			$numrows = $this->model->getNumRows();
@@ -301,7 +301,7 @@ class AdminAdminView extends ModuleAdminView {
 					$passover = 0;
 				}
 
-				$result = $this->model->selectFromConnectsite('*', null, 'id desc', $passover, $limit);
+				$result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$a = $numrows - $passover;
@@ -349,7 +349,7 @@ class AdminAdminView extends ModuleAdminView {
 
 		$where = new QueryWhere();
 		$where->set('choice', 'y');
-		$result = $this->model->selectFromPopup('id', $where);
+		$result = $this->model->select('popup', 'id', $where);
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -358,7 +358,7 @@ class AdminAdminView extends ModuleAdminView {
 			}
 		}
 
-		$result = $this->model->selectFromBoardgroup('id');
+		$result = $this->model->select('board_group', 'id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -367,7 +367,7 @@ class AdminAdminView extends ModuleAdminView {
 			} 
 		}
 
-		$result = $this->model->selectFromMembergroup('id');
+		$result = $this->model->select('member_group', 'id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -376,7 +376,7 @@ class AdminAdminView extends ModuleAdminView {
 			}
 		}
 
-		$result = $this->model->selectFromPageview('id');
+		$result = $this->model->select('pageview', 'id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -385,7 +385,7 @@ class AdminAdminView extends ModuleAdminView {
 			}
 		}
 
-		$result = $this->model->selectFromConnectsite('id');
+		$result = $this->model->select('connect_site', 'id');
 		if ($result) {
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -400,4 +400,3 @@ class AdminAdminView extends ModuleAdminView {
 		return $data;
 	}
 }
-?>

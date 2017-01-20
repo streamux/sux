@@ -1,5 +1,5 @@
 <?php
-class DocumentAdminView extends ModuleAdminView
+class DocumentAdminView extends View
 {
 
 	function displayDocumentAdmin() {

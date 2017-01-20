@@ -1,6 +1,7 @@
 <?php
 
-class InstallController extends Controller {
+class InstallController extends Controller
+{
 
 	function insertSetupDb() {
 

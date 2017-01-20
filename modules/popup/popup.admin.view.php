@@ -1,6 +1,6 @@
 <?php
 
-class PopupAdminView extends ModuleAdminView
+class PopupAdminView extends View
 {
 
 	var $class_name = 'popup_admin_view';

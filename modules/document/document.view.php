@@ -1,5 +1,5 @@
 <?php
-class DocumentView extends ModuleView
+class DocumentView extends View
 {
 
 	function displayContents() {

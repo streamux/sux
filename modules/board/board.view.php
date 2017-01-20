@@ -1,7 +1,6 @@
 <?php
-class BoardView extends ModuleView {
-
-	var $class_name = 'board_view';
+class BoardView extends View
+{
 
 	function displayList() {
 
@@ -23,13 +22,15 @@ class BoardView extends ModuleView {
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 목록';			
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$this->model->select('board_group', '*', $where);
+
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];
 		$skinName = $groupData['skin_path'];
 		$footerPath = $groupData['footer_path'];
-		//$limit = $groupData['limit_pagination'];
-		$limit = 5;
+		$limit = $groupData['limit_pagination'];
 
 		/**
 		 * css, js file path handler
@@ -58,21 +59,26 @@ class BoardView extends ModuleView {
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
 
-		// list logic
-		$context->setParameter('find', $find);
-		$context->setParameter('search', $search);
-		$context->setParameter('limit', $limit);
-		$context->setParameter('passover', $passover);
+		$where = new QueryWhere();		
+		if (isset($search) && $search) {
+			$where->set($find, $search, 'like');
+		}
 
-		$methodString = (isset($search) && $search) ? 'selectFromBoardSearch' : 'selectFromBoard';
-		$result = $this->model->{$methodString}('*');
+		// total rows from board
+		$where->set('category', $category, '=');
+		$result = $this->model->select('board', '*', $where);
 		if ($result) {
 
-			// use in order to navi
+			// The value of numrows use in order to navi
 			$numrows = $this->model->getNumRows();
 
-			$methodString = (isset($search) && $search) ? 'selectFromBoardSearchLimit' : 'selectFromBoardLimit';
-			$result = $this->model->{$methodString}('*');
+			// limit rows from board
+			$where->reset();
+			if (isset($search) && $search) {
+				$where->set($find, $search, 'like');
+			}
+			$where->set('category', $category, '=');
+			$result = $this->model->select('board', '*', $where, 'igroup_count desc, ssunseo_count asc', $passover, $limit);
 			if ($result) {
 				$numrows2 = $this->model->getNumRows();
 				$contentData['list'] = $this->model->getRows();					
@@ -148,8 +154,8 @@ class BoardView extends ModuleView {
 						}	
 					}				
 
-					$context->setParameter('id', $id);
-					$this->model->selectFromComment('content_id');
+					//$context->setParameter('id', $id);
+					$this->model->select('comment', 'content_id');
 					$commentNums = $this->model->getNumRows();
 					//echo $commentNums;
 					if ($commentNums > 0) {
@@ -210,6 +216,11 @@ class BoardView extends ModuleView {
 		$this->request_data = $context->getRequestAll();
 		$this->session_data = $context->getSessionAll();
 
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+		$this->document_data['category'] = $category;
+		$this->document_data['id'] = $id;
+
 		$this->document_data['jscode'] = 'read';
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 읽기';
@@ -227,9 +238,12 @@ class BoardView extends ModuleView {
 		$user_name = $this->session_data['sux_user_name'];
 		$password = $this->session_data['sux_password'];
 
-		$PHP_SELF = $context->getServer("PHP_SELF");		
+		$PHP_SELF = $context->getServer("PHP_SELF");	
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$this->model->select('board_group', '*', $where);
+
 		$groupData = $this->model->getRow();
 		$nonmember = strtolower($groupData['allow_nonmember']);
 		$grade_r = strtolower($groupData['grade_r']);
@@ -245,13 +259,9 @@ class BoardView extends ModuleView {
 		/**
 		 * css, js file path handler
 		 */
-		$category = $context->getParameter('category');
-		$id = $context->getParameter('id');
-
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
-		$this->document_data['category'] = $category;
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -300,12 +310,15 @@ class BoardView extends ModuleView {
 		}
 
 		// read panel
-		$this->model->selectFromBoardWhere('readed_count', array('id'=>$id));
+		$where->reset();
+		$where->set('id',$id,'=');
+		$this->model->select('board', 'readed_count', $where);
+
 		$row = $this->model->getRow();
 		$hit = $row['readed_count']+1;
-		$this->model->updateFromBoard($hit);
+		$this->model->update('board', $hit, $where);
 
-		$this->model->selectFromBoardWhere('*', array('id'=>$id));
+		$this->model->select('board','*', $where);
 		$contentData = $this->model->getRow();
 		$contentData['user_name'] = htmlspecialchars($contentData['user_name']);
 		$contentData['title'] = htmlspecialchars($contentData['title']);
@@ -364,8 +377,14 @@ class BoardView extends ModuleView {
 		$contentData['css_progress_step'] = 'hide';
 		if (($is_progress_step === 'y') || ($grade > 9)) {
 			$contentData['css_progress_step'] = 'show';
-
-			$progressSteps = array('진행완료'=>'progress_step_done', '진행중'=>'progress_step_ing', '입금완료'=>'progress_step_charged', '미입금'=>'progress_step_nocharged' , '메일발송'=>'progress_step_sended', '초기화'=>'progress_step_reset');
+			$progressSteps = array(
+				'진행완료'=>'progress_step_done',
+				'진행중'=>'progress_step_ing',
+				'입금완료'=>'progress_step_charged',
+				'미입금'=>'progress_step_nocharged',
+				'메일발송'=>'progress_step_sended',
+				'초기화'=>'progress_step_reset'
+			);
 
 			$stepKey = strtolower($contentData['progress_step']);			
 			$contentData[$progressSteps[$stepKey]] = 'checked';
@@ -377,7 +396,7 @@ class BoardView extends ModuleView {
 		if ($is_comment === 'y') {
 			$contentData['css_comment'] = 'show';
 
-			$this->model->selectFromComment('*');
+			$this->model->select('comment','*');
 			$commentData['num'] = $this->model->getNumRows();
 			$commentData['list'] = $this->model->getRows();
 		}
@@ -404,6 +423,7 @@ class BoardView extends ModuleView {
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 		$this->session_data = $context->getSessionAll();	
+		$category = $context->getParameter('category');
 
 		$find = $this->request_data['find'];
 		$search = $this->request_data['search'];
@@ -425,7 +445,8 @@ class BoardView extends ModuleView {
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
-		$this->model->selectFromBoardGroup();
+		$this->model->select('board_group', '*');
+
 		$groupData = $this->model->getRow();
 		$nonemember = $groupData['allow_nonmember'];
 		$grade_w = $groupData['grade_w'];
@@ -437,8 +458,6 @@ class BoardView extends ModuleView {
 		/**
 		 * css, js file path handler
 		 */
-		$category = $context->getParameter('category');
-
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
@@ -458,7 +477,13 @@ class BoardView extends ModuleView {
 			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
-		$this->model->selectFromBoardLatestLimit('wall');
+		$where = new QueryWhere();
+		if (isset($search) && $search) {
+			$where->set($find, $search, 'like');
+		}		
+		$where->set('category', $category, '=');
+		$this->model->select('board', 'wall', $where, 'id desc' , 0, 1);
+
 		$contentData = $this->model->getRow();
 		$wall = $contentData['wall'];		
 
@@ -538,6 +563,12 @@ class BoardView extends ModuleView {
 		$this->session_data = $context->getSessionAll();
 		$this->request_data = $context->getRequestAll();
 
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+
+		$this->document_data['category'] = $category;
+		$this->document_data['id'] = $id;
+
 		$find = $this->request_data['find'];
 		$search = $this->request_data['search'];
 
@@ -557,7 +588,10 @@ class BoardView extends ModuleView {
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();	
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$this->model->select('board_group', '*', $where);
+
 		$groupData = $this->model->getRow();
 		$grade_m = $groupData['grade_m'];
 		$nonemember = $groupData['allow_nonmember'];
@@ -570,14 +604,9 @@ class BoardView extends ModuleView {
 		/**
 		 * css, js file path handler
 		 */
-
-		$category = $context->getParameter('category');
-		$id = $context->getParameter('id');
-
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
-		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -593,7 +622,10 @@ class BoardView extends ModuleView {
 			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
-		$this->model->selectFromBoardWhere('*', array('id'=>$id));
+		$where->reset();
+		$where->set('id', $id, '=');
+		$this->model->select('board', '*', $where);
+
 		$contentData = $this->model->getRow();		
 		$contentData['user_name'] = htmlspecialchars($contentData['user_name']);
 		$contentData['title'] = nl2br($contentData['title']);
@@ -650,6 +682,10 @@ class BoardView extends ModuleView {
 
 		$find = $this->request_data['find'];
 		$search = $this->request_data['search'];
+		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+		$this->document_data['category'] = $category;
+		$this->document_data['id'] = $id;
 
 		$returnURL = $context->getServer('HTTP_REFERER');
 		$returnURL = urldecode($returnURL);
@@ -659,7 +695,7 @@ class BoardView extends ModuleView {
 
 		//$this->document_data['jscode'] = 'reply';
 		$this->document_data['module_code'] = 'board';
-		$this->document_data['module_name'] = '게시판 답변';		
+		$this->document_data['module_name'] = '게시판 답변';
 
 		$grade = $this->session_data['sux_grade'];
 		$user_id = $this->session_data['sux_user_id'];
@@ -668,7 +704,10 @@ class BoardView extends ModuleView {
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$this->model->select('board_group', '*', $where);
+
 		$groupData = $this->model->getRow();
 		$is_progress_step = $groupData['is_progress_step'];
 		$grade_re = $groupData["grade_re"];
@@ -680,13 +719,9 @@ class BoardView extends ModuleView {
 		/**
 		 * css, js file path handler
 		 */
-		$category = $context->getParameter('category');
-		$id = $context->getParameter('id');
-
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
-		$this->document_data['category'] = $category;
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -702,7 +737,10 @@ class BoardView extends ModuleView {
 			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
-		$this->model->selectFromBoardWhere('*', array('id'=>$id));
+		$where->reset();
+		$where->set('id',$id,'=');
+		$this->model->select('board', '*', $where);
+
 		$contentData = $this->model->getRow();		
 		$contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
 		$contentData['title'] = htmlspecialchars($contentData['title']);
@@ -747,10 +785,12 @@ class BoardView extends ModuleView {
 			$contentData['fileup_path'] = $fileupPath;
 		}
 
-		$this->model->selectFromBoardLatestLimit('wall');
+		$where->reset();
+		$where->set('category', $category, '=');
+		$this->model->select('board', 'wall', $where, 'id desc', 0, 1);
+
 		$row = $this->model->getRow();			
 		$wall = $row['wall'];
-
 		if ($wall === 'a' || !isset($wall)) {
 			$contentData['wallname'] = "나라사랑";
 			$contentData['wallkey'] = "b";
@@ -784,14 +824,14 @@ class BoardView extends ModuleView {
 		}
 
 		if ($is_repliable === 'n') {
-			if ($admin_pass === FALSE) {
+			if ($admin_pass == false) {
 				$msg = '죄송합니다. 이곳은 관리지 전용게시판입니다.';
 				UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
 				exit;
 			}
 		}
 
-		if (empty($user_name)) {
+		if (isset($user_name) && $user_name) {
 			$contentData['css_user_label'] = 'hide';
 			$contentData['user_name_type'] = 'hidden';
 			$contentData['user_pass_type'] = 'hidden';
@@ -823,13 +863,21 @@ class BoardView extends ModuleView {
 
 		$UIError = UIError::getInstance();
 		$context = Context::getInstance();
+
 		$category = $context->getParameter('category');
+		$id = $context->getParameter('id');
+
+		$this->document_data['category'] = $category;
+		$this->document_data['id'] = $id;
 
 		//$this->document_data['jscode'] = 'delete';
 		$this->document_data['module_code'] = 'board';
-		$this->document_data['module_name'] = '게시물 삭제';
+		$this->document_data['module_name'] = '게시물 삭제';	
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category', $category, '=');
+		$this->model->select('board_group', '*');
+
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];
 		$skinName = $groupData['skin_path'];
@@ -840,8 +888,7 @@ class BoardView extends ModuleView {
 		 */
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
-		$this->document_data['category'] = $category;
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -856,9 +903,10 @@ class BoardView extends ModuleView {
 			$footerPath = "{$skinPath}/_footer.tpl";
 			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
-
-		$id = $context->getParameter('id');
-		$this->model->selectFromBoardWhere('id, category, user_name', array('id'=>$id));
+		
+		$where->reset();
+		$where->set('id', $id, '=');
+		$this->model->select('board', 'id, category, user_name', $where);
 		$contentData = $this->model->getRow();
 
 		$this->document_data['group'] = $groupData;
@@ -878,26 +926,32 @@ class BoardView extends ModuleView {
 		$UIError = UIError::getInstance();
 		$context = Context::getInstance();
 
+		$category = $context->getParameter('category');
+		$mid = $context->getParameter('id');
+		$id = $context->getParameter('sid');
+
+		$this->document_data['category'] = $category;
+		$this->document_data['mid'] = $mid;
+
 		//$this->document_data['jscode'] ='delete';
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시물 삭제';
 
-		$this->model->selectFromBoardGroup();
+		$where = new QueryWhere();
+		$where->set('category', $category, '=');
+		$this->model->select('board_group', '*', $where);
+
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];
 		$skinName = $groupData['skin_path'];
 		$footerPath = $groupData['footer_path'];
+
 		/**
 		 * css, js file path handler
 		 */
-		$category = $context->getParameter('category');
-		$id = $context->getParameter('id');
-		$sid = $context->getParameter('sid');
-
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
-		$this->document_data['category'] = $category;
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -913,9 +967,12 @@ class BoardView extends ModuleView {
 			$UIError->add('하단 파일경로가 올바르지 않습니다.');
 		}
 
-		$this->model->selectFromBoardWhere('id, user_name', array('id'=>$id));
+		$where->reset();
+		$where->set('id', $id, '=');
+		$this->model->select('comment', 'id, user_name', $where);
+
 		$contentData = $this->model->getRow();
-		$contentData['sid'] = $sid;
+		$contentData['id'] = $id;
 		$this->document_data['group'] = $groupData;
 		$this->document_data['contents'] = $contentData;
 
@@ -923,63 +980,8 @@ class BoardView extends ModuleView {
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;		
 		$this->skin_path_list['contents'] = "{$skinPath}/delete_comment.tpl";
-		$this->skin_path_list['footer'] = $footerPath;		
+		$this->skin_path_list['footer'] = $footerPath;	
 
 		$this->output();
 	}
-
-	/*function displayDownload() {
-
-		$context = Context::getInstance();
-		$board = $context->getRequest('board');
-		$fileupname = $context->getRequest('fileupname');
-		$fileupname = iconv("UTF-8","EUC-KR",$fileupname) ? iconv("UTF-8","EUC-KR",$fileupname) : $fileupname;
-		$filesize = $context->getRequest('filesize');
-		$filetype = $context->getRequest('filetype');
-		$filesdir = _SUX_PATH_ . 'files/board/' . $board . '/';
-		$filespath = $filesdir . $fileupname;
-		$filespath = preg_replace('/ /i', '', $filespath);
-		$filespath = urldecode($filespath);
-
-		//echo $filetype. '<br>' . $filespath . '<br>' . $filesize . '<br>';		
-		$this->download_file($fileupname, $filesdir, $filetype);
-
-		if (!$file_name || !$file_dir) return 1; 
-		if (preg_match( "\\\\|\.\.|/", $file_name)) return 2; 
-
-		if (file_exists($file_dir.$file_name)) { 
-
-			$fp = fopen($file_dir.$file_name,"r"); 
-			if ($file_type) { 
-				//echo $file_type;
-				header("Content-type: $file_type"); 
-				Header("Content-Length: ".filesize($file_dir.$file_name));    
-				Header("Content-Disposition: attachment; filename=" . $file_name);  
-				Header("Content-Transfer-Encoding: binary"); 
-				header("Expires: 0"); 
-			} else { 
-
-				if(eregi("(MSIE 5.0|MSIE 5.1|MSIE 5.5|MSIE 6.0)", $HTTP_USER_AGENT)) { 
-					//echo 'octet-stream';
-					Header("Content-type: application/octet-stream"); 
-					Header("Content-Length: ".filesize($file_dir.$file_name));    
-					Header("Content-Disposition: attachment; filename=" . $file_name);  
-					Header("Content-Transfer-Encoding: binary");  
-					Header("Expires: 0");  
-				} else {
-					//echo 'unknown';
-					Header("Content-type: file/unknown");    
-					Header("Content-Length: ".filesize($file_dir.$file_name)); 
-					Header("Content-Disposition: attachment; filename=". $file_name); 
-					Header("Content-Description: PHP3 Generated Data"); 
-					Header("Expires: 0"); 
-				}
-			}
-			fpassthru($fp); 
-			fclose($fp); 
-		}  else {
-			return 1; 
-		}
-	}*/
 }
-?>

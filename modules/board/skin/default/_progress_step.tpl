@@ -1,5 +1,7 @@
 	<form action="{$uri}/{$contentData.id}/progress-step" name="f_progress_step" method="post">
 	<input type="hidden" name="_method" value="update">
+	<input type="hidden" name="category" value="{$documentData.category}">
+	<input type="hidden" name="id" value="{$documentData.id}">
 	<table summary="관리자 진행 상황 설정 옵션입니다.">
 		<tbody>
 			<tr>

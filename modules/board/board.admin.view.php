@@ -1,6 +1,6 @@
 <?php
 
-class BoardAdminView extends ModuleAdminView
+class BoardAdminView extends View
 {
 
 	function displayBoardAdmin() {

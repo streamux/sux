@@ -61,7 +61,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromConnectSite('id, name', $where);
+		$this->model->select('connect_site', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -91,7 +91,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->selectFromConnectSite('id, name', $where);	
+		$result = $this->model->select('connect_site', 'id, name', $where);	
 
 		/*while($rows = $this->model->getMySqlFetchArray($result)) {
 			foreach ($rows as $key => $value) {
@@ -122,7 +122,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 		$msg = "";
 		$resultYN = "Y";	 
 
-		$result = $this->model->selectFromConnectSite('*', null, 'id desc');//Orderby', 'id desc');
+		$result = $this->model->select('connect_site', '*', null, 'id desc');//Orderby', 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -215,7 +215,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPageview('id, name', $where);
+		$this->model->select('pageview', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -245,7 +245,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPageview('id, name', $where);
+		$this->model->select('pageview', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -268,7 +268,7 @@ class AnalyticsAdminView extends ModuleAdminView {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromPageview('*', null, 'id desc');
+		$result = $this->model->select('pageview', '*', null, 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();

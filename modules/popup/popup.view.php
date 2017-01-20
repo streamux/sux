@@ -1,6 +1,6 @@
 <?php
 
-class PopupView extends ModuleView {
+class PopupView extends View {
 
 	var $class_name = 'popup_view';
 

@@ -22,6 +22,7 @@
 <div class="board-write" style="width:{$groupData.width}">
 	<form action="{$uri}/{$contentData.id}/reply" method="post"  name="f_board_reply" enctype="multipart/form-data">
 	<input type="hidden" name="_method" value="insert">
+	<input type="hidden" name="category" value="{$documentData.category}">
 	<input type="hidden" name="user_id" value="{$contentData.user_id}">
 	<input type="hidden" name="igroup_count" value="{$contentData.igroup_count}">
 	<input type="hidden" name="space_count" value="{$contentData.space_count}">
@@ -58,9 +59,9 @@
 		</p>
 		<span class="ui-wallkey">
 			<label for="wall_key">등록키 [ <span class="color-red font-weight-bold">{$contentData.wallname}</span> ]</label>
-			<input type="text" name="wall" id="wall_key" size="16" maxlength="20">			
+			<input type="text" name="wallname" id="wall_key" size="16" maxlength="20">			
 			<input type="hidden" name="wallok" value="{$contentData.wallname}">
-			<input type="hidden" name="wallwd" value="{$contentData.wallkey}">
+			<input type="hidden" name="wall" value="{$contentData.wallkey}">
 		</span>
 		<span class="ui-inlineblock">등록키를 입력해주세요.</span>
 	</div>
