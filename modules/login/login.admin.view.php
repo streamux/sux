@@ -30,11 +30,4 @@ class LoginAdminView extends View {
 
 		$this->output();
 	}
-
-	function displaySearchID() {		
-	}
-
-	function displaySearchPassword() {		
-	}
 }
-?>

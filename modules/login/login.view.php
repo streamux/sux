@@ -1,6 +1,7 @@
 <?php
 
-class LoginView extends View {
+class LoginView extends View
+{
 
 	var $class_name = 'login_view';
 
@@ -44,7 +45,7 @@ class LoginView extends View {
 		 * get data from DB
 		 */
 		if (!$user_id ) {
-			$this->model->selectMemberGroup();
+			$this->model->select('member_group', '*');
 			$groupData = $this->model->getRows();
 			$contentsPath = $skinPath . 'login.tpl';		
 		} else {
@@ -103,7 +104,7 @@ class LoginView extends View {
 		$this->skin_path_list['contents'] = $contentsPath;
 		$this->skin_path_list['footer'] = $footerPath;
 
-		$this->model->selectMemberGroup();
+		$this->model->select('member_group', '*');
 		$this->document_data['group'] = $this->model->getRows();
 		$this->document_data['isLogon'] = false;
 		
@@ -160,6 +161,9 @@ class LoginView extends View {
 
 		$context = Context::getInstance();
 		$this->post_data = $context->getPostAll();
+		$category = $this->post_data['category'];
+		$userName = $this->post_data['user_name'];
+		$userEmail = $this->post_data['email_address'];
 
 		/**
 		 * css, js file path handler
@@ -185,29 +189,26 @@ class LoginView extends View {
 		if (!is_readable($footerPath)) {
 			$footerPath = $skinPath . "_footer.tpl";
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
-		}
+		}		
 
-		$checkName = $this->post_data['user_name'];
-		$checkEmail = $this->post_data['email_address'];
+		if (isset($userName) && $userName != ''){
 
-		$context ->setParameter('category', $this->post_data['category']);
-		$context ->setParameter('user_name', $this->post_data['user_name']);
+			$where = new QueryWhere();
+			$where->set('category',$category,'=');
+			$where->set('user_name',$userName,'=','and');
+			$this->model->select('member', 'user_id, email_address', $where);
 
-		if (isset($checkName) && $checkName != ''){
-
-			$this->model->selectSearchid();
 			$row = $this->model->getRow();
-
 			if (count($row) > 0) {
 				$userId = $row['user_id'];
 				$email = $row['email_address'];	
 
-				if ($email !== $checkEmail) {
+				if ($email !== $userEmail) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
 					exit;
 				}
 
-				$this->document_data['user_name'] = $checkName;
+				$this->document_data['user_name'] = $userName;
 				$this->document_data['user_id'] = $userId;
 				$this->document_data['jscode'] = 'searchResult';				
 
@@ -217,7 +218,7 @@ class LoginView extends View {
 				exit;
 			}	
 		} else {
-			$this->model->selectMemberGroup();
+			$this->model->select('member_group', '*');
 			$this->document_data['group'] = $this->model->getRows();
 
 			$contentsPath = $skinPath . 'searchid.tpl';
@@ -238,6 +239,10 @@ class LoginView extends View {
 
 		$context = Context::getInstance();
 		$this->post_data = $context->getPostAll();
+		$category = $this->post_data['category'];
+		$userName = $this->post_data['user_name'];
+		$userId = $this->post_data['user_id'];		
+		$userEmail = $this->post_data['email_address'];
 
 		/**
 		 * css, js file path handler
@@ -263,63 +268,60 @@ class LoginView extends View {
 		if (!is_readable($footerPath)) {
 			$footerPath = $skinPath . "_footer.tpl";
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
-		}
+		}		
 
-		$checkName = $this->post_data['user_name'];
-		$checkUserId = $this->post_data['user_id'];
-		$checkEmail = $this->post_data['email_address'];
+		if(isset($userId) && $userId) {
 
-		$context ->setParameter('category', $this->post_data['category']);
-		$context ->setParameter('user_id', $this->post_data['user_id']);
+			$where = new QueryWhere();
+			$where->set('category',$category,'=');
+			$where->set('user_id',$userId,'=','and');
+			$this->model->select('member', 'user_name, email_address, password', $where);
 
-		if(isset($checkUserId) && $checkUserId) {
-
-			$this->model->selectSearchpwd();
 			$row = $this->model->getRow();
 			if (count($row) > 0) {
-				$userName = $row['user_name'];
+				$name = $row['user_name'];
 				$email = $row['email_address'];
-				$password = $row['password'];			
+				$password = $row['password'];	
 
-				if ($userName !== $checkName) {
+				if ($name !== $userName) {
 					UIError::alertToBack('입력하신 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
 					exit;
 				}
 
-				if ($email !== $checkEmail) {
+				if ($email !== $userEmail) {
 					UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
 					exit;
 				}
 
-				$contentsPath = $skinPath . 'searchpwd_result.tpl';
+				$contentsPath = $skinPath . 'searchpwd_result.tpl';				
 
-				$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
-				if (!file_exists($email_skin_path)) {
-					UIError::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
-					exit;
-				}
-
-				$this->document_data['user_id'] = $checkUserId;
+				$this->document_data['user_id'] = $userId;
 				$this->document_data['user_name'] = $userName;
 				$this->document_data['user_email'] = $email;				
 				$this->document_data['password'] = $password;
 				$this->document_data['jscode'] = 'searchResult';
 
-				/*$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
+				/*$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
+				if (!file_exists($email_skin_path)) {
+					UIError::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
+					exit;
+				}
+
+				$subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
 				$additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';
-				$additional_headers .= 'Reply-To : ' . $checkEmail . '\n';
+				$additional_headers .= 'Reply-To : ' . $userEmail . '\n';
 				$additional_headers .= 'MIME-Version: 1.0\n';
 				$additional_headers .= 'Content-Type: text/html; charset=EUC-KR\n';
 				$contents = $mail_skin;
 
 				mail($adminEmail, $subject, $contents, $additional_headers);
-				mail($checkEmail, $subject, $contents, $additional_headers);*/
+				mail($userEmail, $subject, $contents, $additional_headers);*/
 			} else {
 				UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
 				exit;
 			}
 		}else{			
-			$this->model->selectMemberGroup();
+			$this->model->select('member_group', '*');
 			$this->document_data['group'] = $this->model->getRows();
 
 			$contentsPath = $skinPath . 'searchpwd.tpl';
@@ -334,4 +336,3 @@ class LoginView extends View {
 		$this->output();
 	}
 }
-?>

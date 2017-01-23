@@ -4,7 +4,8 @@ class DocumentView extends View
 
 	function displayContents() {
 
-		$this->model->selectFromDocument();
+		$this->model->select('document', '*');
+		
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];
 		$contentsPath = $groupData['contents_path'];

@@ -48,12 +48,11 @@ class Object {
 			$strJson = JsonEncoder::parse($data);
 			echo $callback . '('.$strJson.')';
 		} else {
-			if ($data['delay'] > 0) {
+			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 2;
+			if ($delay > 0) {
 				echo $data['msg'];
 			}			
-			$url = $data['url'];
-
-			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 2;
+			$url = $data['url'];			
 			if (!empty($url)) {
 				printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
 			} 		

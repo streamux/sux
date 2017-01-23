@@ -1,7 +1,7 @@
 {assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{assign var=fieldData value=$documentData.contents}
+{assign var=contentsData value=$documentData.contents}
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
 <div class="articles ui-edgebox">
 	<div class="member-edit">
@@ -49,29 +49,29 @@
 					</tr>
 					<tr>
 						<td>이름</td>
-						<td><input type="text" name="user_name" size="8" maxlength="10" value="{$fieldData['user_name']}"></td>
+						<td><input type="text" name="user_name" size="8" maxlength="10" value="{$contentsData['user_name']}"></td>
 					</tr>
 					<tr>
 						<td>닉네임</td>
-						<td><input type="text" name="nick_name" size="8" maxlength="10" value="{$fieldData['nick_name']}"></td>
+						<td><input type="text" name="nick_name" size="8" maxlength="10" value="{$contentsData['nick_name']}"></td>
 					</tr>
 					<tr>
 						<td>이메일</td>
-						<td><input type="text" name="email_address" size="12" maxlength="20" value="{$fieldData['email']}">
+						<td><input type="text" name="email_address" size="12" maxlength="20" value="{$contentsData['email']}">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="hanmail.com">hanmail.net</option>
 							<option value="gmail.com">gmail.com</option>
 						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value="{$fieldData['email_tail2']}"> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
+						<input type="text" name="email_tail2" size="12" maxlength="20" value="{$contentsData['email_tail2']}"> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
 					</tr>
 					<tr>
 						<td><span>휴</span>대폰번호</td>
 						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="{$fieldData['hp1']}">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="{$fieldData['hp2']}">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="{$fieldData['hp3']}">
+							<input type="text" name="hp1" size="3" maxlength="3" value="{$contentsData['hp1']}">-
+							<input type="text" name="hp2" size="4" maxlength="4" value="{$contentsData['hp2']}">-
+							<input type="text" name="hp3" size="4" maxlength="4" value="{$contentsData['hp3']}">
 						</td>
 					</tr>
 				</tbody>
@@ -95,7 +95,7 @@
 								<option value="">선택하기</option>
 								{assign var='jobList' value=['프리랜서','교수','교사','학생','기업인','회사원','정치인','주부','농어업','기타']}
 								{foreach from=$jobList item=value}							
-									<option value="{$value}" {if $fieldData['job'] === $value} selected {/if}>{$value}</option>
+									<option value="{$value}" {if $contentsData['job'] === $value} selected {/if}>{$value}</option>
 								{/foreach}
 							</select>
 						</td>
@@ -107,7 +107,7 @@
 							{foreach from=$hobbyBoxes item=mItem name=hobby}
 								{assign var=index value=$smarty.foreach.hobby.index}
 								{assign var=isChecked value=''}
-								{foreach from=$fieldData['hobby'] item=compareItem}
+								{foreach from=$contentsData['hobby'] item=compareItem}
 									{if $mItem === $compareItem}
 										{assign var=isChecked value='checked'}
 									{/if}

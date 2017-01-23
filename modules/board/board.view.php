@@ -152,12 +152,10 @@ class BoardView extends View
 							$subject['icon_img'] = 'on';
 							$subject['img_name'] = $imgname;
 						}	
-					}				
+					}
 
-					//$context->setParameter('id', $id);
 					$this->model->select('comment', 'content_id');
 					$commentNums = $this->model->getNumRows();
-					//echo $commentNums;
 					if ($commentNums > 0) {
 						$subject['css_comment'] = 'on';
 						$subject['comment_num'] = $commentNums;

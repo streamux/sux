@@ -1,98 +1,71 @@
 <?PHP
 
-class LoginModel extends Model {
+class LoginModel extends Model
+{
 
-	var $class_name = 'login_model';
-
-	function __construct() {
-
-		 parent::__construct();
-	}
-
-	function init() {}
-
-	function selectMemberGroup() {
+	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
 		$context = Context::getInstance();
-		$tableName = $context->getTable('member_group');
+		$tableName = $context->getTable($table_name);
 
-		$query = new Query();
-		$query->setField('*');
+		$query = new Query();		
 		$query->setTable($tableName);
-		$query->setOrderBy('id asc');
-		parent::select($query);
+		$query->setField($field);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
+
+		return parent::select($query);
 	}
 
-	function selectLogpass($params=NUL) {		
+	function insert($table_name, $columns = null) {
 
 		$context = Context::getInstance();
-		$tableName = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
-
-		$query = new Query();
-		$query->setField('*');
-		$query->setTable($tableName);
-		$query->setWhere($where);
-		parent::select($query);
-	}
-
-	function updateField($params=NULL) {
-
-		$context = Context::getInstance();
-		$tableName = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
 		$query->setTable($tableName);
-		$query->setColumn(array('hit'=>$params['hit']));
-		$query->setWhere($where);
-		parent::update($query);
+		$query->setColumn($columns);
+
+		return parent::insert($query);
 	}
 
-	function selectSearchid() {
-
+	function update($table_name, $columns, $where = null) {
+		
 		$context = Context::getInstance();
-		$tableName = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userName = $context->getParameter('user_name');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_name',$userName,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setField('user_id, email_address');
 		$query->setTable($tableName);
-		$query->setWhere($where);
-		parent::select($query);
+		$query->setColumn($columns);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		return parent::update($query);
 	}
 
-	function selectSearchpwd() {
+	function delete($table_name, $where = null) {
 
 		$context = Context::getInstance();
-		$tableName = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setField('user_name, email_address, password');
 		$query->setTable($tableName);
-		$query->setWhere($where);
-		parent::select($query);
+		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+		return parent::delete($query);
 	}
 }
-?>

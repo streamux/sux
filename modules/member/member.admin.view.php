@@ -83,7 +83,7 @@ class MemberAdminView extends View {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromMemberGroup();
+		$result = $this->model->select('member_group', '*', null, 'id desc');
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
@@ -117,7 +117,8 @@ class MemberAdminView extends View {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromMemberGroup('category', $where);
+		$this->model->select('member_group', 'category', $where);
+
 		$row = $this->model->getRow();
 		$this->document_data['id'] = $id;
 		$this->document_data['category'] = $row['category'];
@@ -171,7 +172,7 @@ class MemberAdminView extends View {
 
 		$where = new QueryWhere();
 		$where->set('id', $sid);
-		$this->model->selectFromMember('category, user_id, user_name', $where);
+		$this->model->select('member', 'category, user_id, user_name', $where);
 		$row = $this->model->getRow();
 
 		$this->document_data['category'] = $row['category'];
@@ -204,7 +205,7 @@ class MemberAdminView extends View {
 
 		$where = new QueryWhere();
 		$where->set('id', $sid);
-		$this->model->selectFromMember('user_id', $where);
+		$this->model->select('member', 'user_id', $where);
 		$row = $this->model->getRow();
 
 		$this->document_data['user_id'] = $row['user_id'];
@@ -227,7 +228,8 @@ class MemberAdminView extends View {
 	function displayListJson() {
 
 		$context = Context::getInstance();
-		$category = $context->getRequest('category');
+		$posts = $context->getPostAll();
+		$category = $posts['category'];
 		
 		$dataObj = array();
 		$dataList = array();
@@ -236,12 +238,11 @@ class MemberAdminView extends View {
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$result = $this->model->selectFromMember('*', $where);
+		$result = $this->model->select('member', '*', $where);
 		if ($result) {
 
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0){
-
 				$limit = 10;  
 				if (!$passover) {
 					$passover = 0;
@@ -251,25 +252,19 @@ class MemberAdminView extends View {
 				$context->set('member_passover', $passover);
 				$context->set('member_limit', $limit);
 
-				$result = $this->model->selectFromMember('*', $where, 'id desc', $passover, $limit);
+				$result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$rows = $this->model->getRows();
-
 					for ($i=0; $i<count($rows); $i++) {
-
 						$obj = array();
 						$obj['no'] = $a;
-
 						foreach ($rows[$i] as $key => $value) {
 							$obj[$key] = $value;
 						}
-
 						$dataList[] = $obj;
-
 						$a--;
 					}
-
 					$dataObj = array('category'=>$category, 'list'=>$dataList);
 				}				
 			} else {
@@ -298,7 +293,7 @@ class MemberAdminView extends View {
 		$where = new QueryWhere();
 		$where->set('id', $id);
 
-		$result = $this->model->selectFromMember('*', $where);
+		$result = $this->model->select('member', '*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();

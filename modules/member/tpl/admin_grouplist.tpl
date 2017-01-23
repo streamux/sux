@@ -13,7 +13,7 @@
 			<ul>
 				<li>
 					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>			
+					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>	
 				</li>
 			</ul>
 			<table summary="회원목록을 보여줍니다." cellspacing="0">

@@ -1,6 +1,7 @@
 <?php
 
-class AdminAdminController extends Controller {
+class AdminAdminController extends Controller
+{
 
 	var $class_name = 'admin_admin_controller';
 

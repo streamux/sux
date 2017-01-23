@@ -1,6 +1,7 @@
 <?php
 
-class AdminAdminView extends ModuleAdminView {
+class AdminAdminView extends View
+{
 
 	var $class_name = 'admin_admin_view';
 

@@ -197,6 +197,8 @@ class BoardAdminView extends View
 			$row = $this->model->getRow();
 			foreach ($row as $key => $value) {
 				$dataObj[$key] = $value;
+
+				$msg .= $key . " : " . $value . "<br>";
 			}
 			$resultYN = "Y";
 		} else {

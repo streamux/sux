@@ -130,6 +130,8 @@ class BoardAdminController extends Controller
 		$resultYN = "Y";
 		$msg = "";
 
+		$msg .= 'is_latest : ' . $posts['is_latest'];
+
 		/**
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
@@ -142,12 +144,16 @@ class BoardAdminController extends Controller
 			exit;
 		}
 
+		$filters = '/^(id|category|date)+$/i';
 		$columns = array();
-		$postsCopy = array_slice($posts, 2);
-		foreach ($columnCaches as $key => $value) {
-			if (isset($postsCopy[$value]) && $postsCopy[$value]) {
-				$columns[$value] = $postsCopy[$value];	
-			}				
+		foreach ($columnCaches as $key => $value) {			
+			if (!preg_match($filters, $value)) {
+				//$msg .= $value . ' : ' . $posts[$value] . "<br>";
+				if ((isset($posts[$value]) && $posts[$value]) || (is_numeric($value) >= 0)) {
+					$columns[$value] = $posts[$value];
+					//$msg .= $value . ' : ' . $posts[$value] . "<br>";
+				}
+			}							
 		}
 
 		$where = new QueryWhere();

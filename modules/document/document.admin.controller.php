@@ -3,7 +3,7 @@
 class DocumentAdminController extends Controller
 {
 
-	function insertAdd() {
+	function insertAdd() { 
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
@@ -14,7 +14,7 @@ class DocumentAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->selectFromDocument('id', $where);
+		$this->model->select('document', 'id', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
@@ -22,7 +22,7 @@ class DocumentAdminController extends Controller
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		} else {
-			$this->model->selectFromBoardGroup('id', $where);
+			$this->model->select('board_group', 'id', $where);
 			$numrows = $this->model->getNumRows();
 			if ($numrows> 0) {
 				$msg = "${category}는 게시판에서 이미 사용하고 있습니다.";
@@ -65,7 +65,7 @@ class DocumentAdminController extends Controller
 			}
 		} // end of if
 
-		$result = $this->model->insertIntoDocument($columns);
+		$result = $this->model->insert('document', $columns);
 		if (!$result) {
 			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
 		}else{
@@ -149,7 +149,7 @@ class DocumentAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->updateDocument($columns, $where);
+		$result = $this->model->update('document', $columns, $where);
 		//$msg .= Tracer::getInstance()->getMessage();
 		if (!$result) {
 			$msg .= "$category 페이지 수정을 실패하였습니다.";
@@ -196,10 +196,10 @@ class DocumentAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('contents_path', $where);
+		$this->model->select('document', 'contents_path', $where);
 		$row = $this->model->getRow();		
 			
-		$result = $this->model->deleteFromDocument($where);
+		$result = $this->model->delete('document', $where);
 		if (!$result) {
 			$msg .= "${category} 페이지 삭제를 실패하였습니다.<br>";
 		} else {

@@ -6,11 +6,12 @@ class MemberAdminController extends Controller
 	function insertGroupAdd() {
 
 		$context = Context::getInstance();
-		$category = $context->getPost('category');
-		$groupName = $context->getPost('group_name');
-		$summary = $context->getPost('summary');
-		$headerPath = $context->getPost('header_path');
-		$footerPath = $context->getPost('footer_path');
+		$posts = $context->getPostAll();
+		$category = $posts['category'];
+		$groupName = $posts['group_name'];
+		$summary = $posts['summary'];
+		$headerPath = $posts['header_path'];
+		$footerPath = $posts['footer_path'];
 
 		$dataObj	= "";
 		$msg = "";
@@ -18,9 +19,9 @@ class MemberAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$result = $this->model->selectFromMemberGroup('id', $where);
-		$rownum = $this->model->getNumrows();
+		$result = $this->model->select('member_group', 'id', $where);
 
+		$rownum = $this->model->getNumrows();
 		if ($rownum > 0) {
 			UIError::alertToBack('This Category Name Already Exists!');
 			exit;
@@ -35,7 +36,7 @@ class MemberAdminController extends Controller
 			$footerPath,
 			'now()');
 
-		$result = $this->model->insertIntoMemberGroup($column);
+		$result = $this->model->insert('member_group', $column);
 		if ($result) {
 			$msg .= "${category} 회원그룹을 등록하였습니다.";
 			$resultYN = "Y";				
@@ -70,7 +71,10 @@ class MemberAdminController extends Controller
 		} 
 		
 		if (isset($category)) {
-			$this->model->selectFromMember('user_name');
+			$where = new QueryWhere();
+			$where->set('category', $category);
+			$this->model->select('member_group', 'id', $where);
+
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
 				$msg = "'${category}'는 이미 존재하는 카테고리 이름입니다.";
@@ -101,7 +105,7 @@ class MemberAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->deleteMemberGroup($where);
+		$result = $this->model->delete('member_group', $where);
 		if ($result) {
 			$resultYN = "Y";
 			$msg = "회원그룹을 삭제하였습니다.";				
@@ -142,7 +146,7 @@ class MemberAdminController extends Controller
 			}				
 		}
 
-		$result = $this->model->updateFromMember($column, $where);
+		$result = $this->model->update('member', $column, $where);
 		if ($result) {			
 			$msg = "${user_name} 님의 회원정보를 수정하였습니다.\n";			
 			$resultYN = "Y";	
@@ -168,11 +172,11 @@ class MemberAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromMember('user_id', $where);
+		$this->model->select('member', 'user_id', $where);
 		$row = $this->model->getRow();
 		$user_id = $row['user_id'];
 
-		$result = $this->model->deleteFromMember($where);
+		$result = $this->model->delete('member', $where);
 		if ($result) {
 			$msg = "${user_id} 회원정보를 삭제하였습니다.";
 			$resultYN = "Y";

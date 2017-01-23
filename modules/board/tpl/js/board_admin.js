@@ -133,7 +133,7 @@ jsux.fn.add = {
 			} else if (type === 'radio' && item.checked) {
 				//console.log(item.name + ' : ' + item.value);
 				params[item.name] = item.value;				
-			} else {
+			} else if (type === 'text') {
 				 if (!type.match(filters)) {
 					//console.log(item.name + ' : ' + item.value);					
 					params[item.name] = item.value;
@@ -280,9 +280,9 @@ jsux.fn.modify = {
 				item.value = self.getSelectVal(item.name);					
 				params[item.name] = item.value;
 			} else if (type === 'radio' && item.checked) {
-				//console.log(item.name + ' : ' + item.value);
+				console.log(item.name + ' : ' + item.value);
 				params[item.name] = item.value;				
-			} else {
+			} else if (type === 'text') {
 				 if (!type.match(filters)) {
 					//console.log(item.name + ' : ' + item.value);					
 					params[item.name] = item.value;
@@ -318,7 +318,6 @@ jsux.fn.modify = {
 		});
 
 		$("input[name=cancel]").on("click", function(e) {
-
 			jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
 		});
 	},
@@ -344,7 +343,6 @@ jsux.fn.modify = {
 					if (e.data[this.name]) {
 						this.value = e.data[this.name];
 					}
-					//console.log(this.name, e.data[this.name]);
 				});
 
 				formLists = $("select");

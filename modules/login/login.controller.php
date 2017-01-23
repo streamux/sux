@@ -1,13 +1,7 @@
 <?php
 
-class LoginController extends Controller {
-
-	var $class_name = 'login_controlelr';
-
-	function LoginController($m=NULL) {
-		
-		$this->model = $m;
-	}
+class LoginController extends Controller
+{
 
 	function insertLogin() {
 
@@ -30,7 +24,7 @@ class LoginController extends Controller {
 			$password = trim($this->post_data['password']);
 			if (isset($password) && $password) {
 				$passwordHash = $context->getPasswordHash($password);
-			}			
+			}
 		}
 
 		$rootPath = _SUX_ROOT_;
@@ -46,27 +40,29 @@ class LoginController extends Controller {
 			exit;
 		}
 
-		$context->setParameter('category', $category);
-		$context->setParameter('user_id', $userId);
-
-		$this->model->selectLogpass();
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$where->set('user_id',$userId,'=','and');
+		$this->model->select('member', '*', $where);
 
 		$rownum = $this->model->getNumRows();
 		if ($rownum > 0) {
+
 			$row = $this->model->getRow();
 			$password = $row['password'];
 			if ($password !== $passwordHash) {
-				$msg = '비밀번호가 일치하지 않습니다.';
+				$msg .= '비밀번호가 일치하지 않습니다.';
 				UIError::alertTo($msg, $rootPath . 'login-fail');
 				exit;
 			}
 			
 			$row['automod1'] = 'yes';
 			$row['chatip'] = $context->getServer('REMOTE_ADDR');
-
 			$row['hit_count'] = $row['hit_count'] + 1;
-			$values['hit'] = $row['hit_count'];
-			$this->model->updateField($values);
+
+			$columns = array();
+			$columns['hit'] = $row['hit_count'];
+			$this->model->update('member', $columns, $where);
 
 			$sessionList = array('category','user_id','password','user_name','nick_name','email_address','is_writable','point','hit_count','grade','automod1','chatip');
 
@@ -107,4 +103,3 @@ class LoginController extends Controller {
 		$this->callback($data);
 	}
 }
-?>

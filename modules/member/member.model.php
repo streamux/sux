@@ -1,38 +1,30 @@
 <?php
 
-class MemberModel extends Model {
+class MemberModel extends Model
+{
 
-	var $class_name = 'member_model';
-
-	function selectMemberGroup() {
-
-		$context = Context::getInstance();
-		$member_group = $context->getTable('member_group');
-
-		$query = new Query();
-		$query->setField('*');
-		$query->setTable($member_group);
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectFromMember($field) {
+	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
 		$context = Context::getInstance();
-		$table_name = $context->getTable('member');
-		$category = $context->getPost('category');
-		$userId = $context->getPost('user_id');
+		$tableName = $context->getTable($table_name);
 
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
-
-		$query = new Query();
+		$query = new Query();		
+		$query->setTable($tableName);
 		$query->setField($field);
-		$query->setTable($table_name);
-		$query->setWhere($where);
-		$result = parent::select($query);
-		return $result;
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
+
+		return parent::select($query);
 	}
 
 	function insert($table_name, $columns = null) {
@@ -47,56 +39,33 @@ class MemberModel extends Model {
 		return parent::insert($query);
 	}
 
-	function updateMemberModify() {
-
+	function update($table_name, $columns, $where = null) {
+		
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($table_name);
-		$query->setColumn(array(
-			'password'=>$posts['password'],
-			'user_name'=>$posts['user_name'],
-			'nick_name'=>$posts['nick_name'],
-			'email_address'=>$posts['email_address'],
-			'hp1'=>$posts['hp1'],
-			'hp2'=>$posts['hp2'],
-			'hp3'=>$posts['hp3'],
-			'job'=>$posts['job'],
-			'hobby'=>$posts['hobby']
-		));
-		$query->setWhere($where);
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::update($query);
-		return $result;
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		return parent::update($query);
 	}
 
-	function deleteDelete() {
+	function delete($table_name, $where = null) {
 
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$context = Context::getInstance();
-		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($table_name);
-		$query->setWhere($where);
-
-		$result = parent::delete($query);
-		return $result;
+		$query->setTable($tableName);
+		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+		return parent::delete($query);
 	}
 }

@@ -62,7 +62,7 @@ class DocumentAdminView extends View
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('category, id', $where);
+		$this->model->select('document', 'category, id', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -88,7 +88,7 @@ class DocumentAdminView extends View
 		
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('id, category', $where);
+		$this->model->select('document', 'id, category', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -115,7 +115,7 @@ class DocumentAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->selectFromDocument('*', null, 'id desc');
+		$this->model->select('document', '*', null, 'id desc');
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -157,7 +157,7 @@ class DocumentAdminView extends View
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('*', $where);
+		$this->model->select('document', '*', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
@@ -219,17 +219,16 @@ class DocumentAdminView extends View
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->selectFromDocument('id', $where);
+		$this->model->select('document', 'id', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows> 0) {
 			$msg = "${category}는 이미 존재하는 페이지입니다.";
 			$resultYN = "N";
 		} else {
+			$this->model->select('board_group', 'id', $where);
 
-			$this->model->selectFromBoardGroup('id', $where);
 			$numrows = $this->model->getNumRows();
-
 			if ($numrows> 0) {
 				$msg = "${category}는 게시판에서 이미 사용하고 있습니다.";
 				$resultYN = "N";

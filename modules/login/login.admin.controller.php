@@ -39,7 +39,7 @@ class LoginAdminController extends Controller {
 
 		$data = array(	'msg'=>'로그인 성공',
 						'result'=>'Y',
-						'url'=>$rootPath . 'admin-admin',
+						'url'=>$rootPath . 'admin',
 						'delay'=>0);
 			
 		$this->callback($data);
@@ -60,4 +60,3 @@ class LoginAdminController extends Controller {
 		$this->callback($data);
 	}
 }
-?>
