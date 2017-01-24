@@ -1,47 +1,71 @@
 <?php
 
-class PopupModel extends Model {
+class PopupModel extends Model
+{
 
-	var $class_name = 'popup_model';
-
-	function init() {
-		
-	}
-
-	function selectFieldFromPopup($field) {
+	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
 		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		$where = '';
-		if (isset($id) && $id != '') {
-			$where = array('id'=>$id);
-		}		
+		$tableName = $context->getTable($table_name);
 
-		$query = new Query();
+		$query = new Query();		
+		$query->setTable($tableName);
 		$query->setField($field);
-		$query->setTable($context->get('db_popup'));		
-		if ($where != '') {
-			$query->setWhere( array('id'=>$id) );
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
 		}
 
-		$result = parent::select($query);
-		return $result;
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
+
+		return parent::select($query);
 	}
 
-	function selectFieldFromPopupWhere($field) {
+	function insert($table_name, $columns = null) {
 
 		$context = Context::getInstance();
-		$id = $context->getRequest('id');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setField($field);
-		$query->setTable($context->get('db_popup'));
-		$query->setWhere(array(
-			'id'=>$id
-		));
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::select($query);
-		return $result;
+		return parent::insert($query);
+	}
+
+	function update($table_name, $columns, $where = null) {
+		
+		$context = Context::getInstance();
+		$tableName = $context->getTable($table_name);
+
+		$query = new Query();
+		$query->setTable($tableName);
+		$query->setColumn($columns);
+
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		return parent::update($query);
+	}
+
+	function delete($table_name, $where = null) {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable($table_name);
+
+		$query = new Query();
+		$query->setTable($tableName);
+		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+		return parent::delete($query);
 	}
 }
-?>

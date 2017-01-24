@@ -64,7 +64,7 @@ jsux.fn.groupAdd = {
 		};
 
 		if (params.category === '') {
-			trace('카테고리 이름을 입력해주세요.')
+			trace('카테고리 이름을 입력해주세요.');
 			$category.focus();
 			return;
 		}

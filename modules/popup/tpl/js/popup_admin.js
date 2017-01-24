@@ -5,7 +5,6 @@ jsux.fn.list = {
 		//popupManager.open();
 		var self = this;
 		$(".popup > a").bind("click", function(e) {
-
 			var id = $(this).data('key');
 			popupManager.open( id );
 		});

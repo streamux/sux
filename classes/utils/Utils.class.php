@@ -12,6 +12,15 @@ class Utils extends Object {
 		return self::$aInstance;
 	}
 
+	function getRealPath($source)
+	{
+		if(strlen($source) >= 2 && substr_compare($source, './', 0, 2) === 0) {
+			return _SUX_PATH_ . substr($source, 2);
+		}
+
+		return $source;
+	}
+
 	/**
 	 * @param $convert_url '외부에서 불러지는 상대경로 주소'
 	 * @param $skin_dir 'Real Path'
@@ -144,5 +153,26 @@ class Utils extends Object {
 			printf($htmlUI, $msg, $url);
 		}
 	}
+
+	public static function getImageInfo($path) {
+
+		$bgimgPath = self::getRealPath($path);
+		$image_info = getimagesize($bgimgPath);
+		$image_type = $image_info[2];
+
+		if ( $image_type == IMAGETYPE_JPEG ) {
+			$image = imagecreatefromjpeg($bgimgPath);
+		} else if ( $image_type == IMAGETYPE_GIF ) {
+			$image = imagecreatefromgif($bgimgPath);
+		} else if ( $image_type == IMAGETYPE_PNG ) {
+			$image = imagecreatefrompng($bgimgPath);
+		}
+
+		$imageInfo = array();
+		$imageInfo['type'] = $image_type;
+		$imageInfo['width'] = imagesx($image);
+		$imageInfo['height'] = imagesy($image);
+
+		return $imageInfo;
+	}
 }
-?>

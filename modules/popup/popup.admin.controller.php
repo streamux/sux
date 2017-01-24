@@ -15,7 +15,7 @@ class PopupAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('popup_name', $popupName);
-		$result = $this->model->selectFromPopup('id',$where);
+		$result = $this->model->select('popup', 'id',$where);
 
 		$numrow = $this->model->getNumRows();
 		if ($numrow > 0) {
@@ -53,7 +53,7 @@ class PopupAdminController extends Controller
 			}
 			$column[] = 'now()';
 
-			$result = $this->model->insertIntoPopup($column);
+			$result = $this->model->insert('popup', $column);
 			if ($result){
 				$msg = "팝업창 입력을 완료하였습니다.";
 				$resultYN = "Y";				
@@ -111,7 +111,7 @@ class PopupAdminController extends Controller
 			$column[$key] = $value;
 		}
 
-		$result = $this->model->updatePopup($column, $where);
+		$result = $this->model->update('popup', $column, $where);
 		if ($result){
 			$msg = "팝업정보 수정을 성공하였습니다.";
 			$resultYN = "Y";			
@@ -138,7 +138,7 @@ class PopupAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->deleteFromPopup($where);
+		$result = $this->model->delete('popup', $where);
 		if ($result) {
 			$msg .= $popupName . ' 팝업삭제를 성공하였습니다.';
 			$resultYN = "Y";
@@ -154,4 +154,3 @@ class PopupAdminController extends Controller
 		$this->callback($data);
 	}
 }
-?>

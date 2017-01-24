@@ -46,7 +46,7 @@
 					<tr>
 						<td>시간</td>
 						<td>
-							<input type="text" id="period_year" name="time_year" size="4" maxlength="4" value="2016">
+							<input type="text" id="period_year" name="time_year" size="4" maxlength="4" value="2017">
 							<span><label for="period_year">년</label></span>
 							<input type="text" id="period_month" name="time_month" size="2" maxlength="2" value="12">
 							<span><label for="period_month">월</label></span>

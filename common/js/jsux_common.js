@@ -42,6 +42,7 @@ function openPopup( url, popwinname, pLeft, pTop, pWidth, pHeight ) {
 		suxpopWindow.opener = self;
 	}
 }
+
 var popupManager = popupManager || {};
 (function(app){
 
@@ -63,7 +64,7 @@ var popupManager = popupManager || {};
 
 		this.open = function() {
 
-			var url = '',
+				var url = '',
 				id = list[counter].id,
 				winname = list[counter].popup_name,
 				skin = list[counter].skin,
@@ -71,14 +72,13 @@ var popupManager = popupManager || {};
 				top = list[counter].popup_top,
 				width = list[counter].popup_width,
 				height = list[counter].popup_height,
-				choice = list[counter].choice,
+				is_usable = list[counter].is_usable,
 				period = list[counter].period,
 				nowtime = list[counter].nowtime;
 
-			if (choice.toLowerCase() == 'y' && nowtime < period ) {
-
-				url  = self.sux_path + '/sux/modules/popup/popup.php?action=event&id='  + id + '&winname=' + winname + '&skin=' + skin;
-				
+			self.stopTimer();
+			if (is_usable.toLowerCase() == 'y' && nowtime < period ) {
+				url  = jsux.rootPath + 'popup-event?id='  + id + '&winname=' + winname + '&skin=' + skin;		
 				openPopup(url, winname, left , top , width , height);
 			}
 
@@ -89,12 +89,10 @@ var popupManager = popupManager || {};
 		};
 
 		this.startTimer = function() {
-
 			interval.push(setInterval(self.open, delay));
 		};
 
 		this.stopTimer = function() {
-
 			for (var i=0; i<interval.length; i++) {
 				clearInterval(interval[i]);
 			}
@@ -111,7 +109,7 @@ var popupManager = popupManager || {};
 			}
 			loaded = false;
 
-			url = self.sux_path + '/sux/modules/popup/popup.php?action=openerJson';
+			url = jsux.rootPath + 'opener-json';
 			jsux.getJSON( url, params, function(e) {
 
 				var result = $.trim(e.result.toLowerCase());
@@ -126,7 +124,6 @@ var popupManager = popupManager || {};
 			});
 		};
 	};
-	Popup.prototype.sux_path = '';
 	
 	app.popup = new Popup();
 	app.open = function( id ) {
@@ -136,6 +133,7 @@ var popupManager = popupManager || {};
 		this.popup.sux_path = path;
 	};
 })(popupManager);
+
 var BoardApp = BoardApp || {};
 BoardApp.Pagination = jsux.Model.create();
 

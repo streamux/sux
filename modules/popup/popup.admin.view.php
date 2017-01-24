@@ -102,7 +102,7 @@ class PopupAdminView extends View
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPopup('id, popup_name', $where);
+		$this->model->select('popup', 'id, popup_name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -124,7 +124,7 @@ class PopupAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromPopup('*', null, 'id desc');
+		$result = $this->model->select('popup', '*', null, 'id desc');
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
@@ -175,7 +175,7 @@ class PopupAdminView extends View
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->selectFromPopup('*', $where);
+		$result = $this->model->select('popup', '*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();
