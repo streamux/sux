@@ -110,6 +110,7 @@
 <script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
 <script>	jsux.rootPath = {$rootPath};</script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
+<script type="text/javascript" src="{$rootPath}common/js/jsux_app.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
 {if $documentData.module_code != ''}
 <script type="text/javascript" src="{$skinPathList.dir}/js/{$documentData.module_code}.js"></script>

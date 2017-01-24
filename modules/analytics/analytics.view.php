@@ -9,8 +9,6 @@
 class AnalyticsView extends View
 { 
 
-	var $class_name = 'analytics_view';
-
 	function displayCounter() {
 
 		$context = Context::getInstance();
@@ -18,34 +16,40 @@ class AnalyticsView extends View
 		$msg = '';
 		$resultYN = 'Y';
 
-		$this->model->insert('counter');
+		$this->controller->addCounter();
 
-		// 접속자 수 
+		//  오늘 접속자 수 
 		$where = new QueryWhere();
 		$where->set('date',$now,'=');
 		$result = $this->model->select('connecter', 'id', $where);
-		if (!$result) {
+		if ($result) {
+			$today_num = $this->model->getNumRows();
+		} else {
 			$msg .= "오늘 접속자 선택을 실패하였습니다.\n";
 		}		
-		$today_num = $this->model->getNumRows();
 
-		$where = new QueryWhere();
+		// 어제 접속자 수 
+		$where->reset();
 		$where->set('date',$now,'<');
 		$result = $this->model->select('connecter', 'id', $where);
-		if (!$result) {
+		if ($result) {
+			$yesterday_num = $this->model->getNumRows();
+		} else {
 			$msg .= "어제 접속자 선택을 실패하였습니다.\n";
 		}
-		$yesterday_num = $this->model->getNumRows();
-
-		$result = $this->model->select('connecter_all', '*');
-		if (!$result) {
+		
+		$where->reset();
+		$where->set('date',$now,'=');
+		$result = $this->model->select('connecter_day', 'total_count', $where);
+		if ($result) {
+			$row = $this->model->getRow();
+			$total_num = $row['total_count'];			
+		} else {
 			$msg .= "전체 접속자 선택을 실패하였습니다.\n";
-		}
-		$row = $this->model->getRow();
-		$total_num = $row['hit'];
+		}		
 
 		// 실 접속자 수 
-		$where = new QueryWhere();
+		$where->reset();
 		$where->set('date',$now,'=');
 		$result = $this->model->select('connecter_real', 'id', $where);
 		if (!$result) {
@@ -53,7 +57,7 @@ class AnalyticsView extends View
 		}
 		$real_today_num = $this->model->getNumRows();
 
-		$where = new QueryWhere();
+		$where->reset();
 		$where->set('date',$now,'<');
 		$result = $this->model->select('connecter_real', 'id', $where);
 		if (!$result) {
@@ -61,18 +65,21 @@ class AnalyticsView extends View
 		}
 		$real_yesterday_num = $this->model->getNumRows();
 
-		$result = $this->model->select('connecter_real_all', '*');
-		if (!$result) {
+		$where->reset();
+		$where->set('date',$now,'=');
+		$result = $this->model->select('connecter_day', 'real_count', $where);
+		if ($result) {
+			$row = $this->model->getRow();
+			$real_total_num = $row['real_count'];
+		} else {
 			$msg .= "전체 실접속자 수 선택을 실패하였습니다.\n";
-		}
-		$row = $this->model->getRow();
-		$real_total_num = $row['hit'];
+		}		
 
 		echo 'today : ' . $today_num . ', ' . 'yester : ' . $yesterday_num . ', ' . 'total : ' . $total_num . '<br>real_today : ' . $real_today_num . ', ' . 'real_yester : ' . $real_yesterday_num . ', ' . 'real total : ' . $real_total_num . '<br>';
 	}
 
 	function displayPageview() {
 
-		$this->model->insert('pageview');
+		$this->controller->addPageview();
 	}
 }

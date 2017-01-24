@@ -42,7 +42,6 @@ function openPopup( url, popwinname, pLeft, pTop, pWidth, pHeight ) {
 		suxpopWindow.opener = self;
 	}
 }
-
 var popupManager = popupManager || {};
 (function(app){
 
@@ -64,7 +63,7 @@ var popupManager = popupManager || {};
 
 		this.open = function() {
 
-				var url = '',
+			var url = '',
 				id = list[counter].id,
 				winname = list[counter].popup_name,
 				skin = list[counter].skin,
@@ -76,9 +75,8 @@ var popupManager = popupManager || {};
 				period = list[counter].period,
 				nowtime = list[counter].nowtime;
 
-			self.stopTimer();
-			if (is_usable.toLowerCase() == 'y' && nowtime < period ) {
-				url  = jsux.rootPath + 'popup-event?id='  + id + '&winname=' + winname + '&skin=' + skin;		
+			if (is_usable.toLowerCase() == 'y' && period > nowtime) {
+				url  = jsux.rootPath + 'popup-event?id='  + id + '&winname=' + winname;		
 				openPopup(url, winname, left , top , width , height);
 			}
 
@@ -93,6 +91,7 @@ var popupManager = popupManager || {};
 		};
 
 		this.stopTimer = function() {
+
 			for (var i=0; i<interval.length; i++) {
 				clearInterval(interval[i]);
 			}
@@ -133,7 +132,6 @@ var popupManager = popupManager || {};
 		this.popup.sux_path = path;
 	};
 })(popupManager);
-
 var BoardApp = BoardApp || {};
 BoardApp.Pagination = jsux.Model.create();
 

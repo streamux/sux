@@ -27,14 +27,12 @@ var popupManager = popupManager || {};
 				top = list[counter].popup_top,
 				width = list[counter].popup_width,
 				height = list[counter].popup_height,
-				choice = list[counter].choice,
+				is_usable = list[counter].is_usable,
 				period = list[counter].period,
 				nowtime = list[counter].nowtime;
 
-			if (choice.toLowerCase() == 'y' && nowtime < period ) {
-
-				url  = self.sux_path + '/sux/modules/popup/popup.php?action=event&id='  + id + '&winname=' + winname + '&skin=' + skin;
-				
+			if (is_usable.toLowerCase() == 'y' && period > nowtime) {
+				url  = jsux.rootPath + 'popup-event?id='  + id + '&winname=' + winname;		
 				openPopup(url, winname, left , top , width , height);
 			}
 
@@ -45,7 +43,6 @@ var popupManager = popupManager || {};
 		};
 
 		this.startTimer = function() {
-
 			interval.push(setInterval(self.open, delay));
 		};
 
@@ -67,7 +64,7 @@ var popupManager = popupManager || {};
 			}
 			loaded = false;
 
-			url = self.sux_path + '/sux/modules/popup/popup.php?action=openerJson';
+			url = jsux.rootPath + 'opener-json';
 			jsux.getJSON( url, params, function(e) {
 
 				var result = $.trim(e.result.toLowerCase());
@@ -82,7 +79,6 @@ var popupManager = popupManager || {};
 			});
 		};
 	};
-	Popup.prototype.sux_path = '';
 	
 	app.popup = new Popup();
 	app.open = function( id ) {

@@ -3,8 +3,6 @@
 class PopupAdminView extends View
 {
 
-	var $class_name = 'popup_admin_view';
-
 	function displayPopupAdmin() {
 
 		$this->displayList();

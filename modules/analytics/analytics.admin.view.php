@@ -1,6 +1,7 @@
 <?php
 
-class AnalyticsAdminView extends ModuleAdminView {
+class AnalyticsAdminView extends View
+{
 
 	function displayConnectSite() {
 
