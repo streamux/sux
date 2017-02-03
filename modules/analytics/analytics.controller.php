@@ -17,7 +17,7 @@ class AnalyticsController extends Controller
 			// 총 접속수	
 			$where = new QueryWhere();
 			$where->set('date', $now, '=');
-			$this->model->select('connecter_day', 'total_count', $where);
+			$this->model->select('connecter_day', '*', $where);
 
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
@@ -58,7 +58,8 @@ class AnalyticsController extends Controller
 				$this->model->insert('connecter_real', $columns);
 
 				// 전체 실접속자 수
-				$this->model->select('connecter_day', 'real_count');
+				$where->set('date', $now, '=');
+				$this->model->select('connecter_day', '*', $where);
 				$row = $this->model->getRow();
 				$hit = $row['real_count']+1;
 				$columns = array('real_count'=>$hit);
@@ -66,7 +67,7 @@ class AnalyticsController extends Controller
 				$where->reset();
 				$where->set('date', $now, '=');
 				$this->model->update('connecter_day', $columns, $where);
-			}		
+			}
 
 			$context->setSession('connectcheck', 'yes');
 		}		
