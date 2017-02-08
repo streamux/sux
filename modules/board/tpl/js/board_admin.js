@@ -117,7 +117,9 @@ jsux.fn.add = {
 	sendJson:  function( f ) {
 
 		var self = this,
-			params = {},
+			params = {
+				_method:$("input[name=_method]").val(),
+			},
 			indexCheckbox = 0;
 
 		$.each(f, function(index, item) {
@@ -266,7 +268,9 @@ jsux.fn.modify = {
 	sendJson: function( f ) {
 
 		var self = this,
-			params = {},
+			params = {
+				_method:$("input[name=_method]").val(),
+			},
 			indexCheckbox = 0;
 
 		$.each(f, function(index, item) {

@@ -25,7 +25,7 @@
 					<tr>
 						<td><label for="category">*카테고리 이름</label></td>
 						<td>
-							<input type="text" id="category" name="category" size="20" maxlength="20" value="">
+							<input type="text" id="category" name="category" size="20" maxlength="20" value="community">
 							<input type="button" name="checkID" value='중복체크'>
 							<span>※ 반드시 영문으로 작성해주세요.</span>
 						</td>
@@ -33,7 +33,7 @@
 					<tr>
 						<td><label for="board_name">*게시판 이름</label></td>
 						<td>
-							<input type="text" id="board_name" name="board_name" size="20" maxlength="20" value="">
+							<input type="text" id="board_name" name="board_name" size="20" maxlength="20" value="커뮤니티">
 						</td>
 					</tr>
 					<tr>
