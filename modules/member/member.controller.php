@@ -38,7 +38,10 @@ class MemberController extends Controller {
 		} 
 
 		if (isset($id)) {
-			$this->model->selectFromMember('user_name');
+			$where = new QueryWhere();
+			$where->set('user_id', $id);
+			$this->model->select('member', 'id', $where);
+
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0) {
 				$msg = "'${id}'는 이미 존재하는 아이디입니다.";
@@ -52,16 +55,17 @@ class MemberController extends Controller {
 			$resultYN = "N";
 		}
 
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
 		$this->callback($data);
 	}
 
-	function selectMemberField() {
+	/*function selectMemberField() {
 
 		$msg = '데이터 로드를 완료하였습니다.';
-		$result = $this->model->selectFieldFromMember('*');
+		$result = $this->model->select('member', '*');
 		if ($result) {
 			$rows = $this->model->getRow();
 			$email_arr = split('@', $rows['email']);
@@ -82,13 +86,15 @@ class MemberController extends Controller {
 						'msg'=>$msg);
 
 		$this->callback($data);
-	}
+	}*/
 
 	function insertMemberJoin() {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();		
 
+		$category = $posts['category'];
+		$user_id = $posts['user_id'];
 		$returnURL = $context->getServer('REQUEST_URI');
 
 		// validation
@@ -103,24 +109,26 @@ class MemberController extends Controller {
 			exit;
 		}
 
-		// hobe data
+		// hoby data
 		$hobby = '';
 		$index = 0;
 		foreach ($posts as $key => $value) {
 			if (preg_match('/^hobby+/', $key)) {
-				$hobby .= ($index == 0) ? $value : ',' . $value;
+				$hobby .= ($index === 0) ? $value : ',' . $value;
 				$index++;
 			}			
 		}	
 
 		// email validation
 		$email = $posts['email_address'];
-		$email .= !($posts['email_tail1'] === '직접입력') ? '@' . $posts['email_tail1'] : '';
-		if ($posts['email_tail1'] === '직접입력') {
-			$email .= !empty($posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
+		if ($posts['email_tail1'] !== '직접입력') {
+			$email .= '@' . $posts['email_tail1'];
+		} else {
+			$email .= '@' . $posts['email_tail2'];
 		}
-		
-		if (!preg_match('/@/i', $email)) {
+	
+		$check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
+		if ($check_email != true) {
 			$msg .= '잘못된 E-mail 주소입니다.';
 	 		$resultYN = 'N';
 	 		$data = array(	'url'=>$returnURL,
@@ -131,15 +139,15 @@ class MemberController extends Controller {
 			exit;
 		}
 
-		$pwd = trim(substr(md5($posts['password']),0,8));
-		$pwdConf =  trim(substr(md5($posts['passwordConf']),0,8));
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		$posts['password'] = $passwordHash;
+		$posts['email_address'] = $email;
+		$posts['hobby'] = $hobby;
 
-		$context->setPost('password', $pwd);
-		$context->setPost('passwordConf', $pwdConf);		
-		$context->setPost('email_address', $email);
-		$context->setPost('hobby', $hobby);
+		$where = new QueryWhere();
+		$where->set('user_id', $user_id);
+		$this->model->select('member', 'id', $where);
 
-		$this->model->selectFromMember('user_id');
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
 			$msg = "아이디가 이미 존재합니다.";
@@ -152,22 +160,46 @@ class MemberController extends Controller {
 			$this->callback($data);
 			exit;
 		}
-
-		$result = $this->model->insertMemberJoin();
-		if (!$result) {
-			$msg .= '신규회원 가입을 실패하였습니다.';
-			$resultYN = "N";
-
-			$data = array(	'url'=>$returnURL,
-							'result'=>$resultYN,
-							'msg'=>$msg);
-
-			$this->callback($data);
+		
+		$cachePath = './files/caches/queries/member.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
-		} 
+		}
 
-		$msg .= '신규회원 가입을 완료하였습니다.';
-		$resultYN = "Y";
+		$columns = array();
+		for($i=0; $i<count($columnCaches); $i++) {
+			$key = $columnCaches[$i];
+			$value = $posts[$key];
+
+			if (isset($value) && $value) {
+				if ($key === 'password') {
+					$value = $value;
+				}
+				$columns[] = $value;
+			} else {
+				if ($key === 'date') {
+					$columns[] = 'now()';
+				} else if ($key === 'ip') {
+					$columns[] = $context->getServer('REMOTE_ADDR');
+				}  else {
+					$columns[] = '';
+				}				
+			}						
+		}
+
+		$result = $this->model->insert('member', $columns);
+		if ($result) {
+			$msg .= '신규회원 가입을 완료하였습니다.' . PHP_EOL;
+			$resultYN = "Y";
+		}  else {
+			$msg .= '신규회원 가입을 실패하였습니다.' . PHP_EOL;
+			$resultYN = "N";			
+		}
+
+		//$msg .= Tracer::getInstance()->getMessage();		
 		$data = array(	'url'=>$rootPath . 'login',
 						'result'=>$resultYN,
 						'msg'=>$msg);
@@ -179,10 +211,12 @@ class MemberController extends Controller {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
+		$category = $posts['category'];
+		$user_id = $posts['user_id'];
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		
-		$msg = $this->checkValidation($posts);
+		$msg = $this->checkValidation($posts);		
 		if (isset($msg) && $msg) {
 	 		$resultYN = 'N';
 	 		$data = array(	'url'=>$returnURL,
@@ -193,14 +227,18 @@ class MemberController extends Controller {
 			exit;
 		}
 
+
+
 		// email validation
 		$email = $posts['email_address'];
-		$email .= !($posts['email_tail1'] === '직접입력') ? '@' . $posts['email_tail1'] : '';
-		if ($posts['email_tail1'] === '직접입력') {
-			$email .= !empty($posts['email_tail2']) ? '@' . $posts['email_tail2'] : '';
+		if ($posts['email_tail1'] !== '직접입력') {
+			$email .= '@' . $posts['email_tail1'];
+		} else {
+			$email .= '@' . $posts['email_tail2'];
 		}
 	
-		if (!preg_match('/@/i', $email)) {
+		$check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
+		if ($check_email != true) {
 			$msg .= '잘못된 E-mail 주소입니다.';
 	 		$resultYN = 'N';
 	 		$data = array(	'url'=>$returnURL,
@@ -216,31 +254,66 @@ class MemberController extends Controller {
 		$index = 0;
 		foreach ($posts as $key => $value) {
 			if (preg_match('/^hobby+/', $key)) {
-				$hobby .= ($index == 0) ? $value : ',' . $value;
+				$hobby .= ($index === 0) ? $value : ',' . $value;
 				$index++;
 			}			
 		}
 
 		$resultYN = "Y";
-		$pwd = trim(substr(md5($posts['password']),0,8));
-		$pwdConf =  trim(substr(md5($posts['passwordConf']),0,8));
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		$passwordHashConf = $context->getPasswordHash($posts['passwordConf']);
 
-		$context->setParameter('category', $posts['category']);
-		$context->setParameter('user_id', $posts['user_id']);
+		if ($passwordHash !== $passwordHashConf) {
+			$msg .= '확인 비밀번호와 일치하지 않습니다.';
+	 		$resultYN = 'N';
+	 		$data = array(	'url'=>$returnURL,
+							'result'=>$resultYN,
+							'msg'=>$msg);
 
-		$context->setPost('password', $pwd);
-		$context->setPost('passwordConf', $pwdConf);
-		$context->setPost('email_address', $email);
-		$context->setPost('hobby', $hobby);
+			$this->callback($data);
+			exit;
+		}
 
-		$this->model->selectFromMember('password');
+		$posts['password'] = $passwordHash;
+		$posts['email_address'] = $email;
+		$posts['hobby'] = $hobby;
+
+		$where = new QueryWhere();
+		$where->set('category', $category);
+		$where->set('user_id', $user_id, '=', 'and');
+		$this->model->select('member', 'password', $where);
+
 		$rows = $this->model->getRow();
-		if ($pwd != $rows['password']) {
+		if ($passwordHash != $rows['password']) {
 			$msg = '등록된 비밀번호와 일치하지 않습니다. <br>다시 입력해주세요.';
 			$resultYN = "N";
 		} else {
 
-			$result = $this->model->updateMemberModify();
+			$cachePath = './files/caches/queries/member.getColumns.cache.php';
+			$columnCaches = CacheFile::readFile($cachePath, 'columns');
+			if (!$columnCaches) {
+				$msg .= "QueryCacheFile Do Not Exists<br>";
+				UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+				exit;
+			}
+
+			$filters = '/^(id|category|user_id|password)+$/i';
+			$columns = array();
+			for($i=0; $i<count($columnCaches); $i++) {
+				$key = $columnCaches[$i];
+				$value = $posts[$key];
+
+				if (isset($value) && $value) {
+					if (!preg_match($filters, $key)) {
+						$columns[$key] = $value;
+					}					
+				} 					
+			}
+
+			$result = $this->model->update('member', $columns, $where);
+			/*$msg .= Tracer::getInstance()->getMessage();
+			echo $msg;
+			return;*/
 			if ($result) {
 				$msg = '회원정보를 수정하였습니다.';
 				$resultYN = "Y";
@@ -249,10 +322,10 @@ class MemberController extends Controller {
 				$resultYN = "N";
 			}
 		}
+
 		$data = array(	'url'=>$returnURL,
 						'result'=>$resultYN,
 						'msg'=>$msg);
-
 
 		$this->callback($data);
 	}
@@ -261,24 +334,26 @@ class MemberController extends Controller {
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
+		$category = $posts['category'];
+		$user_id = $posts['user_id'];
 
 		$rootPath = _SUX_ROOT_;
 		$msg = '';
 		$resultYN = 'Y';		
 
-		$pass = substr(md5(trim($posts['password'])),0,8);
-		if (empty($pass)) {
+		$passwordHash = $context->getPasswordHash($posts['password']);
+		if (empty($passwordHash)) {
 			UIError::alertToBack('비밀번호를 입력해주세요.');
 			exit();
 		}
 		
-		$context->setParameter('category', $posts['category']);
-		$context->setParameter('user_id', $posts['user_id']);
+		$where = new QueryWhere();
+		$where->set('category', $category);
+		$where->set('user_id', $user_id);
+		$this->model->select('member', 'password', $where);
 
-		$this->model->selectFromMember('password');	
 		$row = $this->model->getRow();
-
-		if ($pass != $row['password']) {
+		if ($passwordHash != $row['password']) {
 			$msg = '비밀번호가 잘못되었습니다.';
 			$resultYN = 'N';
 		} else {
@@ -291,6 +366,7 @@ class MemberController extends Controller {
 				$resultYN = 'N';
 			}
 		}
+		$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	'url'=>$rootPath . 'logout?_method=insert',
 						'result'=>$resultYN,
 						'msg'=>$msg);

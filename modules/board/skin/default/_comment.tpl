@@ -1,7 +1,8 @@
 	<div class="panel-write">
 		<form action="{$uri}/{$contentData.id}/comment" name="f_comment" method="post">
 		<input type="hidden" name="_method" value="insert">
-		<input type="hidden" name="content_id" value="content_id : {$contentData.id}">
+		<input type="hidden" name="category" value="{$documentData.category}">
+		<input type="hidden" name="contents_id" value="{$documentData.id}">
 		<dl>
 			<dt>댓글 쓰기</dt>
 			<dd class="form-heading">

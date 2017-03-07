@@ -12,8 +12,11 @@
 	<div class="login">
 		<h1 class="title">댓글 삭제 비밀번호 인증</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>
-		<form action="{$uri}/{$contentData.id}/delete-comment/{$contentData.sid}" method="post" name="f_board_tail_delpass">
+		<form action="{$uri}/{$documentData.mid}/delete-comment/{$contentData.id}" method="post" name="f_board_tail_delpass">
 		<input type="hidden" name="_method" value="delete">
+		<input type="hidden" name="category" value="{$documentData.category}">
+		<input type="hidden" name="mid" value="{$documentData.mid}">
+		<input type="hidden" name="id" value="{$contentData.id}">
 		<div class="box ui-edgebox-2px">
 			<div class="login-title">
 				<img src="{$skinPathList.dir}/images/icon_01.gif" title="">			

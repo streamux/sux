@@ -1,40 +1,6 @@
 <?php
 
-class MemberModules extends View {
-
-	var $class_name = 'member_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance();
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();	
-	}
-}
-
-
-class MemberView extends MemberModules {
+class MemberView extends View {
 
 	var $class_name = 'member_view';
 
@@ -73,12 +39,11 @@ class MemberView extends MemberModules {
 			$footerPath = $skinPath . "_footer.tpl";
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
-
 		$contentsPath = $skinPath . 'join.tpl';
 
-		$this->model->selectMemberGroup();
-		$this->document_data['group'] = $this->model->getRows();
+		$this->model->select('member_group', '*');
 
+		$this->document_data['group'] = $this->model->getRows();
 		$this->skin_path_list['root'] = $rootPath;
 		$this->skin_path_list['dir'] = $skinDir;
 		$this->skin_path_list['header'] = $headerPath;
@@ -92,6 +57,8 @@ class MemberView extends MemberModules {
 
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
+		$category = $this->session_data['sux_category'];
+		$user_id = $this->session_data['sux_user_id'];
 
 		/**
 		 * css, js file path handler
@@ -121,11 +88,11 @@ class MemberView extends MemberModules {
 
 		$contentsPath = $skinPath . 'modify.tpl';
 
-		$context->setParameter('category', $context->getSession('sux_category'));
-		$context->setParameter('user_id', $context->getSession('sux_user_id'));
-
-		$result = $this->model->selectFromMember('*');
-		//Tracer::getInstance()->output();
+		$where = new QueryWhere();
+		$where->set('category', $category);
+		$where->set('user_id', $user_id, '=', 'and');
+		$result = $this->model->select('member', '*', $where);
+		//echo Tracer::getInstance()->output();
 		if ($result) {
 			$contentsData = $this->model->getRow();
 			$email_arr = split('@', $contentsData['email_address']);
@@ -147,7 +114,7 @@ class MemberView extends MemberModules {
 	function displayMemberGroupList() {
 
 		$msg = '데이터 로드를 완료하였습니다.';
-		$result = $this->controller->select('memberListFromGroup');
+		$result = $this->model->select('member_group', '*');
 		if ($result) {
 			$data = array(	'data'=>$this->model->getRows(),
 							'msg'=>$msg);

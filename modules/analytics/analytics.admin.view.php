@@ -1,41 +1,7 @@
 <?php
 
-class AnalyticsAdminModule extends View
+class AnalyticsAdminView extends View
 {
-	
-	var $class_name = 'board_admin_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance();
-
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();	
-	}
-}
-
-class AnalyticsAdminView extends AnalyticsAdminModule {
 
 	function displayConnectSite() {
 
@@ -96,7 +62,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromConnectSite('id, name', $where);
+		$this->model->select('connect_site', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -126,7 +92,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->selectFromConnectSite('id, name', $where);	
+		$result = $this->model->select('connect_site', 'id, name', $where);	
 
 		/*while($rows = $this->model->getMySqlFetchArray($result)) {
 			foreach ($rows as $key => $value) {
@@ -157,7 +123,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 		$msg = "";
 		$resultYN = "Y";	 
 
-		$result = $this->model->selectFromConnectSite('*', null, 'id desc');//Orderby', 'id desc');
+		$result = $this->model->select('connect_site', '*', null, 'id desc');//Orderby', 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -250,7 +216,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPageview('id, name', $where);
+		$this->model->select('pageview', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -280,7 +246,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPageview('id, name', $where);
+		$this->model->select('pageview', 'id, name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -303,7 +269,7 @@ class AnalyticsAdminView extends AnalyticsAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromPageview('*', null, 'id desc');
+		$result = $this->model->select('pageview', '*', null, 'id desc');
 		if ($result){
 
 			$numrows = $this->model->getNumRows();

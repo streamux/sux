@@ -1,45 +1,5 @@
 <?php
-class DocumentModule extends View {
-
-	var $class_name = 'document_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance(); 
-		/*
-		 * @class Tracer
-		 * @brief Tracer를 이용해서 코드의 흐름을 파악할 수 있다.
-		 */
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
-
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);			
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );		
-		} else {			
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}		
-		$UIError->output();	
-	}
-}
-
-class DocumentAdminView extends DocumentModule
+class DocumentAdminView extends View
 {
 
 	function displayDocumentAdmin() {
@@ -102,7 +62,7 @@ class DocumentAdminView extends DocumentModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('category, id', $where);
+		$this->model->select('document', 'category, id', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -128,7 +88,7 @@ class DocumentAdminView extends DocumentModule
 		
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('id, category', $where);
+		$this->model->select('document', 'id, category', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -155,7 +115,7 @@ class DocumentAdminView extends DocumentModule
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->selectFromDocument('*', null, 'id desc');
+		$this->model->select('document', '*', null, 'id desc');
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -197,7 +157,7 @@ class DocumentAdminView extends DocumentModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromDocument('*', $where);
+		$this->model->select('document', '*', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
@@ -236,7 +196,7 @@ class DocumentAdminView extends DocumentModule
 
 		$msg = "추가 생성 페이지 : ".$category."\n";
 
-		if (!isset($category) || $category == '') {
+		if (empty($category)) {
 
 			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
 			$resultYN = "N";
@@ -259,17 +219,16 @@ class DocumentAdminView extends DocumentModule
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->selectFromDocument('id', $where);
+		$this->model->select('document', 'id', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows> 0) {
 			$msg = "${category}는 이미 존재하는 페이지입니다.";
 			$resultYN = "N";
 		} else {
+			$this->model->select('board_group', 'id', $where);
 
-			$this->model->selectFromBoardGroup('id', $where);
 			$numrows = $this->model->getNumRows();
-
 			if ($numrows> 0) {
 				$msg = "${category}는 게시판에서 이미 사용하고 있습니다.";
 				$resultYN = "N";

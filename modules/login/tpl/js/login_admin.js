@@ -20,13 +20,6 @@ jsux.fn.loginAdmin = {
 		return (true);
 	},
 	init: function() {
-
-		var lists = $('input[name ^=user_');
-		$(lists).each(function(index) {
-			if (lists[index].value === '') {
-				$(lists[index]).focus();
-				return false;
-			}
-		});	
+		jsux.setAutoFocus();
 	}
 };

@@ -2,6 +2,7 @@
 class ModuleRouter
 {
 	static $aInstance = null;
+	static $cache_data = null;
 
 	public static function &getInstance()
 	{
@@ -35,18 +36,20 @@ class ModuleRouter
 			// module class and admin class
 			$classList = array();
 			$classList[] = array( 'class'=>$ClassName,
-								'path'=>'files/caches/routes/' . $dirName . '.cache.php');
+								'path'=>'./files/caches/routes/' . $dirName . '.cache.php');
 			$classList[] = array( 'class'=>$ClassName."Admin",
-								'path'=>'files/caches/routes/' . $dirName . '.admin.cache.php');
+								'path'=>'./files/caches/routes/' . $dirName . '.admin.cache.php');
 
 			for($i=0; $i<count($classList); $i++) {
 
-				$cachePath = _SUX_PATH_ . $classList[$i]['path'];				
+				$cachePath = $classList[$i]['path'];		
 				if (file_exists($cachePath)) {
+
+					$this->loadCacheFile($cachePath);
 					
 					//echo $cachePath . "<br>";
 					$Class = $classList[$i]['class'];
-					$actionList = $this->getRoute('action', $cachePath);
+					$actionList = $this->getRoute('action');
 					if ($actionList !== null &&  count($actionList) > 0) {						
 			
 						foreach ($actionList as $key => $value) {			
@@ -58,7 +61,7 @@ class ModuleRouter
 							$context->setModule($routeKeys[0], $Class)	;
 							//echo  $Class . ' : ' . $routeKeys[0] . "<br>";
 
-							$categoryList = $this->getRoute('categories', $cachePath);
+							$categoryList = $this->getRoute('categories');
 							if ($categoryList !== null &&  count($categoryList) > 0){							
 								foreach ($categoryList as $key => $value) {
 
@@ -109,19 +112,35 @@ class ModuleRouter
 		getRoute()->post( $route, $class);
 	}
 
-	function getRoute($key, $cache_path) {
+	function loadCacheFile($path) {
 
-		$file = $cache_path;
-		$tempList = preg_split('/\//', $file);
-		$fileName = $tempList[count($tempList)-1];
-		if (file_exists($file)) {
-			include($file);
-			$result = ${$key};
-			unset(${$key});
+		$filename = $this->getRealPath($path);
+		$pathinfo = pathinfo($file);
+
+		$this->cache_data = array('categories'=>null, 'action'=>null);
+
+		if (file_exists($filename)) {
+			include($filename);			
+			foreach ($this->cache_data as $key => $value) {
+				$this->cache_data[$key] = ${$key};
+				unset(${$key});
+			}			
 		} else {
-			printf("[ %s ] Cache File don't exist<br>", $fileName);
-		}
+			printf("[ %s ] Cache File don't exist<br>", $$pathinfo['filename']);
+		}		
+	}
+
+	function getRoute($key) {
 		
-		return $result;
+		return $this->cache_data[$key];
+	}
+
+	function getRealPath($path) {
+
+		if(strlen($path) >= 2 && substr_compare($path, './', 0, 2) === 0) {
+
+			return _SUX_PATH_ . substr($path, 2);
+		}
+		return $path;
 	}
 }

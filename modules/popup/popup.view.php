@@ -1,41 +1,7 @@
 <?php
 
-class PopupModule extends View {
-	
-	var $class_name = 'popup_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() { 
-
-		$UIError = UIError::getInstance();
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();	
-	}
-}
-
-class PopupView extends PopupModule {
-
-	var $class_name = 'popup_view';
+class PopupView extends View
+{
 
 	function displayOpenerJson() {
 
@@ -43,7 +9,9 @@ class PopupView extends PopupModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->controller->select('fieldFromPopup', '*');
+		$skinDir = _SUX_PATH_ . 'modules/popup/skin/';
+
+		$result = $this->model->select('popup', '*');
 		if ($result) {
 
 			$rows = $this->model->getRows();
@@ -52,15 +20,31 @@ class PopupView extends PopupModule {
 				$timeList = array();
 				foreach ($rows[$i] as $key => $value) {
 
-					if (preg_match('/(time)+/', $key)) {
+					if (preg_match('/^(time_)+/i', $key)) {
 						$timeList[$key] = $value;
-					} else {
+					}else {
 						$dataList[$key] = $value;
-					}					
+					}				
 				}
-				$dataList['period'] = mktime($timeList['time1'],$timeList['time2'],$timeList['time3'],$timeList['time4'],$timeList['time5'],$timeList['time6']);
-				$dataList['nowtime'] = mktime();
 
+				$bgimgPath = $skinDir. $rows[$i]['skin'] . '/images/bg.jpg';
+				$imgInfo = Utils::getImageInfo($bgimgPath);
+				$imgWidth = $imgInfo['width'];
+				$imgHeight = $imgInfo['height'];
+
+				if ($dataList['popup_width'] <= $imgWidth ) {
+					$dataList['popup_width'] = $imgWidth;
+				}
+
+				if ($dataList['popup_height'] <= $imgHeight ) {
+					$dataList['popup_height'] = $imgHeight;
+				}
+
+				$dataList['popup_width'] += 15;
+				$dataList['popup_height'] += 53;
+
+				$dataList['period'] = mktime($timeList['time_hours'],$timeList['time_minutes'],$timeList['time_seconds'],$timeList['time_month'],$timeList['time_day'],$timeList['time_year']);
+				$dataList['nowtime'] = mktime();
 				$dataObj[] = $dataList;
 			}
 			$resultYN = "Y";
@@ -73,49 +57,44 @@ class PopupView extends PopupModule {
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		echo $this->callback($data);
+		$this->callback($data);
 	}
 
-	function displayEvent() {
+	function displayPopupEvent() {
 
 		$context = Context::getInstance();
 		$this->request_data = $context->getRequestAll();
 
-		$skin_name = $this->request_data['skin'];
-		$action = $this->request_data['action'];
-		$this->document_data['jscode'] = $action;
-		$this->document_data['module_code'] = 'popup';
-		
-		$skinPath = _SUX_PATH_ . 'modules/popup/skin/' . $skin_name;
+		$id = $this->request_data['id'];
 
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/index.tpl";
-		$this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
+		$rootPath = _SUX_ROOT_;
+		$skinDir = _SUX_PATH_ . 'modules/popup/skin/';
 
-		$bgimgPath = "skin/{$skin_name}/images/bg.jpg";
-		$image_info = getimagesize($bgimgPath);
-	      $image_type = $image_info[2];
+		$this->document_data['jscode'] = 'event';
+		$this->document_data['module_code'] = 'popup';		
 
-	      if ( $image_type == IMAGETYPE_JPEG ) {
-	      	$image = imagecreatefromjpeg($bgimgPath);
-	      } elseif( $image_type == IMAGETYPE_GIF ) {
-	       	$image = imagecreatefromgif($bgimgPath);
-	      } elseif( $image_type == IMAGETYPE_PNG ) {
-	     		$image = imagecreatefrompng($bgimgPath);
-		}
-
-		$result = $this->controller->select('fieldFromPopupWhere', '*');
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$result = $this->model->select('popup', '*', $where);
 		if ($result) {			
 			$contentData = $this->model->getRow();
 			$contentData['comment'] = nl2br($contentData['comment']);
 		}
-		$contentData['imagesx'] = imagesx($image);
-		$contentData['imagesy'] = imagesy($image);
+
+		$skinPath = $skinDir . $contentData['skin'];
+		$bgimgPath = $skinDir. $contentData['skin'] . '/images/bg.jpg';
+
+		$imgInfo = Utils::getImageInfo($bgimgPath);
+		$contentData['bg_width'] = $imgInfo['width'];
+		$contentData['bg_height'] = $imgInfo['height'];
 
 		$this->document_data['contents'] = $contentData;
+
+		$this->skin_path_list['root'] = $rootPath;
+		$this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
+		$this->skin_path_list['contents'] = "{$skinPath}/index.tpl";
+		$this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
 
 		$this->output();
 	}
 }
-?>

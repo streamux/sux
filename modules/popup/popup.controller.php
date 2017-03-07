@@ -37,4 +37,3 @@ class PopupController extends Controller {
 		return $result;
 	}
 }
-?>

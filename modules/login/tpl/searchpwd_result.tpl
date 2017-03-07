@@ -19,7 +19,7 @@
 				<div class="panel-info-result">
 					<ul>
 						<li>
-							{$documentData.user_name}님의 이메일 주소 '<span>{$documentData.user_email}</span>' (으)로 비밀번호가 발송되었습니다.
+							{$documentData.user_name}님의 이메일 주소<br>'<span>{$documentData.user_email}</span>'<br>(으)로 비밀번호가 발송되었습니다.
 						</li>
 					</ul>				
 				</div>

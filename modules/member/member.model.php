@@ -1,133 +1,71 @@
 <?php
 
-class MemberModel extends Model {
+class MemberModel extends Model
+{
 
-	var $class_name = 'member_model';
-
-	function init() {
-		
-	}
-
-	function selectMemberGroup() {
+	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
 		$context = Context::getInstance();
-		$member_group = $context->getTable('member_group');
+		$tableName = $context->getTable($table_name);
 
-		$query = new Query();
-		$query->setField('*');
-		$query->setTable($member_group);
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function selectFromMember($field) {
-
-		$context = Context::getInstance();
-		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
-
-		$query = new Query();
+		$query = new Query();		
+		$query->setTable($tableName);
 		$query->setField($field);
-		$query->setTable($table_name);
-		$query->setWhere($where);
-		$result = parent::select($query);
-		return $result;
-	}	
 
-	function insertMemberJoin() {
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$remote_addr = $context->getServer('REMOTE_ADDR');
-		$table_name = $context->getTable('member');
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
 
-		$query = new Query();
-		$query->setTable($table_name);
-		$query->setColumn(array(
-			'',
-			$posts['category'],
-			$posts['user_id'],
-			$posts['password'],
-			$posts['user_name'],
-			$posts['nick_name'],
-			$posts['email_address'],
-			'',
-			'',
-			$posts['hp1'],
-			$posts['hp2'],
-			$posts['hp3'],
-			'',
-			$posts['job'],
-			$posts['hobby'],
-			$posts['join_path'],
-			$posts['access_count'],
-			1000,
-			1,
-			'y',			
-			'n',
-			'now()',
-			$remote_addr
-		));
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
 
-		$result = parent::insert($query);
-		return $result;
+		return parent::select($query);
 	}
 
-	function updateMemberModify() {
+	function insert($table_name, $columns = null) {
 
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($table_name);
-		$query->setColumn(array(
-			'password'=>$posts['password'],
-			'user_name'=>$posts['user_name'],
-			'nick_name'=>$posts['nick_name'],
-			'email_address'=>$posts['email_address'],
-			'hp1'=>$posts['hp1'],
-			'hp2'=>$posts['hp2'],
-			'hp3'=>$posts['hp3'],
-			'job'=>$posts['job'],
-			'hobby'=>$posts['hobby']
-		));
-		$query->setWhere($where);
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::update($query);
-		return $result;
+		return parent::insert($query);
 	}
 
-	function deleteDelete() {
-
+	function update($table_name, $columns, $where = null) {
+		
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-
-		$context = Context::getInstance();
-		$table_name = $context->getTable('member');
-		$category = $context->getParameter('category');
-		$userId = $context->getParameter('user_id');
-
-		$where = new QueryWhere();
-		$where->set('category',$category,'=');
-		$where->set('user_id',$userId,'=','and');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($table_name);
-		$query->setWhere($where);
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::delete($query);
-		return $result;
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		return parent::update($query);
+	}
+
+	function delete($table_name, $where = null) {
+
+		$context = Context::getInstance();
+		$tableName = $context->getTable($table_name);
+
+		$query = new Query();
+		$query->setTable($tableName);
+		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+		return parent::delete($query);
 	}
 }

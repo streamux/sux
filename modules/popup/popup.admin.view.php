@@ -1,43 +1,7 @@
 <?php
 
-class  PopupAdminModule extends View
+class PopupAdminView extends View
 {
-	
-	var $class_name = 'popup_admin_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance();
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();	
-	}
-}
-
-class PopupAdminView extends PopupAdminModule
-{
-
-	var $class_name = 'popup_admin_view';
 
 	function displayPopupAdmin() {
 
@@ -136,7 +100,7 @@ class PopupAdminView extends PopupAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromPopup('id, popup_name', $where);
+		$this->model->select('popup', 'id, popup_name', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -158,7 +122,7 @@ class PopupAdminView extends PopupAdminModule
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromPopup('*', null, 'id desc');
+		$result = $this->model->select('popup', '*', null, 'id desc');
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
@@ -209,7 +173,7 @@ class PopupAdminView extends PopupAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->selectFromPopup('*', $where);
+		$result = $this->model->select('popup', '*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();

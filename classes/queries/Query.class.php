@@ -136,34 +136,30 @@ class Query extends Object {
 
 	function setWhere($values, $cond="=", $glue='and') {
 
-		$result = '';
+		$where = array();
+		$tmpArr = array();
 		$glue = trim($glue);
 
 		if (is_a($values, 'QueryWhere')) {
-			$result = $values->get();
+			$where = $values->get();
 		} else {
 			if (is_array($values)) {
-				if (preg_match('/like/i', $cond)) {	
-
+				if (preg_match('/like/i', $cond)) {
 					for($i=0; $i<count($values); $i++) {
 						foreach ($values[$i] as $key => $value) {
-
-							$result .= $key . ' LIKE %\'' . $value . '\'';
-							if ($i < count($values)-1) {
-								$result .= ' ' . $glue . ' ';
-							}
+							$tmpArr[] = $key . ' LIKE %\'' . $value . '\'';
 						}
-					}	
+					}
+					$where = $this->convertToString($tmpArr, $glue);
 				} else {
-					$arr = $this->addQuotationToArray($values, $cond);
-					$result = $this->convertToString($arr, $glue);
+					$tmpArr = $this->addQuotationToArray($values, $cond);
+					$where = $this->convertToString($tmpArr, $glue);
 				}			
 			} else {
-				$result = $values;
+				$where = $values;
 			}
 		}
-		$this->where = $result;
-		//echo $this->where . '<br>';
+		$this->where = $where;
 	}
 
 	function getWhere() {
@@ -290,9 +286,9 @@ class Query extends Object {
 	function addQuotation($value) {
 
 		$temp_value = '';
-		if (((is_string($value) && strpos($value, '()') === FALSE) || !isset($value)) && !preg_match('/[+|-|*]+/', $value)) {
+		if (is_string($value) && (preg_match('/\(\)+$/', $value) == false) && (preg_match('/[+|-|*]+/', $value) == false)) {
 			$temp_value = '\'' . $value. '\'';
-		} else {
+		} else {		
 			$temp_value = $value;
 		}
 

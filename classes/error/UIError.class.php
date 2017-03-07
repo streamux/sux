@@ -35,10 +35,14 @@ class UIError extends Object {
 
 	public function output() {
 
-		$htmlUI = '%s';
+		
 
-		if (strtolower($this->useHtml) === true) {
-			$htmlUI = $this->getHtmlLayout($htmlUI);
+		if (strtolower($this->useHtml) == true) {
+			$htmlUI = $this->htmlHeader();
+			$htmlUI .= '%s';
+			$htmlUI .= $this->htmlFooter();
+		} else {
+			$htmlUI = '%s';
 		}
 
 		printf($htmlUI, $this->msg_list);
@@ -49,12 +53,12 @@ class UIError extends Object {
 	private function htmlHeader() {
 
 		$html = '<!doctype>
-		<html>
-		<head>
-			<title>UI 경고 - StreamUX</title>
-			<meta charset="utf-8" />
-		</head>
-		<body>';
+				<html>
+				<head>
+					<title>UI 경고 - StreamUX</title>
+					<meta charset="utf-8" />
+				</head>
+				<body>';
 
 		$html = preg_replace('/\t|/', '', $html);
 		return $html;
@@ -70,14 +74,13 @@ class UIError extends Object {
 
 	static function alert( $msg, $useHtml=true) {
 
-		$msg = preg_replace('/<br>/', '\n',$msg);
 		$context = Context::getInstance();
 		if ($context->ajax()) {
 			$data = array(	'result'=>'N',
 							'msg'=>$msg);
-
 			Object::callback($data);
 		} else {
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script = 	'<script>
 							alert(\'%s\');
 						</script>
@@ -86,7 +89,7 @@ class UIError extends Object {
 						</noscript>';
 
 			$html = $script;
-			if (strtolower($useHtml) === true) {
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();
@@ -97,7 +100,6 @@ class UIError extends Object {
 
 	static function alertToBack( $msg, $useHtml=true, $options=null) {
 
-		$msg = preg_replace('/<br>/', '\n',$msg);
 		$url = isset($options['url']) ? $options['url'] : null;
 		$delay = isset($options['delay']) ? $options['delay'] : 3;
 
@@ -108,6 +110,7 @@ class UIError extends Object {
 
 			Object::callback($data);
 		} else {
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script =	'<script>
 							alert(\'%s\');
 							history.go(-1);
@@ -119,7 +122,7 @@ class UIError extends Object {
 						</noscript>';
 
 			$html = $script;
-			if (strtolower($useHtml) === true) {
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();
@@ -129,8 +132,7 @@ class UIError extends Object {
 	}
 
 	static function alertTo( $msg, $useHtml=true, $options=null) {
-
-		$msg = preg_replace('/<br>/', '\n',$msg);
+		
 		$url = isset($options['url']) ? $options['url'] : null;
 		$delay = isset($options['delay']) ? $options['delay'] : 3;
 		
@@ -139,9 +141,9 @@ class UIError extends Object {
 			$data = array(	'alertTo'=>$url,
 							'result'=>'N',
 							'msg'=>$msg);
-
 			Object::callback($data);
 		} else {
+			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script ='<script>
 						alert(\'%s\');
 						location.href=\'%s\';
@@ -153,8 +155,7 @@ class UIError extends Object {
 					</noscript>';
 
 			$html = $script;	
-			if (strtolower($useHtml) === true) {
-
+			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
 				$html .= self::htmlFooter();

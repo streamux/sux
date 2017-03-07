@@ -1,42 +1,6 @@
 <?php
 
-class MemberAdminModule extends View {
-	
-	var $class_name = 'admin_admin_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() {
-
-		$UIError = UIError::getInstance();
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		/*$tracer = Tracer::getInstance();
-		$tracer->output();*/
-
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			$UIError->add('스킨 파일경로가 올바르지 않습니다.');
-			$UIError->useHtml = TRUE;
-		}
-		$UIError->output();	
-	}
-}
-
-class MemberAdminView extends MemberAdminModule {
+class MemberAdminView extends View {
 
 	var $class_name = 'member_admin_view';
 
@@ -119,21 +83,20 @@ class MemberAdminView extends MemberAdminModule {
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->selectFromMemberGroup();
+		$result = $this->model->select('member_group', '*', null, 'id desc');
 		if ($result){
 
 			$numrow = $this->model->getNumRows();
 			if ($numrow > 0) {
-
-				$rows = $this->model->getRows();
-				for ($i=0; $i<count($rows); $i++) {
-
-					$dataList = array('no'=>($i+1));
-					foreach ($rows[$i] as $key => $value) {
+				$i = 1;
+				foreach ($this->model->getRows() as $row) {
+					$dataList['no'] = $i;
+					foreach ($row as $key => $value) {
 						$dataList[$key] = $value;
 					}
 					$dataObj[] = $dataList;
-				}				
+					$i++;		
+				}
 			} else {
 				$msg = "회원그룹이 존재하지 않습니다.";
 				$resultYN = "N";
@@ -154,7 +117,8 @@ class MemberAdminView extends MemberAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromMemberGroup('category', $where);
+		$this->model->select('member_group', 'category', $where);
+
 		$row = $this->model->getRow();
 		$this->document_data['id'] = $id;
 		$this->document_data['category'] = $row['category'];
@@ -208,7 +172,7 @@ class MemberAdminView extends MemberAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $sid);
-		$this->model->selectFromMember('category, user_id, user_name', $where);
+		$this->model->select('member', 'category, user_id, user_name', $where);
 		$row = $this->model->getRow();
 
 		$this->document_data['category'] = $row['category'];
@@ -241,7 +205,7 @@ class MemberAdminView extends MemberAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('id', $sid);
-		$this->model->selectFromMember('user_id', $where);
+		$this->model->select('member', 'user_id', $where);
 		$row = $this->model->getRow();
 
 		$this->document_data['user_id'] = $row['user_id'];
@@ -264,7 +228,8 @@ class MemberAdminView extends MemberAdminModule {
 	function displayListJson() {
 
 		$context = Context::getInstance();
-		$category = $context->getRequest('category');
+		$posts = $context->getPostAll();
+		$category = $posts['category'];
 		
 		$dataObj = array();
 		$dataList = array();
@@ -273,12 +238,11 @@ class MemberAdminView extends MemberAdminModule {
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$result = $this->model->selectFromMember('*', $where);
+		$result = $this->model->select('member', '*', $where);
 		if ($result) {
 
 			$numrows = $this->model->getNumRows();
 			if ($numrows > 0){
-
 				$limit = 10;  
 				if (!$passover) {
 					$passover = 0;
@@ -288,25 +252,19 @@ class MemberAdminView extends MemberAdminModule {
 				$context->set('member_passover', $passover);
 				$context->set('member_limit', $limit);
 
-				$result = $this->model->selectFromMember('*', $where, 'id desc', $passover, $limit);
+				$result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
 				if ($result) {
 
 					$rows = $this->model->getRows();
-
 					for ($i=0; $i<count($rows); $i++) {
-
 						$obj = array();
 						$obj['no'] = $a;
-
 						foreach ($rows[$i] as $key => $value) {
 							$obj[$key] = $value;
 						}
-
 						$dataList[] = $obj;
-
 						$a--;
 					}
-
 					$dataObj = array('category'=>$category, 'list'=>$dataList);
 				}				
 			} else {
@@ -335,7 +293,7 @@ class MemberAdminView extends MemberAdminModule {
 		$where = new QueryWhere();
 		$where->set('id', $id);
 
-		$result = $this->model->selectFromMember('*', $where);
+		$result = $this->model->select('member', '*', $where);
 		if ($result) {
 
 			$row = $this->model->getRow();

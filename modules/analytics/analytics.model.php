@@ -1,227 +1,71 @@
 <?php
 
-class AnalyticsModel extends Model {
+class AnalyticsModel extends Model
+{
 
-	var $class_name = 'analytics_model';
-
-	function __construct() {
-
-		 parent::__construct();
-	}
-
-	function init() {}
-
-	/**
-	 * pageview
-	 */
-	function selectFieldFromPageview($field) {
+	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
 		$context = Context::getInstance();
-		$keyword = $context->getRequest('keyword');
+		$tableName = $context->getTable($table_name);
 
-		$query = new Query();
+		$query = new Query();		
+		$query->setTable($tableName);
 		$query->setField($field);
-		$query->setTable($context->get('db_pageview'));
-		$query->setWhere(array(
-			'name'=>$keyword
-		));
 
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function updatePageviewSetValue($column) {
-
-		$context = Context::getInstance();
-		$keyword = $context->getRequest('keyword');
-
-		$query = new Query();
-		$query->setTable($context->get('db_pageview'));
-		$query->setColumn($column);
-		$query->setWhere(array(
-			'name'=>$keyword
-		));
-
-		$result = parent::update($query);
-		return $result;
-	}
-
-	function insertIntoPageview() {
-
-		$context = Context::getInstance();
-		$keyword = $context->getRequest('keyword');
-
-		$query = new Query();
-		$query->setTable($context->get('db_pageview'));
-		$query->setColumn(array(
-			'',
-			$keyword,
-			'now()',
-			1
-		));
-
-		$result = parent::insert($query);
-		return $result;
-	}
-
-	/**
-	 * connecter all
-	 */
-	function selectFieldFromConnecterAll($field) {
-
-		$context = Context::getInstance();
-
-		$query = new Query();
-		$query->setField($field);
-		$query->setTable($context->get('db_connecter_all'));
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function updateConnecterAllSetValues($column) {
-
-		$context = Context::getInstance();
-
-		$query = new Query();
-		$query->setTable($context->get('db_connecter_all'));
-		$query->setColumn($column);
-
-		$result = parent::update($query);
-		return $result;
-	}
-
-	/**
-	 * connecter
-	 */
-	function selectFieldFromConnecter($query) {
-
-		$field = $query['field'];
-		$where = $query['where'];
-
-		$context = Context::getInstance();
-
-		$query = new Query();
-		$query->setField($field);
-		$query->setTable($context->get('db_connecter'));
-
-		if ($where != '') {
-			$query->setWhere($where);		
-		}	
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function insertIntoConnecter() {
-
-		$context = Context::getInstance();
-		$ip = $context->getServer('REMOTE_ADDR');
-
-		$query = new Query();
-		$query->setTable($context->get('db_connecter'));
-		$query->setColumn(array(
-			'',
-			$ip,
-			'now()'
-		));
-
-		$result = parent::insert($query);
-		return $result;
-	}
-
-	function deleteFromConnecter() {
-
-		$context = Context::getInstance();
-		$del_date = date("Y-m-d", time() - 86400); 
-
-		$query = new Query();
-		$query->setTable($context->get('db_connecter'));		
-		$query->setWhere(array(
-			'date'=>$del_date
-		), '<');
-
-		$result = parent::delete($query);
-		return $result;
-	}
-
-	/**
-	 * connecter real
-	 */
-	function selectFieldFromConnecterReal($query) {
-
-		$context = Context::getInstance();	
-		$field = $query['field'];
-		$where = $query['where'];
-
-		$query = new Query();
-		$query->setField($field);
-		$query->setTable($context->get('db_connecter_real'));
-		if ($where != '') {
-			$query->setWhere($where);		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
 		}
 
-		$result = parent::select($query);
-		return $result;
+		if (isset($orderby) && $orderby) {
+			$query->setOrderBy($orderby);
+		}
+
+		if (isset($limit) && $limit) {
+			$query->setLimit($passover, $limit);
+		}
+
+		return parent::select($query);
 	}
 
-	function deleteFromConnecterReal() {
+	function insert($table_name, $columns = null) {
 
 		$context = Context::getInstance();
-		$del_date = date("Y-m-d", time() - 86400); 
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($context->get('db_connecter_real'));		
-		$query->setWhere(array(
-			'date'=>$del_date
-		), '<');
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::delete($query);
-		return $result;
+		return parent::insert($query);
 	}
 
-	function insertIntoConnecterReal() {
-
+	function update($table_name, $columns, $where = null) {
+		
 		$context = Context::getInstance();
-		$ip = $context->getServer('REMOTE_ADDR');
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setTable($context->get('db_connecter_real'));
-		$query->setColumn(array(
-			'',
-			$ip,
-			'now()'
-		));
+		$query->setTable($tableName);
+		$query->setColumn($columns);
 
-		$result = parent::insert($query);
-		return $result;
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+
+		return parent::update($query);
 	}
 
-	/**
-	 * connecter real all
-	 */
-	function selectFieldFromConnecterRealAll($field) {
+	function delete($table_name, $where = null) {
 
 		$context = Context::getInstance();
+		$tableName = $context->getTable($table_name);
 
 		$query = new Query();
-		$query->setField($field);
-		$query->setTable($context->get('db_connecter_real_all'));
-
-		$result = parent::select($query);
-		return $result;
-	}
-
-	function updateConnecterRealAllSetValues($column) {
-
-		$context = Context::getInstance();
-
-		$query = new Query();
-		$query->setTable($context->get('db_connecter_real_all'));
-		$query->setColumn($column);
-
-		$result = parent::update($query);
-		return $result;
+		$query->setTable($tableName);
+		
+		if (isset($where) && $where) {
+			$query->setWhere($where);
+		}
+		return parent::delete($query);
 	}
 }
-?>

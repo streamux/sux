@@ -19,8 +19,8 @@
 	<column name="space_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="ssunseo_count" type="int" size="12" default="0" notnull="not null"/>
 	<column name="wall" type="char" size="1"/>
+	<column name="contents_type" type="char" size="4" default="text" notnull="not nul"/>
 	<column name="filename" type="varchar" size="50"/>
 	<column name="filesize" type="varchar" size="50"/>
-	<column name="filetype" type="varchar" size="50"/>
-	<column name="contents_type" type="char" size="4" default="text" notnull="not nul"/>
+	<column name="filetype" type="varchar" size="50"/>	
 </table>

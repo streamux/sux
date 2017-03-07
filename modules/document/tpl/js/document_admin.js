@@ -97,12 +97,6 @@ jsux.fn.add = {
 			return (false);
 		}
 
-		if ( document_name < 1) {
-			trace("컨텐츠 내용을 입력하세요.");
-			f.document_name.focus();
-			return (false);
-		}
-
 		return (true);
 	},
 	checkTableName: function() {
@@ -182,18 +176,8 @@ jsux.fn.add = {
 			self.checkTableName();
 		});
 	},
-	setLayout: function() {
-
-		jsux.getJSON(jsux.rootPath + "board-admin/skin-json", function( e ) {
-
-			markup = $("#skinList_tmpl");
-			$("#skinList").empty();
-			$(markup).tmpl(e.data.list).appendTo("#skinList");
-		});
-	},
 	init: function() {
 
-		this.setLayout();
 		this.setEvent();
 		jsux.setAutoFocus();
 	}

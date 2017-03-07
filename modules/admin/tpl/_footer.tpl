@@ -45,6 +45,7 @@
 <![endif]-->
 <script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
+<!-- <script type="text/javascript" src="{$rootPath}common/js/app/jsux_common.js"></script> -->
 <script type="text/javascript" src="{$rootPath}common/js/jsux_admin_app.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_admin_app_stage.min.js"></script>
 

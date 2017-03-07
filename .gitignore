@@ -1,13 +1,23 @@
 #generated directory
-node_modules/
+files/
 templates_c/
+
+#project manager
+node_modules/
 
 #config files
 config.admin.php
 config.db.php
 config.table.php
 
-#test files
+#backup files and directories
 *.backup
 *.back
-rmdir.php
+_backup/
+
+#test controll files
+remove.php
+uninstall.php
+
+#other option and settings files
+.sublime-grunt.cache

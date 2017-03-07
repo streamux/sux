@@ -9,6 +9,8 @@
 <div class="board-write" style="width:{$groupData.width}">
 	<form action="{$uri}/{$contentData.id}/modify" method="post"  name="f_board_modify" enctype="multipart/form-data">
 	<input type="hidden" name="_method" value="update">
+	<input type="hidden" name="category" value="{$contentData.category}">
+	<input type="hidden" name="id" value="{$contentData.id}">
 	<div class="panel-heading">
 		<p>
 			<label for="user_name">이름</label>

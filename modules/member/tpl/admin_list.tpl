@@ -12,22 +12,12 @@
 			</div>
 		</div>
 		<div class="box">
-			<dl>
-				<dt>
-					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon_notice">										
-				</dt>
-				<dt>
-					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>
-				</dt>
-				<dd>							
-					<span id="articleMemberDelTitle" class="button-delall">
-						<!--
-						@ jquery templete
-						@ name articleMemberDelTitle_tmpl
-						-->
-					</span>
-				<dd>
-			</dl>
+			<ul>
+				<li>
+					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
+					<span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>	
+				</li>
+			</ul>
 			<table summary="회원목록을 보여줍니다." cellspacing="0">
 				<caption><span class="blind">회원목록</span></caption>
 				<colgroup>

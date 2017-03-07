@@ -168,7 +168,7 @@ window.trace = function( str, bool ) {
 			$($inputs).each(function(index){
 			
 				$input = $(this);
-				$target = $input.attr('type').toLowerCase();
+				$target = $($input).attr('type') ? $($input).attr('type') : $input.nodeName.toLowerCase();
 				if ($target.match($filters)) {
 					//console.log($input.attr('name'), $input.val());
 					if ($input.val() === '') {

@@ -20,7 +20,7 @@ class AnalyticsAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('name', $keyword);
-		$this->model->selectFromConnectSite('id', $where);
+		$this->model->select('connect_site', 'id', $where);
 
 		$numrow = $this->model->getNumRows();
 		if ($numrow > 0) {
@@ -29,7 +29,7 @@ class AnalyticsAdminController extends Controller
 		} else {
 
 			$column = array('', $keyword, 0, 'now()');
-			$result = $this->model->insertIntoConnectSite($column);
+			$result = $this->model->insert('connect_site', $column);
 			if ($result) {
 				$msg = "$keyword 접속키워드 추가를 성공하였습니다.";
 				$resultYN = "Y";		 	
@@ -57,7 +57,7 @@ class AnalyticsAdminController extends Controller
 		$column = array('hit_count'=>0);
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->updateConnectSite($column, $where);
+		$result = $this->model->update('connect_site', $column, $where);
 		if ($result) {
 			$msg = "$keyword 접속키워드 초기화를 성공하였습니다.";
 			$resultYN = "Y";			
@@ -83,7 +83,7 @@ class AnalyticsAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->deleteFromConnectSite($where);
+		$result = $this->model->delete('connect_site', $where);
 		if (!$result) {
 			$msg = "$keyword 접속키워드 삭제를 실패하였습니다.";
 			$resultYN = "N";
@@ -114,7 +114,7 @@ class AnalyticsAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('name', $keyword);
-		$this->model->selectFromPageview('id',$where);
+		$this->model->select('pageview', 'id',$where);
 
 		$numrow = $this->model->getNumRows();
 		if ($numrow > 0) {
@@ -123,7 +123,7 @@ class AnalyticsAdminController extends Controller
 		} else {
 
 			$column = array('', $keyword, 0, 'now()');
-			$result = $this->model->insertIntoPageview($column);
+			$result = $this->model->insert('pageview', $column);
 			if ($result) {
 				$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
 				$resultYN = "Y";		 	
@@ -152,7 +152,7 @@ class AnalyticsAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->updatePageview($column, $where);
+		$result = $this->model->update('pageview', $column, $where);
 		if ($result) {
 			$msg = "페이지뷰 초기화를 성공하였습니다.";
 			$resultYN = "Y";
@@ -178,7 +178,7 @@ class AnalyticsAdminController extends Controller
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->deleteFromPageview($where);
+		$result = $this->model->delete('pageview', $where);
 		if ($result) {
 			$msg = "$keyword 페이지뷰 키워드 삭제를 성공하였습니다.";	
 			$resultYN = "Y";			
@@ -193,4 +193,3 @@ class AnalyticsAdminController extends Controller
 		$this->callback($data);	
 	}
 }
-?>

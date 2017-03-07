@@ -1,37 +1,6 @@
 <?php
 
-class BoardAdminModule extends View
-{
-	
-	var $class_name = 'board_admin_module';
-	var $skin_path_list = array();
-	var $session_data = null;
-	var $request_data = null;
-	var $post_data = null;
-	var $document_data = array();
-
-	function output() { 
-
-		/**
-		 * @class Template
-		 * @brief Template is a Wrapper Class based on Smarty
-		 */
-		$__template = new Template();
-		if (is_readable($this->skin_path_list['contents'])) {
-			$__template->assign('copyrightPath', $this->copyright_path);
-			$__template->assign('skinPathList', $this->skin_path_list);
-			$__template->assign('sessionData', $this->session_data);
-			$__template->assign('requestData', $this->request_data);
-			$__template->assign('postData', $this->post_data);
-			$__template->assign('documentData', $this->document_data);
-			$__template->display( $this->skin_path_list['contents'] );	
-		} else {
-			echo '<p>스킨 파일경로를 확인하세요.</p>';
-		}
-	}
-}
-
-class BoardAdminView extends BoardAdminModule
+class BoardAdminView extends View
 {
 
 	function displayBoardAdmin() {
@@ -96,7 +65,7 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('category, id', $where);
+		$this->model->select('board_group','category, id', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -104,7 +73,7 @@ class BoardAdminView extends BoardAdminModule
 		}
 
 		$skinDir = _SUX_PATH_ . "modules/board/skin/";
-		$skinList = Utils::readDir($skinDir);
+		$skinList = FileHandler::readDir($skinDir);
 		if (!$skinList) {
 			$msg = "스킨폴더가 존재하지 않습니다.";
 			$resultYN = "N";
@@ -132,7 +101,7 @@ class BoardAdminView extends BoardAdminModule
 		
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('id, category', $where);
+		$this->model->select('board_group', 'id, category', $where);
 
 		$row = $this->model->getRow();
 		foreach ($row as $key => $value) {
@@ -180,7 +149,7 @@ class BoardAdminView extends BoardAdminModule
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->selectFromBoardGroup('*', null, 'id desc');
+		$this->model->select('board_group','*', null, 'id desc');
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -221,13 +190,15 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$this->model->selectFromBoardGroup('*', $where);
+		$this->model->select('board_group','*', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0) {
 			$row = $this->model->getRow();
 			foreach ($row as $key => $value) {
 				$dataObj[$key] = $value;
+
+				$msg .= $key . " : " . $value . "<br>";
 			}
 			$resultYN = "Y";
 		} else {
@@ -252,7 +223,7 @@ class BoardAdminView extends BoardAdminModule
 
 		$msg = "추가 생성 게시판 : ".$category."\n";
 
-		if (!isset($category) || $category == '') {
+		if (empty($category)) {
 
 			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
 			$resultYN = "N";
@@ -264,7 +235,7 @@ class BoardAdminView extends BoardAdminModule
 			exit;
 		}
 
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $category)) {
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,}$/i', $category)) {
 
 			$msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 
@@ -275,15 +246,24 @@ class BoardAdminView extends BoardAdminModule
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->selectFromBoardGroup('id', $where);
+		$this->model->select('board_group','id', $where);
 
 		$numrows = $this->model->getNumRows();
 		if ($numrows> 0) {
 			$msg = "${category}는 이미 존재하는 게시판입니다.";
 			$resultYN = "N";
 		} else {
-			$msg = "${category}는 생성할 수 있는 게시판입니다.";
-			$resultYN = "Y";
+			$where = new QueryWhere();
+			$where->set('category', $category);
+			$this->model->select('document','id', $where);
+			$numrows = $this->model->getNumRows();
+			if ($numrows> 0) {
+				$msg = "${category} 이름은 페이지관리에서 이미 사용하고 있습니다.<br>다른 이름을 사용해주세요.";
+				$resultYN = "N";
+			} else {
+				$msg = "${category}는 사용할 수 있는 카테고리명 입니다.";
+				$resultYN = "Y";
+			}
 		}
 
 		$data = array(	"result"=>$resultYN,
