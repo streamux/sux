@@ -171,7 +171,7 @@
 					<tr>
 						<td>글목록 수</td>
 						<td>
-							<input type="textfield" name="limit_pagination" value="10" size="3" maxlength="2">
+							<input type="text" name="limit_pagination" value="10" size="3" maxlength="2">
 							<span>※ 게시판 리스트에 출력할 글목록 수를 설정해주세요.</span>
 						</td>
 					</tr>
