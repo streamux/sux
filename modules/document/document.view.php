@@ -4,6 +4,12 @@ class DocumentView extends View
 
 	function displayContents() {
 
+		$context = Context::getInstance();
+		$category = $context->getParameter('category');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		
 		$this->model->select('document', '*');
 		
 		$groupData = $this->model->getRow();
