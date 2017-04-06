@@ -10,7 +10,7 @@ class DocumentView extends View
 		$where = new QueryWhere();
 		$where->set('category',$category,'=');
 		
-		$this->model->select('document', '*');
+		$this->model->select('document', '*', $where);
 		
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];

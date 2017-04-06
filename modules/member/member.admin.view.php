@@ -6,7 +6,14 @@ class MemberAdminView extends View {
 
 	function displayMemberAdmin() {
 
-		$this->displayGroup();
+		$context = Context::getInstance();
+		$id = $context->getParameter('id');
+
+		if (isset($id) && $id > 0) {
+			$this->displayList();
+		} else {
+			$this->displayGroup();
+		}		
 	}
 
 	function displayGroup() {

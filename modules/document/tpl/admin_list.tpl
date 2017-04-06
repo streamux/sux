@@ -62,11 +62,11 @@
 		</td>						
 		<td><span>{literal}${$item.editDate(date)}{/literal}</span></td>		
 		<td>
-			<a href="{$rootPath}document-admin/modify/{literal}${id}{/literal}">
+			<a href="{$rootPath}document-admin/{literal}${id}{/literal}/modify">
 				<img src="{$rootPath}modules/admin/tpl/images/btn_edit.gif" alt="수정버튼">
 			</a></td>
 		<td>
-			<a href="{$rootPath}document-admin/delete/{literal}${id}{/literal}">
+			<a href="{$rootPath}document-admin/{literal}${id}{/literal}/delete">
 				<img src="{$rootPath}modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
 			</a>
 		</td>
