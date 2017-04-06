@@ -25,13 +25,13 @@
 					<tr>
 						<td><label for="popup_name">*팝업이름</label></td>
 						<td>
-							<input type="text" id="popup_name" name="popup_name" size="20" maxlength="20">
+							<input type="text" id="popup_name" name="popup_name" size="20" maxlength="20" value="">
 						</td>
 					</tr>
 					<tr>
 						<td><label for="popup_title">제목</label></td>
 						<td>
-							<input type="text" name="popup_title" size="30" maxlength="30" value="겨울맞이 대이벤트 안내">
+							<input type="text" name="popup_title" size="30" maxlength="30" value="">
 						</td>
 					</tr>
 					<tr>
@@ -104,7 +104,7 @@
 					<tr>
 						<td><label for="textarea_contents">수정내용</label></td>
 						<td>
-							<textarea id="textarea_contents" name="contents" cols="25" rows="6">안녕하세요.<br>겨울맞이 이벤트를 시작합니다. 많은 관심 부탁드립니다.</textarea>
+							<textarea id="textarea_contents" name="contents" cols="25" rows="6"></textarea>
 							<span>※ 팝업에 들어갈 내용을 입력해주세요.</span>
 						</td>
 					</tr>
