@@ -2,6 +2,10 @@
 
 class AnalyticsAdminView extends View
 {
+	function displayAnalyticsAdmin() {
+
+		$this->displayConnectSiteList();
+	}
 
 	function displayConnectSite() {
 

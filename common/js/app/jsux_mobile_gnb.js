@@ -6,7 +6,7 @@ jsux.mobileGnb.Menu.include({
 	_m: '',
 	_isClick: false,
 	_data: null,
-	_startPosX: 0,
+	_startPosX: "100%",
 
 	update: function(o, value) {
 
@@ -193,7 +193,7 @@ jsux.mobileGnb.Menu.include({
 				self.hide();
 			}			
 		});
-		self._startPosX  = $(window).outerWidth();
+		//self._startPosX  = $(window).outerWidth();
 		this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
 	},
 	menuOn: function() {

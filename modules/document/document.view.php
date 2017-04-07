@@ -4,7 +4,13 @@ class DocumentView extends View
 
 	function displayContents() {
 
-		$this->model->select('document', '*');
+		$context = Context::getInstance();
+		$category = $context->getParameter('category');
+
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		
+		$this->model->select('document', '*', $where);
 		
 		$groupData = $this->model->getRow();
 		$headerPath = $groupData['header_path'];
