@@ -14,11 +14,11 @@
 <h2>Support</h2>
 
 <ul>
-  <li>Official site (Korean) : http://www.streamux.com/</li>
+  <li>Official site (Korean) : http://streamux.com/</li>
 </ul>
 
 <h2>Lisence</h2>
 
-Copyright 2015 STREAMUX Corp. http://www.streamux.com
+Copyright 2015 STREAMUX Corp. http://streamux.com
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public<br>License as published by the Free Software Foundation; either version 1.0 of the License, or (at your option) any later version.
