@@ -79,7 +79,17 @@ class DocumentAdminController extends Controller
 				$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
 				$buff = FileHandler::readFile($contentsPath);
 				if (!$buff) {
-					$buff = $category . ' 내용을 설정해주세요.';
+					$yoursite = $context->getAdminInfo('yourhome');
+					$yoursite = strtoupper($yoursite);
+					$buff .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+					$buff .=	 '{assign var=title value=$groupData.document_name}' . "\n";
+					$buff .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+					$buff .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+					$buff .=	 '{include file="$headerPath" title="$title :: 홈 - ' . ${yoursite} . '"}' . "\n";
+					$buff .= '<!-- contents start -->' . "\n\n";
+					$buff .= ''  . $category . ' 내용을 입력해주세요.' . "\n\n";
+					$buff .= '<!-- contents end -->' . "\n";
+					$buff .= '{include file="$footerPath"}';
 				}
 			}			
 			$result = FileHandler::writeFile($filePath, $buff);

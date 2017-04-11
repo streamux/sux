@@ -10,10 +10,10 @@
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_common.min.css">
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css">	
 	{if $documentData.module_code != ''}
-	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/{$documentData.module_code}.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/{$documentData.module_code}.css">
 	{/if}
 	{if $documentData.isLogon === false}
-	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/login_fail.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/login_fail.css">
 	{/if}
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>

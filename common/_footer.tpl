@@ -1,14 +1,14 @@
-		<div class="footer">
-			<ul class="clearfix">
-				<li><a href="{$rootPath}login">로그인</a></li>
-				<li><a href="{$rootPath}member-join">회원가입</a></li>
-				<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
-			</ul>	
-			<p>
-				<span>{include file="$copyrightPath"}</span>
-			</p>
-		</div>
-	</div>	
+	</div>
+	<div class="footer">
+		<ul class="clearfix">
+			<li><a href="{$rootPath}login">로그인</a></li>
+			<li><a href="{$rootPath}member-join">회원가입</a></li>
+			<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
+		</ul>	
+		<p>
+			<span>{include file="$copyrightPath"}</span>
+		</p>
+	</div>
 </div>
 
 <!-- mobile gnb start -->

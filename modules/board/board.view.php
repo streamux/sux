@@ -36,8 +36,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;
 
@@ -258,8 +258,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -457,8 +457,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;		
 
@@ -603,8 +603,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -718,8 +718,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -885,8 +885,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
@@ -948,8 +948,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
 		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);

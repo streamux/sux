@@ -575,9 +575,10 @@ jsux.mobileGnb.Menu.include({
 				self.show();
 			} else if (tw > 768) {
 				self.hide();
-			}			
+			}
+			self._startPosX  = tw;
 		});
-		//self._startPosX  = $(window).outerWidth();
+		$(window).trigger('resize');
 		this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
 	},
 	menuOn: function() {

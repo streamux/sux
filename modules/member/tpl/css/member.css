@@ -30,7 +30,7 @@
 .articles .member-edit .box dl dt{padding-left:5px;height: 20px;font-weight: bold}
 .articles .member-edit .box dl dd{padding-left:5px;height: 20px}
 .articles .member-edit .box table{margin-bottom:20px;;width:100%;text-align:left}
-.articles .member-edit .box table tr td{height: 24px}
+.articles .member-edit .box table tr td{padding:3px 0 3px 0;height: 24px}
 .articles .member-edit .box table tr td:nth-child(1){padding-left:38px;width:120px}
 .articles .member-edit .box table tr td:nth-child(1) span{color:#FF0000}
 .articles .member-edit .box table tr td:nth-child(2) span{display:inline-block}
