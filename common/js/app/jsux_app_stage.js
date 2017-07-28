@@ -5,6 +5,7 @@ $(window).ready(function() {
 		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
 		pageAppHandler = {},
 		xmlPath = '/sux/common/gnb.xml',
+		jsonPath = '/sux/assets/data/gnb.php',
 		menuList = null;
 
 	gnbModel.addObserver( gnbView );
@@ -34,7 +35,7 @@ $(window).ready(function() {
 		}
 	};
 
-	pageAppHandler.xmlLoader = {
+	/*pageAppHandler.xmlLoader = {
 
 		load: function( path ) {
 
@@ -74,6 +75,46 @@ $(window).ready(function() {
 				}
 			});
 		}		
+	};*/
+
+	pageAppHandler.jsonLoader = {
+
+		load: function(path) {
+
+			$.ajax({
+				url: path,
+				dataType: 'jsonp',
+				jsonpCallback: 'JSONP_CALLBACK',
+				success: function(json) {
+
+					var data = json.data;
+					menuList = [];
+					if (data.length > 0) {						
+						$.each(data, function(index, item) {
+							menuList.push({
+								label: data[index].name,
+								link: data[index].url
+							});
+
+							if (data[index].sub && data[index].sub.length > 0) {
+								menuList[index].menu = [];
+								var sub = data[index].sub;
+								$.each(sub, function(subIndex, suubItem) {
+									menuList[index].menu.push({
+										label: sub[subIndex].name,
+										link: sub[subIndex].url
+									});
+								});
+							}
+						});
+					}
+
+					gnbModel.setData( menuList );
+					//gnbModel.activate( 1, 2 );
+					pageAppHandler.sub.init();
+				}
+			});
+		}
 	};
 
 	var mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
@@ -92,5 +133,6 @@ $(window).ready(function() {
 			break;			
 	}
 	
-	pageAppHandler.xmlLoader.load(xmlPath);
+	pageAppHandler.jsonLoader.load(jsonPath);
+	//pageAppHandler.xmlLoader.load(xmlPath);
 });

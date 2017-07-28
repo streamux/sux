@@ -228,6 +228,22 @@ class Context {
 		return $_REQUEST;
 	}
 
+	function getRequestToArray($key) {
+
+		$request = $this->getRequestAllToArray();
+		return $request[$key];
+	}
+
+	function getRequestAllToArray() {
+
+		$result = array();
+		$requests = $this->getRequestAll();
+		foreach ($requests as $key => $value) {
+			$result[$key] = $value;
+		}
+		return $result;
+	}
+
 	function getReqeustMethod() {
 
 		return $_SERVER['REQUEST_METHOD'];
@@ -283,6 +299,16 @@ class Context {
 		return $_SERVER;
 	}
 
+	function getJsonToArray($value) {
+
+		$result = array();
+		$tempArr = json_decode($value);
+		foreach ($tempArr as $key => $value) {
+			$result[$key] = $value;
+		}
+		return $result;
+	}
+
 	function set($key, $val) {
 
 		$this->hashmap_params[$key] = $val;
@@ -335,7 +361,7 @@ class Context {
 	function ajax() {
 
 		$uri =  strtolower($this->getServer('REQUEST_URI'));
-		if (preg_match('/jquery/', $uri)) {
+		if (preg_match('/(jquery|callback)/', $uri)) {
 			return true;
 		}
 

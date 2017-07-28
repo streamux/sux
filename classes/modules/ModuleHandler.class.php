@@ -52,9 +52,9 @@ class ModuleHandler
 		} else {
 			$className = $context->getModule($moduleKey);
 		}
-		
+
 		if ($context->getDB() || strtolower($className) === 'install') {
-			
+
 			$ModelClass = $className . 'Model';
 			$ControllerClass = $className . 'Controller';
 			$ViewClass = $className . 'View';
@@ -107,7 +107,7 @@ class ModuleHandler
 				$oDB->close();
 			}
 		} else {
-			Utils::goURL('/sux/install');
+			Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');
 		}
 	}
 }

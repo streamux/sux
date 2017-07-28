@@ -53,6 +53,7 @@
 		</div>
 	</div>	
 </div>
+<img src="{$rootPath}analytics/counter" alt="" class="hide">
 <!-- end -->
 
 <!-- js template start -->

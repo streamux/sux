@@ -283,10 +283,11 @@ jsux.fn.modify = {
 		}
 
 		jsux.getJSON(url, params, function( e ) {
-
-			trace( e.msg );			
+			
 			if (e.result == "Y") {
 				jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+			} else {
+				trace( e.msg );			
 			}
 		});
 	},
@@ -320,34 +321,37 @@ jsux.fn.modify = {
 			var formLists = null,
 				checkedVal = "",
 				markup = null,
-				labelList = null;
+				labelList = null,
+				list = null;
 
-			if (e.result == "Y") {				
+			if (e.result == "Y") {
+
+				list = e.data.list[0];	
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
 
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+					if (list[this.name]) {
+						this.value = list[this.name];
 					}
-					//console.log(this.name, e.data[this.name]);
+					//console.log(this.name, list[this.name]);
 				});
 
 				formLists = $("select");
 				$(formLists).each(function(index) {
 
-					//console.log(this.name, e.data[this.name]);
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+					//console.log(this.name, list[this.name]);
+					if (list[this.name]) {
+						this.value = list[this.name];
 					}						
 				});
 
 				formLists = $("input[type=radio]");
 				$(formLists).each(function(index) {
-					self.setRadioVal( this.name, e.data[this.name] );
+					self.setRadioVal( this.name, list[this.name] );
 				});
 
-				self.setTextAreaVal("contents", e.data.contents);	
+				self.setTextAreaVal("contents", list.contents);	
 			} else {
 				trace( e.msg );
 			}

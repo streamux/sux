@@ -23,7 +23,7 @@ class ModuleRouter
 		// Epi::init('base','cache-apc','session-apc');
 		// Epi::init('base','cache-memcached','session-apc');
 
-		getRoute()->get('/', array( 'ModuleHandler', 'display'));		
+		getRoute()->get('/', array( 'ModuleHandler', 'display'));
 		$moduleList = Utils::readDir('modules');
 
 		foreach ($moduleList as $key => $value) {

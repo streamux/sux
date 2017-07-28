@@ -115,7 +115,7 @@ class DocumentAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->select('document', '*', null, 'id desc');
+		$this->model->select('document', '*', null, 'id desc');			
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -147,30 +147,32 @@ class DocumentAdminView extends View
 
 	function displayModifyJson() {
 
-		$context = Context::getInstance();
-		$id = $context->getPost('id');
-
-		$dataObj = array();
+		$dataObj = array('list'=>array());
 		$msg = "";
 		$resultYN = "Y";
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$id = $requests['id'];
 		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$this->model->select('document', '*', $where);
+		
+		$rows = $this->model->getRows();
+		if (count($rows) > 0) {
+			for($i=0; $i<count($rows); $i++) {
+				$dataObj['list'][$i] = array();
+				foreach ($rows[$i] as $key => $value) {
+					$dataObj['list'][$i][$key] = $value;
+				}
 
-		$numrows = $this->model->getNumRows();
-		if ($numrows > 0) {
-			$row = $this->model->getRow();
-			foreach ($row as $key => $value) {
-				$dataObj[$key] = $value;
+				$contentsPath =Utils::convertAbsolutePath($rows[$i]['contents_path'], $contentsPath);
+				$handle = fopen($contentsPath, "r");
+				$dataObj['list'][$i]['contents'] = fread($handle, filesize($contentsPath));
 			}
-			$contentsPath =Utils::convertAbsolutePath($row['contents_path'], $contentsPath);
-			$handle = fopen($contentsPath, "r");
-			$dataObj['contents'] = fread($handle, filesize($contentsPath));
-			//$dataObj['contents'] = $contentsPath;
 			fclose($handle);
-
 			$resultYN = "Y";
 		} else {
 			$resultYN = "N";

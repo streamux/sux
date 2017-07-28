@@ -2,8 +2,6 @@
 
 class MemberAdminView extends View {
 
-	var $class_name = 'member_admin_view';
-
 	function displayMemberAdmin() {
 
 		$context = Context::getInstance();
@@ -85,14 +83,22 @@ class MemberAdminView extends View {
 	function displayGroupJson() {
 
 		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		$id = $requests['id'];
 
 		$dataObj = array();		
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->select('member_group', '*', null, 'id desc');
+		if (isset($id) && $id) {
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$result = $this->model->select('member_group', '*', $where, 'id desc');
+		} else {
+			$result = $this->model->select('member_group', '*', null, 'id desc');
+		}
+		
 		if ($result){
-
 			$numrow = $this->model->getNumRows();
 			if ($numrow > 0) {
 				$i = 1;
@@ -110,11 +116,11 @@ class MemberAdminView extends View {
 			}
 		} 
 
-		$data = array(	"data"=>$dataObj,
+		$json = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
-						"msg"=>$msg);
+						"msg"=>$msg);	
 
-		$this->callback($data);
+		$this->callback($json);
 	}
 
 	function displayList() {
@@ -234,58 +240,85 @@ class MemberAdminView extends View {
 
 	function displayListJson() {
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$category = $posts['category'];
-		
 		$dataObj = array();
 		$dataList = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$where = new QueryWhere();
-		$where->set('category', $category);
-		$result = $this->model->select('member', '*', $where);
-		if ($result) {
+		$context = Context::getInstance();
+		$posts = $context->getRequestAll();
+		$category = $posts['category'];
+		$passover = $posts['passover'];	
+		$limit = $posts['limit'];
+		$id = $posts['id'];
 
-			$numrows = $this->model->getNumRows();
-			if ($numrows > 0){
-				$limit = 10;  
-				if (!$passover) {
-					$passover = 0;
-				}
-				$a = $numrows - $passover;
+		if (!$limit) {
+			$limit = 10;  
+		}
+		if (!$passover) {
+			$passover = 0;
+		}
 
-				$context->set('member_passover', $passover);
-				$context->set('member_limit', $limit);
+		if (isset($id) && $id) {
 
-				$result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
-				if ($result) {
-
-					$rows = $this->model->getRows();
-					for ($i=0; $i<count($rows); $i++) {
-						$obj = array();
-						$obj['no'] = $a;
-						foreach ($rows[$i] as $key => $value) {
-							$obj[$key] = $value;
-						}
-						$dataList[] = $obj;
-						$a--;
-					}
-					$dataObj = array('category'=>$category, 'list'=>$dataList);
-				}				
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$result = $this->model->select('member', '*', $where);
+			if (!$result) {
+				$msg .= '등록된 회원이 존재하지 않습니다.';
+				$resultYN = 'N';
 			} else {
-
-				$dataObj = array('category'=>$category, 'list'=>$dataList);
-				$msg .= '현재 등록된 회원이 없습니다.';
+				$pattern = '/password/';
+				$dataList = $this->model->getRows();
+				for ($i=0; $i<count($dataList); $i++) {
+					foreach ($dataList[$i] as $key => $value) {		
+						if (preg_match($pattern, $key)) {
+							$dataList[$i]['password'] = '';
+						}
+					}
+				}
 			}
+			$dataObj = array('category'=>$category, 'list'=>$dataList);
+		}  else {
+			$where = new QueryWhere();
+			$where->set('category', $category);
+			$result = $this->model->select('member', '*', $where);
+			if ($result) {
+				$numrows = $this->model->getNumRows();
+				if ($numrows > 0){				
+					$a = $numrows - $passover;
+
+					$context->set('member_passover', $passover);
+					$context->set('member_limit', $limit);
+
+					$result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
+					if ($result) {
+						$rows = $this->model->getRows();
+						for ($i=0; $i<count($rows); $i++) {
+							$obj = array();
+							$obj['no'] = $a;
+							foreach ($rows[$i] as $key => $value) {
+								$obj[$key] = $value;
+							}
+							$dataList[] = $obj;
+							$a--;
+						}
+						$dataObj = array('category'=>$category, 'list'=>$dataList);
+					}				
+				} else {
+
+					$dataObj = array('category'=>$category, 'list'=>$dataList);
+					$msg .= '현재 등록된 회원이 존재하지 않습니다.';
+					$resultYN = 'N';
+				}
+			}		
 		}
 		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	'data'=>$dataObj,
+		$json = array(	'data'=>$dataObj,
 						'result'=>$resultYN,
 						'msg'=>$msg);
 
-		$this->callback($data);
+		$this->callback($json);
 	}
 
 	function displayModifyJson() {
@@ -325,4 +358,3 @@ class MemberAdminView extends View {
 		$this->callback($data);
 	}	
 }
-?>

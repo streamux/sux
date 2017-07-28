@@ -30,7 +30,7 @@ class DB extends Object {
 	function _connect($db_info) {
 
 		$db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
-		if (!$db_connect) {		
+		if (!$db_connect) {
 			die('SUX cannot connect to DB');
 		}
 
@@ -49,8 +49,7 @@ class DB extends Object {
 
 		$select = @mysql_select_db($db_info['db_database'], $db_connect);
 		if (!$select) {
-			$warn = 'SUX cannot select DB.';
-			die($warn);
+			die('SUX cannot select DB');
 		}
 		mysql_set_charset("utf8");
 

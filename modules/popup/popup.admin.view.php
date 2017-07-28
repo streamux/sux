@@ -102,8 +102,8 @@ class PopupAdminView extends View
 		$where->set('id', $id);
 		$this->model->select('popup', 'id, popup_name', $where);
 
-		$row = $this->model->getRow();
-		foreach ($row as $key => $value) {
+		$rows = $this->model->getRows();
+		foreach ($rows[0] as $key => $value) {
 			$this->document_data[$key] = $value;
 		}		
 
@@ -122,11 +122,21 @@ class PopupAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->select('popup', '*', null, 'id desc');
-		if ($result){
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+		if (isset($id) && $id) {
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$result = $this->model->select('popup', '*', $where, 'id desc');
+		} else {
+			$result = $this->model->select('popup', '*', null, 'id desc');
+		}
 
+		if ($result){
 			$numrow = $this->model->getNumRows();
 			if ($numrow > 0) {
+
+				$dataObj['list'] = array();
 
 				$rows = $this->model->getRows();
 				for ($i=0; $i<$numrow; $i++) {
@@ -144,14 +154,15 @@ class PopupAdminView extends View
 					}
 					$dataList['date'] = $timeList['time_year'] . '-' . $timeList['time_month'] . '-' . $timeList['time_day'];
 					$dataList['time'] = $timeList['time_hours'] . ':' . $timeList['time_minutes'] . ':' . $timeList['time_seconds'];
-					$dataObj[] = $dataList;
+					$dataObj['list'][] = $dataList;
 				}				
 			} else {
-				$msg = "등록된 팝업이 없습니다.";
+				$msg .= "등록된 팝업이 없습니다.";
 				$resultYN = "N";
 			}
 		} 
 
+		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
@@ -161,28 +172,44 @@ class PopupAdminView extends View
 
 	function displayModifyJson() {
 
-		$context = Context::getInstance();
-		$id = $context->getPost('id');
-
-		$path = _SUX_PATH_ . "modules/popup/skin/";
-
-		$dataObj = array();
-		$skinList = array();
+		$dataObj = array('list'=>null);	
 		$msg = "";
 		$resultYN = "Y";
+
+		$context = Context::getInstance();
+		$id = $context->getPost('id');
+		if (empty($id)) {
+			$id = $context->getRequest('id');
+		}
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$result = $this->model->select('popup', '*', $where);
 		if ($result) {
-
-			$row = $this->model->getRow();
-			foreach ($row as $key => $value) {
-				$dataObj[$key] = $value;
-			}
+			$dataObj['list'] = $this->model->getRows();
 		} else {
-			$msg = "팝업이 존재하지 않습니다.";
+			$msg .= "팝업이 존재하지 않습니다.";
 			$resultYN = "N";
+		}
+
+		//$msg = Tracer::getInstance()->getMessage();
+		$data = array(	"data"=>$dataObj,
+						"result"=>$resultYN,
+						"msg"=>$msg);
+
+		$this->callback($data);
+	}	
+
+	function displaySkinJson() {
+
+		$dataObj = array();
+		$msg = "";
+		$resultYN = "Y";
+
+		$path = _SUX_PATH_ . "modules/popup/skin/";
+		$dataObj = Utils::readDir($path);
+		if (!$dataObj) {
+			$dataObj[] = array('file_name' => 'not exists');
 		}
 
 		$data = array(	"data"=>$dataObj,
@@ -190,5 +217,5 @@ class PopupAdminView extends View
 						"msg"=>$msg);
 
 		$this->callback($data);
-	}	
+	}
 }

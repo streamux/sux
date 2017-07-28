@@ -16,7 +16,7 @@ $(document).ready(function() {
 	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
 	//gnbView.setActivateClass('activate-admin');
 	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
-	var xmlPath = '/sux/common/gnb_admin.xml';
+	var xmlPath = '/sux/common/gnb_admin.xml';	
 	var pageAppHandler = {};
 
 	gnbModel.addObserver( gnbView );
@@ -62,7 +62,7 @@ $(document).ready(function() {
 				}
 			});
 		}		
-	};
+	};	
 
 	pageAppHandler.xmlLoader.load(xmlPath);
 });

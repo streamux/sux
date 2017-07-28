@@ -3,12 +3,12 @@
 		<table name="member_group"></table>
 	</tables>
 	<columns>
-		<column name="id" type="int"></column>
-		<column name="category" type="varchar">member</column>
-		<column name="group_name" type="varchar"><![CDATA[기본회원]]></column>
-		<column name="summary" type="varchar"><![CDATA[기본회원 그룹입니다.]]></column>
-		<column name="header_path" type="varchar"><![CDATA[common/_header.tpl]]></column>
-		<column name="footer_path" type="varchar"><![CDATA[common/_footer.tpl]]></column>
-		<column name="date" type="datetime"><![CDATA[now()]]></column>				
+		<column name="id"></column>
+		<column name="category">member</column>
+		<column name="group_name"><![CDATA[기본회원]]></column>
+		<column name="summary"><![CDATA[기본회원 그룹입니다.]]></column>
+		<column name="header_path"><![CDATA[common/_header.tpl]]></column>
+		<column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
+		<column name="date"><![CDATA[now()]]></column>				
 	</columns>	
 </query>

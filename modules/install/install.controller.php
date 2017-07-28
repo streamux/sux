@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * install.controller.php 는 아직 모델이 설정되어 있지 않기 때문에 DB 클래스 내 쿼리 메서드를 사용한다.
+ */
 class InstallController extends Controller
 {
 
@@ -80,6 +82,7 @@ class InstallController extends Controller
 	/**
 	 * @method createTable
 	 *  스키마 데이터 xml  연동
+	 * 참고 : 라우트 캐시 파일 생성은 Context.php 에 정의 되어 있음 
 	 */
 	function insertCreateTable() {
 
@@ -154,13 +157,16 @@ class InstallController extends Controller
 							$resultYN = 'N';
 							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
 						} else {																
-							$msg .= '@ table->' . $tableName . " [ result : success ] ----<br>";
+							$msg .= "[ result : success ] @ table->" . $tableName . " ---- <br>";
 						}
 					}
 				}
 			} // end of foreach
 
-			// add start's value'
+			/**
+			 * 초기 값을 갖는 테이블 일 경우 모듈 폴더 > queries > 모듈.액션.이름.xml  파일을 추가해서 등록한다.
+			 * 참고 URL : modules/document/queries/document.add.home.xml
+			 */
 			$queryDir = './modules/' . $module . '/queries';				
 			$queryList = FileHandler::readDir($queryDir);
 			if ($queryList) {
@@ -177,7 +183,7 @@ class InstallController extends Controller
 
 							$moduleType = (string) $queryXml['execution'];	
 							$actionType = (string) $queryXml['action'];
-							if (($actionType === 'insert') && ($moduleType === 'once')) {
+							if ($actionType === 'insert' && $moduleType === 'once') {
 
 								$propTableName = $queryXml[0]->tables[0]->table['name'];
 								$tableName = $tablePrefix . '_' . $propTableName;
@@ -189,6 +195,11 @@ class InstallController extends Controller
 									$propValue = (string) $value['name'];
 									if ($propValue === 'category') {
 										$where = array('category'=>$nodeValue);
+										$category = $nodeValue;
+									}
+
+									if ($propValue === 'document_name') {
+										$moduleName = $nodeValue;
 									}
 							
 									if (preg_match('/^((header|contents|footer)_path)+$/i', $propValue)) {
@@ -213,16 +224,45 @@ class InstallController extends Controller
 									$oDB->insert($query);
 								}
 
-								// write template'file to file's dir to read from module's template file
+								// copy template to files's dir to read  a template in module
 								if ($module == 'document') {
+									// $contentsPath was written in xml data
 									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+
+									$yoursite = $context->getAdminInfo('yourhome');
+									$yoursite = strtoupper($yoursite);
+									$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+									$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+									$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+									$buffHeader .=	 '{include file="$headerPath" title="홈 - ' . $yoursite . '"}' . "\n";
+									$buffHeader .= '<!-- contents start -->' . "\n";
+
 									//  read and write contents
 									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
 									$buff = FileHandler::readFile($contentsPath);
-									$result = FileHandler::writeFile($cachePath, $buff);
+
+									$buffFooter .= '<!-- contents end -->' . "\n";
+									$buffFooter .= '{include file="$footerPath"}';
+
+									$buffers = $buffHeader . $buff . $buffFooter;				
+									$result = FileHandler::writeFile($cachePath, $buffers);
 									if (!$result) {
 										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-									} 
+									} else {
+										// write route's key
+										$filePath = $realPath . 'files/caches/routes/document.cache.php';
+										$routeCaches = CacheFile::readFile($filePath);			
+										if (isset($routeCaches) && $routeCaches) {
+											$routes['categories'] = $routeCaches['categories'];
+											$routes['action'] = $routeCaches['action'];
+
+											$pattern = sprintf('/(%s)+/i', $category);
+											if (!preg_match($pattern, implode(',', $routes['categories']))) {
+												$routes['categories'][] = $category; 
+											}
+											CacheFile::writeFile($filePath, $routes);
+										}
+									}									
 								}
 							}
 						} // end of if (file_exists)
@@ -250,6 +290,7 @@ class InstallController extends Controller
 		$data = array(	'msg'=>$msg,
 						'result'=>$resultYN,
 						'url'=>$rootPath);
+
 		$this->callback($data);
 		$oDB->close();
 	}

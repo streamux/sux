@@ -44,6 +44,7 @@ function __sux_autoload($class_name) {
 		$candidate_filename[] = (isset($matches[3]) && $matches[3]) ? strtolower($matches[3]) : 'class';
 		$candidate_filename[] = 'php';
 		$candidate_filename = implode('.', $candidate_filename);
+		//echo $candidate_filename . "<br>";
 
 		if(file_exists(_SUX_PATH_ . $candidate_filename)) {
 			require _SUX_PATH_ . $candidate_filename;

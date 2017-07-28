@@ -647,11 +647,17 @@ jsux.fn.modify = {
 					}
 				});
 
+				var selectPatern = /^(is_writable|is_kickout)$/;
 				formLists = $('select');
 				$(formLists).each(function(index) {
-
-					if (e.data[this.name]) {
-						this.value = e.data[this.name] === 'y' ? 'yes' : 'no';
+					var value = e.data[this.name];
+					if (selectPatern.test(this.name)) {
+						var label = (value.toLowerCase() === 'y') ? 'yes' : 'no';						
+						$(this).val(label);
+					} else {
+						if (value) {
+							$(this).val(value);
+						}						
 					}						
 				});
 
@@ -693,7 +699,6 @@ jsux.fn.modify = {
 		});
 	},		
 	init: function() {
-
 		this.setLayout();
 		this.setEvent();
 		jsux.setAutoFocus();
@@ -720,7 +725,6 @@ jsux.fn.delete = {
 		jsux.getJSON(jsux.rootPath + 'member-admin/delete', params, function( e )  {
 
 			trace( e.msg );
-
 			if (e.result == 'Y') {
 				jsux.goURL( self.returnToURL() );
 			}
@@ -743,7 +747,6 @@ jsux.fn.delete = {
 		});
 	},
 	init: function() {
-
 		this.setEvent();
 	}
 };

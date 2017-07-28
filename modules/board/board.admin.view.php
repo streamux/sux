@@ -149,7 +149,16 @@ class BoardAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->select('board_group','*', null, 'id desc');
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+		if (isset($id) && $id) {
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$this->model->select('board_group','*', $where, 'id desc');
+		} else {
+			$this->model->select('board_group','*', null, 'id desc');
+		}
+		
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -235,7 +244,7 @@ class BoardAdminView extends View
 			exit;
 		}
 
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,}$/i', $category)) {
+		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{2,}$/i', $category)) {
 
 			$msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 

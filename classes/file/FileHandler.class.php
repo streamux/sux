@@ -18,11 +18,11 @@ class FileHandler
 		return @file_get_contents($filename);
 	}
 
-	function writeFile($path, $buff, $mode="w") {
+	function writeFile($path, $buff, $mode="w", $is_safe=true) {
 
 		$filename = self::getRealPath($path);
 		$pathinfo = pathinfo($filename);
-		self::makeDir($pathinfo['dirname']);
+		self::makeDir($pathinfo['dirname'], $is_safe);
 
 		$fiags = 0;
 		if (strtolower($mode) == 'a') {

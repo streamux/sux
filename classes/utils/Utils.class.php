@@ -117,12 +117,13 @@ class Utils extends Object {
 		}
 	}
 
-	public static function goURL( $url, $delay=0) {
+	public static function goURL( $url, $delay=0,$resultYN='Y',$msg='') {
 
 		$context = Context::getInstance();
 		if ($context->ajax()) {
 			$data = array(	'url'=>$url,
-							'result'=>'Y');
+							'result'=>$resultYN,
+							'msg'=>$msg);
 
 			Object::callback($data);
 		} else {

@@ -443,6 +443,8 @@ class BoardView extends View
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
+		echo $grade;
+
 		$this->model->select('board_group', '*');
 
 		$groupData = $this->model->getRow();

@@ -22,6 +22,6 @@
 	<column name="grade" type="int" size="1" default="1" notnull="not null"/>
 	<column name="is_writable" type="char" size="1" default="y" notnull="not null"/>
 	<column name="is_kickout" type="char" size="1" default="n" notnull="not null"/>
-	<column name="date" type="datetime"/>
+	<column name="date" type="date"/>
 	<column name="ip" type="varchar" size="30"/>
 </table>

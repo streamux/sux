@@ -98,6 +98,7 @@
 									<option value="{$value}" {if $contentsData['job'] === $value} selected {/if}>{$value}</option>
 								{/foreach}
 							</select>
+							
 						</td>
 					</tr>
 					<tr>

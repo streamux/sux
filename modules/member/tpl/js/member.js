@@ -360,7 +360,6 @@ jsux.fn.modify = {
 		jsux.setAutoFocus();
 	},		
 	init: function() {
-
 		this.setLayout();
 		this.setEvent();
 	}

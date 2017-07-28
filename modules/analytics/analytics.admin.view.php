@@ -120,14 +120,22 @@ class AnalyticsAdminView extends View
 
 	function displayConnectSiteListJson() {
 
-		$context = Context::getInstance();
-
 		$dataObj = null;
 		$dataList = array();
-		$msg = "";
-		$resultYN = "Y";	 
+		$msg = '';
+		$resultYN = 'N';	 
 
-		$result = $this->model->select('connect_site', '*', null, 'id desc');//Orderby', 'id desc');
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+
+		if (isset($id) && $id) {
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$result = $this->model->select('connect_site', '*', $where, 'id desc');//Orderby', 'id desc');
+		} else {
+			$result = $this->model->select('connect_site', '*', null, 'id desc');//Orderby', 'id desc');
+		}
+		
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -149,9 +157,12 @@ class AnalyticsAdminView extends View
 
 				$dataObj = array("list"=>$dataList);
 			} else {
-				$msg = "등록된 접속키워드가 존재하지 않습니다.";
+				$msg .= "등록된 접속키워드가 존재하지 않습니다.";
 				$resultYN = "N";
 			}
+		} else {
+			$msg .= "DB 접속을 실패하였습니다.";
+			$resultYN = "N";
 		}
 		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"data"=>$dataObj,
@@ -169,6 +180,7 @@ class AnalyticsAdminView extends View
 	function displayPageviewList() {
 
 		$context = Context::getInstance();
+
 
 		$this->document_data['jscode'] = 'pageviewList';
 		$this->document_data['module_code'] = 'analytics';
@@ -268,12 +280,21 @@ class AnalyticsAdminView extends View
 
 	function displayPageviewListJson() {
 
-		$dataObj = null;
+		$dataObj = array();
 		$dataList = array();
 		$msg = "";
 		$resultYN = "Y";
 
-		$result = $this->model->select('pageview', '*', null, 'id desc');
+		$context = Context::getInstance();
+		$id = $context->getRequest('id');
+		if (isset($id) && $id) {
+			$where = new QueryWhere();
+			$where->set('id', $id);
+			$result = $this->model->select('pageview', '*', $where, 'id asc');
+		} else {
+			$result = $this->model->select('pageview', '*', null, 'id asc');
+		}
+
 		if ($result){
 
 			$numrows = $this->model->getNumRows();
@@ -293,7 +314,7 @@ class AnalyticsAdminView extends View
 					$a--;
 				}
 
-				$dataObj = array("list"=>$dataList);
+				$dataObj['list'] = $dataList;
 			} else {
 				$msg = "등록된 페이지뷰가 존재하지 않습니다.";
 				$resultYN = "N";

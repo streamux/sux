@@ -2,9 +2,6 @@
 
 class AdminAdminView extends View
 {
-
-	var $class_name = 'admin_admin_view';
-
 	function displayAdminAdmin() {
 
 		$this->displayMain();
@@ -33,12 +30,39 @@ class AdminAdminView extends View
 
 	function displayMainJson() {
 
+		$resultYN = 'Y';
+		$msg = '';
+
 		$connecterArr1 = $this->_getConnecterData();
+		if ($connecterArr1['resultYN'] === 'N') {
+			$resultYN = $connecterArr1['resultYN'];
+			$msg .= $connecterArr1['msg'];
+		}
+
 		$connecterArr2 = $this->_getConnecterrealData();
+		if ($connecterArr2['resultYN'] === 'N') {
+			$resultYN = $connecterArr2['resultYN'];
+			$msg .= $connecterArr2['msg'];
+		}
 		$connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
+
 		$pageviewArr = $this->_getPageviewData();
+		if ($pageviewArr['resultYN'] === 'N') {
+			$resultYN = $pageviewArr['resultYN'];
+			$msg .= $pageviewArr['msg'];
+		}
+
 		$connectsiteArr = $this->_getConnectsiteData();
+		if ($connectsiteArr['resultYN'] === 'N') {
+			$resultYN = $connectsiteArr['resultYN'];
+			$msg .= $connectsiteArr['msg'];
+		}
+
 		$serviceConfigArr = $this->_getServiceData();
+		if ($serviceConfigArr['resultYN'] === 'N') {
+			$resultYN = $serviceConfigArr['resultYN'];
+			$msg .= $serviceConfigArr['msg'];
+		}
 
 		$dataObj  = array(	'connecter'=>$connecterArr,
 							'pageview'=>$pageviewArr['data'],
@@ -46,7 +70,8 @@ class AdminAdminView extends View
 							'serviceConfig'=>$serviceConfigArr['data']);
 
 		$data = array(	'data'=>$dataObj,
-						'msg'=>'출력완료' );
+						'result'=>$resultYN,
+						'msg'=>$msg );
 		
 		$this->callback($data);
 	}
@@ -69,9 +94,21 @@ class AdminAdminView extends View
 		$this->callback($data);
 	}
 
-	function displayConnectsiteJson() {
+	function displayConnectdayJson() {
 
-		$data = $this->_getConnectsiteData();
+		$data = $this->_getConnectdayData();
+		$this->callback($data);
+	}
+
+	function displayNewmemberJson() {
+
+		$data = $this->_getNewmemberData();
+		$this->callback($data);
+	}
+
+	function displayNewcommentJson() {
+
+		$data = $this->_getNewcommentData();
 		$this->callback($data);
 	}
 
@@ -87,8 +124,9 @@ class AdminAdminView extends View
 		$resultYN = 'Y';
 		$connecterArr = array('today'=>0, 'yester'=>0,'total'=>0,);
 		
-		$result = $this->model->select('connecter_day');
+		$result = $this->model->select('connect_day', '*');
 		if ($result) {
+			// today total
 			$rows = $this->model->getRows();
 			for ($i=0; $i<count($rows); $i++) {
 				$connecterArr['total'] += $rows[$i]['total_count'];
@@ -149,11 +187,13 @@ class AdminAdminView extends View
 		$resultYN = 'Y';
 		$connecterArr = array('real_today'=>0, 'real_yester'=>0,'real_total'=>0,);
 
-		$result = $this->model->select('connecter_day');
+		$result = $this->model->select('connect_day','*');
 		if ($result) {
+
+			// today total
 			$rows = $this->model->getRows();
 			for ($i=0; $i<count($rows); $i++) {
-				$connecterArr['real_total'] += $rows[$i]['real_count'];
+				$connecterArr['real_total'] += $rows[$i]['real_total_count'];
 			}
 
 			$where = new QueryWhere();
@@ -333,6 +373,92 @@ class AdminAdminView extends View
 		//Tracer::getInstance()->output();
 		$data = array(	'data'=>$analyticsArr,
 						'mode'=>'connectsite',
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
+	}
+
+	function _getConnectdayData() {
+
+		$msg = '';
+		$resultYN = 'Y';
+		$connectdayArr = array();
+
+		function getDateFormat($d) {
+
+			$d=str_replace(".","-",$d);
+			$d=str_replace("/","-",$d);
+			$d = date('Y-m-d', strtotime($d));
+			return $d;
+		}
+
+		$result = $this->model->select('connect_day', '*');
+		if ($result) {
+			$rows = $this->model->getRows();
+			for($i=0; $i<count($rows); $i++) {
+				$connectdayArr[] = array('date'=>getDateFormat($rows[$i]['date']), 'real_total_count'=>$rows[$i]['real_total_count'], 'total_count'=>$rows[$i]['total_count']);
+			}
+		}
+
+		//Tracer::getInstance()->output();
+		$data = array(	'data'=>$connectdayArr,
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
+	}
+
+	function _getNewmemberData() {
+
+		$msg = '';
+		$resultYN = 'Y';
+		$newmember = array('list'=>array());
+
+		$where = new QueryWhere();
+		$where->set('date', date('Y-m-d'), '>=', 'and');
+		$where->set('date', date('Y-m-d', time() + 86400), '<');
+		$result = $this->model->select('member', '*', $where);
+		if ($result) {
+			$newmember['list'] = array();
+			$rows = $this->model->getRows();
+			for($i=0; $i<count($rows); $i++) {
+				$field = array();
+				foreach ($rows[$i] as $key => $value) {
+					$field[$key] = $value;
+				}
+				$newmember['list'][] = $field;
+			}
+		}
+		//$msg .= Tracer::getInstance()->getMessage();
+		$data= array(	'data'=>$newmember,
+						'result'=>$resultYN,
+						'msg'=>$msg);
+		return $data;
+	}
+
+	function _getNewcommentData() {
+
+		$msg = '';
+		$resultYN = 'Y';
+		$newcomment = array('list'=>array());
+
+		$where = new QueryWhere();
+		$where->set('date', date('Y-m-d'), '>=', 'and');
+		$where->set('date', date('Y-m-d', time() + 86400), '<');
+		$result = $this->model->select('board', '*', $where);
+		if ($result) {
+			$newcomment['list'] = array();
+			$rows = $this->model->getRows();
+			for($i=0; $i<count($rows); $i++) {
+				$field = array();
+				foreach ($rows[$i] as $key => $value) {
+					$field[$key] = $value;
+				}
+				$newcomment['list'][] = $field;
+			}
+		}
+
+		//$msg .= Tracer::getInstance()->getMessage();
+		$data = array(	'data'=>$newcomment,
 						'result'=>$resultYN,
 						'msg'=>$msg);
 		return $data;

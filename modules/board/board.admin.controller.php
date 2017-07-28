@@ -5,19 +5,42 @@ class BoardAdminController extends Controller
 
 	function insertAdd() {
 
+		$msg = '';
+		$resultYN = 'Y';
+		$dataObj = array();
+
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
+		if (empty($posts)) {
+			$posts = $context->getRequestToArray('board_group');
+			$posts = $context->getJsonToArray($posts);
+		}
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$adminId = $context->getAdminInfo('admin_id');
 		$adminEmail = $context->getAdminInfo('admin_email');
 
-		$msg = '';
-		$resultYN = 'Y';
-		
-		foreach ($posts as $key => $value) {
-			${$key} = $value;
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/board_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
 		}
+		
+		foreach ($columnCaches as $key => $value) {
+			if (isset($posts[$value]) && $posts[$value]) {	
+				${$value} = $posts[$value];
+			} 
+		}
+
+		if (!(isset($category) && $category)) {
+			$category = $posts['category'] = $board_name;
+		} 
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
@@ -39,21 +62,8 @@ class BoardAdminController extends Controller
 			} 
 		}
 
-		/**
-		 * @cache's columns 
-		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
-		 */
-		$cachePath = './files/caches/queries/board_group.getColumns.cache.php';
-		$columnCaches = CacheFile::readFile($cachePath, 'columns');
-		if (!$columnCaches) {
-			$msg .= "QueryCacheFile Do Not Exists<br>";
-			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-			exit;
-		}
-
 		$columns = array();
-		for($i=0; $i<count($columnCaches); $i++) {
-			$key = $columnCaches[$i];
+		foreach ($columnCaches as $index => $key) {
 			$value = $posts[$key];
 
 			if (isset($value) && $value) {
@@ -66,28 +76,13 @@ class BoardAdminController extends Controller
 				}  else {
 					$columns[] = '';
 				}				
-			}						
+			}
 		}
 
 		$result = $this->model->insert('board_group', $columns);
 		if (!$result) {
 			$msg .= "${category}게시판 등록을 실패하였습니다.<br>";
 			$resultYN = 'N';
-		} 
-
-		$passwordHash = $context->getPasswordHash('12');
-		$columns = array(
-			'',$category,'n',$adminId,'운영자','운영자',$passwordHash,
-			'게시판 시동 테스트',
-			'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
-			$adminEmail,'now()',$context->getServer('REMOTE_ADDR'),
-			0,0,0,'',1,0,0,'a','','','','html'
-		);
-
-		$result = $this->model->insert('board', $columns);
-		if (!$result) {
-			$msg .= "시동 게시글 등록을 실패하였습니다.<br>";
-			$resultYN = 'N';		
 		} else {
 
 			// 라우트 키 저장 
@@ -102,35 +97,83 @@ class BoardAdminController extends Controller
 
 			$result = CacheFile::writeFile($filePath, $routes);	
 			if (!$result) {
-				$msg .= "라우트 키 등록을 실패했습니다. ";
+				$msg .= "라우트 키 등록을 실패했습니다.<br>";
+				$resultYN = 'N';
+			}
+
+			$columns = array();
+			$columns[] = '';
+			$columns[] = $posts['category'];
+			$columns[] = $posts['board_name'];
+			$columns[] = $posts['category'];
+			$columns[] = 'now()';
+
+			$result = $this->model->insert('menu', $columns);
+			if (!$result) {
+				$msg .= "메뉴 등록을 실패하였습니다.<br>";
 				$resultYN = 'N';
 			}
 		}
 
+		$passwordHash = $context->getPasswordHash('12');
+		$columns = array(
+			'',$category,'n',$adminId,'운영자','운영자',$passwordHash,
+			'게시판 시동 테스트',
+			'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
+			$adminEmail,'now()',$context->getServer('REMOTE_ADDR'),
+			0,0,0,'',1,0,0,'a','','','','html'
+		);
+
+		$result = $this->model->insert('board', $columns);
+		if (!$result) {
+			$msg .= "시동 게시글 등록을 실패하였습니다.<br>";
+			$resultYN = 'N';		
+		}
+
 		if ($resultYN === 'Y') {
-			$msg = $category . ' 게시판이 성공적으로 생성되었습니다.';
+			$msg .= $category . ' 게시판이 성공적으로 생성되었습니다.';
+		}
+
+		$where->reset();
+		$where->set('category', $category);
+		$result = $this->model->select('board_group', '*', $where);
+		if ($result) {
+
+			$numrows = $this->model->getNumRows();
+			if ($numrows > 0) {
+				$dataObj = $this->model->getRows();
+			} else {
+				$msg .= '등록된 게시판이 존재하지 않습니다.';
+				$resultYN = 'N';
+			}
+		} else {
+			$msg .= '게시판 테이블 선택을 실패하였습니다.';
+			$resultYN = 'N';
 		}
 
 		//$msg .= Tracer::getInstance()->getMessage();
-		$data = array(	"result"=>$resultYN,
+		$json = array(	"data"=> $dataObj,
+						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$this->callback($data);
+		$this->callback($json);
 	}
 
 	function updateModify() {
-
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$id = $posts['id'];
-		$category = $posts['category'];
-		$returnURL = $context->getServer('REQUEST_URI');
 
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
 
-		$msg .= 'is_latest : ' . $posts['is_latest'];
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		if (empty($posts)) {
+			$posts = $context->getRequestToArray('board_group');
+			$posts = $context->getJsonToArray($posts);
+		}
+		$id = $posts['id'];
+		$category = $posts['category'];
+		$returnURL = $context->getServer('REQUEST_URI');
 
 		/**
 		 * @cache's columns 
@@ -148,10 +191,10 @@ class BoardAdminController extends Controller
 		$columns = array();
 		foreach ($columnCaches as $key => $value) {			
 			if (!preg_match($filters, $value)) {
-				//$msg .= $value . ' : ' . $posts[$value] . "<br>";
-				if ((isset($posts[$value]) && $posts[$value]) || (is_numeric($value) >= 0)) {
+				if (isset($posts[$value]) && $posts[$value]) {
 					$columns[$value] = $posts[$value];
-					//$msg .= $value . ' : ' . $posts[$value] . "<br>";
+				} else {
+					$columns[$value] =  '';
 				}
 			}							
 		}
@@ -159,16 +202,16 @@ class BoardAdminController extends Controller
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$result = $this->model->update('board_group', $columns, $where);
-		if (!$result) {
+		if ($result) {
+			$this->model->select('board_group', '*', $where);
+			$dataObj = $this->model->getRows();
+		} else {
 			$msg .= "$category 게시판 수정을 실패하였습니다.";
 			$resultYN = "N";	
 		}
 
-		if ($resultYN === 'Y') {
-			$msg .= $category . ' 게시판이 수정되었습니다.';
-		}
-		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	"member"=>$dataObj,
+		$msg = Tracer::getInstance()->getMessage();
+		$data = array(	"data"=> array('list'=>$dataObj),
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
@@ -178,8 +221,17 @@ class BoardAdminController extends Controller
 	function deleteDelete() {
 
 		$context = Context::getInstance();
-		$category = $context->getPost('category');
-		$id = $context->getPost('id');
+		$posts = $context->getPostAll();
+		if (empty($posts)) {
+			$posts = $context->getRequestToArray('board_group');
+			$posts = $context->getJsonToArray($posts);
+		}
+
+		$msg .= $posts['category'] . "<br>";
+		$id .= $posts['id'] . "<br>";
+
+		$category = $posts['category'];
+		$id = $posts['id'];
 
 		$dir = _SUX_PATH_ . 'board_data/';
 
@@ -188,7 +240,10 @@ class BoardAdminController extends Controller
 		
 		$where = new QueryWhere();
 		$where->set('category', $category);
-		$this->model->select('board', 'id', $where);
+		$result = $this->model->select('board', 'id', $where);
+		if ($result) {
+
+		}
 
 		$where->reset();
 		$i = $this->model->getNumRows();
@@ -197,6 +252,7 @@ class BoardAdminController extends Controller
 			$cid = $rows[$i]['id'];
 			$where->set('contents_id', $cid, '=', 'or');			
 		}
+
 		$result = $this->model->delete('comment', $where);
 		if (!$result) {
 			$msg .= "답글 삭제를 실패했습니다.<br>";
@@ -235,6 +291,14 @@ class BoardAdminController extends Controller
 			$result = CacheFile::writeFile($filePath, $routes);
 			if (!$result) {
 				$msg .= "라우트 키 삭제를 실패했습니다.<br>";
+				$resultYN = "N";
+			}
+
+			$where->reset();
+			$where->set('category', $category);
+			$result = $this->model->delete('menu', $where);
+			if (!$result) {
+				$msg .= "메뉴 삭제를 실패했습니다.<br>";
 				$resultYN = "N";
 			}
 		}

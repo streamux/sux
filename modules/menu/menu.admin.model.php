@@ -1,6 +1,5 @@
 <?php
-
-class BoardModel extends Model
+class MenuAdminModel extends Model
 {
 	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
@@ -22,7 +21,6 @@ class BoardModel extends Model
 		if (isset($limit) && $limit) {
 			$query->setLimit($passover, $limit);
 		}
-
 		return parent::select($query);
 	}
 
