@@ -44,12 +44,13 @@ class ModuleHandler
 		 * @route uri's construct
 		 * type 1 - your ste / action
 		 * type 2 - your site / category / action 
-		 */
+		 */		
 
 		// action값이 uri 값에 없을 때 document 클래스의 index 화면을 보여준다. 
 		if (empty($action)) {
 			$className = 'Document';
 		} else {
+			// ModuleRouter Class 에서 등록된 값 
 			$className = $context->getModule($moduleKey);
 		}
 
@@ -70,7 +71,7 @@ class ModuleHandler
 			/**
 			 * @var httpMethod
 			 * receive 'create' || 'insert' || 'put' || 'update' || 'delete'
-			 */
+			 */			
 			$httpMethod = strtolower($context->getRequest('_method'));
 			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
 			if (preg_match('/^(create|insert|put|update|delete)+/', $httpMethod)) {
@@ -107,7 +108,7 @@ class ModuleHandler
 				$oDB->close();
 			}
 		} else {
-			Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');
+			Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');			
 		}
 	}
 }

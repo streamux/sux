@@ -12,20 +12,24 @@ class ModuleRouter
 		return self::$aInstance;
 	}
 
-	function init() 
-	{		
-		$context = Context::getInstance();
+	function defaultSetting() {
+
 		Epi::setPath('base','libs/epiphany');
 		Epi::setSetting('exceptions', false);
-		Epi::init('route');		
-		
+		Epi::init('route');	
+
 		// Epi::init('base','cache','session');
 		// Epi::init('base','cache-apc','session-apc');
 		// Epi::init('base','cache-memcached','session-apc');
+	}
 
+	function init() 
+	{
+		$this->defaultSetting();
+		$context = Context::getInstance();
 		getRoute()->get('/', array( 'ModuleHandler', 'display'));
-		$moduleList = Utils::readDir('modules');
 
+		$moduleList = Utils::readDir('modules');
 		foreach ($moduleList as $key => $value) {
 			$dirName = strtolower($value['file_name']);
 			$ClassName = ucfirst($dirName);
@@ -102,6 +106,42 @@ class ModuleRouter
 				}
 			}			
 		}
+		getRoute()->run();
+	}
+
+	function install()
+	{
+		$this->defaultSetting();
+		$context = Context::getInstance();
+		getRoute()->get('/', array( 'ModuleHandler', 'display'));
+
+		$moduleList = Utils::readDir('modules');
+		foreach ($moduleList as $key => $value) {
+
+			$dirName = strtolower($value['file_name']);
+			if (preg_match('/^(install)+$/', $dirName)) {
+				$ClassName = ucfirst($dirName);
+				break;
+			}
+		}
+
+		if (empty($ClassName)) {
+			echo 'Install Module do not exist';
+			return;
+		}
+
+		/**
+		 * 모듈,카테고리, 메서드명 키워드를 이용해서  클래스명을 얻을 수 있도록 등록한다.
+		 * ModuleHandler Class 에서 키워드를 이용해서 클래스명을 찾아 사용한다.
+		 * */
+		$context->setModule($dirName, $dirName);
+		$action = $ClassName::$action;
+
+		for ($i=0; $i<count($action); $i++) {
+			$context->setModule($action[$i], $dirName);
+			$this->addRoute( sprintf('/%s', $action[$i]), array( 'ModuleHandler', 'display'));
+		}
+
 		getRoute()->run();
 	}
 

@@ -22,6 +22,10 @@ class InstallController extends Controller
 		foreach ($db_info as $key => $value) {
 			$buffer['db_info'][$value] = $posts[$value];
 		}
+
+		$context->makeFilesDir(false, $buffer['db_info']);
+		$context->makeRouteCaches();
+
 		$result = CacheFile::writeFile($filePath, $buffer);
 		if (!$result) {
 			$msg .= 'DB 설정을 실패했습니다.';

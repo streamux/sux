@@ -5,4 +5,8 @@ $context = Context::getInstance();
 $context->init();
 
 $router = ModuleRouter::getInstance();
-$router->init(); 
+if ($context->installed()) {
+	$router->init(); 
+} else {
+	$router->install(); 
+}

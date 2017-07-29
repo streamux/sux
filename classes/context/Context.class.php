@@ -22,11 +22,9 @@ class Context {
 	function init() {
 
 		$this->startSession();
-		$this->makeFilesDir();
-		$this->makeRouteCaches();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
-		$this->loadTableInfo();
+		$this->loadTableInfo();		
 	}
 
 	function startSession() {
@@ -39,7 +37,10 @@ class Context {
 		session_destroy();
 	}
 
-	function makeFilesDir() {
+	/**
+	 * explode in InstallCass
+	 */	
+	function makeFilesDir($is_safe=false, $db_info=null) {
 
 		$dirList = array(
 			'./files',
@@ -51,9 +52,14 @@ class Context {
 			'./files/document'
 		);
 
+		$msg = '';
+
 		foreach ($dirList as $key => $dir) {
-			FileHandler::makeDir($dir, false);
+			$msg .= FileHandler::makeDir($dir, $is_safe, $db_info);
+			$msg .= "\n";
 		}
+
+		return $msg;
 	}
 
 	function makeRouteCaches() {
@@ -166,12 +172,10 @@ class Context {
 	}
 
 	function getModule( $key ) {
-
 		return $this->module_list[$key];
 	}
 
 	function setModule( $key, $value) {
-
 		$this->module_list[$key] = $value;
 	}
 
@@ -366,6 +370,10 @@ class Context {
 		}
 
 		return false;
+	}
+
+	function installed() {
+		return isset($this->db_info) === true;
 	}
 }
 ?>
