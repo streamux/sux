@@ -10,43 +10,53 @@ class MemberAdminController extends Controller
 		$resultYN = 'Y';
 
 		$context = Context::getInstance();
-		$posts = $context->getRequestAll();
-		$menu = json_decode($posts['menu']);
+		$posts = $context->getPostAll();
 		$prefix = $context->getPrefix();
-		foreach ($menu as $key => $value) {
+		foreach ($posts as $key => $value) {
 			${$key} = $value;
 		}
 
-		if (empty($group_name)) {
-			UIError::alertToBack('그룹 영문 이름을 입력해주세요.');
+		if (empty($category)) {
+			UIError::alertToBack('멤버그룹 영문 이름을 입력해주세요.');
 			exit;
 		}
 		
-		if (empty($category)) {
-			/*$srl = $category . microtime(true) * 100;
-			$category = $prefix . substr(md5($srl), 0, 26);*/
-			$category = $group_name;
-		}
-
 		$where = new QueryWhere();
-		$where->set('group_name', $group_name);
+		$where->set('category', $category);
 		$result = $this->model->select('member_group', 'id', $where);
 		$rownum = $this->model->getNumrows();
 		if ($rownum > 0) {
-			UIError::alertToBack("'${group_name}' 그룹 이름이 이미 존재합니다.");
+			UIError::alertToBack("'${category}' 그룹 이름이 이미 존재합니다.");
 			exit;
 		}
 
-		$column = array(
-			'',
-			$category,
-			$group_name,
-			$summary,
-			$header_path,
-			$footer_path,
-			'now()');
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/member_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+		} else {
+			$columns = array();
+			for($i=0; $i<count($columnCaches); $i++) {
+				$key = $columnCaches[$i];
+				$value = $posts[$key];
 
-		$result = $this->model->insert('member_group', $column);
+				if (isset($value) && $value) {
+					$columns[] = $value;
+				} else {					
+					if ($key === 'date') {
+						$columns[] = 'now()';
+					} else {
+						$columns[] = '';
+					}
+				}						
+			}
+		} // end of if
+
+		$result = $this->model->insert('member_group', $columns);
 		if ($result) {
 			$msg .= "${group_name} 회원그룹을 등록하였습니다.";
 			$resultYN = "Y";				
@@ -59,7 +69,7 @@ class MemberAdminController extends Controller
 		$this->model->select('member_group', '*', $where);
 		$rows = $this->model->getRows();
 
-		//$msg = Tracer::getInstance()->getMessage();		
+		$msg = Tracer::getInstance()->getMessage();		
 		
 		$json['msg'] = $msg;
 		$json['result'] = $resultYN;
@@ -118,27 +128,40 @@ class MemberAdminController extends Controller
 		$resultYN = 'Y';
 
 		$context = Context::getInstance();
-		$menu = $context->getRequest('menu');
-		$menu = json_decode($menu);
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
 		
-		if (empty($menu)) {
+		if (empty($posts)) {
 			UIError::alertToBack("그룹 정보가 존재하지 않습니다.");
 			exit;
 		}
 
-		$columns = array();
-		foreach ($menu as $key => $value) {
-			if (empty($value) || $key === 'id') {
-				continue;
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/member_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+		} else {
+			$columns = array();
+			for($i=0; $i<count($columnCaches); $i++) {
+				$key = $columnCaches[$i];
+				$value = $posts[$key];
+
+				if (isset($value) && $value) {
+					$columns[$key] = $value;
+				} else {					
+					if ($key === 'date') {
+						$columns[$key] = 'now()';
+					} 
+				}						
 			}
-			if ($key === 'date') {
-				$value = 'now()';
-			}
-			$columns[$key] = $value;
-		}
+		} // end of if
 
 		$where = new QueryWhere();
-		$where->set('id', $menu->id);
+		$where->set('id', $id);
 
 		$result = $this->model->update('member_group', $columns, $where);
 		if (!$result) {
@@ -147,7 +170,6 @@ class MemberAdminController extends Controller
 		}
 
 		//$msg = Tracer::getInstance()->getMessage();
-
 		$json['msg'] = $msg;
 		$json['result'] = $resultYN;
 
@@ -161,8 +183,8 @@ class MemberAdminController extends Controller
 		$resultYN = 'Y';
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$id = $requests['id'];
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
@@ -198,16 +220,6 @@ class MemberAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		// json 형태로 값이 넘어 올때 
-		if (!(isset($posts) && $posts && count($posts) > 0)) {	
-			$posts = $context->getRequestAll();	
-			$dataes = array();	
-			$member = json_decode($posts['member']);
-			foreach ($member as $key => $value) {
-				$dataes[$key] = $value;
-			}
-			$posts = $dataes;
-		}
 
 		$id = $posts['id'];
 		$user_name = $posts['user_name'];
@@ -265,8 +277,8 @@ class MemberAdminController extends Controller
 	function deleteDelete() {
 
 		$context = Context::getInstance();
-		$requests = $context->getRequestAll();
-		$id = $requests['id'];
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
 
 		$dataObj	= "";
 		$msg = "";

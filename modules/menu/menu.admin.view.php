@@ -26,9 +26,17 @@ class MenuAdminView extends View
 			$json['data']['list'] = $this->model->getRows();
 		}
 
+		//$msg .= Tracer::getInstance()->getMessage();
 		$json['result'] = $resultYN;
 		$json['msg'] = $msg;
 
 		$this->callback($json);
+	}
+
+	function displayGnbList() {
+
+		$gnburl = './files/gnb/gnb.php';
+		$gnburl = FileHandler::getRealPath($gnburl);	
+		include $gnburl;
 	}
 }

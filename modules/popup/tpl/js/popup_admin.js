@@ -235,7 +235,7 @@ jsux.fn.modify = {
 				list = null;
 
 			if (e.result == "Y") {
-				list = e.data['list'][0]; 
+				list = e.data.list[0]; 
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {

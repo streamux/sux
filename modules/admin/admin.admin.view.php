@@ -254,8 +254,8 @@ class AdminAdminView extends View
 		$pageViewList = array();
 
 		$context = Context::getInstance();
-		$limit = $context->getPost('limit');
-		$passover = $context->getPost('passover');
+		$limit = $context->getRequest('limit');
+		$passover = $context->getRequest('passover');
 
 		$result = $this->model->select('pageview', '*');
 		if ($result) {
@@ -320,8 +320,8 @@ class AdminAdminView extends View
 		$connecterList = array();
 
 		$context = Context::getInstance();
-		$limit = $context->getPost('limit');
-		$passover = $context->getPost('passover');
+		$limit = $context->getRequest('limit');
+		$passover = $context->getRequest('passover');
 
 		$result = $this->model->select('connect_site', '*');
 		if ($result) {

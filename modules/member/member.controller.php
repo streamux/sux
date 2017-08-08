@@ -332,21 +332,22 @@ class MemberController extends Controller {
 
 	function deleteMember() {
 
+		$msg = '';
+		$resultYN = 'Y';		
+
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
 		$category = $posts['category'];
 		$user_id = $posts['user_id'];
 
-		$rootPath = _SUX_ROOT_;
-		$msg = '';
-		$resultYN = 'Y';		
+		$rootPath = _SUX_ROOT_;	
 
 		$passwordHash = $context->getPasswordHash($posts['password']);
 		if (empty($passwordHash)) {
 			UIError::alertToBack('비밀번호를 입력해주세요.');
 			exit();
 		}
-		
+
 		$where = new QueryWhere();
 		$where->set('category', $category);
 		$where->set('user_id', $user_id);
@@ -357,7 +358,7 @@ class MemberController extends Controller {
 			$msg = '비밀번호가 잘못되었습니다.';
 			$resultYN = 'N';
 		} else {
-			$result = $this->model->deleteDelete();
+			$result = $this->model->delete('member', $where);
 			if ($result) {
 				$msg = '회원 탈퇴를 완료하였습니다.';
 				$resultYN = 'Y';
@@ -366,7 +367,7 @@ class MemberController extends Controller {
 				$resultYN = 'N';
 			}
 		}
-		$msg .= Tracer::getInstance()->getMessage();
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	'url'=>$rootPath . 'logout?_method=insert',
 						'result'=>$resultYN,
 						'msg'=>$msg);

@@ -123,7 +123,7 @@ class AnalyticsAdminView extends View
 		$dataObj = null;
 		$dataList = array();
 		$msg = '';
-		$resultYN = 'N';	 
+		$resultYN = 'Y';	 
 
 		$context = Context::getInstance();
 		$id = $context->getRequest('id');

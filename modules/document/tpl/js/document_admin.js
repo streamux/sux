@@ -4,7 +4,7 @@ jsux.fn.list = {
 	setLayout: function() {
 
 		jsux.getJSON(jsux.rootPath + "document-admin/list-json", function( e )  {
-						
+
 			var 	func = {
 					editDate: function( value ) {
 						var list = value.split(" ");
@@ -22,6 +22,8 @@ jsux.fn.list = {
 				markup = $("#documentWarnMsg_tmpl");
 				$(markup).tmpl( e ).appendTo("#documentList");
 			}
+		}, function(e) {
+			console.log('error status : ' , e.status);
 		});
 	},
 	init: function() {
@@ -148,11 +150,12 @@ jsux.fn.add = {
 		}
 
 		jsux.getJSON( url, params, function( e ) {
-
-			trace( e.msg );
+			
 			if (e.result == "Y") {
 				jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
-			} 
+			} else {
+				trace( e.msg );
+			}
 		});
 	},
 	setEvent: function() {

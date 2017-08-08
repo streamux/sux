@@ -11,10 +11,6 @@ class DocumentAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('document');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$category = $posts['category'];
 		$title = $posts['document_name'];
@@ -54,15 +50,13 @@ class DocumentAdminController extends Controller
 				$value = $posts[$key];
 
 				if (isset($value) && $value) {
-					if (strpos($key,'contents_path') !== false) {
-						if (!preg_match('/(.tpl+)$/i', $value)) {
-							$value = $value . $category . '.tpl';						
+					if (preg_match('/^(contents_path)+$/', $key)) {
+						if (!preg_match('/(.tpl+)$/', $value)) {
+							$value = $value . $category . '.tpl';
 						}
 						$contents_path = $value;
 					}
 					$columns[] = $value;
-
-					$msg .= $key . ' = '. $value . "\n";
 				} else {					
 					if ($key === 'date') {
 						$columns[] = 'now()';
@@ -81,6 +75,7 @@ class DocumentAdminController extends Controller
 			//  read and write contents
 			if (isset($contents_path) && $contents_path) {
 				$realPath = _SUX_PATH_ . 'files/document/';
+				$contents_path = _SUX_ROOT_ . $contents_path;
 				$filePath =Utils::convertAbsolutePath($contents_path, $realPath);
 
 				$yoursite = $context->getAdminInfo('yourhome');
@@ -89,16 +84,17 @@ class DocumentAdminController extends Controller
 				$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
 				$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
 				$buffHeader .=	 '{include file="$headerPath" title="' . $title . ' - ' . $yoursite . '"}' . "\n";
-				$buffHeader .= '<!-- contents start -->' . "\n";
+				$buffHeader .= '<!-- contents start -->' . "\n\n";
 
 				$buff = $posts['contents'];
 				if (empty($buff)) {
 					$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . strtolower($category) . '.tpl';
 					$buff = FileHandler::readFile($contentsPath);
 					if (!$buff) {						
-						$buff .= ''  . $category . ' 내용을 입력해주세요.';						
+						$buff .= '내용을 입력해주세요.';					
 					}					
 				} 
+				$buff .= "\n\n";
 				$buffFooter .= '<!-- contents end -->' . "\n";
 				$buffFooter .= '{include file="$footerPath"}';
 
@@ -150,7 +146,7 @@ class DocumentAdminController extends Controller
 			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
 		}
 
-		$msg = Tracer::getInstance()->getMessage();
+		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	'data'=> $dataObj,
 						'result'=>$resultYN,
 						'msg'=>$msg);
@@ -160,24 +156,22 @@ class DocumentAdminController extends Controller
 
 	function updateModify() {
 
+		echo 'CONTENT_TYPE : ' . $_SERVER['CONTENT_TYPE'];
+
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
+		$is_document = 'N';
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('document');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$category = $posts['category'];
+		$title = $posts['document_name'];
 		$contents_path = $posts['contents_path'];
-		$contents = $posts['contents'];	
+		$contents = $posts['contents'];
 
-		$msg = $contents;
-				
 		/**
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
@@ -191,7 +185,7 @@ class DocumentAdminController extends Controller
 			$value = $posts[$key];
 
 			if (isset($value) && $value) {
-				if ($key === 'contents_path') {
+				if (preg_match('/^(contents_path)+$/', $key)) {
 					if (!preg_match('/(.tpl+)$/i', $value)) {
 						$value = $value . $category . '.tpl';						
 					}
@@ -210,18 +204,29 @@ class DocumentAdminController extends Controller
 			if (isset($contents_path) && $contents_path) {
 
 				$realPath = _SUX_PATH_ . 'files/document/';
+				$contents_path = _SUX_ROOT_ . $contents_path;
 				$writeContentsTo =Utils::convertAbsolutePath($contents_path, $realPath);
 
-				$buff = $posts['contents'];
-				if (empty($buff)) {
-					$readFromContents = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
-					$buff = FileHandler::readFile($readFromContents);
-					if (!$buff) {
-						$buff = $category . ' 내용을 설정해주세요.';
-					}
+				$buffers = $posts['contents'];
+				if (empty($buffers)) {
+					$yoursite = $context->getAdminInfo('yourhome');
+					$yoursite = strtoupper($yoursite);
+					$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+					$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+					$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+					$buffHeader .=	 '{include file="$headerPath" title="' . $title . ' - ' . $yoursite . '"}' . "\n";
+					$buffHeader .= '<!-- contents start -->' . "\n\n";
+
+					$buff = '내용을 입력해주세요.';	
+
+					$buff .= "\n\n";
+					$buffFooter .= '<!-- contents end -->' . "\n";
+					$buffFooter .= '{include file="$footerPath"}';
+
+					$buffers = $buffHeader . $buff . $buffFooter;
 				}
 
-				$result = FileHandler::writeFile($writeContentsTo, $buff);
+				$result = FileHandler::writeFile($writeContentsTo, $buffers);
 				if (!$result) {
 					$msg .= "$category 템플릿 파일 수정을 실패하였습니다.";
 					$resultYN = "N";
@@ -245,22 +250,20 @@ class DocumentAdminController extends Controller
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
+		// document  param 값을 받으면 앵귤러 통신 $is_document = Y
 		$this->callback($data);
 	}
 
 	function deleteDelete() {
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('document');
-			$posts = $context->getJsonToArray($posts);
-		}
-		$category = $posts['category'];
-		$id = $posts['id'];
-
 		$resultYN = "Y";
 		$msg = "";	
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$category = $posts['category'];
+		$id = $posts['id'];		
 
 		$where = new QueryWhere();
 		$where->set('id', $id);

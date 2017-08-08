@@ -153,8 +153,8 @@ class DocumentAdminView extends View
 
 		$context = Context::getInstance();
 		$requests = $context->getRequestAll();
+		
 		$id = $requests['id'];
-		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
@@ -162,21 +162,16 @@ class DocumentAdminView extends View
 		
 		$rows = $this->model->getRows();
 		if (count($rows) > 0) {
-			for($i=0; $i<count($rows); $i++) {
-				$dataObj['list'][$i] = array();
-				foreach ($rows[$i] as $key => $value) {
-					$dataObj['list'][$i][$key] = $value;
-				}
-
-				$contentsPath =Utils::convertAbsolutePath($rows[$i]['contents_path'], $contentsPath);
-				$handle = fopen($contentsPath, "r");
-				$dataObj['list'][$i]['contents'] = fread($handle, filesize($contentsPath));
+			$dataObj['list'][0] = array();
+			foreach ($rows[0] as $key => $value) {
+				$dataObj['list'][0][$key] = $value;
 			}
+
+			$contentsPath =Utils::convertAbsolutePath($rows[0]['contents_path'], _SUX_PATH_);
+			$handle = fopen($contentsPath, "r");
+			$dataObj['list'][0]['contents'] = fread($handle, filesize($contentsPath));
 			fclose($handle);
 			$resultYN = "Y";
-		} else {
-			$resultYN = "N";
-			$msg = '페이지가 존재하지 않습니다.';
 		}
 
 		//$msg = Tracer::getInstance()->getMessage();

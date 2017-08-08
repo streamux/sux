@@ -11,10 +11,7 @@ class PopupAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('popup');
-			$posts = $context->getJsonToArray($posts);
-		}
+
 		$popupName = $posts['popup_name'];
 		$skinName = $posts['skin'];
 
@@ -73,7 +70,6 @@ class PopupAdminController extends Controller
 					$column[] = '';
 					if (preg_match('/^(date+)$/', $value) && empty($value)) {
 						$column[] = 'now()';
-						$msg .= 'date';
 					}
 				}
 			}
@@ -108,10 +104,7 @@ class PopupAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('popup');
-			$posts = $context->getJsonToArray($posts);
-		}
+
 		$id = $posts['id'];
 		$skinName = $posts['skin'];		
 
@@ -138,16 +131,31 @@ class PopupAdminController extends Controller
 			$posts['popup_height'] = $popupHeight;
 		}
 
-		$where = new QueryWhere();
-		$where->set('id', $id);
-
-		$column = array();
-		$items = array_slice($posts, 2);
-		foreach ($items as $key => $value) {
-			$column[$key] = $value;
+		$cachePath = './files/caches/queries/popup.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
 		}
 
-		$result = $this->model->update('popup', $column, $where);
+		$columns = array();
+		foreach ($columnCaches as $key => $value) {
+			if (isset($posts[$value]) && $posts[$value]) {	
+				if (!preg_match('/^(id+)$/', $value)) {
+					$columns[$value] = $posts[$value];
+				}				
+			} else {
+				if (preg_match('/^(date+)$/', $value) && empty($value)) {
+					$columns[$value] = 'now()';
+				}
+			}
+		}
+
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$result = $this->model->update('popup', $columns, $where);
 		if ($result){
 			$msg = "팝업정보 수정을 성공하였습니다.";
 			$resultYN = "Y";
@@ -158,7 +166,7 @@ class PopupAdminController extends Controller
 			$msg = "팝업정보 수정을 실패하였습니다.";
 			$resultYN = "N";
 		}
-		//$msg = Tracer::getInstance()->getMessage();
+		$msg = Tracer::getInstance()->getMessage();
 		$data = array(	'data'=> $dataObj,
 						'result'=>$resultYN,
 						'msg'=>$msg);
@@ -170,10 +178,6 @@ class PopupAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('popup');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$popupName = $posts['popup_name'];

@@ -45,8 +45,13 @@ class Object {
 		if ($context->ajax()) {
 			$data['msg'] = preg_replace("/<br>/", "\n",$data['msg']);
 			$callback = $context->getRequest('callback');
+			$strcallback = strtolower($callback);
 			$strJson = JsonEncoder::parse($data);
-			echo $callback . '('.$strJson.')';
+			if (preg_match('/(json_callback)+/', $strcallback) == true) {				
+				echo $strJson;
+			} else {
+				echo $callback . '('.$strJson.')';
+			}		
 		} else {
 			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 2;
 			if ($delay > 0) {

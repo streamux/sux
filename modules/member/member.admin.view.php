@@ -246,7 +246,8 @@ class MemberAdminView extends View {
 		$resultYN = "Y";
 
 		$context = Context::getInstance();
-		$posts = $context->getRequestAll();
+		$posts = $context->getPostAll();
+
 		$category = $posts['category'];
 		$passover = $posts['passover'];	
 		$limit = $posts['limit'];
@@ -278,7 +279,7 @@ class MemberAdminView extends View {
 					}
 				}
 			}
-			$dataObj = array('category'=>$category, 'list'=>$dataList);
+			$dataObj = array('category'=>$dataList[0]['category'], 'list'=>$dataList);
 		}  else {
 			$where = new QueryWhere();
 			$where->set('category', $category);

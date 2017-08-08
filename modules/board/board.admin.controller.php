@@ -10,11 +10,7 @@ class BoardAdminController extends Controller
 		$dataObj = array();
 
 		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('board_group');
-			$posts = $context->getJsonToArray($posts);
-		}
+		$posts = $context->getPostAll();	
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$adminId = $context->getAdminInfo('admin_id');
@@ -38,9 +34,10 @@ class BoardAdminController extends Controller
 			} 
 		}
 
-		if (!(isset($category) && $category)) {
-			$category = $posts['category'] = $board_name;
-		} 
+		if (empty($category)) {
+			$msg = '카테고리를 입력해주세요.';
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+		}
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
@@ -103,9 +100,9 @@ class BoardAdminController extends Controller
 
 			$columns = array();
 			$columns[] = '';
-			$columns[] = $posts['category'];
-			$columns[] = $posts['board_name'];
-			$columns[] = $posts['category'];
+			$columns[] = $category;
+			$columns[] = $board_name;
+			$columns[] = $category;
 			$columns[] = 'now()';
 
 			$result = $this->model->insert('menu', $columns);
@@ -167,10 +164,7 @@ class BoardAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('board_group');
-			$posts = $context->getJsonToArray($posts);
-		}
+
 		$id = $posts['id'];
 		$category = $posts['category'];
 		$returnURL = $context->getServer('REQUEST_URI');
@@ -222,13 +216,6 @@ class BoardAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('board_group');
-			$posts = $context->getJsonToArray($posts);
-		}
-
-		$msg .= $posts['category'] . "<br>";
-		$id .= $posts['id'] . "<br>";
 
 		$category = $posts['category'];
 		$id = $posts['id'];

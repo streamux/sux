@@ -5,18 +5,14 @@ class AnalyticsAdminController extends Controller
 
 	function insertConnectSiteAdd() {
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
-		$keyword = $posts['keyword'];
-
 		$msg = "";
 		$resultYN = "Y";
-		$returnURL = $context->getServer('REQUEST_URI');
 
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		
+		$returnURL = $context->getServer('REQUEST_URI');
+		$keyword = $posts['keyword'];		
 		if (empty($keyword)) {
 			$msg = '접속워드 이름을 입력하세요.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -58,10 +54,6 @@ class AnalyticsAdminController extends Controller
 		
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$keyword = $posts['keyword'];
@@ -91,10 +83,6 @@ class AnalyticsAdminController extends Controller
 		
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$keyword = $posts['keyword'];
@@ -127,13 +115,8 @@ class AnalyticsAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$returnURL = $context->getServer('REQUEST_URI');
-
 		$keyword = $posts['keyword'];
 		if (empty($keyword)) {
 			$msg = '페이지 키워드 이름을 입력하세요.';
@@ -182,16 +165,11 @@ class AnalyticsAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$keyword = $posts['keyword'];
 
 		$column = array('hit_count'=>0);
-
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$result = $this->model->update('pageview', $column, $where);
@@ -217,10 +195,6 @@ class AnalyticsAdminController extends Controller
 
 		$context = Context::getInstance();		
 		$posts = $context->getPostAll();
-		if (empty($posts)) {
-			$posts = $context->getRequestToArray('analytics');
-			$posts = $context->getJsonToArray($posts);
-		}
 
 		$id = $posts['id'];
 		$keyword = $posts['keyword'];		

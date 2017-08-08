@@ -1,6 +1,7 @@
 <?php
 
-class Context { 
+class Context
+{ 
 
 	private static $aInstance = NULL;
 	private $hashmap_params = array();
@@ -20,6 +21,18 @@ class Context {
 	}
 
 	function init() {
+
+		// fix missing HTTP_RAW_POST_DATA in PHP 5.6 and above
+		/*if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
+		{
+			$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+			
+			// If content is not XML JSON, unset
+			if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
+			{
+				unset($GLOBALS['HTTP_RAW_POST_DATA']);
+			}
+		}*/
 
 		$this->startSession();
 		$this->loadDBInfo();
@@ -49,7 +62,8 @@ class Context {
 			'./files/caches/queries',
 			'./files/caches/routes',
 			'./files/board',
-			'./files/document'
+			'./files/document',
+			'./files/gnb'
 		);
 
 		$msg = '';
@@ -204,7 +218,20 @@ class Context {
 	
 	function getPost($key) {
 
-		return $_POST[$key];
+		$post = $_POST[$key];
+		if (empty($post)) {
+			$json = $this->getJson();
+			$posts = $this->getJsonToArray($json);
+			$post = $posts[$key];
+			if (empty($post)) {
+				// 실서버 반영 시 반드시 주석처리 				
+				if ($this->isLocalhost()) {
+					$post = $this->getRequestToArray($key);
+				}	
+			}		
+		}
+		
+		return $post;
 	}
 
 	function setPost($key, $value) {
@@ -214,7 +241,18 @@ class Context {
 
 	function getPostAll() {
 
-		return $_POST;
+		$posts = $_POST;
+		if (empty($posts)) {
+			$json = $this->getJson();
+			$posts = $this->getJsonToArray($json);
+			if (empty($posts)) {
+				// 로컬 서버에서만 실행 
+				if ($this->isLocalhost()) {
+					$posts = $this->getRequestAllToArray();
+				}
+			}
+		}
+		return $posts;
 	}
 
 	function getRequest($key) {
@@ -251,6 +289,21 @@ class Context {
 	function getReqeustMethod() {
 
 		return $_SERVER['REQUEST_METHOD'];
+	}
+
+	function getJson() {
+
+		return file_get_contents('php://input');
+	}
+
+	function getJsonToArray($value) {
+
+		$result = array();
+		$tempArr = json_decode($value);
+		foreach ($tempArr as $key => $value) {
+			$result[$key] = $value;
+		}
+		return $result;
 	}
 
 	function getGet($key) {
@@ -301,17 +354,7 @@ class Context {
 	function getServerAll() {
 
 		return $_SERVER;
-	}
-
-	function getJsonToArray($value) {
-
-		$result = array();
-		$tempArr = json_decode($value);
-		foreach ($tempArr as $key => $value) {
-			$result[$key] = $value;
-		}
-		return $result;
-	}
+	}	
 
 	function set($key, $val) {
 
@@ -353,6 +396,13 @@ class Context {
 		return md5($password);
 	}
 
+	function isLocalhost() {
+
+		$domain = $this->getServer('HTTP_HOST');
+		$result = preg_match('/^(http\:\/\/)?(localhost|127.0.0.1)+/', $domain);
+		return $result;
+	}
+
 	function checkAdminPass() {
 
 		$is_logged = false;
@@ -365,7 +415,7 @@ class Context {
 	function ajax() {
 
 		$uri =  strtolower($this->getServer('REQUEST_URI'));
-		if (preg_match('/(jquery|callback)/', $uri)) {
+		if (preg_match('/(callback)+/', $uri)) {
 			return true;
 		}
 

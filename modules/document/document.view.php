@@ -22,7 +22,7 @@ class DocumentView extends View
 		 */
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/document/";
-		$skinPath = _SUX_PATH_ . "modules/document/";
+		$skinPath = _SUX_PATH_;
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;
 

@@ -204,14 +204,10 @@ class InstallController extends Controller
 
 									if ($propValue === 'document_name') {
 										$moduleName = $nodeValue;
-									}
-							
-									if (preg_match('/^((header|contents|footer)_path)+$/i', $propValue)) {
-										$nodeValue = $rootPath . $nodeValue;
-									}							
+									}						
 
-									if ($propValue === 'contents_path') {
-										$contentsPath = $nodeValue;					
+									if (preg_match('/^(contents_path|)+$/i', $propValue)) {
+										$contentsPath = $rootPath . $nodeValue;					
 									}
 									$columns[] = $nodeValue;
 								}
