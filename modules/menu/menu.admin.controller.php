@@ -119,11 +119,11 @@ class MenuAdminController extends Controller
 
 		$jsonData = "<?PHP\n\r";
 		$jsonData .= "\$data = '". $data . "';\n\r";
-		if (preg_match('/(json_callback)+/', $strcallback) == true) {			
-			$jsonData .= "echo \$data;\n\r";
-		} else {
-			$jsonData .= "echo \$_REQUEST['callback'] . '(' . \$data . ')';\n\r";
-		}		
+		$jsonData .= "if (preg_match('/(jsonp_callback)+/',strtolower(\$_REQUEST['callback'])) === true ) {\n\r";
+		$jsonData .= "	echo \$_REQUEST['callback'] . '(' . \$data . ')';\n\r";
+		$jsonData .= "} else {\n\r";
+		$jsonData .= "	echo \$data;\n\r";		
+		$jsonData .= "}";		
 		$jsonData .= "?>";
 
 		//$contents_path = '/assets/data/gnb.php';

@@ -4,8 +4,8 @@ $(window).ready(function() {
 		gnbView = jsux.gnb.Menu.create("#gnb", gnbModel),
 		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
 		pageAppHandler = {},
-		xmlPath = '/sux/common/gnb.xml',
-		jsonPath = '/sux/assets/data/gnb.php',
+		xmlPath = './common/gnb.xml',
+		jsonPath = './files/gnb/gnb.php',
 		menuList = null;
 
 	gnbModel.addObserver( gnbView );
@@ -83,8 +83,8 @@ $(window).ready(function() {
 
 			$.ajax({
 				url: path,
-				dataType: 'jsonp',
-				jsonpCallback: 'JSONP_CALLBACK',
+				dataType: 'json',
+				jsonpCallback: 'JSON_CALLBACK',
 				success: function(json) {
 
 					var data = json.data;
