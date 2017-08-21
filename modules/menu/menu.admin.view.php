@@ -35,8 +35,16 @@ class MenuAdminView extends View
 
 	function displayGnbList() {
 
-		$gnburl = './files/gnb/gnb.php';
-		$gnburl = FileHandler::getRealPath($gnburl);	
-		include $gnburl;
+		$gnburl = './files/gnb/gnb.json';
+		$gnburl = FileHandler::getRealPath($gnburl);
+		$json = FileHandler::readFile($gnburl);
+
+		$context = Context::getInstance();
+		$callback = $context->getRequest('callback');
+		if (preg_match('/(jsonp)+/', strtolower($callback)) === 1) {
+			echo $callback . '(' . $json . ')';
+		} else {
+			echo $json;
+		}
 	}
 }

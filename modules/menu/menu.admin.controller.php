@@ -112,23 +112,14 @@ class MenuAdminController extends Controller
 
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$data = $posts['data'];
+		$jsonData = $posts['data'];
 
 		$callback = $context->getRequest('callback');
 		$strcallback = strtolower($callback);
 
-		$jsonData = "<?PHP\n\r";
-		$jsonData .= "\$data = '". $data . "';\n\r";
-		$jsonData .= "if (preg_match('/(jsonp_callback)+/',strtolower(\$_REQUEST['callback'])) === true ) {\n\r";
-		$jsonData .= "	echo \$_REQUEST['callback'] . '(' . \$data . ')';\n\r";
-		$jsonData .= "} else {\n\r";
-		$jsonData .= "	echo \$data;\n\r";		
-		$jsonData .= "}";		
-		$jsonData .= "?>";
-
 		//$contents_path = '/assets/data/gnb.php';
 		$realPath = _SUX_PATH_ ;
-		$contents_path = '/files/gnb/gnb.php';
+		$contents_path = '/files/gnb/gnb.json';
 		$filePath = Utils::convertAbsolutePath($contents_path, $realPath);
 		
 		$result = FileHandler::writeFile($filePath, $jsonData);

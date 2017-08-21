@@ -47,10 +47,10 @@ class Object {
 			$callback = $context->getRequest('callback');
 			$strcallback = strtolower($callback);
 			$strJson = JsonEncoder::parse($data);
-			if (preg_match('/(json_callback)+/', $strcallback) == true) {				
-				echo $strJson;
+			if (preg_match('/(jsonp|jquery)+/', $strcallback) === 1) {
+				echo $callback . '('.$strJson.')';				
 			} else {
-				echo $callback . '('.$strJson.')';
+				echo $strJson;		
 			}		
 		} else {
 			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 2;

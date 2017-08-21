@@ -5,7 +5,7 @@ $(window).ready(function() {
 		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
 		pageAppHandler = {},
 		xmlPath = './common/gnb.xml',
-		jsonPath = './files/gnb/gnb.php',
+		jsonPath = './files/gnb/gnb.json',
 		menuList = null;
 
 	gnbModel.addObserver( gnbView );
