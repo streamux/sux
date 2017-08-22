@@ -84,6 +84,7 @@ class ModuleHandler
 				$isLogged = $context->getSession('admin_ok');
 				if (empty($isLogged) && $toLowerClassName !== 'loginadmin') {
 					Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
+					return;
 				}
 
 				if (preg_match('/^(board|document)+/i', $className)) {

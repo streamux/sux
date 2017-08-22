@@ -11,7 +11,7 @@
 		<input type="hidden" name="_method" value="insert">
 		<div class="box ui-edgebox-2px">
 			<div class="login-header">
-				<img src="{$rootPath}modules/admin/tpl/images/icon_01.gif" title="">						
+				<img src="{$rootPath}modules/admin/tpl/images/icon_01.gif" title="">				
 				<span>관리자 확인</span>
 			</div>
 			<div class="login-body">
