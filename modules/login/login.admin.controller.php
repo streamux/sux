@@ -7,11 +7,15 @@ class LoginAdminController extends Controller {
 	function insertLoginAdmin() {
 
 		$context = Context::getInstance();
-		$userId = $context->getPost('user_id');
-		$userPwd = $context->getPost('user_pwd');
+		$posts = $context->getPostAll();
+		$userId = $posts['user_id'];
+		$userPwd = $posts['user_pwd'];
+		$token = $posts['token'];
 
 		$rootPath = _SUX_ROOT_;		
 		$msg = '';
+
+		$token = md5($token . 'SHIFLEFT');
 
 		if (empty($userId)) {
 			$msg = "아이디를 입력하세요.";
@@ -37,7 +41,8 @@ class LoginAdminController extends Controller {
 		$adminHash = $context->getPasswordHash($adminId);
 		$context->setSession('admin_ok', $adminHash);
 
-		$data = array(	'msg'=>'로그인 성공',
+		$data = array(	'token'=>$token,
+						'msg'=>'로그인 성공',
 						'result'=>'Y',
 						'url'=>$rootPath . 'admin',
 						'delay'=>0);
@@ -45,7 +50,7 @@ class LoginAdminController extends Controller {
 		$this->callback($data);
 	}
 
-	function insertLogout() {
+	function insertLogoutAdmin() {
 
 		$context = Context::getInstance();
 		$rootPath = _SUX_ROOT_;

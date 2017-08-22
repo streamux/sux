@@ -60,7 +60,8 @@ class ModuleHandler
 			$ControllerClass = $className . 'Controller';
 			$ViewClass = $className . 'View';
 
-			if (strtolower($className) !== 'install') {
+			$toLowerClassName = strtolower($className);
+			if ($toLowerClassName !== 'install') {
 				$oDB = DB::getInstance();
 			}
 
@@ -73,11 +74,17 @@ class ModuleHandler
 			 * receive 'create' || 'insert' || 'put' || 'update' || 'delete'
 			 */			
 			$httpMethod = strtolower($context->getRequest('_method'));
+			$regMethod = preg_match('/^(create|insert|put|update|delete)+/', $httpMethod);
 			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
-			if (preg_match('/^(create|insert|put|update|delete)+/', $httpMethod)) {
+			if ($regMethod) {
 				$controller->{$httpMethod.ucfirst($action)}();
 				//$controller->tester($httpMethod . ucfirst($action), 'js');
 			} else {
+				// 로그인 체크 
+				$isLogged = $context->getSession('admin_ok');
+				if (empty($isLogged) && $toLowerClassName !== 'loginadmin') {
+					Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
+				}
 
 				if (preg_match('/^(board|document)+/i', $className)) {
 					if (empty($category)) {
