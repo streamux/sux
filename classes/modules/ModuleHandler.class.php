@@ -80,15 +80,18 @@ class ModuleHandler
 				$controller->{$httpMethod.ucfirst($action)}();
 				//$controller->tester($httpMethod . ucfirst($action), 'js');
 			} else {
-				// 로그인 체크 
+
+				//-- Check Login  of Admin Page  start
 				$isLogged = $context->getSession('admin_ok');
-				if (empty($isLogged) && $toLowerClassName !== 'loginadmin') {
+				if (empty($isLogged) && $toLowerClassName !== 'loginadmin' && preg_match('/(admin)+$/', $toLowerClassName) == true ) {
 					Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
 					return;
 				}
+				//-- end
 
 				if (preg_match('/^(board|document)+/i', $className)) {
 					if (empty($category)) {
+						// when user connect from Base URL
 						if (empty($action)) {
 							$category = 'home';
 							$action = 'contents';

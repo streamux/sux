@@ -262,6 +262,20 @@ class InstallController extends Controller
 											}
 											CacheFile::writeFile($filePath, $routes);
 										}
+
+										// make default menu of gnb
+										$realPath = _SUX_PATH_ ;
+										$contents_path = '/files/gnb/gnb.json';
+										$filePath = Utils::convertAbsolutePath($contents_path, $realPath);
+										
+										$result = FileHandler::writeFile($filePath, $jsonData);
+										if (!$result) {
+											$msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
+											$resultYN = 'N';
+										} else {
+											$msg .= "기본 메뉴를 생성하 였습니다.<br>";
+											$resultYN = 'Y';
+										}
 									}									
 								}
 							}

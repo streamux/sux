@@ -14,7 +14,7 @@ class ModuleRouter
 
 	function defaultSetting() {
 
-		Epi::setPath('base','libs/epiphany');
+		Epi::setPath('base', _SUX_PATH_ . 'vendor/jmathai/epiphany/src');
 		Epi::setSetting('exceptions', false);
 		Epi::init('route');	
 

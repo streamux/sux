@@ -127,7 +127,7 @@ class MenuAdminController extends Controller
 			$msg .= "메뉴파일 저장을 실패하였습니다.<br>";
 			$resultYN = 'N';
 		} else {
-			$msg .= "메뉴파일 저장을 완료햐였습니다.<br>";
+			$msg .= "메뉴파일 저장을 완료하였습니다.<br>";
 			$resultYN = 'Y';
 		}
 

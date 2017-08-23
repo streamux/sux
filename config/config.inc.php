@@ -2,6 +2,14 @@
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
+
+/**
+ * 참고 : Composer 1.0.3는 PHP 5.3.2 지원  이후 버전은 PHP 5.6 이상 지원 
+ * Composer version 1.2.4
+ * Server PHP version 5.3.2
+ * require _SUX_PATH_ . 'vendor/autoload.php';
+ */
+
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'CacheFile'=>'classes/caches/CacheFile.class.php',
 	'Controller'=>'classes/mvc/Controller.php',
@@ -24,8 +32,8 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'URIToMethod'=>'classes/utils/URIToMethod.class.php',
 	'Utils'=>'classes/utils/Utils.class.php',
 	'UtilsString'=>'classes/utils/UtilsString.class.php',
-	'Epi'=>'libs/epiphany/Epi.php',
-	'Smarty'=>'libs/smarty/Smarty.class.php'
+	'Epi'=>'vendor/jmathai/epiphany/src/Epi.php',
+	'Smarty'=>'vendor/smarty/smarty/libs/Smarty.class.php',
 ), CASE_LOWER);
 
 function __sux_autoload($class_name) {
