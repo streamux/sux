@@ -1,4 +1,0 @@
-<?PHP
-$data = '{"data":[{"id":"13","sid":0,"name":"home","url":"home","depth":1,"isClicked":false,"isModified":false,"isDragging":false,"state":"default","badge":0,"sub":[],"posy":0,"top":"0"},{"id":"14","sid":0,"name":"history","url":"history","depth":1,"isClicked":false,"isModified":false,"isDragging":false,"state":"default","badge":0,"sub":[],"posy":40,"top":"0"},{"id":"20","sid":0,"name":"free","url":"free","depth":1,"isClicked":false,"isModified":false,"isDragging":false,"state":"default","badge":0,"sub":[],"posy":80,"top":"0"},{"id":"29","sid":0,"name":"portfolio","url":"portfolio","depth":1,"isClicked":false,"isModified":false,"isDragging":false,"state":"default","badge":0,"sub":[],"posy":120,"top":"0"}]}';
-echo $_GET['callback'] . '(' . $data . ')';
-?>
