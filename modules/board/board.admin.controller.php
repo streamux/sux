@@ -167,6 +167,7 @@ class BoardAdminController extends Controller
 
 		$id = $posts['id'];
 		$category = $posts['category'];
+		$title = $posts['board_name'];
 		$returnURL = $context->getServer('REQUEST_URI');
 
 		/**
@@ -199,12 +200,25 @@ class BoardAdminController extends Controller
 		if ($result) {
 			$this->model->select('board_group', '*', $where);
 			$dataObj = $this->model->getRows();
+
+			// insert into menu
+			$columns = array();
+			$columns['name'] = $title;
+			$columns['url'] = $category;
+
+			$where->reset();
+			$where->set('category', $category);
+			$result = $this->model->update('menu', $columns, $where);
+			if (!$result) {
+				$msg .= "메뉴 업데이트를 실패하였습니다.";
+				$resultYN = 'N';
+			}
 		} else {
 			$msg .= "$category 게시판 수정을 실패하였습니다.";
 			$resultYN = "N";	
 		}
 
-		$msg = Tracer::getInstance()->getMessage();
+		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"data"=> array('list'=>$dataObj),
 						"result"=>$resultYN,
 						"msg"=>$msg);

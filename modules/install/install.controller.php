@@ -192,6 +192,7 @@ class InstallController extends Controller
 								$propTableName = $queryXml[0]->tables[0]->table['name'];
 								$tableName = $tablePrefix . '_' . $propTableName;
 								$query->setTable($tableName);
+								$query->setField('*');
 								$queryColumns = $queryXml[0]->columns[0]->column;
 								foreach ($queryColumns as $key => $value) {
 
@@ -213,13 +214,11 @@ class InstallController extends Controller
 								}
 
 								if (isset($where) && $where) {
-									$query->setField('id');
-									$query->setWhere($where);
 									$oDB->select($query);
 									$numrows = $oDB->getNumRows();
 								}
 
-								if (isset($numrows) && $numrows === 0) {
+								if (empty($numrows)) {
 									$query->setColumn($columns);
 									$oDB->insert($query);
 								}
@@ -264,18 +263,38 @@ class InstallController extends Controller
 										}
 
 										// make default menu of gnb
-										$realPath = _SUX_PATH_ ;
-										$contents_path = '/files/gnb/gnb.json';
-										$filePath = Utils::convertAbsolutePath($contents_path, $realPath);
-										
-										$result = FileHandler::writeFile($filePath, $jsonData);
-										if (!$result) {
-											$msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
-											$resultYN = 'N';
-										} else {
-											$msg .= "기본 메뉴를 생성하 였습니다.<br>";
-											$resultYN = 'Y';
+										$where = array('category'=>'home');
+										$query->setWhere($where);
+										$result = $oDB->select($query);
+										$datas = array();
+										while($rows = $oDB->getFetchArray($result)) {
+											$fields = array();
+											foreach ($rows as $key => $value) {
+												if (is_string($key) !== false) {
+													$fields[$key] = $value;
+												}				
+											}
+											$datas[] = $fields;
 										}
+										//$msg .= Tracer::getInstance()->getMessage() . "<br>";
+
+										$contentsPath = 'files/gnb/gnb.json';
+										$filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+										if (!file_exists($filePath)) {
+											$jsonData = array();
+											$jsonData['data'] = array();
+											$jsonData['data'][] = array('id'=>$datas[0]['id'],'sid'=>0,'name'=>$datas[0]['document_name'],'url'=>$datas[0]['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
+
+											$jsonData = JsonEncoder::parse($jsonData);
+											$result = FileHandler::writeFile($filePath, $jsonData);
+											if (!$result) {
+												$msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
+												$resultYN = 'N';
+											} else {
+												$msg .= "기본 메뉴를 생성하 였습니다.<br>";
+												$resultYN = 'Y';
+											}
+										}										
 									}									
 								}
 							}

@@ -10,6 +10,7 @@ class Context
 	private $parameter_list = array();
 	public $db_info = NULL;
 	private $admin_info = Null;
+	private$cookie_id = 'sux_version_date';
 
 	public static function &getInstance() {
 
@@ -61,6 +62,7 @@ class Context
 			'./files/caches',
 			'./files/caches/queries',
 			'./files/caches/routes',
+			'./files/cookie',
 			'./files/board',
 			'./files/document',
 			'./files/gnb'
@@ -98,18 +100,33 @@ class Context
 				$classPath = $value['class_path'];
 				$routePath = $value['route_path'];
 
-				if (file_exists($routePath)) {
-					continue;
+				if (file_exists($routePath)) {					
+					$routedValue = CacheFile::readFile($routePath);
 				}
 
 				if (file_exists($classPath)) {
 					$Class = $value['class'];
 					$routes = array();
 					if (isset($Class::$categories) && $Class::$categories) {
-						$routes['categories'] = $Class::$categories;
+						$categoryArr = $Class::$categories;
+						
+						if (isset($routedValue['categories']) && $$routedValue['categories']) {
+							$routeCategory = $routedValue['categories'];					
+							$categoryArr = array_merge($categoryArr, $routeCategory);
+							$categoryArr = array_unique($categoryArr);
+						}
+						$routes['categories'] = $categoryArr;
 					}
 					if (isset($Class::$action) && $Class::$action) {
-						$routes['action'] = $Class::$action;
+						$actionArr = $Class::$action;
+
+						if (isset($routedValue['action']) && $routedValue['action']) {
+							$routedAction = $routedValue['action'];					
+							$actionArr = array_merge($actionArr, $routedAction);					
+							$actionArr = array_unique($actionArr);
+						}
+						
+						$routes['action'] = $actionArr;
 					} 
 					CacheFile::writeFile( $routePath, $routes);
 				}
@@ -270,6 +287,36 @@ class Context
 		return $_REQUEST;
 	}
 
+	function setCookie($name, $value, $expiry, $path='/') {
+		/**
+		 * value		date('Y-m-d H:i:s')
+		 * expiry	time() + 86400 * 30 * 12
+		 */
+		$path = './files/cookie/version.cookie.php';
+		if (isset($value) && $value) {
+			setcookie($name, $value, $expiry, $path);
+			$buf = array();
+			$buf[] = "<?php\n";
+			$buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";
+			$buf[] = "return \$version;\n";
+			$buf[] = "?>";
+			FileHandler::writeFile( $path, $buf);
+		} else {
+			unset($_COOKIE[$name]);
+			setcookie($name, '', time()-1);
+			unlink($path);
+		}		
+	}
+
+	function getCookie($name) {
+		return $_COOKIE[$name];
+	}
+
+	function getCookieId()
+	{
+		return $this->cookie_id;
+	}
+
 	function getRequestToArray($key) {
 
 		$request = $this->getRequestAllToArray();
@@ -422,8 +469,20 @@ class Context
 		return false;
 	}
 
+	function equalVersion($name) {
+
+		$path = './files/cookie/version.cookie.php';		
+		if (!file_exists($path) || empty($name)) {
+			return false;
+		}
+		$cookieVersion = trim($this->getCookie($name));
+		$fileVersion = CacheFile::readFile($path, $name);
+
+		return $cookieVersion === $fileVersion;
+	}
+
 	function installed() {
-		return isset($this->db_info) === true;
+		return isset($this->db_info) == true;
 	}
 }
 ?>

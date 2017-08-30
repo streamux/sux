@@ -69,8 +69,7 @@ class MemberAdminController extends Controller
 		$this->model->select('member_group', '*', $where);
 		$rows = $this->model->getRows();
 
-		$msg = Tracer::getInstance()->getMessage();		
-		
+		//$msg = Tracer::getInstance()->getMessage();				
 		$json['msg'] = $msg;
 		$json['result'] = $resultYN;
 		$json['data'] = $rows;

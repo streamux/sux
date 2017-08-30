@@ -6,6 +6,7 @@ class DocumentView extends View
 
 		$context = Context::getInstance();
 		$category = $context->getParameter('category');
+		$this->session_data = $context->getSessionAll();
 
 		$where = new QueryWhere();
 		$where->set('category',$category,'=');

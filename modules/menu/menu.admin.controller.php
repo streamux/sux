@@ -12,12 +12,19 @@ class MenuAdminController extends Controller
 		$prefix = $context->getPrefix();
 
 		$name = trim($posts['name']);
-		$category = $prefix . substr(md5($name),0, 12);
-
 		if (!(isset($name) && $name)) {
 			$msg = '이름을 입력해주세요.';
 			$resultYN = 'N';
 		} else {
+
+			if (!preg_match('/^[a-zA-Z0-9]{3,}$/', $name)) {
+				$json['msg'] .= '메뉴 카테고리 명은 영문과 숫자만 사용 가능합니다.';
+				$json['result'] = 'N';
+
+				$this->callback($json);
+				exit();
+			}
+			$category = $name;
 
 			$where = new QueryWhere();
 			$where->set('category', $category);
@@ -32,7 +39,7 @@ class MenuAdminController extends Controller
 				$columns[] = '';
 				$columns[] = $category;
 				$columns[] = $name;
-				$columns[] = '';
+				$columns[] = $category;
 				$columns[] = 'now()';
 				$result = $this->model->insert('menu', $columns);
 				if (!$result) {
@@ -63,9 +70,11 @@ class MenuAdminController extends Controller
 		$posts = $context->getPostAll();
 
 		$id = $posts['id'];
+		$name = $posts['name'];
 		$url = $posts['url'];
 
 		$columns = array();
+		$columns['name'] = $name;
 		$columns['url'] = $url;
 
 		$where = new QueryWhere();

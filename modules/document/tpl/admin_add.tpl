@@ -61,13 +61,13 @@
 					<tr>
 						<td><label for="header_path">상단 경로</label></td>
 						<td>
-							<input type="text" id="header_path" name="header_path" size="25" maxlength="50" value="/sux/common/_header.tpl">
+							<input type="text" id="header_path" name="header_path" size="25" maxlength="50" value="common/_header.tpl">
 						</td>
 					</tr>
 					<tr>
 						<td><label for="contents_path">컨텐츠 경로</label></td>
 						<td>
-							<input type="text" id="contents_path" name="contents_path" size="25" maxlength="50" value="/sux/files/document/">
+							<input type="text" id="contents_path" name="contents_path" size="25" maxlength="50" value="files/document/">
 						</td>
 					</tr>
 					<tr>
@@ -80,7 +80,7 @@
 					<tr>
 						<td><label for="footer_path">하단 경로</label></td>
 						<td>
-							<input type="text" id="footer_path" name="footer_path" size="25" maxlength="50" value="/sux/common/_footer.tpl">
+							<input type="text" id="footer_path" name="footer_path" size="25" maxlength="50" value="common/_footer.tpl">
 						</td>
 					</tr>
 				</tbody>

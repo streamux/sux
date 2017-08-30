@@ -1,5 +1,5 @@
 <?php
-class ModuleRouter
+class RouterModule
 {
 	static $aInstance = null;
 	static $cache_data = null;
@@ -12,7 +12,7 @@ class ModuleRouter
 		return self::$aInstance;
 	}
 
-	function defaultSetting() {
+	private function defaultSetting() {
 
 		Epi::setPath('base', _SUX_PATH_ . 'vendor/jmathai/epiphany/src');
 		Epi::setSetting('exceptions', false);
@@ -23,19 +23,18 @@ class ModuleRouter
 		// Epi::init('base','cache-memcached','session-apc');
 	}
 
-	function init() 
+	public function init() 
 	{
 		$this->defaultSetting();
+
 		$context = Context::getInstance();
-		getRoute()->get('/', array( 'ModuleHandler', 'display'));
+		getRoute()->get('/', array( 'PageModule', 'display'));
+
 
 		$moduleList = Utils::readDir('modules');
 		foreach ($moduleList as $key => $value) {
 			$dirName = strtolower($value['file_name']);
 			$ClassName = ucfirst($dirName);
-			/*if (!preg_match('/^(board)+/i', $ClassName)) {
-				continue;
-			}*/
 
 			// module class and admin class
 			$classList = array();
@@ -77,26 +76,26 @@ class ModuleRouter
 									$context->setModule($shotKeys[0], $Class)	;
 									//echo $Class . ' : ' . $shotKeys[0] . ' : ' . $shotKeys[1] . "<br>";
 
-									$this->addRoute( sprintf('/%s', $shotKeys[0]), array( 'ModuleHandler', 'display'));
-									$this->addRoute( sprintf('/%s/(\d+)', $shotKeys[0]), array( 'ModuleHandler', 'display'));
+									$this->addRoute( sprintf('/%s', $shotKeys[0]), array( 'PageModule', 'display'));
+									$this->addRoute( sprintf('/%s/(\d+)', $shotKeys[0]), array( 'PageModule', 'display'));
 
 									if (!empty($shotKeys[1])) {
-										$this->addRoute( sprintf('/%s/%s', $shotKeys[0], $shotKeys[1]), array( 'ModuleHandler', 'display'));
-										$this->addRoute( sprintf('/%s/%s/(\d+)', $shotKeys[0], $shotKeys[1]), array( 'ModuleHandler', 'display'));
-										$this->addRoute( sprintf('/%s/(\d+)/%s', $shotKeys[0], $shotKeys[1]), array( 'ModuleHandler', 'display'));
-										$this->addRoute( sprintf('/%s/(\d+)/%s/(\d+)', $shotKeys[0], $shotKeys[1]), array( 'ModuleHandler', 'display'));
+										$this->addRoute( sprintf('/%s/%s', $shotKeys[0], $shotKeys[1]), array( 'PageModule', 'display'));
+										$this->addRoute( sprintf('/%s/%s/(\d+)', $shotKeys[0], $shotKeys[1]), array( 'PageModule', 'display'));
+										$this->addRoute( sprintf('/%s/(\d+)/%s', $shotKeys[0], $shotKeys[1]), array( 'PageModule', 'display'));
+										$this->addRoute( sprintf('/%s/(\d+)/%s/(\d+)', $shotKeys[0], $shotKeys[1]), array( 'PageModule', 'display'));
 									}
 								}
 							} else {
 
-								$this->addRoute( sprintf('/%s', $routeKeys[0]), array( 'ModuleHandler', 'display'));
-								$this->addRoute( sprintf('/%s/(\d+)', $routeKeys[0]), array( 'ModuleHandler', 'display'));
+								$this->addRoute( sprintf('/%s', $routeKeys[0]), array( 'PageModule', 'display'));
+								$this->addRoute( sprintf('/%s/(\d+)', $routeKeys[0]), array( 'PageModule', 'display'));
 
 								if (!empty($routeKeys[1])) {
-									$this->addRoute( sprintf('/%s/%s', $routeKeys[0], $routeKeys[1]), array( 'ModuleHandler', 'display'));
-									$this->addRoute( sprintf('/%s/%s/(\d+)', $routeKeys[0], $routeKeys[1]), array( 'ModuleHandler', 'display'));
-									$this->addRoute( sprintf('/%s/(\d+)/%s', $routeKeys[0], $routeKeys[1]), array( 'ModuleHandler', 'display'));
-									$this->addRoute( sprintf('/%s/(\d+)/%s/(\d+)', $routeKeys[0], $routeKeys[1]), array( 'ModuleHandler', 'display'));
+									$this->addRoute( sprintf('/%s/%s', $routeKeys[0], $routeKeys[1]), array( 'PageModule', 'display'));
+									$this->addRoute( sprintf('/%s/%s/(\d+)', $routeKeys[0], $routeKeys[1]), array( 'PageModule', 'display'));
+									$this->addRoute( sprintf('/%s/(\d+)/%s', $routeKeys[0], $routeKeys[1]), array( 'PageModule', 'display'));
+									$this->addRoute( sprintf('/%s/(\d+)/%s/(\d+)', $routeKeys[0], $routeKeys[1]), array( 'PageModule', 'display'));
 								}
 							}													
 						}								
@@ -109,11 +108,11 @@ class ModuleRouter
 		getRoute()->run();
 	}
 
-	function install()
+	public function install()
 	{
 		$this->defaultSetting();
 		$context = Context::getInstance();
-		getRoute()->get('/', array( 'ModuleHandler', 'display'));
+		getRoute()->get('/', array( 'PageModule', 'display'));
 
 		$moduleList = Utils::readDir('modules');
 		foreach ($moduleList as $key => $value) {
@@ -132,27 +131,27 @@ class ModuleRouter
 
 		/**
 		 * 모듈,카테고리, 메서드명 키워드를 이용해서  클래스명을 얻을 수 있도록 등록한다.
-		 * ModuleHandler Class 에서 키워드를 이용해서 클래스명을 찾아 사용한다.
+		 * PageModule Class 에서 키워드를 이용해서 클래스명을 찾아 사용한다.
 		 * */
 		$context->setModule($dirName, $dirName);
 		$action = $ClassName::$action;
 
 		for ($i=0; $i<count($action); $i++) {
 			$context->setModule($action[$i], $dirName);
-			$this->addRoute( sprintf('/%s', $action[$i]), array( 'ModuleHandler', 'display'));
+			$this->addRoute( sprintf('/%s', $action[$i]), array( 'PageModule', 'display'));
 		}
 
 		getRoute()->run();
 	}
 
-	function addRoute( $route, $class)
+	private function addRoute( $route, $class)
 	{
 		//echo $route . "<br>";
 		getRoute()->get( $route, $class);
 		getRoute()->post( $route, $class);
 	}
 
-	function loadCacheFile($path) {
+	private function loadCacheFile($path) {
 
 		$filename = $this->getRealPath($path);
 		$pathinfo = pathinfo($file);
@@ -170,12 +169,12 @@ class ModuleRouter
 		}		
 	}
 
-	function getRoute($key) {
+	private function getRoute($key) {
 		
 		return $this->cache_data[$key];
 	}
 
-	function getRealPath($path) {
+	private function getRealPath($path) {
 
 		if(strlen($path) >= 2 && substr_compare($path, './', 0, 2) === 0) {
 

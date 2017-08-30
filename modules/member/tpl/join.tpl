@@ -2,7 +2,7 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원가입 - StreamUX"}
-<div class="articles ui-edgebox">
+<div class="articles">
 	<div class="member-edit">
 		<div class="tt">
 			<div class="imgbox">

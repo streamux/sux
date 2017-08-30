@@ -156,8 +156,6 @@ class DocumentAdminController extends Controller
 
 	function updateModify() {
 
-		echo 'CONTENT_TYPE : ' . $_SERVER['CONTENT_TYPE'];
-
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
@@ -233,6 +231,29 @@ class DocumentAdminController extends Controller
 				} else {
 					$msg .= "$category 템플릿 파일 수정을 완료하였습니다.";
 					$resultYN = "Y";
+				}
+
+				// insert into menu
+				$columns = array();
+				$columns['name'] = $title;
+				$columns['url'] = $category;
+
+				$where->reset();
+				$where->set('category', $category);
+				$result = $this->model->update('menu', $columns, $where);
+				if (!$result) {
+					$msg .= "메뉴 업데이트를 실패하였습니다.";
+					$resultYN = 'N';
+				}
+
+				$where->reset();
+				$where->set('category', $category);
+				$result = $this->model->select('document', '*',  $where);
+				if ($result) {
+					$dataObj['list'] = $this->model->getRows();
+				} else {
+					$msg .= "${category} 페이지 선택을 실패하였습니다.<br>";
+					$resultYN = 'N';
 				}
 			}
 

@@ -96,6 +96,10 @@ class AdminAdminView extends View
 
 	function displayConnectdayJson() {
 
+		/*$context = Context::getInstance();
+		$passover = $context->getRequest('passover');
+		$limit = $context->getRequest('limit');*/
+
 		$data = $this->_getConnectdayData();
 		$this->callback($data);
 	}
@@ -380,6 +384,10 @@ class AdminAdminView extends View
 
 	function _getConnectdayData() {
 
+		$context = Context::getInstance();
+		$passover = $context->getRequest('passover');
+		$limit = $context->getRequest('limit');
+
 		$msg = '';
 		$resultYN = 'Y';
 		$connectdayArr = array();
@@ -392,7 +400,12 @@ class AdminAdminView extends View
 			return $d;
 		}
 
-		$result = $this->model->select('connect_day', '*');
+		if (isset($limit) && $limit){
+			$result = $this->model->select('connect_day', '*', null, 'id desc', $passover, $limit);
+		} else {
+			$result = $this->model->select('connect_day', '*');
+		}
+		
 		if ($result) {
 			$rows = $this->model->getRows();
 			for($i=0; $i<count($rows); $i++) {
