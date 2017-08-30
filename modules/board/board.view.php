@@ -46,8 +46,8 @@ class BoardView extends View
 		 * @descripttion
 		 * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수에 절대경로 처리 함.
 		 */		
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -262,8 +262,8 @@ class BoardView extends View
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -464,8 +464,8 @@ class BoardView extends View
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;		
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -609,8 +609,8 @@ class BoardView extends View
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -724,8 +724,8 @@ class BoardView extends View
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -891,8 +891,8 @@ class BoardView extends View
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -954,8 +954,8 @@ class BoardView extends View
 		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
