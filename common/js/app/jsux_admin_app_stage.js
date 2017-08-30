@@ -16,7 +16,7 @@ $(document).ready(function() {
 	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
 	//gnbView.setActivateClass('activate-admin');
 	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
-	var jsonPath = './assets/data/gnb_admin.json';	
+	var jsonPath = jsux.rootPath + '/assets/data/gnb_admin.json';	
 	var pageAppHandler = {};
 
 	gnbModel.addObserver( gnbView );

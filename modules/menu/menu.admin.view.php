@@ -2,6 +2,11 @@
 
 class MenuAdminView extends View
 {
+	function displayMenuAdmin() {
+
+		echo 'This is menu page';
+	}
+
 	function displayListJson() {
 		
 		$msg = '';

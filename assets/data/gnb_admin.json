@@ -1,6 +1,5 @@
 {
 	"data": [
-		{"id": 1, "sid": 0, "name": "메뉴관리", "router_link": "menu-admin", "sub": null},
 		{"id": 2, "sid": 0, "name": "회원관리", "router_link": "member-admin", "sub": null},
 		{"id": 3, "sid": 0, "name": "게시판관리", "router_link": "board-admin", "sub": null},
 		{"id": 4, "sid": 0, "name": "페이지관리", "router_link": "document-admin", "sub": null},

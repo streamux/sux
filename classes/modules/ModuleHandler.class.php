@@ -33,13 +33,6 @@ class ModuleHandler
 			$router->init();
 		} else {
 			$router->install(); 
-		}
-		
-	}
-
-	function install()
-	{
-		$router = RouterModule::getInstance();
-		$router->install();
+		}		
 	}
 }
