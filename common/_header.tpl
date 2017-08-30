@@ -23,7 +23,8 @@
 	<![endif]-->
 	<script type="text/javascript">
 		// 컨텐츠 내 값 설정
-		var is_page = '';	
+		var is_page = '';
+		var sux_domain = '';
 	</script>
 </head>
 <body>

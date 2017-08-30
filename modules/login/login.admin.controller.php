@@ -44,7 +44,7 @@ class LoginAdminController extends Controller {
 		$data = array(	'token'=>$adminHash,
 						'msg'=>'로그인 성공',
 						'result'=>'Y',
-						'url'=>$rootPath . 'sux-admin',
+						'url'=>$rootPath . 'admin',
 						'delay'=>0);
 			
 		$this->callback($data);

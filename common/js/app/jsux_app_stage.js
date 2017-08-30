@@ -4,7 +4,6 @@ $(window).ready(function() {
 		gnbView = jsux.gnb.Menu.create("#gnb", gnbModel),
 		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
 		pageAppHandler = {},
-		xmlPath = './common/gnb.xml',
 		jsonPath = './files/gnb/gnb.json',
 		menuList = null;
 
@@ -12,7 +11,6 @@ $(window).ready(function() {
 	gnbModel.addObserver( mobileGnbView );		
 
 	jsux.mobileGnbView = mobileGnbView;
-
 	pageAppHandler.home = {
 
 		init: function() {
@@ -34,48 +32,6 @@ $(window).ready(function() {
 			});
 		}
 	};
-
-	/*pageAppHandler.xmlLoader = {
-
-		load: function( path ) {
-
-			$.ajax({
-				url: path,
-				dataType : "xml",
-				success:function( data ) {
-
-					if (!$(data).children().context || $(data).children().length  === 0) return;
-					menuList = [];
-
-					var menu = $(data).find('root > menu');
-					if (menu.length > 0) {
-
-						$(menu).each(function(index) {
-							menuList.push({
-								label: $(this).find('> label').text(),
-								link: $(this).find('> link').text()
-							});
-
-							if ($(this).find('> menu').length > 0) {
-								menuList[index].menu = [];								
-								menu = $(this).find('> menu');
-								$(menu).each(function(subIndex) {
-									menuList[index].menu.push({
-										label: $(this).find('> label').text(),
-										link: $(this).find('> link').text()
-									});
-								});
-							}	
-						});						
-					}
-
-					gnbModel.setData( menuList );
-					//gnbModel.activate( 1, 2 );
-					pageAppHandler.sub.init();
-				}
-			});
-		}		
-	};*/
 
 	pageAppHandler.jsonLoader = {
 
@@ -134,5 +90,4 @@ $(window).ready(function() {
 	}
 	
 	pageAppHandler.jsonLoader.load(jsonPath);
-	//pageAppHandler.xmlLoader.load(xmlPath);
 });

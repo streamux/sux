@@ -16,53 +16,51 @@ $(document).ready(function() {
 	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
 	//gnbView.setActivateClass('activate-admin');
 	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
-	var xmlPath = '/sux/common/gnb_admin.xml';	
+	var jsonPath = './assets/data/gnb_admin.json';	
 	var pageAppHandler = {};
 
 	gnbModel.addObserver( gnbView );
 	gnbModel.addObserver( gnbIconView );  
 	//gnbModel.activate( 1, 2 );
 
-	pageAppHandler.xmlLoader = {
+	pageAppHandler.jsonLoader = {
 
-		load: function( path ) {
+		load: function(path) {
 
 			$.ajax({
 				url: path,
-				dataType : "xml",
-				success:function( data ) {
+				dataType: 'json',
+				jsonpCallback: 'JSON_CALLBACK',
+				success: function(json) {
 
-					if (!$(data).children().context || $(data).children().length  === 0) return;
+					var data = json.data;
 					menuList = [];
-
-					var menu = $(data).find('root > menu');
-					if (menu.length > 0) {
-
-						$(menu).each(function(index) {
+					if (data.length > 0) {						
+						$.each(data, function(index, item) {
 							menuList.push({
-								label: $(this).find('> label').text(),
-								link: $(this).find('> link').text()
+								label: data[index].name,
+								link: data[index].router_link
 							});
 
-							if ($(this).find('> menu').length > 0) {
-								menuList[index].menu = [];								
-								menu = $(this).find('> menu');
-								$(menu).each(function(subIndex) {
+							if (data[index].sub && data[index].sub.length > 0) {
+								menuList[index].menu = [];
+								var sub = data[index].sub;
+								$.each(sub, function(subIndex, suubItem) {
 									menuList[index].menu.push({
-										label: $(this).find('> label').text(),
-										link: $(this).find('> link').text()
+										label: sub[subIndex].name,
+										link: sub[subIndex].router_link
 									});
 								});
-							}	
-						});						
+							}
+						});
 					}
 
 					gnbModel.setData( menuList );
 					//gnbModel.activate( 1, 2 );
 				}
 			});
-		}		
-	};	
+		}
+	};
 
-	pageAppHandler.xmlLoader.load(xmlPath);
+	pageAppHandler.jsonLoader.load(jsonPath);
 });

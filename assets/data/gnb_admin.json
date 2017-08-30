@@ -1,0 +1,13 @@
+{
+	"data": [
+		{"id": 1, "sid": 0, "name": "메뉴관리", "router_link": "menu-admin", "sub": null},
+		{"id": 2, "sid": 0, "name": "회원관리", "router_link": "member-admin", "sub": null},
+		{"id": 3, "sid": 0, "name": "게시판관리", "router_link": "board-admin", "sub": null},
+		{"id": 4, "sid": 0, "name": "페이지관리", "router_link": "document-admin", "sub": null},
+		{"id": 5, "sid": 0, "name": "팝업관리", "router_link": "popup-admin", "sub": null},
+		{"id": 6, "sid": 0, "name": "통계관리", "router_link": "analytics-admin", "sub": [
+			{"id": 6, "sid":1, "name": "접속경로", "router_link": "analytics-admin/connect-site"},
+			{"id": 6, "sid":2, "name": "페이지뷰", "router_link": "analytics-admin/pageview"}
+		]}
+	]
+}
