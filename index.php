@@ -6,3 +6,5 @@ $context->init();
 
 $moduleHandler = ModuleHandler::getInstance(); 
 $moduleHandler->init(); 
+
+홍길동 
