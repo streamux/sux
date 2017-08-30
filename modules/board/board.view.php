@@ -36,8 +36,8 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;
 
@@ -46,8 +46,8 @@ class BoardView extends View
 		 * @descripttion
 		 * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수에 절대경로 처리 함.
 		 */		
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -232,9 +232,9 @@ class BoardView extends View
 			$returnURL .= "?find=${find}&search=${search}";
 		}
 
-		$grade = $this->session_data['sux_grade'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 
 		$PHP_SELF = $context->getServer("PHP_SELF");	
 
@@ -258,12 +258,12 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -436,12 +436,14 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 쓰기';
 
-		$grade = $this->session_data['sux_grade'];
-		$user_id = $this->session_data['sux_user_id'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_id = $this->session_data['user_id'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
+
+		echo $grade;
 
 		$this->model->select('board_group', '*');
 
@@ -457,13 +459,13 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;		
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -580,9 +582,9 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 수정';
 
-		$grade = $this->session_data['sux_grade'];		
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];	
+		$grade = $this->session_data['grade'];		
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];	
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();	
 
@@ -603,12 +605,12 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -695,10 +697,10 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 답변';
 
-		$grade = $this->session_data['sux_grade'];
-		$user_id = $this->session_data['sux_user_id'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_id = $this->session_data['user_id'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
@@ -718,12 +720,12 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -885,12 +887,12 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";
@@ -948,12 +950,12 @@ class BoardView extends View
 		 * css, js file path handler
 		 */
 		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}";
-		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}";		
+		$skinDir = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
+		$skinPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";		
 		$this->document_data['uri'] = $rootPath.$category;
 
-		$headerPath =Utils::convertAbsolutePath($headerPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";

@@ -9,17 +9,17 @@ class LoginController extends Controller
 		$this->session_data = $context->getSessionAll();
 		$this->post_data = $context->getPostAll();
 
-		$category = trim($this->session_data['sux_category']);
+		$category = trim($this->session_data['category']);
 		if (empty($category)) {
 			$category = trim($this->post_data['category']);
 		}
 
-		$userId = trim($this->session_data['sux_user_id']);		
+		$userId = trim($this->session_data['user_id']);		
 		if (empty($userId)) {
 			$userId = trim($this->post_data['user_id']);
 		}
 
-		$password = trim($this->session_data['sux_password']);
+		$password = trim($this->session_data['password']);
 		if (empty($password)) {
 			$password = trim($this->post_data['password']);
 			if (isset($password) && $password) {
@@ -66,10 +66,8 @@ class LoginController extends Controller
 
 			$sessionList = array('category','user_id','password','user_name','nick_name','email_address','is_writable','point','hit_count','grade','automod1','chatip');
 
-			$prefix = $context->getPrefix();
-
 			foreach ($sessionList as $key => $value) {
-				$context->setSession($prefix . '_' . $value, $row[$value]);
+				$context->setSession($value, $row[$value]);
 			}
 
 			$data = array(	'msg'=>'로그인 성공',

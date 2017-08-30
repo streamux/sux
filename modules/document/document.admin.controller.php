@@ -5,12 +5,16 @@ class DocumentAdminController extends Controller
 
 	function insertAdd() { 
 
+		$msg = '';
+		$resultYN = 'Y';
+		$dataObj = array();
+
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$category = $posts['category'];		
 
-		$returnURL = $context->getServer('REQUEST_URI');
-		$resultYN = 'Y';
+		$category = $posts['category'];
+		$title = $posts['document_name'];
+		$returnURL = $context->getServer('REQUEST_URI');	
 
 		$where = new QueryWhere();
 		$where->set('category', $category);
@@ -46,14 +50,14 @@ class DocumentAdminController extends Controller
 				$value = $posts[$key];
 
 				if (isset($value) && $value) {
-					if (strpos($key,'contents_path') !== false) {
-						if (!preg_match('/(.tpl+)$/i', $value)) {
-							$value = $value . $category . '.tpl';						
+					if (preg_match('/^(contents_path)+$/', $key)) {
+						if (!preg_match('/(.tpl+)$/', $value)) {
+							$value = $value . $category . '.tpl';
 						}
 						$contents_path = $value;
 					}
 					$columns[] = $value;
-				} else {
+				} else {					
 					if ($key === 'date') {
 						$columns[] = 'now()';
 					} else if ($key === 'ip') {
@@ -66,27 +70,39 @@ class DocumentAdminController extends Controller
 		} // end of if
 
 		$result = $this->model->insert('document', $columns);
-		if (!$result) {
-			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-		}else{
+		if ($result) {
 
 			//  read and write contents
-			$realPath = _SUX_PATH_ . 'files/document/';
-			$filePath =Utils::convertAbsolutePath($contents_path, $realPath);
+			if (isset($contents_path) && $contents_path) {
+				$realPath = _SUX_PATH_ . 'files/document/';
+				$contents_path = _SUX_ROOT_ . $contents_path;
+				$filePath =Utils::convertAbsolutePath($contents_path, $realPath);
 
-			$buff = $posts['contents'];
-			if (empty($buff)) {
-				$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
-				$buff = FileHandler::readFile($contentsPath);
-				if (!$buff) {
-					$buff = $category . ' 내용을 설정해주세요.';
-				}
-			}			
-			$result = FileHandler::writeFile($filePath, $buff);
-			if (!$result) {
-				$msg .= "${category} 템플릿 파일 등록을 실패하였습니다.<br>";
-			} else {
-				$msg .= "${category} 템플릿 파일을 정상적으로 등록하였습니다.<br>";
+				$yoursite = $context->getAdminInfo('yourhome');
+				$yoursite = strtoupper($yoursite);
+				$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+				$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+				$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+				$buffHeader .=	 '{include file="$headerPath" title="' . $title . ' - ' . $yoursite . '"}' . "\n";
+				$buffHeader .= '<!-- contents start -->' . "\n\n";
+
+				$buff = $posts['contents'];
+				if (empty($buff)) {
+					$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . strtolower($category) . '.tpl';
+					$buff = FileHandler::readFile($contentsPath);
+					if (!$buff) {						
+						$buff .= '내용을 입력해주세요.';					
+					}					
+				} 
+				$buff .= "\n\n";
+				$buffFooter .= '<!-- contents end -->' . "\n";
+				$buffFooter .= '{include file="$footerPath"}';
+
+				$buffers = $buffHeader . $buff . $buffFooter;
+				$result = FileHandler::writeFile($filePath, $buffers);
+				if (!$result) {
+					$msg .= "${category} 템플릿 파일 등록을 실패하였습니다.<br>";
+				} 
 			}
 
 			// write route's key
@@ -101,28 +117,59 @@ class DocumentAdminController extends Controller
 					$routes['categories'][] = $category; 
 				}
 				CacheFile::writeFile($filePath, $routes);
-			}			
-		}		
+			}
+
+			// insert into menu
+			$columns = array();
+			$columns[] = '';
+			$columns[] = $posts['category'];
+			$columns[] = $posts['document_name'];
+			$columns[] = $posts['category'];
+			$columns[] = 'now()';
+
+			$result = $this->model->insert('menu', $columns);
+			if (!$result) {
+				$msg .= "메뉴 등록을 실패하였습니다.";
+				$resultYN = 'N';
+			}
+
+			$where->reset();
+			$where->set('category', $category);
+			$result = $this->model->select('document', '*',  $where);
+			if ($result) {
+				$dataObj['list'] = $this->model->getRows();
+			} else {
+				$msg .= "${category} 페이지 선택을 실패하였습니다.<br>";
+				$resultYN = 'N';
+			}
+		} else {
+			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+		}
+
 		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
+		$data = array(	'data'=> $dataObj,
+						'result'=>$resultYN,
+						'msg'=>$msg);
 
 		$this->callback($data);
 	}
 
 	function updateModify() {
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$id = $posts['id'];
-		$category = $posts['category'];
-		$contents_path = $posts['contents_path'];
-		$contents = $posts['contents'];
-
 		$dataObj = array();
 		$resultYN = "Y";
 		$msg = "";
-				
+		$is_document = 'N';
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$category = $posts['category'];
+		$title = $posts['document_name'];
+		$contents_path = $posts['contents_path'];
+		$contents = $posts['contents'];
+
 		/**
 		 * @cache's columns 
 		 *  페이지에서 넘어온 데이터 값은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
@@ -136,7 +183,7 @@ class DocumentAdminController extends Controller
 			$value = $posts[$key];
 
 			if (isset($value) && $value) {
-				if ($key === 'contents_path') {
+				if (preg_match('/^(contents_path)+$/', $key)) {
 					if (!preg_match('/(.tpl+)$/i', $value)) {
 						$value = $value . $category . '.tpl';						
 					}
@@ -145,54 +192,99 @@ class DocumentAdminController extends Controller
 				$columns[$key] = $value;
 			} 					
 		}
-		// end of page	
+		// end of page
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->update('document', $columns, $where);
-		//$msg .= Tracer::getInstance()->getMessage();
-		if (!$result) {
-			$msg .= "$category 페이지 수정을 실패하였습니다.";
-			$resultYN = "N";	
-		} else {
+		$result = $this->model->update('document', $columns, $where);		
+		if ($result) {
 
-			$realPath = _SUX_PATH_ . 'files/document/';
-			$contentsPath =Utils::convertAbsolutePath($columns['contents_path'], $realPath);
+			if (isset($contents_path) && $contents_path) {
 
-			$buff = $posts['contents'];
-			if (empty($buff)) {
-				$contentsPath = _SUX_PATH_ . 'modules/document/tpl/' . $category . '.tpl';
-				$buff = FileHandler::readFile($contentsPath);
-				if (!$buff) {
-					$buff = $category . ' 내용을 설정해주세요.';
+				$realPath = _SUX_PATH_ . 'files/document/';
+				$contents_path = _SUX_ROOT_ . $contents_path;
+				$writeContentsTo =Utils::convertAbsolutePath($contents_path, $realPath);
+
+				$buffers = $posts['contents'];
+				if (empty($buffers)) {
+					$yoursite = $context->getAdminInfo('yourhome');
+					$yoursite = strtoupper($yoursite);
+					$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+					$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+					$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+					$buffHeader .=	 '{include file="$headerPath" title="' . $title . ' - ' . $yoursite . '"}' . "\n";
+					$buffHeader .= '<!-- contents start -->' . "\n\n";
+
+					$buff = '내용을 입력해주세요.';	
+
+					$buff .= "\n\n";
+					$buffFooter .= '<!-- contents end -->' . "\n";
+					$buffFooter .= '{include file="$footerPath"}';
+
+					$buffers = $buffHeader . $buff . $buffFooter;
+				}
+
+				$result = FileHandler::writeFile($writeContentsTo, $buffers);
+				if (!$result) {
+					$msg .= "$category 템플릿 파일 수정을 실패하였습니다.";
+					$resultYN = "N";
+				} else {
+					$msg .= "$category 템플릿 파일 수정을 완료하였습니다.";
+					$resultYN = "Y";
+				}
+
+				// insert into menu
+				$columns = array();
+				$columns['name'] = $title;
+				$columns['url'] = $category;
+
+				$where->reset();
+				$where->set('category', $category);
+				$result = $this->model->update('menu', $columns, $where);
+				if (!$result) {
+					$msg .= "메뉴 업데이트를 실패하였습니다.";
+					$resultYN = 'N';
+				}
+
+				$where->reset();
+				$where->set('category', $category);
+				$result = $this->model->select('document', '*',  $where);
+				if ($result) {
+					$dataObj['list'] = $this->model->getRows();
+				} else {
+					$msg .= "${category} 페이지 선택을 실패하였습니다.<br>";
+					$resultYN = 'N';
 				}
 			}
 
-			$result = FileHandler::writeFile($contentsPath, $buff);
-			if (!$result) {
-				$msg .= "$category 템플릿 파일 수정을 실패하였습니다.";
-				$resultYN = "Y";
-			} else {
-				$msg .= "$category 템플릿 파일 수정을 완료하였습니다.";
-				$resultYN = "Y";
-			}			
+			$result = $this->model->select('document', '*', $where);
+			if ($result) {
+				$dataObj['list'] = $this->model->getRows();
+			} 
+		} else {
+			$msg .= "$category 페이지 수정을 실패하였습니다.";
+			$resultYN = "N";	
 		}
-		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	"member"=>$dataObj,
+
+		//$msg .= Tracer::getInstance()->getMessage();
+		$data = array(	"data"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
+		// document  param 값을 받으면 앵귤러 통신 $is_document = Y
 		$this->callback($data);
 	}
 
 	function deleteDelete() {
 
-		$context = Context::getInstance();
-		$category = $context->getPost('category');
-		$id = $context->getPost('id');
-
 		$resultYN = "Y";
 		$msg = "";	
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$category = $posts['category'];
+		$id = $posts['id'];		
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
@@ -227,6 +319,15 @@ class DocumentAdminController extends Controller
 			$result = CacheFile::writeFile($filePath, $routes);
 			if (!$sesult) {
 				$msg .= "라우트 파일 재설정을 완료하였습니다.";
+			}
+
+			// delete menu
+			$where = new QueryWhere();
+			$where->set('category', $category);
+			$result = $this->model->delete('menu', $where);
+			if (!$result) {
+				$msg .= "메뉴 삭제를 실패하였습니다.";
+				$resultYN = 'N';
 			}
 		}
 		//$msg .= Tracer::getInstance()->getMessage();

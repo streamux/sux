@@ -115,7 +115,7 @@ class DocumentAdminView extends View
 		$msg = "";
 		$resultYN = "Y";
 
-		$this->model->select('document', '*', null, 'id desc');
+		$this->model->select('document', '*', null, 'id desc');			
 		$numrows = $this->model->getNumRows();
 		if ($numrows > 0){
 
@@ -147,34 +147,31 @@ class DocumentAdminView extends View
 
 	function displayModifyJson() {
 
-		$context = Context::getInstance();
-		$id = $context->getPost('id');
-
-		$dataObj = array();
+		$dataObj = array('list'=>array());
 		$msg = "";
 		$resultYN = "Y";
-		$contentsPath = _SUX_PATH_ . 'modules/document/contents/';
+
+		$context = Context::getInstance();
+		$requests = $context->getRequestAll();
+		
+		$id = $requests['id'];
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$this->model->select('document', '*', $where);
-
-		$numrows = $this->model->getNumRows();
-		if ($numrows > 0) {
-			$row = $this->model->getRow();
-			foreach ($row as $key => $value) {
-				$dataObj[$key] = $value;
+		
+		$rows = $this->model->getRows();
+		if (count($rows) > 0) {
+			$dataObj['list'][0] = array();
+			foreach ($rows[0] as $key => $value) {
+				$dataObj['list'][0][$key] = $value;
 			}
-			$contentsPath =Utils::convertAbsolutePath($row['contents_path'], $contentsPath);
-			$handle = fopen($contentsPath, "r");
-			$dataObj['contents'] = fread($handle, filesize($contentsPath));
-			//$dataObj['contents'] = $contentsPath;
-			fclose($handle);
 
+			$contentsPath =Utils::convertAbsolutePath($rows[0]['contents_path'], _SUX_PATH_);
+			$handle = fopen($contentsPath, "r");
+			$dataObj['list'][0]['contents'] = fread($handle, filesize($contentsPath));
+			fclose($handle);
 			$resultYN = "Y";
-		} else {
-			$resultYN = "N";
-			$msg = '페이지가 존재하지 않습니다.';
 		}
 
 		//$msg = Tracer::getInstance()->getMessage();

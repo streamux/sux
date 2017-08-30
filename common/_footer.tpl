@@ -1,14 +1,14 @@
-		<div class="footer">
-			<ul class="clearfix">
-				<li><a href="{$rootPath}login">로그인</a></li>
-				<li><a href="{$rootPath}member-join">회원가입</a></li>
-				<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
-			</ul>	
-			<p>
-				<span>{include file="$copyrightPath"}</span>
-			</p>
-		</div>
-	</div>	
+	</div>
+	<div class="footer">
+		<ul class="clearfix">
+			<li><a href="{$rootPath}login">로그인</a></li>
+			<li><a href="{$rootPath}member-join">회원가입</a></li>
+			<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
+		</ul>	
+		<p>
+			<span>{include file="$copyrightPath"}</span>
+		</p>
+	</div>
 </div>
 
 <!-- mobile gnb start -->
@@ -26,7 +26,9 @@
 			<ul class="clearfix">
 				<li><div class="ui-user-picture"></div></li>
 				<li><span class="ui-user-nickname">Guest</span></li>
-				<li><a href="/sux/admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a></li>
+				<li>				
+					<a href="http://localhost:4200/" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
+				</li>
 			</ul>
 		</div>
 		<div class="ui-user-member">
@@ -53,6 +55,7 @@
 		</div>
 	</div>	
 </div>
+<img src="{$rootPath}analytics/counter" alt="" class="hide">
 <!-- end -->
 
 <!-- js template start -->

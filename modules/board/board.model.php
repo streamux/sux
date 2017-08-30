@@ -67,27 +67,4 @@ class BoardModel extends Model
 		}
 		return parent::delete($query);
 	}
-
-	/*function deleteLimitwordFromBoard() {
-
-		$row = $this->getRow();
-		$limit_word = $row['limit_word'];
-		if (isset($limit_word) && $limit_word != '') {
-
-			$where = new QueryWhere();
-			$limit_word_arr = split(',',$limit_word);
-
-			for ($i=0; $i<count($limit_word_arr); $i++) {
-				$limit_temp_str = trim($limit_word_arr[$i]);
-				$where->set($row['limit_choice'], $limit_temp_str, 'like', 'or');
-			}
-
-			$query = new Query();
-			$query->setTable($this->board);
-			$query->setWhere($where);
-
-			$result = parent::delete($query);
-			return $result;			
-		}		
-	}*/
 }

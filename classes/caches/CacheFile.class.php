@@ -26,7 +26,6 @@ class CacheFile
 		if (!file_exists($filename)) {
 			return false;
 		}
-
 		$result = include($filename);
 		return (isset($key) && $key) ? $result[$key] : $result;
 	}

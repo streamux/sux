@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * install.controller.php 는 아직 모델이 설정되어 있지 않기 때문에 DB 클래스 내 쿼리 메서드를 사용한다.
+ */
 class InstallController extends Controller
 {
 
@@ -20,6 +22,10 @@ class InstallController extends Controller
 		foreach ($db_info as $key => $value) {
 			$buffer['db_info'][$value] = $posts[$value];
 		}
+
+		$context->makeFilesDir(false, $buffer['db_info']);
+		$context->makeRouteCaches();
+
 		$result = CacheFile::writeFile($filePath, $buffer);
 		if (!$result) {
 			$msg .= 'DB 설정을 실패했습니다.';
@@ -80,6 +86,7 @@ class InstallController extends Controller
 	/**
 	 * @method createTable
 	 *  스키마 데이터 xml  연동
+	 * 참고 : 라우트 캐시 파일 생성은 Context.php 에 정의 되어 있음 
 	 */
 	function insertCreateTable() {
 
@@ -154,13 +161,16 @@ class InstallController extends Controller
 							$resultYN = 'N';
 							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
 						} else {																
-							$msg .= '@ table->' . $tableName . " [ result : success ] ----<br>";
+							$msg .= "[ result : success ] @ table->" . $tableName . " ---- <br>";
 						}
 					}
 				}
 			} // end of foreach
 
-			// add start's value'
+			/**
+			 * 초기 값을 갖는 테이블 일 경우 모듈 폴더 > queries > 모듈.액션.이름.xml  파일을 추가해서 등록한다.
+			 * 참고 URL : modules/document/queries/document.add.home.xml
+			 */
 			$queryDir = './modules/' . $module . '/queries';				
 			$queryList = FileHandler::readDir($queryDir);
 			if ($queryList) {
@@ -177,11 +187,12 @@ class InstallController extends Controller
 
 							$moduleType = (string) $queryXml['execution'];	
 							$actionType = (string) $queryXml['action'];
-							if (($actionType === 'insert') && ($moduleType === 'once')) {
+							if ($actionType === 'insert' && $moduleType === 'once') {
 
 								$propTableName = $queryXml[0]->tables[0]->table['name'];
 								$tableName = $tablePrefix . '_' . $propTableName;
 								$query->setTable($tableName);
+								$query->setField('*');
 								$queryColumns = $queryXml[0]->columns[0]->column;
 								foreach ($queryColumns as $key => $value) {
 
@@ -189,40 +200,102 @@ class InstallController extends Controller
 									$propValue = (string) $value['name'];
 									if ($propValue === 'category') {
 										$where = array('category'=>$nodeValue);
+										$category = $nodeValue;
 									}
-							
-									if (preg_match('/^((header|contents|footer)_path)+$/i', $propValue)) {
-										$nodeValue = $rootPath . $nodeValue;
-									}							
 
-									if ($propValue === 'contents_path') {
-										$contentsPath = $nodeValue;					
+									if ($propValue === 'document_name') {
+										$moduleName = $nodeValue;
+									}						
+
+									if (preg_match('/^(contents_path|)+$/i', $propValue)) {
+										$contentsPath = $rootPath . $nodeValue;					
 									}
 									$columns[] = $nodeValue;
 								}
 
 								if (isset($where) && $where) {
-									$query->setField('id');
-									$query->setWhere($where);
 									$oDB->select($query);
 									$numrows = $oDB->getNumRows();
 								}
 
-								if (isset($numrows) && $numrows === 0) {
+								if (empty($numrows)) {
 									$query->setColumn($columns);
 									$oDB->insert($query);
 								}
 
-								// write template'file to file's dir to read from module's template file
+								// copy template to files's dir to read  a template in module
 								if ($module == 'document') {
+									// $contentsPath was written in xml data
 									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+
+									$yoursite = $context->getAdminInfo('yourhome');
+									$yoursite = strtoupper($yoursite);
+									$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
+									$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
+									$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+									$buffHeader .=	 '{include file="$headerPath" title="홈 - ' . $yoursite . '"}' . "\n";
+									$buffHeader .= '<!-- contents start -->' . "\n";
+
 									//  read and write contents
 									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
 									$buff = FileHandler::readFile($contentsPath);
-									$result = FileHandler::writeFile($cachePath, $buff);
+
+									$buffFooter .= '<!-- contents end -->' . "\n";
+									$buffFooter .= '{include file="$footerPath"}';
+
+									$buffers = $buffHeader . $buff . $buffFooter;				
+									$result = FileHandler::writeFile($cachePath, $buffers);
 									if (!$result) {
 										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-									} 
+									} else {
+										// write route's key
+										$filePath = $realPath . 'files/caches/routes/document.cache.php';
+										$routeCaches = CacheFile::readFile($filePath);			
+										if (isset($routeCaches) && $routeCaches) {
+											$routes['categories'] = $routeCaches['categories'];
+											$routes['action'] = $routeCaches['action'];
+
+											$pattern = sprintf('/(%s)+/i', $category);
+											if (!preg_match($pattern, implode(',', $routes['categories']))) {
+												$routes['categories'][] = $category; 
+											}
+											CacheFile::writeFile($filePath, $routes);
+										}
+
+										// make default menu of gnb
+										$where = array('category'=>'home');
+										$query->setWhere($where);
+										$result = $oDB->select($query);
+										$datas = array();
+										while($rows = $oDB->getFetchArray($result)) {
+											$fields = array();
+											foreach ($rows as $key => $value) {
+												if (is_string($key) !== false) {
+													$fields[$key] = $value;
+												}				
+											}
+											$datas[] = $fields;
+										}
+										//$msg .= Tracer::getInstance()->getMessage() . "<br>";
+
+										$contentsPath = 'files/gnb/gnb.json';
+										$filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+										if (!file_exists($filePath)) {
+											$jsonData = array();
+											$jsonData['data'] = array();
+											$jsonData['data'][] = array('id'=>$datas[0]['id'],'sid'=>0,'name'=>$datas[0]['document_name'],'url'=>$datas[0]['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
+
+											$jsonData = JsonEncoder::parse($jsonData);
+											$result = FileHandler::writeFile($filePath, $jsonData);
+											if (!$result) {
+												$msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
+												$resultYN = 'N';
+											} else {
+												$msg .= "기본 메뉴를 생성하 였습니다.<br>";
+												$resultYN = 'Y';
+											}
+										}										
+									}									
 								}
 							}
 						} // end of if (file_exists)
@@ -250,6 +323,7 @@ class InstallController extends Controller
 		$data = array(	'msg'=>$msg,
 						'result'=>$resultYN,
 						'url'=>$rootPath);
+
 		$this->callback($data);
 		$oDB->close();
 	}

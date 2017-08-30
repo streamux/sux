@@ -2,6 +2,15 @@
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
+
+/**
+ * 참고 : Composer 1.0.3는 PHP 5.3.2 지원  이후 버전은 PHP 5.6 이상 지원 
+ * Composer version 1.2.4
+ * Server PHP version 5.3.2
+ *
+ * require _SUX_PATH_ . 'vendor/autoload.php';
+ */
+
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'CacheFile'=>'classes/caches/CacheFile.class.php',
 	'Controller'=>'classes/mvc/Controller.php',
@@ -12,7 +21,8 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'UIError'=>'classes/error/UIError.class.php',
 	'FileHandler'=>'classes/file/FileHandler.class.php',
 	'ModuleHandler'=>'classes/modules/ModuleHandler.class.php',
-	'ModuleRouter'=>'classes/modules/ModuleRouter.class.php',
+	'RouterModule'=>'classes/modules/RouterModule.class.php',
+	'PageModule'=>'classes/modules/PageModule.class.php',
 	'Object'=>'classes/object/Object.class.php',	
 	'Navigator'=>'classes/plugin/Navigator.class.php',
 	'Query'=>'classes/queries/Query.class.php',
@@ -24,8 +34,10 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'URIToMethod'=>'classes/utils/URIToMethod.class.php',
 	'Utils'=>'classes/utils/Utils.class.php',
 	'UtilsString'=>'classes/utils/UtilsString.class.php',
-	'Epi'=>'libs/epiphany/Epi.php',
-	'Smarty'=>'libs/smarty/Smarty.class.php'
+	
+	// Location: ./classes/modules/RouterModule.class.php :: Epi::setPath('base', 'libs/epiphan/src');
+	'Epi'=>'libs/epiphany/src/Epi.php',
+	'Smarty'=>'libs/smarty/libs/Smarty.class.php'
 ), CASE_LOWER);
 
 function __sux_autoload($class_name) {
@@ -44,6 +56,7 @@ function __sux_autoload($class_name) {
 		$candidate_filename[] = (isset($matches[3]) && $matches[3]) ? strtolower($matches[3]) : 'class';
 		$candidate_filename[] = 'php';
 		$candidate_filename = implode('.', $candidate_filename);
+		//echo $candidate_filename . "<br>";
 
 		if(file_exists(_SUX_PATH_ . $candidate_filename)) {
 			require _SUX_PATH_ . $candidate_filename;

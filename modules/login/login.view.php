@@ -39,7 +39,7 @@ class LoginView extends View
 			$UIError->add("하단 파일경로가 올바르지 않습니다.");
 		}
 
-		$user_id = $this->session_data['sux_user_id'];
+		$user_id = $this->session_data['user_id'];
 
 		/**
 		 * get data from DB

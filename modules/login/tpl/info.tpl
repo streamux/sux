@@ -14,9 +14,9 @@
 			<div class="login-body">
 				<div class="panel-info">
 					<ul>
-						<li><span class="ui-label">이름</span><span class="ui-value">'{$sessionData.sux_user_name}</span>' 님</li>
-						<li><span class="ui-label">적립포인트</span><span class="ui-value">'{$sessionData.sux_point}</span>' 포인트</li>
-						<li><span class="ui-label">방문횟수</span><span class="ui-value">'{$sessionData.sux_hit_count}</span>' 번째 방문</li>
+						<li><span class="ui-label">이름</span><span class="ui-value">'{$sessionData.user_name}</span>' 님</li>
+						<li><span class="ui-label">적립포인트</span><span class="ui-value">'{$sessionData.point}</span>' 포인트</li>
+						<li><span class="ui-label">방문횟수</span><span class="ui-value">'{$sessionData.hit_count}</span>' 번째 방문</li>
 					</ul>
 				</div><div class="panel-btn">
 					<a href="{$rootPath}logout?_method=insert"><img src="{$rootPath}modules/login/tpl/images/btn_logout.gif"></a>

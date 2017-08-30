@@ -16,7 +16,7 @@
 				<dt>세부옵션 설정</dt>
 				<dd>
 					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-					<span class="text-notice">발강색(별표)으로 표신된 부분은 반드시 입력해주세요.</span>			
+					<span class="text-notice">발강색(별표)으로 표신된 부분은 반드시 입력해주세요.</span>
 				</dd>
 			</dl>
 			<table summary="게시판 정보를 입력해 생성해주세요.">
@@ -26,7 +26,7 @@
 						<td>
 							카테고리 이름
 							<input type="hidden" name="category" value="{$documentData.category}">
-							<input type="hidden" name="id" value="{$documentData.id}">					
+							<input type="hidden" name="id" value="{$documentData.id}">			
 						</td>
 						<td>
 							{$documentData.category}

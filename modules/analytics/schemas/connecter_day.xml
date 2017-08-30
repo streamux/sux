@@ -1,6 +1,0 @@
-<table name="connecter_day">
-	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-	<column name="total_count" type="int" size="12" notnull="not null" defalut="0"/>
-	<column name="real_count" type="int" size="12" notnull="not null" defalut="0"/>
-	<column name="date" type="date"/>
-</table>

@@ -18,11 +18,11 @@ class FileHandler
 		return @file_get_contents($filename);
 	}
 
-	function writeFile($path, $buff, $mode="w") {
+	function writeFile($path, $buff, $mode="w", $is_safe=true) {
 
 		$filename = self::getRealPath($path);
 		$pathinfo = pathinfo($filename);
-		self::makeDir($pathinfo['dirname']);
+		self::makeDir($pathinfo['dirname'], $is_safe);
 
 		$fiags = 0;
 		if (strtolower($mode) == 'a') {
@@ -80,7 +80,7 @@ class FileHandler
 		return false;
 	}
 
-	function makeDir($path, $is_safe=true)
+	function makeDir($path, $is_safe=true, $db_info=null)
 	{
 		$dirPath = self::getRealPath($path);
 
@@ -88,31 +88,36 @@ class FileHandler
 			return true;
 		}
 
-		if (!$is_safe) {
+		if ($is_safe == false) {
 			@mkdir($dirPath, 0755, true);
 			@chmod($dirPath, 0755);
 		} else {
-			$ftp_server = '127.0.0.1';
-			$ftp_port = 21;
+
+			if (empty($db_info)) {
+				return 'DB Info do no exist';
+			}
+
+			$ftp_server = 'localhost';
+			$ftp_port = 80;
 			$ftp_user = 'root';
 			$ftp_pass = 'root';
-			$conn_id = ftp_connect($ftp_server, $ftp_port) or die("Couldn't connect to $ftp_server"); 
 
+			$conn_id = ftp_connect($ftp_server, $ftp_port) or die("Couldn't connect to $ftp_server");
 			if (@ftp_login($conn_id, $ftp_user, $ftp_pass)) {
 				$msg .= "Connected as $ftp_user@$ftp_server\n";
 			} else {
 				$msg .= "Couldn't connect as $ftp_user\n";
 			}
 
-			if (ftp_chmod($conn_id, 0777, _SUX_PATH_ . $dirPath) !== false) {
+			if (ftp_chmod($conn_id, 644, _SUX_PATH_ . $dirPath) !== false) {
 				$msg .= "$dirPath chmoded successfully to 644\n";
 			} else {
-				$msg .= $dirPath . " could not chmod $dirPath\n";
+				$msg .= "$dirPath could not chmod\n";
 			}
 			ftp_close($conn_id); 
 		}
 
-		return $dirPath;
+		return $msg;
 	}
 
 	function deleteAll($directory, $empty = false) { 

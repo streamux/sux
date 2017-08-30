@@ -129,16 +129,18 @@ window.trace = function( str, bool ) {
 		this.init();
 	};
 
-	manager.getJSON = function(path, data, func) {
+	manager.getJSON = function(path, data, func, error) {
 
 		var params = {
 			method: func,
-			data:data
+			data:data,
+			error: error
 		};
 
-		if (typeof(params.data) == "function") {			
-			params.method = params.data;
+		if (typeof(data) == "function") {			
+			params.method = data;
 			params.data = "";
+			params.error = func;			
 		}
 
 		if (!params.data) {
@@ -147,12 +149,15 @@ window.trace = function( str, bool ) {
 
 		if (jQuery) {
 			$.ajax({
-				type: "POST",
+				type: 'POST',
 				url: path,
 				data: params.data,
-				dataType: "jsonp",
+				dataType: 'jsonp',
 				success: function( e ) {
 					params.method( e );
+				},
+				error: function(e) {
+					params.error( e );
 				}
 			});
 		}

@@ -5,50 +5,76 @@ class MemberAdminController extends Controller
 
 	function insertGroupAdd() {
 
+		$json = array();
+		$msg = '';
+		$resultYN = 'Y';
+
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
-		$category = $posts['category'];
-		$groupName = $posts['group_name'];
-		$summary = $posts['summary'];
-		$headerPath = $posts['header_path'];
-		$footerPath = $posts['footer_path'];
+		$prefix = $context->getPrefix();
+		foreach ($posts as $key => $value) {
+			${$key} = $value;
+		}
 
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
-
+		if (empty($category)) {
+			UIError::alertToBack('멤버그룹 영문 이름을 입력해주세요.');
+			exit;
+		}
+		
 		$where = new QueryWhere();
 		$where->set('category', $category);
 		$result = $this->model->select('member_group', 'id', $where);
-
 		$rownum = $this->model->getNumrows();
 		if ($rownum > 0) {
-			UIError::alertToBack('This Category Name Already Exists!');
+			UIError::alertToBack("'${category}' 그룹 이름이 이미 존재합니다.");
 			exit;
 		}
 
-		$column = array(
-			'',
-			$category,
-			$groupName,
-			$summary,
-			$headerPath,
-			$footerPath,
-			'now()');
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/member_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+		} else {
+			$columns = array();
+			for($i=0; $i<count($columnCaches); $i++) {
+				$key = $columnCaches[$i];
+				$value = $posts[$key];
 
-		$result = $this->model->insert('member_group', $column);
+				if (isset($value) && $value) {
+					$columns[] = $value;
+				} else {					
+					if ($key === 'date') {
+						$columns[] = 'now()';
+					} else {
+						$columns[] = '';
+					}
+				}						
+			}
+		} // end of if
+
+		$result = $this->model->insert('member_group', $columns);
 		if ($result) {
-			$msg .= "${category} 회원그룹을 등록하였습니다.";
+			$msg .= "${group_name} 회원그룹을 등록하였습니다.";
 			$resultYN = "Y";				
 		} else {
-			$msg .= "${category} 레코드 등록을 실패하였습니다.";
+			$msg .= "${group_name} 레코드 등록을 실패하였습니다.";
 			$resultYN = "N";		
-		}		
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
+		}
+
+		$where->set('category', $category);
+		$this->model->select('member_group', '*', $where);
+		$rows = $this->model->getRows();
+
+		//$msg = Tracer::getInstance()->getMessage();				
+		$json['msg'] = $msg;
+		$json['result'] = $resultYN;
+		$json['data'] = $rows;
 		
-		$this->callback($data);
+		$this->callback($json);
 	}
 
 	function insertGroupCheckid() {
@@ -94,26 +120,91 @@ class MemberAdminController extends Controller
 		$this->callback($data);
 	}
 
-	function deleteGroupDelete() {
+	function updateGroupModify() {
+
+		$json = array();
+		$msg = '';
+		$resultYN = 'Y';
 
 		$context = Context::getInstance();
-		$id = $context->getPost('id');
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
+		
+		if (empty($posts)) {
+			UIError::alertToBack("그룹 정보가 존재하지 않습니다.");
+			exit;
+		}
 
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
+		/**
+		 * @cache's columns 
+		 *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
+		 */
+		$cachePath = './files/caches/queries/member_group.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+		} else {
+			$columns = array();
+			for($i=0; $i<count($columnCaches); $i++) {
+				$key = $columnCaches[$i];
+				$value = $posts[$key];
+
+				if (isset($value) && $value) {
+					$columns[$key] = $value;
+				} else {					
+					if ($key === 'date') {
+						$columns[$key] = 'now()';
+					} 
+				}						
+			}
+		} // end of if
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
-		$result = $this->model->delete('member_group', $where);
-		if ($result) {
-			$resultYN = "Y";
-			$msg = "회원그룹을 삭제하였습니다.";				
-		} else {
-			$msg = "레코드 삭제를 실패하였습니다.";
-			$resultYN = "N";
+
+		$result = $this->model->update('member_group', $columns, $where);
+		if (!$result) {
+			$msg .= $columns['group_name']  . " 수정을 실패하였습니다.";
+			$resultYN = 'N';
 		}
+
 		//$msg = Tracer::getInstance()->getMessage();
+		$json['msg'] = $msg;
+		$json['result'] = $resultYN;
+
+		$this->callback($json);
+	}
+
+	function deleteGroupDelete() {
+
+		$dataObj	= '';
+		$msg = '';
+		$resultYN = 'Y';
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
+
+		$where = new QueryWhere();
+		$where->set('id', $id);
+		$this->model->select('member_group', 'category', $where);
+		$row = $this->model->getRow();
+		$category = $row['category'];
+
+		$result = $this->model->delete('member_group', $where);
+		if (!$result) {
+			$msg .= "${category} 그룹 삭제를 실패하였습니다.";
+			$resultYN = "N";				
+		} else {
+			$where->reset();
+			$where->set('category', $category);
+			$this->model->delete('member', $where);
+			if (!$result) {
+				$msg .= "${category} 회원 삭제를 실패하였습니다.";
+				$resultYN = "N";
+			}
+		}
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	"member"=>$dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
@@ -123,48 +214,70 @@ class MemberAdminController extends Controller
 
 	function updateModify() {
 
-		$context = Context::getInstance();
-		$posts = $context->getPostAll();
-		$id = $posts['id'];
-		$user_name = $posts['user_name'];
-
 		$msg = "";
 		$resultYN = "Y";
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$user_name = $posts['user_name'];
 
 		$where = new QueryWhere();
 		$where->set('id', $id);
 
-		$column_data = array_slice($posts, 2);
-		$column = array();
-		foreach ($column_data as $key => $value) {			
-			if ($value != '') {
-				if (preg_match('/password/', $key)) {	
-					$column[$key] = $context->getPassowordHash($value);
-				} else {
-					$column[$key] = $value;
-				}	
-			}				
+		$cachePath = './files/caches/queries/member.getColumns.cache.php';
+		$columnCaches = CacheFile::readFile($cachePath, 'columns');
+		if (!$columnCaches) {
+			$msg .= "QueryCacheFile Do Not Exists<br>";
+			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+			exit;
 		}
 
-		$result = $this->model->update('member', $column, $where);
-		if ($result) {			
-			$msg = "${user_name} 님의 회원정보를 수정하였습니다.\n";			
-			$resultYN = "Y";	
-		} else {
-			$msg = "${user_name} 님의 회원정보 수정을 실패하였습니다.\n";
-			$resultYN = "N";	
+		$ignorePattern = '/^(id)$/';
+		$column = array();	
+		foreach ($columnCaches as $key) {
+			if (!preg_match($ignorePattern, $key)) {
+				$value = $posts[$key];				
+				if (isset($value) && $value) {
+					if (preg_match('/^(password)$/', $key)) {	
+						$column[$key] = $context->getPasswordHash($value);
+					} else {
+						$column[$key] = $value;
+					}
+				}
+			}	
 		}
+
+		$this->model->select('member', 'password', $where);
+		$row = $this->model->getRow();
+		$passwordPattern = '/^'.$row['password'].'$/';
+		$newPassword = $column['password'];
+		if (preg_match($passwordPattern, $newPassword)) {
+			$result = $this->model->update('member', $column, $where);
+			if ($result) {			
+				$msg .= "${user_name} 님의 회원정보를 수정하였습니다.\n";			
+				$resultYN = "Y";	
+			} else {
+				$msg .= "${user_name} 님의 회원정보 수정을 실패하였습니다.\n";
+				$resultYN = "N";	
+			}
+		} else {
+			$msg .= '비밀번호가 같지 않습니다.';
+		}
+		
 		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	"result"=>$resultYN,
+		$json = array(	"result"=>$resultYN,
 						"msg"=>$msg);
 
-		$this->callback($data);
+		$this->callback($json);
 	}
 	
 	function deleteDelete() {
 
 		$context = Context::getInstance();
-		$id = $context->getPost('id');
+		$posts = $context->getPostAll();
+		$id = $posts['id'];
 
 		$dataObj	= "";
 		$msg = "";

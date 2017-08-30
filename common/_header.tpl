@@ -4,16 +4,17 @@
 	<title>{$title}</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
+	<link rel="icon" href="./favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_default.min.css">
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_common.min.css">
 	<link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css">	
 	{if $documentData.module_code != ''}
-	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/{$documentData.module_code}.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/{$documentData.module_code}.css">
 	{/if}
 	{if $documentData.isLogon === false}
-	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}/css/login_fail.css">
+	<link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/login_fail.css">
 	{/if}
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -22,7 +23,7 @@
 	<![endif]-->
 	<script type="text/javascript">
 		// 컨텐츠 내 값 설정
-		var is_page = '';	
+		var is_page = '';
 	</script>
 </head>
 <body>

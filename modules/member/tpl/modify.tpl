@@ -28,15 +28,15 @@
 					<tr>
 						<td>회원그룹</td>
 						<td>
-							<input type="hidden" name="category" value="{$sessionData.sux_category}">		
-							{$sessionData.sux_category}
+							<input type="hidden" name="category" value="{$sessionData.category}">		
+							{$sessionData.category}
 						</td>
 					</tr>
 					<tr>
 						<td>아이디</td>
 						<td>
-							<input type="hidden" name="user_id" value="{$sessionData.sux_user_id}">
-							{$sessionData.sux_user_id}
+							<input type="hidden" name="user_id" value="{$sessionData.user_id}">
+							{$sessionData.user_id}
 						</td>
 					</tr>
 					<tr>
@@ -98,6 +98,7 @@
 									<option value="{$value}" {if $contentsData['job'] === $value} selected {/if}>{$value}</option>
 								{/foreach}
 							</select>
+							
 						</td>
 					</tr>
 					<tr>

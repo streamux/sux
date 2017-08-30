@@ -1,7 +1,7 @@
 {assign var=rootPath value=$skinPathList.root}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="SUX관리자 페이지 삭제 - StreamUX"}
+{include file="$headerPath" title="SUX관리자 페이지 삭제 - STREAMUX"}
 <div class="articles ui-edgebox">
 	<div class="del">
 		<h2 class="blind">페이지 삭제 알림</h2>

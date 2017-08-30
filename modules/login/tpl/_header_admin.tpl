@@ -15,7 +15,7 @@
 <div class="wrapper">
 	<div class="header">
 		<div class="util"></div>
-		<a href="{$rootPath}modules/admin/index.php?action=main">
+		<a href="{$rootPath}admin-admin">
 			<h1><img class="logo" src="{$rootPath}modules/admin/tpl/images/logo.png" alt="streamxux"></h1>
 		</a>
 	</div>

@@ -442,6 +442,8 @@ jsux.mobileGnb.Menu.include({
 		self = this;
 		$('.mobile-gnb-case').css({'transform':'translateX('+this._startPosX+'px)'});
 
+		$('#test_startPosX').val(this._startPosX);
+
 		this.killTween('.mobile-gnb-case');
 		this.killTween('.mobile-menu-btn .ui-h-3stick .hline1');
 		this.killTween('.mobile-menu-btn .ui-h-3stick .hline3');
@@ -570,14 +572,15 @@ jsux.mobileGnb.Menu.include({
 		$(window).on('resize', function(e){
 
 			//trace( self._isClick, 1);
-			var tw = e.target.outerWidth;
+			var tw = $(window).outerWidth();
 			if (tw < 769 && self._isClick === true) {
 				self.show();
 			} else if (tw > 768) {
 				self.hide();
-			}			
+			}
+			self._startPosX  = tw;
 		});
-		//self._startPosX  = $(window).outerWidth();
+		$(window).trigger('resize');
 		this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
 	},
 	menuOn: function() {

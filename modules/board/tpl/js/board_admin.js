@@ -47,8 +47,7 @@ jsux.fn.add = {
 
 		return result;
 	},
-	setRadioVal: function( id, value) {
-
+	setRadioVal: function( id, value) {		
 		var result = $("input:radio[name="+id+"]:input[value="+value+"]").prop("checked", true);
 
 		return result;
@@ -284,9 +283,9 @@ jsux.fn.modify = {
 				item.value = self.getSelectVal(item.name);					
 				params[item.name] = item.value;
 			} else if (type === 'radio' && item.checked) {
-				console.log(item.name + ' : ' + item.value);
+				//console.log(item.name + ' : ' + item.value);
 				params[item.name] = item.value;				
-			} else if (type === 'text') {
+			} else if (type === 'text' || type === 'hidden') {
 				 if (!type.match(filters)) {
 					//console.log(item.name + ' : ' + item.value);					
 					params[item.name] = item.value;
@@ -360,7 +359,7 @@ jsux.fn.modify = {
 
 				formLists = $("input[type=radio]");
 				$(formLists).each(function(index) {
-					self.setRadioVal( this.name, e.data[this.name] );
+					self.setRadioVal( this.name, e.data[this.board_name] );
 				});
 
 				self.setTextAreaVal("limit_word", e.data.limit_word);	

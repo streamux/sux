@@ -5,13 +5,14 @@ class AnalyticsAdminController extends Controller
 
 	function insertConnectSiteAdd() {
 
-		$context = Context::getInstance();
-		$keyword = $context->getPost('keyword');
-
 		$msg = "";
 		$resultYN = "Y";
-		$returnURL = $context->getServer('REQUEST_URI');
 
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+		
+		$returnURL = $context->getServer('REQUEST_URI');
+		$keyword = $posts['keyword'];		
 		if (empty($keyword)) {
 			$msg = '접속워드 이름을 입력하세요.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -32,15 +33,19 @@ class AnalyticsAdminController extends Controller
 			$result = $this->model->insert('connect_site', $column);
 			if ($result) {
 				$msg = "$keyword 접속키워드 추가를 성공하였습니다.";
-				$resultYN = "Y";		 	
+				$resultYN = "Y";
+
+				$this->model->select('connect_site', '*', $where); 
+				$dataObj['list'] = $this->model->getRows();
 			} else {
 				$msg = "$keyword 접속키워드 추가를 실패하였습니다.";
 			 	$resultYN = "N";
 			}			
 		}	
 		//$msg .= Tracer::getInstance()->getMessage();
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
+		$data = array(	'data'=>$dataObj,
+						'result'=>$resultYN,
+						'msg'=>$msg);
 
 		$this->callback($data);
 	}
@@ -48,8 +53,10 @@ class AnalyticsAdminController extends Controller
 	function updateConnectSiteReset() {
 		
 		$context = Context::getInstance();
-		$id = $context->getPost('id');
-		$keyword = $context->getPost('keyword');
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$keyword = $posts['keyword'];
 
 		$msg = "";
 		$resultYN = "Y";
@@ -74,9 +81,11 @@ class AnalyticsAdminController extends Controller
 
 	function deleteConnectSiteDelete() {
 		
-		$context = Context::getInstance();		
-		$id = $context->getPost('id');
-		$keyword = $context->getPost('keyword');
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$keyword = $posts['keyword'];
 
 		$msg = "";
 		$resultYN = "Y";
@@ -97,15 +106,18 @@ class AnalyticsAdminController extends Controller
 		$this->callback($data);
 	}	
 
-	function insertPageviewAdd() {
 
-		$context = Context::getInstance();
-		$keyword = $context->getPost('keyword');
+	function insertPageviewAdd() {
 
 		$msg = "";
 		$resultYN = "Y";
-		$returnURL = $context->getServer('REQUEST_URI');
+		$dataObj = array();
 
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$returnURL = $context->getServer('REQUEST_URI');
+		$keyword = $posts['keyword'];
 		if (empty($keyword)) {
 			$msg = '페이지 키워드 이름을 입력하세요.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -126,30 +138,38 @@ class AnalyticsAdminController extends Controller
 			$result = $this->model->insert('pageview', $column);
 			if ($result) {
 				$msg = "페이지뷰 키워드 추가를 성공하였습니다.";
-				$resultYN = "Y";		 	
+				$resultYN = "Y";
+
+				$result = $this->model->select('pageview', '*', $where, '');
+				if ($result) {
+					$dataObj['list'] = $this->model->getRows();
+				}
 			} else {
 				$msg = "페이지뷰 키워드 추가를 실패하였습니다.";
 			 	$resultYN = "N";
 			}
 		}
 		//$msg .= Tracer::getInstance()->getMessage();
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
+		$data = array(	'data'=>$dataObj,
+						'result'=>$resultYN,
+						'msg'=>$msg);
 
 		$this->callback($data);
 	}
 
 	function updatePageviewReset() {
 		
-		$context = Context::getInstance();		
-		$id = $context->getPost('id');
-		$keyword = $context->getPost('keyword');
-
 		$msg = "";
 		$resultYN = "Y";
+		$dataObj = array();
+
+		$context = Context::getInstance();
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$keyword = $posts['keyword'];
 
 		$column = array('hit_count'=>0);
-
 		$where = new QueryWhere();
 		$where->set('id', $id);
 		$result = $this->model->update('pageview', $column, $where);
@@ -169,12 +189,15 @@ class AnalyticsAdminController extends Controller
 
 	function deletePageviewDelete() {
 	
-		$context = Context::getInstance();		
-		$id = $context->getPost('id');
-		$keyword = $context->getPost('keyword');
-
 		$msg = "";
 		$resultYN = "Y";
+		$dataObj = array();
+
+		$context = Context::getInstance();		
+		$posts = $context->getPostAll();
+
+		$id = $posts['id'];
+		$keyword = $posts['keyword'];		
 
 		$where = new QueryWhere();
 		$where->set('id', $id);

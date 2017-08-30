@@ -16,25 +16,25 @@
 			<ul>
 				<li>
 					<fieldset>
-						<label for="db_hostname">* 호스트명</label>
+						<label for="db_hostname">* 호스트 주소</label>
 						<input type="text" id="db_hostname" name="db_hostname" value="localhost">
 					</fieldset>	
 				</li>
 				<li>
 					<fieldset>
-						<label for="db_userid">* 사용자계정</label>
+						<label for="db_userid">* 데이터베이스 계정</label>
 						<input type="text" id="db_userid" name="db_userid" value="streamuxcom">
 					</fieldset>
 				</li>
 				<li>
 					<fieldset>
-						<label for="db_password">* 비밀번호</label>
-						<input type="password" id="db_password" name="db_password">
+						<label for="db_password">* 데이터베이스 비밀번호</label>
+						<input type="password" id="db_password" name="db_password" value="">
 					</fieldset>
 				</li>
 				<li>
 					<fieldset>
-						<label for="db_database">* DB이름</label>
+						<label for="db_database">* 데이터베이스 이름</label>
 						<input type="text" id="db_database" name="db_database" value="streamuxcom">
 					</fieldset>
 				</li>

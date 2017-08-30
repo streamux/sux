@@ -117,17 +117,14 @@ class Utils extends Object {
 		}
 	}
 
-	public static function goURL( $url, $delay=0) {
+	public static function goURL( $url, $delay=0,$resultYN='Y',$msg='') {
 
-		$context = Context::getInstance();
-		if ($context->ajax()) {
-			$data = array(	'url'=>$url,
-							'result'=>'Y');
+		$data = array(	'url'=>$url,
+						'delay'=>$delay,
+						'result'=>$resultYN,
+						'msg'=>$msg);
 
-			Object::callback($data);
-		} else {
-			printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
-		}
+		Object::callback($data);
 	}
 
 	public static function alertTo( $msg, $url) {

@@ -6,6 +6,7 @@ class DocumentView extends View
 
 		$context = Context::getInstance();
 		$category = $context->getParameter('category');
+		$this->session_data = $context->getSessionAll();
 
 		$where = new QueryWhere();
 		$where->set('category',$category,'=');
@@ -22,7 +23,7 @@ class DocumentView extends View
 		 */
 		$rootPath = _SUX_ROOT_;
 		$skinDir = _SUX_ROOT_ . "modules/document/";
-		$skinPath = _SUX_PATH_ . "modules/document/";
+		$skinPath = _SUX_PATH_;
 		$this->document_data['category'] = $category;
 		$this->document_data['uri'] = $rootPath.$category;
 

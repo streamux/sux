@@ -38,12 +38,13 @@ class AnalyticsView extends View
 			$msg .= "어제 접속자 선택을 실패하였습니다.\n";
 		}
 		
-		$where->reset();
-		$where->set('date',$now,'=');
-		$result = $this->model->select('connecter_day', 'total_count', $where);
+		$result = $this->model->select('connect_day', 'total_count');
 		if ($result) {
-			$row = $this->model->getRow();
-			$total_num = $row['total_count'];			
+			$total_num =  0;
+			$rows = $this->model->getRows();
+			for ($i=0; $i < count($rows); $i++) { 
+				$total_num += $rows[$i]['total_count'];		
+			}		
 		} else {
 			$msg .= "전체 접속자 선택을 실패하였습니다.\n";
 		}		
@@ -65,17 +66,22 @@ class AnalyticsView extends View
 		}
 		$real_yesterday_num = $this->model->getNumRows();
 
-		$where->reset();
-		$where->set('date',$now,'=');
-		$result = $this->model->select('connecter_day', 'real_count', $where);
+		$result = $this->model->select('connect_day', 'real_total_count');
 		if ($result) {
-			$row = $this->model->getRow();
-			$real_total_num = $row['real_count'];
+			$real_total_num = 0;
+			$rows = $this->model->getRows();
+			for ($i=0; $i < count($rows); $i++) { 
+				$real_total_num += $rows[$i]['real_total_count'];
+			}
 		} else {
 			$msg .= "전체 실접속자 수 선택을 실패하였습니다.\n";
 		}		
 
 		echo 'today : ' . $today_num . ', ' . 'yester : ' . $yesterday_num . ', ' . 'total : ' . $total_num . '<br>real_today : ' . $real_today_num . ', ' . 'real_yester : ' . $real_yesterday_num . ', ' . 'real total : ' . $real_total_num . '<br>';
+	}
+
+	function displayConnecter() {
+		$this->controller->addConnecter();
 	}
 
 	function displayPageview() {

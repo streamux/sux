@@ -30,4 +30,8 @@ class LoginAdminView extends View {
 
 		$this->output();
 	}
+
+	function displayLogoutAdmin() {
+		echo 'This is a ViewPage of LogoutAdmin';
+	}
 }

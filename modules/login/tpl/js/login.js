@@ -116,7 +116,7 @@ jsux.fn.leave = {
 
 		var logoutHandler = function( url ) {
 
-			var params = {_method:'insert'};
+			params._method = 'insert';
 			jsux.getJSON( url, params, function( e ) {
 				
 				if (e.result.toLowerCase() === 'y') {

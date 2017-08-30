@@ -2,7 +2,7 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원가입 - StreamUX"}
-<div class="articles ui-edgebox">
+<div class="articles">
 	<div class="member-edit">
 		<div class="tt">
 			<div class="imgbox">
@@ -37,44 +37,44 @@
 					<tr>
 						<td>아이디</td>
 						<td>
-							<input type="text" name="user_id" size="12" maxlength="12" value="test">
+							<input type="text" name="user_id" size="12" maxlength="12" value="">
 							<input type="button" name="checkID" value='중복체크'>
 						</td>
 					</tr>
 					<tr>
 						<td>비밀번호</td>
-						<td><input type="password" name="password" size="10" maxlength="12" value="12"></td>
+						<td><input type="password" name="password" size="10" maxlength="12" value=""></td>
 					</tr>
 					<tr>
 						<td>비밀번호 확인</td>
-						<td><input type="password" name="passwordConf" size="10" maxlength="12" value="12"></td>
+						<td><input type="password" name="passwordConf" size="10" maxlength="12" value=""></td>
 					</tr>
 					<tr>
 						<td>이름</td>
-						<td><input type="text" name="user_name" size="8" maxlength="10" value="홍길동"></td>
+						<td><input type="text" name="user_name" size="8" maxlength="10" value=""></td>
 					</tr>
 					<tr>
 						<td>닉네임</td>
-						<td><input type="text" name="nick_name" size="8" maxlength="10" value="홍길동"></td>
+						<td><input type="text" name="nick_name" size="8" maxlength="10" value=""></td>
 					</tr>
 					<tr>
 						<td>이메일</td>
-						<td><input type="text" name="email_address" size="12" maxlength="20" value="streamux">
+						<td><input type="text" name="email_address" size="12" maxlength="20" value="">
 						<select name="email_tail1">
 							<option>직접입력</option>
 							<option value="naver.com">naver.com</option>
 							<option value="hanmail.com">hanmail.net</option>
 							<option value="gmail.com">gmail.com</option>
 						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value="naver.com"> 
+						<input type="text" name="email_tail2" size="12" maxlength="20" value=""> 
 						<p>[ 비밀번호 분실 시 사용됩니다. ]</p></td>
 					</tr>
 					<tr>
 						<td><span>휴</span>대폰번호</td>
 						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="010">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="0000">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="0000">
+							<input type="text" name="hp1" size="3" maxlength="3" value="">-
+							<input type="text" name="hp2" size="4" maxlength="4" value="">-
+							<input type="text" name="hp3" size="4" maxlength="4" value="">
 						</td>
 					</tr>
 				</tbody>

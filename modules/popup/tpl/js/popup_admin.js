@@ -19,7 +19,7 @@ jsux.fn.list = {
 
 			if (e.result == "Y") {
 				markup = $("#popupList_tmpl");
-				$(markup).tmpl(e.data).appendTo("#popupList");				
+				$(markup).tmpl(e.data.list).appendTo("#popupList");				
 			} else {
 				markup = $("#popupWarnMsg_tmpl");
 				$(markup).tmpl( e ).appendTo("#popupList");
@@ -231,22 +231,24 @@ jsux.fn.modify = {
 			var formLists = null,
 				checkedVal = "",
 				markup = null,
-				labelList = null;
+				labelList = null,
+				list = null;
 
 			if (e.result == "Y") {
+				list = e.data.list[0]; 
 
 				formLists = $("input[type=text]");
 				$(formLists).each(function(index) {
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
+					if (list[this.name]) {
+						this.value = list[this.name];
 					}
 				});
 
 				formLists = $("select");
 				$(formLists).each(function(index) {
 
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];							
+					if (list[this.name]) {
+						this.value = list[this.name];							
 					}						
 				});
 
@@ -260,13 +262,13 @@ jsux.fn.modify = {
 						data = "";
 
 					label = $(labelList[index]).attr("id");		
-					data = {label: e.data[label]};
+					data = {label: list[label]};
 
 					$("#"+label).empty();
 					$(markup).tmpl( data ).appendTo("#"+label);
 				});
 
-				self.setTextAreaVal("contents", e.data.contents);	
+				self.setTextAreaVal("contents", list.contents);	
 			} else {
 				trace( e.msg );
 			}
