@@ -63,4 +63,5 @@ uninstall.php
 
 #other option and settings files
 .sublime-grunt.cache
+.gitignore
 sftp-config.json
