@@ -232,9 +232,9 @@ class BoardView extends View
 			$returnURL .= "?find=${find}&search=${search}";
 		}
 
-		$grade = $this->session_data['sux_grade'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 
 		$PHP_SELF = $context->getServer("PHP_SELF");	
 
@@ -436,10 +436,10 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 쓰기';
 
-		$grade = $this->session_data['sux_grade'];
-		$user_id = $this->session_data['sux_user_id'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_id = $this->session_data['user_id'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
@@ -582,9 +582,9 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 수정';
 
-		$grade = $this->session_data['sux_grade'];		
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];	
+		$grade = $this->session_data['grade'];		
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];	
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();	
 
@@ -697,10 +697,10 @@ class BoardView extends View
 		$this->document_data['module_code'] = 'board';
 		$this->document_data['module_name'] = '게시판 답변';
 
-		$grade = $this->session_data['sux_grade'];
-		$user_id = $this->session_data['sux_user_id'];
-		$user_name = $this->session_data['sux_user_name'];
-		$password = $this->session_data['sux_password'];
+		$grade = $this->session_data['grade'];
+		$user_id = $this->session_data['user_id'];
+		$user_name = $this->session_data['user_name'];
+		$password = $this->session_data['password'];
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 

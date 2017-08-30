@@ -57,8 +57,8 @@ class MemberView extends View {
 
 		$context = Context::getInstance();
 		$this->session_data = $context->getSessionAll();
-		$category = $this->session_data['sux_category'];
-		$user_id = $this->session_data['sux_user_id'];
+		$category = $this->session_data['category'];
+		$user_id = $this->session_data['user_id'];
 
 		/**
 		 * css, js file path handler

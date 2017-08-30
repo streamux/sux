@@ -18,7 +18,7 @@
 				<div class="panel-info">
 					<ul>
 						<li>
-							<input type="hidden" name="category" value="{$sessionData.sux_category}"><span class="ui-label">아이디</span><span>{$sessionData.sux_user_id}</span><input type="hidden" name="user_id" value="{$sessionData.sux_user_id}">
+							<input type="hidden" name="category" value="{$sessionData.category}"><span class="ui-label">아이디</span><span>{$sessionData.user_id}</span><input type="hidden" name="user_id" value="{$sessionData.user_id}">
 						</li>
 						<li>
 							<span class="ui-label"><label for="password">비밀번호</label></span><input type="password" id="password" name="password" maxlength="20">
