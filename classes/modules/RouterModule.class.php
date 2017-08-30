@@ -14,7 +14,7 @@ class RouterModule
 
 	private function defaultSetting() {
 
-		Epi::setPath('base', _SUX_PATH_ . 'vendor/epiphany/src');
+		Epi::setPath('base', _SUX_PATH_ . 'libs/epiphany/src');
 		Epi::setSetting('exceptions', false);
 		Epi::init('route');	
 
@@ -29,7 +29,6 @@ class RouterModule
 
 		$context = Context::getInstance();
 		getRoute()->get('/', array( 'PageModule', 'display'));
-
 
 		$moduleList = Utils::readDir('modules');
 		foreach ($moduleList as $key => $value) {
@@ -52,7 +51,7 @@ class RouterModule
 					
 					//echo $cachePath . "<br>";
 					$Class = $classList[$i]['class'];
-					$actionList = $this->getRoute('action');
+					$actionList = $this->getRouteKey('action');
 					if ($actionList !== null &&  count($actionList) > 0) {						
 			
 						foreach ($actionList as $key => $value) {			
@@ -64,7 +63,7 @@ class RouterModule
 							$context->setModule($routeKeys[0], $Class)	;
 							//echo  $Class . ' : ' . $routeKeys[0] . "<br>";
 
-							$categoryList = $this->getRoute('categories');
+							$categoryList = $this->getRouteKey('categories');
 							if ($categoryList !== null &&  count($categoryList) > 0){							
 								foreach ($categoryList as $key => $value) {
 
@@ -169,7 +168,7 @@ class RouterModule
 		}		
 	}
 
-	private function getRoute($key) {
+	private function getRouteKey($key) {
 		
 		return $this->cache_data[$key];
 	}

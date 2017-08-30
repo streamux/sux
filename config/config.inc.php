@@ -34,6 +34,8 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'URIToMethod'=>'classes/utils/URIToMethod.class.php',
 	'Utils'=>'classes/utils/Utils.class.php',
 	'UtilsString'=>'classes/utils/UtilsString.class.php',
+	
+	// Location: ./classes/modules/RouterModule.class.php :: Epi::setPath('base', 'libs/epiphan/src');
 	'Epi'=>'libs/epiphany/src/Epi.php',
 	'Smarty'=>'libs/smarty/libs/Smarty.class.php'
 ), CASE_LOWER);

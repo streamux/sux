@@ -110,7 +110,6 @@ class PageModule
 				$context->setParameter('action', $action);
 				$context->setParameter('id', $id);
 				$context->setParameter('sid', $sid);
-
 				$view->display($action, $category, $id);
 			}
 
