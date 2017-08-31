@@ -32,9 +32,9 @@ class DocumentView extends View
 		 * @descripttion
 		 * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수에 절대경로 처리 함.
 		 */		
-		$headerPath = Utils::convertAbsolutePath($headerPath, $skinPath);
-		$contentsPath = Utils::convertAbsolutePath($contentsPath, $skinPath);
-		$footerPath = Utils::convertAbsolutePath($footerPath, $skinPath);
+		$headerPath = Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+		$contentsPath = Utils::convertAbsolutePath($contentsPath, _SUX_PATH_);
+		$footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
 		if (!is_readable($headerPath)) {
 			$headerPath = "{$skinPath}/_header.tpl";

@@ -27,7 +27,7 @@
 				<li><div class="ui-user-picture"></div></li>
 				<li><span class="ui-user-nickname">Guest</span></li>
 				<li>				
-					<a href="http://localhost:4200/" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
+					<a href="/sux-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
 				</li>
 			</ul>
 		</div>
