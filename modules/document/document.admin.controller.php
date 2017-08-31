@@ -242,12 +242,8 @@ class DocumentAdminController extends Controller
 
 					$pattern = sprintf('/(%s)+/i', $category);
 					if (!preg_match($pattern, implode(',', $routes['categories']))) {
-
-						$msg .= 'update';
 						$routes['categories'][] = $category; 
 						CacheFile::writeFile($filePath, $routes);
-
-						return;
 					}					
 				}
 
