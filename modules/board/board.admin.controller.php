@@ -88,15 +88,10 @@ class BoardAdminController extends Controller
 			if (isset($routes) && $routes) {
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					$routes['categories'][] = $category;  
+					$routes['categories'][] = $category; 
+					$result = CacheFile::writeFile($filePath, $routes);	
 				}
-			}
-
-			$result = CacheFile::writeFile($filePath, $routes);	
-			if (!$result) {
-				$msg .= "라우트 키 등록을 실패했습니다.<br>";
-				$resultYN = 'N';
-			}
+			}			
 
 			$columns = array();
 			$columns[] = '';
@@ -200,6 +195,17 @@ class BoardAdminController extends Controller
 		if ($result) {
 			$this->model->select('board_group', '*', $where);
 			$dataObj = $this->model->getRows();
+
+			// 라우트 키 저장 
+			$filePath = './files/caches/routes/board.cache.php';
+			$routes = CacheFile::readFile($filePath);
+			if (isset($routes) && $routes) {
+				$pattern = sprintf('/(%s)+/i', $category);
+				if (!preg_match($pattern, implode(',', $routes['categories']))) {
+					$routes['categories'][] = $category; 
+					$result = CacheFile::writeFile($filePath, $routes);	
+				}
+			}	
 
 			// insert into menu
 			$columns = array();

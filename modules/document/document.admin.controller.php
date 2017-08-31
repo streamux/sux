@@ -114,9 +114,9 @@ class DocumentAdminController extends Controller
 
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					$routes['categories'][] = $category; 
-				}
-				CacheFile::writeFile($filePath, $routes);
+					$routes['categories'][] = $category;
+					CacheFile::writeFile($filePath, $routes);
+				}				
 			}
 
 			// insert into menu
@@ -231,6 +231,24 @@ class DocumentAdminController extends Controller
 				} else {
 					$msg .= "$category 템플릿 파일 수정을 완료하였습니다.";
 					$resultYN = "Y";
+				}
+
+				// rewrite route's key
+				$filePath = './files/caches/routes/document.cache.php';
+				$routeCaches = CacheFile::readFile($filePath);			
+				if (isset($routeCaches) && $routeCaches) {
+					$routes['categories'] = $routeCaches['categories'];
+					$routes['action'] = $routeCaches['action'];
+
+					$pattern = sprintf('/(%s)+/i', $category);
+					if (!preg_match($pattern, implode(',', $routes['categories']))) {
+
+						$msg .= 'update';
+						$routes['categories'][] = $category; 
+						CacheFile::writeFile($filePath, $routes);
+
+						return;
+					}					
 				}
 
 				// insert into menu

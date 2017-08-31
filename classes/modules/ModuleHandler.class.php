@@ -15,7 +15,7 @@ class ModuleHandler
 		return self::$aInstance;
 	}
 
-	function init()
+	public function init()
 	{		
 		$context = Context::getInstance();
 		$cookieId = $context->getCookieId();
