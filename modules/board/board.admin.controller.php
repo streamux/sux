@@ -39,6 +39,10 @@ class BoardAdminController extends Controller
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 		}
 
+		if (empty($board_name)) {
+			$board_name = $category;
+		}
+
 		$where = new QueryWhere();
 		$where->set('category', $category);
 		$this->model->select('board_group','id', $where);
@@ -91,7 +95,22 @@ class BoardAdminController extends Controller
 					$routes['categories'][] = $category; 
 					$result = CacheFile::writeFile($filePath, $routes);	
 				}
-			}			
+			}				
+
+			$passwordHash = $context->getPasswordHash('12');
+			$columns = array(
+				'',$category,'n',$adminId,'운영자','운영자',$passwordHash,
+				'게시판 시동 테스트',
+				'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
+				$adminEmail,'now()',$context->getServer('REMOTE_ADDR'),
+				0,0,0,'',1,0,0,'a','','','','html'
+			);
+
+			$result = $this->model->insert('board', $columns);
+			if (!$result) {
+				$msg .= "시동 게시글 등록을 실패하였습니다.<br>";
+				$resultYN = 'N';		
+			}
 
 			$columns = array();
 			$columns[] = '';
@@ -104,43 +123,24 @@ class BoardAdminController extends Controller
 			if (!$result) {
 				$msg .= "메뉴 등록을 실패하였습니다.<br>";
 				$resultYN = 'N';
-			}
-		}
+			}	
 
-		$passwordHash = $context->getPasswordHash('12');
-		$columns = array(
-			'',$category,'n',$adminId,'운영자','운영자',$passwordHash,
-			'게시판 시동 테스트',
-			'본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br> 본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.',
-			$adminEmail,'now()',$context->getServer('REMOTE_ADDR'),
-			0,0,0,'',1,0,0,'a','','','','html'
-		);
+			$where->reset();
+			$where->set('category', $category);
+			$result = $this->model->select('board_group', '*', $where);
+			if ($result) {
 
-		$result = $this->model->insert('board', $columns);
-		if (!$result) {
-			$msg .= "시동 게시글 등록을 실패하였습니다.<br>";
-			$resultYN = 'N';		
-		}
-
-		if ($resultYN === 'Y') {
-			$msg .= $category . ' 게시판이 성공적으로 생성되었습니다.';
-		}
-
-		$where->reset();
-		$where->set('category', $category);
-		$result = $this->model->select('board_group', '*', $where);
-		if ($result) {
-
-			$numrows = $this->model->getNumRows();
-			if ($numrows > 0) {
-				$dataObj = $this->model->getRows();
+				$numrows = $this->model->getNumRows();
+				if ($numrows > 0) {
+					$dataObj = $this->model->getRows();
+				} else {
+					$msg .= '등록된 게시판이 존재하지 않습니다.';
+					$resultYN = 'N';
+				}
 			} else {
-				$msg .= '등록된 게시판이 존재하지 않습니다.';
+				$msg .= '게시판 테이블 선택을 실패하였습니다.';
 				$resultYN = 'N';
 			}
-		} else {
-			$msg .= '게시판 테이블 선택을 실패하였습니다.';
-			$resultYN = 'N';
 		}
 
 		//$msg .= Tracer::getInstance()->getMessage();
@@ -207,18 +207,37 @@ class BoardAdminController extends Controller
 				}
 			}	
 
-			// insert into menu
-			$columns = array();
-			$columns['name'] = $title;
-			$columns['url'] = $category;
-
+			// insert into menu	
 			$where->reset();
 			$where->set('category', $category);
-			$result = $this->model->update('menu', $columns, $where);
-			if (!$result) {
-				$msg .= "메뉴 업데이트를 실패하였습니다.";
-				$resultYN = 'N';
-			}
+			$result = $this->model->select('menu', 'id', $where);
+			if ($result) {
+				$numrows = $this->model->getNumRows();
+				if ($numrows > 0) {
+					$columns = array();
+					$columns['name'] = $title;
+					$columns['url'] = $category;
+					
+					$result = $this->model->update('menu', $columns, $where);
+					if (!$result) {
+						$msg .= "메뉴 업데이트를 실패하였습니다.";
+						$resultYN = 'N';
+					}
+				} else {
+					$columns = array();
+					$columns[] = '';
+					$columns[] = $category;
+					$columns[] = $title;
+					$columns[] = $category;
+					$columns[] = 'now()';
+
+					$result = $this->model->insert('menu', $columns);
+					if (!$result) {
+						$msg .= "메뉴 등록을 실패하였습니다.<br>";
+						$resultYN = 'N';
+					}
+				}
+			}			
 		} else {
 			$msg .= "$category 게시판 수정을 실패하였습니다.";
 			$resultYN = "N";	
