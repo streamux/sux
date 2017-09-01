@@ -39,8 +39,8 @@
 						<span class="label label-primary {$item.subject.icon_progress_step_color}">{$item.subject.progress_step_name}</span>	
 					</span></a>
 				</td>				
-				<td class="date"><span>{$item.id}</span></td>
-				<td class="hit"><span>{$item.ssunseo_count}</span></td>
+				<td class="date"><span>{$item.date}</span></td>
+				<td class="hit"><span>{$item.hit}</span></td>
 			</tr>
 			{else if}
 			<tr>
