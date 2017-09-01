@@ -247,18 +247,37 @@ class DocumentAdminController extends Controller
 					}					
 				}
 
-				// insert into menu
-				$columns = array();
-				$columns['name'] = $title;
-				$columns['url'] = $category;
-
+				// insert into menu	
 				$where->reset();
 				$where->set('category', $category);
-				$result = $this->model->update('menu', $columns, $where);
-				if (!$result) {
-					$msg .= "메뉴 업데이트를 실패하였습니다.";
-					$resultYN = 'N';
-				}
+				$result = $this->model->select('menu', 'id', $where);
+				if ($result) {
+					$numrows = $this->model->getNumRows();
+					if ($numrows > 0) {
+						$columns = array();
+						$columns['name'] = $title;
+						$columns['url'] = $category;
+						
+						$result = $this->model->update('menu', $columns, $where);
+						if (!$result) {
+							$msg .= "메뉴 업데이트를 실패하였습니다.";
+							$resultYN = 'N';
+						}
+					} else {
+						$columns = array();
+						$columns[] = '';
+						$columns[] = $category;
+						$columns[] = $title;
+						$columns[] = $category;
+						$columns[] = 'now()';
+
+						$result = $this->model->insert('menu', $columns);
+						if (!$result) {
+							$msg .= "메뉴 등록을 실패하였습니다.<br>";
+							$resultYN = 'N';
+						}
+					}
+				}				
 
 				$where->reset();
 				$where->set('category', $category);
@@ -285,7 +304,6 @@ class DocumentAdminController extends Controller
 						"result"=>$resultYN,
 						"msg"=>$msg);
 
-		// document  param 값을 받으면 앵귤러 통신 $is_document = Y
 		$this->callback($data);
 	}
 
