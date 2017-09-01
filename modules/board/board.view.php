@@ -91,6 +91,7 @@ class BoardView extends View
 					$name =htmlspecialchars($contentData['list'][$i]['user_name']);	
 					$title =htmlspecialchars($contentData['list'][$i]['title']);
 					$progressStep =$contentData['list'][$i]['progress_step'];
+					$hit =htmlspecialchars($contentData['list'][$i]['readed_count']);
 					$space = $contentData['list'][$i]['space_count'];
 					
 					$date =$contentData['list'][$i]['date'];				
@@ -314,7 +315,7 @@ class BoardView extends View
 
 		$row = $this->model->getRow();
 		$hit = $row['readed_count']+1;
-		$this->model->update('board', $hit, $where);
+		$this->model->update('board', array('readed_count'=>$hit), $where);
 
 		$this->model->select('board','*', $where);
 		$contentData = $this->model->getRow();
