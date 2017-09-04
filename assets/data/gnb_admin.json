@@ -10,7 +10,7 @@
 		]},
 		{"id": 4, "sid": 0, "name": "페이지관리", "router_link": "", "sub": [
 			{"id": 4, "sid":1, "name": "그룹목록", "router_link": "document-admin"},
-			{"id": 4, "sid":2, "name": "그룹목록", "router_link": "document-admin/add"}
+			{"id": 4, "sid":2, "name": "그룹추가", "router_link": "document-admin/add"}
 		]},
 		{"id": 5, "sid": 0, "name": "팝업관리", "router_link": "", "sub": [
 			{"id": 5, "sid":1, "name": "팝업목록", "router_link": "popup-admin"},
