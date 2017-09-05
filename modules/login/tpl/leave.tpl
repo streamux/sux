@@ -2,7 +2,7 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원탈퇴 - StreamUX"}
-<div class="article-box ui-edgebox">				
+<div class="article-box">				
 	<div class="login">
 		<h1 class="title">회원 탈퇴</h1>
 		<span class="subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>

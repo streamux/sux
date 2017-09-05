@@ -58,10 +58,15 @@ class InstallController extends Controller
 
 		$rootPath = _SUX_ROOT_;
 		$filePath = 'files/config/config.admin.php';
-		$buffer = array();
+		$buffer = array('admin_info'=>array());
 		foreach ($admin_info as $key => $value) {
-			$buffer['admin_info'][$value] = $posts[$value];
+			if (preg_match('/(admin_pwd)+/', $value)) {
+				$buffer['admin_info'][$value] = $context->getPasswordHash($posts[$value]);
+			} else {
+				$buffer['admin_info'][$value] = $posts[$value];
+			}			
 		}
+
 		$result = CacheFile::writeFile($filePath, $buffer);
 		if(!$result) {
 			$msg = "관리자 설정을 실패했습니다.";
@@ -249,6 +254,7 @@ class InstallController extends Controller
 										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
 									} else {
 										// write route's key
+										$routes = array();
 										$filePath = $realPath . 'files/caches/routes/document.cache.php';
 										$routeCaches = CacheFile::readFile($filePath);			
 										if (isset($routeCaches) && $routeCaches) {
@@ -257,7 +263,7 @@ class InstallController extends Controller
 
 											$pattern = sprintf('/(%s)+/i', $category);
 											if (!preg_match($pattern, implode(',', $routes['categories']))) {
-												$routes['categories'][] = $category; 
+												array_push($routes['categories'], $category); 
 											}
 											CacheFile::writeFile($filePath, $routes);
 										}

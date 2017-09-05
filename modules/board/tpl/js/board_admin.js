@@ -300,10 +300,11 @@ jsux.fn.modify = {
 		}
 
 		jsux.getJSON(url, params, function( e ) {
-
-			trace( e.msg );			
+			
 			if (e.result == "Y") {
 				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
+			} else {
+				trace( e.msg );			
 			}
 		});
 	},

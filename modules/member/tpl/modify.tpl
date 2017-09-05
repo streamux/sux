@@ -3,7 +3,7 @@
 {assign var=footerPath value=$skinPathList.footer}
 {assign var=contentsData value=$documentData.contents}
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
-<div class="articles ui-edgebox">
+<div class="articles">
 	<div class="member-edit">
 		<div class="tt">
 			<div class="imgbox">

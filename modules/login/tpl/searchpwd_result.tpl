@@ -2,7 +2,7 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="비밀번호 찾기 결과 - StreamUX"}
-<div class="article-box ui-edgebox">	
+<div class="article-box">	
 	<div class="login">
 		<h1 class="title">비밀번호 찾기 결과</h1>
 		<span class="subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>

@@ -27,6 +27,7 @@ class View extends Object {
 
 	function defaultSetting() {
 
+		$context = Context::getInstance();
 		$this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
 	}
 

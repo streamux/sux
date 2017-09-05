@@ -28,9 +28,8 @@ class BoardController extends Controller
 	function _checkFiles( $value ) {
 
 		$imageUpName = $value['imgup']['name'];
-
-		if (eregi("php|php3|htm|html|js|exe|phtml|inc|jsp|asp|swf",$imageUpName)) {
-			$msg = '실행파일(php,php3,htm,html,js,exe,phtml,inc,jsp,asp,swf...)은 등록 할 수 없습니다.';
+		if (isset($imageUpName) && $imageUpName && !preg_match('/(jpg|jpeg|gif|png|bmp|zip)+$/', $imageUpName)) {
+			$msg .= '[ jpg, jpeg, gif, png, bmp, zip ] 형식의 이미지 파일과 압축 파일만 등록이 가능합니다.';
 			UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
 			exit;
 		}

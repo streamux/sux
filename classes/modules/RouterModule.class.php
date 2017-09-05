@@ -99,7 +99,7 @@ class RouterModule
 							}													
 						}								
 					} else {
-						printf("[ %sClass ] An Error Occurred<br>", $ClassName);	
+						printf("[ %sClass ] An Error Occurred In 'RouterModule.class.php'<br>", $ClassName);	
 					}
 				}
 			}			

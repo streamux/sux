@@ -2,7 +2,7 @@
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 로그인 - StreamUX"}
-<div class="article-box ui-edgebox">
+<div class="article-box">
 	<div class="login">
 		<h1 class="title">관리자 로그인</h1>
 		<span class="subtitle">SUX 솔루션을 이용해 주셔서 진심으로 감사합니다.</span>

@@ -53,7 +53,7 @@ class Object {
 				echo $strJson;		
 			}		
 		} else {
-			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 2;
+			$delay = (isset($data['delay']) ||  $data['delay'] === 0) ? $data['delay'] : 0;
 			if ($delay > 0) {
 				echo $data['msg'];
 			}			

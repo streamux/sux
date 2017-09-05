@@ -16,7 +16,7 @@ class ModuleHandler
 	}
 
 	public function init()
-	{		
+	{
 		$context = Context::getInstance();
 		$cookieId = $context->getCookieId();
 		$cookieVersion = $context->getCookie($cookieId);
@@ -27,9 +27,10 @@ class ModuleHandler
 				$context->makeRouteCaches();
 			}
 		}
-
+		
 		$router = RouterModule::getInstance();
 		if ($context->installed()) {
+
 			$router->init();
 		} else {
 			$router->install(); 

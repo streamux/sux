@@ -1,8 +1,13 @@
 	</div>
 	<div class="footer">
 		<ul class="clearfix">
+		{if isset($sessionData.user_name) && $sessionData.user_name}
+			<li><a href="{$rootPath}logout?_method=insert">로그아웃</a></li>
+			<li><a href="{$rootPath}member-modify">회원정보수정</a></li>
+		{else}
 			<li><a href="{$rootPath}login">로그인</a></li>
-			<li><a href="{$rootPath}member-join">회원가입</a></li>
+			<li><a href="{$rootPath}member-join">회원가입</a></li>		
+		{/if}
 			<li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
 		</ul>	
 		<p>
@@ -25,7 +30,15 @@
 		<div class="ui-user-info">
 			<ul class="clearfix">
 				<li><div class="ui-user-picture"></div></li>
-				<li><span class="ui-user-nickname">Guest</span></li>
+				<li>
+					<span class="ui-user-nickname">
+					{if isset($sessionData.user_name) && $sessionData.user_name}
+						{$sessionData.user_name}
+					{else}
+						Guest
+					{/if}
+					</span>
+				</li>
 				<li>				
 					<a href="/sux-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
 				</li>
@@ -33,12 +46,13 @@
 		</div>
 		<div class="ui-user-member">
 			<ul class="clearfix">
-				<li>
-					<div class="ui-link-login"><a href="{$rootPath}login">로그인</a></div>
-				</li>
-				<li>
-					<div class="ui-link-join"><a href="{$rootPath}member-join">회원가입</a></div>
-				</li>
+			{if isset($sessionData.user_name) && $sessionData.user_name}
+				<li><div class="ui-link-login"><a href="{$rootPath}logout?_method=insert">로그아웃</a></div></li>
+				<li><div class="ui-link-join"><a href="{$rootPath}member-modify">회원정보수정</a></div></li>
+			{else}
+				<li><div class="ui-link-login"><a href="{$rootPath}login">로그인</a></div></li>
+				<li><div class="ui-link-join"><a href="{$rootPath}member-join">회원가입</a></div></li>
+			{/if}
 			</ul>
 		</div>
 	</div>

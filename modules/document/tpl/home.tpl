@@ -1,7 +1,3 @@
-{assign var=rootPath value=$skinPathList.root}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="홈 -SREAMUX"}
 <!-- contents start -->
 <div class="header-contents">
 	<div class="swiper-container swiper-container-visual">
@@ -37,7 +33,7 @@
 		<p class="title">START UP</p>
 		<ul class="clearfix">
 			<li>
-				<a href="${rootPath}member-admin" title="회원관리 하기" target="_blank">
+				<a href="{$rootPath}member-admin" title="회원관리 하기" target="_blank">
 					<span>
 						<i class="xi-group xi-2x"></i>
 					</span>
@@ -84,4 +80,3 @@
 	is_page = 'main';
 </script>
 <!-- contents end -->
-{include file="$footerPath"}

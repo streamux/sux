@@ -27,7 +27,7 @@
 						<a href="{$uri}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
 					{else}
 						<a href="{$uri}/{$item.subject.id}">
-					{/if}			
+					{/if}
 					<span class="link-area" style="padding-left:{$item.subject.space}">
 						<span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>						
 						{$item.subject.title|nl2br}
