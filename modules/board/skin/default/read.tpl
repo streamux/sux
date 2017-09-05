@@ -21,7 +21,6 @@
 		<p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
 		<p>{$contentData.contents}</p>
 	</div>
-	{$requestData.search}
 	<div class="board-buttons">
 		{if $requestData.search != ''}
 			<a href="{$uri}?find={$requestData.find}&search={$requestData.search}">

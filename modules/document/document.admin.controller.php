@@ -106,6 +106,7 @@ class DocumentAdminController extends Controller
 			}
 
 			// write route's key
+			$routes = array();
 			$filePath = './files/caches/routes/document.cache.php';
 			$routeCaches = CacheFile::readFile($filePath);			
 			if (isset($routeCaches) && $routeCaches) {
@@ -114,9 +115,9 @@ class DocumentAdminController extends Controller
 
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					$routes['categories'][] = $category;
-					CacheFile::writeFile($filePath, $routes);
-				}				
+					array_push($routes['categories'], $category);
+				}
+				CacheFile::writeFile($filePath, $routes);			
 			}
 
 			// insert into menu
@@ -191,7 +192,7 @@ class DocumentAdminController extends Controller
 				}
 				$columns[$key] = $value;
 			} 					
-		}
+		}		
 		// end of page
 
 		$where = new QueryWhere();
@@ -234,17 +235,18 @@ class DocumentAdminController extends Controller
 				}
 
 				// rewrite route's key
+				$routes = array();
 				$filePath = './files/caches/routes/document.cache.php';
 				$routeCaches = CacheFile::readFile($filePath);			
 				if (isset($routeCaches) && $routeCaches) {
 					$routes['categories'] = $routeCaches['categories'];
 					$routes['action'] = $routeCaches['action'];
-
+					
 					$pattern = sprintf('/(%s)+/i', $category);
 					if (!preg_match($pattern, implode(',', $routes['categories']))) {
-						$routes['categories'][] = $category; 
-						CacheFile::writeFile($filePath, $routes);
-					}					
+						array_push($routes['categories'], $category);			
+					}
+					CacheFile::writeFile($filePath, $routes);
 				}
 
 				// insert into menu	

@@ -6,7 +6,8 @@ class BoardView extends View
 
 		$UIError = UIError::getInstance();
 		$context = Context::getInstance();
-		$requestData = $context->getRequestAll();
+		$requestData = $context->getRequestAll();		
+		$this->session_data = $context->getSessionAll();
 
 		$returnURL = $context->getServer('REQUEST_URI');
 		$passover = $context->getRequest('passover');
@@ -93,6 +94,8 @@ class BoardView extends View
 					$progressStep =$contentData['list'][$i]['progress_step'];
 					$hit =htmlspecialchars($contentData['list'][$i]['readed_count']);
 					$space = $contentData['list'][$i]['space_count'];
+					$filename = $contentData['list'][$i]['filename'];
+					$filetype = trim($contentData['list'][$i]['filetype']);
 					
 					$date =$contentData['list'][$i]['date'];				
 					$compareDayArr = split(' ', $date);
@@ -142,10 +145,10 @@ class BoardView extends View
 						$subject['icon_box_color'] = 'icon-notice-color';
 					}*/
 
-					if ($filename){
-						if ($filetype === ("image/gif" || "image/jpeg" || "image/x-png" || "image/png" || "image/bmp")) {
+					if (isset($filename) && $filename){
+						if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {							
 							$imgname = "icon_img.png";
-						} else if ($download == 'y'  && ($filetype=="application/x-zip-compressed" || "application/zip")) { 
+						} else if ($download === 'y'  && preg_match('/(application/x-zip-compressed|application/zip)+/', $filetype)) { 
 							$imgname = "icon_down.png";
 						}
 
@@ -347,17 +350,15 @@ class BoardView extends View
 		$contentData['css_img'] = 'hide';
 
 		$fileupPath = '';
-		if ($filename) {
+		if (isset($filename) && $filetype) {
 
 			$fileupPath = $rootPath . "files/board/${filename}";
-			if (($is_download === 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
-
+			if (($is_download === 'y') && preg_match( '/(application\/x-zip-compressed|application\/zip)+', $filetype)) {
 				$contentData['css_down'] = 'show';
-			} else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
+			} else if (!preg_match( '/(application\/x-zip-compressed|application\/zip)+', $filetype)){
 
 				$image_info = getimagesize($fileupPath);
 			      $image_type = $image_info[2];
-
 			      if ( $image_type === IMAGETYPE_JPEG ) {
 			      		$image = imagecreatefromjpeg($fileupPath);
 			      } elseif( $image_type === IMAGETYPE_GIF ) {
@@ -444,9 +445,9 @@ class BoardView extends View
 		$PHP_SELF = $context->getServer("PHP_SELF");
 		$admin_pass = $context->checkAdminPass();
 
-		echo $grade;
-
-		$this->model->select('board_group', '*');
+		$where = new QueryWhere();
+		$where->set('category',$category,'=');
+		$this->model->select('board_group', '*', $where);
 
 		$groupData = $this->model->getRow();
 		$nonemember = $groupData['allow_nonmember'];
@@ -505,7 +506,6 @@ class BoardView extends View
 			$level = 0;
 		}
 
-		//echo '<meta charset="utf-8" />';
 		if ($level < $grade_w) {
 			$msg .= '죄송합니다. 쓰기 권한이 없습니다.';		
 			UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));

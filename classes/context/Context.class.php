@@ -38,7 +38,7 @@ class Context
 		$this->startSession();
 		$this->loadDBInfo();
 		$this->loadAdminInfo();
-		$this->loadTableInfo();		
+		$this->loadTableInfo();
 	}
 
 	function startSession() {
@@ -69,7 +69,6 @@ class Context
 		);
 
 		$msg = '';
-
 		foreach ($dirList as $key => $dir) {
 			$msg .= FileHandler::makeDir($dir, $is_safe, $db_info);
 			$msg .= "\n";

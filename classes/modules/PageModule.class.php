@@ -48,23 +48,24 @@ class PageModule
 		// action값이 uri 값에 없을 때 document 클래스의 index 화면을 보여준다. 
 		if (empty($action)) {
 			$className = 'Document';
-		} else {
+		} else {	
+
 			// ModuleRouter Class 에서 등록된 값 
 			$className = $context->getModule($moduleKey);
 		}
 
 		if ($context->getDB() || strtolower($className) === 'install') {
 
-			$ModelClass = $className . 'Model';
-			$ControllerClass = $className . 'Controller';			
-			$ViewClass = $className . 'View';
+			$ModelClass = ucfirst($className) . 'Model';
+			$ControllerClass = ucfirst($className) . 'Controller';			
+			$ViewClass = ucfirst($className) . 'View';
 
 			$toLowerClassName = strtolower($className);
 			if ($toLowerClassName !== 'install') {
 				$oDB = DB::getInstance();
 			}
 
-			$model = new $ModelClass();			
+			$model = new $ModelClass();
 			$controller = new $ControllerClass($model);
 			$view = new $ViewClass( $model, $controller);
 			
@@ -76,20 +77,46 @@ class PageModule
 			$regMethod = preg_match('/^(create|insert|put|update|delete)+/', $httpMethod);
 			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
 			if ($regMethod) {
+
+				// 값을 저장할 때 올바른 경로를 통해서 유입되는지 체크
+				$referURL = $_SERVER['HTTP_REFERER'];
+				if (empty($returnURL)) {
+					Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access URL is not valid');
+					exit;
+				}
+
+				$yourdomain = $context->getServer('HTTP_HOST');
+				if (isset($yourdomain) && $yourdomain) {
+
+					if (preg_match('/(www)+', $yourdomain)) {
+						str_replace('www.', '',$yourdomain);
+					}
+					
+					$urlReg = sprintf('/^(http(s)?\:\/\/)?(www.)?(%s)/', $yourdomain);
+					if (!preg_match($urlReg, $referURL)) {
+						Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
+						exit;
+					}
+				}
+
+				$referURL = null;
+				$yourdomain = null;
+
 				$controller->{$httpMethod.ucfirst($action)}();
 				//$controller->tester($httpMethod . ucfirst($action), 'js');
 			} else {
 
 				//-- Check Login  of Admin Page  start
 				$isLogged = $context->getSession('admin_ok');
-				if (empty($isLogged) && $toLowerClassName !== 'loginadmin' && preg_match('/(admin)+$/', $toLowerClassName) == true ) {
-					Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
-					return;
+				if (empty($isLogged)) {
+					if (!preg_match('/^(loginadmin)+/', $toLowerClassName) && preg_match('/(admin)+$/', $toLowerClassName)) {
+						Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
+						exit;
+					}
 				}
-				//-- end
 
-				if (preg_match('/^(board|document)+/i', $className)) {
-					if (empty($category)) {
+				if (empty($category)) {
+					if (preg_match('/^(board|document)+/i', $className)) {					
 						// when user connect from Base URL
 						if (empty($action)) {
 							$category = 'home';

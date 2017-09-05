@@ -87,14 +87,18 @@ class BoardAdminController extends Controller
 		} else {
 
 			// 라우트 키 저장 
+			$routes = array();			
 			$filePath = './files/caches/routes/board.cache.php';
-			$routes = CacheFile::readFile($filePath);
-			if (isset($routes) && $routes) {
+			$routeCaches  = CacheFile::readFile($filePath);
+			if (isset($routeCaches) && $routeCaches) {
+				$routes['categories'] = $routeCaches['categories'];
+				$routes['action'] = $routeCaches['action'];
+
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					$routes['categories'][] = $category; 
-					CacheFile::writeFile($filePath, $routes);	
+					array_push($routes['categories'], $category); 						
 				}
+				CacheFile::writeFile($filePath, $routes);
 			}				
 
 			$passwordHash = $context->getPasswordHash('12');
@@ -197,16 +201,19 @@ class BoardAdminController extends Controller
 			$dataObj = $this->model->getRows();
 
 			// 라우트 키 저장 
+			$routes = array();			
 			$filePath = './files/caches/routes/board.cache.php';
-			$routes = CacheFile::readFile($filePath);
-			if (isset($routes) && $routes) {
+			$routeCaches  = CacheFile::readFile($filePath);
+			if (isset($routeCaches) && $routeCaches) {
+				$routes['categories'] = $routeCaches['categories'];
+				$routes['action'] = $routeCaches['action'];
+
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-
-					$routes['categories'][] = $category; 
-					CacheFile::writeFile($filePath, $routes);	
+					array_push($routes['categories'], $category); 						
 				}
-			}	
+				CacheFile::writeFile($filePath, $routes);
+			}
 
 			// insert into menu	
 			$where->reset();

@@ -29,6 +29,7 @@ class LoginAdminController extends Controller {
 
 		$adminId = $context->getAdminInfo('admin_id');
 		$adminPwd = $context->getAdminInfo('admin_pwd');
+		$userPwd = $context->getPasswordHash($userPwd);
 
 		if ($userId !== $adminId) {
 			UIError::alertToBack('아이디가 일치하지 않습니다.');
@@ -75,6 +76,8 @@ class LoginAdminController extends Controller {
 
 		$adminId = $context->getAdminInfo('admin_id');
 		$adminPwd = $context->getAdminInfo('admin_pwd');
+		$userPwd = $context->getPasswordHash($userPwd);
+		$userNewPwd = $context->getPasswordHash($userNewPwd);
 
 		if ($userId !== $adminId) {
 			UIError::alertToBack('아이디가 일치하지 않습니다.');
@@ -88,9 +91,16 @@ class LoginAdminController extends Controller {
 
 		$rootPath = _SUX_ROOT_;
 		$filePath = 'files/config/config.admin.php';
-		$buffer = array();
+		$buffer = array('admin_info'=>array());
+		$adminInfo = $context->getAdminInfo();
 		foreach ($admin_info as $key => $value) {
-			$buffer['admin_info'][$value] = $posts[$value];
+			if (isset($posts[$value]) && $posts[$value]) {
+				$buffer['admin_info'][$value] = $posts[$value];
+			} else {
+				if (isset($adminInfo[$value]) && $adminInfo[$value]) {
+					$buffer['admin_info'][$value] = $adminInfo[$value];
+				}				
+			}		
 		}
 		$buffer['admin_info']['admin_pwd'] = $userNewPwd;
 		$result = CacheFile::writeFile($filePath, $buffer);

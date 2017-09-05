@@ -96,7 +96,7 @@ class LoginController extends Controller
 
 		$data = array(	'msg'=>'로그아웃',
 						'result'=>'Y',
-						'url'=>$rootPath . 'login',);
+						'url'=>$rootPath . 'login');
 		
 		$this->callback($data);
 	}
