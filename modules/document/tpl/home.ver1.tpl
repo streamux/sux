@@ -37,6 +37,15 @@
 		<p class="title">START UP</p>
 		<ul class="clearfix">
 			<li>
+				<a href="{$rootPath}menues" title="메뉴관리 하기" target="_blank">
+					<span>
+						<i class="xi-view-list xi-2x"></i>
+					</span>
+				</a>
+				<h2>메뉴 관리하기</h2>
+				<p>회원 그룹을 통해 체계적으로 관리해보세요. 회원 관리 메뉴는 <a href="/sux-admin/menues" target="_blank">[메뉴 > 관리자 설정(톱니바퀴 아이콘) > 관리자 화면 > 메뉴 관리]</a>에서 메뉴를 추가, 삭제, 순서 변경을 할 수 있습니다.</p>
+			</li>
+			<li>
 				<a href="{$rootPath}member-admin" title="회원관리 하기" target="_blank">
 					<span>
 						<i class="xi-group xi-2x"></i>
