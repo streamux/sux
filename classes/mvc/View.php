@@ -41,6 +41,7 @@ class View extends Object {
 		 */
 		$__template = new Template();
 		if (is_readable($this->skin_path_list['contents'])) {
+			$__template->assign('baseUri', str_replace('/', '', _SUX_ROOT_));
 			$__template->assign('copyrightPath', $this->copyright_path);
 			$__template->assign('skinPathList', $this->skin_path_list);
 			$__template->assign('sessionData', $this->session_data);
