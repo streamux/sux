@@ -40,7 +40,7 @@
 					</span>
 				</li>
 				<li>				
-					<a href="/{$baseUri}-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
+					<a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="ui-user-modify" alt="관리자 설정" /></a>
 				</li>
 			</ul>
 		</div>
