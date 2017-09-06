@@ -96,7 +96,8 @@ class BoardAdminController extends Controller
 
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					array_push($routes['categories'], $category); 						
+					//array_push($routes['categories'], $category); 
+					$routes['categories'][] = $category;	
 				}
 				CacheFile::writeFile($filePath, $routes);
 			}				
@@ -210,7 +211,8 @@ class BoardAdminController extends Controller
 
 				$pattern = sprintf('/(%s)+/i', $category);
 				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					array_push($routes['categories'], $category); 						
+					//array_push($routes['categories'], $category); 
+					$routes['categories'][] = $category;			
 				}
 				CacheFile::writeFile($filePath, $routes);
 			}

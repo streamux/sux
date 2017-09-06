@@ -84,16 +84,13 @@ class Context
 			$module = $value['file_name'];
 
 			$classList = array();
-			$classList[] = array(
-				'class'=>ucfirst($module) . 'Admin',
-				'class_path'=>'./modules/' . $module . '/' . $module . '.admin.class.php',
-				'route_path'=>'./files/caches/routes/' . $module . '.admin.cache.php'
-				);
-			$classList[] = array(
-				'class'=>ucfirst($module),
-				'class_path'=>'./modules/' . $module . '/' . $module . '.class.php',
-				'route_path'=>'./files/caches/routes/' . $module . '.cache.php'
-				);
+			$classList[] = array(	'class'=>ucfirst($module) . 'Admin',
+								'class_path'=>'./modules/' . $module . '/' . $module . '.admin.class.php',
+								'route_path'=>'./files/caches/routes/' . $module . '.admin.cache.php'	);
+
+			$classList[] = array(	'class'=>ucfirst($module),
+								'class_path'=>'./modules/' . $module . '/' . $module . '.class.php',
+								'route_path'=>'./files/caches/routes/' . $module . '.cache.php' );
 
 			foreach ($classList as $key => $value) {
 				$classPath = $value['class_path'];
@@ -106,27 +103,38 @@ class Context
 				if (file_exists($classPath)) {
 					$Class = $value['class'];
 					$routes = array();
-					if (isset($Class::$categories) && $Class::$categories) {
-						$categoryArr = $Class::$categories;
-						
-						if (isset($routedValue['categories']) && $$routedValue['categories']) {
-							$routeCategory = $routedValue['categories'];					
-							$categoryArr = array_merge($categoryArr, $routeCategory);
-							$categoryArr = array_unique($categoryArr);
-						}
-						$routes['categories'] = $categoryArr;
-					}
-					if (isset($Class::$action) && $Class::$action) {
-						$actionArr = $Class::$action;
 
-						if (isset($routedValue['action']) && $routedValue['action']) {
-							$routedAction = $routedValue['action'];					
-							$actionArr = array_merge($actionArr, $routedAction);					
-							$actionArr = array_unique($actionArr);
-						}
-						
-						$routes['action'] = $actionArr;
+					// set category
+					$classCategories = array();
+					$routedCategories = array();
+					$classAction = array();
+					$routedAction = array();
+
+					if (isset($Class::$categories) && $Class::$categories) {						
+						$classCategories = $Class::$categories;					
+					}
+
+					if (isset($routedValue['categories']) && $routedValue['categories']) {
+						$routedCategories = $routedValue['categories'];							
+					}
+
+					$categories = array_merge($classCategories, $routedCategories);
+					$categories = array_unique($categories);
+					$routes['categories'] = $categories;
+
+					// set action
+					if (isset($Class::$action) && $Class::$action) {
+						$classAction = $Class::$action;						
 					} 
+
+					if (isset($routedValue['action']) && $routedValue['action']) {
+						$routedAction = $routedValue['action'];							
+					}
+
+					$actions = array_merge($classAction, $routedAction);					
+					$actions = array_unique($actions);
+					$routes['action'] = $actions;
+
 					CacheFile::writeFile( $routePath, $routes);
 				}
 			}
@@ -286,14 +294,16 @@ class Context
 		return $_REQUEST;
 	}
 
+	/**
+	 * value		date('Y-m-d H:i:s')
+	 * expiry	time() + 86400 * 30 * 12
+	 */
 	function setCookie($name, $value, $expiry, $path='/') {
-		/**
-		 * value		date('Y-m-d H:i:s')
-		 * expiry	time() + 86400 * 30 * 12
-		 */
+		
 		$path = './files/cookie/version.cookie.php';
 		if (isset($value) && $value) {
 			setcookie($name, $value, $expiry, $path);
+
 			$buf = array();
 			$buf[] = "<?php\n";
 			$buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";

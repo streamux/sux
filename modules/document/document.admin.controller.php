@@ -114,8 +114,10 @@ class DocumentAdminController extends Controller
 				$routes['action'] = $routeCaches['action'];
 
 				$pattern = sprintf('/(%s)+/i', $category);
-				if (!preg_match($pattern, implode(',', $routes['categories']))) {
-					array_push($routes['categories'], $category);
+				$routeList =  implode(',', $routes['categories']);
+				if (!preg_match($pattern, $routeList)) {
+					//array_push($routes['categories'], $category);
+					$routes['categories'][] = $category;
 				}
 				CacheFile::writeFile($filePath, $routes);			
 			}
@@ -244,7 +246,8 @@ class DocumentAdminController extends Controller
 					
 					$pattern = sprintf('/(%s)+/i', $category);
 					if (!preg_match($pattern, implode(',', $routes['categories']))) {
-						array_push($routes['categories'], $category);			
+						//array_push($routes['categories'], $category);
+						$routes['categories'][] =$category;				
 					}
 					CacheFile::writeFile($filePath, $routes);
 				}
