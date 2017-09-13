@@ -1,253 +1,266 @@
 jsux.fn = jsux.fn || {};
 jsux.fn.login = {
 
-	checkForm: function( f ) {
+  checkForm: function( f ) {
 
-		var id = f.user_id.value.length,
-			pwd = f.password.value.length;
+    var userId = f.user_id,
+          pwd = f.password;
 
-		if ( id < 1) {
-			trace('아이디를 입력하세요.');
-			f.user_id.focus();
-			return (false);				
-		}
+    if ( userId.value.length < 1) {
+      trace('아이디를 입력하세요.');
+      userId.focus();
+      return false;       
+    }
 
-		if ( pwd < 1) {
-			trace('비밀번호를 입력하세요.');
-			f.password.focus();
-			return (false);				
-		}
-		return (true);
-	},
-	sendJson: function(f) {
+    if ( pwd.value.length < 1) {
+      trace('비밀번호를 입력하세요.');
+      pwd.focus();
+      return false;       
+    }
+    return true;
+  },
+  sendJson: function(f) {
 
-		var params = '',
-			url = '';
-			
-		params = {
-			_method: f._method.value,
-			category: f.category.value,
-			user_id: f.user_id.value,
-			password: f.password.value
-		};
-		
-		if (!f.action) {
-			alert('Not Exists URL');
-		}
-		url = f.action;
+    var params = '',
+      url = '';
+      
+    params = {
+      _method: f._method.value,
+      category: f.category.value,
+      user_id: f.user_id.value,
+      password: f.password.value
+    };
+    
+    if (!f.action) {
+      alert('Not Exists URL');
+    }
+    url = f.action;
 
-		jsux.getJSON( url, params, function( e ) {
-			
-			if (e.result.toLowerCase() == 'y') {
-				jsux.goURL(jsux.rootPath + 'login');
-			} else {
-				trace( e.msg );
-				jsux.goURL(jsux.rootPath + 'login-fail');
-			}
-		});
-	},
-	event: function() {
+    jsux.getJSON( url, params, function( e ) {
+      
+      if (e.result.toLowerCase() == 'y') {
+        jsux.goURL(jsux.rootPath + 'login');
+      } else {
+        trace( e.msg );
+        jsux.goURL(jsux.rootPath + 'login-fail');
+      }
+    });
+  },
+  event: function() {
 
-		var self = this;
-		$('form').submit( function(e) {
-			e.preventDefault();
-			var bool = self.checkForm(this);
-			if (bool) {
-				self.sendJson(this);
-			}
-		});
+    var self = this;
+    $('form').submit( function(e) {       
+      e.preventDefault();      
 
-		$('.panel-btn > a').on('click', function(e) {
-			e.preventDefault();
-
-			var url = $(this).attr('href');
-			if (!url) {
-				alert('Not Exists URL');
-			}
-			var params = {_method:'insert'};
-			jsux.getJSON( url, params, function( e ) {
-				
-				if (e.result.toLowerCase() === 'y') {
-					jsux.goURL(jsux.rootPath + 'login');
-				}
-			});			
-		});
-	},
-	init: function() {
-		this.event();
-		jsux.setAutoFocus();
-	}
+      var bool = self.checkForm(this);
+      console.log(bool);
+      if (bool) {
+        console.log('aa');
+        self.sendJson(this);
+      }
+    });
+  },
+  init: function() {
+    this.event();
+    jsux.setAutoFocus();
+  }
 };
+
 jsux.fn.leave = {
 
-	checkForm: function( f ) {
+  checkForm: function( f ) {
 
-		var id = f.user_id.value.length,
-			pwd = f.password.value.length;
+    var pwd = f.password.value.length;
+    if ( pwd < 1) {
+      trace('비밀번호를 입력하세요.');
+      f.password.focus();
+      return false;       
+    }
+    return true;
+  },
+  resetForm: function( f ) {
 
-		if ( id < 1) {
-			trace('아이디를 입력하세요.');
-			f.user_id.focus();
-			return (false);				
-		}
+    var pwd = f.password;
+    pwd.value = '';
+    pwd.focus();
+  },
+  sendJson: function( f ) {
 
-		if ( pwd < 1) {
-			trace('비밀번호를 입력하세요.');
-			f.password.focus();
-			return (false);				
-		}
-		return (true);
-	},
-	sendJson: function( f ) {
+    var self = this,
+      params = '',
+      url = '';
 
-		var params = '',
-			url = '';
-		params = {
-			_method: f._method.value,
-			category: f.category.value,
-			user_id: f.user_id.value,
-			password: f.password.value
-		};
+    params = {
+      _method: f._method.value,
+      category: f.category.value,
+      user_id: f.user_id.value,
+      password: f.password.value
+    };
 
-		if (!f.action) {
-			alert('Not Exists URL');
-		}
-		url = f.action;
+    if (!f.action) {
+      alert('Not Exists URL');
+    }
+    url = f.action;
 
-		var logoutHandler = function( url ) {
+    var logoutHandler = function( url ) {
 
-			params._method = 'insert';
-			jsux.getJSON( url, params, function( e ) {
-				
-				if (e.result.toLowerCase() === 'y') {
-					jsux.goURL(jsux.rootPath + 'login');
-				}
-			});
-		};
+      params._method = 'insert';
+      jsux.getJSON( url, params, function( e ) {
+        
+        if (e.result.toLowerCase() === 'y') {
+          jsux.goURL(jsux.rootPath + 'login');
+        }
+      });
+    };
 
-		jsux.getJSON( url, params, function( e ) {
+    jsux.getJSON( url, params, function( e ) {
 
-			trace( e.msg );
-			if (e.result.toUpperCase() == 'Y') {
-				logoutHandler(jsux.rootPath + 'logout');
-			}
-		});		
-	},
-	setEvent: function() {
+      trace( e.msg );
+      if (e.result.toUpperCase() == 'Y') {
+        logoutHandler(jsux.rootPath + 'logout');
+      } else {
+        self.resetForm(f);
+      }
+    });   
+  },
+  setEvent: function() {
 
-		var self = this;
-		$('.panel-btn input').on('click',function(e) {
-			e.preventDefault();
+    var self = this;
+    $('input[type=submit]').on('click',function(e) {
+      e.preventDefault();
 
-			var form = $('form')[0],
-				key = $(this).attr('name');
+      var form = $('form')[0],
+        key = $(this).attr('name');
 
-			if (key == 'btn_confirm') {
-				var bool = self.checkForm(form);
-				if (!bool) {
-					return;
-				}
-				self.sendJson(form);
-			} 
-		});
-	},
-	init: function() {
-		this.setEvent();
-		jsux.setAutoFocus();
-	}
+      if (key === 'btn_confirm' && self.checkForm(form)) {
+        self.sendJson(form);        
+      } 
+    });
+  },
+  init: function() {
+    this.setEvent();
+    jsux.setAutoFocus();
+  }
 };
 jsux.fn.searchResult = {
 
-	init: function() {}
+  init: function() {}
 };
+
 jsux.fn.searchId = {
 
-	checkForm: function( f ) {
+  validateEmail: function(id) {
 
-		var nm = f.user_name.value.length,
-			em = f.email_address.value.length;
+    var value = $('input:text[name='+id+']').val();
+    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
+    if (reg.test(value)) {
+      return true;
+    }
+    return false;
+  },
+  checkForm: function( f ) {
 
-		if ( nm < 1) {
-			trace('이름을 입력하세요.');
-			f.user_name.focus();
-			return false;				
-		}
+    var userName = f.user_name,
+      email = f.email_address;
 
-		if ( em < 1) {
-			trace('이메일 주소를 입력하세요.');
-			f.email_address.focus();
-			return (false);				
-		}
-		return (true);
-	},
-	setEvent: function() {
+    if ( userName.value.length < 1) {
+      trace('이름을 입력하세요.');
+      userName.focus();
+      return false;       
+    }
 
-		var self = this;
+    if ( email.value.length < 1) {
+      trace('이메일 주소를 입력하세요.');
+      email.focus();
+      return false;       
+    }
 
-		$('.panel-btn input').on('click',function(e) {
-			e.preventDefault();
+    if (!this.validateEmail('email_address')) {
+      trace('이메일이 올바르지 않습니다.');
+      email.focus();
+      return false;       
+    }
+    return true;
+  },
+  setEvent: function() {
 
-			var form = $('form')[0],
-				key = $(this).attr('name');
+    var self = this;
 
-			if (key == 'btn_confirm') {
-				if (self.checkForm(form)) {
-					$(form).submit();
-				}				
-			} 
-		});
-	},
-	init: function() {
-		this.setEvent();
-		jsux.setAutoFocus();
-	}
+    $('input[type=submit]').on('click',function(e) {
+      e.preventDefault();
+
+      var form = $('form')[0],
+        key = $(this).attr('name');
+      if (key === 'btn_confirm' && self.checkForm(form)) {
+        $(form).submit();  
+      } 
+    });
+  },
+  init: function() {
+    this.setEvent();
+    jsux.setAutoFocus();
+  }
 };
 jsux.fn.searchPassword = {
 
-	checkForm: function( f ) {
+  validateEmail: function(id) {
 
-		var nm = f.user_name.value.length,
-			id = f.user_id.value.length,
-			email = f.email_address.value.length;
+    var value = $('input:text[name='+id+']').val();
+    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
+    if (reg.test(value)) {
+      return true;
+    }
+    return false;
+  },
+  checkForm: function( f ) {
 
-		if ( nm < 1) {
-			trace('이름을 입력하세요.');
-			f.user_name.focus();
-			return (false);				
-		}
+    var userName = f.user_name,
+          userId = f.user_id,
+          email = f.email_address;
 
-		if ( id < 1) {
-			trace('아이디를 입력하세요.');
-			f.user_id.focus();
-			return (false);				
-		}
+    if ( userName.value.length < 1) {
+      trace('이름을 입력하세요.');
+      userName.focus();
+      return false;       
+    }
 
-		if ( email < 1) {
-			trace('이메일을 입력하세요.');
-			f.email_address.focus();
-			return (false);				
-		}
-		return (true);
-	},
-	setEvent: function() {
+    if ( userId.value.length < 1) {
+      trace('아이디를 입력하세요.');
+      userId.focus();
+      return false;       
+    }
 
-		var self = this;
+    if ( email.value.length < 1) {
+      trace('이메일을 입력하세요.');
+      f.email_address.focus();
+      return false;       
+    }
 
-		$('.panel-btn input').on('click',function(e) {
-			e.preventDefault();
+     if (!this.validateEmail('email_address')) {
+        trace('이메일이 올바르지 않습니다.');
+        email.focus();
+        return false;       
+      }
 
-			var form = $('form')[0],
-				key = $(this).attr('name');
+      return true;
+  },
+  setEvent: function() {
 
-			if (key == 'btn_confirm') {
-				if (self.checkForm(form)) {
-					$(form).submit();
-				}
-			} 
-		});
-	},
-	init: function() {
-		this.setEvent();
-		jsux.setAutoFocus();
-	}
+    var self = this;
+
+    $('input[type=submit]').on('click',function(e) {
+      e.preventDefault();
+
+      var form = $('form')[0],
+        key = $(this).attr('name');
+
+      if (key == 'btn_confirm' && self.checkForm(form)) {
+        $(form).submit();
+      } 
+    });
+  },
+  init: function() {
+    this.setEvent();
+    jsux.setAutoFocus();
+  }
 };

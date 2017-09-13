@@ -19,8 +19,8 @@ class LoginController extends Controller
 			$userId = trim($this->post_data['user_id']);
 		}
 
-		$password = trim($this->session_data['password']);
-		if (empty($password)) {
+		$passwordHash = trim($this->session_data['password']);
+		if (empty($passwordHash)) {
 			$password = trim($this->post_data['password']);
 			if (isset($password) && $password) {
 				$passwordHash = $context->getPasswordHash($password);
@@ -56,6 +56,7 @@ class LoginController extends Controller
 				exit;
 			}
 			
+			$row['password'] = $passwordHash;
 			$row['automod1'] = 'yes';
 			$row['chatip'] = $context->getServer('REMOTE_ADDR');
 			$row['hit_count'] = $row['hit_count'] + 1;

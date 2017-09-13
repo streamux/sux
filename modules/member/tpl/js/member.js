@@ -1,366 +1,465 @@
 jsux.fn = jsux.fn || {};
 jsux.fn.join = {
 
-	getEmailVal: function( id ) {
+  getSelectVal: function( id ) {
 
-		var result = $.trim($('select[name='+id+'1]').val());
-		if ( result == '직접입력') {
-			result = $('input[name='+id+'2]').val();
-		}
-		result = result.replace(/@/i, '');
+    var result = $.trim($('select[name='+id+']').val());
+    return result;
+  },
+  setSelectVal:function( id, value ) {
 
-		return result;
-	},
-	getSelectVal: function( id ) {
+    $('select[name='+id+']').val( value );
+  },
+  getCheckboxVal: function( id ) {
 
-		var result = $.trim($('select[name='+id+']').val());
-		return result;
-	},
-	setSelectVal:function( id, value ) {
+    var result= '',
+      list = $('input:checkbox[name^='+id+']:checked'),
+      len = list.length;
 
-		$('select[name='+id+']').val( value );
-	},
-	getCheckboxVal: function( id ) {
+    $(list).each(function(index){
+      result += list[index].value;
 
-		var result= '',
-			list = $('input:checkbox[name^='+id+']:checked'),
-			len = list.length;
+      if (index < len-1) {
+        result += ',';
+      }
+    });
+    return result;
+  },
+  checkLangKor: function( value ) {
 
-		$(list).each(function(index){
-			result += list[index].value;
+    var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    return reg.test( value );
+  },
+  validateEmail: function(id) {
 
-			if (index < len-1) {
-				result += ',';
-			}
-		});
-		return result;
-	},
-	checkLangKor: function( value ) {
+    var value = $('input:text[name='+id+']').val();
+    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
+    if (reg.test(value)) {
+      return true;
+    }
+    return false;
+  },
+  validateHp: function(e) {
 
-		var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-		return reg.test( value );
-	},
-	checkFormVal: function( f ) {
+    var hpNum = e.target.value;
+    var reg;
 
-		var labelList = ['아이디','비밀번호','비밀번호 확인','이름','닉네임','e-mail','핸드폰 앞자리','핸드폰 가운데 자리', '핸드폰 뒷자리'];
-		var checkList = ['user_id','password','passwordConf','user_name','nick_name','email_address','hp1','hp2','hp3'];
-		var email = f.email_address.value.length + this.getEmailVal('email_tail');
-		var result = true;
+    hpNum = hpNum.replace(/-/g,'');
+    if (!(hpNum.length > 9 && hpNum.length < 12)) {
+      return false;
+    }
 
-		$.each( checkList, function( index, item) {
+    if (hpNum.length === 10) {
+       reg = /^(\d{3})+(\d{3})+(\d{4})+$/;    
+    }
+    if (hpNum.length === 11) {
+      reg = /^(\d{3})+(\d{4})+(\d{4})+$/;    
+    }
 
-			var $input = f[item];
-			if ($input.value.length < 1) {
-				trace(labelList[index] + '을(를) 입력 하세요.');
-				$input.focus();
-				result = false;
-				return false;
-			}
-		});
+    if (!reg.test(hpNum)) {
+      return false;
+    }
 
-		return result;	
-	},
-	sendJson: function( f ) {
+    var str = hpNum.replace(reg, '$1-$2-$3');
+    $('input[name=hp]').val(str);
+    return true;
+  },
+  checkFormVal: function( f ) {
 
-		var self = this;
-		var params = {};
-		var datas = $('form')[0];
-		var indexCheckbox = 0;
-		var url = '';
+    var labelList = ['아이디를','비밀번호를','비밀번호 확인을','이름을','닉네임을','이메일을'];
+    var inputList = ['user_id','password','passwordConf','user_name','nick_name','email_address'];
+    var isValidForm = true;
+    $.each( inputList, function( index, item) {
 
-		$.each(datas, function( index, item ) {
+      var $input = f[item];
+      if ($input.value.length < 1) {
+        trace(labelList[index] + ' 입력 하세요.');
+        $input.focus();
+        isValidForm = false;
+        return false;
+      }
+    });
 
-			var filters = 'checkbox|button|submit';
-			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
-			var glue ='';
+    if (!isValidForm) {
+      return false;
+    }
 
-			if (item.nodeName.toLowerCase() === 'select') {
-				item.value = self.getSelectVal(item.name);
-				params[item.name] = item.value;
-			} else {
+    if (!this.validateEmail('email_address')) {
+      trace('이메일이 올바르지 않습니다.');
+      return false;
+    }
 
-				 if (!type.match(filters)) {
-					//console.log(item.name + ' : ' + item.value);					
-					params[item.name] = item.value;
-				}
-			}
+    return true;  
+  },
+  sendJson: function( f ) {
 
-			if (type === 'checkbox' && item.checked) {
-				if (indexCheckbox === 0) {
-					var name = item.name.substr(0, item.name.length-1);
-					params[item.name] = self.getCheckboxVal(name);
-				} 
-				indexCheckbox++;					
-			}
-		});
+    var self = this;
+    var params = {};
+    var datas = $('form')[0];
+    var indexCheckbox = 0;
+    var url = '';
 
-		/*$.each(params, function( index, item ) {
-			console.log(index + ' : ' + item);
-		});*/
+    $.each(datas, function( index, item ) {
 
-		if (!f.action) {
-			alert('Not Exists URL');
-		}
-		url = f.action;
+      var filters = 'checkbox|button|submit';
+      var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
+      var glue ='';
 
-		jsux.getJSON( url, params, function( e ) {
+      if (item.nodeName.toLowerCase() === 'select') {
+        item.value = self.getSelectVal(item.name);
+        params[item.name] = item.value;
+      } else {
 
-			trace( e.msg );			
-			if (e.result == 'Y') {
-				jsux.goURL( jsux.rootPath + 'login');
-			}
-		});
-	},
-	checkPWD: function() {
+         if (!type.match(filters)) {
+          //console.log(item.name + ' : ' + item.value);          
+          params[item.name] = item.value;
+        }
+      }
 
-		if ($('input[name=passowrd]').val() != $('input[name=passowrdConf]').val()) {
+      if (type === 'checkbox' && item.checked) {
+        if (indexCheckbox === 0) {
+          var name = item.name.substr(0, item.name.length-1);
+          params[item.name] = self.getCheckboxVal(name);
+        } 
+        indexCheckbox++;          
+      }
+    });
 
-			trace('비밀번호가 일치하지 않습니다.');
+    /*$.each(params, function( index, item ) {
+      console.log(index + ' : ' + item);
+    });*/
 
-			$('input[name=passowrd]').val('');
-			$('input[name=passowrdConf]').val('');
-			$('input[name=passowrd]').focus();
+    if (!f.action) {
+      alert('Not Exists URL');
+    }
+    url = f.action;
 
-			return(false);
-		}
-	},		
-	checkID: function() {
+    jsux.getJSON( url, params, function( e ) {
 
-		var	params =  {
-			_method: 'insert',
-			category: this.getSelectVal('category'),
-			user_id: $('input[name=user_id]').val()
-		};
+      trace( e.msg );     
+      if (e.result == 'Y') {
+        jsux.goURL( jsux.rootPath + 'login');
+      }
+    });
+  },
+  checkPWD: function() {
 
-		if (params.user_id === '') {
-			trace('아이디를 입력해주세요');
-			$('input[name=memberid]').focus();
-			return;
-		}
+    if ($('input[name=passowrd]').val() != $('input[name=passowrdConf]').val()) {
 
-		jsux.getJSON( jsux.rootPath + 'check-id', params, function( e ) {
-			trace( e.msg );
-		});
-	},
-	setEvent: function() {
+      trace('비밀번호가 일치하지 않습니다.');
+      $('input[name=passowrd]').val('');
+      $('input[name=passowrdConf]').val('');
+      $('input[name=passowrd]').focus();
 
-		var self = this;
-		$('form').on('submit', function( e ) {
-			e.preventDefault();
+      return(false);
+    }
+  },    
+  checkID: function() {
 
-			var bool  = self.checkFormVal( this);
-			if (bool === true) {
-				self.sendJson( e.target );
-			}
-		});
-		$('input[name=cancel]').on('click', function(e) {
-			jsux.goURL( jsux.rootPath + 'login' );
-		});
+    var inputId = $('input[name=user_id]');
+    var params =  {
+      _method: 'insert',
+      category: this.getSelectVal('category'),
+      user_id: inputId.val()
+    };
 
-		$('input[name=passowrdConf]').on('blur', function() {
-			self.checkPWD();
-		});	
-		$('input[name=checkID]').on('click',function(e) {
-			self.checkID();
-		});
-		$('input[name=checkCorpName]').on('click',function(e) {
-			self.checkCorpName();
-		});
-		$('select[name=email_tail1]').on('change', function() {
+    
+    if (params.user_id === '') {
+      trace('아이디를 입력해주세요');
+      inputId.focus();
+      return;
+    }
 
-			if ($(this).val() === '직접입력') {
-				$('input[name=email_tail2').show();
-			} else {
-				$('input[name=email_tail2').val('').hide();
-			}			
-		});	
-	},
-	setLayout: function() {
+    jsux.getJSON( jsux.rootPath + 'check-id', params, function( e ) {
+      trace( e.msg );
+    });
+  },
+  setEvent: function() {
 
-		jsux.setAutoFocus();
-	},
-	init: function() {
+    var self = this;
+    $('form').on('submit', function( e ) {
+      e.preventDefault();
 
-		this.setEvent();
-		this.setLayout();
-	}
+      var bool  = self.checkFormVal( this);
+      if (bool === true) {
+        self.sendJson( e.target );
+      }
+    });
+
+    $('input[name=cancel]').on('click', function(e) {
+      jsux.goURL( jsux.rootPath + 'login' );
+    });
+
+    $('input[name=passowrdConf]').on('blur', function() {
+      self.checkPWD();
+    }); 
+
+    $('input[name=checkID]').on('click',function(e) {
+      self.checkID();
+    });
+
+    $('input[name=checkCorpName]').on('click',function(e) {
+      self.checkCorpName();
+    });
+
+     $('input[name=hp]').on('keyup', function(e) {
+      self.validateHp(e);
+    });
+    
+    $('input[name=hp]').on('blur', function(e) {
+      $('input[name=hp]').off('keydown');
+    });
+  },
+  setLayout: function() {
+
+    jsux.setAutoFocus();
+  },
+  init: function() {
+
+    this.setEvent();
+    this.setLayout();
+  }
 };
 
 jsux.fn = jsux.fn || {};
 jsux.fn.modify = {
 
-	getEmailVal: function( id ) {
+  getSelectVal: function( id ) {
 
-		var result = $.trim($('select[name='+id+'1]').val());
+    var result = $.trim($('select[name='+id+']').val());
+    return result;
+  },
+  setSelectVal:function( id, value ) {
 
-		if ( result == '직접입력') {
-			result = $('input[name='+id+'2]').val();
-		}
-		result = result.replace(/@/i, '');
+    $('select[name='+id+']').val( value );
+  },
+  getCheckboxVal: function( id ) {
 
-		return result;
-	},
-	getSelectVal: function( id ) {
+    var result= '',
+      list = $('input:checkbox[name^='+id+']:checked'),
+      len = list.length;
 
-		var result = $.trim($('select[name='+id+']').val());
+    $(list).each(function(index){
+      result += list[index].value;
 
-		return result;
-	},
-	setSelectVal:function( id, value ) {
+      if (index < len-1) {
+        result += ',';
+      }
+    });
+    return result;
+  },
+  checkLangKor: function( value ) {
 
-		$('select[name='+id+']').val( value );
-	},
-	getCheckboxVal: function( id ) {
+    var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    return reg.test( value );
+  },
+  checkPWD: function() {
 
-		var result= '',
-			list = $('input:checkbox[name^='+id+']:checked'),
-			len = list.length;
+    var panelPwd = $('#panelNewPassword');
+    var btn = $('input[name=check_newpassword]');
+    if (panelPwd.css('display') === 'none') {
+      btn.val('기존 비밀번호 사용하기');
+      panelPwd.css('display','block');
 
-		$(list).each(function(index){
-			result += list[index].value;
+      if (!btn.hasClass('active')) {
+        btn.addClass('active');
+      }
+    } else {
+      btn.val('비밀번호 변경하기');
+      panelPwd.css('display','none');
+      btn.removeClass('active');
+      btn.blur();
+    }
+  },
+  validatePassword: function() {
 
-			if (index < len-1) {
-				result += ',';
-			}
-		});
-		return result;
-	},
-	checkLangKor: function( value ) {
+    var inputPwd = $('input[name=password]');
+    if (!inputPwd.val()) {
+      return false;
+    }
 
-		var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+     var panelPwd = $('#panelNewPassword');
+    //console.log(panelPwd);
+     if (panelPwd.css('display') === 'none') {     
+      return true;
+     }
 
-		return reg.test( value );
-	},
-	checkPWD: function() {
+    var inputNewPwd = $('input[name=new_password]');
+    var inputNewPwdConf = $('input[name=new_password_conf]');
 
-		if ($('input[name=password]').val() != $('input[name=passwordConf]').val()) {
+    if (!inputNewPwd.val()) {
+       trace('새 비밀번호를 입력하세요.');
+      return false;
+    }
 
-			trace('비밀번호가 일치하지 않습니다.');
+    if (inputNewPwd.val() !== inputNewPwdConf.val()) {
+      inputNewPwd.val('');
+      inputNewPwdConf.val('');
+      inputNewPwd.focus();
+      trace('새 비밀번호가 일치하지 않습니다.');
+      return false;
+    }
+    return true;
+  },
+  validateEmail: function(id) {
 
-			$('input[name=password]').val('');
-			$('input[name=passwordConf]').val('');
-			$('input[name=password]').focus();
+    var value = $('input:text[name=email_address]').val();
+    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
+    if (!reg.test(value)) {
+      trace('이메일이 올바르지 않습니다.');
+      return false;
+    }
+    return true;
+  },
+  validateHp: function(e) {    
+    var hpNum = e.target.value;
+    var reg;
 
-			return(false);
-		}
-	},
-	checkFormVal: function( f ) {
+    hpNum = hpNum.replace(/-/g,'');
+    if (!(hpNum.length > 9 && hpNum.length < 12)) {
+      return false;
+    }
 
-		var labelList = ['아이디','비밀번호','비밀번호 확인','이름','닉네임','e-mail','핸드폰 앞자리','핸드폰 가운데 자리', '핸드폰 뒷자리'];
-		var checkList = ['user_id','password','passwordConf','user_name','email_address','hp1','hp2','hp3'];
-		var email = f.email.value.length + this.getEmailVal('email_tail');
-		var result = true;
+    if (hpNum.length === 10) {
+       reg = /^(\d{3})+(\d{3})+(\d{4})+$/;    
+    }
+    if (hpNum.length === 11) {
+      reg = /^(\d{3})+(\d{4})+(\d{4})+$/;    
+    }
 
-		$.each( checkList, function( index, item) {
+    if (!reg.test(hpNum)) {
+      return false;
+    }
 
-			var $input = f[item];
-			if ($input.value.length < 1) {
-				trace(labelList[index] + '을(를) 입력 하세요.');
-				$input.focus();
-				result = false;
-				return false;
-			}
-		});
+    var str = hpNum.replace(reg, '$1-$2-$3');
+    $('input[name=hp]').val(str);
+    return true;
+  },
+  checkFormVal: function( f ) {
 
-		return result;	
-	},
-	sendJson: function( f ) {
+    var labelList = ['아이디를','비밀번호를','이름을','닉네임을','이메일을'];
+    var checkList = ['user_id','password','user_name','email_address'];
 
-		var self = this;
-		var params = {};
-		var datas = $('form')[0];
-		var indexCheckbox = 0;
+    $.each( checkList, function( index, item) {
 
-		$.each(datas, function( index, item ) {
+      var $input = f[item];
+      if ($input.value.length < 1) {
+        trace(labelList[index] + ' 입력 하세요.');
+        $input.focus();
+        return false;
+      }
+    });
 
-			var filters = 'checkbox|button|submit';
-			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
-			var glue ='';
+    if (!this.validateEmail()) {     
+      return false;
+    }
 
-			if (item.nodeName.toLowerCase() === 'select') {
-				item.value = self.getSelectVal(item.name);
-				params[item.name] = item.value;
-			} else {
+    if (!this.validatePassword()) {      
+       return false;
+    }  
 
-				 if (!type.match(filters)) {
-					//console.log(item.name + ' : ' + item.value);					
-					params[item.name] = item.value;
-				}
-			}
+    return true;  
+  },
+  sendJson: function( f ) {
 
-			if (type === 'checkbox' && item.checked) {
-				if (indexCheckbox === 0) {
-					var name = item.name.substr(0, item.name.length-1);
-					params[name] = self.getCheckboxVal(name);
-				} 
-				indexCheckbox++;					
-			}
-		});
+    var self = this;
+    var params = {};
+    var datas = $('form')[0];
+    var indexCheckbox = 0;
 
-		/*$.each(params, function( index, item ) {
-			console.log(index + ' : ' + item);
-		});*/
+    $.each(datas, function( index, item ) {
 
-		if (!f.action) {
-			alert('Not Exists URL');
-		}
-		url = f.action;
+      var filters = 'checkbox|button|submit';
+      var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
+      var glue ='';
 
-		var updateLoginHandler = function( url ) {
+      if (item.nodeName.toLowerCase() === 'select') {
+        item.value = self.getSelectVal(item.name);
+        params[item.name] = item.value;
+      } else {
 
-			var params = {_method:'insert'};
-			jsux.getJSON( url, params, function(e) {
+         if (!type.match(filters)) {
+         //console.log(item.name + ' : ' + item.value);          
+          params[item.name] = item.value;
+        }
+      }
 
-				if  (e.result.toLowerCase() == 'y') {
-					jsux.goURL( jsux.rootPath + 'login');
-				}
-			});
-		};
+      if (type === 'checkbox' && item.checked) {
+        if (indexCheckbox === 0) {
+          var name = item.name.substr(0, item.name.length-1);
+          params[name] = self.getCheckboxVal(name);
+        } 
+        indexCheckbox++;          
+      }
+    });
 
-		jsux.getJSON( url, params, function( e ) {
+    /*$.each(params, function( index, item ) {
+      console.log(index + ' : ' + item);
+    });*/
 
-			trace( e.msg );
-			if (e.result.toLowerCase() == 'y') {
-				updateLoginHandler( jsux.rootPath + 'login');
-			}
-		});
-	},
-	setEvent: function() {
+    if (!f.action) {
+      alert('Not Exists URL');
+    }
+    url = f.action;
 
-		var self = this;
-		
-		$('form').on('submit', function( e ) {
+    var updateLoginHandler = function( url ) {
 
-			e.preventDefault();
-			var bool  = self.checkFormVal( e.target );			
-			if (bool === true) {
-				self.sendJson( e.target );
-			}
-		});
+      var params = {_method:'insert'};
+      jsux.getJSON( url, params, function(e) {
 
-		$('input[name=cancel]').on('click', function(e) {			
-			jsux.goURL( jsux.rootPath + 'login' );
-		});
+        if  (e.result.toUpperCase() == 'Y') {
+          jsux.goURL( jsux.rootPath + 'login');
+        }
+      });
+    };
 
-		$('input[name=password]').on('blur', function() {
-			self.checkPWD();
-		});	
+    jsux.getJSON( url, params, function( e ) {
 
-		$('select[name=email_tail1]').on('change', function() {
+      trace( e.msg );
+      if (e.result.toUpperCase() == 'Y') {
+        updateLoginHandler( jsux.rootPath + 'login');
+      }
+    });
+  },
+  setEvent: function() {
 
-			if ($(this).val() === '직접입력') {
-				$('input[name=email_tail2').show();
-			} else {
-				$('input[name=email_tail2').val('').hide();
-			}
-		});
-	},
-	setLayout: function() {
+    var self = this;
+    
+    $('form').on('submit', function( e ) {
 
-		jsux.setAutoFocus();
-	},		
-	init: function() {
-		this.setLayout();
-		this.setEvent();
-	}
+      e.preventDefault();
+      var bool  = self.checkFormVal( e.target );    
+      if (bool === true) {
+        self.sendJson( e.target );
+      }
+    });
+
+    $('input[name=cancel]').on('click', function(e) {     
+      jsux.goURL( jsux.rootPath + 'login' );
+    });
+
+    $('input[name=new_password_conf]').on('blur', function(e) {      
+      self.validatePassword();
+    }); 
+
+    $('input[name=check_newpassword]').on('click', function() {
+      self.checkPWD();
+    });    
+
+    $('input[name=hp]').on('keyup', function(e) {
+      self.validateHp(e);
+    });
+
+    $('input[name=hp]').on('blur', function(e) {
+      $('input[name=hp]').off('keydown');
+    });
+  },
+  setLayout: function() {
+
+    jsux.setAutoFocus();
+  },    
+  init: function() {
+    this.setLayout();
+    this.setEvent();
+  }
 };
