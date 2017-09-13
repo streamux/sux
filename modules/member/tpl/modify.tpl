@@ -4,126 +4,94 @@
 {assign var=contentsData value=$documentData.contents}
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
 <div class="articles">
-	<div class="member-edit">
-		<div class="tt">
-			<div class="imgbox">
-				<h1>회원정보수정</h1>
-			</div>
-		</div>
-		<div class="box">
-			<form name="f_member_modify" action="{$rootPath}member-modify" method="post">
-			<input type="hidden" name="_method" value="update">
-			<dl>
-				<dt>
-					<h2>기본정보입력</h2>
-				</dt>
-				<dd>
-					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-					<span class="text-notice">발강색으로 표신된 부분은 반드시 입력해주세요.</span>			
-				</dd>
-			</dl>					
-			<table summary="회원정보를 수정하세요.">
-				<caption class="blind">회원정보수정</caption>
-				<tbody>
-					<tr>
-						<td>회원그룹</td>
-						<td>
-							<input type="hidden" name="category" value="{$sessionData.category}">		
-							{$sessionData.category}
-						</td>
-					</tr>
-					<tr>
-						<td>아이디</td>
-						<td>
-							<input type="hidden" name="user_id" value="{$sessionData.user_id}">
-							{$sessionData.user_id}
-						</td>
-					</tr>
-					<tr>
-						<td>비밀번호</td>
-						<td><input type="password" name="password" size="10" maxlength="12"></td>
-					</tr>
-					<tr>
-						<td>비밀번호 확인</td>
-						<td><input type="password" name="passwordConf" size="10" maxlength="12"></td>
-					</tr>
-					<tr>
-						<td>이름</td>
-						<td><input type="text" name="user_name" size="8" maxlength="10" value="{$contentsData['user_name']}"></td>
-					</tr>
-					<tr>
-						<td>닉네임</td>
-						<td><input type="text" name="nick_name" size="8" maxlength="10" value="{$contentsData['nick_name']}"></td>
-					</tr>
-					<tr>
-						<td>이메일</td>
-						<td><input type="text" name="email_address" size="12" maxlength="20" value="{$contentsData['email']}">
-						<select name="email_tail1">
-							<option>직접입력</option>
-							<option value="naver.com">naver.com</option>
-							<option value="hanmail.com">hanmail.net</option>
-							<option value="gmail.com">gmail.com</option>
-						</select>
-						<input type="text" name="email_tail2" size="12" maxlength="20" value="{$contentsData['email_tail2']}"> <span>[ 비밀번호 분실 시 사용됩니다. ]</span></td>
-					</tr>
-					<tr>
-						<td><span>휴</span>대폰번호</td>
-						<td>
-							<input type="text" name="hp1" size="3" maxlength="3" value="{$contentsData['hp1']}">-
-							<input type="text" name="hp2" size="4" maxlength="4" value="{$contentsData['hp2']}">-
-							<input type="text" name="hp3" size="4" maxlength="4" value="{$contentsData['hp3']}">
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<dl>
-				<dt>
-					<h2>기타정보입력</h2>
-				</dt>
-				<dd>
-					<img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-					<span class="text-notice">추가 정보를 입력해주세요.</span>			
-				</dd>
-			</dl>	
-			<table summary="기타 회원정보를 수정하세요.">
-				<caption class="blind">회원정보수정</caption>
-				<tbody>
-					<tr>
-						<td>직업</td>
-						<td>
-							<select name="job">								
-								<option value="">선택하기</option>
-								{assign var='jobList' value=['프리랜서','교수','교사','학생','기업인','회사원','정치인','주부','농어업','기타']}
-								{foreach from=$jobList item=value}							
-									<option value="{$value}" {if $contentsData['job'] === $value} selected {/if}>{$value}</option>
-								{/foreach}
-							</select>
-							
-						</td>
-					</tr>
-					<tr>
-						<td>취미</td>
-						<td>
-							{assign var='hobbyBoxes' value=['인터넷','독서','여행','낚시','바둑','기타']}
-							{foreach from=$hobbyBoxes item=mItem name=hobby}
-								{assign var=index value=$smarty.foreach.hobby.index}
-								{assign var=isChecked value=''}
-								{foreach from=$contentsData['hobby'] item=compareItem}
-									{if $mItem === $compareItem}
-										{assign var=isChecked value='checked'}
-									{/if}
-								{/foreach}
-								<label for="hobby{$index}"></label>
-								<input type="checkbox" id="hobby{$index}" name="hobby{$index}" value="{$mItem}" {$isChecked}><span>{$mItem}</span>
-							{/foreach}
-						</td>
-					</tr>
-				</tbody>
-			</table>
-			<input type="submit" name="submit" size="10" value="확 인">
-			<input type="button" name="cancel" value="취 소" onclick="location.href='{$rootPath}login'">
-			</form>
-		</div>
-	</div>
+  <div class="sx_member">
+    <h1>회원정보수정</h1>
+    <div class="box">
+      <form name="f_member_modify" action="{$rootPath}member-modify" method="post" class="sx-form-horizontal">
+      <input type="hidden" name="_method" value="update">
+      <p class="text_notice">
+        <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
+        <span>*(별표)는 필수 입력 사항입니다.</span>
+      </p> 
+      <div class="sx-form-group">
+        <label for="category" class="sx-control-label form_label_width">회원그룹</label>
+        <input type="hidden" name="category" value="{$sessionData.category}">
+        <span class="sx-form-control" disabled>{$sessionData.category}</span>
+      </div>
+      <div class="sx-form-group">
+        <label for="userId" class="sx-control-label form_label_width">아이디</label>
+        <input type="hidden" name="user_id" value="{$sessionData.user_id}">
+        <span class="sx-form-control" disabled>{$sessionData.user_id}</span>
+      </div>
+      <div class="sx-form-group">
+        <label for="password" class="sx-control-label form_label_width">* 비밀번호</label>
+        <input type="password" id="password" name="password" maxlength="23" class="sx-form-control">
+        <input type="button" name="check_newpassword" value="비밀번호 변경하기" class="sx-btn sx-btn-block">
+      </div>
+      <div id="panelNewPassword" class="panel_newpassword">
+        <div class="sx-form-group">
+          <label for="newPassword" class="sx-control-label form_label_width">* 신규 비밀번호</label><input type="password" id="newPassword" name="new_password" maxlength="23" class="sx-form-control">
+        </div>
+        <div class="sx-form-group">
+          <label for="newPasswordConf" class="sx-control-label form_label_width">* 신규 비밀번호 확인</label>
+          <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
+        </div>
+      </div>       
+      <div class="sx-form-group">
+        <label for="userName" class="sx-control-label form_label_width">* 이름</label>
+        <input type="text" name="user_name" id="userName" maxlength="12" value="{$contentsData['user_name']}" class="sx-form-control">
+      </div>
+      <div class="sx-form-group">
+        <label for="nickName" class="sx-control-label form_label_width">* 닉네임</label>
+        <input type="text" id="nickName" name="nick_name" maxlength="12"  value="{$contentsData['nick_name']}" class="sx-form-control">
+      </div>
+      <div class="sx-form-group">
+        <label for="emailAddress" class="sx-control-label form_label_width">* 이메일</label>
+        <input type="text" id="emailAddress" name="email_address" value="{$contentsData['email_address']}" class="sx-form-control">
+      </div>    
+      <p class="text_notice">
+        <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
+        <span>아래 내용은 선택사항입니다.</span>
+      </p>
+      <div class="sx-form-group">
+        <label for="hp" class="sx-control-label form_label_width">휴대폰 번호</label>
+        <input type="text" id="hp" name="hp" value="{$contentsData['hp']}" class="sx-form-control">
+      </div>
+      <div class="sx-form-group">
+        <label for="job" class="sx-control-label form_label_width">직업</label>
+        <select name="job" id="job" class="sx-form-control">               
+          <option value="">선택하기</option>
+          {assign var='jobList' value=['프리랜서','교수','교사','학생','기업인','회사원','정치인','주부','농어업','기타']}
+          {foreach from=$jobList item=value}              
+            <option value="{$value}" {if $contentsData['job'] === $value} selected {/if}>{$value}</option>
+          {/foreach}
+        </select>
+      </div>
+      <div class="sx-form-inline">
+        <label for="emptyName" class="sx-control-label form_label_width">취미</label>
+        <div class="sx-form-group">
+          {assign var='hobbyBoxes' value=['인터넷','독서','여행','낚시','바둑','기타']}
+          {foreach from=$hobbyBoxes item=mItem name=hobby}
+            {assign var=index value=$smarty.foreach.hobby.index}
+            {assign var=isChecked value=''}
+            {foreach from=$contentsData['hobby'] item=compareItem}
+              {if $mItem === $compareItem}
+                {assign var=isChecked value='checked'}
+              {/if}
+            {/foreach}            
+            <input type="checkbox" id="hobby{$index}" name="hobby{$index}" value="{$mItem}" {$isChecked}>
+            <label for="hobby{$index}" class="sx-text-normal">{$mItem}</label>
+          {/foreach}
+        </div>        
+      </div>     
+      <div class="sx-form-inline text-center submit_top_margin">
+        <div class="sx-input-group">
+          <input type="submit" name="btn_confirm" id="btnConfirm" size="10" value="확 인" class="sx-btn btn_space">
+          <input type="button" name="btn_cancel" id="btnCancel" value="취 소" onclick="location.href='{$rootPath}login'"  class="sx-btn">
+        </div>        
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
 {include file="$footerPath"}

@@ -149,7 +149,7 @@ class DocumentAdminController extends Controller
 			$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
 		}
 
-		//$msg = Tracer::getInstance()->getMessage();
+		//$msg .= Tracer::getInstance()->getMessage();
 		$data = array(	'data'=> $dataObj,
 						'result'=>$resultYN,
 						'msg'=>$msg);

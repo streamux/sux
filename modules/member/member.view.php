@@ -2,127 +2,127 @@
 
 class MemberView extends View {
 
-	var $class_name = 'member_view';
+  var $class_name = 'member_view';
 
-	function displayMember() {
+  function displayMember() {
 
-		$this->displayMemberJoin();
-	}
+    $this->displayMemberJoin();
+  }
 
-	function displayMemberJoin() {
+  function displayMemberJoin() {
 
-		$UIError = UIError::getInstance();
-		$context = Context::getInstance();
+    $UIError = UIError::getInstance();
+    $context = Context::getInstance();
 
-		/**
-		 * css, js file path handler
-		 */
-		$this->document_data['jscode'] = 'join';
-		$this->document_data['module_code'] = 'member';
-		$this->document_data['module_name'] = '회원 가입';
-		
-		/**
-		 * skin directory path
-		 */
-		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
-		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
+    /**
+     * css, js file path handler
+     */
+    $this->document_data['jscode'] = 'join';
+    $this->document_data['module_code'] = 'member';
+    $this->document_data['module_name'] = '회원 가입';
+    
+    /**
+     * skin directory path
+     */
+    $rootPath = _SUX_ROOT_;
+    $skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
+    $skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
-		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
-		if (!is_readable($headerPath)) {
-			$headerPath = $skinPath . "_header.tpl";
-			$UIError->add("상단 파일경로가 올바르지 않습니다.");
-		}
+    $headerPath = _SUX_PATH_ . 'common/_header.tpl';
+    if (!is_readable($headerPath)) {
+      $headerPath = $skinPath . "_header.tpl";
+      $UIError->add("상단 파일경로가 올바르지 않습니다.");
+    }
 
-		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
-		if (!is_readable($footerPath)) {
-			$footerPath = $skinPath . "_footer.tpl";
-			$UIError->add("하단 파일경로가 올바르지 않습니다.");
-		}
-		$contentsPath = $skinPath . 'join.tpl';
+    $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+    if (!is_readable($footerPath)) {
+      $footerPath = $skinPath . "_footer.tpl";
+      $UIError->add("하단 파일경로가 올바르지 않습니다.");
+    }
+    $contentsPath = $skinPath . 'join.tpl';
 
-		$this->model->select('member_group', '*');
+    $this->model->select('member_group', '*');
 
-		$this->document_data['group'] = $this->model->getRows();
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = $skinDir;
-		$this->skin_path_list['header'] = $headerPath;
-		$this->skin_path_list['contents'] = $contentsPath;
-		$this->skin_path_list['footer'] = $footerPath;
+    $this->document_data['group'] = $this->model->getRows();
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['header'] = $headerPath;
+    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['footer'] = $footerPath;
 
-		$this->output();
-	}
+    $this->output();
+  }
 
-	function displayMemberModify() {
+  function displayMemberModify() {
 
-		$context = Context::getInstance();
-		$this->session_data = $context->getSessionAll();
-		$category = $this->session_data['category'];
-		$user_id = $this->session_data['user_id'];
+    $context = Context::getInstance();
+    $this->session_data = $context->getSessionAll();
+    $category = $this->session_data['category'];
+    $user_id = $this->session_data['user_id'];
 
-		/**
-		 * css, js file path handler
-		 */
-		//$this->document_data['jscode'] = 'modify';
-		$this->document_data['module_code'] = 'member';
-		$this->document_data['module_name'] = '회원 수정';
-		
-		/**
-		 * skin directory path
-		 */
-		$rootPath = _SUX_ROOT_;
-		$skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
-		$skinPath = _SUX_PATH_ . 'modules/member/tpl/';
+    /**
+     * css, js file path handler
+     */
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'member';
+    $this->document_data['module_name'] = '회원 수정';
+    
+    /**
+     * skin directory path
+     */
+    $rootPath = _SUX_ROOT_;
+    $skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
+    $skinPath = _SUX_PATH_ . 'modules/member/tpl/';
 
-		$headerPath = _SUX_PATH_ . 'common/_header.tpl';
-		if (!is_readable($headerPath)) {
-			$headerPath = $skinPath . "_header.tpl";
-			$UIError->add("상단 파일경로가 올바르지 않습니다.");
-		}
+    $headerPath = _SUX_PATH_ . 'common/_header.tpl';
+    if (!is_readable($headerPath)) {
+      $headerPath = $skinPath . "_header.tpl";
+      $UIError->add("상단 파일경로가 올바르지 않습니다.");
+    }
 
-		$footerPath = _SUX_PATH_ . 'common/_footer.tpl';
-		if (!is_readable($footerPath)) {
-			$footerPath = $skinPath . "_footer.tpl";
-			$UIError->add("하단 파일경로가 올바르지 않습니다.");
-		}
+    $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
+    if (!is_readable($footerPath)) {
+      $footerPath = $skinPath . "_footer.tpl";
+      $UIError->add("하단 파일경로가 올바르지 않습니다.");
+    }
 
-		$contentsPath = $skinPath . 'modify.tpl';
+    $contentsPath = $skinPath . 'modify.tpl';
 
-		$where = new QueryWhere();
-		$where->set('category', $category);
-		$where->set('user_id', $user_id, '=', 'and');
-		$result = $this->model->select('member', '*', $where);
-		//echo Tracer::getInstance()->output();
-		if ($result) {
-			$contentsData = $this->model->getRow();
-			$email_arr = split('@', $contentsData['email_address']);
-			$contentsData['email'] = $email_arr[0];
-			$contentsData['email_tail2'] = $email_arr[1];			
-			$contentsData['hobby'] = explode(',', $contentsData['hobby']);
-		} 
+    $where = new QueryWhere();
+    $where->set('category', $category);
+    $where->set('user_id', $user_id, '=', 'and');
+    $result = $this->model->select('member', '*', $where);
+    //echo Tracer::getInstance()->output();
+    if ($result) {
+      $contentsData = $this->model->getRow();
+      if (isset($contentsData['hp1']) && $contentsData['hp1']) {
+        $contentsData['hp'] = $contentsData['hp1'] .' - '. $contentsData['hp2'] . ' - '. $contentsData['hp3'];
+      }
+      $contentsData['hobby'] = explode(',', $contentsData['hobby']);
+    } 
 
-		$this->document_data['contents'] = $contentsData;
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = $skinDir;
-		$this->skin_path_list['header'] = $headerPath;
-		$this->skin_path_list['contents'] = $contentsPath;
-		$this->skin_path_list['footer'] = $footerPath;
+    $this->document_data['contents'] = $contentsData;
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['header'] = $headerPath;
+    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['footer'] = $footerPath;
 
-		$this->output();
-	}
+    $this->output();
+  }
 
-	function displayMemberGroupList() {
+  function displayMemberGroupList() {
 
-		$msg = '데이터 로드를 완료하였습니다.';
-		$result = $this->model->select('member_group', '*');
-		if ($result) {
-			$data = array(	'data'=>$this->model->getRows(),
-							'msg'=>$msg);
-		} else {
-			$msg = '데이터 로드를 실패하였습니다.';
-			$data = array('msg'=>$msg);			
-		}
+    $msg = '데이터 로드를 완료하였습니다.';
+    $result = $this->model->select('member_group', '*');
+    if ($result) {
+      $data = array(  'data'=>$this->model->getRows(),
+              'msg'=>$msg);
+    } else {
+      $msg = '데이터 로드를 실패하였습니다.';
+      $data = array('msg'=>$msg);     
+    }
 
-		$this->callback($data);
-	}	
+    $this->callback($data);
+  } 
 }

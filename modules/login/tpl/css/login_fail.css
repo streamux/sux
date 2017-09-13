@@ -1,1 +1,3 @@
-.article-box .login .panel-fail{display:block}
+.articles .sx_login .panel-fail{
+	display:block;
+}
