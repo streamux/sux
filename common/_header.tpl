@@ -12,10 +12,10 @@
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.css"> 
   {if $documentData.module_code != ''}
-  <link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/{$documentData.module_code}.css">
+  <link rel="stylesheet" type="text/css" href="{$skinPath}css/{$documentData.module_code}.css">
   {/if}
   {if $documentData.isLogon === false}
-  <link rel="stylesheet" type="text/css" href="{$skinPathList.dir}css/login_fail.css">
+  <link rel="stylesheet" type="text/css" href="{$skinPath}css/login_fail.css">
   {/if}  
   <!--[if lt IE 9]>
   <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -28,33 +28,29 @@
   </script>
 </head>
 <body>
-<div class="wrapper">
-  <div class="header clearfix">
+<div class="sx-wrapper">
+  <div class="sx-header clearfix">
+    <!-- mobbile gnb start -->
     <div class="mobile-menu-case">
       <div class="mobile-menu-btn">
-        <div class="ui-h-3stick">
-          <div class="hline1"></div>
-          <div class="hline2"></div>
-          <div class="hline3"></div>
+        <div class="sx-h-3stick">
+          <div class="sx-hline1"></div>
+          <div class="sx-hline2"></div>
+          <div class="sx-hline3"></div>
         </div>
       </div>
     </div>
-    <h1 class="logo">
+    <!-- end -->
+    <h1 class="sx-logo">
       <a href="{$rootPath}"><img src="{$rootPath}common/images/sux_logo.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"></a>
     </h1>
-    <div class="gnb-case">
-      <div id="gnb" class="gnb"></div>
-      <a href="{$rootPath}login" class="gnb-login">
+    <!-- gnb start -->
+    <div class="sx-gnb-case">
+      <div id="sxGnb" class="sx-gnb"></div>
+      <a href="{$rootPath}login" class="sx-gnb-login">
         <i class="xi-user"></i>로그인
       </a>
-    </div>    
-  </div>
-  <div class="section sx-container">
-    {if {$groupData.board_name}}
-    <div class="contents-header">
-      
-      <div class="ui-btn-write"><a href="board.php?board={$requestData.board}&board_grg={$requestData.board_grg}&passover={$requestData.passover}&page={$requestData.page}&action=write"><img src="{$rootPath}common/images/icon_write.png" width="18px" height="18px"></a></div>
-      <h1 class="document-title">{$groupData.board_name}</h1>     
-      <p>home > {$documentData.module_name}</p>
     </div>
-    {/if}
+    <!-- end -->    
+  </div>
+  <div class="section sx-container"> 

@@ -1,9 +1,9 @@
 {assign var=pagination value=$documentData.pagination}
 {if $pagination.okpage != 'yes'}
 	{if $requestData.search != ''}
-		<a href="{$uri}?passover={$pagination.prevpassover}&find={$requestData.find}&search={$requestData.search}">이전</a>
+		<a href="{$uri}?passover={$pagination.prevpassover}&find={$requestData.find}&search={$requestData.search}" class="sx-pagination-constrol sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
 	{else}
-		<a href="{$uri}?passover={$pagination.prevpassover}">이전</a>
+		<a href="{$uri}?passover={$pagination.prevpassover}" class="sx-pagination-constrol sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
 	{/if}		
 {/if}
 
@@ -14,20 +14,20 @@
 	{if $pagination.total > $nowpassover }
 		{if $pagination.passover != $nowpassover }
 			{if $requestData.search != ''}
-				<a href="{$uri}?passover={$nowpassover}&find={$requestData.find}&search={$requestData.search}">[{$index}]</a>
+				<a href="{$uri}?passover={$nowpassover}&find={$requestData.find}&search={$requestData.search}" class="sx-pagination"><span>{$index}</span></a>
 			{else}
-				<a href="{$uri}?passover={$nowpassover}">[{$index}]</a>
+				<a href="{$uri}?passover={$nowpassover}" class="sx-pagination"><span>{$index}</span></a>
 			{/if}	
 		{else}
-			&nbsp;<span class="color-red">{$index}</span>&nbsp
+			<span class="sx-pagination" disabled>{$index}</span>&nbsp
 		{/if}
 	{/if}
 {/section}
 
 {if $pagination.total > $pagination.hanpassoverpage }
 	{if $requestData.search != ''}
-		<a href="{$uri}?passover={$pagination.newpassover}&find={$requestData.find}&search={$requestData.search}">다음</a>
+		<a href="{$uri}?passover={$pagination.newpassover}&find={$requestData.find}&search={$requestData.search}" class="sx-pagination-constrol sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
 	{else}
-		<a href="{$uri}?passover={$pagination.newpassover}">다음</a>
+		<a href="{$uri}?passover={$pagination.newpassover}" class="sx-pagination-constrol sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
 	{/if}
 {/if}

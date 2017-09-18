@@ -13,7 +13,7 @@ $(document).ready(function() {
 	 * Model에서 상속받아 사용하는 구조로 만든다.
 	 */
 	var gnbModel = jsux.adminGnb.Model.create();
-	var gnbView   = jsux.gnb.Menu.create("#gnb", gnbModel);
+	var gnbView   = jsux.gnb.Menu.create("#sxGnb", gnbModel);
 	//gnbView.setActivateClass('activate-admin');
 	var gnbIconView = jsux.adminGnb.Icon.create("#gnbIcon", gnbModel);
 	var jsonPath = jsux.rootPath + '/assets/data/gnb_admin.json';	

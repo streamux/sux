@@ -1,10 +1,13 @@
+{assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
+{assign var=skinRealPath value=$skinPathList.realPath}
+{assign var=headerPath value=$skinPathList.header}
+{assign var=footerPath value=$skinPathList.footer}
+
 {assign var=groupData value=$documentData.group}
 {assign var=boardTitle value=$groupData.board_name}
 {assign var=contentData value=$documentData.contents}
-{assign var=uri value=$documentData.uri}
-{assign var=rootPath value=$skinPathList.root}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
+
 {include file="$headerPath" title="$boardTitle :: 게시물 삭제 - StreamUX"}
 <div class="article-box ui-edgebox">	
 	<div class="login">

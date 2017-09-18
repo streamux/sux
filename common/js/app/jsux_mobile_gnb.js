@@ -22,34 +22,34 @@ jsux.mobileGnb.Menu.include({
 	},
 	showCloseX: function() {
 
-		this.killTween('.menu-btn-close .ui-h-3stick');
-		this.tween('.menu-btn-close .ui-h-3stick', 13, {opacity:1, ease: Expo.easeOut, useFrames:true});
-		this.tween('.menu-btn-close .ui-h-3stick', 82, {rotation:450, useFrames:true});
+		this.killTween('.menu-btn-close .sx-h-3stick');
+		this.tween('.menu-btn-close .sx-h-3stick', 13, {opacity:1, ease: Expo.easeOut, useFrames:true});
+		this.tween('.menu-btn-close .sx-h-3stick', 82, {rotation:450, useFrames:true});
 	},
 	hideCloseX: function() {
 
 		var self = this;
-		this.killTween('.menu-btn-close .ui-h-3stick');
-		this.tween('.menu-btn-close .ui-h-3stick', 17, {opacity:0, rotation:0, useFrames:true, onComplete: $.proxy(self.showMobileMenu, self)});
+		this.killTween('.menu-btn-close .sx-h-3stick');
+		this.tween('.menu-btn-close .sx-h-3stick', 17, {opacity:0, rotation:0, useFrames:true, onComplete: $.proxy(self.showMobileMenu, self)});
 	},
 	showMobileMenu: function() {
 
 		var self = this;
 
-		this.killTween('.mobile-menu-btn .ui-h-3stick');
-		$('.mobile-menu-btn .ui-h-3stick').find('> div').each(function(index) {
+		this.killTween('.mobile-menu-btn .sx-h-3stick');
+		$('.mobile-menu-btn .sx-h-3stick').find('> div').each(function(index) {
 			self.tween(this, 21, {opacity:1, useFrames:true});
 		});
 
-		this.tween('.mobile-menu-btn .ui-h-3stick .hline1', 21, {y:0, useFrames:true});
-		this.tween('.mobile-menu-btn .ui-h-3stick .hline3', 21, {y:0, useFrames:true});	
+		this.tween('.mobile-menu-btn .sx-h-3stick .hline1', 21, {y:0, useFrames:true});
+		this.tween('.mobile-menu-btn .sx-h-3stick .hline3', 21, {y:0, useFrames:true});	
 	},
 	hideMobileMenu: function() {
 
 		var self = this;
 
-		this.killTween('.mobile-menu-btn .ui-h-3stick');
-		$('.mobile-menu-btn .ui-h-3stick').find('> div').each(function(index) {
+		this.killTween('.mobile-menu-btn .sx-h-3stick');
+		$('.mobile-menu-btn .sx-h-3stick').find('> div').each(function(index) {
 			self.tween(this, 21, {opacity:0, useFrames:true});
 		});
 	},	
@@ -61,27 +61,27 @@ jsux.mobileGnb.Menu.include({
 		$('#test_startPosX').val(this._startPosX);
 
 		this.killTween('.mobile-gnb-case');
-		this.killTween('.mobile-menu-btn .ui-h-3stick .hline1');
-		this.killTween('.mobile-menu-btn .ui-h-3stick .hline3');
+		this.killTween('.mobile-menu-btn .sx-h-3stick .hline1');
+		this.killTween('.mobile-menu-btn .sx-h-3stick .hline3');
 		this.tween('.mobile-gnb-case', 17, {x:42, useFrames:true,onComplete: $.proxy(self.showCloseX, self)});
-		this.tween('.mobile-menu-btn .ui-h-3stick .hline1', 12, {y:6, useFrames:true});
-		this.tween('.mobile-menu-btn .ui-h-3stick .hline3', 12, {y:-6, useFrames:true});
+		this.tween('.mobile-menu-btn .sx-h-3stick .hline1', 12, {y:6, useFrames:true});
+		this.tween('.mobile-menu-btn .sx-h-3stick .hline3', 12, {y:-6, useFrames:true});
 	},
 	closeSlide: function() {
 
 		var self = this;
 
 		this.killTween('.mobile-gnb-case');
-		this.killTween('.mobile-menu-btn .ui-h-3stick .hline1');
-		this.killTween('.mobile-menu-btn .ui-h-3stick .hline3');
+		this.killTween('.mobile-menu-btn .sx-h-3stick .hline1');
+		this.killTween('.mobile-menu-btn .sx-h-3stick .hline3');
 		this.tween('.mobile-gnb-case', 17, {x:this._startPosX, useFrames:true, onComplete: $.proxy(self.hide, self)});		
 
 		this.hideCloseX();	
 	},
 	show: function() {
 
-		$('.ui-bg-cover').removeClass('ui-bg-cover-off');
-		$('.ui-bg-cover').addClass('ui-bg-cover-on');
+		$('.sx-bgcover').removeClass('sx-bgcover-off');
+		$('.sx-bgcover').addClass('sx-bgcover-on');
 		$('.mobile-gnb-case').removeClass('mobile-gnb-case-off');	
 		$('.mobile-gnb-case').addClass('mobile-gnb-case-on');
 		$('html').addClass('hide-scroll');
@@ -89,8 +89,8 @@ jsux.mobileGnb.Menu.include({
 	},
 	hide: function() {	
 
-		$('.ui-bg-cover').removeClass('ui-bg-cover-on');
-		$('.ui-bg-cover').addClass('ui-bg-cover-off');
+		$('.sx-bgcover').removeClass('sx-bgcover-on');
+		$('.sx-bgcover').addClass('sx-bgcover-off');
 		$('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
 		$('.mobile-gnb-case').addClass('mobile-gnb-case-off');
 		$('html').removeClass('hide-scroll');
@@ -98,7 +98,7 @@ jsux.mobileGnb.Menu.include({
 	},
 	showSitemap: function() {
 
-		$('.mobile-menu-btn .ui-h-3stick').trigger('click');
+		$('.mobile-menu-btn .sx-h-3stick').trigger('click');
 	},
 	click: function( url, target) {
 
@@ -127,15 +127,15 @@ jsux.mobileGnb.Menu.include({
 			if (self._data[index].menu !== undefined && self._data[index].menu.length > 0) {				
 				markup = $('#suxMobileGnbSecondMenuCase').html();
 				menu.append( markup );
-				menu.find('.second-menu > ul').empty();
+				menu.find('.sx-second-menu > ul').empty();
 
 				$(self._data[index].menu).each( function( subIndex){			
 
 					if (self._data[index].menu[subIndex].label) {
 						markup = $('#suxMobileGnbSecondMenu').html();
-						menu.find('.second-menu > ul').append( markup );
+						menu.find('.sx-second-menu > ul').append( markup );
 
-						subMenu = menu.find('.second-menu > ul > li:eq('+subIndex+')');
+						subMenu = menu.find('.sx-second-menu > ul > li:eq('+subIndex+')');
 						subMenu.attr('data-code', index);
 						subMenu.attr('data-sub-code', subIndex);
 						subMenu.find(' > a').attr('href', self._data[index].menu[subIndex].link);
@@ -149,7 +149,7 @@ jsux.mobileGnb.Menu.include({
 
 		var self = this;
 
-		$('.mobile-menu-btn .ui-h-3stick').on('click', function(e) {
+		$('.mobile-menu-btn .sx-h-3stick').on('click', function(e) {
 			e.preventDefault();
 			self.show();
 			self.openSlide();
@@ -179,7 +179,7 @@ jsux.mobileGnb.Menu.include({
 			self._isClick = false;	
 		});
 		
-		$('.ui-bg-cover').on('click', function(e) {
+		$('.sx-bgcover').on('click', function(e) {
 			e.preventDefault();
 			self.closeSlide();
 			self._isClick = false;	
@@ -213,7 +213,7 @@ jsux.mobileGnb.Menu.extend({
 
 		if ($(path).length<1) {
 
-			var markup = '<div id="mobileGnb" class="body-panel"><div class="menu-panel"><ul></ul></div></div>';
+			var markup = '<div id="mobileGnb" class="sx-body-panel"><div class="sx-menu-panel"><ul></ul></div></div>';
 			$( document.body ).append( markup );
 			this.path = '#mobileGnb';
 		} else {

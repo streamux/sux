@@ -1,31 +1,31 @@
-	</div>
-	<div class="footer">
-		<p>
-			<span>
-				{include file="$copyrightPath"}
-			</span>
-		</p>
-	</div>
+  </div>
+  <div class="sx-footer">
+    <p>
+      <span>
+        {include file="$copyrightPath"}
+      </span>
+    </p>
+  </div>
 </div>
 <script type="text/javascript">
-	var is_page = 'admin_main';
+  var is_page = 'admin_main';
 </script>
 
 <!-- js template start -->
 <script type="sux-templete" id="gnbFirstMenu">
-	<ul class="mmenu">
-		<li data-mid="" data-sid="">
-			<a href="#none"><span></span></a>
-			<div class="sub">
-				<ul class="panel" style="" data-startPosY=""></ul>
-			</div>
-		</li>
-	</ul>
+  <ul class="sx-mmenu">
+    <li data-mid="" data-sid="">
+      <a href="#none"><span></span></a>
+      <div class="sx-gnb-sub">
+        <ul class="panel" style="" data-startPosY=""></ul>
+      </div>
+    </li>
+  </ul>
 </script>
 <script type="sux-templete" id="gnbSecondMenu">
-	<li class="smenu" data-mid="" data-sid="">
-		<a href="#none"><span></span></a>
-	</li>
+  <li class="sx-smenu" data-mid="" data-sid="">
+    <a href="#none"><span></span></a>
+  </li>
 </script>
 
 
@@ -40,8 +40,8 @@
 <script>window.Swiper || document.write('<script src="{$rootPath}common/js/idangerous.swiper.min.js"><\/script>')</script>
 <!-- end -->
 <!--[if (gte IE 6)&(lte IE 8)]>
-	<script type="text/javascript" src="tpl/js/selectivizr-min.js"></script>
-	<link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
+  <script type="text/javascript" src="tpl/js/selectivizr-min.js"></script>
+  <link rel="stylesheet" type="text/css" href="./css/main_ie8.css">
 <![endif]-->
 <script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
@@ -50,10 +50,10 @@
 <script type="text/javascript" src="{$rootPath}common/js/jsux_admin_app_stage.min.js"></script>
 
 {if $documentData.jscode != ''}
-<script>	jsux.rootPath = {$rootPath};</script>
+<script>  jsux.rootPath = {$rootPath};</script>
 <script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/js/{$documentData.module_code}_admin.js"></script>
 <script type="text/javascript">
-	jsux.fn['{$documentData.jscode}'].init();
+  jsux.fn['{$documentData.jscode}'].init();
 </script>
 {/if}
 </body>

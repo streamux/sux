@@ -53,9 +53,7 @@ jsux.fn.login = {
       e.preventDefault();      
 
       var bool = self.checkForm(this);
-      console.log(bool);
       if (bool) {
-        console.log('aa');
         self.sendJson(this);
       }
     });

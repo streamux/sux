@@ -24,18 +24,18 @@ class LoginView extends View
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/login/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/login/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
@@ -47,15 +47,16 @@ class LoginView extends View
     if (!$user_id ) {
       $this->model->select('member_group', '*');
       $groupData = $this->model->getRows();
-      $contentsPath = $skinPath . 'login.tpl';    
+      $contentsPath = $skinRealPath . 'login.tpl';    
     } else {
-      $contentsPath = $skinPath . 'info.tpl';
+      $contentsPath = $skinRealPath . 'info.tpl';
     } 
 
     $this->document_data['isLogon'] = 'success';
     $this->document_data['group'] = $groupData;
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
@@ -82,25 +83,26 @@ class LoginView extends View
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/login/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/login/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $contentsPath = $skinPath . 'login.tpl';
+    $contentsPath = $skinRealPath . 'login.tpl';
 
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
@@ -130,25 +132,26 @@ class LoginView extends View
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/login/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/login/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $contentsPath = $skinPath . 'leave.tpl';
+    $contentsPath = $skinRealPath . 'leave.tpl';
 
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
@@ -177,18 +180,18 @@ class LoginView extends View
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/login/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/login/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }   
 
@@ -213,7 +216,7 @@ class LoginView extends View
         $this->document_data['user_id'] = $userId;
         $this->document_data['jscode'] = 'searchResult';        
 
-        $contentsPath = $skinPath . 'searchid_result.tpl';
+        $contentsPath = $skinRealPath . 'searchid_result.tpl';
       } else {
         UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
         exit;
@@ -222,11 +225,12 @@ class LoginView extends View
       $this->model->select('member_group', '*');
       $this->document_data['group'] = $this->model->getRows();
 
-      $contentsPath = $skinPath . 'searchid.tpl';
+      $contentsPath = $skinRealPath . 'searchid.tpl';
     }
 
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
@@ -256,18 +260,18 @@ class LoginView extends View
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/login/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/login/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/login/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/login/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }   
 
@@ -294,7 +298,7 @@ class LoginView extends View
           exit;
         }
 
-        $contentsPath = $skinPath . 'searchpwd_result.tpl';       
+        $contentsPath = $skinRealPath . 'searchpwd_result.tpl';       
 
         $this->document_data['user_id'] = $userId;
         $this->document_data['user_name'] = $userName;
@@ -325,11 +329,12 @@ class LoginView extends View
       $this->model->select('member_group', '*');
       $this->document_data['group'] = $this->model->getRows();
 
-      $contentsPath = $skinPath . 'searchpwd.tpl';
+      $contentsPath = $skinRealPath . 'searchpwd.tpl';
     }
 
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
