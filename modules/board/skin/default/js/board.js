@@ -21,7 +21,6 @@ jsux.fn.read = {
 	checkSearchForm: function ( f ) {
 
 		var searcho = f.search.value.length;
-
 		if ( searcho < 1 ) {
 			alert("검색어를 입력하세요.");
 			f.search.focus();
@@ -77,16 +76,16 @@ jsux.fn.write = {
 
 	checkDocumentForm: function (f) {
 
-		var labelList = ['이름','비밀번호','제목','e-mail','내용','등록키'];
-		var checkList = ['user_name','password','title','email_address','contents','wall'];
-		var email = f.email_address.value.length + this.getEmailVal('email_tail');
+		var labelList = ['이름을','비밀번호를','제목을','이메일을','내용을','등록키를'];
+		var checkList = ['user_name','password','title','email_address','contents','wallname'];
+		var email = f.email_address.value.length;
 		var result = true;
 
 		$.each( checkList, function( index, item) {
 
 			var $input = f[item];
 			if ($input.value.length < 1) {
-				trace(labelList[index] + '을(를) 입력 하세요.');
+				trace(labelList[index] + ' 입력 하세요.');
 				$input.focus();
 				result = false;
 				return false;
@@ -97,7 +96,16 @@ jsux.fn.write = {
 	},
 	setEvent: function() {
 
-		
+		var self = this;
+		$('input[name=btn_confirm]').on('click', function(e) {
+			e.preventDefault();
+
+			var $form = $('form')[0];
+			var bool = self.checkDocumentForm($form);
+			if (bool) {
+				$form.submit();
+			}
+		});
 	},
 	init: function() {
 
@@ -161,57 +169,54 @@ jsux.fn.modify = {
 
 	checkDocumentForm: function (f) {
 
-		var pass = f.pass.value.length,
-			title = f.title.value.length,
-			comment = f.comment.value.length;
-		
-		if ( pass < 1 ) {
-			alert("비밀번호를 입력하세요.");
-			f.pass.focus();
-			return (false);
-		}
+		var labelList = ['이름을','비밀번호를','제목을','이메일을','내용을','등록키를'];
+		var checkList = ['user_name','password','title','email_address','contents','wallname'];
+		var email = f.email_address.value.length;
+		var result = true;
 
-		if ( title < 1 ) {
-			alert("제목을 입력하세요.");
-			f.title.focus();
-			return (false);
-		}
+		$.each( checkList, function( index, item) {
 
-		if ( title > 60 ) {
-			alert("제목은 최대 60바이트까지 허용합니다.");
-			f.title.focus();
-			return (false);
-		}
+			var $input = f[item];
+			if ($input.value.length < 1) {
+				trace(labelList[index] + ' 입력 하세요.');
+				$input.focus();
+				result = false;
+				return false;
+			}
+		});
 
-		if ( email < 1 ) {
-			alert("이메일 주소를 입력하세요.");
-			f.email.focus();
-			return (false);
-		}
+		return result;
+	},
+	setEvent: function() {
 
-		if ( comment < 1 ) {
-			alert("내용을 입력하세요.");
-			f.comment.focus();
-			return (false);
-		}
-
-		return (true);
+		var self = this;
+		$('input[name=btn_confirm]').on('click', function(e) {
+			e.preventDefault();
+			var $form = $('form')[0];
+			var bool = self.checkDocumentForm($form);
+			if (bool) {				
+				$form.submit();
+			}
+		});
 	},
 	init: function() {
-		$('input[name=pass]').focus();
+		this.setEvent();
+		$('input[name=password]').focus();
 	}
 };
 jsux.fn.delete = {
 
 	checkDocumentForm: function( f ) {
 
+		var result = true;
 		var pass = f.password.value.length;
 		if ( pass < 1) {
 			trace('비밀번호를 입력하세요.');
 			f.password.focus();
+			result = false;
 			return false;				
 		}
-		return true;
+		return result;
 	},
 	setEvent: function (f) {
 
@@ -220,8 +225,9 @@ jsux.fn.delete = {
 			e.preventDefault();
 
 			var bool = self.checkDocumentForm(e.target);
-			if (bool === false) {
-				return;
+			if (bool ) {
+				var $form = $('form')[0];
+				$form.submit();
 			}
 		});		
 	},

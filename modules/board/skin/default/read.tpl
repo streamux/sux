@@ -35,17 +35,16 @@
     <div class="btn_groups">    
       <a href="{$routeURI}{$params}" class="sx-btn">목록</a>
       <a href="{$routeURI}/write{$params}" class="sx-btn">글쓰기</a>
-      <a href="{$routeURI}/reply{$params}" class="sx-btn">답변</a>
-      <a href="{$routeURI}/modify{$params}" class="sx-btn">수정</a>
-      <a href="{$routeURI}/delete{$params}" class="sx-btn">삭제</a>
+      <a href="{$routeURI}/{$contentData.id}/reply{$params}" class="sx-btn">답변</a>
+      <a href="{$routeURI}/{$contentData.id}/modify{$params}" class="sx-btn">수정</a>
+      <a href="{$routeURI}/{$contentData.id}/delete{$params}" class="sx-btn">삭제</a>
     </div>   
   </div>   
-</div> 
-{if $progressStepSkinPath != ''}   
-  {include file="$progressStepSkinPath"}
-{/if}
-
+</div>
 {if $commentSkinPath != ''}  
   {include file="$commentSkinPath"}
+{/if}
+{if $progressStepSkinPath != ''}   
+  {include file="$progressStepSkinPath"}
 {/if}
 {include file="$footerPath"}

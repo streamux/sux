@@ -16,7 +16,7 @@
       <div class="sx-form-group">
         <textarea name="comment" rows="23" class="sx-form-control">내용 입력 테스트 글 입니다.</textarea>
       </div>
-      <div class="sx-form-group">
+      <div class="btn_group sx-form-group">
         <input type="submit" name="comfirm" value="댓글등록" class="sx-btn">
         <input type="reset" name="rewrite" value="다시쓰기" class="sx-btn">
       </div>      
@@ -37,9 +37,9 @@
             <div class="comment_body">
               <span class="comment">{$item.comment}</span>
               <p class="btn_group">
-                <a href="{$routeURI}{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs"><i class="xi-heart-o"></i>좋아요(+1)</a>
-                <a href="{$routeURI}{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">댓글</a>
-                <a href="{$routeURI}{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">삭제</a>
+                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs"><i class="xi-heart-o"></i>좋아요(+1)</a>
+                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">댓글</a>
+                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">삭제</a>
               </p>
             </div>            
           </td>

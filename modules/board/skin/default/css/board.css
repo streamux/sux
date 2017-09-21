@@ -14,10 +14,19 @@
   text-align: center;
   border-radius:0.25em;
 }
+.contents_header .btn_write:hover{
+  border:1px solid #fff;
+}
 .contents_header .btn_write a {
   display:inline-block;
   width:34px;
   height:32px;
+}
+.contents_header .btn_write a i{
+  color: #e3e3e3;
+}
+.contents_header .btn_write a i:hover{
+  color: #fff;
 }
 .contents_header h1 {
   line-height:50px;
@@ -32,32 +41,63 @@
 .form_search_panel {
   overflow:hidden;
   margin-top:30px;
+  padding: 0 10px;
+}
+.form_search_panel .sx-input-group {
+  display: block;
+  text-align: right;
+}
+.form_search_panel .sx-input-group a.sx-btn{
+  display: none;
+  vertical-align: middle;
+  padding: 0 4px;
 }
 
 /* List */
 .board_list {
   padding-bottom:20px;
 }
-.board_list table {
-  border-collapse:collapse;
-  border-spacing: 0;  
-  width:100%;  
+.board_list ul li {
+  padding: 0 15px;
 }
-.board_list table thead th {
+.board_list ul li p.subject{
+  margin-bottom: 10px;
+  line-height: 24px;
+}
+.board_list ul li p.info{
+  font-size: 0.875em;
+  color: #aeaeae;
+}
+.board_list ul li p i{
+  position: relative;
+  top:-1px;
+  vertical-align: middle;
+}
+
+.board_list .table_panel {
+  display: none; 
+}
+.board_list .table_panel table {  
+  border-collapse:collapse;
+  border-spacing: 0; 
+  width: 100%;
+}
+.board_list .table_panel table thead th {
   height:50px;
   border-bottom: 1px solid #e8eef1;
   background-color: #f3f3f3;  
   font-size: 1.250em;
 }
-.board_list table thead th,
+.board_list .table_panel table thead th,
 .board_list table tbody tr td{
   min-height:55px; 
   font-weight: normal;
   text-align:center;
 }
-.board_list table tbody tr.sx-btn-activate:hover {
+.board_list .table_panel table tbody tr.sx-btn-activate:hover {
    background-color: #f6f6f6;
 }
+.board_list ul li,
 .board_list table tbody tr td{
   font-size: 1.125em;
 }
@@ -67,22 +107,28 @@
 .board_list table thead th.date {
   width:130px;
 }
-.board_list table thead th.hit {`
+.board_list table thead th.hit {
   width:90px;
 }
-.board_list table tbody tr td.subject {
+.board_list ul li,
+.board_list .table_panel table tbody tr td.subject {
   padding-top:20px;
   padding-bottom:20px;
   text-align: left;
 }
-.board_list table tbody tr td.subject span.link_area {
+.board_list .table_panel table tbody tr td.subject span.link_area {
   display:inline-block;
   width:100%;
 }
-.board_list table tbody tr td img.icon_new_show {
-  display: inline-block;
+.board_list ul li p.subject span.label,
+.board_list .table_panel table tbody tr td.subject span.link_area .label {
+  border:none;
+  font-weight: normal;
+  vertical-align: middle;
 }
-
+.board_list ul li a:hover {
+  text-decoration-line: none;
+}
 .board_list .warn_subject {
   padding-left:10px;
   text-align: left;
@@ -118,7 +164,7 @@
 }
 .board_read .head_panel p.title {
   font-size: 1.6250em;
-  line-height:26px;  
+  line-height:34px;  
 }
 .board_read .head_panel p.sub_info {
   margin-top: 5px;
@@ -140,7 +186,8 @@
   text-align: right;
 }
 .board_read .btn_groups a.sx-btn {
-  width: 70px;
+  margin-bottom: 5px;
+  width: 100%;
 }
 
 /* opkey - setup */
@@ -186,14 +233,16 @@
   padding-right: 10px;
   text-align: right;
 }
+.board_adminsetup .btn_group {
+  margin-top:15px;
+}
 .board_adminsetup .sx-form-group input.sx-btn {
-  margin-top: 15px;
-  width: 100px;
+  margin-top: 5px;
+  width: 100%;
 }
 
 /* comment tail */
 .board_comment {
-  margin-top:45px;
   margin-bottom: 65px;
 }
 .board_comment p.title {
@@ -273,6 +322,9 @@
   padding-left:10px;
   padding-right:10px;
 }
+.board_write .head_panel .sx-form-group div.sx-form-control {
+  width: 350px;
+}
 .board_write .body_panel .sx-input-group {
   display: inline-block;
   position: relative;
@@ -286,24 +338,26 @@
 
 .board_write .foot_panel {
   margin-top:20px;
+  margin-bottom: 65px;
 }
 .board_write .foot_panel .button_width {
   width: 100px;
 }
 .board_write .foot_panel .input_file_div {
   position: relative;
-  margin-top: 10px;
+  margin-top: 5px;
   overflow:hidden;
   display: inline-block;
   vertical-align: middle;
 }
 .board_write .foot_panel .input_file_div,
 .board_write .foot_panel .sx-btn {
-  width:100%;
+  margin-bottom: 5px;
+  width:100%;  
 }
 .board_write .foot_panel input.file_uploader_button {
   position: absolute;
-  z-index: -1;
+  z-index: -1;  
 }
 .board_write .foot_panel .wall_key {
   height: 100px;
@@ -328,136 +382,112 @@
   text-align: center;
 }
 
-
-
-
 /* reply */
 .board_read .panel-body .download-align {
   margin-right:10px;
   text-align: right;
 }
 
+
 /* delpass */
-.article-box {
-  padding:30px 20px 20px 20px;
-  background-color:#fcfcfc;
-}
-.article-box .login  {
+.sx_login {
+  margin-top:5px;
+  padding:30px 15px 20px 15px;
   word-break:keep-all;
   text-align: center;
 }
-.article-box .login .title {
-  display:block;
-  margin-top:10px;
+.sx_login h1{
+  font-weight: normal;
   font-size:2.5625em;
-  color:#ff6600;
+  color:#ff6600
 }
-.article-box .login .subtitle {
-  display:block;
+.sx_login .sx_subtitle{
   font-size:1.0625em;
 }
-.article-box .login .box  {
-  position: relative;
+.sx_login .sx_login_box {
   margin:0 auto;
   margin-top:25px;
+  margin-bottom: 30px;
+  padding:35px 20px 20px 20px;
+  width: 356px;
+}
+.sx_login .sx_login_box label {
+  position: relative;
+  top:-3px;
+  font-weight: normal;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box label.sx_label_with{
+  display: inline-block;
+  width:80px;
+  text-align:right;
+}
+.sx_login .sx_login_box .sx-form-group span {
+  position: relative;
+  top:-3px;
+  font-size: 1.250em;
+  font-weight: bold;
+}
+.sx_login .sx_login_box .sx-form-group p {
+  margin-top: 15px;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box .sx_char_colon {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: normal;
+}
+.sx_login .sx_login_box .sx-form-group {
+  text-align: left;
+}
+.sx_login .sx_login_box .sx_login_btn{
+  margin-top: 35px;
+}
+.sx_login .sx_login_box .submit_top_margin {
   padding-top:15px;
-   padding-bottom:20px;
-   width:300px;
-  background-color: #FFFFFF;
-  text-align: center;
 }
-.article-box .login .box .login-title  {
-  margin:0 auto;
-  width: 92%;
-  height:26px;
-  border-bottom: 1px dotted #bebebe;
-  text-align: left;
+.sx_login .sx_login_box a.sx-btn,
+.sx_login .sx_login_box input[type=button].sx-btn,
+.sx_login .sx_login_box input[type=submit].sx-btn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1.500em;
 }
-.article-box .login .box .login-title span {
-  text-align: left;
-  vertical-align: middle;
-}
-.article-box .login .box .login-title img {
-  vertical-align: middle;
-}
-.article-box .login .box .login-title .link-searchinfo {
-  line-height: 20px;
-}
-.article-box .login .box .login-body {
-  margin:0 auto;
-   width:92%;
-   text-align: left;
-}
-.article-box .login .box .login-body input  {
-  width:110px;
-  text-align: left;
-}
-.article-box .login .box .login-body div {
-  margin-top:20px;
-}
-.article-box .login .box .login-body .panel-info {
-  width:69%;
-  vertical-align: middle;
-}
-.article-box .login .box .login-body .panel-info ul li {
-  line-height: 27px;
-}
-.article-box .login .box .login-body .panel-info .ui-label {
-  display:inline-block;
-  width:70px;
-}
-.article-box .login .box .login-body .panel-info .ui-value {
-  font-weight:bold;
-  font-size: 1.0625em;
+.sx_login .sx_login_box .sx_btn_md {
+  width: 100px;
 }
 
-.article-box .login .box .login-body .panel-btn {
-  margin-top:20px;
-  text-align:center;
-  font-size:1.0625em;
-}
-.article-box .login .box .login-body .panel-btn input {
+.sx_login .sx_login_box .sx_login_footer{
   line-height:30px;
-  width:60px;
-  text-align:center;
-  border:1px solid #e3e3e3;
-  background-color:#ffffff;
-  border-radius: 10px;
-  cursor:pointer;
+  margin-top:20px;
 }
-.article-box .login .box .login-body .panel-btn input:hover {
-  background-color:#e3e3e3;
+.sx_login .sx_login_box .sx_login_footer span{
+  color: #c3c3c3;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-.article-box .login .panel-notice {
-  margin:30px 0 30px 0;
-  text-align:center;
-}
-.article-box .login .panel-notice dl {
-  display:inline-block;
-  padding:10px;
-  width:43%;
+.sx_login .notice_panel {
+  margin:0 auto;
+  padding-bottom: 30px;
   text-align: left;
-  vertical-align:top;
+  max-width: 356px;
 }
-.article-box .login .panel-notice dl dt {
+.sx_login .notice_panel dl{
+  display:inline-block;
+}
+.sx_login .notice_panel dl dt{
   height:22px;
   font-weight: bold;
 }
-.article-box .login .panel-notice dl dd {
-  height:22px;
+.sx_login .notice_panel dl:first-child dd{
+  padding-bottom: 25px;
 }
-.article-box .login .panel-login-fail {
-  display:none;
+.sx_login .fail_panel {
+  display: none;
   margin:0 auto;
-  padding-top:20px;
-  width:300px;
+  max-width: 356px;
   text-align: left;
-}
-.article-box .login .panel-login-fail ul li {
-  list-style-type: square;
-}
-.article-box .login .panel-login-fail ul li span {
-  color: #de0000;
+  color: #ff6600;
 }
 
 @media (min-width: 768px)  {
@@ -480,8 +510,23 @@
   .contents_header .btn_write {
     display: none;  
   }
+  .form_search_panel .sx-input-group a.sx-btn{
+    display: inline-block;
+  }
   .board_comment .list_panel table tbody tr td .user_info{
     float: left;
+  }
+  .board_list ul{
+    display: none;
+  }
+  .board_list .table_panel {
+    display: block; 
+  }
+  .board_read .btn_groups a.sx-btn {
+    width: 80px;
+  }
+  .board_adminsetup .sx-form-group input.sx-btn {
+    width: 80px;
   }
   .board_write .form_label_width {
     padding-right: 20px;
@@ -498,6 +543,7 @@
   }
   .board_write .foot_panel .input_file_div,
   .board_write .foot_panel .sx-btn {
+    margin-bottom: 0;
     width:auto;
   }
   .board_write .button_panel {
@@ -515,5 +561,9 @@
   }
   .board_write .foot_panel p.wall_key_comment {
     margin-left: 103px;
+  }
+  .sx-btn-block {
+    display: inline-block;
+    width: 100%;
   }
 }

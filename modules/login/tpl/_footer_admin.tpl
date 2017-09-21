@@ -1,5 +1,5 @@
 	</div>
-	<div class="footer">
+	<div class="sx-footer">
 		{include file="$copyrightPath"}
 	</div>
 </div>

@@ -1,10 +1,6 @@
   </div>
   <div class="sx-footer">
-    <p>
-      <span>
-        {include file="$copyrightPath"}
-      </span>
-    </p>
+      {include file="$copyrightPath"}
   </div>
 </div>
 <script type="text/javascript">

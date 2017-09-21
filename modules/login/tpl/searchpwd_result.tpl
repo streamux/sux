@@ -26,7 +26,7 @@
         <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-id">ID 찾기</a>
       </div>
     </div>
-    <div class="panel-notice">
+    <div class="notice_panel">
       기타 궁금한 사항이나 질문은 Q&amp;A 게시판을 이용해 주세요.
     </div>
   </div>      

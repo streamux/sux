@@ -16,7 +16,7 @@
       </dd>
     </dl>
     <p class="setup_tip">※ 해당버튼을 선택하여 진행상황을 표시할 수 있습니다.</p>
-    <div class="sx-form-group">   
+    <div class="btn_group sx-form-group">   
       <input type="submit" name="submit"  value="설정" class="sx-btn">    
       <input type="cancel" value="취소" class="sx-btn">
     </div>

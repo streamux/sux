@@ -9,7 +9,7 @@ class LoginAdminController extends Controller {
 		$context = Context::getInstance();
 		$posts = $context->getPostAll();
 		$userId = $posts['user_id'];
-		$userPwd = $posts['user_pwd'];
+		$userPwd = $posts['password'];
 		$token = $posts['token'];
 
 		$rootPath = _SUX_ROOT_;		
