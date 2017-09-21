@@ -242,7 +242,7 @@ class InstallController extends Controller
 									$buffHeader .= '<!-- contents start -->' . "\n";
 
 									//  read and write contents
-									$contentsPath = $realPath . 'modules/document/tpl/home.tpl';
+									$contentsPath = $realPath . 'modules/document/skin/home.tpl';
 									$buff = FileHandler::readFile($contentsPath);
 
 									$buffFooter .= '<!-- contents end -->' . "\n";
