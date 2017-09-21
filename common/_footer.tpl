@@ -30,8 +30,8 @@
     <div class="sx-user-info">
       <ul class="clearfix">
         <li><div class="sx-user-picture"></div></li>
-        <li>
-          <span class="sx-user-nickname">
+        <li class="sx-user-nickname">
+          <span>
           {if isset($sessionData.user_name) && $sessionData.user_name}
             {$sessionData.user_name}
           {else}
@@ -39,8 +39,8 @@
           {/if}
           </span>
         </li>
-        <li>        
-          <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' class="sx-user-modify" alt="관리자 설정" /></a>
+        <li class="sx-user-modify">        
+          <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' alt="관리자 설정" /></a>
         </li>
       </ul>
     </div>
