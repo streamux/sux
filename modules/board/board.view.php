@@ -125,23 +125,23 @@ class BoardView extends View
           $subject['space'] = 0;
           $subject['icon_box'] = '';
           $subject['icon_box_type'] = 0;
-          $subject['icon_img'] = 'hide';
-          $subject['css_comment'] = 'hide';
+          $subject['icon_img'] = 'sx-hide';
+          $subject['css_comment'] = 'sx-hide';
           $subject['comment_num'] = 0;
-          $subject['icon_new'] = 'hide';
-          $subject['icon_opkey'] = 'hide';
+          $subject['icon_new'] = 'sx-hide';
+          $subject['icon_opkey'] = 'sx-hide';
 
           if (isset($space) && $space) {
             $subject['space'] = $space*10;
             $subject['icon_box'] = '답변';
-            $subject['icon_box_color'] = 'sx-color-replay';
+            $subject['icon_box_color'] = 'sx-bg-replay';
           }
 
           //공지글 설정은 개발 예정 
           /*if (isset($isNotice) && $isNotice != '') {
             $subject['space'] = '10px';
             $subject['icon_box'] = '공지';
-            $subject['icon_box_color'] = 'sx-color-notice';
+            $subject['icon_box_color'] = 'sx-bg-notice';
           }*/
 
           if (isset($filename) && $filename){
@@ -152,7 +152,7 @@ class BoardView extends View
             }
 
             if (isset($imgname) && $imgname) {
-              $subject['icon_img'] = 'show';
+              $subject['icon_img'] = 'sx-show';
               $subject['img_name'] = $imgname;
             } 
           }
@@ -160,17 +160,17 @@ class BoardView extends View
           $this->model->select('comment', 'content_id');
           $commentNums = $this->model->getNumRows();
           if ($commentNums > 0) {
-            $subject['css_comment'] = 'show';
+            $subject['css_comment'] = 'sx-show';
             $subject['comment_num'] = $commentNums;
           }
 
           if ($compareDay == $today){
-            $subject['icon_new'] = 'icon_new_show';
+            $subject['icon_new'] = 'sx-show';
             $subject['icon_new_title'] = 'new';
           }
           
           $subject['progress_step_name'] = ($progressStep === '초기화') ? '' : $progressStep;
-          $subject['icon_progress_color'] = 'sx-color-progress';
+          $subject['icon_progress_color'] = 'sx-bg-progress';
 
           $contentData['list'][$i]['name'] = $name;
           $contentData['list'][$i]['hit'] = $hit;
@@ -348,23 +348,28 @@ class BoardView extends View
     $contentData['css_down'] = 'hide';
     $contentData['css_img'] = 'hide';
 
-    $fileupPath = '';
     if (isset($filename) && $filetype) {
 
       $fileupPath = $rootPath . "files/board/${filename}";
       if (($is_download === 'y') && preg_match( '/(application\/x-zip-compressed|application\/zip)+', $filetype)) {
-        $contentData['css_down'] = 'show';
-      } else if (!preg_match( '/(application\/x-zip-compressed|application\/zip)+', $filetype)){
 
-        $image_info = getimagesize($fileupPath);
-            $image_type = $image_info[2];
-            if ( $image_type === IMAGETYPE_JPEG ) {
-                $image = imagecreatefromjpeg($fileupPath);
-            } elseif( $image_type === IMAGETYPE_GIF ) {
-              $image = imagecreatefromgif($fileupPath);
-            } elseif( $image_type === IMAGETYPE_PNG ) {
-              $image = imagecreatefrompng($fileupPath);
+        $contentData['css_down'] = 'sx-show';
+      } else if (preg_match( '/(jpg|jpeg|gif|png)+/i', $filetype)){
+
+       $imageInfo = getimagesize($fileupPath);
+        /*echo 'fileupPath = ' . $fileupPath . "<br>";
+        echo 'type : ' . $imageInfo;*/
+        $imageType = $imageInfo[2];
+
+        if ($imageType === IMAGETYPE_JPEG) {
+          $image = imagecreatefromjpeg($fileupPath);
+        } elseif($imageType === IMAGETYPE_GIF) {
+          $image = imagecreatefromgif($fileupPath);
+        } elseif($imageType === IMAGETYPE_PNG) {
+          $image = imagecreatefrompng($fileupPath);
         }
+
+        //echo 'image size = ' . imagesx($image);
         $contentData['css_img'] = 'show';
         $contentData['css_img_width'] = imagesx($image) . 'px';
       }
@@ -395,7 +400,9 @@ class BoardView extends View
     if ($is_comment === 'y') {
       $contentData['css_comment'] = 'show';
 
-      $this->model->select('comment','*');
+      $where->reset();
+      $where->set('contents_id',$id,'=');
+      $this->model->select('comment','*', $where);
       $commentData['num'] = $this->model->getNumRows();
       $commentData['list'] = $this->model->getRows();
     }
@@ -577,8 +584,8 @@ class BoardView extends View
     if (isset($search) && $search) {
       $returnURL .= "?find=${find}&search=${search}";
     }
-    
-    //$this->document_data['jscode'] = 'modify';
+
+    $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 수정';
 
@@ -633,6 +640,23 @@ class BoardView extends View
     $contentsType = $contentData['contents_type'];
     $contentData['contents_type_' . $contentsType] = 'checked';
     unset($contentData['password']);
+
+    $where = new QueryWhere();
+    if (isset($search) && $search) {
+      $where->set($find, $search, 'like');
+    }
+    $where->set('category', $category, '=');
+    $this->model->select('board', 'wall', $where, 'id desc' , 0, 1);
+
+    $row = $this->model->getRow();
+    $wall = $row['wall']; 
+    if ($wall === 'a' || empty($wall)) {
+      $contentData['wallname'] = "나라사랑";
+      $contentData['wallkey'] = "b";
+    } else if ($wall === 'b') {
+      $contentData['wallname'] = "조국사랑";
+      $contentData['wallkey'] = "a";
+    }
 
     if (isset($grade) && $grade) {
       $level = $grade;
@@ -766,7 +790,7 @@ class BoardView extends View
       $fileupPath = $rootPath . "files/board/${filename}";
       if (($is_download == 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
 
-        $contentData['css_down'] = 'show';
+        $contentData['css_down'] = 'sx-show';
       } else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
 
         $image_info = getimagesize($fileupPath);
@@ -779,7 +803,7 @@ class BoardView extends View
             } elseif( $image_type === IMAGETYPE_PNG ) {
               $image = imagecreatefrompng($fileupPath);
         }
-        $contentData['css_img'] = 'show';
+        $contentData['css_img'] = 'sx-show';
         $contentData['img_width'] = imagesx($image) . 'px';
       }
       $contentData['fileup_name'] = $filename;
@@ -833,19 +857,19 @@ class BoardView extends View
     }
 
     if (isset($user_name) && $user_name) {
-      $contentData['css_user_label'] = 'hide';
+      $contentData['css_user_label'] = 'sx-hide';
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
       $contentData['user_id'] = empty($user_id) ? 'guest' : $user_id;
       $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
       $contentData['user_password'] = $password;
     } else {
-      $contentData['css_user_label'] = 'show';      
+      $contentData['css_user_label'] = 'sx-show';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_id'] = empty($user_id) ? 'guest' : $user_id;
       $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
       $contentData['user_pass_type'] = 'password';
-      $contentData['user_password'] = '12';
+      $contentData['user_password'] = '';
     }
 
     $this->document_data['group'] = $groupData;
@@ -872,7 +896,7 @@ class BoardView extends View
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
 
-    //$this->document_data['jscode'] = 'delete';
+    $this->document_data['jscode'] = 'delete';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시물 삭제'; 
 
@@ -930,13 +954,13 @@ class BoardView extends View
     $context = Context::getInstance();
 
     $category = $context->getParameter('category');
-    $mid = $context->getParameter('id');
-    $id = $context->getParameter('sid');
+    $mid = $context->getParameter('id');  // 메인 아이디
+    $id = $context->getParameter('sid');    // 서브 아이디 
 
     $this->document_data['category'] = $category;
     $this->document_data['mid'] = $mid;
 
-    //$this->document_data['jscode'] ='delete';
+    $this->document_data['jscode'] ='delete';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시물 삭제';
 
@@ -971,7 +995,7 @@ class BoardView extends View
 
     $where->reset();
     $where->set('id', $id, '=');
-    $this->model->select('comment', 'id, user_name', $where);
+    $this->model->select('comment', '*', $where);
 
     $contentData = $this->model->getRow();
     $contentData['id'] = $id;

@@ -76,23 +76,23 @@
   padding-left: 5px;
   padding-right: 5px;
 }
-.sx_login .panel-notice {
+.sx_login .notice_panel {
   margin:0 auto;
   padding-bottom: 30px;
   text-align: left;
   max-width: 356px;
 }
-.sx_login .panel-notice dl{
+.sx_login .notice_panel dl{
   display:inline-block;
 }
-.sx_login .panel-notice dl dt{
+.sx_login .notice_panel dl dt{
   height:22px;
   font-weight: bold;
 }
-.sx_login .panel-notice dl:first-child dd{
+.sx_login .notice_panel dl:first-child dd{
   padding-bottom: 25px;
 }
-.sx_login .panel-fail {
+.sx_login .fail_panel {
   display: none;
   margin:0 auto;
   max-width: 356px;
