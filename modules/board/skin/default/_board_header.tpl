@@ -7,14 +7,4 @@
     <p><a href="">home</a> &gt; {$groupData.board_name}</p> 
   </div>
 {/if}
-
-{if $requestData.search != ''}
-  {assign var=find value=$requestData.find}
-  {assign var=search value=$requestData.search}
-  {assign var=params value="?find=$find&search=$search"}
-{else}
-  {assign var=find value=''}
-  {assign var=search value=''}
-  {assign var=params value=''}
-{/if}
   

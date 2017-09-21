@@ -57,47 +57,47 @@
 .board_list {
   padding-bottom:20px;
 }
-.board_list ul li {
+.board_list ul.list_mobile_panel li {
   padding: 0 15px;
 }
-.board_list ul li p.subject{
+.board_list ul.list_mobile_panel li p.subject{
   margin-bottom: 10px;
   line-height: 24px;
 }
-.board_list ul li p.info{
+.board_list ul.list_mobile_panel li p.info{
   font-size: 0.875em;
   color: #aeaeae;
 }
-.board_list ul li p i{
+.board_list ul.list_mobile_panel li p i{
   position: relative;
   top:-1px;
   vertical-align: middle;
 }
 
-.board_list .table_panel {
+.board_list .list_pc_panel {
   display: none; 
 }
-.board_list .table_panel table {  
+.board_list .list_pc_panel table {  
   border-collapse:collapse;
   border-spacing: 0; 
   width: 100%;
 }
-.board_list .table_panel table thead th {
+.board_list .list_pc_panel table thead th {
   height:50px;
   border-bottom: 1px solid #e8eef1;
   background-color: #f3f3f3;  
   font-size: 1.250em;
 }
-.board_list .table_panel table thead th,
+.board_list .list_pc_panel table thead th,
 .board_list table tbody tr td{
   min-height:55px; 
   font-weight: normal;
   text-align:center;
 }
-.board_list .table_panel table tbody tr.sx-btn-activate:hover {
+.board_list .list_pc_panel table tbody tr.sx-btn-activate:hover {
    background-color: #f6f6f6;
 }
-.board_list ul li,
+.board_list ul.list_mobile_panel li,
 .board_list table tbody tr td{
   font-size: 1.125em;
 }
@@ -110,23 +110,23 @@
 .board_list table thead th.hit {
   width:90px;
 }
-.board_list ul li,
-.board_list .table_panel table tbody tr td.subject {
+.board_list ul.list_mobile_panel li,
+.board_list .list_pc_panel table tbody tr td.subject {
   padding-top:20px;
   padding-bottom:20px;
   text-align: left;
 }
-.board_list .table_panel table tbody tr td.subject span.link_area {
+.board_list .list_pc_panel table tbody tr td.subject span.link_area {
   display:inline-block;
   width:100%;
 }
-.board_list ul li p.subject span.label,
-.board_list .table_panel table tbody tr td.subject span.link_area .label {
+.board_list ul.list_mobile_panel li p.subject span.label,
+.board_list .list_pc_panel table tbody tr td.subject span.link_area .label {
   border:none;
   font-weight: normal;
   vertical-align: middle;
 }
-.board_list ul li a:hover {
+.board_list ul.list_mobile_panel li a:hover {
   text-decoration-line: none;
 }
 .board_list .warn_subject {
@@ -155,6 +155,9 @@
 }
 .board_pagination .sx-space-right {
   margin-right: 25px;
+}
+.board_list .board_pagination .pagin_pc {
+  display:none;
 }
 
 /* read */
@@ -516,11 +519,17 @@
   .board_comment .list_panel table tbody tr td .user_info{
     float: left;
   }
-  .board_list ul{
+  .board_list ul.list_mobile_panel {
     display: none;
   }
-  .board_list .table_panel {
+  .board_list .list_pc_panel {
     display: block; 
+  }
+  .board_list .board_pagination .pagin_pc {
+    display:block;
+  }
+  .board_list .board_pagination .pagin_mobile {
+    display:none;
   }
   .board_read .btn_groups a.sx-btn {
     width: 80px;

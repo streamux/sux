@@ -206,7 +206,6 @@ class BoardView extends View
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = "{$skinRealPath}/list.tpl";
     $this->skin_path_list['footer'] = $footerPath;
-    $this->skin_path_list['navi'] = "{$skinRealPath}/_navi.tpl";    
 
     $this->output();
   } 

@@ -36,6 +36,9 @@ class Navigator extends Object {
 	var $passover = 0;
 	var $limit = 10;
 	var $total = 1;
+	var $totalpage = 0;
+	var $currentpage = 1;
+	var $endpage = 0;
 	var $page = 1;
 	
 	var $nextpage = 0;
@@ -51,7 +54,9 @@ class Navigator extends Object {
 	function init() {
 
 		$context = Context::getInstance();
-		$result = array();
+		$this->totalpage = ceil($this->total/$this->limit);
+		$this->currentpage = ceil($this->passover/$this->limit)+1;
+		$this->endpage = ($this->totalpage-1)*$this->limit;
 
 		$passoverpage = $this->limit * 10;
 		if ($this->passover == $passoverpage || $this->passover == 0) {

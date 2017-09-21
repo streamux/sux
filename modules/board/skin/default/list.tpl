@@ -16,6 +16,15 @@
   {include file="$skinRealPath/_board_header.tpl"}
   <!-- end -->
 
+  {if $requestData.search != ''}
+    {assign var=find value=$requestData.find}
+    {assign var=search value=$requestData.search}
+    {assign var=params value="?find=$find&search=$search"}
+  {else}
+    {assign var=find value=''}
+    {assign var=search value=''}
+    {assign var=params value=''}
+  {/if}
   <div class="form_search_panel">
     <form action="{$routeURI}" method="post" name="f_board_list_search" class="sx-form-inline">
       <input type="hidden" name="_method" value="select">           
@@ -31,9 +40,10 @@
       </div>    
     </form>
   </div>
-
-  <ul>
-  {foreach from=$contentData.list  item=$item}
+  
+  <!-- LIST Mobile -->
+  <ul class="list_mobile_panel">
+  {foreach from=$contentData.list item=$item}
     {if isset($item)}
     <li class="sx-btn-activate">
       {if $requestData.search != ''}
@@ -63,8 +73,10 @@
     {/if}
   {/foreach}
   </ul>
+  <!-- end -->
 
-  <div class="table_panel">  
+  <!-- LIST PC -->
+  <div class="list_pc_panel">  
     <table class="table-striped" summary="게시판 리스트입니다.">
       <thead>
         <tr>        
@@ -108,12 +120,21 @@
       </tbody>
     </table>
   </div>
+  <!-- end -->
 
-  <div class="board_pagination" style="width:{$groupData.width}">
-  {if $skinPathList.navi != ''}
-    {assign var=naviSkinPath value=$skinPathList.navi}
-    {include file="$naviSkinPath"}
-  {/if}
-  </div>  
+  <div class="board_pagination">
+    <div class="pagin_pc">
+      {assign var=naviSkinPath value="$skinRealPath/_navi.tpl"}
+      {if $naviSkinPath != ''}
+        {include file="$naviSkinPath"}
+      {/if}
+    </div>
+    <div class="pagin_mobile">
+      {assign var=naviSkinPath value="$skinRealPath/_navi_mobile.tpl"}
+      {if $naviSkinPath != ''}
+        {include file="$naviSkinPath"}
+      {/if}
+    </div>  
+  </div>
 </div>
 {include file="$footerPath"}
