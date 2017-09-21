@@ -1,4 +1,5 @@
 {assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원탈퇴 - StreamUX"}
@@ -33,7 +34,7 @@
       </form>
     </div>
 
-    <div class="panel-notice">
+    <div class="notice_panel">
       <dl>
         <dt>주의사항</dt>
         <dd>비밀번호가 노출되지 않도록 세심한 주의를 기울여 주세요.</dd>

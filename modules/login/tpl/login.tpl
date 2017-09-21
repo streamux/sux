@@ -1,4 +1,5 @@
 {assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="회원 로그인 - StreamUX"}
@@ -34,13 +35,15 @@
                        로그인 실패 시 'common/_header.tpl' > head 태그에 link 경로 'login_fail.css' 파일을 로드해서
                        display:block; 로 설정한다.
          -->
-        <div class="panel-fail">
+        <div class="fail_panel">
           <p>아이디 또는 비밀번호를 다시 확인하세요.</p>
           <p>STREAMUX에 등록되지 않은 아이디이거나, 아이디 또는 비밀번호를 잘못 입력하셨습니다.</p>
         </div>
+        
         <div class="sx-form-group sx_login_btn">
           <input type="submit" value="로그인" class="sx-btn sx-btn-block">
         </div>
+
         <div class="sx_login_footer">
           <a href="{$rootPath}member-join">회원가입</a>
           <span>|</span>
@@ -48,7 +51,7 @@
         </div>  
       </form>                             
     </div>
-    <div class="panel-notice">
+    <div class="notice_panel">
       <dl>
         <dt>주의사항</dt>
         <dd>비밀번호가 노출되지 않도록 세심한 주의를 기울여 주세요.</dd>

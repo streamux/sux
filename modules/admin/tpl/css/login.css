@@ -2,34 +2,109 @@
 .article-box{padding:30px 20px 20px 20px;background-color:#fcfcfc}
 
 /* admin login */
-.article-box{margin-top:5px;padding:30px 20px 20px 20px;background-color:#fcfcfc}
-.article-box .login {word-break:keep-all;text-align: center;}
-.article-box .login .title{display:block;margin-top:10;font-size:2.5625em;color:#ff6600}
-.article-box .login .subtitle{display:block;font-size:1.0625em}
-.article-box .login .box {position: relative;margin:0 auto;margin-top:25px;padding-top:15px; padding-bottom:20px;width:300px;background-color: #FFFFFF}
-.article-box .login .box .login-header {margin:0 auto;width: 92%;height:26px;border-bottom: 1px dotted #bebebe;text-align: left}
-.article-box .login .box .login-header span{text-align: left;vertical-align: middle;}
-.article-box .login .box .login-header img{vertical-align: middle;}
-.article-box .login .box .login-body{margin:0 auto; width:92%;text-align: left}
-.article-box .login .box .login-body input {width:110px;text-align: left}
-.article-box .login .box .login-body div{display:inline-block;margin-top:20px}
-.article-box .login .box .login-body .panel-info{width:69%;vertical-align: middle}
-.article-box .login .box .login-body .panel-info ul li{line-height: 27px}
-.article-box .login .box .login-body .panel-info .ui-label{display:inline-block;width:70px}
-.article-box .login .box .login-body .panel-info .ui-value{font-weight:bold;font-size: 1.0625em}
-.article-box .login .box .login-body .panel-btn{width:29%;vertical-align: middle;text-align: center}
-.article-box .login .box .login-body .panel-btn .login-btn{width:61px;height:57px}
-.article-box .login .box .login-footer{margin:0 auto;margin-top:20px;width: 92%;text-align: center}
-.article-box .login .box .login-footer .link-searchinfo{line-height: 20px}
-.article-box .login .box .login-footer .link-searchinfo .ui-label-join{margin-right:10px}
-.article-box .login .box .login-footer .link-searchinfo span{color:#636363}
-.article-box .login .panel-notice{margin:30px 0 30px 0}
-.article-box .login .panel-notice dl{display:inline-block;padding:10px;width:43%;text-align: left;vertical-align:top}
-.article-box .login .panel-notice dl dt{height:22px;font-weight: bold}
-.article-box .login .panel-notice dl dd{height:22px}
-.article-box .login .panel-fail{display:none;margin:0 auto;padding-top:20px;width:300px;text-align: left;}
-.article-box .login .panel-fail ul li{list-style-type: square}
-.article-box .login .panel-fail ul li span{color: #de0000}
+.sx_login {
+  margin-top:5px;
+  padding:30px 15px 20px 15px;
+  word-break:keep-all;
+  text-align: center;
+}
+.sx_login h1{
+  font-weight: normal;
+  font-size:2.5625em;
+  color:#ff6600
+}
+.sx_login .sx_subtitle{
+  font-size:1.0625em;
+}
+.sx_login .sx_login_box {
+  margin:0 auto;
+  margin-top:25px;
+  margin-bottom: 30px;
+  padding:35px 20px 20px 20px;
+  width: 356px;
+}
+.sx_login .sx_login_box label {
+  position: relative;
+  top:-3px;
+  font-weight: normal;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box label.sx_label_with{
+  display: inline-block;
+  width:80px;
+  text-align:right;
+}
+.sx_login .sx_login_box .sx-form-group span {
+  position: relative;
+  top:-3px;
+  font-size: 1.250em;
+  font-weight: bold;
+}
+.sx_login .sx_login_box .sx-form-group p {
+  margin-top: 15px;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box .sx_char_colon {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: normal;
+}
+.sx_login .sx_login_box .sx-form-group {
+  text-align: left;
+}
+.sx_login .sx_login_box .sx_login_btn{
+  margin-top: 35px;
+}
+.sx_login .sx_login_box .submit_top_margin {
+  padding-top:15px;
+}
+.sx_login .sx_login_box a.sx-btn,
+.sx_login .sx_login_box input[type=button].sx-btn,
+.sx_login .sx_login_box input[type=submit].sx-btn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1.500em;
+}
+.sx_login .sx_login_box .sx_btn_md {
+  width: 100px;
+}
 
-.footer{text-align: center;background-color:#ffffff;color:#3e3e3e}
-.footer a{color:#3e3e3e;}
+.sx_login .sx_login_box .sx_login_footer{
+  line-height:30px;
+  margin-top:20px;
+}
+.sx_login .sx_login_box .sx_login_footer span{
+  color: #c3c3c3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.sx_login .notice_panel {
+  margin:0 auto;
+  padding-bottom: 30px;
+  text-align: left;
+  max-width: 356px;
+}
+.sx_login .notice_panel dl{
+  display:inline-block;
+}
+.sx_login .notice_panel dl dt{
+  height:22px;
+  font-weight: bold;
+}
+.sx_login .notice_panel dl:first-child dd{
+  padding-bottom: 25px;
+}
+.sx_login .fail_panel {
+  display: none;
+  margin:0 auto;
+  max-width: 356px;
+  text-align: left;
+  color: #ff6600;
+}
+
+@media(min-width: 768px) {
+  .sx-btn-block {
+    display: inline-block;
+    width: 100%;
+  }
+}

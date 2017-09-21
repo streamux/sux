@@ -1,4 +1,5 @@
 {assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="비밀번호 찾기 - StreamUX"}
@@ -44,7 +45,7 @@
         <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-id">ID 찾기</a>
       </div>
     </div>
-    <div class="panel-notice">
+    <div class="notice_panel">
       <ul>
         <li><span>위 사항을 입력해 주세요.</span></li>
         <li>기타 궁금한 사항이나 질문은 Q&amp;A 게시판을 이용해 주세요.</li>

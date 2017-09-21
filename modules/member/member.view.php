@@ -25,27 +25,28 @@ class MemberView extends View {
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/member/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/member/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/member/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
-    $contentsPath = $skinPath . 'join.tpl';
+    $contentsPath = $skinRealPath . 'join.tpl';
 
     $this->model->select('member_group', '*');
 
     $this->document_data['group'] = $this->model->getRows();
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
@@ -71,22 +72,22 @@ class MemberView extends View {
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
-    $skinDir = _SUX_ROOT_ . 'modules/member/tpl/';
-    $skinPath = _SUX_PATH_ . 'modules/member/tpl/';
+    $skinPath = _SUX_ROOT_ . 'modules/member/tpl/';
+    $skinRealPath = _SUX_PATH_ . 'modules/member/tpl/';
 
     $headerPath = _SUX_PATH_ . 'common/_header.tpl';
     if (!is_readable($headerPath)) {
-      $headerPath = $skinPath . "_header.tpl";
+      $headerPath = $skinRealPath . "_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
     }
 
     $footerPath = _SUX_PATH_ . 'common/_footer.tpl';
     if (!is_readable($footerPath)) {
-      $footerPath = $skinPath . "_footer.tpl";
+      $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $contentsPath = $skinPath . 'modify.tpl';
+    $contentsPath = $skinRealPath . 'modify.tpl';
 
     $where = new QueryWhere();
     $where->set('category', $category);
@@ -103,7 +104,8 @@ class MemberView extends View {
 
     $this->document_data['contents'] = $contentsData;
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = $skinDir;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;

@@ -1,50 +1,77 @@
+{assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
+{assign var=skinRealPath value=$skinPathList.realPath}
+{assign var=headerPath value=$skinPathList.header}
+{assign var=footerPath value=$skinPathList.footer}
+
+{assign var=category value=$documentData.category}
 {assign var=groupData value=$documentData.group}
 {assign var=boardTitle value=$groupData.board_name}
 {assign var=contentData value=$documentData.contents}
-{assign var=uri value=$documentData.uri}
-{assign var=rootPath value=$skinPathList.root}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
+{assign var=routeURI value="$rootPath$category"}
+
 {include file="$headerPath" title="$boardTitle :: 게시물 수정 - StreamUX"}
-<div class="board-write" style="width:{$groupData.width}">
-	<form action="{$uri}/{$contentData.id}/modify" method="post"  name="f_board_modify" enctype="multipart/form-data">
-	<input type="hidden" name="_method" value="update">
-	<input type="hidden" name="category" value="{$contentData.category}">
-	<input type="hidden" name="id" value="{$contentData.id}">
-	<div class="panel-heading">
-		<p>
-			<label for="user_name">이름</label>
-			<input type="text" name="user_name" id="user_name" maxlength="20" value="{$contentData.user_name}">
-		</p>
-		<p>
-			<label for="password">비번</label>
-			<input type="password" name="password" id="password" maxlength="10" value="">
-		</p>
-		<p>
-			<label for="title">제목</label>
-			<input type="text" name="title" id="title" maxlength="50" value="{$contentData.title}">
-		</p>
-		<p>
-			<label for="email_address">이메일</label>
-			<input type="text" name="email_address" id="email_address" maxlength="28" value="{$contentData.email_address}">			
-		</p>
-	</div>
-	<div class="panel-body">
-		<p>
-			<span class="ui-label-width"><label for="contents">내용</label></span>
-			<span><input type="radio" name="type" id="radio_type_text" value="text" {$contentData.contents_type_text}><label for="radio_type_text">TEXT</label></span>
-			<span><input type="radio" name="type" id="radio_type_html" value="html" {$contentData.contents_type_html}><label for="radio_type_html">HTML</label></span>
-		</p>
-		<textarea name="contents" id="contents" cols="64" rows="14">{$contentData.contents}</textarea>
-	</div>
-	<div class="panel-footer">
-		<p class="ui-imgup">
-			첨부파일&nbsp;<input type="file" name="imgup">			
-		</p>
-	</div>
-	<div class="panel-buttons">
-		<input name="imageField" type="image" src="{$skinPathList.dir}/images/btn_confirm.gif" width="51" height="23" border="0">&nbsp;<a href="#" onclick="history.back();"><img src="{$skinPathList.dir}/images/btn_cancel.gif" width="51" height="23" border="0"></a>
-	</div>
-	</form>
+<div class="board_write" style="width:{$groupData.width}">
+  <form action="{$routeURI}/{$contentData.id}/modify" method="post"  name="f_board_modify" enctype="multipart/form-data" class="sx-form-horizontal">
+    <input type="hidden" name="_method" value="update">
+    <input type="hidden" name="category" value="{$contentData.category}">
+    <input type="hidden" name="id" value="{$contentData.id}">
+
+    <div class="head_panel">
+      <div class="sx-form-group">
+        <label for="emptyName" class="sx-control-label form_label_width">이름</label>
+        <div class="sx-form-control">{$contentData.user_name}</div>
+        <input type="hidden" name="user_name" maxlength="20" value="{$contentData.user_name}">
+      </div>
+      <div class="sx-form-group">
+        <label for="password" class="sx-control-label form_label_width">비밀번호</label>
+        <input type="password" name="password" id="password" maxlength="20" value="{$contentData.password}" class="sx-form-control ">
+      </div>
+      <div class="sx-form-group">
+        <label for="title" class="sx-control-label form_label_width">제목</label>
+        <input type="text" name="title" id="title" maxlength="72" value="{$contentData.title}" class="sx-form-control ">
+      </div>
+      <div class="sx-form-group">
+        <label for="emailAddress" class="sx-control-label form_label_width">이메일</label>
+        <input type="text" name="email_address" id="emailAddress" maxlength="72" value="{$contentData.email_address}" class="sx-form-control ">
+      </div>
+    </div>
+    <div class="body_panel">
+      <div class="sx-form-group">
+        <label for="emptyName" class="sx-control-label form_label_width">내용</label>
+        <div class="sx-input-group">
+          <input type="radio" name="type" id="radio_type_text" value="text" {$contentData.contents_type_text}><label for="radio_type_text" class="sx-control-label">TEXT</label>
+          <input type="radio" name="type" id="radio_type_html" value="html" {$contentData.contents_type_html}><label for="radio_type_html" class="sx-control-label">HTML</label>
+        </div>
+        <div class="textarea_panel">
+          <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control">{$contentData.contents}</textarea>
+        </div>
+      </div>    
+    </div>
+    <div class="foot_panel">
+      <div class="sx-form-group">
+        <label for="imgUploader" class="sx-control-label form_label_width">파일 첨부</label>
+        <input type="text" id="imgUploader" class="sx-form-control" readonly="readonly" tabindex="-1">      
+        <div class="input_file_div button_width">
+          <input type="button" value="파일 선택" class="sx-btn file_uploader_button button_width">
+          <input type="file" name="imgup" class="sx-btn sx-opacity-0" onchange="javascript:document.getElementById('imgUploader').value = this.value" title="파일 선택 ">
+        </div>        
+      </div>
+      <div class="sx-form-group">
+        <label for="wallKey" class="sx-control-label form_label_width">등록키</label>
+        <div class="wall_key sx-box-content">
+          <span>{$contentData.wallname}</span>
+        </div>
+        <input type="text" name="wallname" id="wallKey" size="16" maxlength="20" class="sx-form-control">
+        <p class="wall_key_comment">등록키를 입력해주세요.</p>
+        <input type="hidden" name="wallok" value="{$contentData.wallname}">
+        <input type="hidden" name="wall" value="{$contentData.wallkey}">      
+      </div>
+      <div class="button_panel sx-form-group">
+        <input type="submit" name="btn_confirm" value="확인" class="sx-btn">
+        <input type="button" name="btn_cancel" value="취소" onclick="history.back();" class="sx-btn">
+      </div>
+    </div>
+  </form>
 </div>
 {include file="$footerPath"}
