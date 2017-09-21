@@ -1,7 +1,11 @@
 {assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
+{assign var=skinRealPath value=$skinPathList.realPath}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
+
 {assign var=contentsData value=$documentData.contents}
+
 {include file="$headerPath" title="회원정보수정 - StreamUX"}
 <div class="articles">
   <div class="sx_member">

@@ -140,7 +140,7 @@ jsux.adminGnb.Icon = jsux.View.create();
 	app.create = function( path, m ) {
 
 		if ($(path).length<1) {
-			$( document.body ).append('<div id="TEMP_GNB_ICON" class="gnb-icon"></div>');
+			$( document.body ).append('<div id="TEMP_GNB_ICON" class="sx-gnb-icon"></div>');
 			path = '#TEMP_GNB_ICON';
 		}
 		return new GNB_ICON(path, m);

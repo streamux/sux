@@ -1,4 +1,5 @@
 {assign var=rootPath value=$skinPathList.root}
+{assign var=skinPath value=$skinPathList.path}
 {assign var=headerPath value=$skinPathList.header}
 {assign var=footerPath value=$skinPathList.footer}
 {include file="$headerPath" title="SUX관리자 로그인 - StreamUX"}

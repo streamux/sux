@@ -57,10 +57,11 @@
   padding-top:15px;
 }
 .sx_login .sx_login_box a.sx-btn,
-.sx_login .sx_login_box input[type=button],
-.sx_login .sx_login_box input[type=submit] {
+.sx_login .sx_login_box input[type=button].sx-btn,
+.sx_login .sx_login_box input[type=submit].sx-btn {
+  padding-top: 10px;
+  padding-bottom: 10px;
   font-size: 1.500em;
-  line-height: 35px;
 }
 .sx_login .sx_login_box .sx_btn_md {
   width: 100px;

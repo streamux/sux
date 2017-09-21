@@ -1,10 +1,10 @@
 $(window).ready(function() {
 	
 	var gnbModel = jsux.gnb.Model.create(),
-		gnbView = jsux.gnb.Menu.create("#gnb", gnbModel),
+		gnbView = jsux.gnb.Menu.create("#sxGnb", gnbModel),
 		mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
 		pageAppHandler = {},
-		jsonPath = './files/gnb/gnb.json',
+		jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
 		menuList = null;
 
 	gnbModel.addObserver( gnbView );
@@ -88,6 +88,5 @@ $(window).ready(function() {
 		default:			
 			break;			
 	}
-	
 	pageAppHandler.jsonLoader.load(jsonPath);
 });
