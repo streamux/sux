@@ -1,8 +1,3 @@
-{assign var=rootPath value=$skinPathList.root}
-{assign var=skinPath value=$skinPathList.path}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="회원가입 - StreamUX"}
 <div class="articles">
   <div class="sx_member"> 
     <h1>회원가입</h1>
@@ -90,4 +85,3 @@
     </form>
   </div>
 </div>
-{include file="$footerPath"}

@@ -38,8 +38,7 @@ class BoardView extends View
      */
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
-    $skinRealPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
-    $this->document_data['category'] = $category;
+    $skinRealPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";    
 
     /**
      * @var headerPath
@@ -199,6 +198,7 @@ class BoardView extends View
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
+    $this->document_data['category'] = $category;
     
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
@@ -409,6 +409,7 @@ class BoardView extends View
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
     $this->document_data['comments'] = $commentData;
+    $this->document_data['category'] = $category;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
@@ -551,6 +552,7 @@ class BoardView extends View
 
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
+
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;    

@@ -1,19 +1,6 @@
-{assign var=category value=$documentData.category}
-{assign var=groupData value=$documentData.group}
-{assign var=boardTitle value=$groupData.board_name}
-{assign var=contentData value=$documentData.contents}
 {assign var=commentData value=$documentData.comments}
-
-{assign var=rootPath value=$skinPathList.root}
-{assign var=skinPath value=$skinPathList.path}
-{assign var=skinRealPath value=$skinPathList.realPath}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
 {assign var=progressStepSkinPath value=$skinPathList.progress_step}
 {assign var=commentSkinPath value=$skinPathList.comment}
-{assign var=routeURI value="$rootPath$category"}
-
-{include file="$headerPath" title="$boardTitle :: 게시물 읽기 - StreamUX"}
 
 <div class="board_read" style="width:{$groupData.width}">
   <!-- banner start -->
@@ -23,7 +10,6 @@
     <p class="title">{$contentData.title}</p>
     <p class="sub_info">{$contentData.user_name} &nbsp; {$contentData.date} &nbsp; 조회 {$contentData.readed_count}</p>
   </div>
-
   <div class="body_panel">
     <div class="contents">
       <p class="{$contentData.css_down}">      
@@ -41,10 +27,13 @@
     </div>   
   </div>   
 </div>
+
+<!-- comment -->
 {if $commentSkinPath != ''}  
   {include file="$commentSkinPath"}
 {/if}
+
+<!-- progress step -->
 {if $progressStepSkinPath != ''}   
   {include file="$progressStepSkinPath"}
 {/if}
-{include file="$footerPath"}

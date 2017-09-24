@@ -1,0 +1,70 @@
+/* layout */
+.wrapper{
+  width:100%;
+}
+.header{
+  margin:0 auto;
+}
+.container{
+  margin:0 auto;
+  padding:0 5px 0 5px;
+  max-width: 768px;
+  text-align:center;
+}
+.footer{
+  margin-top:55px;
+  padding-top:15px;
+  height: 60px;
+  text-align: center;
+  background-color: #333;
+}
+.footer,
+.footer a{
+  font-size: 0.9375em;
+  color:#c3c3c3;
+}
+
+/* header */
+.header .util{
+  height:20px;
+}
+.header .logo{
+  text-align:center;
+}
+
+/* footer */
+.ui-panel-msg{
+  margin:0 auto;
+}
+
+/* install */
+.container .terms_box{
+  margin-bottom:20px;
+  padding:40px 20px 30px 20px;
+  background-color:#fcfcfc;
+  text-align:left;
+}
+.container .terms_box p{
+  padding-top:7px;
+  padding-bottom:7px;
+}
+.container .terms_box h1{
+  font-size: 1.250em;
+  font-weight: bold;
+}
+.container .terms_box ul{
+  width:100%;
+  border:1px solid #e3e3e3;
+}
+.container .terms_box ul li{
+  padding:7px 10px 7px 10px;
+  line-height: 20px;
+}
+.container .terms_box input{
+  width:100%;
+}
+.container .btn-submit{
+  margin-top: 20px;  
+}
+
+

@@ -2,211 +2,211 @@
 
 class AnalyticsAdminModel extends Model
 {
-	function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
+  function select($table_name, $field = '*', $where = null, $orderby = null, $passover = 0, $limit = null) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable($table_name);
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
 
-		$query = new Query();		
-		$query->setTable($tableName);
-		$query->setField($field);
+    $query = new Query();   
+    $query->setTable($tableName);
+    $query->setField($field);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		if (isset($orderby) && $orderby) {
-			$query->setOrderBy($orderby);
-		}
+    if (isset($orderby) && $orderby) {
+      $query->setOrderBy($orderby);
+    }
 
-		if (isset($limit) && $limit) {
-			$query->setLimit($passover, $limit);
-		}
+    if (isset($limit) && $limit) {
+      $query->setLimit($passover, $limit);
+    }
 
-		return parent::select($query);
-	}
+    return parent::select($query);
+  }
 
-	function insert($table_name, $columns = null) {
+  function insert($table_name, $columns = null) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable($table_name);
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
 
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($columns);
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($columns);
 
-		return parent::insert($query);
-	}
+    return parent::insert($query);
+  }
 
-	function update($table_name, $columns, $where = null) {
-		
-		$context = Context::getInstance();
-		$tableName = $context->getTable($table_name);
+  function update($table_name, $columns, $where = null) {
+    
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
 
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($columns);
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($columns);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		return parent::update($query);
-	}
+    return parent::update($query);
+  }
 
-	function delete($table_name, $where = null) {
+  function delete($table_name, $where = null) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable($table_name);
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
 
-		$query = new Query();
-		$query->setTable($tableName);
-		
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
-		return parent::delete($query);
-	}
-	/*
-	function selectFromConnectSite($field='*', $where=null, $orderby=null, $passover=0, $limit=null) {
+    $query = new Query();
+    $query->setTable($tableName);
+    
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
+    return parent::delete($query);
+  }
+  /*
+  function selectFromConnectSite($field='*', $where=null, $orderby=null, $passover=0, $limit=null) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('connect_site');
+    $context = Context::getInstance();
+    $tableName = $context->getTable('connect_site');
 
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setField($field);
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setField($field);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		if (isset($orderby) && $orderby) {
-			$query->setOrderBy('id desc');
-		}
+    if (isset($orderby) && $orderby) {
+      $query->setOrderBy('id desc');
+    }
 
-		if (isset($limit) && $limit) {
-			$query->setLimit($passover, $limit);
-		}		
+    if (isset($limit) && $limit) {
+      $query->setLimit($passover, $limit);
+    }   
 
-		$result = parent::select($query);
-		return $result;
-	}
+    $result = parent::select($query);
+    return $result;
+  }
 
-	function insertIntoConnectSite($column) {
+  function insertIntoConnectSite($column) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('connect_site');
-	
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($column);
+    $context = Context::getInstance();
+    $tableName = $context->getTable('connect_site');
+  
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($column);
 
-		$result = parent::insert($query);
-		return $result;
-	}
+    $result = parent::insert($query);
+    return $result;
+  }
 
-	function updateConnectSite($column, $where) {
+  function updateConnectSite($column, $where) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('connect_site');
-		
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($column);
+    $context = Context::getInstance();
+    $tableName = $context->getTable('connect_site');
+    
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($column);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		$result = parent::update($query);
-		return $result;
-	}
+    $result = parent::update($query);
+    return $result;
+  }
 
-	function deleteFromConnectSite($where) {
+  function deleteFromConnectSite($where) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('connect_site');
+    $context = Context::getInstance();
+    $tableName = $context->getTable('connect_site');
 
-		$query = new Query();
-		$query->setTable($tableName);
-		
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    $query = new Query();
+    $query->setTable($tableName);
+    
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		$result = parent::delete($query);
-		return $result;
-	}
+    $result = parent::delete($query);
+    return $result;
+  }
 
-	function selectFromPageview($field='*', $where=null, $orderby=null, $passover=0, $limit=null) {
+  function selectFromPageview($field='*', $where=null, $orderby=null, $passover=0, $limit=null) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('pageview');
+    $context = Context::getInstance();
+    $tableName = $context->getTable('pageview');
 
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setField($field);
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setField($field);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		if (isset($orderby) && $orderby) {
-			$query->setOrderBy('id desc');
-		}
+    if (isset($orderby) && $orderby) {
+      $query->setOrderBy('id desc');
+    }
 
-		if (isset($limit) && $limit) {
-			$query->setLimit($passover, $limit);
-		}		
+    if (isset($limit) && $limit) {
+      $query->setLimit($passover, $limit);
+    }   
 
-		$result = parent::select($query);
-		return $result;
-	}
+    $result = parent::select($query);
+    return $result;
+  }
 
-	function insertIntoPageview($column) {
+  function insertIntoPageview($column) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('pageview');
-	
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($column);
+    $context = Context::getInstance();
+    $tableName = $context->getTable('pageview');
+  
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($column);
 
-		$result = parent::insert($query);
-		return $result;
-	}
+    $result = parent::insert($query);
+    return $result;
+  }
 
-	function updatePageview($column, $where) {
+  function updatePageview($column, $where) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('pageview');
-		
-		$query = new Query();
-		$query->setTable($tableName);
-		$query->setColumn($column);
+    $context = Context::getInstance();
+    $tableName = $context->getTable('pageview');
+    
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($column);
 
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		$result = parent::update($query);
-		return $result;
-	}
+    $result = parent::update($query);
+    return $result;
+  }
 
-	function deleteFromPageview($where) {
+  function deleteFromPageview($where) {
 
-		$context = Context::getInstance();
-		$tableName = $context->getTable('pageview');
+    $context = Context::getInstance();
+    $tableName = $context->getTable('pageview');
 
-		$query = new Query();
-		$query->setTable($tableName);
-		
-		if (isset($where) && $where) {
-			$query->setWhere($where);
-		}
+    $query = new Query();
+    $query->setTable($tableName);
+    
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
-		$result = parent::delete($query);
-		return $result;
-	}	*/
+    $result = parent::delete($query);
+    return $result;
+  } */
 }

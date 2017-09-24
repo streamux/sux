@@ -5,332 +5,332 @@
 class InstallController extends Controller
 {
 
-	function insertSetupDb() {
+  function insertSetupDb() {
 
-		$context = Context::getInstance();
-		$posts =$context->getPostAll();
+    $context = Context::getInstance();
+    $posts =$context->getPostAll();
 
-		$db_info = array('db_hostname', 'db_userid', 'db_password', 'db_database','db_table_prefix');
-		
-		$resultYN = 'Y';
-		$msg = '';
+    $db_info = array('db_hostname', 'db_userid', 'db_password', 'db_database','db_table_prefix');
+    
+    $resultYN = 'Y';
+    $msg = '';
 
-		$rootPath = _SUX_ROOT_;
-		$filePath = './files/config/config.db.php';
+    $rootPath = _SUX_ROOT_;
+    $filePath = './files/config/config.db.php';
 
-		$buffer = array();
-		foreach ($db_info as $key => $value) {
-			$buffer['db_info'][$value] = $posts[$value];
-		}
+    $buffer = array();
+    foreach ($db_info as $key => $value) {
+      $buffer['db_info'][$value] = $posts[$value];
+    }
 
-		$context->makeFilesDir(false, $buffer['db_info']);
-		$context->makeRouteCaches();
+    $context->makeFilesDir(false, $buffer['db_info']);
+    $context->makeRouteCaches();
 
-		$result = CacheFile::writeFile($filePath, $buffer);
-		if (!$result) {
-			$msg .= 'DB 설정을 실패했습니다.';
-			$resultYN = 'N';
-		} else {
-			$msg .= " DB 설정을 완료하였습니다.<br>";
-			$resultYN = 'Y';
-		}
+    $result = CacheFile::writeFile($filePath, $buffer);
+    if (!$result) {
+      $msg .= 'DB 설정을 실패했습니다.';
+      $resultYN = 'N';
+    } else {
+      $msg .= " DB 설정을 완료하였습니다.<br>";
+      $resultYN = 'Y';
+    }
 
-		if ($resultYN === 'N') {
-			UIError::alertToBack($msg);
-		} else {
-			$data = array(	'msg'=>$msg,
-							'result'=>$resultYN,
-							'url'=>$rootPath . 'setup-admin');
+    if ($resultYN === 'N') {
+      UIError::alertToBack($msg);
+    } else {
+      $data = array(  'msg'=>$msg,
+              'result'=>$resultYN,
+              'url'=>$rootPath . 'setup-admin');
 
-			$this->callback($data);
-		}		
-	}
+      $this->callback($data);
+    }   
+  }
 
-	function insertSetupAdmin() {
+  function insertSetupAdmin() {
 
-		$context = Context::getInstance();
-		$posts =$context->getPostAll();
+    $context = Context::getInstance();
+    $posts =$context->getPostAll();
 
-		$admin_info = array('admin_id','admin_pwd','admin_email','yourhome');
+    $admin_info = array('admin_id','admin_pwd','admin_email','yourhome');
 
-		$resultYN = 'Y';
-		$msg = '';
+    $resultYN = 'Y';
+    $msg = '';
 
-		$rootPath = _SUX_ROOT_;
-		$filePath = 'files/config/config.admin.php';
-		$buffer = array('admin_info'=>array());
-		foreach ($admin_info as $key => $value) {
-			if (preg_match('/(admin_pwd)+/', $value)) {
-				$buffer['admin_info'][$value] = $context->getPasswordHash($posts[$value]);
-			} else {
-				$buffer['admin_info'][$value] = $posts[$value];
-			}			
-		}
+    $rootPath = _SUX_ROOT_;
+    $filePath = 'files/config/config.admin.php';
+    $buffer = array('admin_info'=>array());
+    foreach ($admin_info as $key => $value) {
+      if (preg_match('/(admin_pwd)+/', $value)) {
+        $buffer['admin_info'][$value] = $context->getPasswordHash($posts[$value]);
+      } else {
+        $buffer['admin_info'][$value] = $posts[$value];
+      }     
+    }
 
-		$result = CacheFile::writeFile($filePath, $buffer);
-		if(!$result) {
-			$msg = "관리자 설정을 실패했습니다.";
-			$resultYN = "N";
-		} else {
-			$msg = "관리자계정 설정을 완료하였습니다.<br>";
-			$resultYN = 'Y';
-		}
+    $result = CacheFile::writeFile($filePath, $buffer);
+    if(!$result) {
+      $msg = "관리자 설정을 실패했습니다.";
+      $resultYN = "N";
+    } else {
+      $msg = "관리자계정 설정을 완료하였습니다.<br>";
+      $resultYN = 'Y';
+    }
 
-		if ($resultYN === 'N') {
-			UIError::alertToBack($msg);
-		} else {
-			$data = array(
-				'msg'=>$msg,
-				'result'=>$resultYN,
-				'url'=>$rootPath . 'create-table' . '?_method=insert');
+    if ($resultYN === 'N') {
+      UIError::alertToBack($msg);
+    } else {
+      $data = array(
+        'msg'=>$msg,
+        'result'=>$resultYN,
+        'url'=>$rootPath . 'create-table' . '?_method=insert');
 
-			$this->callback($data);
-		}
-	}
+      $this->callback($data);
+    }
+  }
 
-	/**
-	 * @method createTable
-	 *  스키마 데이터 xml  연동
-	 * 참고 : 라우트 캐시 파일 생성은 Context.php 에 정의 되어 있음 
-	 */
-	function insertCreateTable() {
+  /**
+   * @method createTable
+   *  스키마 데이터 xml  연동
+   * 참고 : 라우트 캐시 파일 생성은 Context.php 에 정의 되어 있음 
+   */
+  function insertCreateTable() {
 
-		$realPath = _SUX_PATH_;
-		$rootPath = _SUX_ROOT_;
-		$resultYN = 'Y';
-		$msg = '';
+    $realPath = _SUX_PATH_;
+    $rootPath = _SUX_ROOT_;
+    $resultYN = 'Y';
+    $msg = '';
 
-		$tableList = array();
-		$tracer = Tracer::getInstance();
-		$context = Context::getInstance();
-		$context->init();
+    $tableList = array();
+    $tracer = Tracer::getInstance();
+    $context = Context::getInstance();
+    $context->init();
 
-		$query = new Query();
-		$schemas = new QuerySchema();
-		$cacheFile = CacheFile::getInstance();
+    $query = new Query();
+    $schemas = new QuerySchema();
+    $cacheFile = CacheFile::getInstance();
 
-		// 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
-		$oDB = DB::getInstance();		
+    // 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
+    $oDB = DB::getInstance();   
 
-		$tablePrefix = $context->getPrefix();
-		$moduleList = FileHandler::readDir('./modules');
-		foreach ($moduleList as $key => $value) {
-			$module = $value['file_name'];
+    $tablePrefix = $context->getPrefix();
+    $moduleList = FileHandler::readDir('./modules');
+    foreach ($moduleList as $key => $value) {
+      $module = $value['file_name'];
 
-			// create table and make cache's column file'
-			$shemasDir = './modules/' . $module . '/schemas';
-			$schemasList = FileHandler::readDir($shemasDir);
-			foreach ($schemasList as $key => $value) {
+      // create table and make cache's column file'
+      $shemasDir = './modules/' . $module . '/schemas';
+      $schemasList = FileHandler::readDir($shemasDir);
+      foreach ($schemasList as $key => $value) {
 
-				if (preg_match('/(.xml+)$/', $value['file_name'] )) {
+        if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 
-					$xmlPath = $shemasDir . '/' . $value['file_name'];
-					if (file_exists($xmlPath)) {
+          $xmlPath = $shemasDir . '/' . $value['file_name'];
+          if (file_exists($xmlPath)) {
 
-						$query->resetSchema();
-						$schemas->reset();
+            $query->resetSchema();
+            $schemas->reset();
 
-						$tableXml = simplexml_load_file($xmlPath);
-						$tableName = $tablePrefix . '_' . $tableXml['name'];
-						$query->setTable($tableName);											
+            $tableXml = simplexml_load_file($xmlPath);
+            $tableName = $tablePrefix . '_' . $tableXml['name'];
+            $query->setTable($tableName);                     
 
-						$cacheColumn = array();
-						$columns = $tableXml[0]->column;
-						foreach ($columns as $key => $value) {
+            $cacheColumn = array();
+            $columns = $tableXml[0]->column;
+            foreach ($columns as $key => $value) {
 
-							$name = $value['name'];
-							$type = $value['type'];
-							$size = $value['size'];
-							$default = isset($value['default']) ? $value['default'] : null;
-							$notnull = isset($value['notnull']) ? $value['notnull'] : null;					
-							$autoincrement = isset($value['auto_increment']) ? $value['auto_increment'] : null;
-							$primarykey = isset($value['primary_key']) ? $value['primary_key'] : null;
-							$schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
+              $name = $value['name'];
+              $type = $value['type'];
+              $size = $value['size'];
+              $default = isset($value['default']) ? $value['default'] : null;
+              $notnull = isset($value['notnull']) ? $value['notnull'] : null;         
+              $autoincrement = isset($value['auto_increment']) ? $value['auto_increment'] : null;
+              $primarykey = isset($value['primary_key']) ? $value['primary_key'] : null;
+              $schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
 
-							$cacheColumn[] = $name;
-						} // end of foreach
+              $cacheColumn[] = $name;
+            } // end of foreach
 
-						// setup query's columns-cache-file
-						$queryCachePath = './files/caches/queries/' . $tableXml['name'] . '.getColumns.cache.php';
+            // setup query's columns-cache-file
+            $queryCachePath = './files/caches/queries/' . $tableXml['name'] . '.getColumns.cache.php';
 
-						$buffer = array();
-						$buffer['columns'] = $cacheColumn;
-						$cacheFile->writeFile($queryCachePath, $buffer);
+            $buffer = array();
+            $buffer['columns'] = $cacheColumn;
+            $cacheFile->writeFile($queryCachePath, $buffer);
 
-						$keyName = (string) $tableXml['name'];	
-						$tableList[$keyName] = $tableName;
+            $keyName = (string) $tableXml['name'];  
+            $tableList[$keyName] = $tableName;
 
-						$query->setSchema($schemas);
-						$result = $oDB->createTable($query);
-						if (!$result) {
-							$resultYN = 'N';
-							$msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
-						} else {																
-							$msg .= "[ result : success ] @ table->" . $tableName . " ---- <br>";
-						}
-					}
-				}
-			} // end of foreach
+            $query->setSchema($schemas);
+            $result = $oDB->createTable($query);
+            if (!$result) {
+              $resultYN = 'N';
+              $msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
+            } else {                                
+              $msg .= "[ result : success ] @ table->" . $tableName . " ---- <br>";
+            }
+          }
+        }
+      } // end of foreach
 
-			/**
-			 * 초기 값을 갖는 테이블 일 경우 모듈 폴더 > queries > 모듈.액션.이름.xml  파일을 추가해서 등록한다.
-			 * 참고 URL : modules/document/queries/document.add.home.xml
-			 */
-			$queryDir = './modules/' . $module . '/queries';				
-			$queryList = FileHandler::readDir($queryDir);
-			if ($queryList) {
+      /**
+       * 초기 값을 갖는 테이블 일 경우 모듈 폴더 > queries > 모듈.액션.이름.xml  파일을 추가해서 등록한다.
+       * 참고 URL : modules/document/queries/document.add.home.xml
+       */
+      $queryDir = './modules/' . $module . '/queries';        
+      $queryList = FileHandler::readDir($queryDir);
+      if ($queryList) {
 
-				foreach ($queryList as $key => $value) {
-					if (preg_match('/(.xml+)$/', $value['file_name'] )) {
+        foreach ($queryList as $key => $value) {
+          if (preg_match('/(.xml+)$/', $value['file_name'] )) {
 
-						$xmlPath = $queryDir . '/' . $value['file_name'];
-						if (file_exists($xmlPath)) {
+            $xmlPath = $queryDir . '/' . $value['file_name'];
+            if (file_exists($xmlPath)) {
 
-							$query = new Query();
-							$columns = array();				
-							$queryXml = simplexml_load_file($xmlPath);	
+              $query = new Query();
+              $columns = array();       
+              $queryXml = simplexml_load_file($xmlPath);  
 
-							$moduleType = (string) $queryXml['execution'];	
-							$actionType = (string) $queryXml['action'];
-							if ($actionType === 'insert' && $moduleType === 'once') {
+              $moduleType = (string) $queryXml['execution'];  
+              $actionType = (string) $queryXml['action'];
+              if ($actionType === 'insert' && $moduleType === 'once') {
 
-								$propTableName = $queryXml[0]->tables[0]->table['name'];
-								$tableName = $tablePrefix . '_' . $propTableName;
-								$query->setTable($tableName);
-								$query->setField('*');
-								$queryColumns = $queryXml[0]->columns[0]->column;
-								foreach ($queryColumns as $key => $value) {
+                $propTableName = $queryXml[0]->tables[0]->table['name'];
+                $tableName = $tablePrefix . '_' . $propTableName;
+                $query->setTable($tableName);
+                $query->setField('*');
+                $queryColumns = $queryXml[0]->columns[0]->column;
+                foreach ($queryColumns as $key => $value) {
 
-									$nodeValue = (string) $value;
-									$propValue = (string) $value['name'];
-									if ($propValue === 'category') {
-										$where = array('category'=>$nodeValue);
-										$category = $nodeValue;
-									}
+                  $nodeValue = (string) $value;
+                  $propValue = (string) $value['name'];
+                  if ($propValue === 'category') {
+                    $where = array('category'=>$nodeValue);
+                    $category = $nodeValue;
+                  }
 
-									if ($propValue === 'document_name') {
-										$moduleName = $nodeValue;
-									}						
+                  if ($propValue === 'document_name') {
+                    $moduleName = $nodeValue;
+                  }           
 
-									if (preg_match('/^(contents_path|)+$/i', $propValue)) {
-										$contentsPath = $rootPath . $nodeValue;					
-									}
-									$columns[] = $nodeValue;
-								}
+                  if (preg_match('/^(contents_path|)+$/i', $propValue)) {
+                    $contentsPath = $rootPath . $nodeValue;         
+                  }
+                  $columns[] = $nodeValue;
+                }
 
-								if (isset($where) && $where) {
-									$oDB->select($query);
-									$numrows = $oDB->getNumRows();
-								}
+                if (isset($where) && $where) {
+                  $oDB->select($query);
+                  $numrows = $oDB->getNumRows();
+                }
 
-								if (empty($numrows)) {
-									$query->setColumn($columns);
-									$oDB->insert($query);
-								}
+                if (empty($numrows)) {
+                  $query->setColumn($columns);
+                  $oDB->insert($query);
+                }
 
-								// copy template to files's dir to read  a template in module
-								if ($module == 'document') {
-									// $contentsPath was written in xml data
-									$cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+                // copy template to files's dir to read  a template in module
+                if ($module == 'document') {
+                  // $contentsPath was written in xml data
+                  $cachePath = Utils::convertAbsolutePath($contentsPath, $realPath);
 
-									$yoursite = $context->getAdminInfo('yourhome');
-									$yoursite = strtoupper($yoursite);
-									$buffHeader .=	 '{assign var=rootPath value=$skinPathList.root}' . "\n";
-									$buffHeader .=	 '{assign var=headerPath value=$skinPathList.header}' . "\n";
-									$buffHeader .=	 '{assign var=footerPath value=$skinPathList.footer}' . "\n";
-									$buffHeader .=	 '{include file="$headerPath" title="홈 - ' . $yoursite . '"}' . "\n";
-									$buffHeader .= '<!-- contents start -->' . "\n";
+                  $yoursite = $context->getAdminInfo('yourhome');
+                  $yoursite = strtoupper($yoursite);
+                  $buffHeader .=   '{assign var=rootPath value=$skinPathList.root}' . "\n";
+                  $buffHeader .=   '{assign var=headerPath value=$skinPathList.header}' . "\n";
+                  $buffHeader .=   '{assign var=footerPath value=$skinPathList.footer}' . "\n";
+                  $buffHeader .=   '{include file="$headerPath" title="홈 - ' . $yoursite . '"}' . "\n";
+                  $buffHeader .= '<!-- contents start -->' . "\n";
 
-									//  read and write contents
-									$contentsPath = $realPath . 'modules/document/skin/home.tpl';
-									$buff = FileHandler::readFile($contentsPath);
+                  //  read and write contents
+                  $contentsPath = $realPath . 'modules/document/skin/home.tpl';
+                  $buff = FileHandler::readFile($contentsPath);
 
-									$buffFooter .= '<!-- contents end -->' . "\n";
-									$buffFooter .= '{include file="$footerPath"}';
+                  $buffFooter .= '<!-- contents end -->' . "\n";
+                  $buffFooter .= '{include file="$footerPath"}';
 
-									$buffers = $buffHeader . $buff . $buffFooter;				
-									$result = FileHandler::writeFile($cachePath, $buffers);
-									if (!$result) {
-										$msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
-									} else {
-										// write route's key
-										$routes = array();
-										$filePath = $realPath . 'files/caches/routes/document.cache.php';
-										$routeCaches = CacheFile::readFile($filePath);			
-										if (isset($routeCaches) && $routeCaches) {
-											$routes['categories'] = $routeCaches['categories'];
-											$routes['action'] = $routeCaches['action'];
+                  $buffers = $buffHeader . $buff . $buffFooter;       
+                  $result = FileHandler::writeFile($cachePath, $buffers);
+                  if (!$result) {
+                    $msg .= "${category} 페이지 등록을 실패하였습니다.<br>";
+                  } else {
+                    // write route's key
+                    $routes = array();
+                    $filePath = $realPath . 'files/caches/routes/document.cache.php';
+                    $routeCaches = CacheFile::readFile($filePath);      
+                    if (isset($routeCaches) && $routeCaches) {
+                      $routes['categories'] = $routeCaches['categories'];
+                      $routes['action'] = $routeCaches['action'];
 
-											$pattern = sprintf('/(%s)+/i', $category);
-											if (!preg_match($pattern, implode(',', $routes['categories']))) {
-												array_push($routes['categories'], $category); 
-											}
-											CacheFile::writeFile($filePath, $routes);
-										}
+                      $pattern = sprintf('/(%s)+/i', $category);
+                      if (!preg_match($pattern, implode(',', $routes['categories']))) {
+                        array_push($routes['categories'], $category); 
+                      }
+                      CacheFile::writeFile($filePath, $routes);
+                    }
 
-										// make default menu of gnb
-										$where = array('category'=>'home');
-										$query->setWhere($where);
-										$result = $oDB->select($query);
-										$datas = array();
-										while($rows = $oDB->getFetchArray($result)) {
-											$fields = array();
-											foreach ($rows as $key => $value) {
-												if (is_string($key) !== false) {
-													$fields[$key] = $value;
-												}				
-											}
-											$datas[] = $fields;
-										}
-										//$msg .= Tracer::getInstance()->getMessage() . "<br>";
+                    // make default menu of gnb
+                    $where = array('category'=>'home');
+                    $query->setWhere($where);
+                    $result = $oDB->select($query);
+                    $datas = array();
+                    while($rows = $oDB->getFetchArray($result)) {
+                      $fields = array();
+                      foreach ($rows as $key => $value) {
+                        if (is_string($key) !== false) {
+                          $fields[$key] = $value;
+                        }       
+                      }
+                      $datas[] = $fields;
+                    }
+                    //$msg .= Tracer::getInstance()->getMessage() . "<br>";
 
-										$contentsPath = 'files/gnb/gnb.json';
-										$filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-										if (!file_exists($filePath)) {
-											$jsonData = array();
-											$jsonData['data'] = array();
-											$jsonData['data'][] = array('id'=>$datas[0]['id'],'sid'=>0,'name'=>$datas[0]['document_name'],'url'=>$datas[0]['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
+                    $contentsPath = 'files/gnb/gnb.json';
+                    $filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+                    if (!file_exists($filePath)) {
+                      $jsonData = array();
+                      $jsonData['data'] = array();
+                      $jsonData['data'][] = array('id'=>$datas[0]['id'],'sid'=>0,'name'=>$datas[0]['document_name'],'url'=>$datas[0]['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
 
-											$jsonData = JsonEncoder::parse($jsonData);
-											$result = FileHandler::writeFile($filePath, $jsonData);
-											if (!$result) {
-												$msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
-												$resultYN = 'N';
-											} else {
-												$msg .= "기본 메뉴를 생성하 였습니다.<br>";
-												$resultYN = 'Y';
-											}
-										}										
-									}									
-								}
-							}
-						} // end of if (file_exists)
-					}
-				} // end of foreach		
-			}
-		} // end of foreach
+                      $jsonData = JsonEncoder::parse($jsonData);
+                      $result = FileHandler::writeFile($filePath, $jsonData);
+                      if (!$result) {
+                        $msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
+                        $resultYN = 'N';
+                      } else {
+                        $msg .= "기본 메뉴를 생성하 였습니다.<br>";
+                        $resultYN = 'Y';
+                      }
+                    }                   
+                  }                 
+                }
+              }
+            } // end of if (file_exists)
+          }
+        } // end of foreach   
+      }
+    } // end of foreach
 
-		//$msg .= Tracer::getInstance()->getMessage();
-		// write table list
-		$tableDir = './files/config/config.table.php';
-		$pathinfo = pathinfo($tableDir);
+    //$msg .= Tracer::getInstance()->getMessage();
+    // write table list
+    $tableDir = './files/config/config.table.php';
+    $pathinfo = pathinfo($tableDir);
 
-		$buffer = array();
-		$buffer['table_list'] = $tableList;		
-		$result = CacheFile::writeFile($tableDir, $buffer);
-		if (!$result) {
-			$msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
-			$resultYN = 'N';
-		} else {
-			$msg .= $pathinfo['filename'] . " 설정을 완료하였습니다.<br>";
-			$resultYN = 'Y';
-		}
+    $buffer = array();
+    $buffer['table_list'] = $tableList;   
+    $result = CacheFile::writeFile($tableDir, $buffer);
+    if (!$result) {
+      $msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
+      $resultYN = 'N';
+    } else {
+      $msg .= $pathinfo['filename'] . " 설정을 완료하였습니다.<br>";
+      $resultYN = 'Y';
+    }
 
-		$data = array(	'msg'=>$msg,
-						'result'=>$resultYN,
-						'url'=>$rootPath);
+    $data = array(  'msg'=>$msg,
+            'result'=>$resultYN,
+            'url'=>$rootPath);
 
-		$this->callback($data);
-		$oDB->close();
-	}
+    $this->callback($data);
+    $oDB->close();
+  }
 }

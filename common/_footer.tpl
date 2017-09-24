@@ -47,11 +47,11 @@
     <div class="sx-user-member">
       <ul class="clearfix">
       {if isset($sessionData.user_name) && $sessionData.user_name}
-        <li><div class="sx-link-login"><a href="{$rootPath}logout?_method=insert">로그아웃</a></div></li>
-        <li><div class="sx-link-join"><a href="{$rootPath}member-modify">회원정보수정</a></div></li>
+        <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그아웃</a></li>
+        <li><a href="{$rootPath}member-modify" class="sx-btn">회원정보수정</a></li>
       {else}
-        <li><div class="sx-link-login"><a href="{$rootPath}login">로그인</a></div></li>
-        <li><div class="sx-link-join"><a href="{$rootPath}member-join">회원가입</a></div></li>
+        <li><a href="{$rootPath}login" class="sx-btn">로그인</a></li>
+        <li><a href="{$rootPath}member-join" class="sx-btn">회원가입</a></li>
       {/if}
       </ul>
     </div>
@@ -129,10 +129,10 @@
 <script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app.min.js"></script>
 <script type="text/javascript" src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
-{if $documentData.module_code != ''}
-<script type="text/javascript" src="{$skinPath}js/{$documentData.module_code}.js"></script>
+{if $documentData.module_code}
+<script type="text/javascript" src="{$skinPath}{$documentData.module_code}.js"></script>
 {/if}
-{if $documentData.jscode != ''}
+{if $documentData.jscode }
 <script type="text/javascript"> 
   jsux.fn['{$documentData.jscode}'].init();
 </script>

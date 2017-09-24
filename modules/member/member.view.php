@@ -44,6 +44,7 @@ class MemberView extends View {
     $this->model->select('member_group', '*');
 
     $this->document_data['group'] = $this->model->getRows();
+
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
@@ -66,8 +67,8 @@ class MemberView extends View {
      */
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'member';
-    $this->document_data['module_name'] = '회원 수정';
-    
+    $this->document_data['module_name'] = '회원 정보 수정';
+
     /**
      * skin directory path
      */
@@ -103,6 +104,7 @@ class MemberView extends View {
     } 
 
     $this->document_data['contents'] = $contentsData;
+    
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;

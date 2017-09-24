@@ -19,7 +19,7 @@ class LoginView extends View
     $this->document_data['jscode'] = 'login';
     $this->document_data['module_code'] = 'login';
     $this->document_data['module_name'] = '회원 로그인';
-    
+
     /**
      * skin directory path
      */
@@ -54,6 +54,7 @@ class LoginView extends View
 
     $this->document_data['isLogon'] = 'success';
     $this->document_data['group'] = $groupData;
+
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
@@ -77,7 +78,7 @@ class LoginView extends View
      */
     $this->document_data['jscode'] = 'login';
     $this->document_data['module_code'] = 'login';
-    $this->document_data['module_name'] = '회원 로그인';
+    $this->document_data['module_name'] = '회원 로그인 실패';
     
     /**
      * skin directory path
@@ -99,6 +100,9 @@ class LoginView extends View
     }
 
     $contentsPath = $skinRealPath . 'login.tpl';
+    $this->model->select('member_group', '*');
+    $this->document_data['group'] = $this->model->getRows();
+    $this->document_data['isLogFail'] = true;
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
@@ -106,10 +110,6 @@ class LoginView extends View
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['contents'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
-
-    $this->model->select('member_group', '*');
-    $this->document_data['group'] = $this->model->getRows();
-    $this->document_data['isLogon'] = false;
     
     $this->output();
   }
@@ -214,7 +214,7 @@ class LoginView extends View
 
         $this->document_data['user_name'] = $userName;
         $this->document_data['user_id'] = $userId;
-        $this->document_data['jscode'] = 'searchResult';        
+        $this->document_data['jscode'] = 'searchResult';
 
         $contentsPath = $skinRealPath . 'searchid_result.tpl';
       } else {

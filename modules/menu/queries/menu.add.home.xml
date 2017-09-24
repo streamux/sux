@@ -1,12 +1,12 @@
 <query id="insertMenu" action="insert" execution="once">
-	<tables>
-		<table name="menu"></table>
-	</tables>
-	<columns>
-		<column name="id"></column>
-		<column name="category">home</column>
-		<column name="name"><![CDATA[홈]]></column>
-		<column name="url"><![CDATA[home]]></column>
-		<column name="date"><![CDATA[now()]]></column>				
-	</columns>
+  <tables>
+    <table name="menu"></table>
+  </tables>
+  <columns>
+    <column name="id"></column>
+    <column name="category">home</column>
+    <column name="name"><![CDATA[홈]]></column>
+    <column name="url"><![CDATA[home]]></column>
+    <column name="date"><![CDATA[now()]]></column>        
+  </columns>
 </query>

@@ -1,7 +1,7 @@
 <table name="pageview">
-	<!-- essential -->
-	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-	<column name="name" type="varchar" size="30" notnull="not null"/>	
-	<column name="hit_count" type="int" size="12" notnull="not null" default="0"/>
-	<column name="date" type="datetime"/>
+  <!-- essential -->
+  <column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+  <column name="name" type="varchar" size="30" notnull="not null"/> 
+  <column name="hit_count" type="int" size="12" notnull="not null" default="0"/>
+  <column name="date" type="datetime"/>
 </table>

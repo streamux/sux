@@ -3,41 +3,44 @@
 class InstallView extends View
 {
 
-	function displayInstall() {
+  function displayInstall() {
 
-		$this->displayTerms();
-	}
+    $this->displayTerms();
+  }
 
-	function displayTerms() {
+  function displayTerms() {
 
-		$this->skin_path_list['root'] = _SUX_ROOT_;
-		$this->skin_path_list['skin_dir'] = _SUX_PATH_.'modules/install/tpl/';
-		$this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/terms.tpl';
+    $this->skin_path_list['root'] = _SUX_ROOT_;
+    $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
+    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
+    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/terms.tpl';
 
-		$this->output();
-	}
+    $this->output();
+  }
 
-	function displaySetupDb() {
+  function displaySetupDb() {
 
-		$context = Context::getInstance();
-		$this->request_data['action'] = 'setupDb';
+    $context = Context::getInstance();
+    $this->request_data['action'] = 'setupDb';
 
-		$this->skin_path_list['root'] = _SUX_ROOT_;
-		$this->skin_path_list['skin_dir'] = _SUX_PATH_.'modules/install/tpl/';
-		$this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/db_setup.tpl';
+    $this->skin_path_list['root'] = _SUX_ROOT_;
+    $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
+    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
+    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/db_setup.tpl';
 
-		$this->output();
-	}
+    $this->output();
+  }
 
-	function displaySetupAdmin() {
+  function displaySetupAdmin() {
 
-		$context = Context::getInstance();
-		$this->request_data['action'] = 'setupAdmin';
+    $context = Context::getInstance();
+    $this->request_data['action'] = 'setupAdmin';
 
-		$this->skin_path_list['root'] = _SUX_ROOT_;
-		$this->skin_path_list['skin_dir'] = _SUX_PATH_.'modules/install/tpl/';
-		$this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/admin_setup.tpl';
+    $this->skin_path_list['root'] = _SUX_ROOT_;
+    $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
+    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
+    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/admin_setup.tpl';
 
-		$this->output();
-	}	
+    $this->output();
+  } 
 }

@@ -4,9 +4,6 @@
  * Licensed under MIT (https://github.com/streamux/sux/master)
  */
 
-@charset "UTF-8";
-
-/*html, body {width:100%;height:100%}*/
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
@@ -15,7 +12,8 @@ html {
 body {
   margin:0;
 }
-/* html5 */
+
+/* html5 start*/
 article,
 aside,
 details,
@@ -38,6 +36,8 @@ video {
   display: inline-block;
   vertical-align: baseline;
 }
+
+/* html5 end */
 button,
 h1,
 h2,
@@ -148,8 +148,8 @@ input::-ms-clear {
 *:before,
 *:after {
   -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+      -moz-box-sizing: border-box;
+               box-sizing: border-box;
 }
 textarea {
   overflow: auto;
@@ -303,9 +303,9 @@ h2{
   white-space: nowrap;
   vertical-align: baseline;
   -webkit-border-radius: .25em;
-  -moz-border-radius: .25em;
-  -o-border-radius: .25em;
-  border-radius: .25em;
+      -moz-border-radius: .25em;
+           -o-border-radius: .25em;
+                border-radius: .25em;
 }
 a.label:hover,
 a.label:focus {
@@ -375,9 +375,9 @@ a.label:focus {
   vertical-align: baseline;
   background-color: #777;
   -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  -o-border-radius: 10px;
-  border-radius: 10px;
+      -moz-border-radius: 10px;
+           -o-border-radius: 10px;
+                border-radius: 10px;
 }
 .badge:empty {
   display: none;
@@ -424,6 +424,15 @@ a.badge:focus {
 .sx-hide {
   display: none !important;
 }
+.sx-show-scroll{
+  overflow: scroll;
+  height: auto;
+
+}
+.sx-hide-scroll{
+  overflow: hidden;
+  height: 100%;  
+}
 .sx-row {
   display: block;
 }
@@ -442,22 +451,21 @@ a.badge:focus {
   text-align: center;
   white-space: nowrap;
   vertical-align: middle;
+  color: #3e3e3e;
+  border: 1px solid #c3c3c3;
+  background-color: #f3f3f3;
+  background-image: none;  
   -ms-touch-action: manipulation;
          touch-action: manipulation;
   cursor: pointer;
   -webkit-user-select: none;
       -moz-user-select: none;
         -ms-user-select: none;
-               user-select: none;
-  color: #3e3e3e;
-  border: 1px solid #c3c3c3;
-  background-color: #f3f3f3;
-  background-image: none;  
+               user-select: none;  
   -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
-  -o-border-radius: 0.2em;
-  border-radius: 0.2em;
-
+      -moz-border-radius: 0.2em;
+           -o-border-radius: 0.2em;
+                border-radius: 0.2em;
   -webkit-transition: background-color ease-in-out .15s,
                                border-color ease-in-out .15s,
                                color ease-in-out .15s;
@@ -618,9 +626,9 @@ input[type=reset].sx-btn.active.focus {
   font-size: 18px;
   line-height: 1.3333333;
   -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -o-border-radius: 6px;
-  border-radius: 6px;
+      -moz-border-radius: 6px;
+           -o-border-radius: 6px;
+                border-radius: 6px;
 }
 .sx-btn-sm,
 .sx-btn-group-sm > .sx-btn {
@@ -628,9 +636,9 @@ input[type=reset].sx-btn.active.focus {
   font-size: 12px;
   line-height: 1.5;
   -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
+      -moz-border-radius: 3px;
+           -o-border-radius: 3px;
+                border-radius: 3px;
 }
 .sx-btn-xs,
 .sx-btn-group-xs > .sx-btn {
@@ -638,9 +646,9 @@ input[type=reset].sx-btn.active.focus {
   font-size: 12px;
   line-height: 1.5;
   -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  -o-border-radius: 3px;
-  border-radius: 3px;
+      -moz-border-radius: 3px;
+           -o-border-radius: 3px;
+                border-radius: 3px;
 }
 
 
@@ -697,9 +705,9 @@ select.sx-form-group {
   background-image: none;
   border: 1px solid #ccc;
   -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -o-border-radius: 4px;
-  border-radius: 4px;
+      -moz-border-radius: 4px;
+           -o-border-radius: 4px;
+                border-radius: 4px;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
                box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
   -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
@@ -765,11 +773,11 @@ textarea.sx-form-control {
   min-width: 35px;
   height:35px;
   line-height: 35px;
-  -webkit-border-radius: 0.5em;
-  -moz-border-radius: 0.5em;
-  -o-border-radius: 0.5em;
-  border-radius: 0.5em;
   background-color: #fff;
+  -webkit-border-radius: 0.5em;
+      -moz-border-radius: 0.5em;
+           -o-border-radius: 0.5em;
+                border-radius: 0.5em;  
   -webkit-transition: background-color ease-in-out .15s,
                                color ease-in-out .15s;
   -o-transition: background-color ease-in-out .15s,
@@ -794,8 +802,8 @@ a.sx-pagination:hover {
   vertical-align: middle;
   color: #a3a3a3;
   -webkit-transition: color ease-in-out .15s;
-  -o-transition: color ease-in-out .15s;
-  transition: color ease-in-out .15s;
+          -o-transition: color ease-in-out .15s;
+               transition: color ease-in-out .15s;
 }
 a.sx-pagination-constrol:hover {
   color: #333;

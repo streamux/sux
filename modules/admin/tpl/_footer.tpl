@@ -47,7 +47,7 @@
 
 {if $documentData.jscode != ''}
 <script>  jsux.rootPath = {$rootPath};</script>
-<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/js/{$documentData.module_code}_admin.js"></script>
+<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.js"></script>
 <script type="text/javascript">
   jsux.fn['{$documentData.jscode}'].init();
 </script>

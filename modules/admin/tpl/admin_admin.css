@@ -1,0 +1,53 @@
+.articles {padding:35px 5px 20px  7px;background-color:#fcfcfc}
+.articles .tt{text-align: left}
+.articles .tt .imgbox{display:inline-block;padding:4px 24px 0 24px;height:24px;background:url('images/tt_box_01.gif') 0 0 no-repeat,url('images/tt_box_03.gif') 100% 0 no-repeat,url('images/tt_box_02.gif') 0 0 repeat-x;text-align:center}
+.articles h1{font-size: 1.1875em;font-weight:bold}
+.articles .p-graph span{font-size:0.0250em}
+
+/* connect */
+.articles .connect .box {overflow:hidden;color: #000000; border:2px solid #b3bed0;text-align: left}
+.articles .connect .box table{float:left;width:50%;border:2px solid #FFFFFF}
+
+.articles .connect .box table thead tr th{height:30px;background-color: #bec7d6;text-align:center}
+.articles .connect .box table tbody tr td{position:relative;height:30px;line-height:30px;border-bottom: 1px dotted #e7eaf1}
+.articles .connect .box table tbody tr td:first-child{background-color: #e7eaf1;text-align:center}
+.articles .connect .box table tbody tr td:nth-child(2){padding-right:5px;text-align: right}
+.articles .connect .box table tbody tr:last-child td{border-bottom:none}
+.articles .connect .box table tbody .p-graph span{position:absolute;top:0;margin-left:5px;color:#3e3e3e;border:1px solid #FF0000}
+.articles .connect .box table tbody .g-graph{margin-left:5px;width:10px;height:10px;background:url("images/stick.jpg") 0 50% no-repeat,#eea335}
+
+/* page hit, analytics */
+.articles .ui-tab-promotion{clear:both;overflow:hidden;margin-top:20px}
+.articles .ui-tab-promotion .tab-header .tt{float:left;width:50%;text-align: left;cursor:pointer}
+.articles .ui-tab-promotion .tab-header .tt .imgbox-true{padding:4px;height:25px;background:url('images/tt_box2_01.gif') 0 0 no-repeat,url('images/tt_box2_03.gif') 100% 0 no-repeat,url('images/tt_box2_02.gif') 0 0 repeat;text-align:center}
+
+.articles .ui-tab-promotion .tab-header .tt .imgbox-false{padding-top:4px;height:25px;background:url('images/tt_box3_01.gif') 0 0 no-repeat,url('images/tt_box3_03.gif') 100% 0 no-repeat,url('images/tt_box3_02.gif') 0 0 repeat;text-align:center}
+
+.articles .ui-tab-promotion .activate-true{display:block}
+.articles .ui-tab-promotion .activate-false{display:none}
+.articles .ui-tab-promotion .pageview {clear:both;overflow:hidden;padding-bottom:3px;width:100%;min-height:105px;border:1px solid #828382;border-top:none;text-align: center}
+.articles .ui-tab-promotion .analytics {clear:both;overflow:hidden;padding-bottom:3px;width:100%;border:1px solid #828382;border-top:none;text-align: center}
+
+.articles .ui-tab-promotion table{width: 100%}
+.articles .ui-tab-promotion table thead{border:2px solid #FFFFFF;border-bottom: 1px solid #d6d7d6;background-color:#f6f6f6}
+.articles .ui-tab-promotion table thead tr th{height: 29px;line-height: 29px;background:url('images/verti_line.gif') 100% 50% no-repeat}
+.articles .ui-tab-promotion table thead tr th:last-child{background:none}
+.articles .ui-tab-promotion table tbody .p-no{text-align: center}
+.articles .ui-tab-promotion table tbody .p-name{padding-left:10px;text-align: left}
+.articles .ui-tab-promotion table tbody .p-hit{padding-right:10px;text-align: right}
+.articles .ui-tab-promotion table tbody tr td{position:relative;height: 27px;border-bottom: 1px dotted #d6d7d6;line-height: 27px}
+.articles .ui-tab-promotion table tbody tr:last-child td{border-bottom: 1px solid #d6d7d6}
+.articles .ui-tab-promotion .p-graph span{position:absolute;top:0;margin-left:5px;color:#3e3e3e;text-align:right}
+.articles .ui-tab-promotion .g-graph{margin-left:5px;width:0;height:10px;background:url("images/stick.jpg") 0 50% no-repeat,#eea335;text-align: right}
+.articles .ui-tab-promotion .warn-msg{display:block;padding-left:5px;text-align: left;color:#FF0000}
+
+/* config state */
+.articles .config{margin-top: 20px}
+.articles .config .box{overflow:hidden;clear:both;margin-bottom:10px;padding: 10px 0 10px 0;width:100%;border:2px solid #d6d7d6}
+
+.articles .config table{margin:0 auto;width:90%}
+.articles .config table tbody tr td{height:26px;text-align: right}
+.articles .config .view-type-textfield{padding-right:5px}
+.articles .config .box .icon-activate{background:url("images/light_on.gif") 0 50% no-repeat}
+.articles .config .box .icon-inactivate{background:url("images/light_off.gif") 0 50% no-repeat}
+

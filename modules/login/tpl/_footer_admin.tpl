@@ -1,7 +1,7 @@
-	</div>
-	<div class="sx-footer">
-		{include file="$copyrightPath"}
-	</div>
+  </div>
+  <div class="footer">
+    {include file="$copyrightPath"}
+  </div>
 </div>
 <div class="ui-panel-msg"></div>
 
@@ -13,9 +13,9 @@
 <!-- end -->
 <script src="{$rootPath}common/js/jsux.min.js"></script>
 {if $documentData.jscode != ''}
-<script src="{$rootPath}modules/login/tpl/js/login_admin.js"></script>
+<script src="{$rootPath}modules/login/tpl/login_admin.js"></script>
 <script>
-	jsux.fn['{$documentData.jscode}'].init();
+  jsux.fn['{$documentData.jscode}'].init();
 </script>
 {/if}
 </body>

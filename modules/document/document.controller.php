@@ -2,5 +2,5 @@
 
 class DocumentController extends Controller
 {
-	// code
+  // code
 }

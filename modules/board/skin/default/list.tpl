@@ -1,16 +1,3 @@
-{assign var=category value=$documentData.category}
-{assign var=groupData value=$documentData.group}
-{assign var=boardTitle value=$groupData.board_name}
-{assign var=contentData value=$documentData.contents}
-
-{assign var=rootPath value=$skinPathList.root}
-{assign var=skinPath value=$skinPathList.path}
-{assign var=skinRealPath value=$skinPathList.realPath}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
-{assign var=routeURI value="$rootPath$category"}
-
-{include file="$headerPath" title="$boardTitle :: 게시물 목록 - StreamUX"}
 <div class="board_list" style="width:{$groupData.width}">
   <!-- banner start -->
   {include file="$skinRealPath/_board_header.tpl"}
@@ -137,4 +124,3 @@
     </div>  
   </div>
 </div>
-{include file="$footerPath"}

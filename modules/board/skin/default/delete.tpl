@@ -1,16 +1,3 @@
-{assign var=rootPath value=$skinPathList.root}
-{assign var=skinPath value=$skinPathList.path}
-{assign var=skinRealPath value=$skinPathList.realPath}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
-
-{assign var=category value=$documentData.category}
-{assign var=groupData value=$documentData.group}
-{assign var=boardTitle value=$groupData.board_name}
-{assign var=contentData value=$documentData.contents}
-{assign var=routeURI value="$rootPath$category"}
-
-{include file="$headerPath" title="$boardTitle :: 게시물 삭제 - StreamUX"}
 <div class="articles">        
   <div class="sx_login">
     <h1>게시물 삭제 인증</h1>
@@ -18,7 +5,7 @@
     <div class="sx_login_box sx-edgebox-2px">
       <form action="{$routeURI}/{$contentData.id}/delete" method="post" name="f_board_delpass">
         <input type="hidden" name="_method" value="delete">
-        <input type="hidden" name="category" value="{$category}">
+        <input type="hidden" name="category" value="{$documentData.category}">
         <input type="hidden" name="id" value="{$contentData.id}">
 
 
@@ -70,4 +57,3 @@
     </div> 
   </div>
 </div>
-{include file="$footerPath"}

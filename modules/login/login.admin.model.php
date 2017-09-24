@@ -2,5 +2,5 @@
 
 class LoginAdminModel extends Model
 {
-	// empty code	
+  // empty code 
 }

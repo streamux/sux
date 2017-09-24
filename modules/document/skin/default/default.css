@@ -1,0 +1,26 @@
+
+.starter_title{
+  text-align: center;
+}
+.starter_template {
+    padding: 40px 15px;
+    text-align: center;
+}
+
+/* userguide */
+.container-fluid {
+  font-family: Georgia, "Times New Roman", Times, serif;
+  color: #555;
+}
+
+.starter_title{
+  margin-top: 30px;
+  margin-bottom: 0;
+  font-size: 60px;
+  font-weight: normal;
+}
+
+.starter_template{
+  font-size: 18px;
+  line-height: 1.5;
+}

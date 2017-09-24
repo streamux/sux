@@ -1,9 +1,9 @@
 <table name="member_group">
-	<column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-	<column name="category" type="varchar" size="30" notnull="not null"/>
-	<column name="group_name" type="varchar" size="75" notnull="not null"/>
-	<column name="summary" type="varchar" size="125"/>	
-	<column name="header_path" type="varchar" size="125"/>
-	<column name="footer_path" type="varchar" size="125"/>
-	<column name="date" type="datetime"/>
+  <column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
+  <column name="category" type="varchar" size="30" notnull="not null"/>
+  <column name="group_name" type="varchar" size="75" notnull="not null"/>
+  <column name="summary" type="varchar" size="125"/>  
+  <column name="header_path" type="varchar" size="125"/>
+  <column name="footer_path" type="varchar" size="125"/>
+  <column name="date" type="datetime"/>
 </table>

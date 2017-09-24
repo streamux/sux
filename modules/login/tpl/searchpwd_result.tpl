@@ -1,8 +1,3 @@
-{assign var=rootPath value=$skinPathList.root}
-{assign var=skinPath value=$skinPathList.path}
-{assign var=headerPath value=$skinPathList.header}
-{assign var=footerPath value=$skinPathList.footer}
-{include file="$headerPath" title="비밀번호 찾기 결과 - StreamUX"}
 <div class="articles"> 
   <div class="sx_login">
     <h1>비밀번호 찾기 결과</h1>
@@ -31,4 +26,3 @@
     </div>
   </div>      
 </div>
-{include file="$footerPath"}

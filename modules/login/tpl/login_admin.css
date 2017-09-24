@@ -1,0 +1,120 @@
+/* admin login */
+.sx_login {
+  margin-top:5px;
+  padding:30px 15px 20px 15px;
+  word-break:keep-all;
+  text-align: center;
+}
+.sx_login h1{
+  font-weight: normal;
+  font-size:2.5625em;
+  color:#ff6600
+}
+.sx_login .sx_subtitle{
+  font-size:1.0625em;
+}
+.sx_login .sx_login_box {
+  margin:0 auto;
+  margin-top:25px;
+  margin-bottom: 30px;
+  padding:35px 20px 20px 20px;
+  width: 356px;
+}
+.sx_login .sx_login_box label {
+  position: relative;
+  top:-3px;
+  font-weight: normal;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box label.sx_label_with{
+  display: inline-block;
+  width:80px;
+  text-align:right;
+}
+.sx_login .sx_login_box .sx-form-group span {
+  position: relative;
+  top:-3px;
+  font-size: 1.250em;
+  font-weight: bold;
+}
+.sx_login .sx_login_box .sx-form-group p {
+  margin-top: 15px;
+  font-size: 1.250em;
+}
+.sx_login .sx_login_box .sx_char_colon {
+  margin-left: 10px;
+  margin-right: 10px;
+  font-weight: normal;
+}
+.sx_login .sx_login_box .sx-form-group {
+  text-align: left;
+}
+.sx_login .sx_login_box .sx_login_btn{
+  margin-top: 35px;
+}
+.sx_login .sx_login_box .submit_top_margin {
+  padding-top:15px;
+}
+.sx_login .sx_login_box a.sx-btn,
+.sx_login .sx_login_box input[type=button].sx-btn,
+.sx_login .sx_login_box input[type=submit].sx-btn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 1.500em;
+}
+.sx_login .sx_login_box .sx_btn_md {
+  width: 100px;
+}
+
+.sx_login .sx_login_box .sx_login_footer{
+  line-height:30px;
+  margin-top:20px;
+}
+.sx_login .sx_login_box .sx_login_footer span{
+  color: #c3c3c3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.sx_login .notice_panel {
+  margin:0 auto;
+  padding-bottom: 30px;
+  text-align: left;
+  max-width: 356px;
+}
+.sx_login .notice_panel dl{
+  display:inline-block;
+}
+.sx_login .notice_panel dl dt{
+  height:22px;
+  font-weight: bold;
+}
+.sx_login .notice_panel dl:first-child dd{
+  padding-bottom: 25px;
+}
+.sx_login .fail_panel {
+  display: none;
+  margin:0 auto;
+  max-width: 356px;
+  text-align: left;
+  color: #ff6600;
+}
+
+.footer{
+  margin-top:35px;
+  padding-top:15px;
+  height: 60px;
+  text-align: center;
+  background-color: #333;
+}
+.footer,
+.footer a{
+  font-size: 0.9375em;
+  color:#c3c3c3;
+}
+
+@media(min-width: 768px) {
+  .sx-btn-block {
+    display: inline-block;
+    width: 100%;
+  }
+}
