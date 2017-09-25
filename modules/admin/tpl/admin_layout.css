@@ -155,3 +155,43 @@
 .sx-navi .activate {
   color:#FF0000;
 }
+
+/* tab */
+.sx-nav-tabs {
+  display: inline-block;
+  width:100%;
+  border-bottom: 1px solid #ddd;
+}
+.sx-nav-tabs > li {
+  position: relative;
+  display: block;
+  float: left; 
+  margin-bottom: -1px;
+}
+.sx-nav-tabs > li > a {  
+  position: relative;
+  display: block;
+  margin-right: 2px;  
+  padding: 8px 35px;
+  font-size: 1.250em;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+  text-decoration-line: none;
+}
+.sx-nav-tabs > li > a:hover {
+  border-color: #eee #eee #ddd;
+  border-bottom-color: transparent;
+}
+.sx-nav-tabs > li.active {
+  border-bottom-color: transparent;
+}
+.sx-nav-tabs > li.active > a,
+.sx-nav-tabs > li.active > a:hover,
+.sx-nav-tabs > li.active > a:focus {
+  color: #555;
+  cursor: default;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-bottom-color: transparent;
+}

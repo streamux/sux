@@ -39,7 +39,7 @@ class DocumentAdminView extends View
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/document/";
 
-    $skinDir = _SUX_PATH_ . "modules/document/skin/";
+    $skinDir = _SUX_PATH_ . "modules/document/templates/";
     $skinList = FileHandler::readDir($skinDir);
     if (!$skinList) {
       $msg = "스킨폴더가 존재하지 않습니다.";
@@ -77,7 +77,7 @@ class DocumentAdminView extends View
 
     $skinBuffer = array();
     $skinList = array();
-    $skinDir = _SUX_PATH_ . "modules/document/skin/";
+    $skinDir = _SUX_PATH_ . "modules/document/templates/";
     $skinTempList = FileHandler::readDir($skinDir);
     if (!$skinTempList) {
       $msg = "스킨폴더가 존재하지 않습니다.";
@@ -86,7 +86,7 @@ class DocumentAdminView extends View
 
     $skinModuleList = array();
     foreach ($skinTempList as $key => $value) {
-      $skinModuleList[] = array('file_name'=>'skin_' . $value['file_name']);
+      $skinModuleList[] = array('file_name'=>'origin_' . $value['file_name']);
     }
 
     $skinDir = _SUX_PATH_ . "files/document/";
@@ -211,14 +211,18 @@ class DocumentAdminView extends View
       }
 
       $category = $rows[0]['category'];
-      $contentsPath = $rows[0]['contents_path'] . '/' . $category . '.tpl';      
-      $contentsPath =Utils::convertAbsolutePath($contentsPath, _SUX_PATH_);
-
-      $handle = fopen($contentsPath, "r");
-      $dataObj['list'][0]['contents'] = fread($handle, filesize($contentsPath));
-      $resultYN = "Y";
+      $templatePathList = array();
+      $templatePathList['contents_tpl'] = $rows[0]['contents_path'] . '/' . $category . '.tpl'; 
+      $templatePathList['contents_css'] = $rows[0]['contents_path'] . '/' . $category . '.css'; 
+      $templatePathList['contents_js'] = $rows[0]['contents_path'] . '/' . $category . '.js'; 
+  
+      foreach ($templatePathList as $key => $value) {
+        $readTemplatePath = Utils::convertAbsolutePath($value, _SUX_PATH_);
+        if (file_exists($readTemplatePath)) {
+          $dataObj['list'][0][$key] = FileHandler::readFile($readTemplatePath);
+        }
+      }
     }
-
     $dataObj['list'][0]['contents_path'] = $category;
 
     //$msg = Tracer::getInstance()->getMessage();
@@ -231,7 +235,42 @@ class DocumentAdminView extends View
 
   function displaySkinResource() {
 
+    $msg = '';
+    $resultYN = 'Y';
+
+    $context = Context::getInstance();
+    $template = $context->getRequest('template');
+
+    $readFileDir = array();
+    $readFileDir['origin'] = _SUX_PATH_ . 'modules/document/templates/';
+    $readFileDir['edit'] = _SUX_PATH_ . 'files/document/';
+
+    $pathKey = 'edit';
+    if (preg_match('/^(origin_)+/', $template)) {
+      $pathKey = 'origin';
+      $template = str_replace('origin_', '',$template);
+    }
+
+    $readFilePath = $readFileDir[$pathKey];
+
+    $templatePathList = array();
+    $templatePathList['contents_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
+    $templatePathList['contents_css'] = $readFilePath . $template . '/' . $template . '.css'; 
+    $templatePathList['contents_js'] = $readFilePath . $template . '/' . $template . '.js'; 
+
+    $dataObj = array();
+    foreach ($templatePathList as $key => $value) {
+      //$msg .= $value . "\n";
+      if (file_exists($value)) {
+        $dataObj[$key] = FileHandler::readFile($value);
+      }
+    }
     
+   $data = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg);
+
+    $this->callback($data);
   }
 
   function displayCheckPage() {

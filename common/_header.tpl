@@ -28,14 +28,15 @@
 <div class="sx-wrapper">
   <div class="sx-header clearfix">
     <!-- mobbile gnb start -->
-    <div class="mobile-menu-case">
-      <div class="mobile-menu-btn">
+    <div class="mobile-menu-case">      
+      <div class="mobile-menu-btn">        
         <ul class="sx-h-3stick">
           <li class="sx-hline1"></li>
           <li class="sx-hline2"></li>
           <li class="sx-hline3"></li>
-        </ul>
+        </ul>        
       </div>
+      <div class="mobile-menu-bg"></div>
     </div>
     <!-- end -->
     <h1 class="sx-logo">

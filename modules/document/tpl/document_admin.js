@@ -189,18 +189,17 @@ jsux.fn.add = {
 
 jsux.fn.modify = {
   
+  activedTab: null,
+
   loadTemplateContents: function(value) {
 
-    //var url = jsux.rootPath + 'document-admin/skin-resource';
-    var baseURL = jsux.rootPath + 'files/document/';   
-    if (value.match(/^(skin_)+/)) {
-      baseURL = jsux.rootPath + 'modules/document/skin/';
-    }
-    var tempName = value.replace(/^skin_/i, '', value);
-    var url = baseURL + tempName + '/' + tempName + '.tpl';   
+    var self = this;
+    var url = jsux.rootPath + 'document-admin/skin-resource?template=' + value;
    
-    jsux.ajax( url, function(v) {
-      $('#contents').val(v);
+    jsux.getJSON( url, function(e) {
+      $.each(e.data, function(key, item) {
+        self.setTextAreaVal(key,item)
+      })
     });
   },
   getSelectVal: function( id ) {
@@ -303,6 +302,7 @@ jsux.fn.modify = {
 
     jsux.getJSON(url, params, function( e ) {
       
+      trace( e.msg );
       if (e.result == "Y") {
         jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
       } else {
@@ -324,8 +324,21 @@ jsux.fn.modify = {
     });
 
     $("input[name=cancel]").on("click", function(e) {
-
       jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+    });
+
+    // contents tab event
+    $('.sx-nav-tabs > li > a').on('click', function(e) {
+      e.preventDefault();
+      if (self.activedTab.hasClass('active')) {
+        self.activedTab.removeClass('active');
+      }
+
+      var parent = $(e.target).parent();
+      if (!parent.hasClass('active')) {
+        parent.addClass('active');
+        self.activedTab = parent;
+      }
     });
   },
   setLayout: function() {
@@ -334,6 +347,13 @@ jsux.fn.modify = {
       params = {
         id: $("input[name=id]").val()
       };
+
+    $('.sx-nav-tabs > li').each(function(index) {
+      var target = $(this);
+      if(target.hasClass('active')) {
+        self.activedTab = target;
+      }
+    });
 
     jsux.getJSON(jsux.rootPath + "document-admin/modify-json", params, function( e ) {
 
@@ -368,7 +388,9 @@ jsux.fn.modify = {
           self.setRadioVal( this.name, list[this.name] );
         });
 
-        self.setTextAreaVal("contents", list.contents); 
+        self.setTextAreaVal("contents_tpl", list.contents_tpl);
+        self.setTextAreaVal("contents_css", list.contents_css); 
+        self.setTextAreaVal("contents_js", list.contents_js); 
       } else {
         trace( e.msg );
       }

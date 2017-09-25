@@ -12,6 +12,7 @@ class DocumentAdminController extends Controller
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);
+    $templateName = $posts['contents_path'];
     $title = $posts['document_name'];
     $returnURL = $context->getServer('REQUEST_URI');  
 
@@ -39,6 +40,7 @@ class DocumentAdminController extends Controller
      *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
      */
 
+    $savePath = 'files/document/';
     $cachePath = './files/caches/queries/document.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
     if (!$columnCaches) {
@@ -51,10 +53,7 @@ class DocumentAdminController extends Controller
 
         if (isset($value) && $value) {
           if (preg_match('/^(contents_path)+$/', $key)) {
-            if (!preg_match('/(.tpl+)$/', $value)) {
-              $value = 'files/document/' . $category;
-            }
-            $contents_path = $value;
+            $value = $savePath . $category;
           }
           $columns[] = $value;
         } else {          
@@ -71,54 +70,47 @@ class DocumentAdminController extends Controller
 
     $result = $this->model->insert('document', $columns);
     if ($result) {
+      $realPath = _SUX_PATH_ . $savePath;
 
-      //  read and write contents
-      if (isset($contents_path) && $contents_path) {
-        $realPath = _SUX_PATH_ . 'files/document/';
-
-        // make new skin dir
-        $saveFileDir = $realPath . $category;
-        if (!file_exists($saveFileDir)) {
-          FileHandler::makeDir($saveFileDir, false);
-        }
-
-        // read files of skin to module's directory
-        $skinName = $posts['contents_path'];
-        $readSkinPath = _SUX_PATH_ . 'modules/document/skin/' . $skinName;
-        $readSkinPathList = array();
-        $readSkinPathList['tpl'] = $readSkinPath . '/' . $skinName . '.tpl';
-        $readSkinPathList['css'] = $readSkinPath . '/' . $skinName . '.css';
-        $readSkinPathList['js'] = $readSkinPath . '/' . $skinName . '.js';
-
-        $buffers = array();
-        foreach ($readSkinPathList as $key => $value) {
-          if (file_exists($value)) {
-            $buffers[$key] = FileHandler::readFile($value);
-          }
-        }
-
-        $buffer = $posts['contents'];
-        if (!empty($buffer)) {
-            $buffers['tpl'] = $buffer;
-        }
-
-        // Save files of skin to files's directory
-        $contents_path = _SUX_ROOT_ . $contents_path;
-        $saveSkinPath =Utils::convertAbsolutePath($contents_path, $realPath);
-        $saveSkinPathList = array();
-        $saveSkinPathList['tpl'] = $saveSkinPath . '/' . $category . '.tpl';
-        $saveSkinPathList['css'] = $saveSkinPath . '/' . $category . '.css';
-        $saveSkinPathList['js'] = $saveSkinPath . '/' . $category . '.js';
-
-        foreach ($saveSkinPathList as $key => $value) {
-          if (isset($buffers[$key]) && $buffers[$key]) {
-            $result = FileHandler::writeFile($value, $buffers[$key]);
-            if (!$result) {
-              $msg .= "${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
-            }      
-          }           
-        }       
+      // make new template dir
+      $saveFileRealDir = $realPath . $category;
+      if (!file_exists($saveFileRealDir)) {
+        FileHandler::makeDir($saveFileRealDir, false);
       }
+
+      // read files of template to module's directory      
+      $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $templateName;
+      $readtemplatePathList = array();
+      $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $templateName . '.tpl';
+      $readtemplatePathList['css'] = $readtemplatePath . '/' . $templateName . '.css';
+      $readtemplatePathList['js'] = $readtemplatePath . '/' . $templateName . '.js';
+
+      $buffers = array();
+      foreach ($readtemplatePathList as $key => $value) {
+        if (file_exists($value)) {
+          $buffers[$key] = FileHandler::readFile($value);
+        }
+      }
+
+      $buffer = $posts['contents'];
+      if (!empty($buffer)) {
+          $buffers['tpl'] = $buffer;
+      }
+
+      // Save files of skin to files's directory
+      $saveTemplatePathList = array();
+      $saveTemplatePathList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
+      $saveTemplatePathList['css'] = $saveFileRealDir . '/' . $category . '.css';
+      $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
+
+      foreach ($saveTemplatePathList as $key => $value) {
+        if (isset($buffers[$key]) && $buffers[$key]) {
+          $result = FileHandler::writeFile($value, $buffers[$key]);
+          if (!$result) {
+            $msg .= "${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
+          }      
+        }           
+      }       
 
       // write route's key
       $routes = array();
@@ -217,26 +209,29 @@ class DocumentAdminController extends Controller
     if ($result) {
 
       if (isset($contents_path) && $contents_path) {
+        $realPath = _SUX_PATH_ . 'files/document/';
 
         $buffers = array();
         $buffers['tpl'] = '';
         $buffers['css'] = '';
         $buffers['js'] = '';
 
-        $buffer = $posts['contents'];
-        if (empty($buffer)) {
-            $buffers['tpl'] = '내용을 입력해주세요';
+        $buffers['tpl'] = $contents;
+        if (empty($buffers['tpl'])) {
+            $buffers['tpl'] = '컨텐츠 내용을 입력해주세요';
         }
+
+        // js, css 파일을 어떻게 처리할 지 그민이 필요 
 
         // Save files of skin to files's directory
         $contents_path = _SUX_ROOT_ . $contents_path;
-        $saveSkinPath =Utils::convertAbsolutePath($contents_path, $realPath);
-        $saveSkinPathList = array();
-        $saveSkinPathList['tpl'] = $saveSkinPath . '/' . $category . '.tpl';
-        $saveSkinPathList['css'] = $saveSkinPath . '/' . $category . '.css';
-        $saveSkinPathList['js'] = $saveSkinPath . '/' . $category . '.js';
+        $saveTemplatePath =Utils::convertAbsolutePath($contents_path, $realPath);
+        $saveTemplatePathList = array();
+        $saveTemplatePathList['tpl'] = $saveTemplatePath . '/' . $category . '.tpl';
+        $saveTemplatePathList['css'] = $saveTemplatePath . '/' . $category . '.css';
+        $saveTemplatePathList['js'] = $saveTemplatePath . '/' . $category . '.js';
 
-        foreach ($saveSkinPathList as $key => $value) {
+        foreach ($saveTemplatePathList as $key => $value) {
           if (isset($buffers[$key]) && $buffers[$key]) {
             $result = FileHandler::writeFile($value, $buffers[$key]);
             if (!$result) {

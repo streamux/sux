@@ -319,8 +319,37 @@ a.sx-gnb-login i{
 }
 
 /*mobile gnb*/
+.mobile-menu-case{
+  position: relative;
+  overflow: hidden;
+  width:100%;
+  background-color: #ffffff;
+}
+.mobile-menu-btn{
+  position: absolute;
+  z-index: 1;
+  display: inline-block;
+}
+.mobile-menu-bg{
+  position: absolute;
+  top:0;
+  left:0;
+  width:56px;
+  height: 100%;
+}
+.mobile-menu-case .menu-bg-activate{  
+  background-color: #000;
+  opacity: .1; 
+  filter:alpha(opacity=10); 
+  -moz-opacity: .1;
+  -khtml-opacity: .1;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opactity=10)";
+}
+.mobile-menu-btn{
+  cursor:pointer;
+}
 .sx-h-3stick {
-  margin:10px 10px;
+  margin:22px 15px;
   width:25px;
 }
 .sx-hline1 {
@@ -333,24 +362,11 @@ a.sx-gnb-login i{
   height:2px;
   margin-top:4px;
 }
-.mobile-menu-case{
-  overflow: hidden;
-  width:100%;
-  background-color: #ffffff;
-}
-.mobile-menu-btn{
-  display: inline-block;
-  margin-top:12px;
-  margin-left:5px;  
-}
-.mobile-menu-btn .sx-h-3stick{
-  cursor:pointer;
-}
+
 .menu-btn-close{
   position: absolute;
   z-index: 3px;
-  top:12px;
-  left:-47px;
+  left:-52px;
 }
 .menu-btn-close .sx-h-3stick{
   cursor:pointer;

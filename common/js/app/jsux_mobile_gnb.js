@@ -98,7 +98,7 @@ jsux.mobileGnb.Menu.include({
   },
   showSitemap: function() {
 
-    $('.mobile-menu-btn .sx-h-3stick').trigger('click');
+    $('.mobile-menu-btn').trigger('click');
   },
   click: function( url, target) {
 
@@ -148,8 +148,23 @@ jsux.mobileGnb.Menu.include({
   setEvent: function() {
 
     var self = this;
+    $('.mobile-menu-btn').on('mouseover', function(e) {
+      e.preventDefault();
+      console.log(e.currentTarget);
+      if (!$('.mobile-menu-bg').hasClass('menu-bg-activate')) {
+        trace(e.target,1);
+        $('.mobile-menu-bg').addClass('menu-bg-activate');
+      }      
+    });
+    $('.mobile-menu-btn').on('mouseout', function(e) {
+      e.preventDefault();
+      if ($('.mobile-menu-bg').hasClass('menu-bg-activate')) {
+        trace('out',1);
+        $('.mobile-menu-bg').removeClass('menu-bg-activate');
+      }      
+    });
 
-    $('.mobile-menu-btn .sx-h-3stick').on('click', function(e) {
+    $('.mobile-menu-btn').on('click', function(e) {
       e.preventDefault();
       self.show();
       self.openSlide();

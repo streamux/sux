@@ -29,7 +29,7 @@
           <tr>
             <td><label for="documentName">*페이지 이름</label></td>
             <td>
-              <input type="text" id="document_name" name="documentName" size="20" maxlength="20" value="">
+              <input type="text" id="documentName" name="document_name" size="20" maxlength="20" value="{$documentData.document_name}">
             </td>
           </tr>
           <tr>
@@ -70,9 +70,18 @@
             </td>
           </tr>
           <tr>
-            <td><label for="contents">컨텐츠 내용</label></td>
+            <td><label for="emptyName">컨텐츠 내용</label></td>
             <td>
-              <textarea id="contents" name="contents" rows="15"></textarea>
+              <ul class="sx-nav-tabs">
+                <li class="active"><a href="#">tpl</a></li>
+                <li><a href="#">css</a></li>
+                <li><a href="#">js</a></li>
+              </ul>
+              <div class="contents_panel">
+                <textarea name="contents_tpl" rows="15" class="sx-form-control"></textarea>
+                <textarea name="contents_css" rows="15" class="sx-form-control"></textarea>    
+                <textarea name="contents_js" rows="15" class="sx-form-control"></textarea>     
+              </div>              
               <p>컨텐츠 내용을 입력하세요.</p>
             </td>
           </tr>
