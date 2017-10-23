@@ -1,530 +1,401 @@
-jsux.gnb = jsux.gnb || {};
-jsux.gnb.Menu = jsux.View.create();
-(function( app, $ ){
+$(document).ready(function() {
 
-  var GNB = function( p, m ) {
+  var adminMobilePanel = new SXAdminMobilePanel();
+  adminMobilePanel.init();
 
-    var _scope = this,
-      _stage = $(p),     
-      _data = null,
-      _list = [],
-      _m = m,
-      _mid = -1,
-      _sid = -1,
-      _oldMid = -1,
-      _oldSid = -1,
-      _activateMid = -1,
-      _activateSid = -1,
-      _timer = -1,
-      _activate = 'activate';
+  var adminMenu = new SXAdminMenu();
+  adminMenu.init();
+});
 
-    this.update = function( o,  value ) {
+var SXAdminMobilePanel = function() {
 
-      _data = value;
-      this.setUI();       
-      this.setEvent();
-    };
+  var self = this;
+  var isReadClickMenu = true;
 
-    this.setActivateClass = function( className) {
+  this.init = function() {
+    this.setEvent();
+  }; 
 
-      _activate = className;
-    };
+  this.removeClass = function(target, id) {
 
-    this.setUI = function() {
-
-      var ty = 0;
-      var markup = $('#gnbFirstMenu').html();
-      var subMarkup = $('#gnbSecondMenu').html();
-
-      $( _data ).each(function(mindex) {
-
-        ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * (34+1) : 0;
-      
-        _stage.append(markup);
-        var menu = _stage.find('.sx-mmenu:eq('+mindex+') > li');
-        menu.attr('data-mid', mindex);
-        menu.attr('data-sid', -1);
-        menu.find('> a > span').text(_data[mindex].label);
-        menu.find('> a').attr('href', _data[mindex].link);
-        menu.find('.sx-gnb-sub > .panel').attr('data-startPosY', ty+'px');
-        menu.find('.sx-gnb-sub > .panel').css('top', ty+'px');
-      });
-
-      this.alignUI();
-
-      $( _data ).each(function(mindex) {
-
-        $( _data[mindex].menu ).each(function(sindex) {           
-          _stage.find('.sx-mmenu:eq('+mindex+') .sx-gnb-sub > ul').append(subMarkup);
-
-          var subMenu = _stage.find('.sx-mmenu:eq('+mindex+') .sx-gnb-sub > ul > li:eq('+sindex+')');
-          subMenu.attr('data-mid', mindex);
-          subMenu.attr('data-sid', sindex);
-          subMenu.find('> a').attr('href', _data[mindex].menu[sindex].link);
-          subMenu.find('> a > span').text(_data[mindex].menu[sindex].label);
-        });
-      });
-    };
-
-    this.alignUI = function() {
-
-      var max_width     = _stage.width(),
-        max_txtWidth  = 0,
-        spaceWidth    = 0,
-        wdRate      = 0,
-        wd        = 0,
-        wd_lastChild  = 0,
-        sizeList      = [];
-
-      _list = _stage.find(".sx-mmenu");
-
-      $( _list ).each(function(mindex){
-        max_txtWidth += $(this).find("li > a > span").width();
-      });
-
-      spaceWidth = Math.floor((max_width - max_txtWidth)/_data.length);
-
-      $( _list ).each(function(mindex) {
-
-        wdRate = Math.floor((100-0)/(max_width - 0)*(($(this).find("li > a > span").width()+spaceWidth) - 0) + 0);  
-
-        // 마지막은 항상 나머지 비율로 100%를 채운다.
-        if (mindex == _list.length-1) {
-          wdRate = 100-wd;
-        }
-        wd += wdRate;       
-        $( this ).css("width", wdRate+"%");
-
-        sizeList.push(wdRate);  
-      });
-
-      _m.setSizeList( sizeList );
-    };
-
-    this.setEvent = function() {
-
-      _stage.find('.sx-mmenu > li > a').on('mouseover', function(e){
-
-        e.preventDefault();
-        _scope.stopTimer();
-
-        _m.menuOn( $( this ).parent().attr('data-mid'), -1 ); 
-      });
-
-      _stage.find('.sx-mmenu > li > a').on('mouseout', function(e){
-
-        e.preventDefault();
-        _scope.startTimer();
-        
-      });
-
-      _stage.find('.sx-mmenu > li > a').on('click', function(e){
-
-        e.preventDefault();
-
-        var url = _data[$( this ).parent().attr('data-mid')].link;
-        if (url === '') {
-          return;
-        }
-
-        console.log(jsux.rootPath);
-
-        jsux.goURL( jsux.rootPath + url, '_self' ); 
-      });
-
-      _stage.find('.sx-smenu > a').on('mouseover', function(e){
-
-        e.preventDefault();
-        _scope.stopTimer();
-        _m.menuOn( $( this ).parent().attr('data-mid'), $( this ).parent().attr('data-sid') );
-        
-      });
-
-      _stage.find('.sx-smenu > a').on('mouseout', function(e){
-
-        e.preventDefault();
-        _scope.startTimer();        
-      });
-
-      _stage.find('.sx-smenu > a').on('click', function(e){
-
-        e.preventDefault();
-
-        var url = _data[$( this ).parent().attr('data-mid')].menu[$( this ).parent().attr('data-sid')].link;
-        jsux.goURL( jsux.rootPath + url, '_self' );       
-      });
-    };
-
-    this.mouseHandler = function(e, obj) {
-      
-      var type    = e.type,
-
-        menu    = null,
-        submenu = null,
-        mask    = null,
-        panel     = null,
-        ty      = 0,
-        th      = 0,
-        oldMask   = null,
-        oldPanel  = null,
-        oldth     = 0,
-        oldty     = 0;
-
-      _mid  = obj.mid;
-      _sid  = obj.sid;
-
-      switch(type) {
-
-        case 'mouseover' :          
-
-          if (_mid > -1) menu   = _list.eq(_mid);
-          if (_sid > -1) submenu  = menu.find('.sx-gnb-sub .sx-smenu').eq(_sid);
-
-          if (menu && !menu.hasClass(_activate)) {
-
-            mask  = menu.find('.sx-gnb-sub');
-            panel = menu.find('.sx-gnb-sub .panel');
-            ty    = 0;
-            th    = _list.eq(_mid).find('.sx-gnb-sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-            menu.addClass(_activate);
-            _scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-
-              var mh = th - panel.css('top').replace(/[^(0-9)]/gi, '');
-              mask.css('height', mh);
-            }});
-          }
-          
-          if (submenu && !submenu.hasClass(_activate)) {
-            submenu.addClass(_activate);
-          }
-
-          if (_oldMid != _mid && _oldMid > -1) {
-
-            oldMask   = _list.eq(_oldMid).find('.sx-gnb-sub');
-            oldPanel  = _list.eq(_oldMid).find('.sx-gnb-sub .panel');
-            oldty     = _list.eq(_oldMid).find('.sx-gnb-sub .panel').attr('data-startPosY');
-            oldth     = _list.eq(_oldMid).find('.sx-gnb-sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-            _list.eq(_oldMid).removeClass(_activate);
-            _scope.tween( oldPanel, 10, {'top': oldty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-              
-              var mh = oldth - oldPanel.css('top').replace(/[^(0-9)]/gi, '');
-              oldMask.css('height', mh);
-            }});
-          }
-
-          if (_oldSid != _sid && _oldSid > -1) {
-            _list.eq(_oldMid).find('.sx-gnb-sub .sx-smenu').eq(_oldSid).removeClass(_activate);
-          }         
-
-          _oldMid = _mid;
-          _oldSid   = _sid;
-          break;
-
-        case 'mouseout':
-
-          if (_mid > -1) menu   = _list.eq(_mid);
-          if (_sid > -1) submenu  = menu.find('.sx-gnb-sub .sx-smenu').eq(_sid);
-
-          if (menu && menu.hasClass(_activate)) {
-
-            panel   = menu.find('.sx-gnb-sub .panel');
-            ty    = menu.find('.sx-gnb-sub .panel').attr('data-startPosY');
-            oldth = _list.eq(_mid).find('.sx-gnb-sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-            menu.removeClass(_activate);
-            _scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-            
-              var mh = oldth - $( panel ).css('top').replace(/[^(0-9)]/gi, '');
-              menu.find('.sx-gnb-sub').css('height', mh);
-            }});
-          }
-
-          if (submenu && submenu.hasClass(_activate)) {
-            submenu.removeClass(_activate);
-          }
-          break;
-
-        default:
-          break;
-      }
-    };
-
-    this.activate = function(m, s) {
-
-      _activateMid  = parseInt(m, 10);
-      _activateSid  = parseInt(s, 10);
-
-      if (_activateMid <=0 && _activateMid > _data.length) {
-        warn('It not a Avaliable Depth1\'s Number!');
-        return;
-      } 
-
-      if (_activateSid <= 0 && _activateSid > _data[mid].menu.length) {
-        warn('It not a Avaliable Depth2\'s Number!');
-        return;
-      }
-
-      _activateMid  = _activateMid - 1;
-      _activateSid    =  _activateSid - 1;
-
-      this.menuOn( _activateMid, _activateSid);
-    };
-
-    this.menuOn = function(m, s) {
-
-      _scope.mouseHandler({type:'mouseover'}, {mid: m, sid: s});
-    };
-
-    this.menuOff = function() {
-
-      _scope.mouseHandler({type:'mouseout'}, {mid: _mid, sid: _sid});
-    };
-
-    this.tween = function( target, time, obj) {
-
-      TweenLite.to( target, time, obj);
-    };
-
-    this.startTimer = function() {
-
-      if (_timer == -1) {
-        _timer = setInterval(function(){
-
-          if (_activateMid > -1) {
-            _m.menuOn(_activateMid, _activateSid);
-          } else {
-            _m.menuOff();
-          }
-          _scope.stopTimer();
-
-        }, 500);
-      }
-    };
-
-    this.stopTimer = function() {
-
-      if (_timer) {
-        clearInterval(_timer);
-        _timer = -1;
-      }
-    };
-
-    this.replaceNumber = function( str ) {
-
-      return str.replace(/[^(0-9)]/gi, '');
-    };
-  };
-
-  app.create = function( path, m ) {
-
-    if ($(path).length<1) {
-      $( document.body ).append('<div id="TEMP_GNB_CASE" class="sx-gnb"></div>');
-      path = '#TEMP_GNB_CASE';
+    var $gnbCase = $(target);
+    if ($gnbCase.hasClass(id)) {
+      $gnbCase.removeClass(id);
     }
-    return new GNB(path, m);
   };
-})(jsux.gnb.Menu, jQuery);
-jsux.adminGnb = jsux.adminGnb || {};
-jsux.adminGnb.Icon = jsux.View.create();
-(function( app, $ ){
+  this.addClass = function(target, id) {
 
-  var GNB_ICON;
-
-  function trace( str ) {
-
-    console.log( str );
-  }
-
-  function warn( str ) {
-
-    trace('warn : ' + str);
-  }
-
-  GNB_ICON = function( p, m ) {
-
-    var _scope    = this,
-      _stage    = $(p),     
-      _data   = null,
-      _list   = [],
-      _sizeList   = [],
-      _m      = m,
-      _mid      = -1,
-      _oldMid   = -1,
-      _activateMid  = -1,
-      _timer      = -1;
-
-    this.update = function( o, value ) {
-
-      _data = value;
-      this.setUI();       
-    };
-
-    this.setUI = function() {
-
-      _stage.append('<ul></ul>');
-
-      $( _data ).each(function(mindex) {
-
-        _stage.find('ul').append( '<li>' +
-                        '<div class="g-arrow"></div>'+
-                        '<div class="g-icon"></div>'+
-                      '</li>');
-      });
-      
-      _sizeList = _m.getSizeList();
-      this.alignUI();
-    };
-
-    this.alignUI = function() {
-
-      _list = _stage.find('ul > li');
-
-      $( _list ).each(function(mindex) {
-        $( this ).css({'width': _sizeList[mindex]+'%'});
-        $( this ).find('.g-icon').css({'background-position':'50% '+(-mindex*75)+'px'});
-      });
-    };  
-
-    this.mouseHandler = function(e, obj) {
-      
-      var type    = e.type,
-
-        menu    = null,
-        submenu = null,
-        panel     = null,
-        ty      = 0;
-
-      _mid  = obj.mid;    
-
-      switch(type) {
-
-        case 'mouseover' :  
-
-          panel = $(_list[_mid]).find('.g-arrow');
-          _scope.tween( panel, 10, {'top': 0, ease: Linear.easeOutQuad, useFrames: true, onComplete: function() {
-              //trace( 'hide' );
-            }});
-
-          if (_oldMid > -1 && _oldMid != _mid) {
-            panel = $(_list[_oldMid]).find('.g-arrow');
-            _scope.tween( panel, 10, {'top': -80, ease: Linear.easeOutQuad, useFrames: true, onComplete: function() {
-              //trace( 'hide' );
-            }});
-          }
-          break;
-
-        case 'mouseout':
-
-          var id = (_activateMid) ? _activateMid : _mid;
-
-          panel = $(_list[_oldMid]).find('.g-arrow');
-          _scope.tween( panel, 10, {'top': -80, ease: Linear.easeOutQuad, useFrames: true, onComplete: function() {
-              //trace( 'hide' );
-            }});
-          break;
-
-        default:
-          break;
-      }
-
-      _oldMid  = _mid;
-    };
-
-    this.activate = function(m, s) {
-
-      _activateMid  = parseInt(m, 10);
-
-      if (_activateMid <=0 && _activateMid > _data.length) {
-        warn('It not a Avaliable Depth1\'s Number!');
-        return;
-      } 
-      _activateMid  = _activateMid - 1;
-      this.menuOn(_activateMid);
-    };
-
-    this.unactivate = function() {
-
-      this.menuOff();
-    };
-
-    this.menuOn = function(m) {
-
-      _scope.mouseHandler({type:'mouseover'}, {mid: m});
-    };
-
-    this.menuOff = function() {
-
-      _scope.mouseHandler({type:'mouseout'},{mid:_mid});
-    };
-
-    this.tween = function( target, time, obj) {
-
-      TweenLite.to( target, time, obj);
-    };
-  };
-
-  app.create = function( path, m ) {
-
-    if ($(path).length<1) {
-      $( document.body ).append('<div id="TEMP_GNB_ICON" class="sx-gnb-icon"></div>');
-      path = '#TEMP_GNB_ICON';
+    var $gnbCase = $(target);
+    if (!$gnbCase.hasClass(id)) {
+      $gnbCase.addClass(id);
     }
-    return new GNB_ICON(path, m);
   };
-})(jsux.adminGnb.Icon, jQuery);
-jsux.adminGnb = jsux.adminGnb || {};
-jsux.adminGnb.Model = jsux.Model.create();
-(function(app, $){  
-  app.include({
 
-    sizeList: [],
-    setData: function(infoObj) {
+  this.slideInGnbPanel = function() {
 
-      this.setChanged();
-      this.notifyObserver( infoObj );
-    },
-    activate: function( mid, sid) {
+    this.removeClass('.sx-gnb-case', 'sx-slide-out');
+    this.addClass('.sx-gnb-case', 'sx-slide-in');
+    this.hideMobileMenu();
+    this.hideCloseBtn();
+    this.removeTransitionEnd();
 
-      var len = this.observers.length;
-      for (var i=0; i<len; i++) {
-        this.observers[i].activate( mid, sid );
+    isReadClickMenu = false;
+  };
+
+  this.slideOutGnbPanel = function() {
+
+    this.removeClass('.sx-gnb-case', 'sx-slide-in');
+    this.addClass('.sx-gnb-case', 'sx-slide-out');
+    this.addTransitionEnd();
+  };
+
+  this.hideMobileMenu = function() {
+
+    var option = {'margin-top':10,'margin-bottom':-2};
+    var duration = 500;
+    var easing = 'easeOutExpo';
+    $('.sx-menu-btn').animate({'opacity':0}, duration, easing, function() {
+      self.showCloseBtn();
+    });
+    $('.sx-menu-btn .sx-menu > li:first-child').animate(option, duration, easing);
+
+     option = {'margin-top':0,'margin-bottom':0};
+    $('.sx-menu-btn .sx-menu > li:nth-child(2)').animate(option, duration, easing);
+
+    option = {'margin-top':-2,'margin-bottom':10};
+    $('.sx-menu-btn .sx-menu > li:last-child').animate(option, duration, easing);
+  };
+
+  this.showMobileMenu = function() {
+
+    var option = {'margin-top':5,'margin-bottom':5};
+    var duration = 300;
+    var easing = 'easeOutExpo';
+
+    $('.sx-menu-btn').animate({'opacity':1}, duration, easing);
+    $('.sx-menu-btn .sx-menu > li:first-child').animate(option, duration, easing);
+    $('.sx-menu-btn .sx-menu > li:nth-child(2)').animate(option, duration, easing);
+    $('.sx-menu-btn .sx-menu > li:last-child').animate(option, duration, easing);
+  };
+
+  this.hideCloseBtn = function() {
+    this.removeClass('#sxGnbCase .sx-close-btn', 'active');
+  };
+
+  this.showCloseBtn = function() {    
+    this.addClass('#sxGnbCase .sx-close-btn', 'active');
+  };
+
+  this.addTransitionEnd = function() {
+
+    var $gnbCase = $('.sx-gnb-case');
+    $gnbCase.on('transitionend', function(e){
+      self.removeTransitionEnd();
+      self.showMobileMenu();
+      self.hideNavPanel();
+      self.hideCloseBtn();
+
+      isReadClickMenu = true;
+    });
+  };
+
+  this.removeTransitionEnd = function() {
+
+    var $gnbCase = $('.sx-gnb-case');
+    $gnbCase.off('transitionend');
+  };
+
+  this.showNavPanel = function() {
+
+    this.removeClass('.sx-nav-bar', 'sx-nav-off');
+  };
+
+  this.hideNavPanel = function() {
+
+     this.addClass('.sx-nav-bar', 'sx-nav-off');
+  };
+
+  this.setEvent = function() {
+
+    $('.sx-menu-btn').on('click', function() {
+
+      if (!isReadClickMenu) {
+        return;
+      }
+      self.showNavPanel();
+      self.slideInGnbPanel();      
+    });
+    $('.sx-close-btn').on('click', function() {
+      self.slideOutGnbPanel();
+    });
+  };
+};
+
+var SXAdminMenu = function(){
+
+  var selectedSub = null;
+  var self = this;
+
+  this.init = function() {
+    this.setEvent();
+  };
+
+  this.setEvent = function() {
+
+    var menuList = $('.sx-gnb > li > a'),
+          subPanelList = $('.sx-drap-menu');
+
+    menuList.on('click', function(e){
+
+      var mindex = menuList.index(this);
+      var sub = subPanelList[mindex];
+      self.showSubMenu(sub);
+
+      if (selectedSub && selectedSub !== sub) {
+         self.hideSubMenu(selectedSub);
+      }     
+ 
+      selectedSub = sub;   
+    });
+
+    $('body').on('click', function(e) {
+      
+      if (e.target.nodeName && e.target.nodeName.toUpperCase() === 'A') {
+        e.stopImmediatePropagation();
+        return;
+      }
+      self.hideSubMenu(selectedSub);
+      selectedSub = null;
+    });
+  };
+  this.removeClass = function(target, id) {
+
+    var $gnbCase = $(target);
+    if ($gnbCase.hasClass(id)) {
+      $gnbCase.removeClass(id);
+    }
+  };
+  this.addClass = function(target, id) {
+
+    var $gnbCase = $(target);
+    if (!$gnbCase.hasClass(id)) {
+      $gnbCase.addClass(id);
+    }
+  };
+  this.showSubMenu = function(sub) {
+
+    if (selectedSub === sub) {
+      return;
+    }
+    this.removeClass(sub, 'sx-slide-out');
+    this.addClass(sub, 'sx-slide-in');
+      
+    var $sub = $(sub);
+    var subCaseHeight = $sub.css('height').replace('px', '');
+    var $subCase = $($sub.parent());
+    $subCase.css('height', subCaseHeight);
+
+    this.removeClass($sub.parent(), 'sx-slide-out');
+    this.addClass($sub.parent(), 'sx-slide-in');
+  };
+
+  this.hideSubMenu = function(sub) {
+
+    if (!sub) {
+      return;
+    }
+
+    var $sub = $(sub);
+    this.hideSubCase($sub);
+    this.removeClass(sub, 'sx-slide-in');
+    this.addClass(sub, 'sx-slide-out');    
+  };
+
+  this.hideSubCase = function(sub) {
+
+    var $subCase = $(sub.parent());
+    $subCase.css('height', 0);
+    this.removeClass(sub.parent(), 'sx-slide-in');
+    this.addClass(sub.parent(), 'sx-slide-out');
+  };
+};
+/**
+ * class ListManager
+ * ver 1.0.0
+ * update 2017.10.22
+ * author streamux.com
+ * description ''
+ */
+
+/*jsux.logger.isConsole = false;*/
+jsux.app = jsux.app || {};
+(function( app, $) {
+
+  var ListManager = jsux.Model.create();
+
+  ListManager.include({
+
+    isLoading: false,
+    resource_url: '',
+    params: null,
+    id: '',    
+    template: '',
+    msg_template: '',
+    tmpl:'',
+    msg_tmpl: '',
+
+    setResource: function(url, params) {
+      this.resource_url = url;
+      if (params) {
+        this.params = params;
       }
     },
-    menuOn: function(m, s) {
+    setParams: function(p) {
+      this.params = p;
+    },
 
-      var len = this.observers.length;
-      for (var i=0; i<len; i++) {
-        this.observers[i].menuOn(m, s);
+    /**
+     * method initialize
+     * @ param data {  id: string, template: string, msg: string,
+     *                          mobile_id: string, mobile_template: string, mobile_msg: string }
+     */ 
+    initialize: function(data) {
+      
+      for (var p in data) {
+        this[p] = data[p];
       }
     },
-    menuOff: function() {
+    digit: function(value) {
+      return jsux.utils.digit(value);
+    },
+    reset: function() {
+     $(this.id).empty();  
+    },
+    remove: function() {
 
-      var len = this.observers.length;
-      for (var i=0; i<len; i++) {
-        this.observers[i].menuOff();
+       $(this.id).empty();
+    },
+    reloadData: function( page, limit) { 
+
+      var self = this,
+            params = {              
+              passover: (page-1) * limit,
+              limit: limit
+            },
+            url = this.resource_url;
+
+      if (!url) {
+        trace('resource_url 주소를 확인해주세요.');
+        return;
       }
-    },
-    tick: function() {
 
-      var len = this.observers.length;
-      for (var i=0; i<len; i++) {
-        this.observers[i].tick();
+      if (this.params) {
+        for(var p in this.params) {
+          if (!params[p]) {
+             params[p] = this.params[p];
+           }    
+        }        
       }
+      
+      if (this.isLoading === true) {
+        return;
+      }
+      this.isLoading = true;
+      jsux.getJSON( url, params, function( e )  {
+        
+        self.setData(e.data);
+        self.isLoading = false;
+      });
     },
-    getSizeList: function() {
+    setData: function( json ) {
 
-      return this.sizeList;
+      var self = this,
+            list = json.list,
+            markup = null,           
+            parseDate = null,
+            getRate = null,
+            addComma = null,
+            msg = null;
+
+      if (!this.id) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 입력하세요.', 'jsux_list_manager.js', 98);
+        return;
+      }
+
+      if ($(this.id).length < 1) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 103);
+        return;
+      }
+
+      this.template = this.template || this.tmpl;
+      if (!this.template) {
+        jsux.logger.error('\'' + this.template + '\' 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js', 109);
+        return;
+      }
+
+      markup = $(this.template);
+      if (markup.length < 1) {
+        jsux.logger.error('\'' + this.id + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 115);
+        return;
+      }     
+
+      parseDate = function(date) {
+
+        var d = new Date(date);
+        if (isNaN(d.getFullYear())) {
+          d = '0000-00-00';
+        } else {
+           d = d.getFullYear() + '-' + self.digit(d.getMonth()+1) + '-' + self.digit(d.getDay());
+        }
+        return d;
+      };
+      getRate = function( hit, total) {
+        return (hit || total) === 0 ? 0 : (hit/total*100);
+      };
+      addComma = function(num) {
+        jsux.utils.addComma(num);
+      };
+
+      this.reset();
+
+      $(markup).tmpl(list, {
+        getRate: function( hit, total) {
+          return getRate(hit, total);
+        },
+        editDate: function( date) {        
+          return parseDate(date);
+        },
+        addComma: function( num ) {
+          return addComma(num);
+        }
+      }).appendTo(this.id);
     },
-    setSizeList: function( value ) {
+    setMsg: function(msg) {
 
-      this.sizeList = value;
+      var data = msg,
+            markup = '';            
+
+      if (typeof(msg) === 'string') {
+        data = {msg: msg};
+      }
+
+      this.msg_template = this.msg_template || this.msg_tmpl;
+      if (!this.msg_template) {
+        jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js', 161);
+        return;
+      }
+
+      markup = $(this.msg_template);
+     if (markup.length < 1) {
+      jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 167);
+        return;
+      }
+
+      $(markup).tmpl(data).appendTo(this.id);
     }
   });
 
-  app.create = function() {
-
-    return new jsux.adminGnb.Model();
+  app.getListManager = function() {
+    return new ListManager();
   };
-})(jsux.adminGnb.Model, jQuery);
+})(jsux.app, jQuery);

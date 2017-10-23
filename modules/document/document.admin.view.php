@@ -77,26 +77,26 @@ class DocumentAdminView extends View
 
     $skinBuffer = array();
     $skinList = array();
-    $skinDir = _SUX_PATH_ . "modules/document/templates/";
-    $skinTempList = FileHandler::readDir($skinDir);
+    $skinLocalDir = _SUX_PATH_ . "modules/document/templates/";
+    $skinTempList = FileHandler::readDir($skinLocalDir);
     if (!$skinTempList) {
-      $msg = "스킨폴더가 존재하지 않습니다.";
+      $msg .= "'modules/document/templates/' 스킨폴더가 존재하지 않습니다.";
       $resultYN = "N";
     }
+
+    $skinFilesDir = _SUX_PATH_ . "files/document/";
+    $skinFiles = FileHandler::readDir($skinFilesDir);
+    if (!$skinFiles) {
+      $msg .= "'files/document/' 스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    } 
 
     $skinModuleList = array();
-    foreach ($skinTempList as $key => $value) {
-      $skinModuleList[] = array('file_name'=>'origin_' . $value['file_name']);
+    foreach ($skinFiles as $key => $value) {
+      $skinModuleList[] = array('file_name'=>$value['file_name'] . '_remote');
     }
 
-    $skinDir = _SUX_PATH_ . "files/document/";
-    $skinFiles = FileHandler::readDir($skinDir);
-    if (!$skinFiles) {
-      $msg = "스킨폴더가 존재하지 않습니다.";
-      $resultYN = "N";
-    }    
-
-    $skinList = array_merge($skinModuleList, $skinFiles);
+    $skinList = array_merge($skinTempList, $skinModuleList);
     foreach ($skinList as $key => $value) {
       if (preg_match('/^(\w)+$/', $value['file_name'])) {
         $skinBuffer[] = $value['file_name'];
@@ -159,28 +159,55 @@ class DocumentAdminView extends View
     $msg = "";
     $resultYN = "Y";
 
-    $this->model->select('document', '*', null, 'id desc');     
-    $numrows = $this->model->getNumRows();
-    if ($numrows > 0){
+    $context = Context::getInstance();
+    $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
 
-      $a = $numrows;
-      $rows = $this->model->getRows();
-      foreach ($rows as $key => $row) {
+     if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
 
-        $fields = array('no'=>$a);
-        foreach ($row as $key => $value) {
-          $fields[$key] = $value;
+    if (isset($id) && $id) {
+      $where = new QueryWhere();
+      $where->set('id', $id);
+      $result = $this->model->select('document', '*', $where);
+    } else {
+      $this->model->select('document', 'id');
+      $totalNum = $this->model->getNumRows();
+      $result = $this->model->select('document', '*', null, 'id desc', $passover, $limit);
+    }
+
+    if ($result) {
+
+      $numrows = $this->model->getNumRows();
+      if ($numrows > 0){
+
+        $dataObj['total_num'] = $totalNum;
+        
+        $a = $numrows;
+        $rows = $this->model->getRows();
+        foreach ($rows as $key => $row) {
+
+          $fields = array('no'=>$a);
+          foreach ($row as $key => $value) {
+            $fields[$key] = $value;
+          }
+
+          $dataList[] = $fields;
+          $a--;
         }
 
-        $dataList[] = $fields;
-        $a--;
+        $dataObj['list'] =$dataList;
+      } else {
+        $msg = "페이지가 존재하지 않습니다.";
+        $resultYN = "N";
       }
-
-      $dataObj['list'] =$dataList;
-    } else {
-      $msg = "페이지가 존재하지 않습니다.";
-      $resultYN = "N";
     }
+    
     //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
@@ -223,7 +250,9 @@ class DocumentAdminView extends View
         }
       }
     }
-    $dataObj['list'][0]['contents_path'] = $category;
+    $dataObj['list'][0]['contents_path'] = $category . '_remote';
+
+    $msg .= $category . '_remote';
 
     //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
@@ -243,17 +272,17 @@ class DocumentAdminView extends View
 
     $readFileDir = array();
     $readFileDir['origin'] = _SUX_PATH_ . 'modules/document/templates/';
-    $readFileDir['edit'] = _SUX_PATH_ . 'files/document/';
+    $readFileDir['remote'] = _SUX_PATH_ . 'files/document/';
 
-    $pathKey = 'edit';
-    if (preg_match('/^(origin_)+/', $template)) {
-      $pathKey = 'origin';
-      $template = str_replace('origin_', '',$template);
+    $pathKey = 'origin';
+    if (preg_match('/(_remote)+$/', $template)) {
+      $pathKey = 'remote';
+      $template = str_replace('_remote', '',$template);
     }
 
     $readFilePath = $readFileDir[$pathKey];
-
-    $templatePathList = array();
+    $msg = $readFilePath;
+    
     $templatePathList['contents_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
     $templatePathList['contents_css'] = $readFilePath . $template . '/' . $template . '.css'; 
     $templatePathList['contents_js'] = $readFilePath . $template . '/' . $template . '.js'; 

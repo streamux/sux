@@ -1,28 +1,87 @@
+/** 
+ * used class 'jsux.fn.listManager'
+ * path 'common/js/app/jsux_list_manager.js'
+ * author streamux.com
+ * update 2017.10.18
+ */
+
 jsux.fn = jsux.fn || {};
 jsux.fn.list = {
-    
+
+  limit: 10,
+  limitGroup: 5,
+  pagination: jsux.app.getPagination(),
+  listManager: jsux.app.getListManager(),
+  listMobileManager: jsux.app.getListManager(),
+
   setEvent: function() {
-    //popupManager.open();
+
+    //popupManager.open();    
     var self = this;
-    $(".popup > a").bind("click", function(e) {
+    $('.popup > a').bind('click', function(e) {
       var id = $(this).data('key');
       popupManager.open( id );
     });
   },
   setLayout: function() {
 
-    var self = this;
-    jsux.getJSON(jsux.rootPath + "popup-admin/list-json", function( e )  {
-    
-      var markup = "";
-      $("#popupList").empty();
+    var self = this,
+          url = $('input[name=list_json_path').val(),
+          changeHandler = null; 
 
-      if (e.result == "Y") {
-        markup = $("#popupList_tmpl");
-        $(markup).tmpl(e.data.list).appendTo("#popupList");       
+
+    this.listManager.initialize({
+      id: '#dataList',
+      tmpl: '#dataListTmpl',
+      msg_tmpl: '#warnMsgTmpl'
+    });
+    this.listMobileManager.initialize({
+      id: '#dataMobileList',    
+      tmpl: '#dataListMobileTmpl',
+      msg_tmpl: '#warnMsgMobileTmpl'
+    });
+
+    changeHandler = function( e ) {
+      self.listManager.reloadData( e.page, self.limit);
+      self.listMobileManager.reloadData( e.page, self.limit);
+    };
+    this.pagination.addEventListener('change', changeHandler);
+    this.pagination.initialize({
+      el: '.sx-pagination-group',
+      id: '#paginList',
+      tmpl: '#paginationTmpl',
+      control: {
+        'prev':'.sx-pagination-group .sx-nav-prev',
+        'next':'.sx-pagination-group .sx-nav-next'
+      }
+    });
+
+    jsux.getJSON(url, function( e )  {
+    
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {
+                
+        self.listManager.setData( data );
+        self.listMobileManager.setData( data );
+
+        // pagination start
+        self.pagination.setData({
+          total: data.total_num,
+          limit: self.limit,
+          limitGroup: self.limitGroup
+        });
+        
+        self.pagination.activateControl();
       } else {
-        markup = $("#popupWarnMsg_tmpl");
-        $(markup).tmpl( e ).appendTo("#popupList");
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+
+        // pagination start
+        self.pagination.deactivateControl();
       }
 
       self.setEvent();
@@ -34,23 +93,31 @@ jsux.fn.list = {
 };
 jsux.fn.add = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   getSelectVal: function( id ) {
 
-    var result = $.trim($("select[name="+id+"]").val());
+    var result = $.trim($('select[name='+id+']').val());
     return result;
   },
   setSelectVal:function( id, value ) {
 
-    $("select[name="+id+"]").val( value );
+    $('select[name='+id+']').val( value );
   },
   getTextAreaVal: function( id ) {
 
-    var result = $("textarea[name="+id+"]").val();
+    var result = $('textarea[name='+id+']').val();
     return result;
   },
   setTextAreaVal: function( id, value ) {
 
-    $("textarea[name="+id+"]").val( value );
+    $('textarea[name='+id+']').val( value );
   },
   checkLangKor: function( value ) {
 
@@ -63,7 +130,7 @@ jsux.fn.add = {
     var name = f.popup_name.value.length;
 
     if ( name < 1 ) {
-      trace("팝업이름을 입력하세요.");
+      trace('팝업이름을 입력하세요.');
       f.popup_name.focus();
       return (false);
     }
@@ -104,10 +171,11 @@ jsux.fn.add = {
     }
 
     jsux.getJSON( url, params, function( e ) {
-
-      trace( e.msg );
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
+     
+      if (e.result == 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+         trace( e.msg );
       }
     });
   },
@@ -115,19 +183,16 @@ jsux.fn.add = {
 
     var self = this;
 
-    $("form").on("submit", function( e ) {
-
-      var bool;
+    $('form').on('submit', function( e ) {
       e.preventDefault();
 
-      bool = self.chechFormVal( e.target );
-      if (bool === true) {
+      if (self.chechFormVal( e.target ) === true) {
         self.sendJson( e.target );
       }     
     });
 
-    $("input[name=cancel]").on("click", function() {
-      jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
+    $('#btnCancel').on('click', function() {
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
@@ -138,28 +203,44 @@ jsux.fn.add = {
 };
 jsux.fn.modify = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   getSelectVal: function( id ) {
 
-    var result = $.trim($("select[name="+id+"]").val());
+    var result = $.trim($('select[name='+id+']').val());
 
     return result;
   },
   setSelectVal:function( id, value ) {
 
-    $("select[name="+id+"]").val( value );
+    $('select[name='+id+']').val( value );
   },
   getTextAreaVal: function( id ) {
 
-    var result = $("textarea[name="+id+"]").val();
+    var result = $('textarea[name='+id+']').val();
 
     return result;
   },
   setTextAreaVal: function( id, value ) {
 
-    $("textarea[name="+id+"]").val( value );
+    $('textarea[name='+id+']').val( value );
   },
   chechFormVal: function( f ) {
     
+    var pname = f.popup_name;
+
+    if (!pname.value) {
+      trace('팝업 이름을 입력하세요.');
+      pname.focus();
+      return false;
+    }
+    return true;
   },
   sendJson: function( f ) {
 
@@ -196,10 +277,10 @@ jsux.fn.modify = {
 
     jsux.getJSON(url, params, function( e ) {
 
-      trace( e.msg );
-
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -207,68 +288,71 @@ jsux.fn.modify = {
 
     var self = this;
 
-    $("form").on("submit", function( e ) {
-
+    $('form').on('submit', function( e ) {
       e.preventDefault();
 
-      self.sendJson( e.target );      
+      if (self.chechFormVal(e.target)) {
+        self.sendJson( e.target );      
+      }
     });
 
-    $("input[name=cancel]").on("click", function() {
+    $('#btnCancel').on('click', function() {
 
-      jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
+      jsux.goURL(self.returnUrl());
     });
   },
   setLayout: function() {
 
     var self = this,
-      params = {
-        id: $("input[name=id]").val()
-      };
+          params = {
+            id: $('input[name=id]').val()
+          },
+          url = $('input[name=modify_info_path').val();
 
-    jsux.getJSON(jsux.rootPath + "popup-admin/modify-json", params, function( e ) {
+    if (!url) {
+      trace('input[name=modify_info_path 경로값을 입력하세요.');
+      return false;
+    }
+
+    jsux.getJSON(url, params, function( e ) {
 
       var formLists = null,
-        checkedVal = "",
+        checkedVal = '',
         markup = null,
         labelList = null,
         list = null;
 
-      if (e.result == "Y") {
+      if (e.result == 'Y') {
         list = e.data.list[0]; 
 
-        formLists = $("input[type=text]");
+        formLists = $('input[type=text]');
         $(formLists).each(function(index) {
           if (list[this.name]) {
             this.value = list[this.name];
+            //trace( this.name + ' = ' +  this.value , 1);         
           }
         });
 
-        formLists = $("select");
+        formLists = $('select');
         $(formLists).each(function(index) {
-
           if (list[this.name]) {
-            this.value = list[this.name];             
+            this.value = list[this.name];
+            //trace( this.name + ' = ' +  this.value , 1);         
           }           
         });
 
-        
-        labelList = $("table tr").find(".view-type-textfield");
-
-        markup = $("#popupLabel_tmpl");
+        markup = $('#popupLabel_tmpl');
+        labelList = $('table tr').find('.view-type-textfield');        
         $(labelList).each(function(index) {
 
-          var label = "",
-            data = "";
+          var label = $(labelList[index]).attr('id'),
+                data = {label: list[label]};
 
-          label = $(labelList[index]).attr("id");   
-          data = {label: list[label]};
-
-          $("#"+label).empty();
-          $(markup).tmpl( data ).appendTo("#"+label);
+          $('#'+label).empty();
+          $(markup).tmpl( data ).appendTo('#'+label);
         });
 
-        self.setTextAreaVal("contents", list.contents); 
+        self.setTextAreaVal('contents', list.contents); 
       } else {
         trace( e.msg );
       }
@@ -284,18 +368,31 @@ jsux.fn.modify = {
 };
 jsux.fn.delete = {
 
-  sendJSON: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function() {
 
-    var params = {
-      _method: 'delete',
-      id : $("input[name=id]").val(),
-      popup_name : $("input[name=popup_name]").val()
-    };
-    jsux.getJSON(jsux.rootPath + "popup-admin/delete", params, function( e )  {
+    var self = this,
+          params = {
+            _method: 'delete',
+            id : $('input[name=id]').val(),
+            popup_name : $('input[name=popup_name]').val()
+          },
+          $form = $('form'),
+          url = $form[0].action;
 
-      trace( e.msg );
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
+    jsux.getJSON(url, params, function( e )  {
+      
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -303,17 +400,15 @@ jsux.fn.delete = {
 
     var self = this;
 
-    $(".articles .del .box ul > li > a").on("click", function( e ) {
-
+    $('#btnConfirm').on('click', function( e ) {
       e.preventDefault();
-      var key = $(this).data("key");
+      self.sendJson();
+    });
 
-      if (key == "del") {
-        self.sendJSON();
-      } else if (key == "back") {
-        jsux.goURL(jsux.rootPath + menuList[3].menu[0].link);
-      }
-    });     
+    $('#cancelBtn').on('click', function( e ) {
+      e.preventDefault();
+      jsux.goURL(self.returnUrl());
+    });
   },
   init: function() {
     this.setEvent();

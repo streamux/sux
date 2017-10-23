@@ -126,9 +126,6 @@ jsux.gnb.Menu = jsux.View.create();
         if (url === '') {
           return;
         }
-
-        console.log(jsux.rootPath);
-
         jsux.goURL( jsux.rootPath + url, '_self' ); 
       });
 

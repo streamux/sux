@@ -42,13 +42,17 @@
     <h1 class="sx-logo">
       <a href="{$rootPath}"><img src="{$rootPath}common/images/sux_logo.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"></a>
     </h1>
-    <!-- gnb start -->
     <div class="sx-gnb-case">
       <div id="sxGnb" class="sx-gnb"></div>      
     </div>
-    <a href="{$rootPath}login" class="sx-gnb-login">
-      <i class="xi-user xi-2x" alt="로그인"></i>
-    </a>
-    <!-- end -->    
+    {if isset($sessionData.user_name) && $sessionData.user_name}
+      <a href="{$rootPath}logout?_method=insert" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
+        <i class="xi-user-o xi-2x"></i>
+      </a>
+    {else}
+      <a href="{$rootPath}login" class="sx-gnb-login" title="로그인" alt="로그인">
+        <i class="xi-user xi-2x"></i>
+      </a>
+    {/if}      
   </div>
   <div class="section sx-container"> 

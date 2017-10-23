@@ -14,7 +14,7 @@ class AnalyticsAdminView extends View
 
   function displayConnectSiteList() {
 
-    $context = Context::getInstance();
+    $context = Context::getInstance();    
 
     $this->document_data['jscode'] = 'connectSiteList';
     $this->document_data['module_code'] = 'analytics';
@@ -122,26 +122,37 @@ class AnalyticsAdminView extends View
 
     $dataObj = null;
     $dataList = array();
+    $totalNum = 0;
     $msg = '';
-    $resultYN = 'Y';   
+    $resultYN = 'Y';  
 
     $context = Context::getInstance();
     $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
+
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
 
     if (isset($id) && $id) {
       $where = new QueryWhere();
       $where->set('id', $id);
-      $result = $this->model->select('connect_site', '*', $where, 'id desc');//Orderby', 'id desc');
+      $result = $this->model->select('connect_site', '*', $where);
     } else {
-      $result = $this->model->select('connect_site', '*', null, 'id desc');//Orderby', 'id desc');
-    }
-    
+      $this->model->select('connect_site', 'id');
+      $totalNum = $this->model->getNumRows();
+      $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
+    }    
     if ($result){
 
       $numrows = $this->model->getNumRows();
       if ($numrows > 0){
-        $a = $numrows;
 
+        $a = $totalNum - $passover;
         $rows = $this->model->getRows();
         for($i=0; $i<count($rows); $i++) {
 
@@ -155,7 +166,10 @@ class AnalyticsAdminView extends View
           $a--;
         }
 
-        $dataObj = array("list"=>$dataList);
+        $dataObj = array(
+          "list"=>$dataList,
+          'total_num'=>$totalNum
+          );
       } else {
         $msg .= "등록된 접속키워드가 존재하지 않습니다.";
         $resultYN = "N";
@@ -164,6 +178,7 @@ class AnalyticsAdminView extends View
       $msg .= "DB 접속을 실패하였습니다.";
       $resultYN = "N";
     }
+
     //$msg .= Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
@@ -287,20 +302,31 @@ class AnalyticsAdminView extends View
 
     $context = Context::getInstance();
     $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
+
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
+
     if (isset($id) && $id) {
       $where = new QueryWhere();
       $where->set('id', $id);
-      $result = $this->model->select('pageview', '*', $where, 'id asc');
+      $result = $this->model->select('pageview', '*', $where);
     } else {
-      $result = $this->model->select('pageview', '*', null, 'id asc');
+      $this->model->select('pageview', 'id');
+      $totalNum = $this->model->getNumRows();
+      $result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
     }
 
     if ($result){
-
       $numrows = $this->model->getNumRows();
       if ($numrows > 0){
-        $a = $numrows;
 
+         $a = $totalNum - $passover;
         $rows = $this->model->getRows();
         for($i=0; $i<count($rows); $i++) {
 
@@ -314,7 +340,10 @@ class AnalyticsAdminView extends View
           $a--;
         }
 
-        $dataObj['list'] = $dataList;
+        $dataObj = array(
+          "list"=>$dataList,
+          'total_num'=>$totalNum
+        );
       } else {
         $msg = "등록된 페이지뷰가 존재하지 않습니다.";
         $resultYN = "N";

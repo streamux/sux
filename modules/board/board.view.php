@@ -156,7 +156,9 @@ class BoardView extends View
             } 
           }
 
-          $this->model->select('comment', 'content_id');
+          $where->reset();
+          $where->set('contents_id', $id, '=');
+          $this->model->select('comment', 'id', $where);
           $commentNums = $this->model->getNumRows();
           if ($commentNums > 0) {
             $subject['css_comment'] = 'sx-show';

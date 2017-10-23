@@ -1,3 +1,8 @@
+/**
+ * class jsux
+ * ver 1.0.0
+ * author streamux.com
+ */
 window.jsuxApp = window.jsuxApp || {};
 
 (function(app, exports){  

@@ -16,8 +16,7 @@
   padding-bottom: 25px;
 }
 .sx_member .form_label_width {
-  padding-right: 25px;
-  width: 150px;
+  padding-right: 15px;
 }
 .sx_member .submit_top_margin {
   padding-top:15px;
@@ -27,4 +26,10 @@
 }
 .sx_member .panel_newpassword {
   display:none;
+}
+
+@media (min-width: 768px) {
+  .sx_member .form_label_width {
+    width:150px;
+  }
 }

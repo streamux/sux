@@ -1,218 +1,178 @@
-/* articles */
-.articles{
-	padding:35px 7px 20px 7px;
-	background-color:#fcfcfc;
-}
-.articles .tt{
-	text-align: left;
-}
-.articles .tt .imgbox{
-	display:inline-block;
-	padding:4px 24px 0 24px;
-	height:24px;
-	background:url('../images/tt_box4_01.gif') 0 0 no-repeat,url('../images/tt_box4_03.gif') 100% 0 no-repeat,url('../images/tt_box4_02.gif') 0 0 repeat-x;
-	text-align:center;
-}
-.articles .tt .imgbox h1{
-	font-size: 1.1875em;
-	font-weight:bold;
-}
-
 /* list */
-.articles .list .box{
-	clear:both;
-	margin-bottom:20px;
-	padding-bottom:3px;
-	width:100%;
-	border:2px solid #d6d7d6;
-	background-color:#FFFFFF;
+.list_pc_panel{
+  display: none;
 }
-.articles .list .box ul{
-	overflow:hidden;
-	margin-top:30px;
-	margin-bottom:10px;
-	width:100%;
+.sx-contents .sx-box-content .table > tbody > tr > td{  
+  padding:8px 5px;
 }
-.articles .list .box ul li{
-	padding-left:5px;
-	text-align: left;
+.sx-contents .sx-box-content .table{
+  width:100%;
 }
-.articles .list .box table{
-	width: 100%;
+.sx-contents .sx-box-content .table > thead > tr > th{
+  padding: 8px 5px;
+  background-color: #e3e3e3;
+  text-align: center;
 }
-.articles .list .box table thead{
-	border:2px solid #FFFFFF;
-	border-top: 1px solid #d6d7d6;
-	border-bottom: 1px solid #d6d7d6;
-	background-color:#f6f6f6;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_no{
+  width:55px;
 }
-.articles .list .box table thead tr th{
-	height: 29px;
-	line-height: 29px;
-	background:url('../images/verti_line.gif') 100% 50% no-repeat;
-	text-align: center;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_name{
+  width: 150px;
 }
-.articles .list .box table thead tr th:last-child{
-	background:none;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_date{
+  width: 100px;
 }
-.articles .list .box tbody{
-	text-align: center;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_contents{
+  width: 200px;
 }
-.articles .list .box table tbody tr{
-	border-bottom: 1px dotted #d6d7d6;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_modify_btn{
+  width: 40px;
 }
-.articles .list .box table tbody tr:last-child{
-	border-bottom: none;
+.sx-contents .sx-box-content .table > thead > tr > th.sx_delete_btn{
+  width: 40px;
 }
-.articles .list .box table tbody tr td{
-	overflow:hidden;
-	padding-left:5px;
-	height: 27px;
-	line-height: 26px;
-	text-align:center;
+.sx-contents .sx-box-content .table > tbody > tr > td{
+  padding: 12px 5px;
+  text-align: center;
+  border-bottom: 1px dashed #e3e3e3;
 }
-.articles .list .box table tbody tr td:nth-child(2){
-	text-align:left;
+.sx-contents .sx-box-content .table > tbody > tr > td.sx_summary{
+  padding-left: 10px;
+  text-align: left;
 }
-.articles .list .box table tbody tr td img{
-	display:block;
-	margin:0 auto;
+.sx-contents .sx-box-content .table > tbody > tr > td .sx-btn-info,
+.sx-contents .sx-box-content .table > tbody > tr > td .sx-btn-warning{
+  padding:4px 7px;
+  font-size:0.875em;
 }
-.articles .list .box table tbody tr td img{
-	display:block;
-	margin:0 auto;
+.sx-contents .sx-box-content .table > tbody > tr:hover{
+  background-color: #f9f9f9;
 }
 
-
-/* add, edit */
-.articles .add .tt{
-	position: relative;
+/* add, modify */
+.btn_check{
+  width:100%;
 }
-.articles .add .tt .imgbox .g-imgbox-left{
-	float:left;
-	width:24px;
-	height:24px;
-	background:url('../images/tt_box2_01.gif') 0 0 no-repeat;
+.text_notice {
+  padding-top: 5px;
+  padding-bottom: 25px;
 }
-.articles .add .tt .imgbox .g-imgbox-center{
-	float:left;
-	padding-top:4px;
-	height:24px;
-	background:url('../images/tt_box2_02.gif') 0 0 repeat-x;
+.text_caption{
+  margin-top: 10px;
 }
-.articles .add .tt .imgbox .g-imgbox-right{
-	float:left;
-	width:24px;
-	height:24px;
-	background:url('../images/tt_box2_03.gif') 0 0 no-repeat;
+.sx-contents .sx-box-content .contents_panel textarea.sx-form-control{
+  width:100%;
 }
 
-.articles .add .box{
-	clear:both;
-	margin-bottom:20px;
-	padding-bottom:20px;
-	width:100%;
-	border:2px solid #d6d7d6;
-	background-color:#FFFFFF;
-	text-align: center;
+/* list mobile */
+.list_mobile_panel > li {
+  position: relative;
+  border-bottom: 1px dashed #e3e3e3;
 }
-.articles .add .box dl{
-	overflow:hidden;
-	margin-top:25px;
-	margin-bottom:10px;
-	width:100%;
-	text-align: left;
+.list_mobile_panel > li > a{
+  display: inline-block;
+  padding:10px 110px 10px 0;
+  text-decoration: none;
 }
-.articles .add .box dl dt{
-	padding-left:5px;
-	height: 20;
-	font-weight: bold;
+.list_mobile_panel > li > a:hover{
+  color: #9e9e9e;
 }
-.articles .add .box dl dd{
-	padding-left:5px;
-	height: 20px;
-
+.list_mobile_panel > li > a > span{
+  display: block;
+  margin-right: 5px;
 }
-.articles .add .box table{
-	margin-bottom:20px;
-	width:100%;
-	text-align:left;
+.list_mobile_panel > li > a > .title{
+  font-weight: bold;
+  font-size: 1.250em;
 }
-.articles .add .box table tr td{
-	height: 34px;
+.list_mobile_panel > li > a > .sx_summary{
+  margin-top: 3px;
+  font-size: 1em;
 }
-.articles .add .box table tr td:nth-child(1){
-	padding-left:38px;
-	width:130px;
+.list_mobile_panel > li > a > .sx_contents,
+.list_mobile_panel > li > a > .sx_date{
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 0.9375em;
 }
-.articles .add .box table tr td:nth-child(2){
-	padding-right:20px;
+.list_mobile_panel > li > a > .sx_contents > i,
+.list_mobile_panel > li > a > .sx_date > i{
+  position: relative;
+  top:2px;
+  margin-right: 5px;
+  font-size: 1.125em;
 }
-.articles .add .box table tr td:nth-child(2) span{
-	display:inline-block;
+.list_mobile_panel > li > .sx-btn-group{
+  position: absolute;
+  top:42px;
+  right: 0;
 }
-.articles .add .box table tr td input[name=header_path]{
-	width:100%;
+.list_mobile_panel > li > .sx-btn-group > a{  
+  padding: 8px 10px;
 }
-.articles .add .box table tr td input[name=contents_path]{
-	width:100%;
+.list_mobile_panel > li > .sx-btn-group > a.sx-btn-warning{
+  margin-left: 3px;
 }
-.articles .add .box table tr td input[name=footer_path]{
-	width:100%;
-}
-.articles .add .box table tr td textarea{	
-	width:100%;
-}
-.articles .add .box table tr td .contents_panel{
-	margin-top: 15px;
-	margin-bottom: 10px;
- }
 
 /* del */
-.articles .del .tt{
-	position: relative;
+.sx-contents .sx-box-content .title_group{
+  position: relative;  
 }
-.articles .del .tt .imgbox .g-imgbox-left{
-	float:left;
-	width:24px;
-	height:24px;
-	background:url('../images/tt_box2_01.gif') 0 0 no-repeat;
+.sx-contents .sx-box-content .title_group img{
+  position: absolute;
+  top:7px;
+  vertical-align: top;
 }
-.articles .del .tt .imgbox .g-imgbox-center{
-	float:left;
-	padding-top:4px;
-	height:24px;
-	background:url('../images/tt_box2_02.gif') 0 0 repeat-x;
-}
-.articles .del .tt .imgbox .g-imgbox-right{
-	float:left;
-	width:24px;
-	height:24px;
-	background:url('../images/tt_box2_03.gif') 0 0 no-repeat;
+.sx-contents .sx-box-content .title_group span{
+  display: block;
+  margin-left: 34px;
+  line-height: 28px;
 }
 
-.articles .del .box{
-	clear:both;
-	margin-bottom:20px;
-	padding-top:30px;
-	padding-bottom:30px;
-	width:100%;
-	border:2px solid #d6d7d6;
-	text-align: left;
-}
-.articles .del .box ul li{
-	height: 24px;
-}
-.articles .del .box ul li .icon{
-	margin-left: 20px;
-}
-.articles .del .box ul li .title1{
-	color:#FF0000;
-}
-.articles .del .box ul li .title2{
-	margin-left: 20px;
-}
-.articles .del .box ul li a span{
-	font-weight: bold;
+/* common */
+.sx-contents .sx-box-content .btn_group{
+  padding-top: 25px;
+  padding-bottom: 35px;
 }
 
+@media (min-width: 768px) {
+
+  .sx-contents{
+    position: relative;
+  }
+  .list_pc_panel{
+    display: block;
+  }
+  .list_mobile_panel{
+    display: none;
+  }
+
+  /* add, modify */
+  .label_width{
+    padding-right: 10px;
+    text-align: right;
+    width:170px;
+  }
+  .btn_check{
+    width:auto;
+  }
+  .sx-form-inline .sx-form-group{
+    width: 75%;
+  }
+  .sx-form-inline .sx-form-group .contents_panel {
+    margin-top:5px;
+  }
+  .text_caption{
+    margin-top: 10px;
+    margin-left:170px;
+  }
+
+  /* del */
+  .sx-contents .sx-box-content .title_group img{
+    position: relative;
+  }
+  .sx-contents .sx-box-content .title_group .title1{
+    display: inline-block;
+    margin-left: 0;
+  }
+}

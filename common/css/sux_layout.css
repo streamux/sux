@@ -15,8 +15,9 @@
   width:100%;  
   border-bottom: 1px solid #e3e3e3;
   background-color:#ffffff;
-  -webkit-box-shadow:0 1px 3px rgba(22,4,3,0.1);
-               box-shadow:0 1px 3px rgba(22,4,3,0.1);
+  -webkit-box-shadow:0 1px 2px rgba(22,4,3,0.07);
+          -o-box-shadow:0 1px 2px rgba(22,4,3,0.07);
+               box-shadow:0 1px 2px rgba(22,4,3,0.07);
 }
 .sx-header-off{
   height:0;
@@ -63,7 +64,6 @@
 .sx-footer ul li {
   float: left;
   width:33%;
-  line-height:30px;
   border:1px solid #333333;
   border-left:none;
 }
@@ -73,6 +73,7 @@
 }
 .sx-footer ul li a {
   display:inline-block;
+  padding:15px 0;  
   width:100%;
   height:100%;
   text-decoration:none;
@@ -98,7 +99,7 @@
   text-align: center;
 }
 .sx-logo img {
-  width:48px;
+  width:50px;
   height:24px;
 }
 .sx-user-picture{

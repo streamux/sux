@@ -106,7 +106,15 @@ class PopupAdminController extends Controller
     $posts = $context->getPostAll();
 
     $id = $posts['id'];
-    $skinName = $posts['skin'];   
+    $skinName = $posts['skin'];
+    $popupName = $posts['popup_name'];
+
+   if (empty($popupName)) {
+    $resultYN = "N";
+    $msg .= "Popup Name Do Not Exists<br>";
+    UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+    exit;
+    }
 
     $skinImagePath = "skin/{$skinName}/images/bg.jpg";
     $imageInfo = getimagesize($skinImagePath);

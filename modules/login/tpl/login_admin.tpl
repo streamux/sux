@@ -13,7 +13,7 @@
         <div class="sx-form-group">
           <i class="xi-lock-o xi-2x"></i>
           <label for="userPassword" class="sx-control-label">비밀번호</label>
-          <input type="password" name="password" id="userPassword" maxlength="22" class="sx-form-control">
+          <input type="password" name="user_pwd" id="userPassword" maxlength="22" class="sx-form-control">
         </div>
         <!-- 
           @ class 'panel-fail'

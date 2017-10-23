@@ -124,12 +124,24 @@ class PopupAdminView extends View
 
     $context = Context::getInstance();
     $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
+
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
+
     if (isset($id) && $id) {
       $where = new QueryWhere();
       $where->set('id', $id);
-      $result = $this->model->select('popup', '*', $where, 'id desc');
+      $result = $this->model->select('popup', '*', $where);
     } else {
-      $result = $this->model->select('popup', '*', null, 'id desc');
+      $this->model->select('popup', 'id');
+      $totalNum = $this->model->getNumRows();
+      $result = $this->model->select('popup', '*', null, 'id desc', $passover, $limit);
     }
 
     if ($result){
@@ -137,6 +149,7 @@ class PopupAdminView extends View
       if ($numrow > 0) {
 
         $dataObj['list'] = array();
+        $dataObj['total_num'] = $totalNum;
 
         $rows = $this->model->getRows();
         for ($i=0; $i<$numrow; $i++) {
@@ -149,13 +162,12 @@ class PopupAdminView extends View
               $timeList[$key] = UtilsString::digit($value);
             } else {
               $dataList[$key] = $value;
-            }
-            
+            }            
           }
           $dataList['date'] = $timeList['time_year'] . '-' . $timeList['time_month'] . '-' . $timeList['time_day'];
           $dataList['time'] = $timeList['time_hours'] . ':' . $timeList['time_minutes'] . ':' . $timeList['time_seconds'];
           $dataObj['list'][] = $dataList;
-        }       
+        }
       } else {
         $msg .= "등록된 팝업이 없습니다.";
         $resultYN = "N";

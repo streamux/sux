@@ -1,241 +1,215 @@
-<div class="articles ui-edgebox">
-  <div class="add">
-    <div class="tt">
-      <div class="imgbox">
-        <h1>게시판 옵션수정</h1>
-      </div>
+    <div class="sx-contents sx-admin-main">
+      <section class="sx-board-panel">
+        <h1 class="title">게시판 수정</h1>
+        <div class="sx-box-content">                    
+          <form action="{$rootPath}board-admin/modify" class="sx-form-horizontal">
+            <input type="hidden" name="_method" value="update">
+            <input type="hidden" name="category" value="{$documentData.category}">
+            <input type="hidden" name="id" value="{$documentData.id}">
+            <input type="hidden" name="modify_info_path" value="{$rootPath}board-admin/modify-json">
+            <input type="hidden" name="skin_path" value="{$rootPath}board-admin/skin-json">
+            <input type="hidden" name="location_back" value="{$rootPath}board-admin">
+
+            <p class="text_notice">
+              <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>
+            </p>
+            <div class="sx-form-group">
+              <label for="category" class="sx-control-label label_width">* 카테고리(영문)</label>
+              <span class="sx-form-control" disabled="false">{$documentData.category}</span>
+            </div>
+            <div class="sx-form-group">
+              <label for="groupName" class="sx-control-label label_width">* 게시판 이름</label>     
+              <input type="text" id="groupName" name="board_name" size="20" maxlength="120" class="sx-form-control">
+            </div>
+            <div class="sx-form-group">
+              <label for="summary" class="sx-control-label label_width">요약 설명</label>
+              <input type="text" id="summary" name="summary" size="25" maxlength="50" class="sx-form-control">
+            </div>
+            <div class="sx-form-group">
+              <label for="boardWidth" class="sx-control-label label_width">넓이</label>
+              <input type="text" id="boardWidth" name="board_width" size="10" maxlength="12"class="sx-form-control">
+            </div>
+            <div class="sx-form-group">
+              <label for="headerPath" class="sx-control-label label_width">상단 파일</label>  
+              <input type="text" id="headerPath" name="header_path" size="25" maxlength="120" class="sx-form-control">
+            </div>
+            <div class="sx-form-group">
+              <label for="skinList" class="sx-control-label label_width">스킨</label>
+              <select id="skinList" name="skin_path" class="sx-form-control">
+                {foreach from=$documentData.skin_list item=$item}
+                  <option>{$item.file_name}</option>
+                {/foreach}
+              </select>
+            </div>
+            <div class="sx-form-group">
+              <label for="footerPath" class="sx-control-label label_width">하단 파일</label>
+              <input type="text" id="footerPath" name="footer_path"  size="25" maxlength="50" class="sx-form-control">
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">사용 가능</label>
+              <div class="sx-form-group">
+                <label for="isReadable" class="sx-control-label">읽기</label>
+                <select id="isReadable" name="is_readable" class="sx-form-control">
+                  <option value="y">yes</option>
+                  <option value="n">no</option>
+                </select>
+                <label for="isWritable" class="sx-control-label">쓰기</label>
+                <select id="isWritable" name="is_writable" class="sx-form-control">
+                  <option value="y">yes</option>
+                  <option value="n">no</option>
+                </select>
+                <label for="isModifiable" class="sx-control-label">수정</label>
+                <select id="isModifiable" name="is_modifiable" class="sx-form-control">
+                  <option value="y">yes</option>
+                  <option value="n">no</option>
+                </select>
+                <label for="isRepliable" class="sx-control-label">답글</label>
+                <select id="isRepliable" name="is_repliable" class="sx-form-control">
+                  <option value="y">yes</option>
+                  <option value="n">no</option>
+                </select>
+              </div>
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">허용 레벨</label>
+              <div class="sx-form-group">
+                <label for="gradeRead" class="sx-control-label">읽기</label>
+                <select id="gradeRead" name="grade_r" class="sx-form-control">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+                <label for="gradeWrite" class="sx-control-label">쓰기</label>
+                <select id="gradeWrite" name="grade_w" class="sx-form-control">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+                <label for="gradeModify" class="sx-control-label">수정</label>
+                <select id="gradeModify" name="grade_m" class="sx-form-control">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+                <label for="gradeReply" class="sx-control-label">답글</label>
+                <select id="gradeReply" name="grade_re" class="sx-form-control">
+                  <option value="0">0</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                </select>
+              </div>
+            </div>
+            <div class="sx-form-group">
+              <label for="allowNonmember" class="sx-control-label label_width">비회원 권한</label>
+              <select id="allowNonmember" name="allow_nonmember" class="sx-form-control">
+                <option value="y">사용 가능</option>
+                <option value="n">사용 불가능</option>
+              </select>
+            </div>
+            <div class="sx-form-group">
+              <label for="limitPagination" class="sx-control-lable label_width">목록 글 출력 수</label>
+              <input type="text" id="limitPagination" name="limit_pagination" value="10" size="3" maxlength="2" class="sx-form-control">
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">옵션 출력 설정</label>
+              <div class="sx-form-group">
+                <label for="isComment" class="sx-control-label">꼬리글</label>
+                <select id="isComment" name="is_comment" class="sx-form-control">
+                <option value="y" selected>yes</option>                
+                  <option value="n">no</option>                  
+                </select>
+                <label for="isDownload" class="sx-control-label">다운로드</label>
+                <select id="isDownload" name="is_download" class="sx-form-control">                  
+                  <option value="y">yes</option>
+                  <option value="n">no</option>             
+                </select>
+                <label for="isProgressStep" class="sx-control-label">진행상황</label>
+                <select id="isProgressStep" name="is_progress_step" class="sx-form-control">                  
+                  <option value="y">yes</option>
+                  <option value="n">no</option>           
+                </select>
+              </div>
+            </div>
+            <div class="sx-form-inline">
+              <label for="" class="sx-control-label label_width">취미</label>
+              <div class="sx-input-group">
+                <input type="checkbox" id="hoby1" name="hobby" value="인터넷"><label for="hoby1" class="sx-control-label">인터넷</label>
+                <input type="checkbox" id="hoby2" name="hobby" value="독서"><label for="hoby2" class="sx-control-label sx-control-label">독서</label>
+                <input type="checkbox" id="hoby3" name="hobby" value="여행"><label for="hoby3" class="sx-control-label">여행</label>
+                <input type="checkbox" id="hoby4" name="hobby" value="낚시"><label for="hoby4" class="sx-control-label">낚시</label>
+                <input type="checkbox" id="hoby5" name="hobby" value="바둑"><label for="hoby5" class="sx-control-label">바둑</label>
+                <input type="checkbox" id="hoby6" name="hobby" value="기타"><label for="hoby6" class="sx-control-label">기타</label>
+              </div>                   
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">최근 게시물</label>              
+              <div class="sx-input-group">
+                <input type="radio" id="isLatestYes" name="is_latest" value="y">
+                <label for="isLatestYes" class="sx-control-label">출력</label>
+                <input type="radio" id="isLatestNo" name="is_latest" value="n">
+                <label for="isLatestNo" class="sx-control-label">출력안함</label>
+              </div>
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">게시판 형식</label>          
+              <div class="sx-input-group">
+                <input type="radio" id="boardTypeHtml" name="board_type" value="html">
+                <label for="boardTypeHtml" class="sx-control-label">HTML</label>
+                <input type="radio" id="boardTypeTextl" name="board_type" value="text">
+                <label for="boardTypeTextl" class="sx-control-label">TEXT</label>
+                <input type="radio" id="boardTypeAll" name="board_type" value="all">
+                <label for="boardTypeAll" class="sx-control-label">HTML + TEXT</label>
+              </div>
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">불량 단어 범위</label>
+              <div class="sx-input-group">
+                <input type="radio" id="limitChoiceTitle" name="limit_choice" value="title">
+                <label for="limitChoiceTitle" class="sx-control-label">제목</label>
+                <input type="radio" id="limitChoiceComment" name="limit_choice" value="comment">
+                <label for="limitChoiceComment" class="sx-control-label">내용</label>
+                <input type="radio" id="limitChoiceAll" name="limit_choice" value="all">
+                <label for="limitChoiceAll" class="sx-control-label">제목+내용</label>
+              </div>
+            </div>
+            <div class="sx-form-inline">
+              <label for="limitWord" class="sx-control-label label_width">불량 단어</label>
+              <textarea id="limitWord" name="limit_word" cols="25" rows="6" class="sx-form-control">광고, 대출</textarea>
+              <p class="text_caption">※ 단어 구분은 반드시 콤마(,)로 해주세요.</p>         
+            </div>
+            <div class="row btn_group text-center">
+              <input type="submit" id="btnConfirm" class="sx-btn" value="확인">
+              <a href="#" id="btnCancel" class="sx-btn">취소</a>
+            </div>        
+          </form>
+        </div>
+      </section>
     </div>
-    <div class="box">
-      <form action="{$rootPath}board-admin/modify" name="f_board_admin_modify" method="post">
-      <input type="hidden" name="_method" value="update">
-      <dl>
-        <dt>세부옵션 설정</dt>
-        <dd>
-          <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-          <span class="text-notice">발강색(별표)으로 표신된 부분은 반드시 입력해주세요.</span>
-        </dd>
-      </dl>
-      <table summary="게시판 정보를 입력해 생성해주세요.">
-        <caption class="blind">게시판 정보 입력</caption>
-        <tbody>
-          <tr>
-            <td>
-              카테고리 이름
-              <input type="hidden" name="category" value="{$documentData.category}">
-              <input type="hidden" name="id" value="{$documentData.id}">      
-            </td>
-            <td>
-              {$documentData.category}
-            </td>
-          </tr>
-          <tr>
-            <td><label for="board_name">*게시판 이름</label></td>
-            <td>
-              <input type="text" id="board_name" name="board_name" size="20" maxlength="20" value="">
-            </td>
-          </tr>
-          <tr>
-            <td><label for="summary">게시판 설명</label></td>
-            <td>
-              <input type="text" id="summary" name="summary" size="25" maxlength="50" value="">
-            </td>
-          </tr>
-          <tr>
-            <td><label for="board_width">게시판 넓이</label></td>
-            <td>
-              <input type="text" id="board_width" name="board_width" size="10" maxlength="12" value="100%">
-            </td>
-          </tr>
-          <tr>
-            <td><label for="hearder_path">상단 경로</label></td>
-            <td>
-              <input type="text" id="hearder_path" name="header_path" size="25" maxlength="50" value="">
-            </td>
-          </tr>
-          <tr>
-            <td>스킨</td>
-            <td>
-              <select id="skinList" name="skin_path">
-              {foreach from=$documentData.skin_list item=$item}
-                <option>{$item.file_name}</option>
-              {/foreach}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td><label for="footer_path">하단 경로</label></td>
-            <td>
-              <input type="text" id="footer_path" name="footer_path" size="25" maxlength="50" value="">
-            </td>
-          </tr>
-          <tr>
-            <td>사용가능</td>
-            <td>
-              <span>읽기</span>
-              <select name="is_readable">
-                <option value="y">yes</option>
-                <option value="n">no</option>
-              </select>
-              <span>쓰기</span>
-              <select name="is_writable">
-                <option value="y">yes</option>
-                <option value="n">no</option>
-              </select>             
-              <span>수정</span>
-              <select name="is_modifiable">
-                <option value="y">yes</option>
-                <option value="n">no</option>
-              </select>
-              <span>답변</span>
-              <select name="is_repliable">
-                <option value="y">yes</option>
-                <option value="n">no</option>
-              </select>
-              <span>가능:y 제한:n</span>
-            </td>
-          </tr>
-          <tr>
-            <td>허용레벨</td>
-            <td>
-              <span>읽기</span>
-              <select name="grade_r">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-              </select>
-              <span>쓰기</span>
-              <select name="grade_w">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-              </select>             
-              <span>수정</span>
-              <select name="grade_m">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-              </select>
-              <span>답변</span>
-              <select name="grade_re">
-                <option>0</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>비회원 권한</td>
-            <td>
-              <select name="allow_nonmember">
-                <option value="y">yes</option>
-                <option value="n">no</option>
-              </select>
-              <span>가능 : yes / 제한 : no</span>
-            </td>
-          </tr>       
-          <tr>
-            <td>글목록 수</td>
-            <td>
-              <input type="text" name="limit_pagination" value="" size="3" maxlength="2">
-              <span>※ 게시판 리스트에 출력할 글목록 수를 설정해주세요.</span>
-            </td>
-          </tr>
-          <tr>
-            <td>기타옵션 출력</td>
-            <td>
-              <span>꼬리글</span>
-              <select name="is_comment">
-                <option value="n">no</option>
-                <option value="y">yes</option>                
-              </select>
-              <span>다운로드</span>
-              <select name="is_download">
-                <option value="n">no</option>
-                <option value="y">yes</option>                
-              </select>
-              <span>진행상황</span>
-              <select name="is_progress_step">
-                <option value="n">no</option>
-                <option value="y">yes</option>                
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>최근게시물</td>
-            <td>
-              <input type="radio" id="is_latest_y" name="is_latest" value="y">
-              <span><label for="is_latest_y">출력</label></span>
-              <input type="radio" id="is_latest_n" name="is_latest" value="n">
-              <span><label for="is_latest_n">출력안함</label></span>
-            </td>
-          </tr>
-          <tr>
-            <td>게시판형식</td>
-            <td>
-              <input type="radio" id="board_type_html" name="board_type" value="html">
-              <span><label for="board_type_html">HTML</label></span>
-              <input type="radio" id="board_type_text" name="board_type" value="text">
-              <span><label for="board_type_text">TEXT</label></span>
-              <input type="radio" id="board_type_all" name="board_type" value="all">
-              <span><label for="board_type_all">HTML + TEXT</label></span>
-            </td>
-          </tr>
-          <tr>
-            <td>불량단어 범위</td>
-            <td>                  
-              <input type="radio" id="board_type_title" name="limit_choice" value="title">
-              <span><label for="board_type_title">제목</label></span>                 
-              <input type="radio" id="board_type_comment" name="limit_choice" value="comment">
-              <span><label for="board_type_comment">내용</label></span>                 
-              <input type="radio" id="board_type_all" name="limit_choice" value="all">
-              <span><label for="board_type_all">제목+내용</label></span>
-            </td>
-          </tr>
-          <tr>
-            <td>불량단어</td>
-            <td>
-              <textarea name="limit_word" cols="25" rows="6">광고, 대출</textarea>
-              <span>※ 단어 구분은 반드시 콤마(,)로 해주세요.</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <input type="submit" name="submit" size="10" value="수 정">
-      <input type="button" name="cancel" value="취 소">
-      </form>
-    </div>
-  </div>
-</div>

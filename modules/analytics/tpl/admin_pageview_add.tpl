@@ -1,27 +1,26 @@
-<div class="articles ui-edgebox">
-  <div class="add">
-    <div class="tt">
-      <div class="imgbox">
-        <h1>페이지뷰 추가</h1>
-      </div>
-    </div>
-    <div class="box">
-      <form action="{$rootPath}analytics-admin/pageview-add" name="f_pageview_add" method="post">
-      <ul>
-        <li>
-          <img src="{$rootPath}modules/admin/tpl/images/icon_refer.gif" width="30" height="13" align="absmiddle" alt="참고아이콘" class="icon-notice">
-        </li>
-        <li>
-          <span>페이지뷰를 생성하면 각 메뉴별 클릭 조회수를 알 수 있습니다.<span>
-          <span>예제) http://www.사이트주소.com/gateway.php/페이지명.php?keyword=페이지뷰 키워드<span>
 
-          <span class="text-keyword">페이지뷰키워드</span>
-          <input type="text" name="keyword" size="16" maxlength="16">
-        </li>
-      </ul>
-      <input type="submit" name="submit" size="10" value="확 인">
-      <input type="button" name="cancel" value="취 소">
-      </form>
+    <div class="sx-contents sx-admin-main">
+      <section class="sx-analytics-panel">
+        <h1 class="title">페이지뷰 키워드 추가</h1>
+        <div class="sx-box-content">
+          <form action="{$rootPath}analytics-admin/pageview-add" class="sx-form-horizontal">
+            <input type="hidden" name="_method" value="insert">
+            <input type="hidden" name="location_back" value="{$rootPath}analytics-admin/pageview">
+
+            <div class="row title_group">
+              <img src="{$rootPath}modules/admin/tpl/images/icon_refer.gif" width="30" height="13" alt="참고" class="icon"> <span class="title1">페이지뷰 키워드를 생성하면 외부 링크를 통해 사용자 접속경로를 알 수 있습니다.</span><span class="title2">예제) http://your-site/sux/pageview?keyword=접속키워드</span>    
+            </div>            
+            <div class="sx-form-group">
+              <label for="keyword" class="sx-control-label label_width">페이지뷰 키워드</label>
+              <input type="text" name="keyword" id="keyword" size="16" maxlength="16" class="sx-form-control">
+            </div>
+            <div class="row btn_group text-center">
+              <input type="submit" id="btnConfirm" value="확인" class="sx-btn sx-btn-info">
+              <a href="#" id="btnCancel" class="sx-btn sx-btn-warning">취소</a>
+            </div>        
+          </form>
+        </div>
+      </section>
     </div>
-  </div>
-</div>
+
+

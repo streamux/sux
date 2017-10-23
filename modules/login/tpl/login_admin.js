@@ -4,7 +4,7 @@ jsux.fn.loginAdmin = {
   checkForm: function( f ) {
 
     var id = f.user_id,
-      pwd = f.password;
+      pwd = f.user_pwd;
 
     if ( id.value.length < 1) {
       trace("아이디를 입력하세요.");

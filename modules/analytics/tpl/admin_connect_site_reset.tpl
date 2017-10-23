@@ -1,24 +1,21 @@
-<div class="articles ui-edgebox">
-  <div class="del">
-    <div class="tt">
-      <div class="imgbox">
-        <h1>접속키워드 초기화 확인</h1> 
-      </div>
+    <div class="sx-contents sx-admin-main">
+      <section class="sx-analytics-panel">
+        <h1 class="title">접속 키워드 초기화</h1>
+        <div class="sx-box-content">
+          <form action="{$rootPath}analytics-admin/connect-site-reset">
+            <input type="hidden" name="_method" value="update">
+            <input type="hidden" name="id" value="{$documentData.id}">
+            <input type="hidden" name="keyword" value="{$documentData.name}">  
+            <input type="hidden" name="location_back" value="{$rootPath}analytics-admin/connect-site">
+
+            <div class="row title_group">
+              <img src="{$rootPath}modules/admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon"> <span class="title1">{$documentData.name} 접속 키워드를 정말로 초기화 하시겠습니까?</span><span class="title2">다시한번 잘 확인해 주세요.</span>    
+            </div>
+            <div class="row btn_group text-center">
+              <input type="submit" id="btnConfirm" value="확인" class="sx-btn sx-btn-info">
+              <a href="#" id="btnCancel" class="sx-btn sx-btn-warning">취소</a>
+            </div>        
+          </form>
+        </div>
+      </section>
     </div>
-    <div class="box">
-      <ul>
-        <li>
-          <img src="{$rootPath}modules/admin/tpl/images/icon_stop.gif" width="30" height="13" alt="경고아이콘" class="icon">
-          <span class="title1">{$documentData.name} 접속키워드를 정말로 초기화 하시겠습니까?</span>
-          <input type="hidden" name="id" value={$documentData.id}>
-          <input type="hidden" name="keyword" value={$documentData.name}>
-        </li>
-        <li>
-          <span class="title2">다시한번 잘 확인해 주세요.</span>
-          <a href="#" data-key="reset" class="button-del"><span>[초기화]</span></a>
-          <a href="#" data-key="back" class="button-cancel"><span>[취소]</span></a>   
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>

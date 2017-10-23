@@ -44,7 +44,7 @@ jsux.fn.join = {
     var hpNum = e.target.value;
     var reg;
 
-    hpNum = hpNum.replace(/-/g,'');
+    hpNum = hpNum.replace(/\s-\s/g,'');
     if (!(hpNum.length > 9 && hpNum.length < 12)) {
       return false;
     }
@@ -60,14 +60,14 @@ jsux.fn.join = {
       return false;
     }
 
-    var str = hpNum.replace(reg, '$1-$2-$3');
+    var str = hpNum.replace(reg, '$1 - $2 - $3');
     $('input[name=hp]').val(str);
     return true;
   },
   checkFormVal: function( f ) {
 
-    var labelList = ['아이디를','비밀번호를','비밀번호 확인을','이름을','닉네임을','이메일을'];
-    var inputList = ['user_id','password','passwordConf','user_name','nick_name','email_address'];
+    var labelList = ['아이디를','비밀번호를','비밀번호 확인을','닉네임을','이메일을'];
+    var inputList = ['user_id','password','password_conf','nick_name','email_address'];
     var isValidForm = true;
     $.each( inputList, function( index, item) {
 
@@ -93,17 +93,17 @@ jsux.fn.join = {
   },
   sendJson: function( f ) {
 
-    var self = this;
-    var params = {};
-    var datas = $('form')[0];
-    var indexCheckbox = 0;
-    var url = '';
+    var self = this,
+          params = {},
+          datas = $('form')[0],
+          indexCheckbox = 0,
+          url = '';
 
     $.each(datas, function( index, item ) {
 
-      var filters = 'checkbox|button|submit';
-      var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName;
-      var glue ='';
+      var filters = 'checkbox|button|submit',
+            type = $(item).attr('type') ? $(item).attr('type') : item.nodeName,
+            glue ='';
 
       if (item.nodeName.toLowerCase() === 'select') {
         item.value = self.getSelectVal(item.name);
@@ -151,7 +151,7 @@ jsux.fn.join = {
       $('input[name=passowrdConf]').val('');
       $('input[name=passowrd]').focus();
 
-      return(false);
+      return false;
     }
   },    
   checkID: function() {
@@ -202,8 +202,8 @@ jsux.fn.join = {
       self.checkCorpName();
     });
 
-     $('input[name=hp]').on('keyup', function(e) {
-      self.validateHp(e);
+    $('input[name=hp]').on('keyup', function(e) {
+    self.validateHp(e);
     });
     
     $('input[name=hp]').on('blur', function(e) {
@@ -235,9 +235,9 @@ jsux.fn.modify = {
   },
   getCheckboxVal: function( id ) {
 
-    var result= '',
-      list = $('input:checkbox[name^='+id+']:checked'),
-      len = list.length;
+    var result = '',
+          list = $('input:checkbox[name^='+id+']:checked'),
+          len = list.length;
 
     $(list).each(function(index){
       result += list[index].value;
@@ -258,7 +258,7 @@ jsux.fn.modify = {
     var panelPwd = $('#panelNewPassword');
     var btn = $('input[name=check_newpassword]');
     if (panelPwd.css('display') === 'none') {
-      btn.val('기존 비밀번호 사용하기');
+      btn.val('비밀번호 변경 취소하기');
       panelPwd.css('display','block');
 
       if (!btn.hasClass('active')) {
@@ -315,7 +315,7 @@ jsux.fn.modify = {
     var hpNum = e.target.value;
     var reg;
 
-    hpNum = hpNum.replace(/-/g,'');
+    hpNum = hpNum.replace(/\s-\s/g,'');
     if (!(hpNum.length > 9 && hpNum.length < 12)) {
       return false;
     }
@@ -331,14 +331,14 @@ jsux.fn.modify = {
       return false;
     }
 
-    var str = hpNum.replace(reg, '$1-$2-$3');
+    var str = hpNum.replace(reg, '$1 - $2 - $3');
     $('input[name=hp]').val(str);
     return true;
   },
   checkFormVal: function( f ) {
 
-    var labelList = ['아이디를','비밀번호를','이름을','닉네임을','이메일을'];
-    var checkList = ['user_id','password','user_name','email_address'];
+    var labelList = ['아이디를','비밀번호를','닉네임을','이메일을'];
+    var checkList = ['user_id','password','nick_name','email_address'];
 
     $.each( checkList, function( index, item) {
 

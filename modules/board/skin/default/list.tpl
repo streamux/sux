@@ -13,22 +13,24 @@
     {assign var=params value=''}
   {/if}
   <div class="form_search_panel">
-    <form action="{$routeURI}" method="post" name="f_board_list_search" class="sx-form-inline">
-      <input type="hidden" name="_method" value="select">           
-      <div class="sx-input-group">             
-        <select name="find" class="sx-form-control">
-          <option value='title'>제 목</option>
-          <option value='name'>작성자</option>
-          <option value='comment'>내 용</option>
-        </select>  
-        <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
-        <button type="submit" class="sx-btn"><i class="xi-search"></i>검색</button>
-        <a href="{$routeURI}/write{$params}" class="sx-btn"><i class="xi-pen-o xi-2x"><span class="sr-only">글쓰기</span></i></a>
-      </div>    
-    </form>
+    <form action="{$routeURI}" method="post" name="f_board_list_search" class="sx-form-horizontal">
+      <input type="hidden" name="_method" value="select">
+        <div class="sx-form-inline">
+          <div class="sx-input-group">             
+          <select name="find" class="sx-form-control form_control_width">
+            <option value='title'>제 목</option>
+            <option value='name'>작성자</option>
+            <option value='comment'>내 용</option>
+          </select>  
+          <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
+          <button type="submit" class="sx-btn"><i class="xi-search"></i>검색</button>
+          <a href="{$routeURI}/write{$params}" class="sx-btn"><i class="xi-pen-o xi-2x"><span class="sr-only">글쓰기</span></i></a>
+        </div> 
+      </div>          
+    </form> 
   </div>
   
-  <!-- LIST Mobile -->
+  <!-- Mobile -->
   <ul class="list_mobile_panel">
   {foreach from=$contentData.list item=$item}
     {if isset($item)}
@@ -41,7 +43,7 @@
         <p class="subject" style="padding-left:{$item.subject.space}px">
           <span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>            
           <span class="title">{$item.subject.title|nl2br}</span>
-          <span class="{$item.subject.css_comment}">({$item.subject.comment_num})</span>
+          <span class="sx-badge {$item.subject.css_comment}">{$item.subject.comment_num}</span>
           {if $item.subject.img_name != ''}
           <img src="{$skinPath}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
           {/if}
@@ -62,7 +64,7 @@
   </ul>
   <!-- end -->
 
-  <!-- LIST PC -->
+  <!-- PC -->
   <div class="list_pc_panel">  
     <table class="table-striped" summary="게시판 리스트입니다.">
       <thead>

@@ -58,6 +58,36 @@ class MemberAdminView extends View {
     $this->output();
   }
 
+  function displayGroupModify() {
+
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
+    $this->document_data['jscode'] = 'groupModify';
+    $this->document_data['module_code'] = 'member';
+
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('member_group', '*', $where);
+    $row = $this->model->getRow();
+
+    foreach ($row as $key => $value) {
+      $this->document_data[$key] = $value;
+    }
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupmodify.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+
   function displayGroupDelete() {
     
     $context = Context::getInstance();
@@ -83,8 +113,16 @@ class MemberAdminView extends View {
   function displayGroupJson() {
 
     $context = Context::getInstance();
-    $requests = $context->getRequestAll();
-    $id = $requests['id'];
+    $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
+
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
 
     $dataObj = array();   
     $msg = "";
@@ -93,22 +131,34 @@ class MemberAdminView extends View {
     if (isset($id) && $id) {
       $where = new QueryWhere();
       $where->set('id', $id);
-      $result = $this->model->select('member_group', '*', $where, 'id desc');
+      $result = $this->model->select('member_group', '*', $where);
     } else {
+      $this->model->select('member_group', 'id');
+      $totalNum = $this->model->getNumRows();
       $result = $this->model->select('member_group', '*', null, 'id desc');
     }
     
     if ($result){
       $numrow = $this->model->getNumRows();
       if ($numrow > 0) {
-        $i = 1;
-        foreach ($this->model->getRows() as $row) {
-          $dataList['no'] = $i;
+
+        $where = new QueryWhere();
+        $dataObj['list'] = array();
+        $dataObj['total_num'] = $totalNum;
+
+        $rows = $this->model->getRows();
+        foreach ( $rows as $key => $row) {
+
+          $where->reset();
+          $where->set('category', $row['category']);
+          $this->model->select('member', 'id', $where);
+          $dataList['member_num'] = $this->model->getNumRows();
+
+          $dataList['no'] = (int) $key+1;
           foreach ($row as $key => $value) {
             $dataList[$key] = $value;
           }
-          $dataObj[] = $dataList;
-          $i++;   
+          $dataObj['list'][] = $dataList;
         }
       } else {
         $msg = "회원그룹이 존재하지 않습니다.";
@@ -123,19 +173,79 @@ class MemberAdminView extends View {
     $this->callback($json);
   }
 
-  function displayList() {
-    
+  function displayGroupModifyJson() {
+
+    $dataObj = array();   
+    $msg = "";
+    $resultYN = "Y";
+
     $context = Context::getInstance();
-    $id = $context->getParameter('id');
+   $requests = $context->getRequestAll();
+    $id = $requests['id'];
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('member_group', 'category', $where);
 
-    $row = $this->model->getRow();
-    $this->document_data['id'] = $id;
+    $result = $this->model->select('member_group', '*', $where);    
+    if ($result){
+      $dataObj = $this->model->getRow();
+    } 
+
+    //$msg .= Tracer::getInstance()->getMessage();
+    $json = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg); 
+
+    $this->callback($json);
+  }
+
+  function displaySetup() {
+    
+    $context = Context::getInstance();
+    $requests = $context->getRequestAll();
+
+    $this->model->select('member_group', 'category');
+    $group = $this->model->getRows();    
+    
+    $this->request_data = $requests;
+    $this->document_data['jscode'] = 'setup';
+    $this->document_data['module_code'] = 'member';
+    $this->document_data['group'] = $group; 
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_setup.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+  function displayList() {
+    
+    $context = Context::getInstance();
+    $groupId = $context->getParameter('id');
+
+    if (isset($groupId) && $groupId) {
+      $where = new QueryWhere();
+      $where->set('id', $groupId);
+      $this->model->select('member_group', 'category', $where);
+      $row = $this->model->getRow();
+    }
+
+    $this->model->select('member_group', 'category');
+    $categoryList = $this->model->getRows();    
+
+    $this->model->select('member', '*');
+    $totalNum = $this->model->getNumRows();
+
+    $this->document_data['categories'] = $categoryList; 
+    $this->document_data['total_num'] = $totalNum;
+
     $this->document_data['category'] = $row['category'];
-
     $this->document_data['jscode'] = 'list';
     $this->document_data['module_code'] = 'member';
 
@@ -155,11 +265,15 @@ class MemberAdminView extends View {
   function displayAdd() {
     
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
+    $requests = $context->getRequestAll();
 
-    $action = $this->request_data['action'];
-    $this->document_data['jscode'] = $action;
+    $this->model->select('member_group', 'category');
+    $group = $this->model->getRows();    
+    
+    $this->request_data = $requests;
+    $this->document_data['jscode'] = 'add';
     $this->document_data['module_code'] = 'member';
+    $this->document_data['group'] = $group; 
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
@@ -178,21 +292,19 @@ class MemberAdminView extends View {
     
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-    $sid = $context->getParameter('sid');
 
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'member';
 
     $where = new QueryWhere();
-    $where->set('id', $sid);
+    $where->set('id', $id);
     $this->model->select('member', 'category, user_id, user_name', $where);
     $row = $this->model->getRow();
 
     $this->document_data['category'] = $row['category'];
     $this->document_data['user_id'] = $row['user_id'];
     $this->document_data['user_name'] = $row['user_name'];
-    $this->document_data['category_id'] = $id;
-    $this->document_data['id'] = $sid;    
+    $this->document_data['id'] = $id;    
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
@@ -222,7 +334,7 @@ class MemberAdminView extends View {
     $row = $this->model->getRow();
 
     $this->document_data['user_id'] = $row['user_id'];
-    $this->document_data['category_id'] = $id;
+    $this->document_data['category'] = $id;
     $this->document_data['id'] = $sid;    
 
     $rootPath = _SUX_ROOT_;
@@ -249,9 +361,10 @@ class MemberAdminView extends View {
     $posts = $context->getPostAll();
 
     $category = $posts['category'];
-    $passover = $posts['passover']; 
+    $passover = $posts['passover'];
     $limit = $posts['limit'];
-    $id = $posts['id'];
+
+    $msg .= 'category ' . $category;
 
     if (!$limit) {
       $limit = 10;  
@@ -260,61 +373,47 @@ class MemberAdminView extends View {
       $passover = 0;
     }
 
-    if (isset($id) && $id) {
-
-      $where = new QueryWhere();
-      $where->set('id', $id);
-      $result = $this->model->select('member', '*', $where);
-      if (!$result) {
-        $msg .= '등록된 회원이 존재하지 않습니다.';
-        $resultYN = 'N';
-      } else {
-        $pattern = '/password/';
-        $dataList = $this->model->getRows();
-        for ($i=0; $i<count($dataList); $i++) {
-          foreach ($dataList[$i] as $key => $value) {   
-            if (preg_match($pattern, $key)) {
-              $dataList[$i]['password'] = '';
-            }
-          }
-        }
-      }
-      $dataObj = array('category'=>$dataList[0]['category'], 'list'=>$dataList);
-    }  else {
+    $where = null;    
+    if (isset($category) && $category) {
       $where = new QueryWhere();
       $where->set('category', $category);
-      $result = $this->model->select('member', '*', $where);
-      if ($result) {
-        $numrows = $this->model->getNumRows();
-        if ($numrows > 0){        
-          $a = $numrows - $passover;
-
-          $context->set('member_passover', $passover);
-          $context->set('member_limit', $limit);
-
-          $result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
-          if ($result) {
-            $rows = $this->model->getRows();
-            for ($i=0; $i<count($rows); $i++) {
-              $obj = array();
-              $obj['no'] = $a;
-              foreach ($rows[$i] as $key => $value) {
-                $obj[$key] = $value;
-              }
-              $dataList[] = $obj;
-              $a--;
-            }
-            $dataObj = array('category'=>$category, 'list'=>$dataList);
-          }       
-        } else {
-
-          $dataObj = array('category'=>$category, 'list'=>$dataList);
-          $msg .= '현재 등록된 회원이 존재하지 않습니다.';
-          $resultYN = 'N';
-        }
-      }   
     }
-    //$msg = Tracer::getInstance()->getMessage();
+
+    $this->model->select('member', '*', $where);      
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0){        
+      $a = $numrows - $passover;
+
+      $result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
+      if ($result) {
+        $rows = $this->model->getRows();
+        for ($i=0; $i<count($rows); $i++) {
+          $obj = array();
+          $obj['hp'] = '';
+          $obj['no'] = $a;
+          foreach ($rows[$i] as $key => $value) {
+            $obj[$key] = $value;
+          }
+          if (isset($obj['hp1']) && $obj['hp1']) {
+            $obj['hp'] =  $obj['hp1'] .' - '. $obj['hp2'] . ' - '. $obj['hp3'];
+          }              
+          $dataList[] = $obj;
+          $a--;
+        }
+        $dataObj = array(
+          'category'=>$category,
+          'list'=>$dataList,
+          'total_num'=>$numrows
+        );
+      }       
+    } else {
+
+      $dataObj = array('category'=>$category, 'list'=>$dataList);
+      $msg .= '현재 등록된 회원이 존재하지 않습니다.';
+      $resultYN = 'N';
+    }
+
+    $msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);
@@ -339,18 +438,13 @@ class MemberAdminView extends View {
 
       $row = $this->model->getRow();
       foreach ($row as $key => $value) {
-
-        if (preg_match('/password/', $key)) {
-
-        } else if (preg_match('/email/', $key)) {
-          $emailList = split("@", $value );
-          $dataObj['email_address'] = $emailList[0];
-          $dataObj['email_tail2'] = $emailList[1];
-        } else {
-          $dataObj[$key] = $value;
-        }     
+        $dataObj[$key] = $value;
       }
     } 
+
+    if (isset($row['hp1']) && $row['hp1']) {
+      $dataObj['hp'] = $row['hp1'] .' - '. $row['hp2'] . ' - '. $row['hp3'];
+    }
 
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,

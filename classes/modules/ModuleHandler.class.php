@@ -25,13 +25,12 @@ class ModuleHandler
 			//echo 'set cookie version is ' . date('Y-m-d H:i:s') . ' : location -> 25 line in ModuleHandler.class.php' . "<br>";
 		} else {
 			$isEqual = $context->equalVersion($cookieId);
-			if (!$isEqual) {				
+			if (!$isEqual) {
 				$context->makeRouteCaches();
 				/*echo 'cookie version is different : location -> 28 line in ModuleHandler.class.php' . "<br>";
 				echo 'cookie version - ' . $hasCookieVersion . "<br>";
 				exit;*/
-			}
-			
+			}			
 		}
 		
 		$router = RouterModule::getInstance();
