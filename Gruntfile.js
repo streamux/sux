@@ -26,8 +26,9 @@ module.exports = function(grunt) {
       },
       'common-admin-app': {
         src: [
-          'common/js/app/jsux_gnb_menu.js',
-          'common/js/app/jsux_admin_gnb_*.js'
+          'common/js/app/jsux_admin_gnb.js',
+          'common/js/app/jsux_list_manager.js',
+          '!*.back'
         ],
         dest: 'common/js/jsux_admin_app.js'
       },
@@ -46,7 +47,7 @@ module.exports = function(grunt) {
           banner: banner_jsux_js
         },
         files: {
-          'common/js/jsux.min.js': ['common/js/jsux/jsux-1.1.0.js']
+          'common/js/jsux.min.js': ['common/js/jsux/jsux.js']
         }
       },
       'common-apps': {

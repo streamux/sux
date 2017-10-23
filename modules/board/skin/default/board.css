@@ -47,6 +47,12 @@
   display: block;
   text-align: right;
 }
+.form_search_panel .sx-input-group .sx-form-control{
+  margin-bottom: 5px;
+}
+.form_search_panel .sx-input-group button.sx-btn{
+  width:100%;
+}
 .form_search_panel .sx-input-group a.sx-btn{
   display: none;
   vertical-align: middle;
@@ -84,8 +90,8 @@
 }
 .board_list .list_pc_panel table thead th {
   height:50px;
-  border-bottom: 1px solid #e8eef1;
-  background-color: #f3f3f3;  
+  border-top: 1px solid #e3e3e3;
+  border-bottom: 2px solid #e3e3e3;
   font-size: 1.250em;
 }
 .board_list .list_pc_panel table thead th,
@@ -512,6 +518,15 @@
   }
   .contents_header .btn_write {
     display: none;  
+  }
+  .form_search_panel .sx-input-group .form_control_width{
+    width:auto;
+  }
+  .form_search_panel .sx-input-group .sx-form-control{
+    margin-bottom: 0;
+  }
+  .form_search_panel .sx-input-group button.sx-btn{
+    width:auto;
   }
   .form_search_panel .sx-input-group a.sx-btn{
     display: inline-block;

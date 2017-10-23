@@ -1,3 +1,8 @@
+/**
+ * class jsux
+ * ver 1.1.0
+ * author streamux.com
+ */
 window.jsux = window.jsux || {};
 window.jsux.define = function( var_name, value) {
 

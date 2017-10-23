@@ -1,70 +1,125 @@
-<div class="articles ui-edgebox">
-  <div class="list">
-    <div class="tt">
-      <div class="imgbox">
-        <h1>페이지목록</h1>
-      </div>
+    <div class="sx-contents sx-admin-main">
+      <section class="sx-document-panel">
+        <header class="header">
+          <h1 class="title">페이지 관리</h1>
+          <div class="sx-row clearfix">
+            <span class="search_title">전체 페이지(0)</span>     
+            <a href="{$rootPath}document-admin/add" class="sx-btn pull-right" title="페이지 추가">페이지 추가</a>
+          </div>
+        </header>
+        <article class="sx-box-content sx-member">
+          <input type="hidden" name="list_json_path" value="{$rootPath}document-admin/list-json">
+          
+          <ul class="list_mobile_panel" id="dataMobileList">
+            <!--
+              @ jquery templete
+              @ name  warnMsgMobileTmpl, dataListMobileTmpl
+            -->
+            <li>
+              <a href="#">
+                <span class="summary">로딩 중...</span>
+              </a>     
+            </li>
+          </ul>
+          <div class="list_pc_panel">
+            <table class="table" summary="회원 그룹 정보를 제공합니다.">
+            <caption class="sr-only">페이지 목록</caption>
+              <thead>
+                <tr>
+                  <th class="sx_no">번호</th>
+                  <th class="sx_name">그룹 이름</th>
+                  <th class="sx_summary">설명</th>
+                  <th class="sx_contents">템플릿 경로</th>
+                  <th class="sx_date">생성일</th>
+                  <th class="sx_modify_btn">수정</th>
+                  <th class="sx_delete_btn">삭제</th>
+                </tr>         
+              </thead>
+              <tbody id="dataList">
+                <tr>
+                  <td colspan="5">데이타 로딩중...</td>
+                </tr>
+                <!--
+                @ jquery templete
+                @ name  hitAnalysisWarnMsg_tmpl, hitAnalysisList_tmpl
+                -->
+              </tbody>
+            </table>
+          </div>
+          <nav class="pagin_member sx-pagination-group">
+            <a href="#none" class="sx-nav-prev sx-pagination-control unactive">이전</a>
+            <span id="paginList">
+              <a href="#" class="sx-pagination unactive">1</a>
+            </span>
+            <a href="#none" class="sx-nav-next sx-pagination-control unactive">다음</a>
+          </nav>
+        </article>
+      </section>
     </div>
-    <div class="box">
-      <ul>
-        <li>
-          <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-          <span class="text-notice">한번 삭제 시 모든 자료가 사라집니다. 주의하세요.</span>     
-        </li>
-      </ul>
-      <table summary="회원목록을 보여줍니다." cellspacing="0">
-        <caption><span class="blind">페이지목록</span></caption>
-        <colgroup>
-          <col width="12%">
-          <col width="38%">
-          <col width="30%">
-          <col width="10%">
-          <col width="10%">
-        </colgroup>
-        <thead>
-          <tr>
-            <th scope="col"><span>번호</span></th>
-            <th scope="col"><span>페이지 이름</span></th>
-            <th scope="col"><span>생성날</span></th>
-            <th scope="col"><span>수정</span></th>
-            <th scope="col"><span>삭제</span></th>
-          </tr>         
-        </thead>
-        <tbody id="documentList">
-          <tr>
-            <td colspan="5"></td>
-          </tr>
-          <!--
-          @ jquery templete
-          @ name  boardWarnMsg_tmpl, documentList_tmpl
-          -->               
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-<script type="jquery-templete" id="documentWarnMsg_tmpl">
+
+<!-- pc start -->
+<script type="jquery-templete" id="warnMsgTmpl">
 {literal}
   <tr>
-    <td colspan="9"><span class="warn-msg">${msg}</span></td>
+    <td colspan="7"><span class="sx-text-warning"><i class="xi-warning"></i>${msg}</span></td>
   </tr>
 {/literal}
 </script>
-<script type="jquery-templete" id="documentList_tmpl">
+<script type="jquery-templete" id="dataListTmpl">
   <tr>
     <td><span>{literal}${no}{/literal}</span></td>
     <td>
-      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank"><span>{literal}${document_name}{/literal}</span></a>
-    </td>           
-    <td><span>{literal}${$item.editDate(date)}{/literal}</span></td>    
+      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${document_name}{/literal}</a>
+    </td>
+    <td class="sx_summary">
+      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${summary}{/literal}</a>
+    </td>
+    <td class="sx_contents">
+      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${contents_path}{/literal}</a>
+    </td>
+    <td>{literal}${$item.editDate(date)}{/literal}</td>    
     <td>
-      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/modify">
-        <img src="{$rootPath}modules/admin/tpl/images/btn_edit.gif" alt="수정버튼">
-      </a></td>
+      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/modify" class="sx-btn sx-btn-info">수정</a></td>
     <td>
-      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/delete">
-        <img src="{$rootPath}modules/admin/tpl/images/btn_del.gif" alt="삭제버튼">
-      </a>
+      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/delete" class="sx-btn sx-btn-warning">삭제</a>
     </td>
   </tr>
 </script>
+<!-- pc end -->
+
+<!-- mobile start -->
+<script type="jquery-templete" id="warnMsgMobileTmpl">
+{literal}
+  <li>
+    <a href="#">
+      <span class="title sx-text-warning">등록회원 없음.</span>
+      <span class="summary sx-text-warning">${msg}</span>
+    </a>           
+  </li>
+{/literal}
+</script>
+<script type="jquery-templete" id="dataListMobileTmpl">
+  <li>
+    <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">
+      <span class="title">
+        {literal}${document_name}{/literal}
+      </span>      
+      <span class="sx_summary">{literal}${summary}{/literal}</span> 
+      <span class="sx_contents"><i class="xi-file-text-o"></i>{literal}${contents_path}{/literal}</span>      
+      <span class="sx_date"><i class="xi-clock-o"></i>{literal}${$item.editDate(date)}{/literal}</span>
+    </a>
+    <div class="sx-btn-group">
+      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/modify" class="sx-btn sx-btn-info">수정</a>
+      <a href="{$rootPath}document-admin/{literal}${id}{/literal}/delete" class="sx-btn sx-btn-warning">삭제</a>
+    </div>              
+  </li>
+</script>
+<!-- mobile end -->
+
+<!-- pagination start -->
+<script type="x-jquery-templete" id="paginationTmpl">
+{literal}
+  <a href="#" class="sx-pagination">${no}</a>
+{/literal}
+</script>
+<!-- pagination end -->

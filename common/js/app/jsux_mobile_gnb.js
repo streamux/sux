@@ -150,16 +150,13 @@ jsux.mobileGnb.Menu.include({
     var self = this;
     $('.mobile-menu-btn').on('mouseover', function(e) {
       e.preventDefault();
-      console.log(e.currentTarget);
       if (!$('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        trace(e.target,1);
         $('.mobile-menu-bg').addClass('menu-bg-activate');
       }      
     });
     $('.mobile-menu-btn').on('mouseout', function(e) {
       e.preventDefault();
       if ($('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        trace('out',1);
         $('.mobile-menu-bg').removeClass('menu-bg-activate');
       }      
     });

@@ -3,282 +3,306 @@
 class BoardAdminView extends View
 {
 
-	function displayBoardAdmin() {
+  function displayBoardAdmin() {
 
-		$this->displayList();
-	}
+    $this->displayList();
+  }
 
-	function displayList() {
+  function displayList() {
 
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+    $context = Context::getInstance();
+    $this->request_data = $context->getRequestAll();
 
-		$this->document_data['jscode'] = 'list';
-		$this->document_data['module_code'] = 'board';
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'board';
 
-		$rootPath = _SUX_ROOT_;
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-		$this->output();
-	}
+    $this->output();
+  }
 
-	function displayAdd() {
+  function displayAdd() {
 
-		$context = Context::getInstance();
-		$this->request_data = $context->getRequestAll();
+    $context = Context::getInstance();
+    $this->request_data = $context->getRequestAll();
 
-		$this->document_data['jscode'] = 'add';
-		$this->document_data['module_code'] = 'board';
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'board';
 
-		$rootPath = _SUX_ROOT_;
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+    $skinDir = _SUX_PATH_ . "modules/board/skin/";
+    $skinList = FileHandler::readDir($skinDir);
+    if (!$skinList) {
+      $msg = "스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    $this->document_data['skin_list'] = $skinList;
 
-		$this->output();
-	}
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-	function displayModify() {
+    $this->output();
+  }
 
-		$context = Context::getInstance();
-		$id = $context->getParameter('id');		
-		$this->request_data = $context->getRequestAll();
+  function displayModify() {
 
-		$this->document_data['jscode'] = 'modify';
-		$this->document_data['module_code'] = 'board';
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');   
+    $this->request_data = $context->getRequestAll();
 
-		$rootPath = _SUX_ROOT_;
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'board';
 
-		$where = new QueryWhere();
-		$where->set('id', $id);
-		$this->model->select('board_group','category, id', $where);
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-		$row = $this->model->getRow();
-		foreach ($row as $key => $value) {
-			$this->document_data[$key] = $value;
-		}
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board_group','category, id', $where);
 
-		$skinDir = _SUX_PATH_ . "modules/board/skin/";
-		$skinList = FileHandler::readDir($skinDir);
-		if (!$skinList) {
-			$msg = "스킨폴더가 존재하지 않습니다.";
-			$resultYN = "N";
-		}
-		$this->document_data['skin_list'] = $skinList;
+    $row = $this->model->getRow();
+    foreach ($row as $key => $value) {
+      $this->document_data[$key] = $value;
+    }
 
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+    $skinDir = _SUX_PATH_ . "modules/board/skin/";
+    $skinList = FileHandler::readDir($skinDir);
+    if (!$skinList) {
+      $msg = "스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    $this->document_data['skin_list'] = $skinList;
 
-		$this->output();
-	}
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
-	function displayDelete() {
+    $this->output();
+  }
 
-		
-		$context = Context::getInstance();
-		$id = $context->getParameter('id');
-		$this->request_data = $context->getRequestAll();
+  function displayDelete() {
 
-		$this->document_data['jscode'] = 'delete';
-		$this->document_data['module_code'] = 'board';
-		
-		$where = new QueryWhere();
-		$where->set('id', $id);
-		$this->model->select('board_group', 'id, category', $where);
+    
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+    $this->request_data = $context->getRequestAll();
 
-		$row = $this->model->getRow();
-		foreach ($row as $key => $value) {
-			$this->document_data[$key] = $value;
-		}
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'board';
+    
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board_group', 'id, category', $where);
 
-		$rootPath = _SUX_ROOT_;
-		$adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-		$skinPath = _SUX_PATH_ . "modules/board/tpl";
+    $row = $this->model->getRow();
+    foreach ($row as $key => $value) {
+      $this->document_data[$key] = $value;
+    }
 
-		$this->skin_path_list['root'] = $rootPath;
-		$this->skin_path_list['dir'] = '';
-		$this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-		$this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
-		$this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-		
-		$this->output();
-	}
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
 
-	function displaySkinJson() {
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+    
+    $this->output();
+  }
 
-		$skinDir = _SUX_PATH_ . "modules/board/skin/";
-		
-		$msg = "";
-		$resultYN = "Y";
+  function displaySkinJson() {
 
-		$skinList = Utils::readDir($skinDir);
-		if (!$skinList) {
-			$msg = "스킨폴더가 존재하지 않습니다.";
-			$resultYN = "N";
-		}
-		
-		sort($skinList);
-		$data = array(	"data"=>array("list"=>$skinList),
-						"result"=>$resultYN,
-						"msg"=>$msg);
+    $skinDir = _SUX_PATH_ . "modules/board/skin/";
+    
+    $msg = "";
+    $resultYN = "Y";
 
-		$this->callback($data);
-	}
+    $skinList = Utils::readDir($skinDir);
+    if (!$skinList) {
+      $msg = "스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    
+    sort($skinList);
+    $data = array(  "data"=>array("list"=>$skinList),
+            "result"=>$resultYN,
+            "msg"=>$msg);
 
-	function displayListJson() {
+    $this->callback($data);
+  }
 
-		$dataObj = null;
-		$dataList = array();
-		$msg = "";
-		$resultYN = "Y";
+  function displayListJson() {
 
-		$context = Context::getInstance();
-		$id = $context->getRequest('id');
-		if (isset($id) && $id) {
-			$where = new QueryWhere();
-			$where->set('id', $id);
-			$this->model->select('board_group','*', $where, 'id desc');
-		} else {
-			$this->model->select('board_group','*', null, 'id desc');
-		}
-		
-		$numrows = $this->model->getNumRows();
-		if ($numrows > 0){
+    $dataObj = null;
+    $dataList = array();
+    $msg = "";
+    $resultYN = "Y";
 
-			$a = $numrows;
-			$rows = $this->model->getRows();
-			foreach ($rows as $key => $row) {
+    $context = Context::getInstance();
+    $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
 
-				$fields = array('no'=>$a);
-				foreach ($row as $key => $value) {
-					$fields[$key] = $value;
-				}
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
 
-				$dataList[] = $fields;
-				$a--;
-			}
+    if (isset($id) && $id) {
+      $where = new QueryWhere();
+      $where->set('id', $id);
+      $this->model->select('board_group','*', $where);
+    } else {
+      $this->model->select('board_group', 'id');
+      $totalNum = $this->model->getNumRows();
+      $this->model->select('board_group','*', null, 'id desc', $passover, $limit);
+    }
+    
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0){
 
-			$dataObj = array("list"=>$dataList);
-		} else {
-			$msg = "게시판이 존재하지 않습니다.";
-			$resultYN = "N";
-		}
-		//$msg = Tracer::getInstance()->getMessage();
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
+      $dataObj['list'] = array();
+      $dataObj['total_num'] = $totalNum;
+      $dataList = array();
 
-		$this->callback($data);
-	}
+      $a = $numrows;
+      $rows = $this->model->getRows();
+      foreach ($rows as $key => $row) {
 
-	function displayModifyJson() {
+        $fields = array('no'=>$a);
+        foreach ($row as $key => $value) {
+          $fields[$key] = $value;
+        }
 
-		$context = Context::getInstance();
-		$id = $context->getPost('id');
+        $dataList[] = $fields;
+        $a--;
+      }
 
-		$dataObj = array();
-		$msg = "";
-		$resultYN = "Y";
+      $dataObj['list'] =$dataList;
+    } else {
+      $msg = "게시판이 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    //$msg = Tracer::getInstance()->getMessage();
+    $data = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg);
 
-		$where = new QueryWhere();
-		$where->set('id', $id);
-		$this->model->select('board_group','*', $where);
+    $this->callback($data);
+  }
 
-		$numrows = $this->model->getNumRows();
-		if ($numrows > 0) {
-			$row = $this->model->getRow();
-			foreach ($row as $key => $value) {
-				$dataObj[$key] = $value;
+  function displayModifyJson() {
 
-				$msg .= $key . " : " . $value . "<br>";
-			}
-			$resultYN = "Y";
-		} else {
-			$resultYN = "N";
-			$msg = '게시판이 존재하지 않습니다.';
-		}
-		$data = array(	"data"=>$dataObj,
-						"result"=>$resultYN,
-						"msg"=>$msg);
+    $context = Context::getInstance();
+    $id = $context->getPost('id');
 
-		$this->callback($data);
-	}
+    $dataObj = array();
+    $msg = "";
+    $resultYN = "Y";
 
-	function displayCheckBoard() {
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board_group','*', $where);
 
-		$context = Context::getInstance();
-		$category = $context->getPost('category');
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0) {
+      $row = $this->model->getRow();
+      foreach ($row as $key => $value) {
+        $dataObj[$key] = $value;
 
-		$dataObj	= "";
-		$msg = "";
-		$resultYN = "Y";
+        $msg .= $key . " : " . $value . "<br>";
+      }
+      $resultYN = "Y";
+    } else {
+      $resultYN = "N";
+      $msg = '게시판이 존재하지 않습니다.';
+    }
+    $data = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg);
 
-		$msg = "추가 생성 게시판 : ".$category."\n";
+    $this->callback($data);
+  }
 
-		if (empty($category)) {
+  function displayCheckBoard() {
 
-			$msg = "카테고리명을 넣고 중복체크를 하십시오.";
-			$resultYN = "N";
+    $context = Context::getInstance();
+    $category = $context->getPost('category');
 
-			$data = array(	"result"=>$resultYN,
-							"msg"=>$msg);
+    $dataObj  = "";
+    $msg = "";
+    $resultYN = "Y";
 
-			$this->callback($data);
-			exit;
-		}
+    $msg = "추가 생성 게시판 : ".$category."\n";
 
-		if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{2,}$/i', $category)) {
+    if (empty($category)) {
 
-			$msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
+      $msg = "카테고리명을 넣고 중복체크를 하십시오.";
+      $resultYN = "N";
 
-			$data = array(	"msg"=>$msg);			
-			$this->callback($data);
-			exit;
-		} 
+      $data = array(  "result"=>$resultYN,
+              "msg"=>$msg);
 
-		$where = new QueryWhere();
-		$where->set('category', $category);
-		$this->model->select('board_group','id', $where);
+      $this->callback($data);
+      exit;
+    }
 
-		$numrows = $this->model->getNumRows();
-		if ($numrows> 0) {
-			$msg = "${category}는 이미 존재하는 게시판입니다.";
-			$resultYN = "N";
-		} else {
-			$where = new QueryWhere();
-			$where->set('category', $category);
-			$this->model->select('document','id', $where);
-			$numrows = $this->model->getNumRows();
-			if ($numrows> 0) {
-				$msg = "${category} 이름은 페이지관리에서 이미 사용하고 있습니다.<br>다른 이름을 사용해주세요.";
-				$resultYN = "N";
-			} else {
-				$msg = "${category}는 사용할 수 있는 카테고리명 입니다.";
-				$resultYN = "Y";
-			}
-		}
+    if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{2,}$/i', $category)) {
 
-		$data = array(	"result"=>$resultYN,
-						"msg"=>$msg);
+      $msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
 
-		$this->callback($data);
-	}	
+      $data = array(  "msg"=>$msg);     
+      $this->callback($data);
+      exit;
+    } 
+
+    $where = new QueryWhere();
+    $where->set('category', $category);
+    $this->model->select('board_group','id', $where);
+
+    $numrows = $this->model->getNumRows();
+    if ($numrows> 0) {
+      $msg = "${category}는 이미 존재하는 게시판입니다.";
+      $resultYN = "N";
+    } else {
+      $where = new QueryWhere();
+      $where->set('category', $category);
+      $this->model->select('document','id', $where);
+      $numrows = $this->model->getNumRows();
+      if ($numrows> 0) {
+        $msg = "${category} 이름은 페이지관리에서 이미 사용하고 있습니다.<br>다른 이름을 사용해주세요.";
+        $resultYN = "N";
+      } else {
+        $msg = "${category}는 사용할 수 있는 카테고리명 입니다.";
+        $resultYN = "Y";
+      }
+    }
+
+    $data = array(  "result"=>$resultYN,
+            "msg"=>$msg);
+
+    $this->callback($data);
+  } 
 }
 ?>

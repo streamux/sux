@@ -9,7 +9,7 @@ class LoginAdminController extends Controller {
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $userId = $posts['user_id'];
-    $userPwd = $posts['password'];
+    $userPwd = $posts['user_pwd'];
     $token = $posts['token'];
 
     $rootPath = _SUX_ROOT_;   
@@ -22,7 +22,7 @@ class LoginAdminController extends Controller {
       UIError::alertToBack($msg);
       exit;
     } else if (empty($userPwd)) {
-      $msg = "비밀번호를 입력하세요.";
+      $msg = $userPwd. "비밀번호를 입력하세요.";
       UIError::alertToBack($msg);
       exit;
     } 

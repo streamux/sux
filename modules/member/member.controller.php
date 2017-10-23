@@ -1,17 +1,15 @@
 <?php
 
-class MemberController extends Controller {
+class MemberController extends Controller
+{
+  function checkValidation( $post ) {
 
-  var $class_name = 'member_conntroller';
-
-  private function checkValidation( $post ) {
-
-    $labelList = array('이름','닉네임','아이디','비밀번호','이메일');
-    $ckeckList = array('user_name','nick_name','user_id','password','email_address');
+    $labelList = array('아이디를','비밀번호를','닉네임을','이메일을');
+    $ckeckList = array('user_id','password','nick_name','email_address');
     foreach ($ckeckList as $key => $value) {
 
       if (empty($post[$value])) {
-        $msg = $post[$value] . $labelList[$key] . '을(를) 입력해주세요.';
+        $msg = $post[$value] . $labelList[$key] . ' 입력해주세요.';
         return $msg;
       }
     }
@@ -217,6 +215,9 @@ class MemberController extends Controller {
 
   function updateMemberModify() {
 
+    $msg = "";
+    $resultYN = "Y";
+
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $category = $posts['category'];
@@ -257,8 +258,7 @@ class MemberController extends Controller {
         $index++;
       }     
     }
-
-    $resultYN = "Y";
+    
     $passwordHash = $context->getPasswordHash($posts['password']);
     if (isset($posts['new_password']) && $posts['new_password']) {
       $newpasswordHash = $context->getPasswordHash($posts['new_password']);

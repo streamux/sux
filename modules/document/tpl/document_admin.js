@@ -1,72 +1,161 @@
+/** 
+ * used class 'jsux.fn.listManager'
+ * path 'common/js/app/jsux_list_manager.js'
+ * author streamux.com
+ * update 2017.10.18
+ */
+ 
 jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 
+  limit: 10,
+  limitGroup: 5,
+  pagination: jsux.app.getPagination(),
+  listManager: jsux.app.getListManager(),
+  listMobileManager: jsux.app.getListManager(),
+
   setLayout: function() {
 
-    jsux.getJSON(jsux.rootPath + "document-admin/list-json", function( e )  {
+    var self = this,
+          url = $('input[name=list_json_path').val(),
+          params = {
+            passover: 0,
+            limit: this.limit
+          },
+          changeHandler = null;
 
-      var   func = {
-          editDate: function( value ) {
-            var list = value.split(" ");
-            return list[0];
-          }
-        },
-        markup = "";
+    if (!url) {
+      trace('input[name=list_json_path] 경로값을 입력하세요');
+      return;
+    }
+    
+    self.listManager.setResource(url);
+    self.listMobileManager.setResource(url);
+    
+    self.listManager.initialize({
+      id: '#dataList',
+      tmpl: '#dataListTmpl',
+      msg_tmpl: '#warnMsgTmpl'
+    });
+    self.listMobileManager.initialize({
+      id: '#dataMobileList',    
+      tmpl: '#dataListMobileTmpl',
+      msg_tmpl: '#warnMsgMobileTmpl'
+    });
 
-      // data에러가 나는 경우 서버 필드에 날자가 등록되어 있는지 확인한다.
-      $("#documentList").empty();
-      if (e.result == "Y") {
-        markup = $("#documentList_tmpl");
-        $(markup).tmpl(e.data.list, func).appendTo("#documentList");        
-      } else {
-        markup = $("#documentWarnMsg_tmpl");
-        $(markup).tmpl( e ).appendTo("#documentList");
+    // pagination start
+    changeHandler = function( e ) {
+      self.listManager.reloadData( e.page, self.limit);
+      self.listMobileManager.reloadData( e.page, self.limit);
+    };    
+    self.pagination.addEventListener('change', changeHandler);
+    self.pagination.initialize({
+      el: '.sx-pagination-group',
+      id: '#paginList',
+      tmpl: '#paginationTmpl',
+      control: {
+        'prev':'.sx-pagination-group .sx-nav-prev',
+        'next':'.sx-pagination-group .sx-nav-next'
       }
-    }, function(e) {
-      console.log('error status : ' , e.status);
+    });
+
+    jsux.getJSON(url, params, function( e )  {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {
+
+        self.listManager.setData( data );
+        self.listMobileManager.setData( data );
+
+        self.pagination.setData({
+          total: data.total_num,
+          limit: self.limit,
+          limitGroup: self.limitGroup
+        });
+        
+        self.pagination.activateControl();
+      } else {
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+
+        // pagination start
+        self.pagination.deactivateControl();
+      }
     });
   },
   init: function() {
-    
     this.setLayout();
   }
 };
 
 jsux.fn.add = {
 
+  activedTab: null,
+
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  loadTemplateContents: function(value) { 
+
+    var self = this,
+          skinPath = $('input[name=skin_path]').val(),
+          url = '';
+
+    if (!skinPath) {
+      trace('input[name=skin_path] 경로값을 입력하세요.');
+      return;
+    }
+    url = skinPath + '?template=' + value;
+  
+    jsux.getJSON( url, function(e) {
+
+      if (e.data) {
+        $.each(e.data, function(key, item) {
+          self.setTextAreaVal(key,item)
+        });
+      }      
+    });
+  },
   getSelectVal: function( id ) {
 
-    var result = $.trim($("select[name="+id+"]").val());
-
-    return result;
+    return $.trim($('select[name='+id+']').val());
   },
   setSelectVal:function( id, value ) {
 
-    $("select[name="+id+"]").val( value );
+    $('select[name='+id+']').val( value );
   },
   getRadioVal: function( id ) {
 
-    var result = $("input:radio[name="+id+"]:checked").val();
-
-    return result;
+    return $('input:radio[name='+id+']:checked').val();
   },
   setRadioVal: function( id, value) {
 
-    var result = $("input:radio[name="+id+"]:input[value="+value+"]").prop("checked", true);
+    return $('input:radio[name='+id+']:input[value='+value+']').prop('checked', true);
+  },
+  setTextAreaVal: function( id, value ) {
 
-    return result;
+    $('textarea[name='+id+']').val( value );
   },
   getCheckboxVal: function( id ) {
 
-    var result= "",
-      list = $("input:checkbox[name="+id+"]:checked"),
+    var result= '',
+      list = $('input:checkbox[name='+id+']:checked'),
       len = list.length;
 
     $(list).each(function(index){
       result += list[index].value;
 
       if (index < len-1) {
-        result += ",";
+        result += ',';
       }
     });
     return result;
@@ -83,38 +172,40 @@ jsux.fn.add = {
       document_name = f.document_name.value.length;
 
     if ( category < 1 ) {
-      trace("카테고리 이름을 입력하세요.");
+      trace('카테고리 이름을 입력하세요.');
       f.category.focus();
       return (false);
     }
 
     if (this.checkLangKor( f.category.value)) {
-      trace("카테고리 이름에 한글이 포함되어 있습니다.");
+      trace('카테고리 이름에 한글이 포함되어 있습니다.');
       f.category.focus();
       return (false);
     }
 
     if ( document_name < 1) {
-      trace("페이지 이름을 입력하세요.");
+      trace('페이지 이름을 입력하세요.');
       f.document_name.focus();
       return (false);
     }
 
     return (true);
   },
-  checkTableName: function() {
+  checkCategoryName: function() {
 
-    var params = {  category: $("input[name=category]").val()};
+    var params = {  category: $('input[name=category]').val()};
 
-    if (params.category === "") {
-      trace("카테고리명을 입력하세요.");
-      $("input[name=category]").focus();
+    if (params.category === '') {
+      trace('카테고리명을 입력하세요.');
+      $('input[name=category]').focus();
       return;
     }
 
-    jsux.getJSON(jsux.rootPath + "document-admin/check-page", params, function( e ) {
+    jsux.getJSON(jsux.rootPath + 'document-admin/check-page', params, function( e ) {
 
-      trace( e.msg );
+      if (e.msg) {
+        trace( e.msg );
+      }      
     });
   },
   sendJson:  function( f ) {
@@ -152,18 +243,61 @@ jsux.fn.add = {
 
     jsux.getJSON( url, params, function( e ) {
       
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
       } else {
         trace( e.msg );
       }
     });
   },
+  setContentsByTab: function(e) {
+
+    var targetName = $(e.target).data('target');
+    $contents = $('textarea[name^=contents]');
+    $contents.each(function(index) {
+
+      var $this = $(this);
+      var itemName = $this.attr('name');
+      if (targetName.match(itemName)) {
+
+        var $selectedItem = $('textarea[name='+itemName+']');          
+        if ($selectedItem.hasClass('hide')) {
+          $selectedItem.removeClass('hide');
+        }
+
+        if (!$selectedItem.hasClass('show')) {
+          $selectedItem.addClass('show');
+        }
+      } else {
+
+        if ($this.hasClass('show')) {
+          $this.removeClass('show');
+        }   
+
+        if (!$this.hasClass('hide')) {
+          $this.addClass('hide');
+        }          
+      }
+    });
+  },
+  setTab: function(e) {
+
+    var target = $(e.target).parent();
+
+    if (this.activedTab.hasClass('active')) {
+      this.activedTab.removeClass('active');
+    }
+    
+    if (!target.hasClass('active')) {
+      target.addClass('active');
+      this.activedTab = target;
+    }
+  },
   setEvent: function() {
 
     var self = this;
 
-    $("form").on("submit",function( e ) {
+    $('form').on('submit',function( e ) {
       e.preventDefault();
 
       var bool = self.checkFormVal( e.target );
@@ -171,17 +305,38 @@ jsux.fn.add = {
         self.sendJson( e.target );
       }
     });
-    $("input[name=cancel]").on("click", function(e) {
+    $('#btnCancel').on('click', function(e) {
 
-      jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+      jsux.goURL(self.returnUrl());
     });
-    $("input[name=checkID]").on("click",function(e) {       
+    $('#btnCheckCategory').on('click',function(e) {       
 
-      self.checkTableName();
+      self.checkCategoryName();
     });
+
+    // contents tab event
+    $('.sx-nav-tabs > li > a').on('click', function(e) {
+      e.preventDefault();
+      
+      self.setTab(e);
+      self.setContentsByTab(e);
+    });
+  },
+  setLayout: function() {
+
+    var self = this;
+    $('.sx-nav-tabs > li').each(function(index) {
+      var target = $(this);
+      if(target.hasClass('active')) {
+        self.activedTab = target;
+      }
+    });
+
+    this.loadTemplateContents('default');    
   },
   init: function() {
 
+    this.setLayout();
     this.setEvent();
     jsux.setAutoFocus();
   }
@@ -191,63 +346,79 @@ jsux.fn.modify = {
   
   activedTab: null,
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   loadTemplateContents: function(value) {
 
-    var self = this;
-    var url = jsux.rootPath + 'document-admin/skin-resource?template=' + value;
-   
+    var self = this,
+          skinPath = $('input[name=skin_path]').val(),
+          url = '';
+
+    if (!skinPath) {
+      trace('input[name=skin_path] 경로값을 입력하세요.');
+      return;
+    }
+    url = skinPath + '?template=' + value;
+
     jsux.getJSON( url, function(e) {
-      $.each(e.data, function(key, item) {
-        self.setTextAreaVal(key,item)
-      })
+
+      if (e.data) {
+        $.each(e.data, function(key, item) {
+          self.setTextAreaVal(key,item)
+        });
+      }      
     });
   },
   getSelectVal: function( id ) {
 
-    var result = $.trim($("select[name="+id+"]").val());
-
-    return result;
+    return $.trim($('select[name='+id+']').val());
   },
   setSelectVal:function( id, value ) {
 
-    $("select[name="+id+"]").val( value );
+    $('select[name='+id+']').val( value );
   },
   getRadioVal: function( id ) {
 
-    var result = $("input:radio[name="+id+"]:checked").val();
+    var result = $('input:radio[name='+id+']:checked').val();
 
     return result;
   },
   setRadioVal: function( id, value) {
 
-    var result = $("input:radio[name="+id+"][value="+value+"]").attr("checked", true);
+    var result = $('input:radio[name='+id+'][value='+value+']').attr('checked', true);
 
     return result;
   },
   getCheckboxVal: function( id ) {
 
-    var result= "",
-      list = $("input:checkbox[name="+id+"]:checked"),
+    var result= '',
+      list = $('input:checkbox[name='+id+']:checked'),
       len = list.length;
 
     $(list).each(function(index){
       result += list[index].value;
 
       if (index < len-1) {
-        result += ",";
+        result += ',';
       }
     });
     return result;
   },
   getTextAreaVal: function( id ) {
 
-    var result = $("textarea[name="+id+"]").val();
+    var result = $('textarea[name='+id+']').val();
 
     return result;
   },
   setTextAreaVal: function( id, value ) {
 
-    $("textarea[name="+id+"]").val( value );
+    $('textarea[name='+id+']').val( value );
   },
   checkLangKor: function( value ) {
 
@@ -260,7 +431,7 @@ jsux.fn.modify = {
     var document_name = f.document_name.value.length;
 
     if ( document_name < 1) {
-      trace("페이지  이름을 입력하세요.");
+      trace('페이지  이름을 입력하세요.');
       f.document_name.focus();
       return (false);
     }
@@ -302,51 +473,87 @@ jsux.fn.modify = {
 
     jsux.getJSON(url, params, function( e ) {
       
-      trace( e.msg );
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
       } else {
         trace( e.msg );     
       }
     });
   },
+  setContentsByTab: function(e) {
+
+    var targetName = $(e.target).data('target');
+    $contents = $('textarea[name^=contents]');
+    $contents.each(function(index) {
+
+      var $this = $(this);
+      var itemName = $this.attr('name');
+      if (targetName.match(itemName)) {
+
+        var $selectedItem = $('textarea[name='+itemName+']');          
+        if ($selectedItem.hasClass('hide')) {
+          $selectedItem.removeClass('hide');
+        }
+
+        if (!$selectedItem.hasClass('show')) {
+          $selectedItem.addClass('show');
+        }
+      } else {
+
+        if ($this.hasClass('show')) {
+          $this.removeClass('show');
+        }   
+
+        if (!$this.hasClass('hide')) {
+          $this.addClass('hide');
+        }          
+      }
+    });
+  },
+  setTab: function(e) {
+
+    var target = $(e.target).parent();
+
+    if (this.activedTab.hasClass('active')) {
+      this.activedTab.removeClass('active');
+    }
+    
+    if (!target.hasClass('active')) {
+      target.addClass('active');
+      this.activedTab = target;
+    }
+  },
   setEvent: function() {
 
     var self = this;
 
-    $("form").on("submit", function( e ) {
+    $('form').on('submit', function( e ) {
       e.preventDefault();
 
-      var bool  = self.checkFormVal( e.target );
-      if (bool === true) {
+      if (self.checkFormVal( e.target ) === true) {
         self.sendJson( e.target );
       }
     });
 
-    $("input[name=cancel]").on("click", function(e) {
-      jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+    $('#btnCancel').on('click', function(e) {
+      jsux.goURL(self.returnUrl());
     });
 
     // contents tab event
     $('.sx-nav-tabs > li > a').on('click', function(e) {
       e.preventDefault();
-      if (self.activedTab.hasClass('active')) {
-        self.activedTab.removeClass('active');
-      }
-
-      var parent = $(e.target).parent();
-      if (!parent.hasClass('active')) {
-        parent.addClass('active');
-        self.activedTab = parent;
-      }
+      
+      self.setTab(e);
+      self.setContentsByTab(e);
     });
   },
   setLayout: function() {
 
     var self = this,
-      params = {
-        id: $("input[name=id]").val()
-      };
+          params = {
+            id: $('input[name=id]').val()
+          },
+          url = $('input[name=modify_info_path]').val();
 
     $('.sx-nav-tabs > li').each(function(index) {
       var target = $(this);
@@ -355,42 +562,54 @@ jsux.fn.modify = {
       }
     });
 
-    jsux.getJSON(jsux.rootPath + "document-admin/modify-json", params, function( e ) {
+    if (!url) {
+      trace('input[name=modify_info_path] 경로값을 확인해주세요.');
+      return;
+    }
+
+    jsux.getJSON(url, params, function( e ) {
 
       var formLists = null,
-        checkedVal = "",
+        checkedVal = '',
         markup = null,
         labelList = null,
         list = null;
 
-      if (e.result == "Y") {
-        list = e.data.list[0];
-        formLists = $("input[type=text]");
-        $(formLists).each(function(index) {
+        trace( e.msg , 1);
 
-          if (list[this.name]) {
-            this.value = list[this.name];
-          }
-          //console.log(this.name, list[this.name]);
-        });
+      if ( e.result && e.result.toUpperCase() === 'Y') {
+        if (e.data && e.data.list) {
 
-        formLists = $("select");
-        $(formLists).each(function(index) {
+          list = e.data.list[0];
+          formLists = $('input[type=text]');
+          $(formLists).each(function(index) {
 
-          if (list[this.name]) {
-            this.value = list[this.name];
+            if (list[this.name]) {
+              this.value = list[this.name];
+            }
             //console.log(this.name, list[this.name]);
-          }           
-        });
+          });
 
-        formLists = $("input[type=radio]");
-        $(formLists).each(function(index) {
-          self.setRadioVal( this.name, list[this.name] );
-        });
+          formLists = $('select');
+          $(formLists).each(function(index) {
 
-        self.setTextAreaVal("contents_tpl", list.contents_tpl);
-        self.setTextAreaVal("contents_css", list.contents_css); 
-        self.setTextAreaVal("contents_js", list.contents_js); 
+            if (list[this.name]) {
+              this.value = list[this.name];
+              //console.log(this.name, list[this.name]);
+            }           
+          });
+
+          formLists = $('input[type=radio]');
+          $(formLists).each(function(index) {
+            self.setRadioVal( this.name, list[this.name] );
+          });
+
+          self.setTextAreaVal('contents_tpl', list.contents_tpl);
+          self.setTextAreaVal('contents_css', list.contents_css); 
+          self.setTextAreaVal('contents_js', list.contents_js); 
+        } else {
+          trace( e.msg );
+        }       
       } else {
         trace( e.msg );
       }
@@ -406,19 +625,35 @@ jsux.fn.modify = {
 };
 jsux.fn.delete = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   sendJson: function() {
 
-    var params = {
-      _method:$("input[name=_method]").val(),
-      category:$("input[name=category]").val(),
-      id:$("input[name=id]").val()
-    };
+    var self = this,
+          params = {
+            _method:$('input[name=_method]').val(),
+            category:$('input[name=category]').val(),
+            id:$('input[name=id]').val()
+          },
+          $form = $('form'),
+          url = $form[0].action;
 
-    jsux.getJSON(jsux.rootPath + "document-admin/delete",params, function( e )  {
+    if (!url) {
+      trace('Form action 호출 경로가 존재하지 않습니다.');
+    }
 
-      trace( e.msg );
-      if (e.result == "Y") {
-        jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
+    jsux.getJSON(url,params, function( e )  {
+      
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -426,16 +661,14 @@ jsux.fn.delete = {
 
     var self = this;
 
-    $(".articles .del .box ul > li > a").on("click", function( e ) {
+    $('#btnConfirm').on('click', function( e ) {
       e.preventDefault();
+      self.sendJson();
+    });
 
-      var key = $(this).data("key");
-
-      if (key == "del") {
-        self.sendJson();
-      } else if (key == "back") {
-        jsux.goURL(jsux.rootPath + menuList[2].menu[0].link);
-      }       
+    $('#btnCancel').on('click', function( e ) {
+      e.preventDefault();
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {

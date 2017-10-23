@@ -126,9 +126,6 @@ jsux.gnb.Menu = jsux.View.create();
         if (url === '') {
           return;
         }
-
-        console.log(jsux.rootPath);
-
         jsux.goURL( jsux.rootPath + url, '_self' ); 
       });
 
@@ -534,14 +531,12 @@ jsux.mobileGnb.Menu.include({
     $('.mobile-menu-btn').on('mouseover', function(e) {
       e.preventDefault();
       if (!$('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        trace(e.target,1);
         $('.mobile-menu-bg').addClass('menu-bg-activate');
       }      
     });
     $('.mobile-menu-btn').on('mouseout', function(e) {
       e.preventDefault();
       if ($('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        trace('out',1);
         $('.mobile-menu-bg').removeClass('menu-bg-activate');
       }      
     });

@@ -1,128 +1,170 @@
-<div class="articles ui-edgebox">
-  <div class="add">
-    <div class="tt">
-      <div class="imgbox">
-        <h1>팝업수정</h1>
-      </div>
-    </div>
-    <div class="box">
-      <form action="{$rootPath}popup-admin/modify">
-      <input type="hidden" name="_method" value="update">
-      <dl>
-        <dt>팝업수정 옵션설정</dt>
-        <dd>
-          <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" width="30" height="13" align="absmiddle" class="icon-notice">
-          <span class="text-notice">발강색(*)으로 표신된 부분은 반드시 입력해주세요.</span>
-          <input type="hidden" name="id" value="{$documentData.id}">  
-        </dd>
-      </dl>
-      <table summary="팝업 정보를 입력해 생성해주세요.">
-        <caption class="blind">팝업 정보 입력</caption>
-        <tbody>
-          <tr>
-            <td><label for="popup_name">*팝업이름</label></td>
-            <td>
-              <input type="text" id="popup_name" name="popup_name" size="20" maxlength="30">
-            </td>
-          </tr>
-          <tr>
-            <td><label for="popup_title">제목</label></td>
-            <td>
-              <input type="text" id="popup_title" name="popup_title" size="30" maxlength="30">
-            </td>
-          </tr>
-          <tr>
-            <td>노출</td>
-            <td>
-              <select name="is_usable">
-                <option value="n">n</option>
-                <option value="y">y</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>시간</td>
-            <td>
-              <input type="text" id="period_year" name="time_year" size="4" maxlength="4">
-              <span><label for="period_year">년</label></span>
-              <input type="text" id="period_month" name="time_month" size="2" maxlength="2">
-              <span><label for="period_month">월</label></span>
-              <input type="text" id="period_day" name="time_day" size="2" maxlength="2">
-              <span><label for="period_day">일</label></span>
-              <input type="text" id="period_hours" name="time_hours" size="2" maxlength="2">
-              <span><label for="period_hours">시</label></span>
-              <input type="text" id="period_minutes" name="time_minutes" size="2" maxlength="2">
-              <span><label for="period_minutes">분</label></span>
-              <input type="text" id="period_seconds" name="time_seconds" size="2" maxlength="2">
-              <span><label for="period_seconds">초 까지</label></span>
-              <span>※ 팝업창 닫을 시간을 정확하게 설정하세요.</span>
-            </td>
-            </td>
-          </tr>
-          <tr>
-            <td>스킨</td>
-            <td>
-              <select name="skin" id="skinList">
-              {foreach from=$documentData.skin_list item=$item}
-                <option>{$item.file_name}</option>
-              {/foreach}
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td>팝업크기</td>
-            <td>
-              <label for="popup_width">넓이</label>
-              <input type="text" id="popup_width" name="popup_width" size="4" maxlength="3">
-              <label for="popup_height">높이</label>
-              <input type="text" id="popup_height" name="popup_height" size="4" maxlength="3">
-            </td>
-          </tr>
-          <tr>
-            <td>팝업위치</td>
-            <td>
-              <label for="popup_top">상단</label>
-              <input type="text" id="popup_top" name="popup_top" size="4" maxlength="3">
-              <label for="popup_left">좌측</label>
-              <input type="text" id="popup_left" name="popup_left" size="4" maxlength="3" >
-              <span>※ 모니터 기준</span>
-            </td>
-          </tr>   
-          <tr>
-            <td>내용여백</td>
-            <td>
-              <label for="skin_top">상단</label>
-              <input type="text" id="skin_top" name="skin_top" size="4" maxlength="3">
-              <label for="skin_left">좌측</label>
-              <input type="text" id="skin_left" name="skin_left" size="4" maxlength="3">
-              <label for="skin_right">우측</label>
-              <input type="text" id="skin_right" name="skin_right" size="4" maxlength="3">
-            </td>
-          </tr>           
-          <tr>
-            <td><label for="textarea_contents">수정내용</label></td>
-            <td>
-              <textarea id="textarea_contents" name="contents" cols="25" rows="6"></textarea>
-              <span>※ 팝업에 들어갈 내용을 입력해주세요.</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<div class="sx-contents sx-admin-main">
+  <section class="sx-popup-panel">
+    <h1 class="title">팝업 정보 수정</h1>
+    <div class="sx-box-content">
+      <form action="{$rootPath}popup-admin/modify" class="sx-form-horizontal">
+        <input type="hidden" name="_method" value="update">
+        <input type="hidden" name="id" value="{$documentData.id}"> 
+        <input type="hidden" name="skin_path" value="{$rootPath}popup-admin/skin-json">
+        <input type="hidden" name="modify_info_path" value="{$rootPath}popup-admin/modify-json">
+        <input type="hidden" name="location_back" value="{$rootPath}popup-admin">
 
-      <input type="submit" name="submit" size="10" value="수 정">
-      <input type="button" name="cancel" value="취 소">
-
-      </form>         
-    </div>
-  </div>
+        <p class="text_notice">
+          <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>
+        </p>
+        <div class="sx-form-group">
+          <label for="popupName" class="sx-control-label label_width">*팝업이름</label>
+          <input type="text" name="popup_name" id="popupName" size="20" maxlength="20" class="sx-form-control">
+        </div>
+        <div class="sx-form-group">
+          <label for="popupTitle" class="sx-control-label label_width">제목</label>
+          <input type="text" name="popup_title" id="popupTitle" size="30" maxlength="30" class="sx-form-control">
+        </div>
+        <div class="sx-form-group">
+          <label for="isUsable" class="sx-control-label label_width">노출</label>
+          <select name="is_usable" id="isUsable" class="sx-form-control">
+            <option value="n">n</option>
+            <option value="y">y</option>
+          </select>
+        </div>
+        <div class="sx-form-inline">
+          <label for="emptyInput" class="sx-control-label label_width">노출 기간</label>
+          <div class="sx-form-group">
+            <label for="periodYear" class="sx-control-label">연도</label>
+            <select name="time_year" id="periodYear" class="sx-form-control">
+              <option value="2016">2016</option>
+              <option value="2017">2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+            </select>
+            <label for="timeMonth" class="sx-control-label">월</label>
+            <select name="time_month" id="timeMonth" class="sx-form-control">
+              <option value="1">01</option>
+              <option value="2">02</option>
+              <option value="3">03</option>
+              <option value="4">04</option>
+              <option value="5">05</option>
+              <option value="6">06</option>
+              <option value="7">07</option>
+              <option value="8">08</option>
+              <option value="9">09</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+           <label for="periodDay" class="sx-control-label">일</label>
+           <select name="time_day" id="timeDay" class="sx-form-control">
+             <option value="1">01</option>
+             <option value="2">02</option>
+             <option value="3">03</option>
+             <option value="4">04</option>
+             <option value="5">05</option>
+             <option value="6">06</option>
+             <option value="7">07</option>
+             <option value="8">08</option>
+             <option value="9">09</option>
+             <option value="10">10</option>
+             <option value="11">11</option>
+             <option value="12">12</option>
+             <option value="13">13</option>
+             <option value="14">14</option>
+             <option value="15">15</option>
+             <option value="16">16</option>
+             <option value="17">17</option>
+             <option value="18">18</option>
+             <option value="19">19</option>
+             <option value="20">20</option>
+             <option value="21">21</option>
+             <option value="22">22</option>
+             <option value="23">23</option>
+             <option value="24">24</option>
+             <option value="25">25</option>
+             <option value="26">26</option>
+             <option value="27">27</option>
+             <option value="28">28</option>
+             <option value="29">29</option>
+             <option value="30">30</option>
+             <option value="31">31</option>
+           </select>
+           <label for="periodHours" class="sx-control-label">시</label>
+            <input type="text" id="periodHours" name="time_hours" size="2" maxlength="2" class="sx-form-control">
+            <label for="periodMinutes" class="sx-control-label">분</label>
+            <input type="text" id="periodMinutes" name="time_minutes" size="2" maxlength="2" class="sx-form-control">
+            <label for="periodSeconds" class="sx-control-label">초</label>            
+            <input type="text" id="periodSeconds" name="time_seconds" size="2" maxlength="2" class="sx-form-control">
+            까지      
+          </div>          
+          <p class="text_caption">※ 팝업 노출 종료 시간을 설정하세요.</p>     
+        </div>
+        <div class="sx-form-group">
+          <label for="popupSkin" class="sx-control-label label_width">스킨</label>
+          <select id="popupSkin" name="skin" id="skinList" class="sx-form-control">
+            {foreach from=$documentData.skin_list item=$item}
+            <option>{$item.file_name}</option>
+            {/foreach}
+          </select>
+        </div>
+        <div class="sx-form-inline">
+          <label for="emptyInput" class="sx-control-label label_width">팝업 크기</label>
+          <div class="sx-form-group">
+            <label for="popupWidth" class="sx-control-label">넓이</label>
+            <input type="text" id="popupWidth" name="popup_width" size="4" maxlength="3" class="sx-form-control">
+            <label for="popupHeight" class="sx-control-label">높이</label>
+            <input type="text" id="popupHeight" name="popup_height" size="4" maxlength="3" class="sx-form-control">
+          </div>
+        </div>
+        <div class="sx-form-inline">
+          <label for="emptyInput" class="sx-control-label label_width">팝업위치</label>
+          <div class="sx-form-group">
+            <label for="popupTop" class="sx-control-label">상단</label>
+            <input type="text" id="popupTop" name="popup_top" size="4" maxlength="3" class="sx-form-control">
+            <label for="popupLeft" class="sx-control-label">좌측</label>
+            <input type="text" id="popupLeft" name="popup_left" size="4" maxlength="3" class="sx-form-control">            
+          </div>
+          <p class="text_caption">※ 모니터 기준</p> 
+        </div>
+        <div class="sx-form-inline">
+          <label for="emptyInput" class="sx-control-label label_width">내용여백</label>
+          <div class="sx-form-group">
+            <label for="skinTop" class="sx-control-label">상단</label>
+            <input type="text" id="skinTop" name="skin_top" size="4" maxlength="3" class="sx-form-control">
+            <label for="skinLeft" class="sx-control-label">좌측</label>
+            <input type="text" id="skinLeft" name="skin_left" size="4" maxlength="3" class="sx-form-control">
+            <label for="skinRight" class="sx-control-label">우측</label>
+            <input type="text" id="skinRight" name="skin_right" size="4" maxlength="3" class="sx-form-control">
+          </div>
+        </div>
+        <div class="sx-form-form">
+          <label for="popupContents" class="sx-control-label label_width">내용</label>
+          <textarea id="popupContents" name="contents" cols="25" rows="6" class="sx-form-control"></textarea>
+          <p class="text_caption">※ 팝업에 들어갈 내용을 입력해주세요.</p>       
+        </div>
+        <div class="row btn_group text-center">
+          <input type="submit" id="btnConfirm" class="sx-btn" value="확인">
+          <a href="#" id="btnCancel" class="sx-btn">취소</a>
+        </div>
+      </form>
+    </div>    
+  </section>
 </div>
+
 <script type="jquery-templete" id="popupLabel_tmpl">
-{literal}
+  {literal}
   <span>${label}</span>
-{/literal}
+  {/literal}
 </script>
 <script type="jquery-templete" id="skinList_tmpl">
-{literal}
+  {literal}
   <option>${file_name}</option>
-{/literal}
+  {/literal}
 </script>

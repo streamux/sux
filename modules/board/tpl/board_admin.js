@@ -1,418 +1,504 @@
+/** 
+ * used class 'jsux.fn.listManager'
+ * path 'common/js/app/jsux_list_manager.js'
+ * author streamux.com
+ * update 2017.10.18
+ */
+
 jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 
-	setLayout: function() {
+  limit: 10,
+  limitGroup: 5,
+  pagination: jsux.app.getPagination(),
+  listManager: jsux.app.getListManager(),
+  listMobileManager: jsux.app.getListManager(),
 
-		jsux.getJSON(jsux.rootPath + "board-admin/list-json", function( e )  {
-			
-			var 	func = {
-					editDate: function( value ) {
-						var list = value.split(" ");
-						return list[0];
-					}
-				},
-				markup = "";
+  setLayout: function() {
 
-			// data에러가 나는 경우 서버 필드에 날자가 등록되어 있는지 확인한다.
-			$("#boardList").empty();
-			if (e.result == "Y") {
-				markup = $("#boardList_tmpl");
-				$(markup).tmpl(e.data.list, func).appendTo("#boardList");				
-			} else {
-				markup = $("#boardWarnMsg_tmpl");
-				$(markup).tmpl( e ).appendTo("#boardList");
-			}
-		});
-	},
-	init: function() {
-		
-		this.setLayout();
-	}
+    var self = this,
+          url = $('input[name=list_json_path').val(),
+          params = {
+            passover: 0,
+            limit: this.limit
+          },
+          changeHandler = null;    
+
+    if (!url) {
+      trace('input[name=list_json_path] 경로값을 입력하세요');
+      return;
+    }
+
+    self.listManager.setResource(url);
+    self.listMobileManager.setResource(url);
+
+    this.listManager.initialize({
+      id: '#dataList',
+      tmpl: '#dataListTmpl',
+      msg_tmpl: '#warnMsgTmpl'
+    });
+
+    this.listMobileManager.initialize({
+      id: '#dataMobileList',    
+      tmpl: '#dataListMobileTmpl',
+      msg_tmpl: '#warnMsgMobileTmpl'
+    });
+
+    // pagination start
+    changeHandler = function( e ) {
+      self.listManager.reloadData( e.page, this.limit);
+      self.listMobileManager.reloadData( e.page, this.limit);
+    };
+
+    this.pagination.addEventListener('change', changeHandler);
+    this.pagination.initialize({
+      el: '.sx-pagination-group',
+      id: '#paginList',
+      tmpl: '#paginationTmpl',
+      control: {
+        'prev':'.sx-pagination-group .sx-nav-prev',
+        'next':'.sx-pagination-group .sx-nav-next'
+      }
+    });    
+
+    jsux.getJSON(url, params, function( e )  {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {        
+
+        self.listManager.setData( data );
+        self.listMobileManager.setData( data );
+
+        self.pagination.setData({
+          total: data.total_num,
+          limit: self.limit,
+          limitGroup: self.limitGroup
+        });
+        
+        self.pagination.activateControl();
+      } else {
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+
+        // pagination start
+        self.pagination.deactivateControl();
+      }
+    });
+  },
+  init: function() {    
+    this.setLayout();
+  }
 };
 jsux.fn.add = {
 
-	getSelectVal: function( id ) {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  getSelectVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"]").val());
+    return $.trim($('select[name='+id+']').val());
+  },
+  setSelectVal:function( id, value ) {
 
-		return result;
-	},
-	setSelectVal:function( id, value ) {
+    $('select[name='+id+']').val( value );
+  },
+  getRadioVal: function( id ) {
 
-		$("select[name="+id+"]").val( value );
-	},
-	getRadioVal: function( id ) {
+    return $('input:radio[name='+id+']:checked').val();
+  },
+  setRadioVal: function( id, value) {  
 
-		var result = $("input:radio[name="+id+"]:checked").val();
+    return $('input:radio[name='+id+']:input[value='+value+']').prop('checked', true);
+  },
+  getCheckboxVal: function( id ) {
 
-		return result;
-	},
-	setRadioVal: function( id, value) {		
-		var result = $("input:radio[name="+id+"]:input[value="+value+"]").prop("checked", true);
+    var result= '',
+          list = $('input:checkbox[name='+id+']:checked'),
+          len = list.length;
 
-		return result;
-	},
-	getCheckboxVal: function( id ) {
+    $(list).each(function(index){
+      result += list[index].value;
 
-		var result= "",
-			list = $("input:checkbox[name="+id+"]:checked"),
-			len = list.length;
+      if (index < len-1) {
+        result += ',';
+      }
+    });
+    return result;
+  },
+  checkLangKor: function( value ) {
 
-		$(list).each(function(index){
-			result += list[index].value;
+    var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
-			if (index < len-1) {
-				result += ",";
-			}
-		});
-		return result;
-	},
-	checkLangKor: function( value ) {
+    return reg.test( value );
+  },
+  checkFormVal: function( f ) {
 
-		var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    var category = f.category.value.length,
+         board_name = f.board_name.value.length;
 
-		return reg.test( value );
-	},
-	checkFormVal: function( f ) {
+    if ( category < 1 ) {
+      trace('게시판 테이블이름을 입력하세요.');
+      f.category.focus();
+      return (false);
+    }
 
-		var category = f.category.value.length,
-			board_name = f.board_name.value.length;
+    if (this.checkLangKor( f.category.value)) {
+      trace('테이블 이름에 한글이 포함되어 있습니다.');
+      f.category.focus();
+      return (false);
+    }
 
-		if ( category < 1 ) {
-			trace("게시판 테이블이름을 입력하세요.");
-			f.category.focus();
-			return (false);
-		}
+    if ( board_name < 1) {
+      trace('게시판 이름을 입력하세요.');
+      f.board_name.focus();
+      return (false);
+    }
 
-		if (this.checkLangKor( f.category.value)) {
-			trace("테이블 이름에 한글이 포함되어 있습니다.");
-			f.category.focus();
-			return (false);
-		}
+    return (true);
+  },
+  checkCategory: function() {
 
-		if ( board_name < 1) {
-			trace("게시판 이름을 입력하세요.");
-			f.board_name.focus();
-			return (false);
-		}
+    var params = {  category: $('input[name=category]').val()};
 
-		return (true);
-	},
-	checkTableName: function() {
+    if (params.category === '') {
+      trace('카테고리명을 입력해 주세요.');
+      $('input[name=category]').focus();
+      return;
+    }
 
-		var	params = {	category: $("input[name=category]").val()};
+    jsux.getJSON(jsux.rootPath + 'board-admin/check-board', params, function( e ) {
 
-		if (params.category === "") {
-			trace("카테고리명을 입력해 주세요.");
-			$("input[name=category]").focus();
-			return;
-		}
+      if (e.msg) {
+        trace( e.msg );
+      }      
+    });
+  },
+  sendJson:  function( f ) {
 
-		jsux.getJSON(jsux.rootPath + "board-admin/check-board", params, function( e ) {
+    var self = this,
+      params = {
+        _method:$('input[name=_method]').val(),
+      },
+      indexCheckbox = 0;
 
-			trace( e.msg );
-		});
-	},
-	sendJson:  function( f ) {
+    $.each(f, function(index, item) {
 
-		var self = this,
-			params = {
-				_method:$("input[name=_method]").val(),
-			},
-			indexCheckbox = 0;
+      var filters = 'checkbox|button|submit';
+      var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+      var glue ='';
 
-		$.each(f, function(index, item) {
+      if (item.nodeName.toLowerCase() === 'select') {
+        //console.log(item.name + ' : ' + item.value);
+        item.value = self.getSelectVal(item.name);          
+        params[item.name] = item.value;
+      } else if (type === 'radio' && item.checked) {
+        //console.log(item.name + ' : ' + item.value);
+        params[item.name] = item.value;       
+      } else if (type === 'text' || type === 'textarea') {
+         if (!type.match(filters)) {
+          //console.log(item.name + ' : ' + item.value);          
+          params[item.name] = item.value;
+        }
+      }     
+    });
 
-			var filters = 'checkbox|button|submit';
-			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
-			var glue ='';
+    var url = f.action;
+    if (!url) {
+      trace('Action URL Not Exists');
+      return false;
+    }
 
-			if (item.nodeName.toLowerCase() === 'select') {
-				//console.log(item.name + ' : ' + item.value);
-				item.value = self.getSelectVal(item.name);					
-				params[item.name] = item.value;
-			} else if (type === 'radio' && item.checked) {
-				//console.log(item.name + ' : ' + item.value);
-				params[item.name] = item.value;				
-			} else if (type === 'text') {
-				 if (!type.match(filters)) {
-					//console.log(item.name + ' : ' + item.value);					
-					params[item.name] = item.value;
-				}
-			}			
-		});
+    jsux.getJSON( url, params, function( e ) {
+     
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+         trace( e.msg );
+      }
+    });
+  },
+  setEvent: function() {
 
-		var url = f.action;
-		if (!url) {
-			trace('Action URL Not Exists');
-			return false;
-		}
+    var self = this;
 
-		jsux.getJSON( url, params, function( e ) {
+    $('form').on('submit',function( e ) {
+      e.preventDefault();
 
-			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-			} 
-		});
-	},
-	setEvent: function() {
+      if (self.checkFormVal( e.target ) === true) {
+        self.sendJson( e.target );
+      }
+    });
 
-		var self = this;
+    $('#btnCancel').on('click', function(e) {
+      e.preventDefault();
 
-		$("form").on("submit",function( e ) {
-			e.preventDefault();
+      jsux.goURL(self.returnUrl());
+    });
 
-			var bool = self.checkFormVal( e.target );
-			if (bool === true) {
-				self.sendJson( e.target );
-			}
-		});
-		$("input[name=cancel]").on("click", function(e) {
+    $('#checkCategory').on('click',function(e) {
+      self.checkCategory();
+    });
+  },
+  init: function() {
 
-			jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-		});
-		$("input[name=checkID]").on("click",function(e) {				
-
-			self.checkTableName();
-		});
-	},
-	setLayout: function() {
-
-		jsux.getJSON(jsux.rootPath + "board-admin/skin-json", function( e ) {
-
-			markup = $("#skinList_tmpl");
-			$("#skinList").empty();
-			$(markup).tmpl(e.data.list).appendTo("#skinList");
-		});
-	},
-	init: function() {
-
-		this.setLayout();
-		this.setEvent();
-		jsux.setAutoFocus();
-	}
+    this.setEvent();
+    jsux.setAutoFocus();
+  }
 };
 jsux.fn.modify = {
-		
-	getSelectVal: function( id ) {
 
-		var result = $.trim($("select[name="+id+"]").val());
+   returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  getSelectVal: function( id ) {
 
-		return result;
-	},
-	setSelectVal:function( id, value ) {
+    var result = $.trim($('select[name='+id+']').val());
 
-		$("select[name="+id+"]").val( value );
-	},
-	getRadioVal: function( id ) {
+    return result;
+  },
+  setSelectVal:function( id, value ) {
 
-		var result = $("input:radio[name="+id+"]:checked").val();
+    $('select[name='+id+']').val( value );
+  },
+  getRadioVal: function( id ) {
 
-		return result;
-	},
-	setRadioVal: function( id, value) {
+    var result = $('input:radio[name='+id+']:checked').val();
 
-		var result = $("input:radio[name="+id+"][value="+value+"]").attr("checked", true);
+    return result;
+  },
+  setRadioVal: function( id, value) {
 
-		return result;
-	},
-	getCheckboxVal: function( id ) {
+    var result = $('input:radio[name='+id+'][value='+value+']').attr('checked', true);
+    return result;
+  },
+  getCheckboxVal: function( id ) {
 
-		var result= "",
-			list = $("input:checkbox[name="+id+"]:checked"),
-			len = list.length;
+    var result= '',
+      list = $('input:checkbox[name='+id+']:checked'),
+      len = list.length;
 
-		$(list).each(function(index){
-			result += list[index].value;
+    $(list).each(function(index){
+      result += list[index].value;
 
-			if (index < len-1) {
-				result += ",";
-			}
-		});
-		return result;
-	},
-	getTextAreaVal: function( id ) {
+      if (index < len-1) {
+        result += ',';
+      }
+    });
+    return result;
+  },
+  getTextAreaVal: function( id ) {
 
-		var result = $("textarea[name="+id+"]").val();
+    var result = $('textarea[name='+id+']').val();
 
-		return result;
-	},
-	setTextAreaVal: function( id, value ) {
+    return result;
+  },
+  setTextAreaVal: function( id, value ) {
 
-		$("textarea[name="+id+"]").val( value );
-	},
-	checkLangKor: function( value ) {
+    $('textarea[name='+id+']').val( value );
+  },
+  checkLangKor: function( value ) {
 
-		var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
 
-		return reg.test( value );
-	},		
-	checkCompanyName: function() {
+    return reg.test( value );
+  }, 
+  checkFormVal: function( f ) {
 
-		
-	},
-	checkFormVal: function( f ) {
+    var board_name = f.board_name.value.length;
 
-		var board_name = f.board_name.value.length;
+    if ( board_name < 1) {
+      trace('게시판 이름을 입력하세요.');
+      f.board_name.focus();
+      return (false);
+    }
 
-		if ( board_name < 1) {
-			trace("게시판 이름을 입력하세요.");
-			f.board_name.focus();
-			return (false);
-		}
+    return (true);
+  },
+  sendJson: function( f ) {
 
-		return (true);
-	},
-	sendJson: function( f ) {
+    var self = this,
+      params = {
+        _method:$('input[name=_method]').val(),
+      },
+      indexCheckbox = 0;
 
-		var self = this,
-			params = {
-				_method:$("input[name=_method]").val(),
-			},
-			indexCheckbox = 0;
+    $.each(f, function(index, item) {
 
-		$.each(f, function(index, item) {
+      var filters = 'checkbox|button|submit';
+      var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
+      var glue ='';
 
-			var filters = 'checkbox|button|submit';
-			var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
-			var glue ='';
+      if (item.nodeName.toLowerCase() === 'select') {
+        //console.log(item.name + ' : ' + item.value);
+        item.value = self.getSelectVal(item.name);          
+        params[item.name] = item.value;
+      } else if (type === 'radio' && item.checked) {
+        //console.log(item.name + ' : ' + item.value);
+        params[item.name] = item.value;       
+      } else if (type === 'text' || type === 'textarea' || type === 'hidden') {
+         if (!type.match(filters)) {
+          //console.log(item.name + ' : ' + item.value);          
+          params[item.name] = item.value;
+        }
+      }     
+    });
 
-			if (item.nodeName.toLowerCase() === 'select') {
-				//console.log(item.name + ' : ' + item.value);
-				item.value = self.getSelectVal(item.name);					
-				params[item.name] = item.value;
-			} else if (type === 'radio' && item.checked) {
-				//console.log(item.name + ' : ' + item.value);
-				params[item.name] = item.value;				
-			} else if (type === 'text' || type === 'hidden') {
-				 if (!type.match(filters)) {
-					//console.log(item.name + ' : ' + item.value);					
-					params[item.name] = item.value;
-				}
-			}			
-		});
+    var url = f.action;
+    if (!url) {
+      trace('Action URL Not Exists');
+      return false;
+    }
 
-		var url = f.action;
-		if (!url) {
-			trace('Action URL Not Exists');
-			return false;
-		}
+    jsux.getJSON(url, params, function( e ) {
+      
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );     
+      }
+    });
+  },
+  setEvent: function() {
 
-		jsux.getJSON(url, params, function( e ) {
-			
-			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-			} else {
-				trace( e.msg );			
-			}
-		});
-	},
-	setEvent: function() {
+    var self = this;
 
-		var self = this;
+    $('form').on('submit', function( e ) {
+      e.preventDefault();
 
-		$("form").on("submit", function( e ) {
-			e.preventDefault();
+      if (self.checkFormVal( e.target ) === true) {
+        self.sendJson( e.target );
+      }
+    });
 
-			var bool  = self.checkFormVal( e.target );
-			if (bool === true) {
-				self.sendJson( e.target );
-			}
-		});
+    $('#btnCancel').on('click', function(e) {
+      e.preventDefault();
 
-		$("input[name=cancel]").on("click", function(e) {
-			jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-		});
-	},
-	setLayout: function() {
+      jsux.goURL(self.returnUrl());
+    });
+  },
+  setLayout: function() {
 
-		var self = this,
-			params = {
-				id: $("input[name=id]").val()
-			};
+    var self = this,
+          params = {
+            id: $('input[name=id]').val()
+          },
+          url = $('input[name=modify_info_path]').val();
 
-		jsux.getJSON(jsux.rootPath + "board-admin/modify-json", params, function( e ) {
+    if (!url) {
+      trace('input[name=modify_info_path] 경로값을 입력하세요.');
+      return;
+    }
 
-			var formLists = null,
-				checkedVal = "",
-				markup = null,
-				labelList = null;
+    jsux.getJSON(url, params, function( e ) {
 
-			if (e.result == "Y") {				
+      var formLists = null,
+        checkedVal = '',
+        markup = null,
+        labelList = null;
 
-				formLists = $("input[type=text]");
-				$(formLists).each(function(index) {
+      if (e.result && e.result.toUpperCase() === 'Y') {        
 
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
-					}
-				});
+        formLists = $('input[type=text]');
+        $(formLists).each(function(index) {
 
-				formLists = $("select");
-				$(formLists).each(function(index) {
+          if (e.data[this.name]) {
+            this.value = e.data[this.name];
+          }
+        });
 
-					//console.log(this.name, e.data[this.name]);
-					if (e.data[this.name]) {
-						this.value = e.data[this.name];
-					}						
-				});
+        formLists = $('select');
+        $(formLists).each(function(index) {
 
-				formLists = $("input[type=radio]");
-				$(formLists).each(function(index) {
-					self.setRadioVal( this.name, e.data[this.board_name] );
-				});
+          //console.log(this.name, e.data[this.name]);
+          if (e.data[this.name]) {
+            this.value = e.data[this.name];
+          }           
+        });
 
-				self.setTextAreaVal("limit_word", e.data.limit_word);	
-			} else {
-				trace( e.msg );
-			}
+        formLists = $('input[type=radio]');
+        $(formLists).each(function(index) {
+          self.setRadioVal( this.name, e.data[this.name] );
+        });
 
-			jsux.setAutoFocus();
-		});		
-	},
-	init: function() {
+        self.setTextAreaVal('limit_word', e.data.limit_word); 
+      } else {
+        trace( e.msg );
+      }
 
-		this.setLayout();
-		this.setEvent();		
-	}
+      jsux.setAutoFocus();
+    });   
+  },
+  init: function() {
+
+    this.setLayout();
+    this.setEvent();    
+  }
 };
 jsux.fn.delete = {
 
-	sendJson: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function() {
 
-		var params = {
-			_method:$("input[name=_method]").val(),
-			category:$("input[name=category]").val(),
-			id:$("input[name=id]").val()
-		};
+    var self = this,
+          params = {
+            _method:$('input[name=_method]').val(),
+            category:$('input[name=category]').val(),
+            id:$('input[name=id]').val()
+          },
+          $form = $('form'),
+          url = $form[0].action;
 
-		jsux.getJSON(jsux.rootPath + "board-admin/delete",params, function( e )  {
+    if (!url) {
+      trace('Form action 호출 경로가 존재하지 않습니다.');
+    }
 
-			trace( e.msg );
-			if (e.result == "Y") {
-				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-			}
-		});
-	},
-	setEvent: function() {
+    jsux.getJSON(url,params, function( e )  {
 
-		var self = this;
+      if (e.result == 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
+      }
+    });
+  },
+  setEvent: function() {
 
-		$(".articles .del .box ul > li > a").on("click", function( e ) {
-			e.preventDefault();
+    var self = this;
 
-			var key = $(this).data("key");
+    $('#btnConfirm').on('click', function( e ) {
+      e.preventDefault();
+      self.sendJson();
+    });
 
-			if (key == "del") {
-				self.sendJson();
-			} else if (key == "back") {
-				jsux.goURL(jsux.rootPath + menuList[1].menu[0].link);
-			}				
-		});
-	},
-	init: function() {
+    $('#btnCancel').on('click', function( e ) {
+      e.preventDefault();
 
-		this.setEvent();
-	}
+      jsux.goURL(self.returnUrl());
+    });
+  },
+  init: function() {
+
+    this.setEvent();
+  }
 };

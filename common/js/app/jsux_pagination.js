@@ -1,22 +1,31 @@
-var BoardApp = BoardApp || {};
-BoardApp.Pagination = jsux.Model.create();
+/**
+ * class Pagination
+ * ver 1.0.0
+ * update 2017.10.22
+ * author streamux.com
+ * description control 설정 추가 
+ **/
 
+jsux.app = jsux.app || {};
 (function( app, $ ){
 
-  app.include({
+  var Pagination = jsux.Model.create();
+  Pagination.include({
 
-    el: null,
-    id: "",
-    tmpl: null,
-    total: 0,
-    limit: 0,
+    el: null,                           // pagination 범위 그룹 
+    id: '',                             // markup 출력 위치 
+    tmpl: null,                      // pagination markup
+    template: null,
+    control: null,                  // control 참조 식별자 
+    total: 0,                         // 개시물 총개수 
+    limit: 0,                         // 게시물 개수 
 
     currentPage: 0,
     currentActivate: 0,
     direction: "prev",
     pageGroupNum: 1,
     pageTotalNum: 0,
-    limitGroup: 1,
+    limitGroup: 1,               // pagination 출력 개수
     activateId: 1,
     oldActivate: -1,
     liLists: null,
@@ -28,15 +37,33 @@ BoardApp.Pagination = jsux.Model.create();
     },
     setName: function( str ) {
       this.name = str;
-    },    
-    setUI: function( data ) {
+    },
+    reset: function() {
+      $(this.id).empty();
+    },
 
+    /**
+     * method initialize
+     * @ param data {  el: string, id: string, tmpl: string, control: array }
+     */ 
+    initialize: function( data ) {     
+
+      /**
+       * data's value { el:string, id:string, tmpl:string, control:array }
+       */ 
       for (var p in data) {
         this[p] = data[p];
       }
 
       this.el = $(this.el);
+      this.tmpl = this.tmpl || this.template;
       this.markup = $(this.tmpl);
+
+      if (!this.control) {
+        var control = this.el.find('.sx-pagination-control');
+        this.control = {'prev':control[0], 'next':control[1]};
+      }
+
       this.setEvent();
     },
     setData : function( data ) {
@@ -49,16 +76,36 @@ BoardApp.Pagination = jsux.Model.create();
 
       this.remove();
       this.setLayout();
-
       this.activate( this.activateId );           
     },
     setLayout : function() {
 
       var numLists = [],
-        len = 0,
-        startNum = 0,
-        remain = 0,
-        compareNum = 0;
+            len = 0,
+            startNum = 0,
+            remain = 0,
+            compareNum = 0;
+
+      if (!this.id) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 확인해주세요.', 'jsux_pagination.js', 88);
+        return;
+      }
+
+      var $id = $(this.id);
+      if ($id.length < 1) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 DOM 객체가 존재하지 않습니다.', 'jsux_pagination.js', 94);
+        return;
+      }
+
+      if (!this.tmpl) {
+        jsux.logger.error('\'' + this.tmpl + '\' 템플릿 식별자를 입력하세요.', 'jsux_pagination.js', 153);
+        return;
+      }
+
+     if (this.markup.length < 1) {
+      jsux.logger.error('\'' + this.tmpl + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_pagination.js', 152);
+        return;
+      }
         
       this.liLists = [];
 
@@ -78,13 +125,13 @@ BoardApp.Pagination = jsux.Model.create();
         numLists.push({no: i});
       }
 
-      $(this.markup).tmpl(numLists).appendTo(this.id);
+      $(this.markup).tmpl(numLists).appendTo(this.id);         
 
-      if ( this.el.hasClass("ui-navi-hide")) {
-        this.el.removeClass("ui-navi-hide");
+      if ( this.el.hasClass("sx-hide")) {
+        this.el.removeClass("sx-hide");
       }
-      this.el.addClass("ui-navi-show");
-      this.liLists = this.el.find("li span");
+      this.el.addClass("sx-show");
+      this.liLists = this.el.find("a");
 
       this.currentPage = { prev: startNum, next: len-1};
       this.currentActivate = {prev: 1, next: remain};     
@@ -92,23 +139,27 @@ BoardApp.Pagination = jsux.Model.create();
     setEvent : function() {
 
       var self = this;
+      $(this.control.prev).on('click', function(e) {
+         e.preventDefault();         
+        self.prev();
+      });
 
+      $(this.control.next).on('click', function(e) {
+        e.preventDefault();
+        self.next();
+      });
+      
       $(this.el).on("click", function( e ) {
-
         e.preventDefault();
 
         var className = e.target.className;
-
-        if (className.indexOf("prev") !== -1) {
-          self.prev();
-        } else if (className.indexOf("next") !== -1) {
-          self.next();
-        } else {
-
-          if (e.target.nodeName.toUpperCase() == "SPAN") {
-            self.callPage( $.trim($(e.target).text()) );
-          }       
+        if (className === 'sx-pagination') {
+          self.callPage( $.trim($(e.target).text()) );  
         }
+      });
+
+      $('window').on('resize', function(e) {
+
       });
     },
     prev : function() {
@@ -142,7 +193,6 @@ BoardApp.Pagination = jsux.Model.create();
       this.dispatchEvent({type:"change", page: this.currentPage[this.direction]});
     },
     callPage : function( num ) {
-
       var pageNum = parseInt( num );
 
       this.activate( pageNum );
@@ -157,23 +207,52 @@ BoardApp.Pagination = jsux.Model.create();
       var  id = 0;
 
       this.activateId = parseInt(num);
-
       if (isNaN(this.activateId)) {
         throw new Error(typeof num + " '" + num + "' is not a Number");
       }
 
-      if ($(this.liLists[ this.oldActivate ]).hasClass("activate")) {
-        $(this.liLists[ this.oldActivate ]).removeClass("activate");
+      if ($(this.liLists[ this.oldActivate ]).hasClass("active")) {
+        $(this.liLists[ this.oldActivate ]).removeClass("active");
       }
-
-      this.currentNum = id = (this.activateId-1)%this.limit;
-
-      $(this.liLists[ id ]).addClass("activate");
+      this.currentNum = id = Math.ceil(this.activateId%this.limit);
+      if (this.currentNum === 0) {
+        this.currentNum = id = this.limit;
+      }
+      $(this.liLists[ id ]).addClass("active");
 
       this.oldActivate = id;
+    },
+    activateControl: function() {
+
+      var $prev = $(this.control.prev),
+            $next = $(this.control.next);
+
+      if ($prev.hasClass('unactive')) {
+          $prev.removeClass('unactive');
+      }
+      if ($next.hasClass('unactive')) {
+        $next.removeClass('unactive');
+      } 
+    },
+    deactivateControl: function() {
+
+      var $prev = $(this.control.prev),
+            $next = $(this.control.next);
+
+      if ($prev.hasClass('active')) {
+          $prev.removeClass('active');
+      }
+      if ($next.hasClass('active')) {
+        $next.removeClass('active');
+      } 
     }
   });
 
-})( BoardApp.Pagination, jQuery );
+  app.getPagination = function() {
+
+    return new Pagination();
+  };
+
+})( jsux.app, jQuery );
 
 

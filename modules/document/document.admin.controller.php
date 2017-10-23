@@ -86,9 +86,28 @@ class DocumentAdminController extends Controller
       $readtemplatePathList['js'] = $readtemplatePath . '/' . $templateName . '.js';
 
       $buffers = array();
-      foreach ($readtemplatePathList as $key => $value) {
-        if (file_exists($value)) {
-          $buffers[$key] = FileHandler::readFile($value);
+      $buffers['tpl'] = '';
+      $buffers['css'] = '';
+      $buffers['js'] = '';
+
+      foreach ($buffers as $key => $value) {
+        $buffer = $posts['contents_' . $key];
+        if (isset($buffer) && $buffer) {
+          $buffers[$key] = $buffer;
+        } else {
+          $tempPath = $readtemplatePathList[$key];
+          if (file_exists($tempPath)) {
+            $buffers[$key] = FileHandler::readFile($tempPath);
+          } else {
+            $msg .= $tempPath . ' 파일이 존재하지 않습니다.';
+          }
+        }        
+      }
+
+      foreach ($buffers as $key => $value) {
+        $buffers[$key] = $posts['contents_' . $key];
+        if (empty($buffers[$key])) {
+          $buffers[$key] = $key . ' 내용을 입력해주세요';
         }
       }
 
@@ -177,7 +196,6 @@ class DocumentAdminController extends Controller
     $category = $posts['category'];
     $title = $posts['document_name'];
     $contents_path = $posts['contents_path'];
-    $contents = $posts['contents'];
 
     /**
      * @cache's columns 
@@ -216,16 +234,21 @@ class DocumentAdminController extends Controller
         $buffers['css'] = '';
         $buffers['js'] = '';
 
-        $buffers['tpl'] = $contents;
-        if (empty($buffers['tpl'])) {
-            $buffers['tpl'] = '컨텐츠 내용을 입력해주세요';
+        foreach ($buffers as $key => $value) {
+          $buffers[$key] = $posts['contents_' . $key];
+          if (empty($buffers[$key])) {
+            $buffers[$key] = $key . ' 내용을 입력해주세요';
+          }
         }
-
-        // js, css 파일을 어떻게 처리할 지 그민이 필요 
 
         // Save files of skin to files's directory
         $contents_path = _SUX_ROOT_ . $contents_path;
         $saveTemplatePath =Utils::convertAbsolutePath($contents_path, $realPath);
+
+        if (!file_exists($saveTemplatePath)) {
+          FileHandler::makeDir($saveTemplatePath, false);
+        }
+
         $saveTemplatePathList = array();
         $saveTemplatePathList['tpl'] = $saveTemplatePath . '/' . $category . '.tpl';
         $saveTemplatePathList['css'] = $saveTemplatePath . '/' . $category . '.css';

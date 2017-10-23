@@ -10,9 +10,7 @@
     {/if}
       <li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
     </ul> 
-    <p>
-      <span>{include file="$copyrightPath"}</span>
-    </p>
+    <p>{include file="$copyrightPath"}</p>
   </div>
 </div>
 

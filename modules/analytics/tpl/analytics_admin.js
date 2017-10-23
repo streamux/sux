@@ -1,49 +1,126 @@
+/** 
+ * used class 'jsux.fn.listManager'
+ * path 'common/js/app/jsux_list_manager.js'
+ * author streamux.com
+ * update 2017.10.18
+ */
+
 jsux.fn = jsux.fn || {};
 jsux.fn.connectSiteList = {
 
+  limit: 5,
+  limitGroup: 5,
+  pagination: jsux.app.getPagination(),
+  listManager: jsux.app.getListManager(),
+  listMobileManager: jsux.app.getListManager(),
+
   setLayout: function() {
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-list-json', function( e )  {
+    var self = this,
+          url = $('input[name=list_json_path').val(),
+          params = {
+            passover: 0,
+            limit: this.limit
+          },
+          changeHandler = null;
 
-      var markup = '';
-      $('#totallogList').empty();
+    if (!url) {
+      trace('input[name=list_json_path] 경로값을 입력하세요');
+      return;
+    }
 
-      if (e.result == 'Y') {
-        markup = $('#totallogList_tmpl');
-        $(markup).tmpl(e.data.list).appendTo('#totallogList');
+    self.listManager.setResource(url);
+    self.listMobileManager.setResource(url);
+
+    self.listManager.initialize({
+      id: '#dataList',
+      tmpl: '#dataListTmpl',
+      msg_tmpl: '#warnMsgTmpl'
+    });
+    self.listMobileManager.initialize({
+      id: '#dataMobileList',    
+      tmpl: '#dataListMobileTmpl',
+      msg_tmpl: '#warnMsgMobileTmpl'
+    });
+
+    changeHandler = function( e ) {
+      self.listManager.reloadData( e.page, self.limit);
+      self.listMobileManager.reloadData( e.page, self.limit);
+    };
+    self.pagination.addEventListener('change', changeHandler);
+    self.pagination.initialize({
+      el: '.sx-pagination-group',
+      id: '#paginList',
+      tmpl: '#paginationTmpl',
+      control: {
+        'prev':'.sx-pagination-group .sx-nav-prev',
+        'next':'.sx-pagination-group .sx-nav-next'
+      }
+    });
+
+    jsux.getJSON(url, params, function( e )  {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {       
+        
+        self.listManager.setData( data );
+        self.listMobileManager.setData( data );
+
+        // pagination start
+        self.pagination.setData({
+          total: data.total_num,
+          limit: self.limit,
+          limitGroup: self.limitGroup
+        });
+        
+        self.pagination.activateControl();
       } else {
-        markup = $('#totallogWarnMsg_tmpl');
-        $(markup).tmpl( e ).appendTo('#totallogList');
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+
+        // pagination start
+        self.pagination.deactivateControl();
       }
     });
   },
   init: function() {
-
     this.setLayout();
   }
 };
 jsux.fn.connectSiteAdd = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   checkFormVal: function( f ) {
 
-    var keyword = f.keyword.value.length;
-
-    if ( keyword < 1 ) {
+    var keyword = f.keyword;
+    if ( keyword.value.length < 1 ) {
       trace('접속키워드 이름을 입력하세요.');
       f.keyword.focus();
-      return (false);
+      return false;
     }
 
-    return (true);
+    return true;
   },
   sendJson: function( f ) {
 
-    var params = {
-      '_method':f._method.value,
-      'keyword': f.keyword.value
-    };
+    var self = this,
+          params = {
+            _method:f._method.value,
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    var url = f.action;
     if (!url) {
       trace("Action URL Don't Exists");
       return;
@@ -51,9 +128,10 @@ jsux.fn.connectSiteAdd = {
 
     jsux.getJSON(url, params, function( e ) {
 
-      trace( e.msg );
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -64,14 +142,12 @@ jsux.fn.connectSiteAdd = {
     $('form').on('submit', function( e ) {
       e.preventDefault();
 
-      var bool = self.checkFormVal( e.target );
-      if (bool === true) {
-
+      if (self.checkFormVal( e.target ) === true) {
         self.sendJson( e.target );
       }       
     });
-    $('input[name=cancel]').on('click', function() {
-      jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
+    $('#btnCancel').on('click', function() {
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
@@ -83,19 +159,35 @@ jsux.fn.connectSiteAdd = {
 
 jsux.fn.connectSiteReset = {
   
-  sendJSON: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function(f) {
 
-    var params = {
-      '_method': 'update',
-      'id': $('input[name=id]').val(),
-      'keyword': $('input[name=keyword]').val()
-    };
+    var self = this,
+          params = {
+            _method: 'update',
+            id: f.id.value,
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-reset', params, function( e ) {
+    if (!url) {
+      trace('Action URL Not Exists');
+      return false;
+    }
 
-      trace( e.msg );
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
+    jsux.getJSON(url, params, function( e ) {
+      
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -103,38 +195,47 @@ jsux.fn.connectSiteReset = {
 
     var self = this;
 
-    $('.articles .del .box ul > li > a').on('click', function( e ) {
-
-      var key = $(this).data('key');
-      if (key == 'reset') {         
-        self.sendJSON();
-      } else if (key == 'back') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
-      }
+    $('form').on('submit', function( e ) {
       e.preventDefault();
+      self.sendJson(e.target);
+    });
+
+    $('#btnCancel').on('click',function() {
+
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
-
     this.setEvent();
   }
 };
 
 jsux.fn.connectSiteDelete = {
 
-  sendJSON: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function(f) {
 
-    var params = {
-      '_method': 'delete',
-      'id': $('input[name=id]').val(),
-      'keyword': $('input[name=keyword]').val()
-    };
+    var self = this,
+          params = {
+            _method: 'delete',
+            id: f.id.value,
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/connect-site-delete', params, function( e ) {
-
-      trace( e.msg );
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
+    jsux.getJSON(url, params, function( e ) {
+      
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -142,18 +243,14 @@ jsux.fn.connectSiteDelete = {
 
     var self = this;
 
-    $('.articles .del .box ul > li > a').on('click', function( e ) {
-
-      var key = $(this).data('key');
-
-      if (key == 'del') {
-
-        self.sendJSON();
-      } else if (key == 'back') {
-
-        jsux.goURL(jsux.rootPath + menuList[4].menu[0].link);
-      }
+    $('form').on('submit', function( e ) {
       e.preventDefault();
+      self.sendJson(e.target);
+    });
+
+    $('#btnCancel').on('click', function( e ) {
+      e.preventDefault();
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
@@ -164,34 +261,104 @@ jsux.fn.connectSiteDelete = {
 
 jsux.fn.pageviewList = {
 
+  limit: 10,
+  limitGroup: 5,
+  pagination: jsux.app.getPagination(),
+  listManager: jsux.app.getListManager(),
+  listMobileManager: jsux.app.getListManager(),
+
   setLayout: function() {
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-list-json', function( e )  {
+    var self = this,
+          url = $('input[name=list_json_path').val(),
+          params = {
+            passover: 0,
+            limit: this.limit
+          },
+         changeHandler = null;
+   
+   if (!url) {
+      trace('input[name=list_json_path] 경로값을 입력하세요');
+      return;
+    }
 
-      var markup = '';
-      $('#totallogList').empty();
+    self.listManager.setResource(url);
+    self.listMobileManager.setResource(url);
+    
+    self.listManager.initialize({
+      id: '#dataList',
+      tmpl: '#dataListTmpl',
+      msg_tmpl: '#warnMsgTmpl'
+    });
+    self.listMobileManager.initialize({
+      id: '#dataMobileList',    
+      tmpl: '#dataListMobileTmpl',
+      msg_tmpl: '#warnMsgMobileTmpl'
+    });
+    
+    changeHandler = function( e ) {
 
-      if (e.result == 'Y') {
-        markup = $('#totallogList_tmpl');
-        $(markup).tmpl(e.data.list).appendTo('#totallogList');
+      self.listManager.reloadData( e.page, self.limit);
+      self.listMobileManager.reloadData( e.page, self.limit);
+    };
+    self.pagination.addEventListener('change', changeHandler);
+    self.pagination.initialize({
+      el: '.sx-pagination-group',
+      id: '#paginList',
+      tmpl: '#paginationTmpl',
+      control: {
+        'prev':'.sx-pagination-group .sx-nav-prev',
+        'next':'.sx-pagination-group .sx-nav-next'
+      }
+    });
+
+    jsux.getJSON(url, params, function( e )  {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {
+                
+        self.listManager.setData( data );
+        self.listMobileManager.setData( data );
+
+        // pagination start 
+        self.pagination.setData({
+          total: data.total_num,
+          limit: self.limit,
+          limitGroup: self.limitGroup
+        });
+        
+        self.pagination.activateControl();
       } else {
-        markup = $('#totallogWarnMsg_tmpl');
-        $(markup).tmpl( e ).appendTo('#totallogList');
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+
+        // pagination start
+        self.pagination.deactivateControl();
       }
     });
   },
   init: function() {
-
     this.setLayout();
   }
 };
 jsux.fn.pageviewAdd = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   checkFormVal: function( f ) {
 
-    var keyword = f.keyword.value.length;
-
-    if ( keyword < 1 ) {
+    var keyword = f.keyword;
+    if ( keyword.value.length < 1 ) {
       trace('페이지뷰 키워드를 입력하세요.');
       f.keyword.focus();
       return (false);
@@ -201,12 +368,13 @@ jsux.fn.pageviewAdd = {
   },
   sendJson: function( f ) {
 
-    var params = {
-      '_method': 'insert',
-      'keyword': f.keyword.value
-    };
+    var self = this,
+          params = {
+            _method: 'insert',
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    var url = f.action;
     if (!url) {
       trace("Action URL Don't Exists");
       return;
@@ -214,9 +382,10 @@ jsux.fn.pageviewAdd = {
 
     jsux.getJSON( url, params, function( e ) {
 
-      trace( e.msg );
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -225,18 +394,14 @@ jsux.fn.pageviewAdd = {
     var self = this;
 
     $('form').on('submit', function( e ) {
-
       e.preventDefault();
 
-      var bool = self.checkFormVal( e.target );
-
-      if (bool === true) {
-
+      if (self.checkFormVal( e.target ) === true) {
         self.sendJson( e.target );
       }       
     });
-    $('input[name=cancel]').on('click', function() {
-      jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
+    $('#btnCancel').on('click', function() {
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
@@ -247,19 +412,35 @@ jsux.fn.pageviewAdd = {
 };
 jsux.fn.pageviewReset = {
   
-  sendJSON: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function(f) {
 
-    var params = {
-      '_method': 'update',
-      'id': $('input[name=id]').val(),
-      'keyword': $('input[name=keyword]').val()
-    };
+    var self = this,
+          params = {
+            _method: 'update',
+            id: f.id.value,
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-reset', params, function( e ) {
+    if (!url) {
+      trace("Action URL Don't Exists");
+      return;
+    }
 
-      trace( e.msg );
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
+    jsux.getJSON(url, params, function( e ) {
+     
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+         trace( e.msg );
       }
     });
   },
@@ -267,21 +448,17 @@ jsux.fn.pageviewReset = {
 
     var self = this;
 
-    $('.articles .del .box ul > li > a').on('click', function( e ) {
-
-      var key = $(this).data('key');
-
-      if (key == 'reset') {         
-        self.sendJSON();
-      } else if (key == 'back') {
-        trace('aa', true);
-        jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
-      }
+    $('form').on('submit', function( e ) {
       e.preventDefault();
+      self.sendJson(e.target);
+    });
+
+    $('#btnCancel').on('click', function(e) {
+      e.preventDefault();
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
-
     this.setEvent();
   }
 };
@@ -289,20 +466,35 @@ jsux.fn.pageviewReset = {
 
 jsux.fn.pageviewDelete = {
 
-  sendJSON: function() {
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function(f) {
 
-    var params = {
-      '_method': 'delete',
-      'id': $('input[name=id]').val(),
-      'keyword': $('input[name=keyword]').val()
-    };
+    var self = this, 
+          params = {
+            _method: 'delete',
+            id: f.id.value,
+            keyword: f.keyword.value
+          },
+          url = f.action;
 
-    jsux.getJSON(jsux.rootPath + 'analytics-admin/pageview-delete', params, function( e ) {
+    if (!url) {
+      trace('Action URL Not Exists');
+      return false;
+    }
 
-      trace( e.msg );
+    jsux.getJSON(url, params, function( e ) {
 
-      if (e.result == 'Y') {
-        jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
+      if (e.result && e.result.toUpperCase() === 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -310,18 +502,14 @@ jsux.fn.pageviewDelete = {
 
     var self = this;
 
-    $('.articles .del .box ul > li > a').on('click', function( e ) {
-
-      var key = $(this).data('key');
-
-      if (key == 'del') {
-
-        self.sendJSON();
-      } else if (key == 'back') {
-
-        jsux.goURL(jsux.rootPath + menuList[4].menu[2].link);
-      }
+    $('form').on('submit', function( e ) {
       e.preventDefault();
+      self.sendJson(e.target);
+    });
+
+    $('#btnCancel').on('click', function(e) {
+      e.preventDefault();
+      jsux.goURL(self.returnUrl());
     });
   },
   init: function() {
