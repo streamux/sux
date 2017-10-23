@@ -9,8 +9,8 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.css"> 
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css"> 
   {if $documentData.module_code}
   <link rel="stylesheet" type="text/css" href="{$skinPath}{$documentData.module_code}.css">
   {/if}
