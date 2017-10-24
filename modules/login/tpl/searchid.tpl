@@ -5,15 +5,7 @@
      <div class="sx_login_box sx-edgebox-2px">
       <form action="{$rootPath}search-id" name="f_searchid" method="post">
         <input type="hidden" name="_method" value="select">
-        <div class="sx-form-group">
-          <i class="xi-group xi-2x"></i>
-          <label for="memberGroup" class="sx-control-label">회원그룹</label>
-          <select name="category" id="memberGroup" class="sx-form-control sx_form_width">
-            {foreach from=$documentData.group item=value}
-              <option>{$value['category']}</option>
-            {/foreach}
-          </select>
-        </div>
+
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>
           <label for="userName" class="sx-control-label">이름</label>

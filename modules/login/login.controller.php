@@ -5,44 +5,32 @@ class LoginController extends Controller
 
   function insertLogin() {
 
+    $rootPath = _SUX_ROOT_;
+
     $context = Context::getInstance();
     $this->session_data = $context->getSessionAll();
     $this->post_data = $context->getPostAll();
 
-    $category = trim($this->session_data['category']);
-    if (empty($category)) {
-      $category = trim($this->post_data['category']);
-    }
-
-    $userId = trim($this->session_data['user_id']);   
+    $userId = (isset($this->post_data['user_id']) && $this->post_data['user_id']) ?
+                    $this->post_data['user_id'] : $this->session_data['user_id'];
+    $userId = trim($userId);
     if (empty($userId)) {
-      $userId = trim($this->post_data['user_id']);
-    }
-
-    $passwordHash = trim($this->session_data['password']);
-    if (empty($passwordHash)) {
-      $password = trim($this->post_data['password']);
-      if (isset($password) && $password) {
-        $passwordHash = $context->getPasswordHash($password);
-      }
-    }
-
-    $rootPath = _SUX_ROOT_;
-
-    if (empty($userId)) {
-      $msg .= '아이디를 입력하세요.';
-    } else if (empty($passwordHash)) {
-      $msg .= '비밀번호를 입력하세요.';
-    } 
-
-    if (isset($msg) && $msg) {
-      UIError::alertToBack($msg);     
+      UIError::alertToBack('아이디를 입력하세요.');     
       exit;
     }
 
-    $where = new QueryWhere();
-    $where->set('category',$category,'=');
-    $where->set('user_id',$userId,'=','and');
+    $password = trim($this->post_data['password']);
+    $passwordHash = (isset($password) && $password) ?
+                     $context->getPasswordHash($password) : $this->session_data['password'];
+    
+    if (empty($passwordHash)) {
+      UIError::alertToBack('비밀번호를 입력하세요.');     
+      exit;
+    } 
+
+    $where = new QueryWhere();    
+    $where->set('user_id', $userId);
+    $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', '*', $where);
 
     $rownum = $this->model->getNumRows();
@@ -71,13 +59,15 @@ class LoginController extends Controller
         $context->setSession($value, $row[$value]);
       }
 
-      $data = array(  'msg'=>'로그인 성공',
-              'result'=>'Y',
-              'url'=>$rootPath . 'login');
+      $data = array(
+        'msg'=>'로그인 성공',
+        'result'=>'Y',
+        'url'=>$rootPath . 'login'
+      );
       
       $this->callback($data);
     } else {
-      $msg = '아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다.';
+      $msg .= $userId .' 아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다.';
       UIError::alertTo($msg, $rootPath . 'login-fail');
     }
   }
@@ -95,9 +85,11 @@ class LoginController extends Controller
       $context->setSession($key, '');
     }
 
-    $data = array(  'msg'=>'로그아웃',
-            'result'=>'Y',
-            'url'=>$rootPath . 'login');
+    $data = array(
+      'msg'=>'로그아웃',
+      'result'=>'Y',
+      'url'=>$rootPath . 'login'
+    );
     
     $this->callback($data);
   }

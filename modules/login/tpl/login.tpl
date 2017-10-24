@@ -5,15 +5,7 @@
     <div class="sx_login_box sx-edgebox-2px">
       <form action="{$rootPath}login" name="f_login" method="post">
         <input type="hidden" name="_method" value="insert">
-        <div class="sx-form-group">
-          <i class="xi-group xi-2x"></i>
-          <label for="memberGroup" class="sx-control-label">회원그룹</label>
-          <select name="category" id="memberGroup" class="sx-form-control sx_form_width">
-            {foreach from=$documentData.group item=value}
-              <option>{$value['category']}</option>
-            {/foreach}
-          </select>
-        </div>
+        
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>
           <label for="userId" class="sx-control-label">아이디</label>
@@ -38,13 +30,12 @@
         {/if}
         
         <div class="sx-form-group sx_login_btn">
-          <input type="submit" value="로그인" class="sx-btn sx-btn-block">
+          <input type="submit" class="sx-btn sx-btn-block" value="로그인" title="로그인">
         </div>
-
         <div class="sx_login_footer">
           <a href="{$rootPath}member-join">회원가입</a>
           <span>|</span>
-          <a href="{$rootPath}search-id">ID</a>/<a href="{$rootPath}search-password">PW 찾기</a>
+          <a href="{$rootPath}search-id" title="아이디 찾기">아이디</a> / <a href="{$rootPath}search-password" title="비밀번호 찾기">비밀번호 찾기</a>
         </div>  
       </form>                             
     </div>

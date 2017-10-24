@@ -4,17 +4,12 @@
     <div class="box">
       <form name="f_member_modify" action="{$rootPath}member-modify" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="update">
-      <input type="hidden" name="category" value="{$sessionData.category}">
       <input type="hidden" name="user_id" value="{$sessionData.user_id}">
 
       <p class="text_notice">
         <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
         <span>*(별표)는 필수 입력 사항입니다.</span>
       </p> 
-      <div class="sx-form-group">
-        <label for="category" class="sx-control-label form_label_width">회원그룹</label>        
-        <span class="sx-form-control" disabled>{$sessionData.category}</span>
-      </div>
       <div class="sx-form-group">
         <label for="userId" class="sx-control-label form_label_width">아이디</label>        
         <span class="sx-form-control" disabled>{$sessionData.user_id}</span>
@@ -26,18 +21,18 @@
       </div>
       <div id="panelNewPassword" class="panel_newpassword">
         <div class="sx-form-group">
-          <label for="newPassword" class="sx-control-label form_label_width">신규 비밀번호</label>
+          <label for="newPassword" class="sx-control-label form_label_width">* 신규 비밀번호</label>
           <input type="password" id="newPassword" name="new_password" maxlength="23" class="sx-form-control">
         </div>
         <div class="sx-form-group">
-          <label for="newPasswordConf" class="sx-control-label form_label_width">신규 비밀번호 확인</label>
+          <label for="newPasswordConf" class="sx-control-label form_label_width">* 신규 비밀번호 확인</label>
           <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
         </div>
-      </div>       
-      <div class="sx-form-group">
-        <label for="userName" class="sx-control-label form_label_width">* 이름</label>
-        <input type="text" name="user_name" id="userName" maxlength="12" value="{$contentData.user_name}" class="sx-form-control">
       </div>
+      <div class="sx-form-group">
+        <label for="nickName" class="sx-control-label form_label_width">* 닉네임</label>
+        <input type="text" id="nickName" name="nick_name" maxlength="12"  value="{$contentData.nick_name}" class="sx-form-control">
+      </div>     
       <div class="sx-form-group">
         <label for="emailAddress" class="sx-control-label form_label_width">* 이메일</label>
         <input type="text" id="emailAddress" name="email_address" value="{$contentData.email_address}" class="sx-form-control">
@@ -47,8 +42,8 @@
         <span>아래 내용은 선택사항입니다.</span>
       </p>
       <div class="sx-form-group">
-        <label for="nickName" class="sx-control-label form_label_width">닉네임</label>
-        <input type="text" id="nickName" name="nick_name" maxlength="12"  value="{$contentData.nick_name}" class="sx-form-control">
+        <label for="userName" class="sx-control-label form_label_width">이름</label>
+        <input type="text" name="user_name" id="userName" maxlength="12" value="{$contentData.user_name}" class="sx-form-control">
       </div>
       <div class="sx-form-group">
         <label for="hp" class="sx-control-label form_label_width">휴대폰 번호</label>

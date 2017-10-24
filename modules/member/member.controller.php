@@ -91,8 +91,15 @@ class MemberController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();    
 
-    $category = $posts['category'];
-    $user_id = $posts['user_id'];
+    $category = trim($posts['category']);
+    if (empty($category)) {
+      $category = 'member'; // 초기 가입 시 기본회원
+    }
+
+    $userId = trim($posts['user_id']);
+    if (empty($posts['user_name'])) {
+      $posts['user_name'] = trim($posts['nick_name']);
+    }
     $returnURL = $context->getServer('REQUEST_URI');
 
     // validation

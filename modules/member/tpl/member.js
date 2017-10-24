@@ -159,7 +159,6 @@ jsux.fn.join = {
     var inputId = $('input[name=user_id]');
     var params =  {
       _method: 'insert',
-      category: this.getSelectVal('category'),
       user_id: inputId.val()
     };
 
@@ -364,8 +363,9 @@ jsux.fn.modify = {
 
     var self = this;
     var params = {};
-    var datas = $('form')[0];
+    var datas = f;
     var indexCheckbox = 0;
+    var url = '';
 
     $.each(datas, function( index, item ) {
 
@@ -404,10 +404,13 @@ jsux.fn.modify = {
 
     var updateLoginHandler = function( url ) {
 
-      var params = {_method:'insert'};
+      var params = {
+        _method:'insert'
+      };
+
       jsux.getJSON( url, params, function(e) {
 
-        if  (e.result.toUpperCase() == 'Y') {
+        if  (e.result.toUpperCase() === 'Y') {
           jsux.goURL( jsux.rootPath + 'login');
         }
       });
@@ -416,7 +419,7 @@ jsux.fn.modify = {
     jsux.getJSON( url, params, function( e ) {
 
       trace( e.msg );
-      if (e.result.toUpperCase() == 'Y') {
+      if (e.result.toUpperCase() === 'Y') {
         updateLoginHandler( jsux.rootPath + 'login');
       }
     });
@@ -426,10 +429,9 @@ jsux.fn.modify = {
     var self = this;
     
     $('form').on('submit', function( e ) {
-
       e.preventDefault();
-      var bool  = self.checkFormVal( e.target );    
-      if (bool === true) {
+
+      if (self.checkFormVal( e.target )) {
         self.sendJson( e.target );
       }
     });

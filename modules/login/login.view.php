@@ -165,7 +165,6 @@ class LoginView extends View
 
     $context = Context::getInstance();
     $this->post_data = $context->getPostAll();
-    $category = $this->post_data['category'];
     $userName = $this->post_data['user_name'];
     $userEmail = $this->post_data['email_address'];
 
@@ -198,8 +197,8 @@ class LoginView extends View
     if (isset($userName) && $userName != ''){
 
       $where = new QueryWhere();
-      $where->set('category',$category,'=');
-      $where->set('user_name',$userName,'=','and');
+      $where->set('user_name',$userName);
+      $where->set('email_address',$userEmail,'=','and');
       $this->model->select('member', 'user_id, email_address', $where);
 
       $row = $this->model->getRow();
@@ -244,7 +243,6 @@ class LoginView extends View
 
     $context = Context::getInstance();
     $this->post_data = $context->getPostAll();
-    $category = $this->post_data['category'];
     $userName = $this->post_data['user_name'];
     $userId = $this->post_data['user_id'];    
     $userEmail = $this->post_data['email_address'];
@@ -278,18 +276,24 @@ class LoginView extends View
     if(isset($userId) && $userId) {
 
       $where = new QueryWhere();
-      $where->set('category',$category,'=');
+      $where->set('user_name',$userName);
       $where->set('user_id',$userId,'=','and');
-      $this->model->select('member', 'user_name, email_address, password', $where);
+      $where->set('email_address',$userEmail,'=','and');
+      $this->model->select('member', 'user_name, user_id, email_address', $where);
 
       $row = $this->model->getRow();
       if (count($row) > 0) {
         $name = $row['user_name'];
-        $email = $row['email_address'];
-        $password = $row['password']; 
+        $id = $row['user_id']; 
+        $email = $row['email_address'];        
 
         if ($name !== $userName) {
           UIError::alertToBack('입력하신 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
+          exit;
+        }
+
+        if ($id !== $userId) {
+          UIError::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
           exit;
         }
 
@@ -302,8 +306,7 @@ class LoginView extends View
 
         $this->document_data['user_id'] = $userId;
         $this->document_data['user_name'] = $userName;
-        $this->document_data['user_email'] = $email;        
-        $this->document_data['password'] = $password;
+        $this->document_data['user_email'] = $email;
         $this->document_data['jscode'] = 'searchResult';
 
         /*$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';

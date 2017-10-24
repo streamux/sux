@@ -3,18 +3,11 @@
     <h1 class="title">회원 가입</h1>
     <form name="f_member_join" action="{$rootPath}member-join" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="insert">
+      <input type="hidden" name="category" value="member">
       <p class="text_notice">
         <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
         <span>*(별표)는 필수 입력 사항입니다.</span>
       </p>
-      <div class="sx-form-group">
-        <label for="category" class="sx-control-label form_label_width">회원그룹</label>
-        <select name="category" id="memberGroup" class="sx-form-control">
-          {foreach from=$documentData.group item=value}
-            <option>{$value['category']}</option>
-          {/foreach}
-        </select>
-      </div>
       <div class="sx-form-group">
         <label for="userId" class="sx-control-label form_label_width">* 아이디</label><input type="text" id="userId" name="user_id" class="sx-form-control">
         <input type="button" name="checkID" value='아이디 중복체크' class="sx-btn sx-btn-block">

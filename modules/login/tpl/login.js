@@ -26,7 +26,6 @@ jsux.fn.login = {
       
     params = {
       _method: f._method.value,
-      category: f.category.value,
       user_id: f.user_id.value,
       password: f.password.value
     };
@@ -45,20 +44,19 @@ jsux.fn.login = {
       }
     });
   },
-  event: function() {
+  setEvent: function() {
 
     var self = this;
     $('form').submit( function(e) {       
       e.preventDefault();      
 
-      var bool = self.checkForm(this);
-      if (bool) {
+      if (self.checkForm(this)) {
         self.sendJson(this);
       }
     });
   },
   init: function() {
-    this.event();
+    this.setEvent();
     jsux.setAutoFocus();
   }
 };
@@ -123,14 +121,11 @@ jsux.fn.leave = {
   setEvent: function() {
 
     var self = this;
-    $('input[type=submit]').on('click',function(e) {
+    $('form').on('submit',function(e) {
       e.preventDefault();
 
-      var form = $('form')[0],
-        key = $(this).attr('name');
-
-      if (key === 'btn_confirm' && self.checkForm(form)) {
-        self.sendJson(form);        
+      if (self.checkForm(this)) {
+        self.sendJson(this);        
       } 
     });
   },
@@ -179,17 +174,35 @@ jsux.fn.searchId = {
     }
     return true;
   },
+  sendJson: function(f) {
+
+    var params = '',
+          url = '';
+      
+    params = {
+      _method: f._method.value,
+      user_name: f.user_name.value,
+      email_address: f.email_address.value
+    };
+    
+    if (!f.action) {
+      alert('Not Exists URL');
+    }
+    url = f.action;
+
+    jsux.getJSON( url, params, function( e ) {
+      
+      jsux.goURL(jsux.rootPath + 'search-id');
+    });
+  },
   setEvent: function() {
 
     var self = this;
 
-    $('input[type=submit]').on('click',function(e) {
-      e.preventDefault();
-
-      var form = $('form')[0],
-        key = $(this).attr('name');
-      if (key === 'btn_confirm' && self.checkForm(form)) {
-        $(form).submit();  
+    $('form').on('submit',function(e) {
+      
+      if (!self.checkForm(this)) {
+        e.preventDefault();
       } 
     });
   },
@@ -245,14 +258,10 @@ jsux.fn.searchPassword = {
 
     var self = this;
 
-    $('input[type=submit]').on('click',function(e) {
-      e.preventDefault();
-
-      var form = $('form')[0],
-        key = $(this).attr('name');
-
-      if (key == 'btn_confirm' && self.checkForm(form)) {
-        $(form).submit();
+    $('form').on('submit',function(e) {
+      
+      if (!self.checkForm(this)) {
+        e.preventDefault();
       } 
     });
   },

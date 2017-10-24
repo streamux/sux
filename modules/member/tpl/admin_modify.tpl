@@ -14,8 +14,12 @@
                 <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>
               </p>
               <div class="sx-form-group">
-                <label for="" class="sx-control-label label_width">회원 그룹</label>
-                <span class="sx-form-control" disabled="disabled">{$documentData.category}</span>
+                <label for="category" class="sx-control-label label_width">* 회원 그룹</label>
+                <select name="category" id="category" class="sx-form-control">
+                  {foreach from=$documentData.categories item=value}
+                    <option value="{$value.category}" {if $documentData.category === $value.category} selected="selected" {/if}>{$value.category}</option>
+                  {/foreach}
+                </select>
               </div>
               <div class="sx-form-group">
                 <label for="" class="sx-control-label label_width">아이디</label>

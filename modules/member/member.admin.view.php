@@ -296,12 +296,16 @@ class MemberAdminView extends View {
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'member';
 
+    $this->model->select('member_group', 'category');
+    $categories = $this->model->getRows();
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('member', 'category, user_id, user_name', $where);
     $row = $this->model->getRow();
 
     $this->document_data['category'] = $row['category'];
+    $this->document_data['categories'] = $categories;
     $this->document_data['user_id'] = $row['user_id'];
     $this->document_data['user_name'] = $row['user_name'];
     $this->document_data['id'] = $id;    
