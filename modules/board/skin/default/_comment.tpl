@@ -1,15 +1,15 @@
 <div class="board_comment {$contentData.css_comment}" style="width:{$groupData.width}">
   <div class="write_panel">
     <p class="title">댓글쓰기</p>
-    <form action="{$routeURI}/{$contentData.id}/comment" name="f_comment" method="post">
+    <form action="{$routeURI}/{$contentData.id}/comment" name="f_comment" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="insert">
       <input type="hidden" name="category" value="{$documentData.category}">
       <input type="hidden" name="contents_id" value="{$documentData.id}">
       <div class="sx-form-inline">
          <div class="sx-input-group">
-            <label for="nickName" class="sx-control-label">닉네임</span>
+            <label for="nickName" class="sx-control-label label_width">닉네임</label>
             <input type="text" name="nickname" id="nickName" size="12" maxlength="24" value="임꺽정" class="sx-form-control">
-             <label for="password" class="sx-space-left">비밀번호</span>
+            <label for="password" class="sx-control-label label_width">비밀번호</label>
             <input type="password" name="password" id="password" size="12" maxlength="24" value="12" class="sx-form-control">
         </div>
       </div>      

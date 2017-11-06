@@ -16,15 +16,17 @@
     <form action="{$routeURI}" method="post" name="f_board_list_search" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="select">
         <div class="sx-form-inline">
-          <div class="sx-input-group">             
-          <select name="find" class="sx-form-control form_control_width">
-            <option value='title'>제 목</option>
-            <option value='name'>작성자</option>
-            <option value='comment'>내 용</option>
-          </select>  
-          <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
-          <button type="submit" class="sx-btn"><i class="xi-search"></i>검색</button>
-          <a href="{$routeURI}/write{$params}" class="sx-btn"><i class="xi-pen-o xi-2x"><span class="sr-only">글쓰기</span></i></a>
+          <div class="sx-input-group">
+            <label for="find" class="sr-only">검색 분류</label>
+            <select name="find" class="sx-form-control">
+              <option value='title'>제 목</option>
+              <option value='name'>작성자</option>
+              <option value='comment'>내 용</option>
+            </select>
+            <label for="search" class="sr-only">검색</label>
+            <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
+            <button type="submit" class="sx-btn"><i class="xi-search"></i>검색</button>
+            <a href="{$routeURI}/write{$params}" class="sx-btn"><i class="xi-pen-o xi-2x"><span class="sr-only">글쓰기</span></i></a>
         </div> 
       </div>          
     </form> 
@@ -34,21 +36,21 @@
   <ul class="list_mobile_panel">
   {foreach from=$contentData.list item=$item}
     {if isset($item)}
-    <li class="sx-btn-activate">
+    <li class="sx-btn-active">
       {if $requestData.search != ''}
       <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
       {else}
       <a href="{$routeURI}/{$item.subject.id}">
       {/if}
         <p class="subject" style="padding-left:{$item.subject.space}px">
-          <span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>            
+          <span class="sx-label sx-label-primary">{$item.subject.prefix_icon}</span>            
           <span class="title">{$item.subject.title|nl2br}</span>
-          <span class="sx-badge {$item.subject.css_comment}">{$item.subject.comment_num}</span>
-          {if $item.subject.img_name != ''}
-          <img src="{$skinPath}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+          <span class="sx-badge">{$item.subject.comment_num}</span>
+          {if $item.subject.icon_img_name != ''}
+          <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
           {/if}
           <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-          <span class="label label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>
+          <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>
         </p>
       </a>
       <p class="info" style="padding-left:{$item.subject.space}px">
@@ -78,7 +80,7 @@
       <tbody>
       {foreach from=$contentData.list  item=$item}
         {if isset($item)}
-        <tr class="sx-btn-activate">       
+        <tr class="sx-btn-active">       
           <td class="subject">
             {if $requestData.search != ''}
               <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
@@ -86,14 +88,14 @@
               <a href="{$routeURI}/{$item.subject.id}">
             {/if}
             <span class="link_area" style="padding-left:{$item.subject.space+25}px">
-              <span class="label label-primary {$item.subject.icon_box_color}">{$item.subject.icon_box}</span>            
+              <span class="label label-primary {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
               <span class="title">{$item.subject.title|nl2br}</span>
-              <span class="{$item.subject.css_comment}">({$item.subject.comment_num})</span>
-              {if $item.subject.img_name != ''}
-              <img src="{$skinPath}/images/{$item.subject.img_name}" class="{$item.subject.icon_img}">
+              <span class="sx-badge">{$item.subject.comment_num}</span>
+              {if $item.subject.icon_img_name != ''}
+              <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
               {/if}
               <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-              <span class="label label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
+              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
             </span></a>
           </td>
           <td><span>{$item.name}</span></td>

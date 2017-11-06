@@ -22,8 +22,8 @@
     "grunt-contrib-uglify": "^2.0.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-phplint": "0.0.8",
-    "install": "^0.8.1",
-    "npm": "^3.10.8"
+    "install": "^0.8.9",
+    "npm": "^3.10.10"
   },
   "scripts": {
     "test": "grunt test"

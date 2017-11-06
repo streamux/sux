@@ -188,9 +188,10 @@ class BoardController extends Controller
     
     $where = new QueryWhere();
     $where->set('id',$id, '=');
+    $where->set('password',$passwordHash, '=', 'and');
     $this->model->select('board','password, igroup_count, filename', $where);
-
     $row = $this->model->getRow();
+   
     if (($passwordHash === $row['password']) || ($passwordHash === $adminPasswordHash)) { 
       $delFileName = $row['filename'];
       if ($delFileName) {
@@ -258,9 +259,8 @@ class BoardController extends Controller
       exit();
     }
 
-    /*$msg .=  "<br>" . Tracer::getInstance()->getMessage();
-    echo $msg;
-    return;*/
+    //$msg .=  "<br>" . Tracer::getInstance()->getMessage();
+    //return;
 
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,

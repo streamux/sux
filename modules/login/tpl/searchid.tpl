@@ -24,7 +24,7 @@
         </div>
       </form>
       <div class="sx_login_footer">
-        <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-password">PW 찾기</a>
+        <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-password">비밀번호 찾기</a>
       </div>
     </div>
     <div class="notice_panel">

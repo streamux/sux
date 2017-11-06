@@ -13,7 +13,7 @@
 <!-- end -->
 <script src="{$rootPath}common/js/jsux.min.js"></script>
 {if $documentData.jscode != ''}
-<script src="{$rootPath}modules/login/tpl/login_admin.js"></script>
+<script src="{$rootPath}modules/login/tpl/{$documentData.module_code}_admin.js"></script>
 <script>
   jsux.fn['{$documentData.jscode}'].init();
 </script>

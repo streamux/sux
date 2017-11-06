@@ -1,4 +1,8 @@
 /* Common */
+.label_width {
+  padding-right: 20px;
+  width:auto;
+}
 .contents_header {
   position: relative;
   background-color: #3b3c3b;
@@ -148,14 +152,15 @@
 .board_pagination .sx-pagination{
   background-color: #fff;
 }
+.board_pagination .sx-pagination:hover {
+  color: #fff;
+  background-color: #ff8e42;
+}
 .board_pagination .sx-pagination[disabled] {
   color:#fff;
   background-color: #ff8e42;
 }
-.board_pagination a.sx-pagination:hover {
-  color: #fff;
-  background-color: #ff8e42;
-}
+
 .board_pagination .sx-space-left {
   margin-left: 25px;
 }
@@ -318,21 +323,17 @@
   margin-top:25px;
   text-align: right;
 }
+.board_comment .sx-form-inline .sx-input-group .sx-form-control{
+  margin-bottom: 10px;
+}
 
 /* write & rewrite*/
-.board_write .form_label_width {
-  padding-right: 20px;
-  width:auto;
-}
 .board_write .head_panel,
 .board_write .body_panel,
 .board_write .foot_panel {
   margin-top:30px;
   padding-left:10px;
   padding-right:10px;
-}
-.board_write .head_panel .sx-form-group div.sx-form-control {
-  width: 350px;
 }
 .board_write .body_panel .sx-input-group {
   display: inline-block;
@@ -500,6 +501,10 @@
 }
 
 @media (min-width: 768px)  {
+  .label_width {
+    padding-right: 20px;
+    width:100px;
+  }
   .contents_header  {
     overflow:hidden;
     padding-bottom: 35px;
@@ -551,16 +556,15 @@
   }
   .board_adminsetup .sx-form-group input.sx-btn {
     width: 80px;
-  }
-  .board_write .form_label_width {
-    padding-right: 20px;
-    width:100px;
-  }
+  }  
   .board_write .head_panel input {
     width: 350px;
   }
   .board_write .body_panel .textarea_panel {
     padding-left: 103px;
+  }
+  .board_write .head_panel .sx-form-group div.sx-form-control {
+    width: 350px;
   }
   .board_write .foot_panel .input_file_div {
     margin-top: 0;
@@ -583,11 +587,18 @@
   .board_write .foot_panel input[name=wallname] {
     margin-left: 103px;
   }
+  .board_write .foot_panel .wall_key {
+    display:inline-block;
+    width: 250px;
+  }
   .board_write .foot_panel p.wall_key_comment {
     margin-left: 103px;
   }
   .sx-btn-block {
     display: inline-block;
     width: 100%;
+  }
+  .board_comment .sx-form-inline .sx-input-group .sx-form-control{
+    margin-bottom: 0;
   }
 }

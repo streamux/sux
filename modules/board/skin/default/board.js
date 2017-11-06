@@ -97,13 +97,10 @@ jsux.fn.write = {
   setEvent: function() {
 
     var self = this;
-    $('input[name=btn_confirm]').on('click', function(e) {
-      e.preventDefault();
-
-      var $form = $('form')[0];
-      var bool = self.checkDocumentForm($form);
-      if (bool) {
-        $form.submit();
+    $('form[name=f_board_write]').on('submit', function(e) {
+      
+      if (!self.checkDocumentForm(e.target)) {
+        e.preventDefault();
       }
     });
   },
@@ -171,7 +168,6 @@ jsux.fn.modify = {
 
     var labelList = ['이름을','비밀번호를','제목을','이메일을','내용을','등록키를'];
     var checkList = ['user_name','password','title','email_address','contents','wallname'];
-    var email = f.email_address.value.length;
     var result = true;
 
     $.each( checkList, function( index, item) {
@@ -190,12 +186,10 @@ jsux.fn.modify = {
   setEvent: function() {
 
     var self = this;
-    $('input[name=btn_confirm]').on('click', function(e) {
-      e.preventDefault();
-      var $form = $('form')[0];
-      var bool = self.checkDocumentForm($form);
-      if (bool) {       
-        $form.submit();
+    $('form[name=f_board_modify]').on('submit', function(e) {     
+
+      if (!self.checkDocumentForm(e.target)) {       
+         e.preventDefault();
       }
     });
   },
@@ -221,13 +215,10 @@ jsux.fn.delete = {
   setEvent: function (f) {
 
     var self = this;
-    $('form').on('submit', function(e) {
-      e.preventDefault();
+    $('form[name=f_board_delpass]').on('submit', function(e) {      
 
-      var bool = self.checkDocumentForm(e.target);
-      if (bool ) {
-        var $form = $('form')[0];
-        $form.submit();
+      if (!self.checkDocumentForm(e.target)) {
+        e.preventDefault();
       }
     });   
   },

@@ -40,6 +40,7 @@ class MenuAdminController extends Controller
         $columns[] = $category;
         $columns[] = $name;
         $columns[] = $category;
+        $columns[] = 0;
         $columns[] = 'now()';
         $result = $this->model->insert('menu', $columns);
         if (!$result) {
@@ -72,6 +73,7 @@ class MenuAdminController extends Controller
     $id = $posts['id'];
     $name = $posts['name'];
     $url = $posts['url'];
+    $isActivated = $posts['is_activated'];
 
     $columns = array();
     $columns['name'] = $name;
@@ -140,7 +142,54 @@ class MenuAdminController extends Controller
       $resultYN = 'Y';
     }
 
-    $data = json_decode($posts['data'], true);
+    function convertMultiToArray($arr) {
+
+      if (empty($GLOBALS['menuList'])) {
+        global $menuList;
+        $menuList = array();
+      }
+
+      $arr = Utils::convertArrayToObject($arr);
+      for($i=0; $i<count($arr); $i++) {
+        if ($arr[$i]['sid'] > 0) {
+          $menuList[] = $arr[$i]['sid']; // sub id label
+        } else {
+          $menuList[] = $arr[$i]['id']; // id label
+        }        
+
+        if (isset($arr[$i]['sub']) && $arr[$i]['sub'] && count($arr[$i]['sub']) > 0) {          
+          convertMultiToArray($arr[$i]['sub']);
+        }
+      } //end of for
+    } // end of func
+
+    // reset
+    $columns['is_activated'] = 0;
+    $result = $this->model->update('menu', $columns);
+
+    $columns = array();
+    $menuArr = Utils::convertJsonToArray($jsonData);
+
+    if (count($menuArr['data']) > 0) {
+      convertMultiToArray($menuArr['data']);
+
+      // 동일한 값 합치기
+      $menuList = array_unique($GLOBALS['menuList']);
+      $GLOBALS['menuList'] = null;
+
+      $where = new QueryWhere();
+      foreach ($menuList as $key => $value) {
+        $where->set('id', $value, '=', 'or');
+      }
+      $columns['is_activated'] = 1;
+      $result = $this->model->update('menu', $columns, $where);
+      if (!$result) {
+        $msg .= '메뉴 수정을 실패하였습니다.';
+        $resultYN = 'N';
+      }      
+    } // end of if
+      
+    $data = json_decode($jsonData, true);
     $data['result'] = $resultYN;
     $data['msg'] = $msg;
 

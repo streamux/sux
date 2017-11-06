@@ -227,8 +227,10 @@ class MemberController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $category = $posts['category'];
     $user_id = $posts['user_id']; 
+    $password = $posts['password'];
+    $newpassword = $posts['new_password'];
+    $email = $posts['email_address']; 
 
     $returnURL = $context->getServer('REQUEST_URI');    
     $msg = $this->checkValidation($posts);    
@@ -242,8 +244,7 @@ class MemberController extends Controller
       exit;
     }
 
-    // email validation
-    $email = $posts['email_address']; 
+    // email validation    
     $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
     if ($check_email != true) {
       $msg .= '잘못된 E-mail 주소입니다.';
@@ -266,19 +267,19 @@ class MemberController extends Controller
       }     
     }
     
-    $passwordHash = $context->getPasswordHash($posts['password']);
-    if (isset($posts['new_password']) && $posts['new_password']) {
-      $newpasswordHash = $context->getPasswordHash($posts['new_password']);
+    $passwordHash = $context->getPasswordHash($password);
+    if (isset($newpassword) && $newpassword) {
+      $newpasswordHash = $context->getPasswordHash($newpassword);
     }   
 
     $where = new QueryWhere();
-    $where->set('category', $category);
-    $where->set('user_id', $user_id, '=', 'and');
+    $where->set('user_id', $user_id);
+    $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', '*', $where);
 
     $rows = $this->model->getRow();
     if ($passwordHash != $rows['password']) {
-      $msg = '등록된 비밀번호와 일치하지 않습니다. <br>다시 입력해주세요.';
+      $msg .= '등록된 비밀번호와 일치하지 않습니다. <br>다시 입력해주세요.';
       $resultYN = "N";
     } else {
 
@@ -350,22 +351,22 @@ class MemberController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $category = $posts['category'];
     $user_id = $posts['user_id'];
+    $password = $posts['password'];
 
     $rootPath = _SUX_ROOT_; 
 
-    $passwordHash = $context->getPasswordHash($posts['password']);
+    $passwordHash = $context->getPasswordHash($password);
     if (empty($passwordHash)) {
       UIError::alertToBack('비밀번호를 입력해주세요.');
       exit();
     }
 
     $where = new QueryWhere();
-    $where->set('category', $category);
     $where->set('user_id', $user_id);
+    $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', 'password', $where);
-
+    
     $row = $this->model->getRow();
     if ($passwordHash != $row['password']) {
       $msg = '비밀번호가 잘못되었습니다.';

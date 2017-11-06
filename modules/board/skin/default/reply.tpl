@@ -35,25 +35,25 @@
 
     <div class="head_panel">
       <div class="sx-form-group">
-        <label for="userName" class="sx-control-label form_label_width {$contentData.css_user_label}">이름</label>
+        <label for="userName" class="sx-control-label label_width {$contentData.css_user_label}">이름</label>
         <input type="{$contentData.user_name_type}" name="user_name" id="userName" maxlength="20" value="{$contentData.user_name}" class="sx-form-control">
       </div>
       <div class="sx-form-group">
-        <label for="password" class="sx-control-label form_label_width {$contentData.css_user_label}">비밀번호</label>
+        <label for="password" class="sx-control-label label_width {$contentData.css_user_label}">비밀번호</label>
         <input type="{$contentData.user_pass_type}" name="password" id="password" maxlength="20" value="{$contentData.user_password}" class="sx-form-control">
       </div>
       <div class="sx-form-group">
-        <label for="titleName" class="sx-control-label form_label_width">제목</label>
+        <label for="titleName" class="sx-control-label label_width">제목</label>
         <input type=text" name="title" id="titleName" maxlength="72" value="" class="sx-form-control">
       </div>
       <div class="sx-form-group">
-        <label for="emailAddress" class="sx-control-label form_label_width">이메일</label>
+        <label for="emailAddress" class="sx-control-label label_width">이메일</label>
         <input type="text" name="email_address" id="emailAddress" maxlength="72" value="" class="sx-form-control">
       </div>
     </div>
     <div class="body_panel">
       <div class="sx-form-group">
-        <label for="contents" class="sx-control-label form_label_width">내용</label>
+        <label for="contents" class="sx-control-label label_width">내용</label>
         <div class="sx-input-group">
           <input type="radio" name="type" id="radio_type_text" value="text" {$contentData.comment_type_text}>
           <label for="radio_type_text" class="sx-control-label">TEXT</label>
@@ -67,7 +67,7 @@
     </div>
     <div class="foot_panel">
       <div class="sx-form-group">
-        <label for="imgUploader" class="sx-control-label form_label_width">파일 첨부</label>
+        <label for="imgUploader" class="sx-control-label label_width">파일 첨부</label>
         <input type="text" id="imgUploader" class="sx-form-control" readonly="readonly" tabindex="-1">      
         <div class="input_file_div button_width">
           <input type="button" value="파일 선택" class="sx-btn file_uploader_button button_width">
@@ -75,8 +75,8 @@
         </div>        
       </div>
       <div class="sx-form-group">
-        <label for="wallKey" class="sx-control-label form_label_width">등록키</label>
-        <div class="wall_key sx-box-content">
+        <label for="wallKey" class="sx-control-label label_width">등록키</label>
+        <div class="wall_key">
           <span>{$contentData.wallname}</span>
         </div>
         <input type="text" name="wallname" id="wallKey" size="16" maxlength="20" class="sx-form-control">

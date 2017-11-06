@@ -302,8 +302,8 @@ class InstallController extends Controller
                       }
                     }                   
                   }                 
-                }
-              }
+                } // end of 'module === document ''
+              } // end 'moduleType === once'
             } // end of if (file_exists)
           }
         } // end of foreach   

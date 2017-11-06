@@ -9,7 +9,7 @@
 {if $pagination.prevpassover <= 0}
   {$pagination.prevpassover=0}
 {/if}
-<a href="{$routeURI}?passover={$pagination.prevpassover}{$params}" class="sx-pagination-constrol sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
+<a href="{$routeURI}?passover={$pagination.prevpassover}{$params}" class="sx-pagination-control sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
 
 {section name=page start=$pagination.nowpage loop=$pagination.nowpageend}
   {assign var=index value=$smarty.section.page.index}
@@ -30,4 +30,4 @@
 {if $pagination.total <= $pagination.hanpassoverpage }
   {$pagination.newpassover = $pagination.endpage}
 {/if}
-<a href="{$uri}?passover={$pagination.newpassover}{$params}" class="sx-pagination-constrol sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
+<a href="{$uri}?passover={$pagination.newpassover}{$params}" class="sx-pagination-control sx-space-left"><i class="xi-angle-right xi-2x"></i></a>

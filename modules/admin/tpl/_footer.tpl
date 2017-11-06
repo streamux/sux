@@ -1,9 +1,9 @@
     <footer>
       <div class="sx-footer">
         <span>{include file="$copyrightPath"}</span>
-      </div>
-    </footer>
-  </div>
+      </div>    
+  </footer>
+  </div>  
 </div>
 
 <script type="text/javascript">

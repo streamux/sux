@@ -1,0 +1,66 @@
+/* login header */
+.sx-container{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.sx-header{
+  margin-top:10px;
+  text-align: center;
+}
+.admin_register {
+  margin-top: 15px;
+  padding: 25px 15px;
+}
+.admin_register .header{
+  text-align: center;
+}
+.admin_register .header h1{
+  font-weight: normal;
+  font-size:2.5625em;
+  color:#ff6600
+}
+.admin_register .icon_notice {
+  width: 30px;
+  height:13px;
+  vertical-align: middle;
+}
+.admin_register .text_notice {
+  padding-top: 5px;
+  padding-bottom: 25px;
+}
+.admin_register .help-block{
+  display: none;
+  padding: 5px 0;    
+  color: #f48;
+}
+.admin_register a.sx-btn,
+.admin_register input[type=button].sx-btn,
+.admin_register input[type=submit].sx-btn {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* common */
+.footer{
+  margin-top:35px;
+  padding-top:15px;
+  height: 60px;
+  text-align: center;
+  background-color: #333;
+}
+.footer,
+.footer a{
+  font-size: 0.9375em;
+  color:#c3c3c3;
+}
+
+@media(min-width: 768px) {
+  .admin_register .label_width {
+    width:150px;
+    padding-right: 5px;
+  }
+  .sx-btn-block {
+    display: inline-block;
+    width: 100%;
+  }
+}

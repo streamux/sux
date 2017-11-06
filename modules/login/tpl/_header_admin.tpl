@@ -7,7 +7,7 @@
    <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css">  
-  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/login/tpl/login_admin.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/login/tpl/{$documentData.module_code}_admin.css">
   <!--[if (gte IE 6)&(lte IE 8)]>
    <script type="text/javascript" src="{$rootPath}common/js/selectivizr-min.js"></script>
   <![endif]-->
@@ -16,9 +16,8 @@
 <div class="sx-wrapper">
   <div class="sx-header">
     <div class="util"></div>
-    <a href="{$rootPath}admin-admin">
-      <h1><img class="logo" src="{$rootPath}modules/admin/tpl/images/logo.png" alt="streamxux"></h1>
+    <a href="{$rootPath}admin-admin" class="sx_admin_login" title="streammx">
+      <h1><img src="{$rootPath}modules/admin/tpl/images/logo.png" alt="streamxux"></h1>
     </a>
   </div>
   <div class="sx-container">  
-

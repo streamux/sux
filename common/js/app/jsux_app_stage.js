@@ -1,16 +1,17 @@
 $(window).ready(function() {
   
   var gnbModel = jsux.gnb.Model.create(),
-    gnbView = jsux.gnb.Menu.create("#sxGnb", gnbModel),
-    mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
-    pageAppHandler = {},
-    jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
-    menuList = null;
+        gnbView = jsux.gnb.Menu.create("#sxGnb", gnbModel),
+        mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
+        pageAppHandler = {},
+        jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
+        menuList = null;
 
   gnbModel.addObserver( gnbView );
-  gnbModel.addObserver( mobileGnbView );    
+  gnbModel.addObserver( mobileGnbView );
 
   jsux.mobileGnbView = mobileGnbView;
+
   pageAppHandler.home = {
 
     init: function() {

@@ -1,3 +1,94 @@
+.sx-container{
+  padding-top:60px;
+  height: 100%;
+}
+.sx-contents-body{
+  word-break:keep-all;
+  padding:10px;height:100%;
+}
+.sx-about-us h1,
+.sx-user-guide h1{
+  padding:45px 0 30px 0;
+  color:#dda050;
+  font-size:1.250em;
+}
+.sx-user-guide h2{
+  padding-left:80px;
+  font-size:1.4375em;
+}
+
+.sx-about-us p.title,
+.sx-user-guide p.title{
+  font-size:2.000em;
+  font-weight:bold;
+}
+.sx-about-us p.comment{
+  padding-top:25px;
+  font-size:1.0625em;
+  line-height:1.687em;
+  color:#6e6e6e;
+}
+.sx-user-guide{
+  padding-top:35px;
+}
+.sx-user-guide ul{
+  padding-top:55px;
+}
+.sx-user-guide ul li{
+  padding-right:15px;
+  width:100%;
+}
+.sx-user-guide ul li p{
+  padding:20px 0 45px 80px;
+  font-size:1.0625em;
+  line-height:1.687em;
+  color:#6e6e6e;
+}
+.sx-user-guide ul li p > a{
+  color:#333333;
+  text-decoration-line: underline;
+}
+.sx-user-guide ul li p > a:hover{
+  color:#000;
+}
+
+.sx-user-guide ul li > a{
+  float:left;
+  padding-top:10px;
+  width:50px;
+  height:50px;
+  text-align:center;
+  color: #e3e3e3;
+  background-color:#5e5e5e;
+  -webkit-border-radius: 3em;
+      -moz-border-radius: 3em;
+           -o-border-radius: 3em;
+                border-radius: 3em;
+}
+.sx-user-guide ul li > a:hover{
+  color:#000;
+  background-color:#cda25a;
+}
+
+/* swiper - contents, visual, mobilegnb */
+.swiper-container-contents,
+.swiper-container-visual,
+.swiper-container-mobilegnb{
+  height: 100%;
+}
+.swiper-container-visual {
+  background-color:#d3d3d3;
+}
+.swiper-container-visual img{
+  height: 100%;
+}
+
+.swiper-slide {
+  height: auto;
+}
+.swiper-slide-size{
+  height: 100%;
+}
 
 .starter_title{
   text-align: center;

@@ -18,7 +18,7 @@
         <input type="button" name="btn_confirm" value="확 인" onclick="location.href='{$rootPath}login'" class="sx-btn sx-btn-block">
       </div>
       <div class="sx_login_footer">
-        <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-id">ID 찾기</a>
+        <a href="{$rootPath}member-join">회원가입</a><span>|</span><a href="{$rootPath}search-id">아이디 찾기</a>
       </div>
     </div>
     <div class="notice_panel">

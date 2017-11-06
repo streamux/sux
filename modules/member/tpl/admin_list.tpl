@@ -27,7 +27,7 @@
             </div>
           </form>
         </header> 
-        <article class="sx-box-content">
+        <div class="sx-box-content">
           <input type="hidden" name="category" value="{$documentData.category}">
           <input type="hidden" name="list_json_path" value="{$rootPath}member-admin/list-json">
 
@@ -75,7 +75,7 @@
             </span>
             <a href="#" class="sx-nav-next sx-pagination-control unactive">다음</a>
           </nav>
-        </article>
+        </div>
       </section>
     </div>
 

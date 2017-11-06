@@ -1,9 +1,9 @@
 /**
  * class jsux
- * ver 1.1.3
- * update 2017.10.22
+ * ver 1.1.4
+ * update 2017.10.26
  * author streamux.com
- * description '' 
+ * description 'logger loglevel 디폴트 값 추가' 
  */
 window.jsux = window.jsux || {};
 window.jsux.define = function( var_name, value) {
@@ -268,6 +268,36 @@ window.trace = function( msg, isConsole ) {
     removeComma: function(num) {
 
       return this.replace(/,/g, '');
+    },
+    validateEmail: function(value) {
+
+      var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
+      if (!reg.test(value)) {
+        return false;
+      }
+      return true;
+    },
+    validateHp: function(value) {
+
+      var hpNum = value.replace(/\s-\s/g,''),
+            reg = null;
+
+      if (!(hpNum.length > 9 && hpNum.length < 12)) {
+        return false;
+      }
+
+      if (hpNum.length === 10) {
+         reg = /^(\d{3})+(\d{3})+(\d{4})+$/;    
+      }
+      if (hpNum.length === 11) {
+        reg = /^(\d{3})+(\d{4})+(\d{4})+$/;    
+      }
+
+      if (!reg.test(hpNum)) {
+        return false;
+      }
+
+      return hpNum.replace(reg, '$1 - $2 - $3');
     }
   };
 
@@ -282,7 +312,7 @@ window.trace = function( msg, isConsole ) {
   Logger = function(logLevel) {
 
     this.isConsole = true;
-    this.logLevel = logLevel;
+    this.logLevel = logLevel || manager.LogLevel.DEBUG;
     this.logs = [];
     this.logLabels = ['debug','info','warn','error'];
 

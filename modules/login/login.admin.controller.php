@@ -87,7 +87,7 @@ class LoginAdminController extends Controller {
       exit;
     }
 
-    $admin_info = array('admin_id','admin_pwd','admin_email','yourhome');
+    $admin_info = array('admin_id','admin_name','admin_pwd','admin_email','yourhome');
 
     $rootPath = _SUX_ROOT_;
     $filePath = 'files/config/config.admin.php';

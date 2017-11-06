@@ -47,7 +47,7 @@ jsux.fn.login = {
   setEvent: function() {
 
     var self = this;
-    $('form').submit( function(e) {       
+    $('form[name=f_login]').submit( function(e) {       
       e.preventDefault();      
 
       if (self.checkForm(this)) {
@@ -121,7 +121,7 @@ jsux.fn.leave = {
   setEvent: function() {
 
     var self = this;
-    $('form').on('submit',function(e) {
+    $('form[name=f_loginleave]').on('submit',function(e) {
       e.preventDefault();
 
       if (self.checkForm(this)) {
@@ -199,7 +199,7 @@ jsux.fn.searchId = {
 
     var self = this;
 
-    $('form').on('submit',function(e) {
+    $('form[name=f_searchid]').on('submit',function(e) {
       
       if (!self.checkForm(this)) {
         e.preventDefault();
@@ -258,7 +258,7 @@ jsux.fn.searchPassword = {
 
     var self = this;
 
-    $('form').on('submit',function(e) {
+    $('form[name=f_searchpwd]').on('submit',function(e) {
       
       if (!self.checkForm(this)) {
         e.preventDefault();

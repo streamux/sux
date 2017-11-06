@@ -1,0 +1,127 @@
+/* List */
+.board_list {
+  margin-top:30px;
+}
+/* Common */
+.form_search_panel {
+  padding: 10px 10px;
+}
+.form_search_panel .sx-input-group {
+  text-align: right;
+}
+.form_search_panel .sx-input-group .sx-form-control{
+  margin-bottom: 5px;
+}
+.form_search_panel .sx-input-group button.sx-btn{
+  width:100%;  
+}
+.form_search_panel .sx-input-group a.sx-btn{
+  display: none;
+  vertical-align: middle;
+  padding: 0 4px;
+}
+
+.board_list .search_result {
+  margin-left: 15px;
+}
+
+.list_panel{
+  margin-top:35px;
+}
+.list_panel li {
+  padding: 0 15px;
+}
+.list_panel > li .subject{
+  margin-bottom: 10px;
+  line-height: 24px;
+}
+.list_panel > li .subject .contents{
+  font-size: 0.8750em;
+}
+.list_panel > li .subject .link_address {
+  color: #8a6d3b;
+}
+.list_panel > li .subject .link_address:hover {
+  text-decoration: underline;
+}
+.list_panel > li .info{
+  font-size: 0.875em;
+  color: #aeaeae;
+}
+.list_panel > li p i{
+  position: relative;
+  top:-1px;
+  vertical-align: middle;
+}
+
+.list_panel > li {
+  font-size: 1.125em;
+}
+.list_panel > li {
+  padding-top:20px;
+  padding-bottom:20px;
+  text-align: left;
+}
+
+.list_panel > li .subject .label {
+  border:none;
+  font-weight: normal;
+  vertical-align: middle;
+}
+.list_panel > li a:hover {
+  text-decoration-line: none;
+}
+.board_list .warn_subject {
+  padding-left:10px;
+  text-align: left;
+}
+
+.board_pagination {
+  margin-top:65px;
+  margin-bottom: 55px;
+  text-align: center;
+}
+.board_pagination .sx-pagination{
+  background-color: #fff;
+}
+.board_pagination .sx-pagination[disabled] {
+  color:#fff;
+  background-color: #ff8e42;
+}
+.board_pagination a.sx-pagination:hover {
+  color: #fff;
+  background-color: #ff8e42;
+}
+.board_pagination .sx-space-left {
+  margin-left: 25px;
+}
+.board_pagination .sx-space-right {
+  margin-right: 25px;
+}
+.board_list .board_pagination .pagin_pc {
+  display:none;
+}
+
+@media (min-width: 768px)  {
+
+  .form_search_panel .sx-input-group .form_control_width{
+    width:auto;
+  }
+  .form_search_panel .sx-input-group .sx-form-control{
+    margin-bottom: 0;
+  }
+  .form_search_panel .sx-input-group button.sx-btn{
+    margin-left: 5px;
+    width:auto;
+  }
+  .form_search_panel .sx-input-group a.sx-btn{
+    display: inline-block;
+  }
+
+  .board_list .board_pagination .pagin_pc {
+    display:block;
+  }
+  .board_list .board_pagination .pagin_mobile {
+    display:none;
+  }
+}

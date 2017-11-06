@@ -32,36 +32,22 @@ jsux.fn.join = {
   },
   validateEmail: function(id) {
 
-    var value = $('input:text[name='+id+']').val();
-    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
-    if (reg.test(value)) {
-      return true;
+    var value = $('input:text[name=email_address]').val();
+    var isEmail =jsux.utils.validateEmail(value);
+    if (!isEmail) {
+      trace('이메일이 올바르지 않습니다.');
+      return false;
     }
-    return false;
+    return true;
   },
-  validateHp: function(e) {
+  validateHp: function(e) {    
+    var value = e.target.value;
 
-    var hpNum = e.target.value;
-    var reg;
-
-    hpNum = hpNum.replace(/\s-\s/g,'');
-    if (!(hpNum.length > 9 && hpNum.length < 12)) {
+    var hpNum = jsux.utils.validateHp(value);
+    if (!hpNum) {
       return false;
     }
-
-    if (hpNum.length === 10) {
-       reg = /^(\d{3})+(\d{3})+(\d{4})+$/;    
-    }
-    if (hpNum.length === 11) {
-      reg = /^(\d{3})+(\d{4})+(\d{4})+$/;    
-    }
-
-    if (!reg.test(hpNum)) {
-      return false;
-    }
-
-    var str = hpNum.replace(reg, '$1 - $2 - $3');
-    $('input[name=hp]').val(str);
+    $('input[name=hp]').val(hpNum);
     return true;
   },
   checkFormVal: function( f ) {
@@ -85,7 +71,6 @@ jsux.fn.join = {
     }
 
     if (!this.validateEmail('email_address')) {
-      trace('이메일이 올바르지 않습니다.');
       return false;
     }
 
@@ -95,7 +80,7 @@ jsux.fn.join = {
 
     var self = this,
           params = {},
-          datas = $('form')[0],
+          datas = f,
           indexCheckbox = 0,
           url = '';
 
@@ -176,11 +161,10 @@ jsux.fn.join = {
   setEvent: function() {
 
     var self = this;
-    $('form').on('submit', function( e ) {
+    $('form[name=f_member_join]').on('submit', function( e ) {
       e.preventDefault();
 
-      var bool  = self.checkFormVal( this);
-      if (bool === true) {
+      if (self.checkFormVal( this)) {
         self.sendJson( e.target );
       }
     });
@@ -303,35 +287,21 @@ jsux.fn.modify = {
   validateEmail: function(id) {
 
     var value = $('input:text[name=email_address]').val();
-    var reg = /^([a-zA-Z0-9_+.-])+@([a-zA-Z0-9_-])+(\.[a-z0-9_-]+){1,2}$/;
-    if (!reg.test(value)) {
+    var isEmail =jsux.utils.validateEmail(value);
+    if (!isEmail) {
       trace('이메일이 올바르지 않습니다.');
       return false;
     }
     return true;
   },
   validateHp: function(e) {    
-    var hpNum = e.target.value;
-    var reg;
+    var value = e.target.value;
 
-    hpNum = hpNum.replace(/\s-\s/g,'');
-    if (!(hpNum.length > 9 && hpNum.length < 12)) {
+    var hpNum = jsux.utils.validateHp(value);
+    if (!hpNum) {
       return false;
     }
-
-    if (hpNum.length === 10) {
-       reg = /^(\d{3})+(\d{3})+(\d{4})+$/;    
-    }
-    if (hpNum.length === 11) {
-      reg = /^(\d{3})+(\d{4})+(\d{4})+$/;    
-    }
-
-    if (!reg.test(hpNum)) {
-      return false;
-    }
-
-    var str = hpNum.replace(reg, '$1 - $2 - $3');
-    $('input[name=hp]').val(str);
+    $('input[name=hp]').val(hpNum);
     return true;
   },
   checkFormVal: function( f ) {
@@ -428,7 +398,7 @@ jsux.fn.modify = {
 
     var self = this;
     
-    $('form').on('submit', function( e ) {
+    $('form[name=f_member_modify]').on('submit', function( e ) {
       e.preventDefault();
 
       if (self.checkFormVal( e.target )) {

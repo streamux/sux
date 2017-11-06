@@ -21,7 +21,7 @@
     <div class="swiper-pagination swiper-pagination-visual"></div>
   </div>
 </div>
-<div class="section sx-contents-body">            
+<div class="sx-contents-body">            
   <div class="article sx-about-us">
     <h1>ABOUT US</h1>
     <p class="title">WELCOME TO STREAMUX</p>

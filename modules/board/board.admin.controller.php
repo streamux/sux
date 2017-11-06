@@ -148,7 +148,7 @@ class BoardAdminController extends Controller
 			}
 		}
 
-		$msg .= Tracer::getInstance()->getMessage();
+		//$msg .= Tracer::getInstance()->getMessage();
 		$json = array(	"data"=> $dataObj,
 						"result"=>$resultYN,
 						"msg"=>$msg);
@@ -253,7 +253,7 @@ class BoardAdminController extends Controller
 			$resultYN = "N";	
 		}
 
-		$msg = Tracer::getInstance()->getMessage();
+		//$msg = Tracer::getInstance()->getMessage();
 		$data = array(	"data"=> array('list'=>$dataObj),
 						"result"=>$resultYN,
 						"msg"=>$msg);

@@ -117,30 +117,30 @@ class BoardView extends View
           $subject = array();
           $subject['id'] = $id;
           $subject['title'] = $title;         
-          $subject['img_name'] = '';
+          $subject['icon_img_name'] = '';
           $subject['progress_step_name'] = '';
 
           // 'hide' in value is a class name of CSS
           $subject['space'] = 0;
-          $subject['icon_box'] = '';
-          $subject['icon_box_type'] = 0;
+          $subject['prefix_icon'] = '';
+          $subject['prefix_icon_type'] = 0;
+
           $subject['icon_img'] = 'sx-hide';
-          $subject['css_comment'] = 'sx-hide';
-          $subject['comment_num'] = 0;
+          $subject['comment_num'] = '';
           $subject['icon_new'] = 'sx-hide';
           $subject['icon_opkey'] = 'sx-hide';
 
           if (isset($space) && $space) {
             $subject['space'] = $space*10;
-            $subject['icon_box'] = '답변';
-            $subject['icon_box_color'] = 'sx-bg-replay';
+            $subject['prefix_icon'] = '답변';
+            $subject['prefix_icon_color'] = 'sx-bg-replay';
           }
 
           //공지글 설정은 개발 예정 
           /*if (isset($isNotice) && $isNotice != '') {
             $subject['space'] = '10px';
-            $subject['icon_box'] = '공지';
-            $subject['icon_box_color'] = 'sx-bg-notice';
+            $subject['prefix_icon'] = '공지';
+            $subject['prefix_icon_color'] = 'sx-bg-notice';
           }*/
 
           if (isset($filename) && $filename){
@@ -151,8 +151,8 @@ class BoardView extends View
             }
 
             if (isset($imgname) && $imgname) {
-              $subject['icon_img'] = 'sx-show';
-              $subject['img_name'] = $imgname;
+              $subject['icon_img'] = 'sx-show-inline';
+              $subject['icon_img_name'] = $imgname;
             } 
           }
 
@@ -161,12 +161,11 @@ class BoardView extends View
           $this->model->select('comment', 'id', $where);
           $commentNums = $this->model->getNumRows();
           if ($commentNums > 0) {
-            $subject['css_comment'] = 'sx-show';
             $subject['comment_num'] = $commentNums;
           }
 
           if ($compareDay == $today){
-            $subject['icon_new'] = 'sx-show';
+            $subject['icon_new'] = 'sx-show-inline';
             $subject['icon_new_title'] = 'new';
           }
           
@@ -371,7 +370,7 @@ class BoardView extends View
         }
 
         //echo 'image size = ' . imagesx($image);
-        $contentData['css_img'] = 'show';
+        $contentData['css_img'] = 'sx-show';
         $contentData['css_img_width'] = imagesx($image) . 'px';
       }
       $contentData['fileup_name'] = $filename;
@@ -544,7 +543,7 @@ class BoardView extends View
       $contentData['user_name'] = empty($user_name) ? 'Guest': $user_name;
       $contentData['user_password'] = $password;
     } else {
-      $contentData['css_user_label'] = 'sx-show';      
+      $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_pass_type'] = 'password';
       $contentData['user_id'] = empty($user_id) ? 'Guest': $user_id;
@@ -867,7 +866,7 @@ class BoardView extends View
       $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
       $contentData['user_password'] = $password;
     } else {
-      $contentData['css_user_label'] = 'sx-show';      
+      $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_id'] = empty($user_id) ? 'guest' : $user_id;
       $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;

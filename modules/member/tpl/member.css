@@ -15,7 +15,7 @@
   padding-top: 5px;
   padding-bottom: 25px;
 }
-.sx_member .form_label_width {
+.sx_member .label_width {
   padding-right: 15px;
 }
 .sx_member .submit_top_margin {
@@ -29,7 +29,7 @@
 }
 
 @media (min-width: 768px) {
-  .sx_member .form_label_width {
+  .sx_member .label_width {
     width:150px;
   }
 }

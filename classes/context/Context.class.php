@@ -3,495 +3,532 @@
 class Context
 { 
 
-	private static $aInstance = NULL;
-	private $hashmap_params = array();
-	private $table_list = array();
-	private $module_list = array();
-	private $parameter_list = array();
-	public $db_info = NULL;
-	private $admin_info = Null;
-	private$cookie_id = 'sux_version_date';
-
-	public static function &getInstance() {
-
-		if (empty(self::$aInstance)) {
-			self::$aInstance = new self;
-		}
-
-		return self::$aInstance;
-	}
-
-	function init() {
-
-		// fix missing HTTP_RAW_POST_DATA in PHP 5.6 and above
-		/*if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
-		{
-			$GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
-			
-			// If content is not XML JSON, unset
-			if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
-			{
-				unset($GLOBALS['HTTP_RAW_POST_DATA']);
-			}
-		}*/
-
-		$this->startSession();
-		$this->loadDBInfo();
-		$this->loadAdminInfo();
-		$this->loadTableInfo();
-	}
-
-	function startSession() {
-
-		session_start();
-	}
-
-	function stopSession() {
-
-		session_destroy();
-	}
-
-	/**
-	 * explode in InstallCass
-	 */	
-	function makeFilesDir($is_safe=false, $db_info=null) {
-
-		$dirList = array(
-			'./files',
-			'./files/config',
-			'./files/caches',
-			'./files/caches/queries',
-			'./files/caches/routes',
-			'./files/cookie',
-			'./files/board',
-			'./files/document',
-			'./files/gnb'
-		);
-
-		$msg = '';
-		foreach ($dirList as $key => $dir) {
-			$msg .= FileHandler::makeDir($dir, $is_safe, $db_info);
-			$msg .= "\n";
-		}
-
-		return $msg;
-	}
-
-	function makeRouteCaches() {
-
-		$moduleList = FileHandler::readDir('./modules');
-		foreach ($moduleList as $key => $value) {
-			$module = $value['file_name'];
-
-			$classList = array();
-			$classList[] = array(	'class'=>ucfirst($module) . 'Admin',
-								'class_path'=>'./modules/' . $module . '/' . $module . '.admin.class.php',
-								'route_path'=>'./files/caches/routes/' . $module . '.admin.cache.php'	);
-
-			$classList[] = array(	'class'=>ucfirst($module),
-								'class_path'=>'./modules/' . $module . '/' . $module . '.class.php',
-								'route_path'=>'./files/caches/routes/' . $module . '.cache.php' );
-
-			foreach ($classList as $key => $value) {
-				$classPath = $value['class_path'];
-				$routePath = $value['route_path'];
-
-				if (file_exists($routePath)) {					
-					$routedValue = CacheFile::readFile($routePath);
-				}
-
-				if (file_exists($classPath)) {
-					$Class = $value['class'];
-					$routes = array();
-
-					// set category
-					$classCategories = array();
-					$routedCategories = array();
-					$classAction = array();
-					$routedAction = array();
-
-					if (isset($Class::$categories) && $Class::$categories) {						
-						$classCategories = $Class::$categories;					
-					}
-
-					if (isset($routedValue['categories']) && $routedValue['categories']) {
-						$routedCategories = $routedValue['categories'];							
-					}
-
-					$categories = array_merge($classCategories, $routedCategories);
-					$categories = array_unique($categories);
-					$routes['categories'] = $categories;
-
-					// set action
-					if (isset($Class::$action) && $Class::$action) {
-						$classAction = $Class::$action;						
-					} 
-
-					if (isset($routedValue['action']) && $routedValue['action']) {
-						$routedAction = $routedValue['action'];							
-					}
-
-					$actions = array_merge($classAction, $routedAction);					
-					$actions = array_unique($actions);
-					$routes['action'] = $actions;
+  private static $aInstance = NULL;
+  private $hashmap_params = array();
+  private $table_list = array();
+  private $module_list = array();
+  private $parameter_list = array();
+  public $db_info = NULL;
+  private $admin_info = Null;
+  private$cookie_id = 'sux_version_date';
+
+  public static function &getInstance() {
+
+    if (empty(self::$aInstance)) {
+      self::$aInstance = new self;
+    }
+
+    return self::$aInstance;
+  }
+
+  function init() {
+
+    // fix missing HTTP_RAW_POST_DATA in PHP 5.6 and above
+    /*if(!isset($GLOBALS['HTTP_RAW_POST_DATA']) && version_compare(PHP_VERSION, '5.6.0', '>=') === TRUE)
+    {
+      $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents("php://input");
+      
+      // If content is not XML JSON, unset
+      if(!preg_match('/^[\<\{\[]/', $GLOBALS['HTTP_RAW_POST_DATA']) && strpos($_SERVER['CONTENT_TYPE'], 'json') === FALSE && strpos($_SERVER['HTTP_CONTENT_TYPE'], 'json') === FALSE)
+      {
+        unset($GLOBALS['HTTP_RAW_POST_DATA']);
+      }
+    }*/
+
+    $this->startSession();
+    $this->loadDBInfo();
+    $this->loadAdminInfo();
+    $this->loadTableInfo();
+  }
+
+  function startSession() {
+
+    session_start();
+  }
+
+  function stopSession() {
+
+    session_destroy();
+  }
+
+  /**
+   * explode in InstallCass
+   */ 
+  function makeFilesDir($is_safe=false, $db_info=null) {
+
+    $dirList = array(
+      './files',
+      './files/config',
+      './files/caches',
+      './files/caches/queries',
+      './files/caches/routes',
+      './files/cookie',
+      './files/board',
+      './files/document',
+      './files/gnb'
+    );
+
+    $msg = '';
+    foreach ($dirList as $key => $dir) {
+      $msg .= FileHandler::makeDir($dir, $is_safe, $db_info);
+      $msg .= "\n";
+    }
+
+    return $msg;
+  }
+
+  function makeRouteCaches() {
+
+    $moduleList = FileHandler::readDir('./modules');
+    foreach ($moduleList as $key => $value) {
+      $module = $value['file_name'];
+
+      $classList = array();
+      $classList[] = array( 'class'=>ucfirst($module) . 'Admin',
+                'class_path'=>'./modules/' . $module . '/' . $module . '.admin.class.php',
+                'route_path'=>'./files/caches/routes/' . $module . '.admin.cache.php' );
+
+      $classList[] = array( 'class'=>ucfirst($module),
+                'class_path'=>'./modules/' . $module . '/' . $module . '.class.php',
+                'route_path'=>'./files/caches/routes/' . $module . '.cache.php' );
+      $routedValue = null;
+
+      foreach ($classList as $key => $value) {
+        $classPath = $value['class_path'];
+        $routePath = $value['route_path'];
+
+        if (file_exists($routePath)) {          
+          $routedValue = CacheFile::readFile($routePath);
+        }
+
+        if (file_exists($classPath)) {
+          $Class = $value['class'];
+          $routes = array();
+
+          // set category
+          $classCategories = array();
+          $routedCategories = array();
+          $classAction = array();
+          $routedAction = array();
+
+          if (isset($Class::$categories) && $Class::$categories) {            
+            $classCategories = $Class::$categories;         
+          }
+
+          if (isset($routedValue['categories']) && $routedValue['categories']) {
+            $routedCategories = $routedValue['categories'];             
+          }
+
+          $categories = array_merge($classCategories, $routedCategories);
+          $categories = array_unique($categories);
+          $routes['categories'] = $categories;
+
+          // set action
+          if (isset($Class::$action) && $Class::$action) {
+            $classAction = $Class::$action;           
+          } 
+
+          if (isset($routedValue['action']) && $routedValue['action']) {
+            $routedAction = $routedValue['action'];             
+          }
+
+          $actions = array_merge($classAction, $routedAction);          
+          $actions = array_unique($actions);
+          $routes['action'] = $actions;
 
-					CacheFile::writeFile( $routePath, $routes);
-				}
-			}
-		}
-	}
-
-	function loadDBInfo() {
-
-		$filename = $this->getConfigFile();
-		if (is_readable($filename)) {
-			$result = include $filename;			
-			$this->db_info = $result['db_info'];
-			unset($result);
-		}		
-	}
-
-	function getConfigFile() {		
-
-		return _SUX_PATH_ . 'files/config/config.db.php';
-	}
-
-	function loadAdminInfo() {
-
-		$admin_file = $this->getAdminFile();
-		if (is_readable($admin_file)) {
-			$result = include $admin_file;
-			$this->admin_info = $result['admin_info'];
-			unset($result);
-		}
-	}
-
-	function getAdminFile() {
-
-		return _SUX_PATH_ . 'files/config/config.admin.php';
-	}
-
-	function loadTableInfo() {
-
-		$filename = $this->getTableFile();
-		if (is_readable($filename)) {
-			$result = include $filename;
-			foreach ($result['table_list'] as $key => $value) {
-				$this->setTable($key, $value);
-			}
-			unset($result);
-		}		
-	}
-
-	function getTableFile() {
-
-		return _SUX_PATH_ . 'files/config/config.table.php';
-	}
-
-	function getPrefix() {
-
-		return $this->db_info['db_table_prefix'];
-	}
-
-	function getTable( $key ) {
-
-		return $this->table_list[$key];
-	}
-	
-	/**
-	 * @method setTable
-	 * @param $key
-	 * @param $value 
-	 * 접두사가 붙은 값을 저장한다.
-	 */
-	function setTable( $key, $value ) {
-
-		$this->table_list[$key] = $value;
-	}
-
-	function getModule( $key ) {
-		return $this->module_list[$key];
-	}
-
-	function setModule( $key, $value) {
-		$this->module_list[$key] = $value;
-	}
-
-	function getAdminInfo($key) {
-
-		if (isset($key) && $key) {
-			return $this->admin_info[$key];
-		} else {
-			return $this->admin_info;
-		}
-	}
-
-	function getDB($key) {
-
-		return $this->db_info['db_database'];
-	}
-
-	function getDBInfo($key) {
-
-		if (isset($key)) {
-			return $this->db_info[$key];
-		} else {
-			return $this->db_info;
-		}		
-	}
-	
-	function getPost($key) {
-
-		$post = $_POST[$key];
-		if (empty($post)) {
-			$json = $this->getJson();
-			$posts = $this->getJsonToArray($json);
-			$post = $posts[$key];
-			if (empty($post)) {
-				// 실서버 반영 시 반드시 주석처리 				
-				if ($this->isLocalhost()) {
-					$post = $this->getRequestToArray($key);
-				}	
-			}		
-		}
-		
-		return $post;
-	}
-
-	function setPost($key, $value) {
-
-		$_POST[$key] = $value;
-	}
-
-	function getPostAll() {
-
-		$posts = $_POST;
-		if (empty($posts)) {
-			$json = $this->getJson();
-			$posts = $this->getJsonToArray($json);
-			if (empty($posts)) {
-				// 로컬 서버에서만 실행 
-				if ($this->isLocalhost()) {
-					$posts = $this->getRequestAllToArray();
-				}
-			}
-		}
-		return $posts;
-	}
-
-	function getRequest($key) {
-
-		return $_REQUEST[$key];
-	}
-
-	function setRequest($key, $value) {
-
-		$_REQUEST[$key] = $value;
-	}
-
-	function getRequestAll() {
-
-		return $_REQUEST;
-	}
-
-	/**
-	 * value		date('Y-m-d H:i:s')
-	 * expiry	time() + 86400 * 30 * 12
-	 */
-	function setCookie($name, $value, $expiry, $path='/') {
-		
-		$path = './files/cookie/version.cookie.php';
-		if (isset($value) && $value) {
-			setcookie($name, $value, $expiry, $path);
+          CacheFile::writeFile( $routePath, $routes);
+        }
+      }
+    }
+  }
+
+  function loadDBInfo() {
+
+    $filename = $this->getConfigFile();
+    if (is_readable($filename)) {
+      $result = include $filename;      
+      $this->db_info = $result['db_info'];
+      unset($result);
+    }   
+  }
+
+  function getConfigFile() {    
+
+    return _SUX_PATH_ . 'files/config/config.db.php';
+  }
+
+  function loadAdminInfo() {
+
+    $admin_file = $this->getAdminFile();
+    if (is_readable($admin_file)) {
+      $result = include $admin_file;
+      $this->admin_info = $result['admin_info'];
+      unset($result);
+    }
+  }
+
+  function getAdminFile() {
+
+    return _SUX_PATH_ . 'files/config/config.admin.php';
+  }
+
+  function loadTableInfo() {
+
+    $filename = $this->getTableFile();
+    if (is_readable($filename)) {
+      $result = include $filename;
+      foreach ($result['table_list'] as $key => $value) {
+        $this->setTable($key, $value);
+      }
+      unset($result);
+    }   
+  }
+
+  function getTableFile() {
+
+    return _SUX_PATH_ . 'files/config/config.table.php';
+  }
+
+  function getPrefix() {
+
+    return $this->db_info['db_table_prefix'];
+  }
+
+  function getTable( $key ) {
+
+    return $this->table_list[$key];
+  }
+  
+  /**
+   * @method setTable
+   * @param $key
+   * @param $value 
+   * 접두사가 붙은 값을 저장한다.
+   */
+  function setTable( $key, $value ) {
+
+    $this->table_list[$key] = $value;
+  }
+
+  function getModule( $key ) {
+    return $this->module_list[$key];
+  }
+
+  function setModule( $key, $value) {
+    $this->module_list[$key] = $value;
+  }
+
+  function getAdminInfo($key) {
+
+    if (isset($key) && $key) {
+      return $this->admin_info[$key];
+    } else {
+      return $this->admin_info;
+    }
+  }  
 
-			$buf = array();
-			$buf[] = "<?php\n";
-			$buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";
-			$buf[] = "return \$version;\n";
-			$buf[] = "?>";
-			FileHandler::writeFile( $path, $buf);
-		} else {
-			unset($_COOKIE[$name]);
-			setcookie($name, '', time()-1);
-			unlink($path);
-		}		
-	}
+  function getDB($key) {
+
+    return $this->db_info['db_database'];
+  }
 
-	function getCookie($name) {
-		return $_COOKIE[$name];
-	}
+  function getDBInfo($key) {
 
-	function getCookieId()
-	{
-		return $this->cookie_id;
-	}
+    if (isset($key)) {
+      return $this->db_info[$key];
+    } else {
+      return $this->db_info;
+    }   
+  }
+  
+  function getPost($key) {
+
+
+    $post = $this->_getTrimRequestData($_POST[$key]);
+    if (empty($post)) {
+
+      $json = $this->getJson();
+      $posts = $this->getJsonToArray($json);
+      $post = $posts[$key];
+      if (empty($post)) {
+
+        // 실서버 반영 시 반드시 주석처리        
+        if ($this->isLocalhost()) {
+          $post = $this->getRequestToArray($key);
+        } 
+      }   
+    }
+    
+    return $post;
+  }
+
+  function setPost($key, $value) {
+
+    $_POST[$key] = $value;
+  }
+
+  function getPostAll() {
+
+    $posts = $this->_getTrimRequestData($_POST);
+    if (empty($posts)) {
+
+      $json = $this->getJson();
+      $posts = $this->getJsonToArray($json);
+      if (empty($posts)) {
+
+        // 로컬 서버에서만 실행 
+        if ($this->isLocalhost()) {
+          $posts = $this->getRequestAllToArray();
+        }
+      }
+    }
+    return $posts;
+  }
+
+  function getJson() {
+
+    return file_get_contents('php://input');
+  }
+
+  /////////////////////////// Utils.Class 에 정의 됨
+  function getJsonToArray($value) {
+
+    $result = array();
+    $tempArr = json_decode($value);
+    foreach ($tempArr as $key => $value) {
+      $result[$key] = $value;
+    } // end of key type
+    
+    return $result;
+  }
+
+  /////////////////////////// Utils.Class 에 정의 됨
+  function getArrayToObject($value) {
 
-	function getRequestToArray($key) {
+    $result = array();
+    $tempArr = $value;
 
-		$request = $this->getRequestAllToArray();
-		return $request[$key];
-	}
+    for ($i=0; $i<count($tempArr); $i++) {
+      $result[$i] = array();
 
-	function getRequestAllToArray() {
+      foreach ($tempArr[$i] as $key => $value) {
+        $result[$i][$key] = $value;
+      } 
+    } // end of key type
 
-		$result = array();
-		$requests = $this->getRequestAll();
-		foreach ($requests as $key => $value) {
-			$result[$key] = $value;
-		}
-		return $result;
-	}
+    return $result;
+  }
 
-	function getReqeustMethod() {
+  function getRequest($key) {
 
-		return $_SERVER['REQUEST_METHOD'];
-	}
+    return $this->_getTrimRequestData($_REQUEST[$key]);
+  }
 
-	function getJson() {
+  function setRequest($key, $value) {
 
-		return file_get_contents('php://input');
-	}
+    $_REQUEST[$key] = $value;
+  }
 
-	function getJsonToArray($value) {
+  function getRequestAll() {
 
-		$result = array();
-		$tempArr = json_decode($value);
-		foreach ($tempArr as $key => $value) {
-			$result[$key] = $value;
-		}
-		return $result;
-	}
+    return $this->_getTrimRequestData($_REQUEST);
+  }
 
-	function getGet($key) {
+  /**
+   * value    date('Y-m-d H:i:s')
+   * expiry time() + 86400 * 30 * 12
+   */
+  function setCookie($name, $value, $expiry, $path='/') {
+    
+    $path = './files/cookie/version.cookie.php';
+    if (isset($value) && $value) {
+      setcookie($name, $value, $expiry, $path);
 
-		return $_GET[$key];
-	}
+      $buf = array();
+      $buf[] = "<?php\n";
+      $buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";
+      $buf[] = "return \$version;\n";
+      $buf[] = "?>";
+      FileHandler::writeFile( $path, $buf);
+    } else {
+      unset($_COOKIE[$name]);
+      setcookie($name, '', time()-1);
+      unlink($path);
+    }   
+  }
 
-	function getGetAll() {
+  function getCookie($name) {
+    return $_COOKIE[$name];
+  }
 
-		return $_GET;
-	}
+  function getCookieId()
+  {
+    return $this->cookie_id;
+  }
 
-	function getFiles() {
+  function getRequestToArray($key) {
 
-		return $_FILES;
-	}
+    $request = $this->getRequestAllToArray();
+    return $request[$key];
+  }
 
-	function getFileAll() {
+  function getRequestAllToArray() {
 
-		return $_FILES;
-	}
+    $result = array();
+    $requests = $this->getRequestAll();
+    foreach ($requests as $key => $value) {
+      $result[$key] = $value;
+    }
+    return $result;
+  }
 
-	function getSession($key) {
+  function getReqeustMethod() {
 
-		return $_SESSION[$key];
-	}
+    return $_SERVER['REQUEST_METHOD'];
+  }
 
-	function setSession($key, $value) {
+  function getGet($key) {
 
-		$_SESSION[$key] = $value;
-	}
+    return $this->_getTrimRequestData($_GET[$key]);
+  }
 
-	function getSessionAll() {
+  function getGetAll() {
 
-		return $_SESSION;
-	}
+    return $this->_getTrimRequestData($_GET);
+  }
 
-	function getServer($key) {
+  function getFiles() {
 
-		return $_SERVER[$key];
-	}
+    return $_FILES;
+  }
 
-	function getServers() {
+  function getFileAll() {
 
-		return $_SERVER;
-	}
+    return $_FILES;
+  }
 
-	function getServerAll() {
+  function getSession($key) {
 
-		return $_SERVER;
-	}	
+    return $this->_getTrimRequestData($_SESSION[$key]);
+  }
 
-	function set($key, $val) {
+  function setSession($key, $value) {
 
-		$this->hashmap_params[$key] = $val;
-	}
+    $_SESSION[$key] = $value;
+  }
 
-	function get($key) {
+  function getSessionAll() {
 
-		return $this->hashmap_params[$key];
-	}
+    return $this->_getTrimRequestData($_SESSION);
+  }
 
-	function getAll() {
+  function getServer($key) {
 
-		return $this->hashmap_params;
-	}
+    return $_SERVER[$key];
+  }
 
-	function getTableList() {
+  function getServers() {
 
-		return $this->table_list;
-	}
+    return $_SERVER;
+  }
 
-	function getParameter( $key) {
+  function getServerAll() {
 
-		return $this->parameter_list[$key];
-	}
+    return $_SERVER;
+  } 
 
-	function setParameter( $key, $value) {
+  function set($key, $val) {
 
-		$this->parameter_list[$key] = trim($value);
-	}
+    $this->hashmap_params[$key] = $val;
+  }
 
-	function geParameters() {
+  function get($key) {
 
-		return $this->parameter_list;
-	}
+    return $this->hashmap_params[$key];
+  }
 
-	function getPasswordHash($password) {
+  function getAll() {
 
-		return md5($password);
-	}
+    return $this->hashmap_params;
+  }
 
-	function isLocalhost() {
+  function getTableList() {
 
-		$domain = $this->getServer('HTTP_HOST');
-		$result = preg_match('/^(http\:\/\/)?(localhost|127.0.0.1)+/', $domain);
-		return $result;
-	}
+    return $this->table_list;
+  }
 
-	function checkAdminPass() {
+  function getParameter( $key) {
 
-		$is_logged = false;
-		if ($this->getPasswordHash($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
-			$is_logged = true;
-		}
-		return $is_logged;
-	}
+    return $this->parameter_list[$key];
+  }
 
-	function ajax() {
+  function setParameter( $key, $value) {
 
-		$uri =  strtolower($this->getServer('REQUEST_URI'));
-		if (preg_match('/(callback)+/', $uri)) {
-			return true;
-		}
+    $this->parameter_list[$key] = trim($value);
+  }
 
-		return false;
-	}
+  function geParameters() {
 
-	function equalVersion($name) {
+    return $this->parameter_list;
+  }
 
-		$path = './files/cookie/version.cookie.php';		
-		if (!file_exists($path) || empty($name)) {
-			return false;
-		}
-		$cookieVersion = trim($this->getCookie($name));
-		$fileVersion = CacheFile::readFile($path, $name);
+  function getPasswordHash($password) {
 
-		return $cookieVersion === $fileVersion;
-	}
+    return md5($password);
+  }
 
-	function installed() {
-		return isset($this->db_info) == true;
-	}
+  function isLocalhost() {
+
+    $domain = $this->getServer('HTTP_HOST');
+    $result = preg_match('/^(http\:\/\/)?(localhost|127.0.0.1)+/', $domain);
+    return $result;
+  }
+
+  function checkAdminPass() {
+
+    $is_logged = false;
+    if ($this->getPasswordHash($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
+      $is_logged = true;
+    }
+    return $is_logged;
+  }
+
+  function ajax() {
+
+    $uri =  strtolower($this->getServer('REQUEST_URI'));
+    if (preg_match('/(callback)+/', $uri)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  function equalVersion($name) {
+
+    $path = './files/cookie/version.cookie.php';    
+    if (!file_exists($path) || empty($name)) {
+      return false;
+    }
+    $cookieVersion = trim($this->getCookie($name));
+    $fileVersion = CacheFile::readFile($path, $name);
+
+    return $cookieVersion === $fileVersion;
+  }
+
+  function installed() {
+    return isset($this->db_info) == true;
+  }
+
+  function _getTrimRequestData($dataes) {
+
+    if (!is_array($dataes)) {
+      return trim($dataes);
+    }
+
+    foreach ($dataes as $key => $value) {
+      $dataes[$key] = trim($value);
+    }
+    return $dataes;
+  }
 }
 ?>
