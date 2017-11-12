@@ -157,9 +157,12 @@ class AnalyticsAdminView extends View
         for($i=0; $i<count($rows); $i++) {
 
           $fields = array('no'=>$a);
-          $row = $rows[$i];
-          foreach ($row as $key => $value) {
+          foreach ($rows[$i] as $key => $value) {
+
             $fields[$key] = $value;
+            if (preg_match('/^(date+)$/i', $key) && empty($value)) {
+              $fields[$key] = '0000-00-00';
+            }            
           }
 
           $dataList[] = $fields;

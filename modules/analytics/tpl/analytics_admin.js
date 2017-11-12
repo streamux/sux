@@ -61,7 +61,7 @@ jsux.fn.connectSiteList = {
     jsux.getJSON(url, params, function( e )  {
 
       var data = e.data;
-      if (data && data.list && data.list.length > 0) {       
+      if (data && data.list && data.list.length > 0) {
         
         self.listManager.setData( data );
         self.listMobileManager.setData( data );

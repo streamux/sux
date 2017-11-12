@@ -341,12 +341,15 @@ jsux.app = jsux.app || {};
 
       parseDate = function(date) {
 
-        var d = new Date(date);
-        if (isNaN(d.getFullYear())) {
-          d = '0000-00-00';
-        } else {
-           d = d.getFullYear() + '-' + self.digit(d.getMonth()+1) + '-' + self.digit(d.getDay());
-        }
+        var d = null;
+        if (date) {
+          d = new Date(date);
+          if (isNaN(d.getFullYear())) {
+            d = '0000-00-00';
+          } else {
+             d = d.getFullYear() + '-' + self.digit(d.getMonth()+1) + '-' + self.digit(d.getDate());
+          }
+        }       
         return d;
       };
       getRate = function( hit, total) {

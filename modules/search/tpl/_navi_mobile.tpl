@@ -18,4 +18,3 @@
   {$passover = ($pagination.totalpage-1) * $pagination.limit}
 {/if}
 <a href="{$ootPath}search?passover={$passover}{$params}" class="sx-pagination-control sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
-{{$nextpage}} / {$pagination.limit} / {$pagination.totalpage}
