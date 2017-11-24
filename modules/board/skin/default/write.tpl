@@ -5,8 +5,9 @@
 
   <form action="{$routeURI}/write" method="post"  name="f_board_write" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
+    <input type="hidden" name="user_id" value="{$contentData.user_id}">
     <input type="hidden" name="category" id="category" maxlength="20" value="{$documentData.category}">
-    <input type="hidden" name="user_id" id="user_id" maxlength="20" value="{$contentData.user_id}">
+    
     <div class="head_panel">
       <div class="sx-form-group">
         <label for="userName" class="sx-control-label label_width {$contentData.css_user_label}">이름</label>

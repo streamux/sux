@@ -80,7 +80,7 @@ class SearchView extends View
     $result = $this->model->select('board', '*', $where);
     $numrows = $this->model->getNumRows();
 
-    //echo Tracer::getInstance()->getMessage();
+    //echo "<br><br><br><br><br><br>". Tracer::getInstance()->getMessage();
 
     $result = $this->model->select('board', '*', $where, 'id desc', $passover, $limit);    
     if ($result) {

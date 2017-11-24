@@ -437,6 +437,7 @@ jsux.mobileGnb.Menu.include({
 
     this.killTween('.menu-btn-close');
     this.killTween('.menu-btn-close .sx-h-3stick');
+    this.tween('.menu-btn-close', 1, {opacity:0, useFrames:true});
     this.tween('.menu-btn-close', 13, {opacity:1, ease: Expo.easeOut, useFrames:true});
     this.tween('.menu-btn-close .sx-h-3stick', 65, {rotation:360, useFrames:true});
   },
@@ -445,7 +446,7 @@ jsux.mobileGnb.Menu.include({
     var self = this;
     this.killTween('.menu-btn-close');
     this.killTween('.menu-btn-close .sx-h-3stick');
-    this.tween('.menu-btn-clos', 17, {opacity:0, useFrames:true, onComplete: $.proxy(self.showMobileMenu, self)});
+    this.tween('.menu-btn-close', 13, {opacity:0, useFrames:true, onComplete: $.proxy(self.showMobileMenu, self)});
     this.tween('.menu-btn-close .sx-h-3stick', 65, {rotation:0, useFrames:true});
   },
   showMobileMenu: function() {

@@ -153,8 +153,9 @@ jsux.fn.main = {
   displayList: function(data, url, list_option, pagin_option, params=null) {
 
     var self = this,
-          limit = 5,
+          limit =5,
           limitGroup = 5,
+          originLimitGroup = 5,
           pagination = jsux.app.getPagination(),
           listManager = jsux.app.getListManager(),
           changeHandler = null,
@@ -180,7 +181,8 @@ jsux.fn.main = {
       pagination.setData({
         total: data.total_num,
         limit: limit,
-        limitGroup: limitGroup
+        limitGroup: limitGroup,
+        originLimitGroup: originLimitGroup
       });
       
       pagination.activateControl();
@@ -191,7 +193,10 @@ jsux.fn.main = {
       // pagination start
       pagination.deactivateControl();
     }
-  },  
+  }, 
+  setEvent: function() {
+
+  },
   setLayout: function() {
 
     var self = this,
@@ -213,6 +218,7 @@ jsux.fn.main = {
   init: function() {
 
     this.setLayout();
+    this.setEvent();
   }
 };
 jsux.fn.login = {

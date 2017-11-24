@@ -1,7 +1,7 @@
 /**
  * class Pagination
  * ver 1.0.0
- * update 2017.10.22
+ * update 2017.11.17
  * author streamux.com
  * description control 설정 추가 
  **/
@@ -10,21 +10,34 @@ jsux.app = jsux.app || {};
 (function( app, $ ){
 
   var Pagination = jsux.Model.create();
+  Pagination.extend({
+    onResize: function(listener) {
+      var self = this;
+      $(window).on('resize', function() {
+        self[listener]();
+      });
+    }
+  });
   Pagination.include({
 
     el: null,                           // pagination 범위 그룹 
-    id: '',                             // markup 출력 위치 
+    id: '',                              // markup 출력 위치 
     tmpl: null,                      // pagination markup
     template: null,
     control: null,                  // control 참조 식별자 
     total: 0,                         // 개시물 총개수 
     limit: 0,                         // 게시물 개수 
 
+    isActivated: false,
+    isMobile: true,
+    minWidth: 768,
+
     currentPage: 0,
     currentActivate: 0,
     direction: "prev",
     pageGroupNum: 1,
     pageTotalNum: 0,
+    originLimitGroup: 1,
     limitGroup: 1,               // pagination 출력 개수
     activateId: 1,
     oldActivate: -1,
@@ -62,7 +75,7 @@ jsux.app = jsux.app || {};
       if (!this.control) {
         var control = this.el.find('.sx-pagination-control');
         this.control = {'prev':control[0], 'next':control[1]};
-      }
+      }     
 
       this.setEvent();
     },
@@ -71,20 +84,29 @@ jsux.app = jsux.app || {};
       for (var p in data) {
         this[p] = data[p];
       }
-            
-      this.pageTotalNum = this.total%this.limit !== 0 ? Math.ceil(this.total/this.limit) : this.total/this.limit;
+
+      this.originLimitGroup = this.limitGroup;
+
+      var remain = this.total%this.limit;
+      var page = this.total/this.limit;
+                  
+      this.pageTotalNum = (remain) !== 0 ? Math.ceil(page) : page;
+
+      var screenWidth = this.getResizeWidth();
+      if (screenWidth < this.minWidth) {
+        this.isMobile = false;
+        this.changeToMobile();
+      } else {
+        this.isMobile = true;
+        this.changeToPC();
+      }
 
       this.remove();
+      this.defaultSetting();
       this.setLayout();
-      this.activate( this.activateId );           
+      this.activate( this.activateId );      
     },
-    setLayout : function() {
-
-      var numLists = [],
-            len = 0,
-            startNum = 0,
-            remain = 0,
-            compareNum = 0;
+    defaultSetting: function() {
 
       if (!this.id) {
         jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 확인해주세요.', 'jsux_pagination.js', 88);
@@ -106,21 +128,34 @@ jsux.app = jsux.app || {};
       jsux.logger.error('\'' + this.tmpl + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_pagination.js', 152);
         return;
       }
+    },
+    setLayout : function() {
+
+      var numLists = [],
+            len = 0,
+            startNum = 0,
+            remain = 0,
+            compareNum = 0;
         
       this.liLists = [];
 
       startNum = (this.pageGroupNum-1)*this.limitGroup + 1;
-      compareNum = startNum + this.limitGroup;
+      compareNum = (startNum + this.limitGroup) -1 ;
 
-      if (compareNum < this.pageTotalNum) {
+      // 총 페이지가 선택 그룹 수 보다 작으면 
+      if (compareNum <= this.pageTotalNum) {
         remain = this.limitGroup;
       } else {
 
-        remain = (this.pageTotalNum%this.limitGroup)  !== 0 ? this.pageTotalNum%this.limitGroup : 0;
+        if (this.limitGroup < 2) {
+          remain = 1;
+        }  else {
+          var remainGroupNum = (this.pageTotalNum%this.limitGroup);
+         remain = (remainGroupNum !== 0) ? Math.ceil(remainGroupNum) : 0;
+        }        
       }
 
       len = startNum + remain;
-
       for( var i=startNum; i<len; i++) {
         numLists.push({no: i});
       }
@@ -139,15 +174,6 @@ jsux.app = jsux.app || {};
     setEvent : function() {
 
       var self = this;
-      $(this.control.prev).on('click', function(e) {
-         e.preventDefault();         
-        self.prev();
-      });
-
-      $(this.control.next).on('click', function(e) {
-        e.preventDefault();
-        self.next();
-      });
       
       $(this.el).on("click", function( e ) {
         e.preventDefault();
@@ -158,33 +184,61 @@ jsux.app = jsux.app || {};
         }
       });
 
-      $('window').on('resize', function(e) {
-
-      });
+      Pagination.onResize.apply(this, ['resizeHandler']);
     },
     prev : function() {
 
       this.direction = "prev";
       this.pageGroupNum--;
 
-      if (this.pageGroupNum < 1) {
+      if (this.pageGroupNum <= 1) {
         this.pageGroupNum = 1;
+        this.inactivePrev();
       }
+       this.activeNext();
 
       this.remove();
       this.setLayout();
 
       this.activate( this.currentActivate[this.direction] );
       this.dispatchEvent({type:"change", page: this.currentPage[this.direction]});
+    },
+    activePrev: function() {
+
+      var self = this,
+           $prev = $(this.control.prev);
+
+      if ($prev.hasClass('unactive')) {
+
+        $prev.removeClass('unactive');
+        $prev.on('click', function(e) {
+
+           e.preventDefault();         
+          self.prev();
+        });
+      } 
+    },
+    inactivePrev: function() {
+
+       var $prev = $(this.control.prev);
+
+      if (!$prev.hasClass('unactive')) {
+
+        $prev.addClass('unactive');
+        $prev.off('click');
+      } 
     },
     next : function() {
 
       this.direction = "next";
       this.pageGroupNum++;
 
-      if (this.pageGroupNum*this.limitGroup > this.pageTotalNum) {
+
+      if (this.pageGroupNum*this.limitGroup >= this.pageTotalNum) {
         this.pageGroupNum = Math.ceil(this.pageTotalNum/this.limitGroup);
+        this.inactiveNext();
       }
+      this.activePrev();
 
       this.remove();
       this.setLayout();
@@ -192,7 +246,32 @@ jsux.app = jsux.app || {};
       this.activate( this.currentActivate[this.direction] );
       this.dispatchEvent({type:"change", page: this.currentPage[this.direction]});
     },
+    activeNext: function() {
+
+      var self = this,
+            $next = $(this.control.next);
+
+      if ($next.hasClass('unactive')) {
+
+        $next.removeClass('unactive');
+        $next.on('click', function(e) {
+
+           e.preventDefault();         
+          self.next();
+        });
+      } 
+    },
+    inactiveNext: function() {
+
+      var $next = $(this.control.next);
+      if (!$next.hasClass('unactive')) {
+
+        $next.addClass('unactive');
+        $next.off('click');
+      } 
+    },
     callPage : function( num ) {
+
       var pageNum = parseInt( num );
 
       this.activate( pageNum );
@@ -214,37 +293,86 @@ jsux.app = jsux.app || {};
       if ($(this.liLists[ this.oldActivate ]).hasClass("active")) {
         $(this.liLists[ this.oldActivate ]).removeClass("active");
       }
-      this.currentNum = id = Math.ceil(this.activateId%this.limit);
+
+      this.currentNum = id = Math.ceil(this.activateId%this.limitGroup);
       if (this.currentNum === 0) {
-        this.currentNum = id = this.limit;
+        this.currentNum = id = this.limitGroup;
       }
-      $(this.liLists[ id ]).addClass("active");
+
+      if (!$(this.liLists[ id ]).hasClass("active")) {
+       $(this.liLists[ id ]).addClass("active");
+      }
 
       this.oldActivate = id;
     },
     activateControl: function() {
 
-      var $prev = $(this.control.prev),
-            $next = $(this.control.next);
+      if (this.pageTotalNum < 2) {
+        this.deactivateControl();
+      } else {
+        this.isActivated = true;
+        
+        var selectedNum = this.currentNum;
+        if (this.isMobile === false) {
+          selectedNum = (this.pageGroupNum-1)*this.originLimitGroup + this.currentNum;
+        } 
 
-      if ($prev.hasClass('unactive')) {
-          $prev.removeClass('unactive');
-      }
-      if ($next.hasClass('unactive')) {
-        $next.removeClass('unactive');
-      } 
+        if (this.pageGroupNum <= 1) {
+          this.inactivePrev();
+          this.activeNext();
+        } else if (selectedNum >= this.pageTotalNum) {
+          this.activePrev();
+          this.inactiveNext();
+        } else {
+          this.activePrev();
+          this.activeNext();
+        } 
+      }      
     },
     deactivateControl: function() {
 
-      var $prev = $(this.control.prev),
-            $next = $(this.control.next);
+      this.isActivated = false;
 
-      if ($prev.hasClass('active')) {
-          $prev.removeClass('active');
+      this.inactiveNext();
+      this.inactivePrev();
+    },
+    getResizeWidth: function() {
+
+      return $(window).outerWidth();
+    },
+    resizeHandler: function() {
+      
+      if (this.isActivated === false) return;
+
+      this.changeToMobile();
+      this.changeToPC();      
+
+      this.remove();
+      this.setLayout();      
+      this.activate( this.activateId );
+      this.activateControl();
+    },
+    changeToMobile: function() {
+
+      var screenWidth = this.getResizeWidth();
+      if (screenWidth < this.minWidth && this.isMobile === false) {
+
+        this.isMobile = true;
+        this.limitGroup = 1;
+        this.pageGroupNum = (this.pageGroupNum-1)*this.originLimitGroup + this.activateId;
+        this.activateId = this.pageGroupNum;
       }
-      if ($next.hasClass('active')) {
-        $next.removeClass('active');
-      } 
+    },
+    changeToPC: function() {
+
+      var screenWidth = this.getResizeWidth();
+      if (screenWidth >= this.minWidth && this.isMobile === true) {
+        this.activateId = this.pageGroupNum%this.originLimitGroup;
+
+        this.isMobile = false;
+        this.limitGroup = this.originLimitGroup;
+        this.pageGroupNum = Math.ceil(this.pageGroupNum/this.originLimitGroup);
+      }
     }
   });
 

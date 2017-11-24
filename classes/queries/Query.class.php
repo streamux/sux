@@ -147,6 +147,7 @@ class Query extends Object {
 				if (preg_match('/like/i', $cond)) {
 					for($i=0; $i<count($values); $i++) {
 						foreach ($values[$i] as $key => $value) {
+							$value = mysql_real_escape_string($value);
 							$tmpArr[] = $key . ' LIKE %\'' . $value . '\'';
 						}
 					}
@@ -273,6 +274,7 @@ class Query extends Object {
 		$temp_arr = array();
 		foreach ($obj as $key => $value) {
 
+			$value = mysql_real_escape_string($value);
 			if (is_string($key)) {
 				$temp_arr[] = $key . $cond . $this->addQuotation($value);
 			} else {

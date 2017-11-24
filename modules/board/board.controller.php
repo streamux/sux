@@ -3,36 +3,12 @@
 class BoardController extends Controller
 {
 
-  function _checkValidation( $datas ) {
+  function getFormCheckList() {
 
-    $context = Context::getInstance();
-    $returnURL = $context->getServer('REQUEST_URI');
-    $checkLabel = array('이름', '비밀번호','제목','내용');
-    $checkList = array('user_name', 'password', 'title','contents');
-    $bool = true;
-    $index = 0;
-
-    foreach ($checkList as $key => $value) {      
-      if (empty($datas[$value])) {
-        $msg = $checkLabel[$index] . '을(를) 입력해주세요';
-        UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-        $bool = false;
-        exit;
-      }
-      $index++;
-    }
-
-    return $bool;
-  }
-
-  function _checkFiles( $value ) {
-
-    $imageUpName = $value['imgup']['name'];
-    if (isset($imageUpName) && $imageUpName && !preg_match('/(jpg|jpeg|gif|png|bmp|zip)+$/', $imageUpName)) {
-      $msg .= '[ jpg, jpeg, gif, png, bmp, zip ] 형식의 이미지 파일과 압축 파일만 등록이 가능합니다.';
-      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-      exit;
-    }
+    return array(  array('key'=>'user_name', 'msg'=>'이름을'),
+                          array('key'=>'password', 'msg'=>'비밀번호를'),
+                          array('key'=>'title', 'msg'=>'제목을'),
+                          array('key'=>'contents', 'msg'=>'내용을'));
   }
 
   function insertWrite() {
@@ -42,18 +18,21 @@ class BoardController extends Controller
     $sessions = $context->getSessionAll();
     $files = $context->getFiles();
 
-    $this->_checkValidation($posts);
-    $this->_checkFiles($files);
+    // security - ref : utils/Forms.class.php
+    Forms::validates($posts, $this->getFormCheckList());
+    Forms::validateFile($files);
+    $posts = FormSecurity::encodes($posts);
 
     $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];
+    $password = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
 
     $msg = '';
     $resultYN = 'Y';
     
-    $wall = trim($posts['wall']);
-    $wallname = trim($posts['wallname']);
-    $wallok = trim($posts['wallok']);
+    $wall = $posts['wall'];
+    $wallname = $posts['wallname'];
+    $wallok = $posts['wallok'];
     $imageUpName = $files['imgup']['name'];
     $imageUpTempName = $files['imgup']['tmp_name'];
 
@@ -61,7 +40,7 @@ class BoardController extends Controller
       $msg = '경고! 잘못된 등록키입니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
-    }
+    }    
 
     $rootPath = _SUX_ROOT_;
     $saveDir = _SUX_PATH_ . "files/board/";
@@ -77,6 +56,8 @@ class BoardController extends Controller
       }
     }
 
+
+
     $where = new QueryWhere();
     $where->set('category', $category, '=');
     $this->model->select('board', 'id', $where, 'id desc', 0, 1);
@@ -90,17 +71,20 @@ class BoardController extends Controller
       $msg .= "QueryCacheFile Do Not Exists<br>";
     } else {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
-        $key = $columnCaches[$i];       
+        $key = $columnCaches[$i];
 
-        $option = substr($key, 4);
-        $compareField = 'file' . $option;
-        if (strpos($key,$compareField) !== false) {
+        // image file
+        if (strpos($key, 'file') !== false) {
 
-          $value = $files['imgup'][$option];
-          if ($option === 'name') {
+          // filetype의 'type' 추출 
+          $prop = substr($key, 4);
+          $value = $files['imgup'][$prop];  
+
+          if ($prop === 'name') {
             $value = $imageUpName;
-          } 
+          }
 
           if (isset($value) && $value) {
             $columns[] = $value;
@@ -109,14 +93,12 @@ class BoardController extends Controller
           }
         } else {
           $value = $posts[$key];
+          
+          if ($key === 'password') {
+            $value = $password;
+          }
+
           if (isset($value) && $value ) {
-            if ($key === 'category') {            
-              $value = $category;
-            } else if ($key === 'wall') {
-              $value = $wall;
-            }  else if ($key === 'password') {
-              $value = $context->getPasswordHash($value);
-            }
             $columns[] = $value;
           } else {
             if ($key === 'is_notice') {
@@ -137,9 +119,7 @@ class BoardController extends Controller
           }
         }       
       }
-    }   
-
-    $msg .= $row['id'];
+    } 
 
     $result = $this->model->insert('board', $columns);
     if (!isset($result)) {
@@ -147,9 +127,6 @@ class BoardController extends Controller
       $msg .= '글을 저장하는데 실패했습니다.';
     }
     
-    /*$msg .=  Tracer::getInstance()->getMessage();
-    echo $msg;
-    return;*/
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -164,14 +141,17 @@ class BoardController extends Controller
     $sesstions = $context->getSessionAll();
     $posts = $context->getPostAll();
     $files = $context->getFiles();
+    
 
-    $this->_checkValidation($posts);
-    $this->_checkFiles($files);
+    Forms::validates($posts, $this->getFormCheckList());
+    Forms::validateFile($files);
+    $posts = FormSecurity::encodes($posts);
 
     $category = $posts['category'];
-    $id = $posts['id'];
+    $id = $posts['id']; 
 
     $returnURL = $context->getServer('REQUEST_URI');
+    $user_id = $sesstions['user_id'];
     $user_name = $sesstions['user_name'];
     $passwordHash = $context->getPasswordHash($posts['password']);
 
@@ -181,83 +161,97 @@ class BoardController extends Controller
     $imageUpName = $files['imgup']['name'];
     $imageUpTempName = $files['imgup']['tmp_name'];
 
+
     $msg = '';
     $resultYN = 'Y';
     $rootPath = _SUX_ROOT_;
     $saveDir = _SUX_PATH_ . "files/board/";
     
     $where = new QueryWhere();
-    $where->set('id',$id, '=');
-    $where->set('password',$passwordHash, '=', 'and');
+    $where->set('id', $id, '=');
+    $where->set('user_id', $user_id, '=');
+    $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('board','password, igroup_count, filename', $where);
-    $row = $this->model->getRow();
+    $numrow = $this->model->getNumRows();
+
+    /*Tracer::getInstance()->output();
+    echo $passwordHash . ' : ' . $row['password'];
+    return;*/
+
+    if ($numrow > 0) {
+      $row = $this->model->getRow();
    
-    if (($passwordHash === $row['password']) || ($passwordHash === $adminPasswordHash)) { 
-      $delFileName = $row['filename'];
-      if ($delFileName) {
-        $delFileName = $saveDir . $delFileName;
-        if(!@unlink($delFileName)) {
-          $resultYN = 'N';
-          $msg .= "' " . $delFileName . "' 파일삭제를 실패했습니다.";
-        } 
-      }
-
-      if (is_uploaded_file($imageUpTempName)) {
-        $mktime = mktime();
-        $imageUpName = $mktime."_".$imageUpName;
-        $dest = $saveDir . $imageUpName;
-        if (!move_uploaded_file($imageUpTempName, $dest)) {
-          $resultYN = 'N';
-          $msg .= "파일을 지정한 디렉토리에 저장하는데 실패했습니다.";  
+      if (($passwordHash === $row['password']) || ($passwordHash === $adminPasswordHash)) { 
+        $delFileName = $row['filename'];
+        if ($delFileName) {
+          $delFileName = $saveDir . $delFileName;
+          if(!@unlink($delFileName)) {
+            $resultYN = 'N';
+            $msg .= "' " . $delFileName . "' 파일삭제를 실패했습니다.";
+          } 
         }
-      }
-      $context->set('fileup_name', $imageUpName);
 
-      $cachePath = './files/caches/queries/board.getColumns.cache.php';
-      $columnCaches = CacheFile::readFile($cachePath, 'columns');
-      if (!$columnCaches) {
-        $msg .= "QueryCacheFile Do Not Exists<br>";
-      } else {
-        $regFilters = '/^(category|id|password|user_id|user_name)+$/';
-        $columns = array();
-        for($i=0; $i<count($columnCaches); $i++) {
+        if (is_uploaded_file($imageUpTempName)) {
+          $mktime = mktime();
+          $imageUpName = $mktime."_".$imageUpName;
+          $dest = $saveDir . $imageUpName;
+          if (!move_uploaded_file($imageUpTempName, $dest)) {
+            $resultYN = 'N';
+            $msg .= "파일을 지정한 디렉토리에 저장하는데 실패했습니다.";  
+          }
+        }
+        $context->set('fileup_name', $imageUpName);
 
-          $key = $columnCaches[$i];
-          $option = substr($key, 4);
-          $compareField = 'file' . $option;
-          if (strpos($key,$compareField) !== false) {         
-            $value = $files['imgup'][$option];
-            if ($option === 'name') {
-              $value = $imageUpName;
-            } 
-            if (isset($value) && $value) {
-              $columns[$key] = $value;
-            } else {
-              $columns[$key] = '';
-            }
-          } else {
-            if (!preg_match($regFilters, $key)) {
-              $value = $posts[$key];
+        $cachePath = './files/caches/queries/board.getColumns.cache.php';
+        $columnCaches = CacheFile::readFile($cachePath, 'columns');
+        if (!$columnCaches) {
+          $msg .= "QueryCacheFile Do Not Exists<br>";
+        } else {
+          $regFilters = '/^(category|id|password|user_id|user_name)+$/';
+          $columns = array();
+          for($i=0; $i<count($columnCaches); $i++) {
+
+            $key = $columnCaches[$i];
+            $option = substr($key, 4);
+            $compareField = 'file' . $option;
+            if (strpos($key,$compareField) !== false) {         
+              $value = $files['imgup'][$option];
+              if ($option === 'name') {
+                $value = $imageUpName;
+              } 
               if (isset($value) && $value) {
                 $columns[$key] = $value;
-              }              
-            }
-          }             
+              } else {
+                $columns[$key] = '';
+              }
+            } else {
+              if (!preg_match($regFilters, $key)) {
+                $value = $posts[$key];
+                if (isset($value) && $value) {
+                  $columns[$key] = $value;
+                }              
+              }
+            }             
+          }
         }
-      }
 
-      $result = $this->model->update('board', $columns, $where);  
-      //Tracer::getInstance()->output();
-      if (!isset($result)) {
-        $msg .= '글을 수정하는데 실패했습니다.';
+        $result = $this->model->update('board', $columns, $where);        
+        if (!isset($result)) {
+          $msg .= '글을 수정하는데 실패했습니다.';
+          UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+          exit();
+        }
+      } else {
+        $msg .= '비밀번호가 맞지 않습니다.';
         UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
         exit();
       }
     } else {
-      $msg .= '비밀번호가 맞지 않습니다.';
+      $msg .= '정보가 일치하지 않습니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-      exit();
     }
+
+    
 
     //$msg .=  "<br>" . Tracer::getInstance()->getMessage();
     //return;
@@ -276,8 +270,9 @@ class BoardController extends Controller
     $posts = $context->getPostAll();
     $files = $context->getFiles();
 
-    $this->_checkValidation($posts);
-    $this->_checkFiles($files);
+    Forms::validates($posts, $this->getFormCheckList());
+    Forms::validateFile($files);
+    $posts = FormSecurity::encodes($posts);
 
     $resultYN = 'Y';
     $msg = '';
@@ -398,6 +393,9 @@ class BoardController extends Controller
 
     $context = Context::getInstance();
     $posts =  $context->getPostAll();
+
+    Forms::validates($posts);
+    $posts = FormSecurity::encodes($posts);
 
     $returnURL = $context->getServer('REQUEST_URI');    
     $password = trim($posts['password']);

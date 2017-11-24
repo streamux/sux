@@ -174,8 +174,6 @@
                 <label for="boardTypeHtml" class="sx-control-label sx-text-normal">HTML</label>
                 <input type="radio" id="boardTypeTextl" name="board_type" value="text" checked="checked">
                 <label for="boardTypeTextl" class="sx-control-label sx-text-normal">TEXT</label>
-                <input type="radio" id="boardTypeAll" name="board_type" value="all">
-                <label for="boardTypeAll" class="sx-control-label sx-text-normal">HTML + TEXT</label>
               </div>
             </div>
             <div class="sx-form-inline">

@@ -17,7 +17,7 @@ class QueryWhere extends Object {
 
     $isNumber = is_numeric($value);
     if ($isNumber !== true) {
-      $value = mysql_real_escape_string($value);
+     $value = mysql_real_escape_string($value);
     }
 
     if ($glue !== '' && $this->counter > 0) {

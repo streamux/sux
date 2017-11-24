@@ -497,7 +497,7 @@ class AdminAdminView extends View
     if ($result) {
       $newcomment['list'] = array();
       $rows = $this->model->getRows();
-      $newcomment['total'] = count($rows);
+      $newcomment['total_num'] = count($rows);
       $len = count($rows);
       if ($len > 0) {
         for($i=0; $i<$len; $i++) {

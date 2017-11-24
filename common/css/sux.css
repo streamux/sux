@@ -173,6 +173,13 @@ hr {
 
 pre {
   overflow: auto;
+  padding: 0 0;
+  border: 1px solid transparent;
+  background-color: transparent;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
 }
 
 button,
@@ -1318,6 +1325,10 @@ a.sx-label:hover, a.sx-label:focus {
 
 .sx-space-right {
   margin-right: 7px;
+}
+
+.sx-word-break {
+  word-wrap: break-word;
 }
 
 .sx-edgebox {

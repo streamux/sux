@@ -10,8 +10,8 @@
   <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.css"> 
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css"> 
   {if $documentData.module_code}
   <link rel="stylesheet" type="text/css" href="{$skinPath}{$documentData.module_code}.css">
   {/if}
@@ -86,61 +86,6 @@
       </button>
     </div>
   </header>
-  <!-- header end -->
-
-  <!-- mobile gnb start -->
-  <div class="sx-bgcover sx-bgcover-off"></div>
-  <nav class="nav mobile-gnb-case mobile-gnb-case-off">
-    <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
-      <ul class="sx-h-3stick">
-        <li class="sx-hline1"></li>
-        <li class="sx-hline2"></li>
-        <li class="sx-hline3"></li>
-      </ul>
-    </button>
-    <div class="header-panel">
-      <div class="sx-user-info">
-        <ul class="clearfix">
-          <li><div class="sx-user-picture"></div></li>
-          <li class="sx-user-nickname">
-            <span>
-            {if isset($sessionData.user_name) && $sessionData.user_name}
-              {$sessionData.user_name}
-            {else}
-              Guest
-            {/if}
-            </span>
-          </li>
-          <li class="sx-user-modify">        
-            <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' alt="관리자 설정" /></a>
-          </li>
-        </ul>
-      </div>
-      <div class="sx-user-member">
-        <ul class="clearfix">
-        {if isset($sessionData.user_name) && $sessionData.user_name}
-          <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그아웃</a></li>
-          <li><a href="{$rootPath}member-modify" class="sx-btn">회원정보수정</a></li>
-        {else}
-          <li><a href="{$rootPath}login" class="sx-btn">로그인</a></li>
-          <li><a href="{$rootPath}member-join" class="sx-btn">회원가입</a></li>
-        {/if}
-        </ul>
-      </div>
-    </div>
-    <div class="sx-body-panel">
-      <div class="swiper-container swiper-container-mobilegnb">
-        <div class="swiper-wrapper">
-          <div class="swiper-slide">
-            <ul id="mobileGnb" class="sx-menu-panel">
-              <!-- display first's depth menu list -->
-            </ul>
-          </div>    
-        </div>
-        <div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
-      </div>
-    </div>  
-  </nav>
-  <!-- mobile gnb end -->
+  <!-- header end -->  
 
   <div id="sxContents" class="sx-container">

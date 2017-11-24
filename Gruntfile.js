@@ -91,7 +91,8 @@ module.exports = function(grunt) {
           'common/js/idangerous*.js',
           'common/js/Tween*.js',
           'common/js/api/*.js',
-          'test/**  '
+          'modules/**/skin/**/ckeditor/**',
+          'test/**'
         ]
       }
     },

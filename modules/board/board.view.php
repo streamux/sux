@@ -1,20 +1,21 @@
 <?php
 class BoardView extends View
 {
-
   function displayList() {
-
-    $UIError = UIError::getInstance();
+    
     $context = Context::getInstance();
-    $requestData = $context->getRequestAll();   
-    $this->session_data = $context->getSessionAll();
+    $UIError = UIError::getInstance();
 
     $returnURL = $context->getServer('REQUEST_URI');
-    $passover = $context->getRequest('passover');
+    $request_data = $context->getRequestAll();
+    $session_data = $context->getSessionAll();
+    
     $category = $context->getParameter('category');
-    $find = $requestData['find'];
-    $search = $requestData['search'];
-
+    $passover = (int) $request_data['passover'];
+    
+    $find = $request_data['find'];
+    $search = $request_data['search'];
+    
     if (empty($passover)) {
        $passover = 0;
     }
@@ -45,7 +46,7 @@ class BoardView extends View
      * @descripttion
      * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수에 절대경로 처리 함.
      */   
-    $headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
+    $headerPath = Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
     if (!is_readable($headerPath)) {
@@ -85,29 +86,31 @@ class BoardView extends View
 
         for ($i=0; $i<count($contentData['list']); $i++) {
 
-          $id = $contentData['list'][$i]['id'];
-          $user_id = $contentData['list'][$i]['user_id'];
-          $name =htmlspecialchars($contentData['list'][$i]['user_name']); 
-          $title =htmlspecialchars($contentData['list'][$i]['title']);
-          $progressStep =$contentData['list'][$i]['progress_step'];
-          $hit =htmlspecialchars($contentData['list'][$i]['readed_count']);
-          $space = $contentData['list'][$i]['space_count'];
+          $id = (int) $contentData['list'][$i]['id'];
+          $user_id = FormSecurity::decodeByIdentity($contentData['list'][$i]['user_id']);          
+          $name = FormSecurity::decodeByIdentity($contentData['list'][$i]['user_name']); 
+          $title = FormSecurity::decodeBySimpleTags($contentData['list'][$i]['title']);
+          $contents = FormSecurity::decodeByText($contentData['list'][$i]['contents']);
+          $progressStep = FormSecurity::decodeByIdentity($contentData['list'][$i]['progress_step']);
+          $hit = (int) $contentData['list'][$i]['readed_count'];
+          $space = (int) $contentData['list'][$i]['space_count'];
           $filename = $contentData['list'][$i]['filename'];
-          $filetype = trim($contentData['list'][$i]['filetype']);
+          $filetype = $contentData['list'][$i]['filetype'];
           
           $date =$contentData['list'][$i]['date'];        
           $compareDayArr = split(' ', $date);
           $compareDay = $compareDayArr[0];
           
-          if (isset($search) && $search != '') {  
+          if (isset($search) && $search != '') {
 
+            $search_replace = sprintf('<span class="sx-text-success">%s</span>', $search);
             $find_key = strtolower($find);
             switch ($find_key) {
               case 'title':
-                $title = str_replace("$search","<span class=\"sx-text-success\">$search</span>",$title);
+                $title = str_replace($search,$search_replace,$title);
                 break;
               case 'name':
-                $name = str_replace("$search","<span class=\"sx-text-success\">$search</span>",$name);
+                $name = str_replace($search,$search_replace,$name);
                 break;
               default:
                 break;
@@ -195,7 +198,8 @@ class BoardView extends View
     $navi->total = $numrows;
     $navi->init();
 
-    $this->request_data = $requestData;
+    $this->request_data = $request_data;
+    $this->session_data = $sessionData;
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
@@ -215,6 +219,7 @@ class BoardView extends View
 
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
+
     $this->request_data = $context->getRequestAll();
     $this->session_data = $context->getSessionAll();
 
@@ -256,7 +261,7 @@ class BoardView extends View
     $headerPath = $groupData['header_path'];
     $skinName = $groupData['skin_path'];
     $footerPath = $groupData['footer_path'];
-    $contentsType = $groupData['contents_type'];
+    $contentsType = $groupData['board_type'];
 
     /**
      * css, js file path handler
@@ -318,30 +323,21 @@ class BoardView extends View
     $row = $this->model->getRow();
     $hit = $row['readed_count']+1;
     $this->model->update('board', array('readed_count'=>$hit), $where);
-
     $this->model->select('board','*', $where);
     $contentData = $this->model->getRow();
-    $contentData['user_name'] = htmlspecialchars($contentData['user_name']);
-    $contentData['title'] = htmlspecialchars($contentData['title']);
-    $conType = trim($contentData['contents_type']);
+    $contentData['user_name'] = FormSecurity::decodeByText($contentData['user_name']);
+    $contentData['title'] = FormSecurity::decodeByText($contentData['title']);    
+
     $filename = $contentData['filename'];
     $filetype = $contentData['filetype'];
+    $filesize = $contentData['filesize'];
 
     switch ($contentsType) {
-      case 'all':
-        if ($conType ==='html'){
-          $contentData['conetents'] = htmlspecialchars_decode($contentData['conetents']);
-        }else if ($conType === 'text'){
-          $contentData['conetents'] = nl2br(htmlspecialchars($contentData['conetents']));
-        }
-        break;
       case 'text':
-        $contentData['conetents'] = nl2br(htmlspecialchars($contentData['conetents']));
+        $contentData['contents'] = FormSecurity::decodeByText($contentData['contents']);
         break;
       case 'html':
-        $contentData['conetents'] = htmlspecialchars_decode($contentData['conetents']);
-        break;      
-      default:
+        $contentData['contents'] = FormSecurity::decodeByHtml($contentData['contents']);    
         break;
     }
 
@@ -356,9 +352,7 @@ class BoardView extends View
         $contentData['css_down'] = 'sx-show';
       } else if (preg_match( '/(jpg|jpeg|gif|png)+/i', $filetype)){
 
-       $imageInfo = getimagesize($fileupPath);
-        /*echo 'fileupPath = ' . $fileupPath . "<br>";
-        echo 'type : ' . $imageInfo;*/
+        $imageInfo = getimagesize($fileupPath);
         $imageType = $imageInfo[2];
 
         if ($imageType === IMAGETYPE_JPEG) {
@@ -369,7 +363,6 @@ class BoardView extends View
           $image = imagecreatefrompng($fileupPath);
         }
 
-        //echo 'image size = ' . imagesx($image);
         $contentData['css_img'] = 'sx-show';
         $contentData['css_img_width'] = imagesx($image) . 'px';
       }
@@ -449,6 +442,9 @@ class BoardView extends View
     $grade = $this->session_data['grade'];
     $user_id = $this->session_data['user_id'];
     $user_name = $this->session_data['user_name'];
+    if (empty($user_name)) {
+      $user_name = $this->session_data['nick_name'];
+    }    
     $password = $this->session_data['password'];
     $PHP_SELF = $context->getServer("PHP_SELF");
     $admin_pass = $context->checkAdminPass();
@@ -591,8 +587,12 @@ class BoardView extends View
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 수정';
 
-    $grade = $this->session_data['grade'];    
+    $grade = $this->session_data['grade']; 
+    $user_id = $this->session_data['user_id'];    
     $user_name = $this->session_data['user_name'];
+    if (empty($user_name)) {
+      $user_name = $this->session_data['nick_name'];
+    }   
     $password = $this->session_data['password'];  
     $PHP_SELF = $context->getServer("PHP_SELF");
     $admin_pass = $context->checkAdminPass(); 
@@ -635,10 +635,11 @@ class BoardView extends View
     $where->set('id', $id, '=');
     $this->model->select('board', '*', $where);
 
-    $contentData = $this->model->getRow();    
+    $contentData = $this->model->getRow();
     $contentData['user_name'] = htmlspecialchars($contentData['user_name']);
     $contentData['title'] = nl2br($contentData['title']);
-    $contentData['contents'] = htmlspecialchars($contentData['contents']);
+    $contentData['contents'] = FormSecurity::decode($contentData['contents']);
+    
     $contentsType = $contentData['contents_type'];
     $contentData['contents_type_' . $contentsType] = 'checked';
     unset($contentData['password']);
@@ -720,13 +721,16 @@ class BoardView extends View
       $returnURL .= "?find=${find}&search=${search}";
     }
 
-    //$this->document_data['jscode'] = 'reply';
+    $this->document_data['jscode'] = 'reply';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 답변';
 
     $grade = $this->session_data['grade'];
     $user_id = $this->session_data['user_id'];
     $user_name = $this->session_data['user_name'];
+    if (empty($user_name)) {
+      $user_name = $this->session_data['nick_name'];
+    }   
     $password = $this->session_data['password'];
     $PHP_SELF = $context->getServer("PHP_SELF");
     $admin_pass = $context->checkAdminPass();

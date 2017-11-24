@@ -116,7 +116,8 @@ class PageModule
 				}
 
 				if (empty($category)) {
-					if (preg_match('/^(board|document)+/i', $className)) {					
+					if (preg_match('/^(board|document)+/i', $className)) {
+								
 						// when user connect from Base URL
 						if (empty($action)) {
 							$category = 'home';
