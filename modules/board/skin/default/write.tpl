@@ -5,7 +5,6 @@
 
   <form action="{$routeURI}/write" method="post"  name="f_board_write" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
-    <input type="hidden" name="user_id" value="{$contentData.user_id}">
     <input type="hidden" name="category" id="category" maxlength="20" value="{$documentData.category}">
     
     <div class="head_panel">
@@ -34,7 +33,7 @@
           <input type="radio" name="contents_type" id="radioTypeHtml" value="html" {$contentData.comment_type_html}><label for="radioTypeHtml" class="sx-control-label">HTML</label>
         </div>
         <div class="textarea_panel">
-          <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control">이곳에 내용을 입력하세요.</textarea>
+          <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control"></textarea>
         </div>      
       </div>    
     </div>

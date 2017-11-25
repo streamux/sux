@@ -127,22 +127,21 @@
 <!-- api end //-->
 
 <!-- customize start -->
-<script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
-<script>  jsux.rootPath = {$rootPath};</script>
-<script type="text/javascript" src="{$rootPath}common/js/jsux_common.min.js"></script>
-<script type="text/javascript" src="{$rootPath}common/js/jsux_app.min.js"></script>
-<script type="text/javascript" src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
+<script src="{$rootPath}common/js/jsux.min.js"></script>
+<script>jsux.rootPath = {$rootPath};</script>
+<script src="{$rootPath}common/js/jsux_common.min.js"></script>
+<script src="{$rootPath}common/js/jsux_app.min.js"></script>
+<script src="{$rootPath}common/js/jsux_app_stage.min.js"></script>
+
 {if $documentData.module_code}
-<script type="text/javascript" src="{$skinPath}{$documentData.module_code}.js"></script>
-<script type="text/javascript" src="{$skinPath}ckeditor/ckeditor.js"></script>
-{/if}
-{if $documentData.jscode }
-<script type="text/javascript"> 
-  jsux.fn['{$documentData.jscode}'].init();
-</script>
+<script src="{$skinPath}{$documentData.module_code}.js"></script>
 {/if}
 
-<script type="text/javascript" src="{$rootPath}common/js/app/jsux_search_form.js"></script>
+{if $documentData.jscode }
+<script type="text/javascript">jsux.fn['{$documentData.jscode}'].init();</script>
+{/if}
+
+<script src="{$rootPath}common/js/app/jsux_search_form.js"></script>
 <!-- customize end //-->
 </body>
 </html>

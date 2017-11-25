@@ -20,9 +20,9 @@
                   <option value="email">이메일</option>
                 </select>
                 <input type="text" name="find" value="" class="sx-form-control">
-                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">
+                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">                
+                <a href="{$rootPath}member-admin/group" class="sx-btn" title="그룹 목록">그룹 목록</a>
                 <a href="{$rootPath}member-admin/add" class="sx-btn sx-btn-info" title="회원추가">회원 추가</a>
-                <a href="{$rootPath}member-admin/list" class="sx-btn" title="전체 목록">전체 회원</a>
               </div>            
             </div>
           </form>

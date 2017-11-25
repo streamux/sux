@@ -8,7 +8,6 @@
   <form action="{$routeURI}/{$contentData.id}/reply" method="post"  name="f_board_reply" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
     <input type="hidden" name="category" value="{$documentData.category}">
-    <input type="hidden" name="user_id" value="{$contentData.user_id}">
     <input type="hidden" name="igroup_count" value="{$contentData.igroup_count}">
     <input type="hidden" name="space_count" value="{$contentData.space_count}">
     <input type="hidden" name="ssunseo_count" value="{$contentData.ssunseo_count}">

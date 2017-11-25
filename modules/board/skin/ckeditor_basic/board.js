@@ -1,3 +1,10 @@
+/**
+ * write in here  library and plugin
+ */
+
+document.write('<script src="' + jsux.rootPath +'/libs/ckeditor/basic/ckeditor.js"><\/script>');
+///////////////////////////////////////////////
+
 jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 
@@ -29,8 +36,6 @@ jsux.fn.read = {
     return (true);
   },
   checkTailDocumentForm: function ( f ) {
-
-    CKEDITOR.instances.comment.updateElement();
 
     var nickname = f.nickname.value.length,
       pass = f.pass.value.length,
@@ -72,7 +77,6 @@ jsux.fn.read = {
   },
   setLayout: function() {
 
-    CKEDITOR.replace('comment');
   },
   init: function() {
 

@@ -23,6 +23,27 @@ class FormSecurity extends Object {
     return $inputs;
   }
 
+  public static function encodeByInteger($input, $fields_list = array()) {
+
+    foreach ($fields_list as $key => $value) {
+      $input[$value] = (int) $input[$value];
+    }
+
+    return $input;
+  }
+
+  public static function encodeByNonTags($input, $fields_list = array()) {
+    
+    return self::encodeStripTags($input, $fields_list);
+  }
+
+  public static function encodeBySimpleTags($input, $fields_list = array() , $allowed_tags = array()) {
+
+    $allowed_tags = count($allowed_tags) > 0 ? $allowed_tags : array('b', 'span','strong');
+    
+    return self::encodeStripTags($input, $fields_list, $allowed_tags);
+  }
+
   public static function decode($output, $contents_type='html') {
 
     $output = strcmp($contents_type,'html') === 0 ? self::decodeSpecialchars($output) : $output;  
@@ -46,25 +67,60 @@ class FormSecurity extends Object {
 
     return $output;
   }
-
-  public static function decodeByIdentity($output) {
-
-    $output = trim($output);
-    $output = addslashes($output);
-    return self::flameStripTags($output);
+  
+  public static function decodeByNonTags($output, $fields_list = array()) {
+    
+    return self::decodeStripTags($output, $fields_list);
   }
 
-  public static function decodeBySimpleTags($output) {
+  public static function decodeBySimpleTags($output, $fields_list = array()) {
 
-    $allowed_tags = array('b', 'br','p','span','strong');
-    return self::flameStripTags($output, $allowed_tags);
+    $allowed_tags = array('b', 'span','strong');
+    
+    return self::decodeStripTags($output, $fields_list, $allowed_tags);
   }
 
-  public static function flameStripTags($output, $allowed_tags = array()) { 
+  private static function encodeStripTags($input, $fields_list = array(), $allowed_tags = array()) {
+
+    if (count($fields_list) > 0) {
+      foreach ($fields_list as $key => $value) {
+        $input[$value] = trim($input[$value]);
+        $input[$value] = stripslashes($input[$value]);
+        $input[$value] = self::flameStripTags($input[$value], $allowed_tags);
+      }
+    } else {
+      $input = trim($input);
+      $input = stripslashes($input);
+      $input = self::flameStripTags($input, $allowed_tags);
+    }
+
+    return $input;
+  }
+
+  private static function decodeStripTags($output, $fields_list = array(), $allowed_tags = array()) {
+
+    if (count($fields_list) > 0) {
+      foreach ($fields_list as $key => $value) {
+        $output[$value] = trim($output[$value]);
+        $output[$value] = stripslashes($output[$value]);
+        $output[$value] = htmlspecialchars_decode($output[$value]);
+        $output[$value] = self::flameStripTags($output[$value], $allowed_tags);
+      }
+    } else {
+      $output = trim($output);
+      $output = stripslashes($output);
+      $output = htmlspecialchars_decode($output);
+      $output = self::flameStripTags($output, $allowed_tags);
+    }
+
+    return $output;
+  }
+
+  private static function flameStripTags($output, $allowed_tags = array()) { 
 
 
     $allowed_tags = array_map( strtolower, $allowed_tags);
-    $routput = preg_replace_callback('/<\/?([^>\s]+)[^>]*>/i', function ($matches) use (&$allowed_tags) {        
+    $routput = preg_replace_callback('/<\s*\/?\s*([^>\s]+)[^>]*\s*>/i', function ($matches) use (&$allowed_tags) {        
       return in_array(strtolower($matches[1]), $allowed_tags) ? $matches[0] : '';
     },$output);
     return $routput;
@@ -74,7 +130,9 @@ class FormSecurity extends Object {
 
     $input = trim($input);
     $input = addslashes($input);
+    //$input = self::flameStripTags($input);
     $input = htmlspecialchars($input);
+
 
     return $input;
   }  

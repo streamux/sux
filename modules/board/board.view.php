@@ -1,29 +1,34 @@
 <?php
 class BoardView extends View
 {
+  function getNonTagFields() {
+
+    return array('category','user_id','user_name','nick_name');
+  }
+
+  function getSimpleTagFields() {
+
+    return array('title');
+  }
+
   function displayList() {
     
     $context = Context::getInstance();
     $UIError = UIError::getInstance();
 
     $returnURL = $context->getServer('REQUEST_URI');
-    $request_data = $context->getRequestAll();
-    $session_data = $context->getSessionAll();
+    $requestData = $context->getRequestAll();
+    $sessionData = $context->getSessionAll();
     
     $category = $context->getParameter('category');
-    $passover = (int) $request_data['passover'];
-    
-    $find = $request_data['find'];
-    $search = $request_data['search'];
+    $passover = (int) $requestData['passover'];    
+    $find = $requestData['find'];
+    $search = $requestData['search'];
     
     if (empty($passover)) {
        $passover = 0;
     }
     
-    $this->document_data['jscode'] = 'list';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시판 목록';     
-
     $where = new QueryWhere();
     $where->set('category',$category,'=');
     $this->model->select('board_group', '*', $where);
@@ -87,11 +92,11 @@ class BoardView extends View
         for ($i=0; $i<count($contentData['list']); $i++) {
 
           $id = (int) $contentData['list'][$i]['id'];
-          $user_id = FormSecurity::decodeByIdentity($contentData['list'][$i]['user_id']);          
-          $name = FormSecurity::decodeByIdentity($contentData['list'][$i]['user_name']); 
+          $user_id = FormSecurity::decodeByNonTags($contentData['list'][$i]['user_id']);          
+          $name = FormSecurity::decodeByNonTags($contentData['list'][$i]['user_name']); 
           $title = FormSecurity::decodeBySimpleTags($contentData['list'][$i]['title']);
           $contents = FormSecurity::decodeByText($contentData['list'][$i]['contents']);
-          $progressStep = FormSecurity::decodeByIdentity($contentData['list'][$i]['progress_step']);
+          $progressStep = FormSecurity::decodeByNonTags($contentData['list'][$i]['progress_step']);
           $hit = (int) $contentData['list'][$i]['readed_count'];
           $space = (int) $contentData['list'][$i]['space_count'];
           $filename = $contentData['list'][$i]['filename'];
@@ -162,6 +167,7 @@ class BoardView extends View
           $where->reset();
           $where->set('contents_id', $id, '=');
           $this->model->select('comment', 'id', $where);
+
           $commentNums = $this->model->getNumRows();
           if ($commentNums > 0) {
             $subject['comment_num'] = $commentNums;
@@ -198,8 +204,12 @@ class BoardView extends View
     $navi->total = $numrows;
     $navi->init();
 
-    $this->request_data = $request_data;
+    $this->request_data = $requestData;
     $this->session_data = $sessionData;
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시판 목록'; 
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
@@ -219,33 +229,23 @@ class BoardView extends View
 
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
+    $requestData = $context->getRequestAll();
+    $sessionData = $context->getSessionAll();
 
-    $this->request_data = $context->getRequestAll();
-    $this->session_data = $context->getSessionAll();
+    $find = $requestData['find'];
+    $search = $requestData['search'];
 
-    $category = $context->getParameter('category');
-    $id = $context->getParameter('id');
-    $this->document_data['category'] = $category;
-    $this->document_data['id'] = $id;
-
-    $this->document_data['jscode'] = 'read';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시판 읽기';
-
-    $find = $this->request_data['find'];
-    $search = $this->request_data['search'];
-
-    $returnURL = $context->getServer('HTTP_REFERER');
-    $returnURL = urldecode($returnURL);   
+    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
     if (isset($search) && $search) {
       $returnURL .= "?find=${find}&search=${search}";
     }
 
-    $grade = $this->session_data['grade'];
-    $user_name = $this->session_data['user_name'];
-    $password = $this->session_data['password'];
-
-    $PHP_SELF = $context->getServer("PHP_SELF");  
+    $PHP_SELF = $context->getServer("PHP_SELF");      
+    $category = $context->getParameter('category');
+    $id = $context->getParameter('id');     
+    $grade = $sessionData['grade'];
+    $user_name = $sessionData['user_name'];
+    $password = $sessionData['password'];    
 
     $where = new QueryWhere();
     $where->set('category',$category,'=');
@@ -324,9 +324,10 @@ class BoardView extends View
     $hit = $row['readed_count']+1;
     $this->model->update('board', array('readed_count'=>$hit), $where);
     $this->model->select('board','*', $where);
+
     $contentData = $this->model->getRow();
-    $contentData['user_name'] = FormSecurity::decodeByText($contentData['user_name']);
-    $contentData['title'] = FormSecurity::decodeByText($contentData['title']);    
+    $contentData['user_name'] = FormSecurity::decodeByNonTags($contentData['user_name']);
+    $contentData['title'] = FormSecurity::decodeBySimpleTags($contentData['title']);    
 
     $filename = $contentData['filename'];
     $filetype = $contentData['filetype'];
@@ -396,10 +397,19 @@ class BoardView extends View
       $where->reset();
       $where->set('contents_id',$id,'=');
       $this->model->select('comment','*', $where);
+
       $commentData['num'] = $this->model->getNumRows();
       $commentData['list'] = $this->model->getRows();
     }
 
+    $this->request_data = $requestData;
+    $this->session_data = $sessionDat;
+
+    $this->document_data['jscode'] = 'read';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시판 읽기';
+    $this->document_data['category'] = $category;
+    $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
     $this->document_data['comments'] = $commentData;
@@ -420,33 +430,23 @@ class BoardView extends View
   function displayWrite() {
 
     $UIError = UIError::getInstance();
-
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-    $this->session_data = $context->getSessionAll();  
-    $category = $context->getParameter('category');
+    $requestData = $context->getRequestAll();
+    $sessionData = $context->getSessionAll();
+    
+    $find = $requestData['find'];
+    $search = $requestData['search'];
 
-    $find = $this->request_data['find'];
-    $search = $this->request_data['search'];
-
-    $returnURL = $context->getServer('HTTP_REFERER');
-    $returnURL = urldecode($returnURL);
+    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
     if (isset($search) && $search) {
       $returnURL .= "?find=${find}&search=${search}";
     }
-    
-    $this->document_data['jscode'] = 'write';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시판 쓰기';
 
-    $grade = $this->session_data['grade'];
-    $user_id = $this->session_data['user_id'];
-    $user_name = $this->session_data['user_name'];
-    if (empty($user_name)) {
-      $user_name = $this->session_data['nick_name'];
-    }    
-    $password = $this->session_data['password'];
     $PHP_SELF = $context->getServer("PHP_SELF");
+    $category = $context->getParameter('category');
+    $grade = $sessionData['grade'];
+    $user_name = empty($sessionData['user_name']) ? $sessionData['nick_name'] : $sessionData['user_name'];
+    $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
     $where = new QueryWhere();
@@ -467,8 +467,7 @@ class BoardView extends View
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
     $skinRealPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";
-    $this->document_data['category'] = $category;
-
+    
     $headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
@@ -535,18 +534,23 @@ class BoardView extends View
       $contentData['css_user_label'] = 'sx-hide';
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
-      $contentData['user_id'] = empty($user_id) ? 'Guest': $user_id;
-      $contentData['user_name'] = empty($user_name) ? 'Guest': $user_name;
+      $contentData['user_name'] = $user_name;
       $contentData['user_password'] = $password;
     } else {
       $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_pass_type'] = 'password';
-      $contentData['user_id'] = empty($user_id) ? 'Guest': $user_id;
-      $contentData['user_name'] = empty($user_name) ? 'Guest': $user_name;
+      $contentData['user_name'] = 'Guest';
       $contentData['user_password'] = '';
     }
 
+    $this->request_data = $requestData;
+    $this->session_data = $sessionData;
+
+    $this->document_data['jscode'] = 'write';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시판 쓰기';
+    $this->document_data['category'] = $category;
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
 
@@ -568,31 +572,23 @@ class BoardView extends View
     $this->session_data = $context->getSessionAll();
     $this->request_data = $context->getRequestAll();
 
-    $category = $context->getParameter('category');
-    $id = $context->getParameter('id');
-
-    $this->document_data['category'] = $category;
-    $this->document_data['id'] = $id;
-
     $find = $this->request_data['find'];
     $search = $this->request_data['search'];
 
-    $returnURL = $context->getServer('HTTP_REFERER');
-    $returnURL = urldecode($returnURL);
+    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
     if (isset($search) && $search) {
       $returnURL .= "?find=${find}&search=${search}";
     }
 
-    $this->document_data['jscode'] = 'modify';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시판 수정';
+    $category = $context->getParameter('category');
+    $id = $context->getParameter('id');
 
-    $grade = $this->session_data['grade']; 
-    $user_id = $this->session_data['user_id'];    
+    $grade = $this->session_data['grade'];   
     $user_name = $this->session_data['user_name'];
     if (empty($user_name)) {
       $user_name = $this->session_data['nick_name'];
-    }   
+    }  
+
     $password = $this->session_data['password'];  
     $PHP_SELF = $context->getServer("PHP_SELF");
     $admin_pass = $context->checkAdminPass(); 
@@ -636,9 +632,9 @@ class BoardView extends View
     $this->model->select('board', '*', $where);
 
     $contentData = $this->model->getRow();
-    $contentData['user_name'] = htmlspecialchars($contentData['user_name']);
-    $contentData['title'] = nl2br($contentData['title']);
-    $contentData['contents'] = FormSecurity::decode($contentData['contents']);
+    $contentData['user_name'] = $contentData['user_name'];
+    $contentData['title'] = $contentData['title'];
+    $contentData['contents'] = FormSecurity::decodeByHtml($contentData['contents']);    
     
     $contentsType = $contentData['contents_type'];
     $contentData['contents_type_' . $contentsType] = 'checked';
@@ -688,6 +684,11 @@ class BoardView extends View
       }
     }
 
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시판 수정';
+    $this->document_data['category'] = $category;
+    $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
 
@@ -705,34 +706,23 @@ class BoardView extends View
 
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-    $this->session_data = $context->getSessionAll();
+    $requestData = $context->getRequestAll();
+    $sessionData = $context->getSessionAll();    
 
-    $find = $this->request_data['find'];
-    $search = $this->request_data['search'];
-    $category = $context->getParameter('category');
-    $id = $context->getParameter('id');
-    $this->document_data['category'] = $category;
-    $this->document_data['id'] = $id;
+    $find = $requestData['find'];
+    $search = $requestData['search'];
 
-    $returnURL = $context->getServer('HTTP_REFERER');
-    $returnURL = urldecode($returnURL);
+    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
     if (isset($search) && $search) {
       $returnURL .= "?find=${find}&search=${search}";
     }
 
-    $this->document_data['jscode'] = 'reply';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시판 답변';
-
-    $grade = $this->session_data['grade'];
-    $user_id = $this->session_data['user_id'];
-    $user_name = $this->session_data['user_name'];
-    if (empty($user_name)) {
-      $user_name = $this->session_data['nick_name'];
-    }   
-    $password = $this->session_data['password'];
     $PHP_SELF = $context->getServer("PHP_SELF");
+    $category = $context->getParameter('category');
+    $id = $context->getParameter('id');
+    $grade = $sessionData['grade'];
+    $user_name = empty($sessionData['user_name']) ? $sessionData['nick_name'] : $sessionData['user_name'];
+    $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
     $where = new QueryWhere();
@@ -753,8 +743,7 @@ class BoardView extends View
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
     $skinRealPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";   
-    $this->document_data['uri'] = $rootPath.$category;
-
+    
     $headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
@@ -866,20 +855,27 @@ class BoardView extends View
       $contentData['css_user_label'] = 'sx-hide';
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
-      $contentData['user_id'] = empty($user_id) ? 'guest' : $user_id;
-      $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
+      $contentData['user_name'] = $user_name;
       $contentData['user_password'] = $password;
     } else {
       $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
-      $contentData['user_id'] = empty($user_id) ? 'guest' : $user_id;
-      $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
+      $contentData['user_name'] = 'Guest';
       $contentData['user_pass_type'] = 'password';
       $contentData['user_password'] = '';
     }
 
+    $this->request_data = $requestData;
+    $this->session_data = $sessionData;
+
+    $this->document_data['jscode'] = 'reply';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시판 답변';
+    $this->document_data['category'] = $category;
+    $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
+    $this->document_data['uri'] = $rootPath.$category;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
@@ -898,13 +894,6 @@ class BoardView extends View
 
     $category = $context->getParameter('category');
     $id = $context->getParameter('id');
-
-    $this->document_data['category'] = $category;
-    $this->document_data['id'] = $id;
-
-    $this->document_data['jscode'] = 'delete';
-    $this->document_data['module_code'] = 'board';
-    $this->document_data['module_name'] = '게시물 삭제'; 
 
     $where = new QueryWhere();
     $where->set('category', $category, '=');
@@ -941,6 +930,11 @@ class BoardView extends View
     $this->model->select('board', 'id, category, user_name', $where);
     $contentData = $this->model->getRow();
 
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'board';
+    $this->document_data['module_name'] = '게시물 삭제'; 
+    $this->document_data['category'] = $category;
+    $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;
 

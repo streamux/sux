@@ -5,7 +5,6 @@
 
   <form action="{$routeURI}/write" method="post"  name="f_board_write" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
-    <input type="hidden" name="user_id" value="{$contentData.user_id}">
     <input type="hidden" name="category" id="category" maxlength="20" value="{$documentData.category}">
     
     <div class="head_panel">

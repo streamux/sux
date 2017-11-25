@@ -1,3 +1,10 @@
+/**
+ * write in here  library and plugin
+ */
+
+//document.write('<script src="' + jsux.rootPath +'/libs/ckeditor/standard/ckeditor.js"><\/script>');
+///////////////////////////////////////////////
+
 jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 

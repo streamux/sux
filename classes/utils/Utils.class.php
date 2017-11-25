@@ -272,4 +272,14 @@ class Utils extends Object {
 
     return preg_replace('/[\\n\\r]+/', ' ', $str );
   }
+
+  //----- Time
+  ///////////////////////////////////////////////
+
+  function getMicrotimeInt() {
+
+    list($usec, $sec) = explode(' ', microtime());
+
+    return ((float)$usec + (float)$sec) * 100;
+  }
 }

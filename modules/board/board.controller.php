@@ -3,6 +3,7 @@
 class BoardController extends Controller
 {
 
+  // Form Value Validation && Security
   function getFormCheckList() {
 
     return array(  array('key'=>'user_name', 'msg'=>'이름을'),
@@ -11,25 +12,60 @@ class BoardController extends Controller
                           array('key'=>'contents', 'msg'=>'내용을'));
   }
 
+  function getIntegerFields() {
+
+    return array('id', 'readed_count', 'voted_count', 'blamed_count', 'igroup_count', 'space_count');
+  }
+
+  function getNoneTagFields() {
+
+    return array('category', 'is_notice', 'user_id', 'user_name', 'nick_name', 'password', 'email_address', 'progress_step', 'wall', 'contents_type');
+  }
+
+  function getSimpleTagFields() {
+
+    return array('title');
+  }
+
+  function setEncodeFormValue($input) {
+
+    $input = FormSecurity::encodeByInteger($input, $this->getIntegerFields());
+    $input = FormSecurity::encodeByNonTags($input, $this->getNoneTagFields());
+    $input = FormSecurity::encodeBySimpleTags($input, $this->getSimpleTagFields());
+    $input = FormSecurity::encodes($input);
+
+    return $input;
+  }
+  // end 
+
+  function getUniqueId() {
+
+    return 'Guest' . Utils::getMicrotimeInt();
+  }
+
   function insertWrite() {
 
+    $msg = '';
+    $resultYN = 'Y';
+
     $context = Context::getInstance();
-    $posts = $context->getPostAll();
     $sessions = $context->getSessionAll();
+    $posts = $context->getPostAll();    
     $files = $context->getFiles();
 
     // security - ref : utils/Forms.class.php
     Forms::validates($posts, $this->getFormCheckList());
     Forms::validateFile($files);
-    $posts = FormSecurity::encodes($posts);
+    $posts = $this->setEncodeFormValue($posts);
+
+    /*echo $posts['contents'];
+    return;*/
+    
+    $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
+    $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
 
     $returnURL = $context->getServer('REQUEST_URI');
-    $category = $posts['category'];
-    $password = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
-
-    $msg = '';
-    $resultYN = 'Y';
-    
+    $category = $posts['category']; 
     $wall = $posts['wall'];
     $wallname = $posts['wallname'];
     $wallok = $posts['wallok'];
@@ -55,8 +91,6 @@ class BoardController extends Controller
         $msg .= '파일을 지정한 디렉토리에 저장하는데 실패했습니다.';
       }
     }
-
-
 
     $where = new QueryWhere();
     $where->set('category', $category, '=');
@@ -94,10 +128,6 @@ class BoardController extends Controller
         } else {
           $value = $posts[$key];
           
-          if ($key === 'password') {
-            $value = $password;
-          }
-
           if (isset($value) && $value ) {
             $columns[] = $value;
           } else {
@@ -117,8 +147,8 @@ class BoardController extends Controller
               $columns[] = '';
             }       
           }
-        }       
-      }
+        }   // end of if     
+      } // end of for
     } 
 
     $result = $this->model->insert('board', $columns);
@@ -126,7 +156,9 @@ class BoardController extends Controller
       $resultYN = 'N';
       $msg .= '글을 저장하는데 실패했습니다.';
     }
-    
+
+    /*Tracer::getInstance()->output();
+    return;*/    
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -137,52 +169,48 @@ class BoardController extends Controller
 
   function updateModify() {
 
+    $msg = '';
+    $resultYN = 'Y';
+
     $context = Context::getInstance();
-    $sesstions = $context->getSessionAll();
+    $sessions = $context->getSessionAll();
     $posts = $context->getPostAll();
     $files = $context->getFiles();
     
-
     Forms::validates($posts, $this->getFormCheckList());
     Forms::validateFile($files);
-    $posts = FormSecurity::encodes($posts);
-
-    $category = $posts['category'];
-    $id = $posts['id']; 
+    $posts = $this->setEncodeFormValue($posts);
 
     $returnURL = $context->getServer('REQUEST_URI');
-    $user_id = $sesstions['user_id'];
-    $user_name = $sesstions['user_name'];
+    $category = $posts['category'];
+    $id = $posts['id'];
+    $user_name = $posts['user_name'];
     $passwordHash = $context->getPasswordHash($posts['password']);
-
     $adminPassword = $context->getAdminInfo('admin_pwd');
     $adminPasswordHash = $context->getPasswordHash($adminPassword);
-
     $imageUpName = $files['imgup']['name'];
     $imageUpTempName = $files['imgup']['tmp_name'];
-
-
-    $msg = '';
-    $resultYN = 'Y';
+   
     $rootPath = _SUX_ROOT_;
     $saveDir = _SUX_PATH_ . "files/board/";
     
     $where = new QueryWhere();
     $where->set('id', $id, '=');
-    $where->set('user_id', $user_id, '=');
+    $where->set('user_name', $user_name, '=');
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('board','password, igroup_count, filename', $where);
-    $numrow = $this->model->getNumRows();
 
     /*Tracer::getInstance()->output();
     echo $passwordHash . ' : ' . $row['password'];
     return;*/
 
-    if ($numrow > 0) {
+    $numrow = $this->model->getNumRows();
+    if ($numrow > 0) {      
       $row = $this->model->getRow();
    
       if (($passwordHash === $row['password']) || ($passwordHash === $adminPasswordHash)) { 
         $delFileName = $row['filename'];
+
         if ($delFileName) {
           $delFileName = $saveDir . $delFileName;
           if(!@unlink($delFileName)) {
@@ -212,21 +240,25 @@ class BoardController extends Controller
           for($i=0; $i<count($columnCaches); $i++) {
 
             $key = $columnCaches[$i];
-            $option = substr($key, 4);
-            $compareField = 'file' . $option;
-            if (strpos($key,$compareField) !== false) {         
+            
+            if (strpos($key,'file') !== false) {
+              $option = substr($key, 4);  
               $value = $files['imgup'][$option];
+
               if ($option === 'name') {
                 $value = $imageUpName;
               } 
+
               if (isset($value) && $value) {
                 $columns[$key] = $value;
               } else {
                 $columns[$key] = '';
               }
             } else {
+
               if (!preg_match($regFilters, $key)) {
                 $value = $posts[$key];
+
                 if (isset($value) && $value) {
                   $columns[$key] = $value;
                 }              
@@ -251,8 +283,6 @@ class BoardController extends Controller
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
     }
 
-    
-
     //$msg .=  "<br>" . Tracer::getInstance()->getMessage();
     //return;
 
@@ -266,27 +296,30 @@ class BoardController extends Controller
 
   function insertReply() {
 
+    $resultYN = 'Y';
+    $msg = '';
+
     $context = Context::getInstance();
+    $sessions = $context->getSessionAll();
     $posts = $context->getPostAll();
     $files = $context->getFiles();
 
     Forms::validates($posts, $this->getFormCheckList());
     Forms::validateFile($files);
-    $posts = FormSecurity::encodes($posts);
-
-    $resultYN = 'Y';
-    $msg = '';
+    $posts = $this->setEncodeFormValue($posts);
+    $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
 
     $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];
     $id = $posts['id'];
+    $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
+
     $igroup_count = $posts['igroup_count'];
     $space_count = $posts['space_count'];
     $ssunseo_count = $posts['ssunseo_count'];
 
-    $wall = trim($posts['wall']);
-    $wallname = trim($posts['wallname']);
-    $wallok = trim($posts['wallok']);
+    $wallname = $posts['wallname'];
+    $wallok = $posts['wallok'];
     $imageUpName = $files['imgup']['name'];
     $imageUpTempName = $files['imgup']['tmp_name'];
 
@@ -330,15 +363,15 @@ class BoardController extends Controller
       $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];       
-
-        $option = substr($key, 4);
-        $compareField = 'file' . $option;
-        if (strpos($key,$compareField) !== false) {
-
+        
+        if (strpos($key,'file') !== false) {
+          $option = substr($key, 4);
           $value = $files['imgup'][$option];
+
           if ($option === 'name') {
             $value = $imageUpName;
           } 
+
           if (isset($value) && $value) {
             $columns[] = $value;
           } else {
@@ -347,17 +380,14 @@ class BoardController extends Controller
         } else {
 
           $value = $posts[$key];
-          //echo $key . ' : ' . $value . ' : ' . is_numeric($value) . "<br>";
           if ((isset($value) && $value) || is_numeric($value)) {
-            if ($key === 'category') {            
-              $value = $category;
-            } else if ($key === 'wall') {
-              $value = $wall;
-            } else if ($key === 'space_count') {
+
+            if ($key === 'space_count') {
               $value = $space_count + 1;
             } else if ($key === 'ssunseo_count') {
               $value = $ssunseo_count + 1;
             }
+
             $columns[] = $value;
           } else {
             if ($key === 'is_notice') {

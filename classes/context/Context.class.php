@@ -43,6 +43,7 @@ class Context
 
   function startSession() {
 
+    session_set_cookie_params(0, _SUX_ROOT_);
     session_start();
   }
 
@@ -225,7 +226,7 @@ class Context
     } else {
       return $this->admin_info;
     }
-  }  
+  }
 
   function getDB($key) {
 
