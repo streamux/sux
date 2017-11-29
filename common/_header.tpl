@@ -57,7 +57,7 @@
       </button>
            
       {if isset($sessionData.user_name) && $sessionData.user_name}
-      <a href="{$rootPath}logout?_method=insert" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
+      <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
         <i class="xi-user-o xi-2x"></i>
       </a>
       {else}

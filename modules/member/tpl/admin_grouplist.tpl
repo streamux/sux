@@ -5,7 +5,7 @@
           <div class="sx-row clearfix">
             <span class="search_title">전체 그룹(0)</span>     
             <a href="{$rootPath}member-admin/group-add" class="sx-btn sx-btn-info pull-right" title="그룹 추가">그룹 추가</a>
-            <a href="{$rootPath}member-admin/list" class="sx-btn pull-right" title="전체 목록">전체 목록</a>
+            <a href="{$rootPath}member-admin/list" class="sx-btn pull-right" title="전체 목록">전체 회원 목록</a>
           </div>
         </header>        
         <article class="sx-box-content">

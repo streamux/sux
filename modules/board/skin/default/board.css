@@ -190,7 +190,7 @@
   padding: 0 10px 55px 10px;
 }
 .board_read .body_panel .contents {
-  padding: 20px 15px 30px 15px;
+  padding: 15px 15px 30px 15px;
   min-height:200px;  
   line-height: 20px;
   border:1px solid #ececec;
@@ -340,7 +340,7 @@
   position: relative;
   top:-4px;
 }
-.board_write .body_panel .textarea_panel textarea {
+.board_write .body_panel textarea {
   margin-top:7px;
   width:100%;
   line-height: 22px;
@@ -555,13 +555,16 @@
     width: 80px;
   }
   .board_adminsetup .sx-form-group input.sx-btn {
-    width: 80px;
+    width: 78px;
   }  
   .board_write .head_panel input {
     width: 350px;
   }
+  .board_write .body_panel label {
+    position: absolute;
+  }
   .board_write .body_panel .textarea_panel {
-    padding-left: 103px;
+    margin-left: 103px;
   }
   .board_write .head_panel .sx-form-group div.sx-form-control {
     width: 350px;

@@ -30,13 +30,9 @@
     <div class="body_panel">
       <div class="sx-form-group">
         <label for="emptyName" class="sx-control-label label_width">내용</label>
-        <div class="sx-input-group">
-          <input type="radio" name="type" id="radio_type_text" value="text" {$contentData.contents_type_text}><label for="radio_type_text" class="sx-control-label">TEXT</label>
-          <input type="radio" name="type" id="radio_type_html" value="html" {$contentData.contents_type_html}><label for="radio_type_html" class="sx-control-label">HTML</label>
-        </div>
         <div class="textarea_panel">
           <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control">{$contentData.contents}</textarea>
-        </div>
+        </div>         
       </div>    
     </div>
     <div class="foot_panel">

@@ -62,8 +62,13 @@ class FormSecurity extends Object {
   }
 
   public static function decodeByHtml($output) {
-
-    $output = self::decode($output, 'html');
+    
+    // trim white space in video tag      
+    $reg = '/(<|&lt;div data-oembed-url=\\\?&quot;)+(.*)?(\\\?&quot;&gt;|>)+(\s*)?(<|&lt;div)+/m';
+    if (preg_match($reg, $output)) {
+      $output = preg_replace($reg, '$1$2$3$5', $output); 
+    } 
+    $output = self::decode($output, 'html');     
 
     return $output;
   }

@@ -28,13 +28,9 @@
     <div class="body_panel">
       <div class="sx-form-group">
         <label for="contents" class="sx-control-label label_width">내용</label>
-        <div class="sx-input-group">
-          <input type="radio" name="contents_type" id="radioTypeText" value="text" {$contentData.comment_type_text}><label for="radioTypeText" class="sx-control-label">TEXT</label>
-          <input type="radio" name="contents_type" id="radioTypeHtml" value="html" {$contentData.comment_type_html}><label for="radioTypeHtml" class="sx-control-label">HTML</label>
-        </div>
         <div class="textarea_panel">
           <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control"></textarea>
-        </div>      
+        </div> 
       </div>    
     </div>
     <div class="foot_panel">
