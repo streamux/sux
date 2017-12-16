@@ -159,6 +159,7 @@ jsux.fn.main = {
           pagination = jsux.app.getPagination(),
           listManager = jsux.app.getListManager(),
           changeHandler = null,
+          loadedHandler = null,
           url = jsux.rootPath + url;
 
     if (params) {
@@ -169,15 +170,25 @@ jsux.fn.main = {
     listManager.initialize(list_option);
     pagination.initialize(pagin_option);
 
+    changeHandler = function( e ) {
+      listManager.reloadData( e.page, limit);
+    };
+    loadedHandler = function(e) {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {       
+        listManager.setData( data.list );
+      } else {
+        listManager.reset();
+        listManager.setMsg(data.msg);
+      }
+    };
+    listManager.addEventListener('loaded', loadedHandler);
+    pagination.addEventListener('change', changeHandler);
+
     if (data && data.list && data.list.length > 0) {
 
-      changeHandler = function( e ) {
-        listManager.reloadData( e.page, limit);
-      };     
-      listManager.setData( data );
-
-      // pagination start
-      pagination.addEventListener('change', changeHandler);
+      // pagination start     
       pagination.setData({
         total: data.total_num,
         limit: limit,
@@ -187,12 +198,10 @@ jsux.fn.main = {
       
       pagination.activateControl();
     } else {
-      listManager.reset();
-      listManager.setMsg(data.msg);
-
       // pagination start
       pagination.deactivateControl();
     }
+    loadedHandler({data:data});
   }, 
   setEvent: function() {
 

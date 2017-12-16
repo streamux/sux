@@ -1,7 +1,7 @@
     <div class="sx-contents sx-admin-main">           
       <section class="sx-member-panel">
         <header class="header">
-          <h1 class="title">회원 목록</h1>
+          <h1 class="title">회원 관리</h1>
           <form action="" class="search_form sx-form-horizontal">
             <div class="sx-form-inline clearfix">
               <span class="search_title">전체 회원({$documentData.total_num})</span>

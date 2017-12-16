@@ -11,9 +11,47 @@ jsux.app = jsux.app || {};
 (function( app, $) {
 
   var ListManager = jsux.Model.create();
+  ListManager.extend({
+
+    windowListener: function( event, listener) {
+
+      $(window).on(event, function(e) {
+        listener(e);
+      });
+    },
+    isEqualItem: function(items, compare) {
+
+      if (items.length < 1) return;
+
+      for (var i=0; i<items.length; i++) {
+        if (items[i].id == compare.id) {
+          return true;
+        }
+      }
+
+      return false;
+    },
+    addClass: function(el, className) {
+
+      if ($(el).hasClass(className)) {
+        return false;
+      }
+      $(el).addClass(className);
+      return true;
+    },
+    removeClass: function(el, className) {
+
+       if (!$(el).hasClass(className)) {
+        return false;
+      }
+      $(el).removeClass(className);
+      return true;
+    }
+  });
 
   ListManager.include({
 
+    swiper: null,
     isLoading: false,
     resource_url: '',
     params: null,
@@ -22,8 +60,93 @@ jsux.app = jsux.app || {};
     msg_template: '',
     tmpl:'',
     msg_tmpl: '',
+    model: [],
+    
+    setSwiper: function(swiper) {
 
+      this.swiper = swiper;
+    },
+    lockSwipes: function() {
+
+      var self = this;
+
+      if (this.swiper) {
+        self.swiper.lockSwipes();
+      }
+    },
+    unlockSwipes: function() {
+
+      if (this.swiper) {
+        this.swiper.unlockSwipes();    
+      }
+    },
+    updateSwiper: function() {
+
+      if (this.swiper) {
+        this.swiper.update();    
+      }
+    },
+    hasItem: function(id) {
+
+     for (var i=0; i<this.model.length; i++) {
+        if (this.model[i].id == id) {         
+          return true;
+        }
+      }
+
+      return false;
+    },
+    getItem: function(id) {
+
+      var selected;
+      for (var i=0; i<this.model.length; i++) {
+        if (this.model[i].id == id) {         
+          selected = this.model[i];
+          break;
+        }
+      }
+
+      return selected;
+    },
+    addItem: function(item) {
+
+      for (var i=0; i<this.model.length; i++) {
+        if (this.model[i].id == item.id) {
+          return false;
+        }
+      }
+
+      this.model.push(item);
+      this.setData(this.model);
+      this.dispatchEvent({type:'add', target: this, model: item});
+    },
+    cutItem: function(id) {
+
+      var selected;
+      for (var i=0; i<this.model.length; i++) {
+        if (this.model[i].id == id) {         
+          selected = this.model.splice(i, 1);
+          selected = selected[0];
+          break;
+        }
+      }
+
+      this.setData(this.model);
+
+      return selected;
+    },
+    updateItem: function(item) {
+
+       for (var i=0; i<this.model.length; i++) {
+        if (this.model[i].id == item.id) {
+          this.model[i] = item;
+        }
+      }
+      this.setData(this.model);
+      this.dispatchEvent({type:'add', target: this, model: item});
+    },
     setResource: function(url, params) {
+
       this.resource_url = url;
       if (params) {
         this.params = params;
@@ -82,19 +205,17 @@ jsux.app = jsux.app || {};
       this.isLoading = true;
       jsux.getJSON( url, params, function( e )  {
         
-        self.setData(e.data);
+        //self.setData(e.data.list);
+        self.dispatchEvent({type:'loaded', target: this, data: e.data});
         self.isLoading = false;
       });
     },
-    setData: function( json ) {
+    setData: function( list ) {
 
-      var self = this,
-            list = json.list,
-            markup = null,           
-            parseDate = null,
-            getRate = null,
-            addComma = null,
+      var markup = null,      
             msg = null;
+
+      this.model = list;
 
       if (!this.id) {
         jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 입력하세요.', 'jsux_list_manager.js', 98);
@@ -118,6 +239,16 @@ jsux.app = jsux.app || {};
         return;
       }     
 
+      this.reset();
+      this.makeMenu(list, markup);
+    },
+    makeMenu: function(list, markup) {
+     
+      var self = this;
+      var parseDate = null;
+      var getRate = null;
+      var addComma = null;
+
       parseDate = function(date) {
 
         var d = null;
@@ -138,23 +269,27 @@ jsux.app = jsux.app || {};
         jsux.utils.addComma(num);
       };
 
-      this.reset();
-
       $(markup).tmpl(list, {
         getRate: function( hit, total) {
           return getRate(hit, total);
         },
-        editDate: function( date) {        
+        editDate: function( date) {
           return parseDate(date);
         },
         addComma: function( num ) {
           return addComma(num);
         }
       }).appendTo(this.id);
+
+      if (list.length === 0) {
+        this.setMsg('등록 가능 메뉴가 존재하지 않습니다.');
+      }
+
+      this.updateSwiper();
     },
     setMsg: function(msg) {
 
-      var data = msg,
+      var data = msg ? msg : '데이터가 존재하지 않습니다.',
             markup = '';            
 
       if (typeof(msg) === 'string') {
@@ -176,6 +311,7 @@ jsux.app = jsux.app || {};
       $(markup).tmpl(data).appendTo(this.id);
     }
   });
+  app.ListManager = ListManager;
 
   app.getListManager = function() {
     return new ListManager();

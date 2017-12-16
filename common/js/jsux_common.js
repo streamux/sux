@@ -446,15 +446,15 @@ jsux.app = jsux.app || {};
       } else {
         this.isActivated = true;
         
-        var selectedNum = this.currentNum;
+        var pageTotalGroup = this.pageTotalNum;
         if (this.isMobile === false) {
-          selectedNum = (this.pageGroupNum-1)*this.originLimitGroup + this.currentNum;
-        } 
+          pageTotalGroup = Math.ceil(this.pageGroupNum/this.originLimitGroup);
+        }
 
         if (this.pageGroupNum <= 1) {
           this.inactivePrev();
           this.activeNext();
-        } else if (selectedNum >= this.pageTotalNum) {
+        } else if (this.pageGroupNum >= pageTotalGroup) {
           this.activePrev();
           this.inactiveNext();
         } else {

@@ -84,18 +84,15 @@
   .sx-contents section.pageview{
     clear: both;
   }
-  .sx-contents .member{
+  .sx-contents .member,
+  .sx-contents .pageview{
     padding-right: 5px;
   }
-  .sx-contents .board{
+  .sx-contents .board,
+  .sx-contents .connect-path{
    padding-left: 5px;
   }
-  .sx-contents .pageview{
-   padding-right: 5px;
-  }
-  .sx-contents .connect-path{
-    padding-left: 5px;
-  }
+
   .sx-contents .connect{
     clear: both;
     width:100%;

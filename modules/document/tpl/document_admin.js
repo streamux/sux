@@ -22,22 +22,23 @@ jsux.fn.list = {
             passover: 0,
             limit: this.limit
           },
-          changeHandler = null;
+          changeHandler = null
+          loadedHandler = null;
 
     if (!url) {
       trace('input[name=list_json_path] 경로값을 입력하세요');
       return;
     }
     
-    self.listManager.setResource(url);
-    self.listMobileManager.setResource(url);
+    this.listManager.setResource(url);
+    this.listMobileManager.setResource(url);
     
-    self.listManager.initialize({
+    this.listManager.initialize({
       id: '#dataList',
       tmpl: '#dataListTmpl',
       msg_tmpl: '#warnMsgTmpl'
     });
-    self.listMobileManager.initialize({
+    this.listMobileManager.initialize({
       id: '#dataMobileList',    
       tmpl: '#dataListMobileTmpl',
       msg_tmpl: '#warnMsgMobileTmpl'
@@ -45,11 +46,30 @@ jsux.fn.list = {
 
     // pagination start
     changeHandler = function( e ) {
+
       self.listManager.reloadData( e.page, self.limit);
       self.listMobileManager.reloadData( e.page, self.limit);
-    };    
-    self.pagination.addEventListener('change', changeHandler);
-    self.pagination.initialize({
+    }; 
+
+    loadedHandler = function(e) {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {
+
+        self.listManager.setData( data.list );
+        self.listMobileManager.setData( data.list);
+      } else {
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+      }
+    };
+
+    this.listManager.addEventListener('loaded', loadedHandler);
+    this.pagination.addEventListener('change', changeHandler);
+    this.pagination.initialize({
       el: '.sx-pagination-group',
       id: '#paginList',
       tmpl: '#paginationTmpl',
@@ -64,9 +84,6 @@ jsux.fn.list = {
       var data = e.data;
       if (data && data.list && data.list.length > 0) {
 
-        self.listManager.setData( data );
-        self.listMobileManager.setData( data );
-
         self.pagination.setData({
           total: data.total_num,
           limit: self.limit,
@@ -76,15 +93,10 @@ jsux.fn.list = {
         self.pagination.activateControl();
       } else {
 
-        self.listManager.reset();
-        self.listManager.setMsg(e.msg);
-
-        self.listMobileManager.reset();
-        self.listMobileManager.setMsg(e.msg);
-
         // pagination start
         self.pagination.deactivateControl();
       }
+      loadedHandler(e);
     });
   },
   init: function() {

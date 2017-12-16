@@ -44,7 +44,7 @@ jsux.gnb.Menu = jsux.View.create();
 
       $( _data ).each(function(mindex) {
 
-        ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * (34+1) : 0;
+        ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * 35 : 0;
       
         _stage.append(markup);
         var menu = _stage.find('.sx-mmenu:eq('+mindex+') > li');

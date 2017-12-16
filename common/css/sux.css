@@ -218,6 +218,8 @@ html input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
   cursor: pointer;
 }
 
@@ -255,6 +257,8 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="search"] {
   -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
   -webkit-box-sizing: content-box;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -263,6 +267,8 @@ input[type="search"] {
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 }
 
 fieldset {
@@ -1400,6 +1406,26 @@ a.sx-label:hover, a.sx-label:focus {
   background-color: #fff;
   border: 1px solid #ddd;
   border-bottom-color: transparent;
+}
+
+.sx-header-panel {
+  height: 40px;
+  border-bottom: 1px solid #ddd;
+  background: #f6f8f9;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #f6f8f9 0%, #e5ebee 50%, #d7dee3 51%, #f5f7f9 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', endColorstr='#f5f7f9',GradientType=0 );
+}
+.sx-header-panel h2 {
+  margin-left: 10px;
+  margin-top: 13px;
+  font-size: 1.125em;
+  font-weight: bold;
 }
 
 /*# sourceMappingURL=sux.css.map */

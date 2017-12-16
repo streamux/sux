@@ -7,6 +7,52 @@ class MenuAdminView extends View
     echo 'This is menu page';
   }
 
+  function displayList() {
+
+    $context = Context::getInstance();
+    $requestData = $context->getRequestAll();
+    
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinRealPath = _SUX_PATH_."modules/menu/tpl";
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'menu';
+
+    $this->request_data = $requestData;
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['skinRealPath'] = $skinRealPath;
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_list.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+
+  function displayAdd() {
+
+    $context = Context::getInstance();
+    $requestData = $context->getRequestAll();
+    
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinRealPath = _SUX_PATH_."modules/menu/tpl";
+
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'menu';
+
+    $this->request_data = $requestData;
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['skinRealPath'] = $skinRealPath;
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_modify.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();    
+  }
+
   function displayListJson() {
     
     $msg = '';
@@ -14,21 +60,14 @@ class MenuAdminView extends View
     $json = array('data'=>array());
 
     $context = Context::getInstance();
-    $id = $context->getRequest('id');
 
-    if (empty($id)) {
-      $result = $this->model->select('menu', '*');
+    $result = $this->model->select('menu', '*');    
+    if ($result) {      
+      $json['data']['list'] = $this->model->getRows();
+      $json['data']['total_num'] = $this->model->getNumRows();
     } else {
-      $where = new QueryWhere();
-      $where->set('id', $id);
-      $result = $this->model->select('menu', '*', $where);
-    }
-    
-    if (!$result) {
       $msg .= '메뉴 테이블 선택을 실패하였습니다.';
       $resultYN = 'N';
-    } else {
-      $json['data']['list'] = $this->model->getRows();
     }
 
     //$msg .= Tracer::getInstance()->getMessage();
@@ -40,16 +79,28 @@ class MenuAdminView extends View
 
   function displayGnbList() {
 
+    $msg = '';
+    $resultYN = 'Y';
+    $json = array('data'=>array());
+
     $gnburl = './files/gnb/gnb.json';
     $gnburl = FileHandler::getRealPath($gnburl);
-    $json = FileHandler::readFile($gnburl);
+    $jsonList = FileHandler::readFile($gnburl);
+    $list = json_decode($jsonList);
+    $json['data']['list'] = $list->data;
+    $json['data']['total_num'] = count($list->data);
 
-    $context = Context::getInstance();
+    $json['result'] = $resultYN;
+    $json['msg'] = $msg;
+   
+    $this->callback($json);
+
+      /*$context = Context::getInstance();
     $callback = $context->getRequest('callback');
-    if (preg_match('/(jsonp)+/', strtolower($callback)) === 1) {
+  if (preg_match('/(jsonp)+/', strtolower($callback)) === 1) {
       echo $callback . '(' . $json . ')';
     } else {
-      echo $json;
-    }
+      $this->callback($json);
+    }*/
   }
 }

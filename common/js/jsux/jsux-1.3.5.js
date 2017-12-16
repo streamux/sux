@@ -1,9 +1,9 @@
 /**
  * class jsux
- * ver 1.3.7
- * update 2017.12.05
+ * ver 1.1.4
+ * update 2017.10.26
  * author streamux.com
- * description '정적 클래스 상속 기능 수정 ' 
+ * description 'logger loglevel 디폴트 값 추가' 
  */
 window.jsux = window.jsux || {};
 window.jsux.define = function( var_name, value) {
@@ -31,8 +31,6 @@ window.trace = function( msg, isConsole ) {
         LogLevel = null,
         ReadyManager = null;
 
-  manager.exports = exports;
-
   Class = function( parent ) {
 
     var klass = function() {
@@ -42,8 +40,15 @@ window.trace = function( msg, isConsole ) {
     klass.prototype.init = function() {};
 
     // Inheritance
+    this.extend = function( parent ) {
+
+      var subclass = function() {};
+      subclass.prototype = parent.prototype;
+      return new subclass();
+    };
+
     if (parent) {
-      klass.prototype =  Class.extend(parent);
+      klass.prototype =  this.extend( parent );
     }
 
     klass.proxy = function(func){
@@ -78,23 +83,6 @@ window.trace = function( msg, isConsole ) {
     };
     
     return klass;
-  };
-
-  Class.extend = function(parent) {
-
-    var subclass = function() {};
-    subclass.prototype = parent.prototype;
-    return new subclass();
-  };
-
-  // Class
-  manager.Class = {
-    create: function(parent) {
-      return new Class(parent);
-    },
-    extend: function(parent) {
-      return Class.extend(parent);
-    }
   };
 
   ReadyManager = function() {
@@ -379,7 +367,15 @@ window.trace = function( msg, isConsole ) {
       return this.logLabels[logLevel];
     };
   };
+
   manager.logger = new Logger(manager.LogLevel.DEBUG);  
+
+  manager.exports = exports;
+  manager.Class = {
+    create:function(parent) {
+      return new Class(parent);
+    }
+  };
   
   manager.readyManager = new ReadyManager();
   manager.ready = function( o ) {   
@@ -539,11 +535,11 @@ jsux.Model.extend({
 
   create: function( parent ) {
 
-    var klass = jsux.Model;
+    var kass = jsux.Class.create(this);
     if (parent) {
-      klass.prototype = jsux.Class.extend( parent );
+      kass = jsux.Class.create( parent );
     }   
-    return jsux.Class.create( klass );
+    return kass;
   }
 });
 
@@ -552,11 +548,11 @@ jsux.View.extend({
 
   create: function( parent ) {
 
-    var klass = jsux.View;
+    var kass = jsux.Class.create(this);
     if (parent) {
-      klass.prototype = jsux.Class.extend( parent );
-    }
-    return jsux.Class.create( klass );
+      kass = jsux.Class.create( parent );
+    }   
+    return kass;
   }
 });
 

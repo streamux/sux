@@ -153,6 +153,7 @@ class DocumentAdminController extends Controller
       $columns[] = $posts['category'];
       $columns[] = $posts['document_name'];
       $columns[] = $posts['category'];
+      $columns[] = 0;
       $columns[] = 'now()';
 
       $result = $this->model->insert('menu', $columns);
@@ -301,6 +302,7 @@ class DocumentAdminController extends Controller
             $columns[] = $category;
             $columns[] = $title;
             $columns[] = $category;
+            $columns[] = 0;
             $columns[] = 'now()';
 
             $result = $this->model->insert('menu', $columns);

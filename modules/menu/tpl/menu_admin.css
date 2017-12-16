@@ -1,0 +1,283 @@
+/* header pannel setting start */
+.sx-contents .sx-box-content{
+  padding: 0 0;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}
+.sx-header-panel h2{
+  display: inline-block;
+  font-size: 1.125em;
+  -webkit-text-shadow: 0 1px 0 #fff;
+  -o-text-shadow: 0 1px 0 #fff;
+  text-shadow: 0 1px 0 #fff;
+}
+/* header pannel setting end */
+
+.sx-box-content header .xi-info-o {
+  position: absolute;
+  font-size: 1.5em;
+}
+.sx-box-content header .description{
+  margin-left:25px;
+}
+
+/* swiper start */
+.swiper_container_wrapper_list{
+  position: relative;
+  height:280px; 
+}
+.swiper_container_wrapper_tree{
+  position: relative;
+  height:280px; 
+}
+.swiper_container_item_list,
+.swiper_container_draggable_list{
+  height:100%;
+}
+.swiper-slide {
+  width:100%;
+  height: auto;
+}
+/* swiper end */
+
+/* list */
+.sx_plugin_panel .sx-header-panel .sx-btn-group{
+  float: right;
+  top:6px;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group .sx-btn{
+  margin-right: 5px;
+  padding:4px 8px;
+  border:1px solid #bebebe;  
+  font-size: 0.875em;
+
+  -webkit-box-shadow: 1px 1px 1px #fff;
+  -o-box-shadow: 1px 1px 1px #fff;
+  box-shadow: 1px 1px 1px #fff;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active{
+  color:#fff;
+  background-color: #f0ad4e;
+  border:1px solid #f0fafe;  
+}
+
+.menu_list_panel {
+  position: relative;
+}
+.menu_list_panel > li {
+  position: relative;
+  padding:8px 0px;
+  width:100%;
+  background-color: #fff;
+}
+.menu_list_panel li a{
+  display: inline-block;
+  text-decoration: none;
+}
+.menu_list_panel li a:hover{
+  color: #9e9e9e;
+}
+.menu_list_panel li a span{
+  display: block;
+}
+.menu_list_panel li a > i {
+  position: relative;
+  font-size: 1.125em;
+}
+.menu_list_panel li .sx-btn-group {
+  position: absolute;
+  top:6px;
+  right: 0;
+  margin-right:10px;
+}
+.menu_list_panel li .sx-btn-group > button{
+  padding: 5px 10px;
+}
+
+.draggable_action{
+  margin:10px 0;
+}
+.draggable_action .sx-btn{
+  padding:6px 26px;
+  background-color: #fff;
+}
+.draggable_action .sx-btn:hover{
+  background-color: #f3f3f3;
+}
+.draggable_action .sx-btn i{
+  color:#c3c3c3;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.draggable_action .sx-btn i.xi-angle-left,
+.draggable_action .sx-btn i.xi-angle-right{
+  display: none;
+}
+
+.selected_menu_list > li {
+  padding-bottom: 0;
+}
+.selected_menu_list li button[name=btn_drag] {
+  display: none;
+  padding: 2px 3px 0 3px;
+  border:1px solid transparent;
+  cursor: move;
+}
+
+.selected_menu_list li button[name=btn_drag] > i {
+  font-size: 1.5em;
+}
+.selected_menu_list li a {
+  margin-left:10px;
+  padding:2px 0;
+  vertical-align: middle;
+}
+
+.selected_menu_list li a i {  
+  position: relative;
+  top:2px;
+  color: #a3d4c9;
+  font-size: 1.5em;
+}
+.selected_menu_list li a i.xi-folder-open {
+  display: none;
+}
+.selected_menu_list li a .sx_name {
+  display: inline-block;
+}
+.selected_menu_list li .sub_mask{
+  margin-top:8px;
+  border: -1px solid transparent;
+}
+.selected_menu_list li .sub_mask ul li {
+  position: relative;
+  padding: 8px 0;
+  padding-bottom: 0;
+}
+.selected_menu_list li .sx-btn-group {
+  display: none;
+}
+.addable_menu_list li .sx_text_msg,
+.selected_menu_list li .sx_text_msg{
+  display: inline-block;
+  margin-top:-8px;
+  width: 100%;
+  line-height:270px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.addable_menu_list li .sx-btn-group {
+  top:12px;
+}
+.addable_menu_list > li {
+  border-top:1px solid #eee;
+}
+.addable_menu_list > li:first-child {
+  border-top:1px solid transparent;
+}
+.addable_menu_list > li > a {
+  margin-left:10px;
+}
+
+.sx-box-content footer {
+  padding:10px 0;
+}
+
+/* active start */
+.selected_menu_list li.selected_menu_active > .sx-btn-group .btn_select{
+  color: #fff;
+  background-color: #333;
+}
+
+.selected_menu_list li.icon_folder_active > a > i.xi-folder {
+  display: none;
+}
+.selected_menu_list li.icon_folder_active > a > i.xi-folder-open {
+  display: inline-block;
+}
+
+.selected_menu_list li.item_drag_true {
+  position: relative;
+  z-index: 1000;
+  border-bottom: 1px dashed transparent;
+  -webkit-box-shadow:0 0 3px #e3e3e3;
+  -o-box-shadow:0 0 3px #e3e3e3;
+  box-shadow: 0 0 3px #e3e3e3; 
+}
+.selected_menu_list li.item_drag_true,
+.selected_menu_list li.item_drag_true button,
+.selected_menu_list li.item_drag_true a,
+.selected_menu_list li.item_drag_true .sx-btn-group {
+  cursor: move;  
+}
+
+.selected_menu_list li.selected_editing button[name=btn_drag] {
+  display: inline-block;
+}
+.selected_menu_list li.selected_editing a {
+  margin-left: 0;
+}
+.selected_menu_list li.selected_editing .sx-btn-group {
+  display: inline-block;
+}
+/* active end */
+
+
+/* add, modify */
+.btn_check{
+  width:100%;
+}
+.text_notice {
+  padding-top: 5px;
+  padding-bottom: 25px;
+}
+.text_caption{
+  margin-top: 10px;
+}
+.sx-contents .sx-box-content .panel_newpassword {
+  display:none;
+}
+
+/* common */
+.sx-contents .sx-box-content .btn_group{
+  padding-top: 25px;
+  padding-bottom: 35px;
+}
+
+@media (min-width: 768px) {
+  .sx_plugin_panel{
+    display: inline-block;
+    width:50%;
+    margin:0 -2px;
+    vertical-align: top;
+  }
+  .sx_plugin_panel .sx_item_list{
+    margin-left: 30px;
+  }
+  .sx_plugin_panel .sx_draggable_list{
+    margin-right: 30px;
+  }
+
+  .draggable_action {
+    position: absolute;
+    top:114px;
+    left:50%;
+    z-index: 1;
+    margin-left:-32px;
+    padding-top: 100px;
+    width:60px;
+    height: 334px;
+  }
+  .draggable_action .sx-btn{
+    padding:26px 6px;
+  }
+  .draggable_action .sx-btn i.xi-angle-left,
+  .draggable_action .sx-btn i.xi-angle-right{
+    display: inline-block;
+  }
+  .draggable_action .sx-btn i.xi-angle-up,
+  .draggable_action .sx-btn i.xi-angle-down{
+    display: none;
+  }
+}

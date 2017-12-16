@@ -19,7 +19,6 @@ class AdminAdminView extends View
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_ROOT_ . "modules/admin/tpl/";
     $skinRealPath = _SUX_PATH_."modules/admin/tpl/";
-    $this->document_data['category'] = $category;
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinPath'] = $skinPath;

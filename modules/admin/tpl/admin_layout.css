@@ -130,7 +130,7 @@ nav{
 /* gnb panel */
 .sx-nav-bar{
   position: absolute;
-  z-index: 1;
+  z-index: 100;
   margin-left: 55px;
   width: 100%;
   height: 100%; 
@@ -172,8 +172,9 @@ nav{
 }
 .sx-gnb > li > a{
   display: block;
-  padding:15px 20px;
+  padding:16px 10px;
   color:#e3e3e3;
+  font-size: 0.9375em;
 }
 .sx-gnb > li > a > i{
   position: relative;
@@ -275,6 +276,7 @@ nav{
 }
 
 .sx-contents section > header > .sx-row .search_title,
+.sx-contents section > header > .search_form .title_down,
 .sx-contents section > header > .search_form .sx-form-inline .search_title {
   font-weight: bold;
   display: inline-block;
@@ -385,7 +387,9 @@ nav{
   .sx-contents section > header .search_form .sx-form-inline{
     position: relative;
   }
+  
   .sx-contents section > header > .sx-row .search_title,
+  .sx-contents section > header > .search_form .title_down,
   .sx-contents section > header > .search_form .sx-form-inline .search_title {
     position: absolute;
     bottom: 0; 
@@ -406,8 +410,8 @@ nav{
   .sx-contents section > header > .search_form a.sx-btn{  
     width:auto;
   }
-
   /* seart end */
+
   footer{
     clear: both;
   }

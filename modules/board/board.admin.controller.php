@@ -122,6 +122,7 @@ class BoardAdminController extends Controller
 			$columns[] = $category;
 			$columns[] = $board_name;
 			$columns[] = $category;
+			$columns[] = 0;
 			$columns[] = 'now()';
 
 			$result = $this->model->insert('menu', $columns);
@@ -239,6 +240,7 @@ class BoardAdminController extends Controller
 					$columns[] = $category;
 					$columns[] = $title;
 					$columns[] = $category;
+					$columns[] = 0;
 					$columns[] = 'now()';
 
 					$result = $this->model->insert('menu', $columns);

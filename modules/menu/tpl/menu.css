@@ -1,0 +1,35 @@
+
+/* articles in menu of document*/
+.sx_menu {
+  margin-top:5px;
+  padding:35px 15px 35px 15px;
+}
+
+/* list */
+.sx_menu .icon_notice {
+  width: 30px;
+  height:13px;
+  vertical-align: middle;
+}
+.sx_menu .text_notice {
+  padding-top: 5px;
+  padding-bottom: 25px;
+}
+.sx_menu .label_width {
+  padding-right: 15px;
+}
+.sx_menu .submit_top_margin {
+  padding-top:15px;
+}
+.sx_menu .btn_space {
+  margin-right:10px;
+}
+.sx_menu .panel_newpassword {
+  display:none;
+}
+
+@media (min-width: 768px) {
+  .sx_menu .label_width {
+    width:150px;
+  }
+}

@@ -27,7 +27,8 @@ jsux.fn.list = {
 
     var self = this,
           url = $('input[name=list_json_path').val(),
-          changeHandler = null; 
+          changeHandler = null,
+          loadedHandler = null; 
 
 
     this.listManager.initialize({
@@ -42,9 +43,28 @@ jsux.fn.list = {
     });
 
     changeHandler = function( e ) {
+
       self.listManager.reloadData( e.page, self.limit);
       self.listMobileManager.reloadData( e.page, self.limit);
     };
+
+    loadedHandler = function(e) {
+
+      var data = e.data;
+      if (data && data.list && data.list.length > 0) {
+                
+        self.listManager.setData( data.list );
+        self.listMobileManager.setData( data.list );
+      } else {
+
+        self.listManager.reset();
+        self.listManager.setMsg(e.msg);
+        self.listMobileManager.reset();
+        self.listMobileManager.setMsg(e.msg);
+      }
+    };
+
+    this.listManager.addEventListener('loaded', loadedHandler);
     this.pagination.addEventListener('change', changeHandler);
     this.pagination.initialize({
       el: '.sx-pagination-group',
@@ -61,28 +81,19 @@ jsux.fn.list = {
       var data = e.data;
       if (data && data.list && data.list.length > 0) {
                 
-        self.listManager.setData( data );
-        self.listMobileManager.setData( data );
-
         // pagination start
         self.pagination.setData({
           total: data.total_num,
           limit: self.limit,
           limitGroup: self.limitGroup
-        });
-        
+        });        
         self.pagination.activateControl();
       } else {
-
-        self.listManager.reset();
-        self.listManager.setMsg(e.msg);
-
-        self.listMobileManager.reset();
-        self.listMobileManager.setMsg(e.msg);
 
         // pagination start
         self.pagination.deactivateControl();
       }
+      loadedHandler(e);
 
       self.setEvent();
     });

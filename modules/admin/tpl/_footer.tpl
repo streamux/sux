@@ -33,6 +33,9 @@
 <script>window.jQuery || document.write('<script src="{$rootPath}common/js/jquery-ui.min.js"><\/script>')</script>
 <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 <script>window.jQuery.tmpl || document.write('<script src="{$rootPath}common/js/jquery.tmpl.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
+<script>window.Swiper || document.write('<script src="{$rootPath}common/js/swiper.min.js"><\/script>')</script>
+
 <script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
 <script>  jsux.rootPath = {$rootPath};</script>
 <script src="{$rootPath}common/js/jsux_common.min.js"></script>
