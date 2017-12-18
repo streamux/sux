@@ -36,7 +36,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
 <script>window.Swiper || document.write('<script src="{$rootPath}common/js/swiper.min.js"><\/script>')</script>
 
-<script type="text/javascript" src="{$rootPath}common/js/jsux.min.js"></script>
+<script src="{$rootPath}common/js/jsux.min.js"></script>
 <script>  jsux.rootPath = {$rootPath};</script>
 <script src="{$rootPath}common/js/jsux_common.min.js"></script>
 <script src="{$rootPath}common/js/jsux_admin_app.min.js"></script>

@@ -619,10 +619,8 @@ jsux.fn.list = {
   },
   addMenu: function(id) {
 
-    if (!this.treeManager.getItem(id)) {
-      var menu = this.listManager.cutItem(id);
-      this.treeManager.addItem(menu);
-    }
+    var menu = this.listManager.getItem(id);
+    this.treeManager.addItem(menu);
   },
   addMenues: function(models) {
 
@@ -643,10 +641,7 @@ jsux.fn.list = {
   }, 
   removeTreeMenu: function(id) {
 
-    if (!this.listManager.getItem(id)) {
-      var menu = this.treeManager.cutItem(id);
-      this.listManager.addItem(menu);
-    }    
+    this.treeManager.cutItem(id);  
   },
   selectMenu: function(id) {
 
@@ -845,6 +840,7 @@ jsux.fn.list = {
           collection.push(model);
         });
         self.listManager.setData(collection);
+        self.listManager.updateSwiper();
       } else {
         self.listManager.reset();
         e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
@@ -862,14 +858,25 @@ jsux.fn.list = {
       var data = e.data;
       if (data && data.list && data.list.length > 0) {
 
-        var collection = data.list;
-        var checkLoadded = setInterval(function() {
+        var collection = [];
+        $.each(data.list, function(index) {
+          
+          var model = self.getMenuModel();
+          $.each(model, function(key) {
+            if (data.list[index][key]) {
+              model[key] = data.list[index][key];
+            }            
+          });
+
+          collection.push(model);
+        });
+        self.treeManager.setData(collection);
+        
+        var checkLoadded = setTimeout(function() {
 
           if (self.listManager.getLength() > 0) {
 
-            self.addMenues(collection);
-            self.unselectMenu();
-            
+            self.treeManager.updateSwiper();            
             clearInterval(checkLoadded);
             checkLoadded = null;
           }

@@ -94,28 +94,11 @@
   padding: 5px 10px;
 }
 
-.draggable_action{
-  margin:10px 0;
-}
-.draggable_action .sx-btn{
-  padding:6px 26px;
-  background-color: #fff;
-}
-.draggable_action .sx-btn:hover{
-  background-color: #f3f3f3;
-}
-.draggable_action .sx-btn i{
-  color:#c3c3c3;
-  font-size: 1.5em;
-  font-weight: bold;
-}
-.draggable_action .sx-btn i.xi-angle-left,
-.draggable_action .sx-btn i.xi-angle-right{
-  display: none;
-}
-
 .selected_menu_list > li {
-  padding-bottom: 0;
+  padding-bottom: 0;  
+}
+.selected_menu_list > li:last-child {
+  padding-bottom: 10px;  
 }
 .selected_menu_list li button[name=btn_drag] {
   display: none;
@@ -167,23 +150,6 @@
   vertical-align: middle;
 }
 
-.addable_menu_list li .sx-btn-group {
-  top:12px;
-}
-.addable_menu_list > li {
-  border-top:1px solid #eee;
-}
-.addable_menu_list > li:first-child {
-  border-top:1px solid transparent;
-}
-.addable_menu_list > li > a {
-  margin-left:10px;
-}
-
-.sx-box-content footer {
-  padding:10px 0;
-}
-
 /* active start */
 .selected_menu_list li.selected_menu_active > .sx-btn-group .btn_select{
   color: #fff;
@@ -223,6 +189,42 @@
 }
 /* active end */
 
+.draggable_action{
+  margin:10px 0;
+}
+.draggable_action .sx-btn{
+  padding:6px 26px;
+  background-color: #fff;
+}
+.draggable_action .sx-btn:hover{
+  background-color: #f3f3f3;
+}
+.draggable_action .sx-btn i{
+  color:#c3c3c3;
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.draggable_action .sx-btn i.xi-angle-left,
+.draggable_action .sx-btn i.xi-angle-right{
+  display: none;
+}
+
+.addable_menu_list li .sx-btn-group {
+  top:12px;
+}
+.addable_menu_list > li {
+  border-top:1px solid #eee;
+}
+.addable_menu_list > li:first-child {
+  border-top:1px solid transparent;
+}
+.addable_menu_list > li > a {
+  margin-left:10px;
+}
+
+.sx-box-content footer {
+  padding:10px 0;
+}
 
 /* add, modify */
 .btn_check{
