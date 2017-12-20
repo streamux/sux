@@ -6,5 +6,5 @@ class MenuAdmin
    * They're value is used as a route uri of get method and a name of class's method
    */
   static $categories = array('menu-admin');
-  static $action = array('menu', 'list', 'add', 'save-json', 'list-json', 'gnb-list');
+  static $action = array('menu', 'list', 'add', 'modify', 'save-json', 'list-json', 'gnb-list');
 }

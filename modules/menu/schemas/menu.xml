@@ -4,6 +4,6 @@
   <column name="category" type="varchar" size="120" notnull="not null"/>  
   <column name="name" type="varchar" size="50" notnull="not null"/>
   <column name="url" type="varchar" size="120"/>
-  <column name="is_activated" type="char" size="5"/>  
+  <column name="is_active" type="tinyint" size="1"/>  
   <column name="date" type="datetime"/>
 </table>

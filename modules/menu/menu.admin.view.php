@@ -4,7 +4,7 @@ class MenuAdminView extends View
 {
   function displayMenuAdmin() {
 
-    echo 'This is menu page';
+    $this->displayList();
   }
 
   function displayList() {
@@ -42,6 +42,35 @@ class MenuAdminView extends View
     $this->document_data['jscode'] = 'add';
     $this->document_data['module_code'] = 'menu';
 
+    $this->request_data = $requestData;
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['skinRealPath'] = $skinRealPath;
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_modify.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();    
+  }
+
+  function displayModify() {
+
+    $context = Context::getInstance();
+    $requestData = $context->getRequestAll();
+    $id = $context->getParameter('id'); 
+    
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinRealPath = _SUX_PATH_."modules/menu/tpl";
+
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('menu', '*', $where);
+    $row = $this->model->getRow();
+
+    $this->document_data['contents'] = $row;
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'menu';
     $this->request_data = $requestData;
 
     $this->skin_path_list['root'] = $rootPath;

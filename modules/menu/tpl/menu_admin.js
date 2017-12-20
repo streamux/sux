@@ -1,11 +1,11 @@
 /** 
- * used class 'jsux.fn.listManager'
- * path 'common/js/app/jsux_list_manager.js'
+ * extend 'jsux.fn.listManager'
+ * extend class's path 'common/js/app/jsux_list_manager.js'
  * author streamux.com
  * update 2017.10.18
  */
 
-// MenuListManager
+//-- MenuListManager
 (function(app, $) {
 
   var ListManager = jsux.app.ListManager;
@@ -60,7 +60,7 @@
   };
 })(jsux.app, jQuery);
 
-// MenuTreeManager 
+//-- MenuTreeManager 
 (function(app, $) {
 
   var ListManager = jsux.app.ListManager;
@@ -96,8 +96,8 @@
       }
 
       if (!ListManager.isEqualItem(this.selectedModels, item)) {
-        this.selectedModels.push(item);
-      }
+         this.selectedModels.push(item);
+       }     
       
       this.setData(this.model);
       this.updateSwiper();
@@ -139,6 +139,26 @@
       this.dispatchEvent({type:'add', target: this, model: cutItem});
 
        return cutItem[0];
+    },
+    updateItem: function(item) {
+
+      var searchMenu = (function f(list) {
+
+        for (var i=0; i<list.length; i++) {
+          if (list[i].id == item.id) {        
+            list[i] = item;
+            break;
+          }
+
+          if (list[i] && list[i].sub && list[i].sub.length > 0 ) {   
+            arguments.callee(list[i].sub);
+          }
+        }
+
+      })(this.model);
+
+      this.setData(this.model);
+      this.dispatchEvent({type:'add', target: this, model: item});
     },
     selectMenu: function(id) {
 
@@ -420,11 +440,13 @@
             this.animate(prevItem$, 300, -1*this.moveHeight);
             this.swapArray(this.dragModels, index, index-1);
 
+            var gapY = 8;
+
             // 드래그 위치 값 갱신 
-            movePosY += prevHeight; 
+            movePosY += prevHeight + gapY; 
 
             // 드래그 아이템 top 오프셋 값 갱신 
-            this.dragOffsetY -= prevHeight; 
+            this.dragOffsetY -= prevHeight + gapY; 
           }
         }
       } else if (direction > 0) {
@@ -442,11 +464,13 @@
             this.animate(nextItem$, 300, this.moveHeight);
             this.swapArray(this.dragModels, index, index+1);
             
+            var gapY = 8;
+
             // 드래그 위치 값 갱신  
-            movePosY -= nextHeight;
+            movePosY -= nextHeight + gapY;
 
             // 드래그 아이템 top 오프셋 값 갱신 
-            this.dragOffsetY += nextHeight;
+            this.dragOffsetY += nextHeight + gapY;
           }
         }
       } // end of if
@@ -483,8 +507,6 @@
       
       $(document).on('mousedown', function(e) {
 
-        e.preventDefault();        
-
         var el = e.target;
         var elName = self.getAttr(el, 'name');
 
@@ -494,22 +516,23 @@
           self.unselectMenu();
           return;
         }
+
         if (el.nodeName.toUpperCase().match('BUTTON') && elName !== 'btn_drag') {          
           return;
         }
 
+        $(document).on('mousemove', function(e) {
+
+          e.preventDefault();
+          self.moveDrag(e);
+        });
+
         self.startDrag(e);        
       }); 
-
-      $(document).on('mousemove', function(e) {
-
-        e.preventDefault();
-        self.moveDrag(e);
-      });
       
       $(document).on('mouseup', function(e) {        
 
-        e.preventDefault();
+        $(document).off('mousemove');
         self.stopDrag(e);
       });
 
@@ -527,26 +550,18 @@
           return;
         }
 
-        $('body').on('touchmove', function(e) {
+        $(document).on('touchmove', function(e) {
           e.preventDefault();
+          self.moveDrag(e);
         });
 
         self.startDrag(e);
         self.unselectMenu();
       }); 
 
-      $('#selectedMenuList').on('touchmove', function(e) {
-
-        e.preventDefault();
-        self.moveDrag(e);
-      });
-
       $(window).on('touchend', function(e) {
 
-        $('body').off('touchmove', function(e) {
-          e.preventDefault();
-        });
-
+        $(document).off('touchmove');
         e.preventDefault();
         self.stopDrag(e);
       });
@@ -558,368 +573,570 @@
   };
 })(jsux.app, jQuery);
 
-// ServiceManager
+//-- MenuInfoView
 (function(app, $) {
 
-  var ServiceManager = jsux.Model.create();
+  var ListManager = jsux.app.ListManager;
+  var MenuInfoView = jsux.View.create();
+   MenuInfoView.include({
+
+    id: '',
+    tmpl: '',
+    markup: '',
+    model: null,
+
+    initialize: function(data) {
+
+      for (var p in data) {
+        this[p] = data[p];
+      }
+    },
+    validate: function() {
+
+      if (!this.id) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 입력하세요.', 'menu_manager.js');
+        return false;
+      }
+
+      if ($(this.id).length < 1) {
+        jsux.logger.error('\'' + this.id + '\' 아이디 DOM 객체가 존재하지 않습니다.', 'menu_manager.js');
+        return false;
+      }
+
+      this.markup = $(this.tmpl);
+      if (this.markup.length < 1) {
+        jsux.logger.error('\'' + this.id + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'menu_manager.js');
+        return false;
+      }
+
+      return true;
+    },
+    getModel: function() {
+      
+      return this.model;
+    },
+    setData: function(data) {
+
+      if (!this.validate()) return;
+
+      this.model = data || {};
+
+      this.setLayout();
+      this.setEvent();
+    },
+    setLayout: function() {
+
+      $(this.markup).tmpl(this.model).appendTo(this.id);
+    },
+    setEvent: function() {
+
+      var self = this;
+
+      $('form[name=f_admin_menu_modify]').on('submit', function(e) {
+        e.preventDefault();
+
+        $.each(self.model, function(key, value) {
+          if (e.target[key] && e.target[key].value) {
+            self.model[key] = e.target[key].value;
+          }          
+        });
+
+        self.dispatchEvent({type: 'submit', target:self, model: self.model});
+      });
+    },
+    showPanel: function() {
+
+      ListManager.addClass('#SlidingBoxPanel', 'sx_sliding_box_active');
+    },
+    hidePanel: function() {
+
+      var self = this;
+
+      ListManager.removeClass('#SlidingBoxPanel', 'sx_sliding_box_active');
+
+      $('#SlidingBoxPanel').on('transitionend', function(e) {
+        $(this).off('transitionend');
+        self.removePanel();        
+      });
+    },
+    removePanel: function() {
+      
+      $('.sx_menu_info').remove();
+    },
+    update: function(data) {
+
+      if (!this.validate()) return;
+
+      this.model = data || {};
+      this.setLayout();
+      this.setEvent();
+    }
+   });
+
+   app.getMenuInfoView = function() {
+    return new MenuInfoView();
+   };
+})(jsux.app, jQuery);
+
+//-- ServiceManager
+(function(app, $) {
+
+  var ServiceManagerEvent = jsux.Class.create();
+  ServiceManagerEvent.extend({
+    UPDATE_COMPLETE: 'updateComplete',
+    DELETE_COMPLETE: 'deleteComplete',
+    SAVE_COMPLETE: 'saveComplete'
+  });
+  var ServiceManager = jsux.Model.create();  
   ServiceManager.include({
 
     save_url: '',
-    delete_url: '',
+    menu_url: '',
 
+    update: function(data) {
+
+      var self = this;
+
+      if (!data._method) {
+        data._method = 'update';
+      }
+
+      jsux.getJSON(this.menu_url, data, function(e) {
+
+        console.log(e.msg);
+        self.dispatchEvent({type:ServiceManagerEvent.UPDATE_COMPLETE, target: self, event: e})
+      });
+    },
     delete: function(data) {
 
-      jsux.getJSON(this.delete_url, data, function(e) {
-        console.log(e);
+      var self = this;
+
+      if (!data._method) {
+        data._method = 'delete';
+      }
+
+      jsux.getJSON(this.menu_url, data, function(e) {
+
+        console.log(e.msg);
+        self.dispatchEvent({type:ServiceManagerEvent.DELETE_COMPLETE, target: self, event: e})
       });
     },
     saveJson: function(data) {
 
+      var self = this;
+
       jsux.getJSON(this.save_url, data, function(e) {
-        console.log(e);
+
+        console.log(e.msg);
+        self.dispatchEvent({type:ServiceManagerEvent.SAVE_COMPLETE, target: self, event: e})
       });
     }
   });
 
+  app.ServiceManagerEvent = ServiceManagerEvent;
   app.getServiceMonager = function() {
     return new ServiceManager();
   };
 })(jsux.app, jQuery);
 
 // App Stage
-jsux.fn = jsux.fn || {};
-jsux.fn.list = {
+(function(app, $) {
 
-  limit: 10,
-  limitGroup: 5,
-  listManager: jsux.app.getMenuListManager(),
-  treeManager: jsux.app.getMenuTreeManager(),
-  serviceManager: jsux.app.getServiceMonager(),
-  listSwiper: null,
-  treeSwiper: null,
+  var ServiceManagerEvent = jsux.app.ServiceManagerEvent;
 
-  getMenuModel: function() {
+  app.fn = jsux.fn || {};
+  app.fn.list = {
 
-    var model = {
-      badge:0,
-      id:'',
-      isClicked:false,
-      isDragging:false,
-      isModified:false,
-      name:'',
-      posy:0,
-      state:'default',
-      sub:[],
-      top:'0px',
-      url:'',
-      date:''
-    };
+    limit: 10,
+    limitGroup: 5,
+    listManager: jsux.app.getMenuListManager(),
+    treeManager: jsux.app.getMenuTreeManager(),
+    serviceManager: jsux.app.getServiceMonager(),
+    menuInfoView: jsux.app.getMenuInfoView(),
+    listSwiper: null,
+    treeSwiper: null,
 
-    return model;
-  },
-  addMenu: function(id) {
+    createSwiper: function(className, option) {
 
-    var menu = this.listManager.getItem(id);
-    this.treeManager.addItem(menu);
-  },
-  addMenues: function(models) {
-
-    var self = this;
-    var searchManager = (function f(list) {
-
-      for (var i=0; i<list.length; i++) {
-        self.addMenu(list[i].id);
+      if (!option) {
+        option = {
+          scrollbar: '.swiper-scrollbar',
+          direction: 'vertical',
+          slidesPerView: 'auto',
+          mousewheelControl: true,
+          freeMode: true
+        };
       }
 
-      for (var j=0; j<list.length; j++) {
-        if (list[j] && list[j].sub && list[j].sub.length > 0) {
-          self.selectMenu(list[j].id);
-          arguments.callee(list[j].sub);
+      var swiper = new Swiper(className, option);
+      return swiper;
+    },
+    getMenuModel: function() {
+
+      var model = {
+        badge:0,
+        id:'',
+        isClicked:false,
+        isDragging:false,
+        isModified:false,
+        is_active: 0,
+        category: '',
+        name:'',
+        posy:0,
+        state:'default',
+        sub:[],
+        top:'0px',
+        url:'',
+        date:''
+      };
+
+      return model;
+    },
+    addMenu: function(id) {
+
+      if (!this.treeManager.hasItem(id)) {
+        var menu = this.listManager.getItem(id);
+        this.treeManager.addItem(menu);
+      }       
+    },
+    addMenues: function(models) {
+
+      var self = this;
+      var searchManager = (function f(list) {
+
+        for (var i=0; i<list.length; i++) {
+          self.addMenu(list[i].id);
         }
+
+        for (var j=0; j<list.length; j++) {
+          if (list[j] && list[j].sub && list[j].sub.length > 0) {
+            self.selectMenu(list[j].id);
+            arguments.callee(list[j].sub);
+          }
+        }
+      })(models);
+    }, 
+    removeTreeMenu: function(id) {
+
+      if (this.treeManager.hasItem(id)) {
+        this.treeManager.cutItem(id);
       }
-    })(models);
-  }, 
-  removeTreeMenu: function(id) {
+    },
+    selectMenu: function(id) {
 
-    this.treeManager.cutItem(id);  
-  },
-  selectMenu: function(id) {
+      this.treeManager.selectMenu(id);
+    },
+    unselectMenu: function() {    
 
-    this.treeManager.selectMenu(id);
-  },
-  unselectMenu: function() {    
+      this.treeManager.unselectMenu();
+    },
+    editSelectedMenu: function() {
 
-    this.treeManager.unselectMenu();
-  },
-  editSelectedMenu: function() {
+      this.treeManager.edit();
+    },
+    modifyMenuInfo: function(id) {
+      
+      var item = this.listManager.getItem(id);
+      this.menuInfoView.showPanel();
+      this.menuInfoView.update(item);
+    },
+    canceModifyMenu: function() {
 
-    this.treeManager.edit();
-  },
-  modifyInfo: function(id) {
+     this.menuInfoView.hidePanel();
+    },
 
-    console.log('modify list menu');
-  },
-  removeMenu: function(id) {
+    /* business logic */
+    updateModifyInfo: function() {
 
-    this.listManager.cutItem(id);
+      var params = this.menuInfoView.getModel();
+      params._method = $('form[name=f_admin_menu_modify]')[0]._method.value;
 
-     var params = {
-      _method: 'delete',
-      id: id
-    };
+      this.serviceManager.update(params);
+      this.listManager.updateItem(params);
+      this.treeManager.updateItem(params);
+    },
+    removeMenu: function(id) {
 
-    this.serviceManager.delete(params);
-    this.saveJson();
-  },
-  saveJson: function() {
+       var params = {
+        _method: 'delete',
+        id: id
+      };
 
-    var params = {
-      _method: 'insert',
-      data: JSON.stringify({data: this.treeManager.getJson()})
-    };
+      this.listManager.cutItem(id);
+      this.serviceManager.delete(params);
+      this.saveJson();
+    },
+    saveJson: function() {
 
-    this.serviceManager.saveJson(params);
-  },
-  setSwiper: function(className, option) {
+      var params = {
+        _method: 'insert',
+        data: JSON.stringify({data: this.treeManager.getJson()})
+      };
 
-    if (!option) {
-      option = {
+      this.serviceManager.saveJson(params);
+    },
+    checkLangKor: function( value ) {
+
+      var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+      return reg.test( value );
+    },
+    checkFormVal: function( f ) {
+
+      var labelList = ['메뉴 영문 이름을'];
+      var inputList = ['menu_name'];
+      var isValidForm = true;
+      $.each( inputList, function( index, item) {
+
+        var $input = f[item];
+        if ($input.value.length < 1) {
+          trace(labelList[index] + ' 입력 하세요.');
+          $input.focus();
+          isValidForm = false;
+          return false;
+        }
+      });
+
+      if (!isValidForm) {
+        return false;
+      }
+
+      return true;  
+    },
+    sendJson: function( f ) {
+
+      var self = this,
+            params = {},
+            datas = f,
+            url = '';
+
+      $.each(datas, function( index, item ) {
+
+        var filters = 'checkbox|button|submit',
+              type = $(item).attr('type') ? $(item).attr('type') : item.nodeName,
+              glue ='';
+
+       if (!type.match(filters)) {
+          //console.log(item.name + ' : ' + item.value);          
+          params[item.name] = item.value;
+        }
+      });
+
+      /*$.each(params, function( index, item ) {
+        console.log(index + ' : ' + item);
+      });*/
+
+      if (!f.action) {
+        alert('Not Exists URL');
+      }
+      url = f.action;
+
+      jsux.getJSON( url, params, function( e ) {
+
+        trace( e.msg );     
+        if (e.result == 'Y') {
+          jsux.goURL( jsux.rootPath + 'login');
+        }
+      });
+    },
+    setEvent: function() {
+
+      var self = this;
+      $('form[name=f_admin_menu_add]').on('submit', function( e ) {
+        e.preventDefault();
+
+        if (self.checkFormVal(this)) {
+          self.sendJson( e.target );
+        }
+      });
+    },
+    setLayout: function() {
+
+      var self = this,
+            gnbJsonUrl = $('input[name=gnb_json_path]').val(),
+            listJsonUrl = $('input[name=list_json_url]').val(),
+            saveJsonUrl = $('input[name=save_json_url]').val(),
+            menuUrl = $('input[name=menu_url]').val(),
+            params = {
+              passover: 0,
+              limit: this.limit
+            };
+
+      //-- menu info view
+      var menuInfoSubmit = function(e) {
+
+        self.updateModifyInfo();
+      };
+      this.menuInfoView.initialize({
+        id: '#SlidingBoxPanel',
+        tmpl: '#menuInfoTmpl'
+      });      
+      this.menuInfoView.addEventListener('submit', menuInfoSubmit);
+
+      //-- tree manager
+      var loadedHandler = function(e) {
+
+        console.log('loaded : model.name = ' + e.model.name);
+      };
+      this.treeManager.addEventListener('loaded', loadedHandler);
+      this.treeManager.setResource(gnbJsonUrl);
+      this.treeManager.initialize({
+        id: '#selectedMenuList',
+        tmpl: '#treeListTmpl',
+        msg_tmpl: '#warnMsgTmpl'
+      });
+
+      if (!listJsonUrl) {
+        trace('input[name=gnb_json_path] 경로값을 입력하세요');
+        return;
+      }
+
+      //-- list manager
+      var changeHandler = function( e ) {
+        console.log('type : ', e.type);
+        //self.listManager.reloadData( e.page, limit);
+      };
+
+      //this.listManager.addEventListener('loaded', loadedHandler);
+      this.listManager.addEventListener('modify', changeHandler);
+      this.listManager.addEventListener('remove', changeHandler);
+      this.listManager.setResource(listJsonUrl);
+      this.listManager.initialize({
+        id: '#addableMenuList',
+        tmpl: '#menuListTmpl',
+        msg_tmpl: '#warnMsgTmpl'
+      });
+
+      var serviceUpdateHandler = function(e) {
+
+        //console.log(e.event.data);
+        switch(e.type) {
+          case ServiceManagerEvent.UPDATE_COMPLETE: 
+            self.canceModifyMenu();
+            self.saveJson();
+            break;
+
+          case ServiceManagerEvent.DELETE_COMPLETE:
+            break;
+
+          case ServiceManagerEvent.SAVE_COMPLETE:
+            break;
+
+          default:
+            break;
+        }
+      };
+      this.serviceManager.save_url = saveJsonUrl;
+      this.serviceManager.menu_url = menuUrl;
+      this.serviceManager.addEventListener(ServiceManagerEvent.UPDATE_COMPLETE, serviceUpdateHandler);
+
+      jsux.getJSON(listJsonUrl, params, function( e )  {
+
+        var data = e.data;
+        if (data && data.list && data.list.length > 0) {
+
+          // 서버에서 받은 값을 model 객체 값에 맞게 저장 
+          var collection = [];
+          $.each(data.list, function(index) {
+            
+            var model = self.getMenuModel();
+            $.each(model, function(key) {
+              if (data.list[index][key]) {
+                model[key] = data.list[index][key];
+              }            
+            });
+
+            collection.push(model);
+          });
+          self.listManager.setData(collection);
+          self.listManager.updateSwiper();
+        } else {
+          self.listManager.reset();
+          e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
+          self.listManager.setMsg(e.msg);
+        }
+      });
+
+      if (!gnbJsonUrl) {
+        trace('input[name=gnb_json_path] 경로값을 입력하세요');
+        return;
+      }
+
+      jsux.getJSON(gnbJsonUrl, params, function( e )  {
+
+        var data = e.data;
+        if (data && data.list && data.list.length > 0) {
+
+          var collection = [];
+          $.each(data.list, function(index) {
+            
+            var model = self.getMenuModel();
+            $.each(model, function(key) {
+              if (data.list[index][key]) {
+                model[key] = data.list[index][key];
+              }            
+            });
+
+            collection.push(model);
+          });
+          self.treeManager.setData(collection);
+          
+          var checkLoadded = setTimeout(function() {
+
+            if (self.listManager.getLength() > 0) {
+
+              self.treeManager.updateSwiper();            
+              clearInterval(checkLoadded);
+              checkLoadded = null;
+            }
+          }, 100);        
+        } else {
+          self.treeManager.reset();
+          e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
+          self.treeManager.setMsg(e.msg);
+        }
+      });   
+    },
+    init: function() {
+
+      var listSwiper = this.createSwiper('.swiper_container_item_list', {
         scrollbar: '.swiper-scrollbar',
         direction: 'vertical',
         slidesPerView: 'auto',
         mousewheelControl: true,
         freeMode: true
-      };
+      });
+
+      var treeSwiper = this.createSwiper('.swiper_container_draggable_list', {
+        scrollbar: '.swiper-scrollbar',
+        direction: 'vertical',
+        slidesPerView: 'auto',
+        mousewheelControl: true,
+        freeMode: true
+      });
+
+      this.listManager.setSwiper(listSwiper);
+      this.treeManager.setSwiper(treeSwiper);
+
+      this.setEvent();
+      this.setLayout();    
     }
+  };
+})(jsux, jQuery);
 
-    var swiper = new Swiper(className, option);
-    return swiper;
-  },
-  checkLangKor: function( value ) {
 
-    var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-    return reg.test( value );
-  },
-  checkFormVal: function( f ) {
 
-    var labelList = ['메뉴 영문 이름을'];
-    var inputList = ['menu_name'];
-    var isValidForm = true;
-    $.each( inputList, function( index, item) {
 
-      var $input = f[item];
-      if ($input.value.length < 1) {
-        trace(labelList[index] + ' 입력 하세요.');
-        $input.focus();
-        isValidForm = false;
-        return false;
-      }
-    });
-
-    if (!isValidForm) {
-      return false;
-    }
-
-    return true;  
-  },
-  sendJson: function( f ) {
-
-    var self = this,
-          params = {},
-          datas = f,
-          url = '';
-
-    $.each(datas, function( index, item ) {
-
-      var filters = 'checkbox|button|submit',
-            type = $(item).attr('type') ? $(item).attr('type') : item.nodeName,
-            glue ='';
-
-     if (!type.match(filters)) {
-        //console.log(item.name + ' : ' + item.value);          
-        params[item.name] = item.value;
-      }
-    });
-
-    /*$.each(params, function( index, item ) {
-      console.log(index + ' : ' + item);
-    });*/
-
-    if (!f.action) {
-      alert('Not Exists URL');
-    }
-    url = f.action;
-
-    jsux.getJSON( url, params, function( e ) {
-
-      trace( e.msg );     
-      if (e.result == 'Y') {
-        jsux.goURL( jsux.rootPath + 'login');
-      }
-    });
-  },
-  setEvent: function() {
-
-    var self = this;
-    $('form[name=f_admin_menu_add]').on('submit', function( e ) {
-      e.preventDefault();
-
-      if (self.checkFormVal(this)) {
-        self.sendJson( e.target );
-      }
-    });
-  },
-  setLayout: function() {
-
-    var self = this,
-          listUrl = $('input[name=list_json_path]').val(),
-          menuUrl = $('input[name=tree_json_path]').val(),
-          saveUrl = $('input[name=save_tree_url]').val(),
-          deleteUrl = $('input[name=delete_tree_url]').val(),
-          params = {
-            passover: 0,
-            limit: this.limit
-          };
-
-    if (!listUrl) {
-      trace('input[name=list_json_path] 경로값을 입력하세요');
-      return;
-    }
-
-    var loadedHandler = function(e) {
-
-      console.log('loaded : model.name = ' + e.model.name);
-    };
-    this.treeManager.addEventListener('loaded', loadedHandler);
-    this.treeManager.setResource(menuUrl);
-    this.treeManager.initialize({
-      id: '#selectedMenuList',
-      tmpl: '#treeListTmpl',
-      msg_tmpl: '#warnMsgTmpl'
-    });
-
-    var changeHandler = function( e ) {
-      console.log('type : ', e.type);
-      //self.listManager.reloadData( e.page, limit);
-    };
-
-    //this.listManager.addEventListener('loaded', loadedHandler);
-    this.listManager.addEventListener('modify', changeHandler);
-    this.listManager.addEventListener('remove', changeHandler);
-    this.listManager.setResource(listUrl);
-    this.listManager.initialize({
-      id: '#addableMenuList',
-      tmpl: '#menuListTmpl',
-      msg_tmpl: '#warnMsgTmpl'
-    });
-
-    this.serviceManager.save_url = saveUrl;
-    this.serviceManager.delete_url = deleteUrl;
-
-    if (!saveUrl) {
-      trace('input[name=save_tree_url] 경로값을 입력하세요');
-      return;
-    }
-
-    jsux.getJSON(listUrl, params, function( e )  {
-
-      var data = e.data;
-      if (data && data.list && data.list.length > 0) {
-
-        // 서버에서 받은 값을 model 객체 값에 맞게 저장 
-        var collection = [];
-        $.each(data.list, function(index) {
-          
-          var model = self.getMenuModel();
-          $.each(model, function(key) {
-            if (data.list[index][key]) {
-              model[key] = data.list[index][key];
-            }            
-          });
-
-          collection.push(model);
-        });
-        self.listManager.setData(collection);
-        self.listManager.updateSwiper();
-      } else {
-        self.listManager.reset();
-        e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
-        self.listManager.setMsg(e.msg);
-      }
-    });
-
-    if (!menuUrl) {
-      trace('input[name=tree_json_path] 경로값을 입력하세요');
-      return;
-    }
-
-    jsux.getJSON(menuUrl, params, function( e )  {
-
-      var data = e.data;
-      if (data && data.list && data.list.length > 0) {
-
-        var collection = [];
-        $.each(data.list, function(index) {
-          
-          var model = self.getMenuModel();
-          $.each(model, function(key) {
-            if (data.list[index][key]) {
-              model[key] = data.list[index][key];
-            }            
-          });
-
-          collection.push(model);
-        });
-        self.treeManager.setData(collection);
-        
-        var checkLoadded = setTimeout(function() {
-
-          if (self.listManager.getLength() > 0) {
-
-            self.treeManager.updateSwiper();            
-            clearInterval(checkLoadded);
-            checkLoadded = null;
-          }
-        }, 100);        
-      } else {
-        self.treeManager.reset();
-        e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
-        self.treeManager.setMsg(e.msg);
-      }
-    });   
-  },
-  init: function() {
-
-    var listSwiper = this.setSwiper('.swiper_container_item_list', {
-      scrollbar: '.swiper-scrollbar',
-      direction: 'vertical',
-      slidesPerView: 'auto',
-      mousewheelControl: true,
-      freeMode: true
-    });
-
-    var treeSwiper = this.setSwiper('.swiper_container_draggable_list', {
-      scrollbar: '.swiper-scrollbar',
-      direction: 'vertical',
-      slidesPerView: 'auto',
-      mousewheelControl: true,
-      freeMode: true
-    });
-
-    this.listManager.setSwiper(listSwiper);
-    this.treeManager.setSwiper(treeSwiper);
-
-    this.setEvent();
-    this.setLayout();    
-
-    jsux.setAutoFocus();
-  }
-};
-
-/*
 jsux.fn = jsux.fn || {};
 jsux.fn.modify = {
 
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
   getSelectVal: function( id ) {
 
     var result = $.trim($('select[name='+id+']').val());
@@ -948,11 +1165,11 @@ jsux.fn.modify = {
 
     var reg = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
     return reg.test( value );
-  }
+  },
   checkFormVal: function( f ) {
 
-    var labelList = ['아이디를','비밀번호를','닉네임을','이메일을'];
-    var checkList = ['user_id','password','nick_name','email_address'];
+    var labelList = ['메뉴이름을','링크주소를'];
+    var checkList = ['name','url'];
 
     $.each( checkList, function( index, item) {
 
@@ -963,14 +1180,6 @@ jsux.fn.modify = {
         return false;
       }
     });
-
-    if (!this.validateEmail()) {     
-      return false;
-    }
-
-    if (!this.validatePassword()) {      
-       return false;
-    }  
 
     return true;  
   },
@@ -1013,25 +1222,12 @@ jsux.fn.modify = {
     }
     url = f.action;
 
-    var updateLoginHandler = function( url ) {
-
-      var params = {
-        _method:'insert'
-      };
-
-      jsux.getJSON( url, params, function(e) {
-
-        if  (e.result.toUpperCase() === 'Y') {
-          jsux.goURL( jsux.rootPath + 'login');
-        }
-      });
-    };
-
     jsux.getJSON( url, params, function( e ) {
-
-      trace( e.msg );
+      
       if (e.result.toUpperCase() === 'Y') {
-        updateLoginHandler( jsux.rootPath + 'login');
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
@@ -1039,7 +1235,7 @@ jsux.fn.modify = {
 
     var self = this;
     
-    $('form[name=f_member_modify]').on('submit', function( e ) {
+    $('form[name=f_admin_menu_modify]').on('submit', function( e ) {
       e.preventDefault();
 
       if (self.checkFormVal( e.target )) {
@@ -1047,33 +1243,18 @@ jsux.fn.modify = {
       }
     });
 
-    $('input[name=cancel]').on('click', function(e) {     
-      jsux.goURL( jsux.rootPath + 'login' );
+    $('#btnCancel').on('click', function(e) {     
+      jsux.goURL( self.returnUrl());
     });
 
-    $('input[name=new_password_conf]').on('blur', function(e) {      
-      self.validatePassword();
-    }); 
-
-    $('input[name=check_newpassword]').on('click', function() {
-      self.checkPWD();
-    });    
-
-    $('input[name=hp]').on('keyup', function(e) {
-      self.validateHp(e);
-    });
-
-    $('input[name=hp]').on('blur', function(e) {
-      $('input[name=hp]').off('keydown');
-    });
   },
   setLayout: function() {
 
-    jsux.setAutoFocus();
+    /*jsux.setAutoFocus();*/
   },    
   init: function() {
     this.setLayout();
     this.setEvent();
   }
 };
-*/
+

@@ -308,14 +308,26 @@ jsux.app = jsux.app || {};
       }
     },
     hasItem: function(id) {
+      
+      var result = false;
+      var searcher = (function f(list) {
 
-     for (var i=0; i<this.model.length; i++) {
-        if (this.model[i].id == id) {         
-          return true;
+        for (var i=0; i<list.length; i++) {
+
+          if (list[i].id == id) {
+            result = true;
+            break;
+          }
+
+          if (list[i].sub && list[i].sub.length > 0) {
+            arguments.callee(list[i].sub);
+          }
         }
-      }
+      });
+      searcher(this.model);
+      searcher = null;
 
-      return false;
+      return result;
     },
     getItem: function(id) {
 

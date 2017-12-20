@@ -1,7 +1,7 @@
 /* header pannel setting start */
-.sx-contents .sx-box-content{
-  padding: 0 0;
-  overflow: hidden;
+.sx-menu-panel .sx-box-content{
+  position: relative;
+  padding:0 0;
   border: 1px solid #ddd;
 }
 .sx-header-panel h2{
@@ -90,15 +90,19 @@
   right: 0;
   margin-right:10px;
 }
+.menu_list_panel li .sx-btn-group > a,
 .menu_list_panel li .sx-btn-group > button{
   padding: 5px 10px;
 }
+.menu_list_panel li .sx-btn-group > a:hover {
+  color:#fff;
+}
 
+.selected_menu_list{
+  padding-bottom: 10px;  
+}
 .selected_menu_list > li {
   padding-bottom: 0;  
-}
-.selected_menu_list > li:last-child {
-  padding-bottom: 10px;  
 }
 .selected_menu_list li button[name=btn_drag] {
   display: none;
@@ -237,17 +241,58 @@
 .text_caption{
   margin-top: 10px;
 }
-.sx-contents .sx-box-content .panel_newpassword {
-  display:none;
+.sx_plugin_panel .sx_draggable_list{
+  position: relative;
+  overflow: hidden;
+}
+.sx_plugin_panel .sx_draggable_list .sx_sliding_box{
+  position: relative;
+  margin-left: 0;
+  width:200%;
+  clear:both;
+
+  -webkit-transition: all ease-out 0.25s;
+  -o-transition: all ease-out 0.25s;
+  transition: all ease-out 0.25s;
+}
+.sx_plugin_panel .sx_draggable_list .sx_sliding_box .sx_menu{
+  display: inline-block;
+  position: relative;  
+  width:50%;
+  vertical-align: top;  
+}
+.sx_plugin_panel .sx_draggable_list .sx_sliding_box .sx_menu_info {
+  position: absolute;
+  left:50%;
+  z-index: 100;
+  background-color: #fff;
+}
+.sx_plugin_panel .sx_draggable_list .sx_menu_info form {
+  padding-top:20px;
+}
+.sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group{
+  padding:0 5px;
+}
+
+/* activate */
+.sx_plugin_panel .sx_draggable_list .sx_sliding_box_active{
+  margin-left: -100%;
 }
 
 /* common */
 .sx-contents .sx-box-content .btn_group{
-  padding-top: 25px;
-  padding-bottom: 35px;
+  padding-top: 10px;
+  padding-bottom: 20px;
 }
 
 @media (min-width: 768px) {
+
+  .label_width{
+    padding-right: 10px;
+    text-align: right;
+    width:100px;
+  }
+
   .sx_plugin_panel{
     display: inline-block;
     width:50%;
@@ -259,6 +304,17 @@
   }
   .sx_plugin_panel .sx_draggable_list{
     margin-right: 30px;
+  }
+  .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group{
+    padding-right: 125px;
+  }
+  .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group .sx-control-label{
+    position: absolute;
+    padding:5px 0;
+  }
+  .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group .sx-form-control {
+    margin-left:115px;
+    width: 100%;
   }
 
   .draggable_action {

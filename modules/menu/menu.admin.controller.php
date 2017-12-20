@@ -73,19 +73,29 @@ class MenuAdminController extends Controller
     $id = $posts['id'];
     $name = $posts['name'];
     $url = $posts['url'];
-    $isActivated = $posts['is_activated'];
+    $isActive = (int) $posts['is_active'];
 
     $columns = array();
     $columns['name'] = $name;
     $columns['url'] = $url;
+    $columns['is_active'] = $isActive;
 
     $where = new QueryWhere();
     $where->set('id', $id);
     $result = $this->model->update('menu', $columns, $where);
-    if (!$result) {
+    if ($result) {
+      $msg .= '메뉴 수정 완료하였습니다.';
+      $resultYN = 'Y';
+      
+      $this->model->select('menu', '*', $where);
+      $row = $this->model->getRow();
+    } else {
       $msg .= '메뉴 수정을 실패하였습니다.';
       $resultYN = 'N';
     }
+
+    $msg .= Tracer::getInstance()->getMessage();
+    $json['data'] = $row;
     $json['msg'] = $msg;
     $json['result'] = $resultYN;
 
