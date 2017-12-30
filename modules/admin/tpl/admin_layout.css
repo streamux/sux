@@ -71,12 +71,10 @@ nav{
 .sx-nav{  
   margin-top: -55px;
 }
-
 .sx-menu-btn{
   position: absolute;
   top:13px;
   left:12px;
-  display: table-cell;
   vertical-align: middle;
   width: 35px;
   height: 35px;
@@ -97,8 +95,8 @@ nav{
 /* gnb close */
 .sx-close-btn{
   position: absolute;
-  left: -44px;
-  top: -1000px;
+  top:-1000px;
+  left:12px;
   display: inline-block;
   padding-top:14px;
   height: 30px;
@@ -108,10 +106,15 @@ nav{
   cursor: pointer;
 }
 .sx-close-btn.active{
-  top: 12px;
+  top:10px;
   -webkit-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transform: rotate(360deg);
+}
+.sx-close-btn.inactive{
+  -webkit-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
 }
 .sx-close > li{
   width: 30px;
@@ -131,21 +134,22 @@ nav{
 .sx-nav-bar{
   position: absolute;
   z-index: 100;
-  margin-left: 55px;
+  left:100%;
   width: 100%;
   height: 100%; 
 }
-.sx-nav-bar.sx-nav-off{
-  margin-left: 100%;
+.sx-nav-on{
+  left: 55px;
 }
 .sx-gnb-case{
   height: 100%;
-   -webkit-transition: transform 0.3s ease-out;
-  -o-transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out;
   -webkit-transform: translateX(100%);
   -o-transform: translateX(100%);
   transform: translateX(100%);
+
+  -webkit-transition: transform 0.3s ease-out;
+  -o-transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
 }
 .sx-gnb-case.sx-slide-in{  
   -webkit-transform: translateX(0);
@@ -157,6 +161,7 @@ nav{
   -o-transform: translateX(100%);
   transform: translateX(100%);  
 }
+
 .sx-gnb{  
   background-color: #333;
   height: 100%;
@@ -321,25 +326,19 @@ nav{
     margin-left: 70px;
   }
   .sx-nav{
-    margin-top: -55px;
+    position: relative;
     margin-left:140px;
   }
-  .sx-header-bar .sx-menu-btn{
+  .sx-nav .sx-menu-btn{
    display: none;
   }
   .sx-nav-bar{
-    margin-top:0;
-    margin-left:0;
+    left:40px;
     z-index: 100;
     height: auto;
   }
-  .sx-nav-bar.sx-nav-off{
-    margin-left: 0;
-  }
   .sx-gnb-case {
     position: absolute;
-    margin-left: 0;
-    padding-left: 0;
     background-color: #333;
     -webkit-transition: none;
     -o-transition: none;

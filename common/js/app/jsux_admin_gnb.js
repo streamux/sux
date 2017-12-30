@@ -11,10 +11,7 @@ var SXAdminMobilePanel = function() {
 
   var self = this;
   var isReadClickMenu = true;
-
-  this.init = function() {
-    this.setEvent();
-  }; 
+  var oldTarget = null;
 
   this.removeClass = function(target, id) {
 
@@ -29,24 +26,6 @@ var SXAdminMobilePanel = function() {
     if (!$gnbCase.hasClass(id)) {
       $gnbCase.addClass(id);
     }
-  };
-
-  this.slideInGnbPanel = function() {
-
-    this.removeClass('.sx-gnb-case', 'sx-slide-out');
-    this.addClass('.sx-gnb-case', 'sx-slide-in');
-    this.hideMobileMenu();
-    this.hideCloseBtn();
-    this.removeTransitionEnd();
-
-    isReadClickMenu = false;
-  };
-
-  this.slideOutGnbPanel = function() {
-
-    this.removeClass('.sx-gnb-case', 'sx-slide-in');
-    this.addClass('.sx-gnb-case', 'sx-slide-out');
-    this.addTransitionEnd();
   };
 
   this.hideMobileMenu = function() {
@@ -79,17 +58,37 @@ var SXAdminMobilePanel = function() {
   };
 
   this.hideCloseBtn = function() {
-    this.removeClass('#sxGnbCase .sx-close-btn', 'active');
+    this.removeClass('.sx-close-btn', 'active');
   };
 
-  this.showCloseBtn = function() {    
-    this.addClass('#sxGnbCase .sx-close-btn', 'active');
+  this.showCloseBtn = function() {
+    this.removeClass('.sx-close-btn', 'inactive');
+    this.addClass('.sx-close-btn', 'active');
+  };
+
+  this.slideInGnbPanel = function() {
+
+    this.removeClass('.sx-gnb-case', 'sx-slide-out');
+    this.addClass('.sx-gnb-case', 'sx-slide-in');
+    this.hideMobileMenu();
+    this.removeTransitionEnd();
+
+    isReadClickMenu = false;
+  };
+
+  this.slideOutGnbPanel = function() {
+
+    this.removeClass('.sx-gnb-case', 'sx-slide-in');
+    this.addClass('.sx-gnb-case', 'sx-slide-out');
+    this.addClass('.sx-close-btn', 'inactive');
+    this.addTransitionEnd();
   };
 
   this.addTransitionEnd = function() {
 
     var $gnbCase = $('.sx-gnb-case');
     $gnbCase.on('transitionend', function(e){
+
       self.removeTransitionEnd();
       self.showMobileMenu();
       self.hideNavPanel();
@@ -107,28 +106,59 @@ var SXAdminMobilePanel = function() {
 
   this.showNavPanel = function() {
 
-    this.removeClass('.sx-nav-bar', 'sx-nav-off');
+    this.addClass('.sx-nav-bar', 'sx-nav-on');
   };
 
   this.hideNavPanel = function() {
 
-     this.addClass('.sx-nav-bar', 'sx-nav-off');
+    this.removeClass('.sx-nav-bar', 'sx-nav-on');
   };
 
   this.setEvent = function() {
+
+    var self = this;
 
     $('.sx-menu-btn').on('click', function() {
 
       if (!isReadClickMenu) {
         return;
       }
+
       self.showNavPanel();
       self.slideInGnbPanel();      
     });
+
     $('.sx-close-btn').on('click', function() {
       self.slideOutGnbPanel();
     });
+
+    $(window).on('keyup', function(e) {
+
+      var className = $(e.target).attr('class');
+
+      if (className && className.match('sx-menu-btn') && e.key === 'Tab' && e.shiftKey === false) {
+        $('.sx-menu-btn').trigger('click');
+      }
+
+      if (self.oldTarget && self.oldTarget.match('sx-menu-btn') && e.key === 'Tab' && e.shiftKey === true) {
+        $('.sx-close-btn').trigger('click');
+      }
+
+      if (self.oldTarget && self.oldTarget.match('sx-close-btn') && e.key === 'Tab' && e.shiftKey === false) {
+        $('.sx-close-btn').trigger('click');
+      }
+
+      if (className && className.match('sx-close-btn') && e.key === 'Tab' && e.shiftKey === true) {
+        $('.sx-menu-btn').trigger('click');
+      }
+
+      self.oldTarget = className;
+    });
   };
+
+  this.init = function() {
+    this.setEvent();
+  }; 
 };
 
 var SXAdminMenu = function(){
@@ -145,7 +175,7 @@ var SXAdminMenu = function(){
     var menuList = $('.sx-gnb > li > a'),
           subPanelList = $('.sx-drap-menu');
 
-    menuList.on('click', function(e){
+    menuList.on('mouseover', function(e){
 
       var mindex = menuList.index(this);
       var sub = subPanelList[mindex];
@@ -156,6 +186,39 @@ var SXAdminMenu = function(){
       }     
  
       selectedSub = sub;   
+    });
+
+    menuList.on('touchstart', function(e){
+
+      var mindex = menuList.index(this);
+      var sub = subPanelList[mindex];
+      self.showSubMenu(sub);
+
+      if (selectedSub && selectedSub !== sub) {
+         self.hideSubMenu(selectedSub);
+      }     
+ 
+      selectedSub = sub;   
+    });
+
+    var menuAllList = $('.sx-gnb li a');
+    menuAllList.on('focus', function(e) {
+
+      var el$ = $(e.target).parent().parent().parent();
+      var className = el$.attr('class');
+      var mindex = $(this).parent().index();
+      if (className.match(/^sx-sub-case/i)) {        
+        mindex = $(el$.parent()).index();
+      }
+
+      var sub = subPanelList[mindex];
+      self.showSubMenu(sub);
+
+      if (selectedSub && selectedSub !== sub) {
+         self.hideSubMenu(selectedSub);
+      }     
+ 
+      selectedSub = sub; 
     });
 
     $('body').on('click', function(e) {

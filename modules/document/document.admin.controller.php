@@ -43,9 +43,7 @@ class DocumentAdminController extends Controller
     $savePath = 'files/document/';
     $cachePath = './files/caches/queries/document.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if (!$columnCaches) {
-      $msg .= "QueryCacheFile Do Not Exists<br>";
-    } else {
+    if ($columnCaches) {
       $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];
@@ -66,6 +64,8 @@ class DocumentAdminController extends Controller
           }       
         }           
       }
+    } else {
+      $msg .= "QueryCacheFile Do Not Exists<br>";
     } // end of if
 
     $result = $this->model->insert('document', $columns);
@@ -282,7 +282,7 @@ class DocumentAdminController extends Controller
 
         // insert into menu 
         $where->reset();
-        $where->set('category', $category);
+        $where->set('menu_id', $category);
         $result = $this->model->select('menu', 'id', $where);
         if ($result) {
           $numrows = $this->model->getNumRows();
@@ -358,9 +358,7 @@ class DocumentAdminController extends Controller
     $row = $this->model->getRow();    
       
     $result = $this->model->delete('document', $where);
-    if (!$result) {
-      $msg .= "${category} 페이지 삭제를 실패하였습니다.<br>";
-    } else {
+    if ($result) {
       $msg .= "${category} 페이지을 삭제하였습니다.<br>";
 
       $realPath = _SUX_PATH_ . 'files/document/' . $category;
@@ -390,13 +388,16 @@ class DocumentAdminController extends Controller
 
       // delete menu
       $where = new QueryWhere();
-      $where->set('category', $category);
+      $where->set('menu_id', $category);
       $result = $this->model->delete('menu', $where);
       if (!$result) {
         $msg .= "메뉴 삭제를 실패하였습니다.";
         $resultYN = 'N';
       }
+    } else {
+      $msg .= "${category} 페이지 삭제를 실패하였습니다.<br>";
     }
+
     //$msg .= Tracer::getInstance()->getMessage();
     $data = array(  "result"=>$resultYN,
             "msg"=>$msg);

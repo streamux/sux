@@ -1,46 +1,40 @@
-<div class="wrapper">
-  <div class="header">
-    <div class="util"></div>
+<div class="sx-wrapper">
+  <div class="sx-header">
     <h1 class="logo">
       <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux"> 
     </h1>
   </div>
-  <div class="container">
+  <div class="sx-container">
     <form name="f_setup_admin" action="{$rootPath}setup-admin" method="post">
-    <input type="hidden" name="_method" value="insert">
-    <div class="terms_box sx-edgebox">
-      <h1>관리자 기본정보 설정</h1>
-      <ul>
-        <li>
-          <fieldset>
-            <label for="admin_id">* 관리자 아이디</label>
-            <input type="text" id="admin_id" name="admin_id" value="admin">
-          </fieldset> 
-        </li>
-        <li>
-          <fieldset>
-            <label for="admin_pwd">* 관리자 비밀번호</label>
-            <input type="password" id="admin_pwd" name="admin_pwd">
-          </fieldset>
-        </li>
-        <li>
-          <fieldset>
-            <label for="admin_email">* 관리자 이메일</label>
-            <input type="text" id="admin_email" name="admin_email" value="streamux@naver.com">
-          </fieldset>
-        </li>
-        <li>
-          <fieldset>
-            <label for="yourhome">* 홈페이지 주소</label>
-            <input type="text" id="yourhome" name="yourhome" value="localhost">
-          </fieldset>
-        </li>
-      </ul>
-    </div>
-    <input type="submit" value=' 다 음 ' class="btn-submit">
+      <input type="hidden" name="_method" value="insert">
+      <div class="terms_box sx-edgebox">
+        <h1 class="admin_title">관리자 기본정보 설정</h1>
+
+        <div class="sx-form-group">
+          <label for="adminId" class="sx-control-label">관리자 아이디</label>
+          <input type="text" id="adminId" name="admin_id" value="admin" class="sx-form-control" placeholder="id">
+        </div>
+        <div class="sx-form-group">
+          <label for="adminPwd" class="sx-control-label">관리자 비밀번호</label>
+          <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="1234" placeholder="password">
+        </div>
+        <div class="sx-form-group">
+          <label for="adminNickname" class="sx-control-label">닉네임</label>
+          <input type="text" id="adminNickname" name="admin_nickname" value="관리자" class="sx-form-control" placeholder="nickname">
+        </div>
+        <div class="sx-form-group">
+          <label for="adminEmail" class="sx-control-label">이메일</label>
+          <input type="text" id="adminEmail" name="admin_email" class="sx-form-control" value="streammx@naver.com" placeholder="e-mail">
+        </div>
+        <div class="sx-form-group">
+          <label for="yourhomeUrl" class="sx-control-label">홈페이지 주소</label>
+          <input type="text" id="yourhomeUrl" name="yourhome" class="sx-form-control" value="localhost" placeholder="your site url">
+        </div>
+      </div>
+      <input type="submit" value="다 음"" class="sx-btn">
     </form>
   </div>
-  <div class="footer">
+  <div class="sx-footer">
     {include file="$copyrightPath"}
   </div>
 </div>

@@ -1099,6 +1099,30 @@ select.sx-form-group {
   margin-left: -1px;
 }
 
+.sx-btn-group > .sx-btn:first-child,
+.sx-btn-group > .sx-btn-group:first-child {
+  margin-left: 0;
+}
+.sx-btn-group > .sx-btn:first-child:not(:last-child),
+.sx-btn-group > .sx-btn-group:first-child:not(:last-child) {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.sx-btn-group > .sx-btn:not(:first-child):not(:last-child),
+.sx-btn-group > .sx-btn-group:not(:first-child):not(:last-child) {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  -o-border-radius: 0;
+  border-radius: 0;
+}
+
+.sx-btn-group > .sx-btn:not(:first-child),
+.sx-btn-group > .sx-btn-group:not(:first-child) {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
 .sx-btn-group > .sx-btn-group {
   float: left;
 }

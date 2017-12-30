@@ -1,5 +1,5 @@
   </div>
-  <footer class="footer">
+  <footer id="sxfooter" class="footer">
     <ul class="copyright clearfix">
     {if isset($sessionData.user_name) && $sessionData.user_name}
       <li><a href="{$rootPath}logout?_method=insert">로그아웃</a></li>
@@ -11,63 +11,8 @@
       <li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
     </ul> 
     <p>{include file="$copyrightPath"}</p>
-  </footer>
+  </footer>  
 </div>
-
-<!-- mobile gnb start -->
-<div class="sx-bgcover sx-bgcover-off"></div>
-<nav class="nav mobile-gnb-case mobile-gnb-case-off">
-  <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
-    <ul class="sx-h-3stick">
-      <li class="sx-hline1"></li>
-      <li class="sx-hline2"></li>
-      <li class="sx-hline3"></li>
-    </ul>
-  </button>
-  <div class="header-panel">
-    <div class="sx-user-info">
-      <ul class="clearfix">
-        <li><div class="sx-user-picture"></div></li>
-        <li class="sx-user-nickname">
-          <span>
-          {if isset($sessionData.user_name) && $sessionData.user_name}
-            {$sessionData.user_name}
-          {else}
-            Guest
-          {/if}
-          </span>
-        </li>
-        <li class="sx-user-modify">        
-          <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' alt="관리자 설정" /></a>
-        </li>
-      </ul>
-    </div>
-    <div class="sx-user-member">
-      <ul class="clearfix">
-      {if isset($sessionData.user_name) && $sessionData.user_name}
-        <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그아웃</a></li>
-        <li><a href="{$rootPath}member-modify" class="sx-btn">회원정보수정</a></li>
-      {else}
-        <li><a href="{$rootPath}login" class="sx-btn">로그인</a></li>
-        <li><a href="{$rootPath}member-join" class="sx-btn">회원가입</a></li>
-      {/if}
-      </ul>
-    </div>
-  </div>
-  <div class="sx-body-panel">
-    <div class="swiper-container swiper-container-mobilegnb">
-      <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <ul id="mobileGnb" class="sx-menu-panel">
-            <!-- display first's depth menu list -->
-          </ul>
-        </div>    
-      </div>
-      <div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
-    </div>
-  </div>  
-</nav>
-<!-- mobile gnb end //-->
 
 <!-- Analytics start -->
 <img src="{$rootPath}analytics/counter" alt="" class="hide">
@@ -77,7 +22,7 @@
 <script type="sux-templete" id="gnbFirstMenu">
   <ul class="sx-mmenu">
     <li data-mid="" data-sid="">
-      <a href="#none" title=""></a>
+      <a href="#none"></a>
       <div class="sx-gnb-sub">
         <ul class="panel" style="" data-startPosY=""></ul>
       </div>
@@ -86,7 +31,7 @@
 </script>
 <script type="sux-templete" id="gnbSecondMenu">
   <li class="sx-smenu" data-mid="" data-sid="">
-    <a href="#none" title=""></a>
+    <a href="#none"></a>
   </li>
 </script>
 

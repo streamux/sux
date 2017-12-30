@@ -13,6 +13,7 @@
 .mobile-gnb-case .header-panel .sx-user-info{
   height: 60px;
 }
+.sx-nav,
 .sx-header-body,
 .sx-search-form,
 .sx-container,
@@ -22,14 +23,32 @@
   max-width: 1024px;
 }
 
-/* header */
+/* Skip */
+.sx-skip-menu{  
+  position: absolute;
+}
+.sx-skip-menu > a{
+   position: relative;
+   display: block;
+   top:-1000px;
+   z-index: 1000;
+   padding:18px 30px;
+   font-size: 1.250em;
+   font-weight: bold;
+   text-decoration: none;
+   background-color: #fff;
+}
+.sx-skip-menu > a:focus{
+  top:-60px;
+}
+
+/* Header */
 .header{
   position:fixed;
   top:0;
   z-index:100;
   -webkit-transform: translateZ(0);  
   width:100%;
-  height:61px;
   border-bottom: 1px solid #e3e3e3;
   background-color:#ffffff;
 }
@@ -37,27 +56,19 @@
   height:0;
 }
 
-.sx-skip-menu{  
+/* Nav */
+.sx-nav{
   position: relative;
-  text-align: center;
-  background-color: #fff;
-}
-.sx-skip-menu > a{
-   position: absolute;
-   top:-1000px;
-}
-.sx-skip-menu > a:focus{
-  position: relative;
-  top:0;
+  z-index: 100;
 }
 
-/* container */
+/* Container */
 .sx-container{
   overflow:hidden;
   margin-top:60px;
 }
 
-/* footer */
+/* Footer */
 .footer {
   margin-top: 45px;
   height: 120px;
@@ -134,15 +145,15 @@
                 border-radius: 2em;
 }
 
-/* search start */
+/* search */
+.sx-admin-setup,
 .sx-btn-search,
 .sx-search-form{
   display: none;
 }
-/* search end */
 
-/* login start */
-a.sx-gnb-login{
+/* login */
+.sx-gnb-login{
   position:relative;
   display: inline-block;  
   top:-48px;
@@ -152,23 +163,28 @@ a.sx-gnb-login{
   text-align:center;
   vertical-align: middle;
 }
-a.sx-gnb-login:hover{
+.sx-gnb-login:hover{
   color: #ff0000;
   text-decoration-line: none;
 }
-a.sx-gnb-login i{
+.sx-gnb-login i{
   line-height: 36px;
 }
-/* login end */
+.sx-admin-setup a img{
+  width:25px;
+  height:25px;
+}
 
-/* gnb start */
+/* gnb */
 .sx-gnb-case {
   clear:both;
   display: none;
   position:relative;
+  top:-1px;
   margin-left: 100px;
   margin-right: 150px;
-  max-width: 1024px;
+  max-width: 768px;
+  border-top: 1px solid transparent;
 }
 .sx-gnb{
   overflow:hidden;
@@ -220,9 +236,8 @@ a.sx-gnb-login i{
   background-color:#999999;
   text-decoration: none;
 }
-/* gnb end */
 
-/*mobile gnb start */
+/*mobile gnb */
 .sx-h-3stick {
   margin:10px 7px;
   width:25px;
@@ -295,9 +310,6 @@ button.sx-btn-close{
   height:100%;
   background-color:rgba(000,000,000,0.5);
 }
-.sx-bgcover-off{
-  display:none;
-}
 .sx-bgcover-on{
   display:block;
 }
@@ -341,6 +353,7 @@ button.sx-btn-close{
 }
 .mobile-gnb-case{
   position:fixed;
+  left:-10000px;
   -webkit-transform: translateZ(0);
   z-index:1000;
   top:0;
@@ -348,8 +361,8 @@ button.sx-btn-close{
   width:100%;
   height:100%;
 }
-.mobile-gnb-case-off{
-  left:-10000px;
+.mobile-gnb-case-on{
+  left:0;
 }
 .mobile-gnb-case-on{
   left:0;
@@ -365,34 +378,30 @@ button.sx-btn-close{
   background-color:#fff;
 }
 .mobile-gnb-case .header-panel .sx-user-info{
+  clear:both;
   overflow:hidden;
   padding:0 10px;
   color:#ffffff;
   font-size:1.125em;
   background-color:#3e3e3e;
 }
-.mobile-gnb-case .header-panel .sx-user-info ul{
-  margin-top:12px;
-  clear: both;
+.mobile-gnb-case .header-panel .sx-user-info .sx-user-picture{
+  display: inline-block;
+  position: relative;
+  top:12px;
 }
-.mobile-gnb-case .header-panel .sx-user-info ul li{
-  float:left;
-  line-height: 32px;
+.mobile-gnb-case .header-panel .sx-user-info .sx-user-nickname{
+  display: inline-block;
+  margin-left: 5px;
+  vertical-align: middle;
 }
-.mobile-gnb-case .header-panel .sx-user-info ul li.sx-user-nickname{
-  padding-left:10px;
-}
-.mobile-gnb-case .header-panel .sx-user-info ul li.sx-user-modify{
-  float:right;
+.mobile-gnb-case .header-panel .sx-user-info .sx-admin-setup{
+  display: inline-block; 
+  position: absolute;
+  top:17px;
+  right: 15px;
   width:32px;
   text-align: right;
-}
-.mobile-gnb-case .header-panel .sx-user-info ul li.sx-user-modify img{
-  position: relative;
-  top:-2px;
-  width:25px;
-  height:25px;
-  vertical-align: middle;
 }
 .mobile-gnb-case .header-panel .sx-user-member{
   overflow:hidden;
@@ -441,135 +450,6 @@ button.sx-btn-close{
   text-indent:25px;
   font-size: 1.256em;
 }
-/*mobile gnb end */
-
-/* navi start */
-.sx-navi-show {
-  display:inline-block;
-}
-.sx-navi-hide {
-  display:none;
-}
-.sx-navi {
-  overflow:hidden;
-  margin-top:10px;
-  margin-bottom:5px;
-}
-.sx-navi .sx-navi-prev,
-.sx-navi .sx-navi-next,
-.sx-navi .sx-navi-list {
-  float:left;
-  padding:0 5px 0 5px;
-}
-.sx-navi ol li {
-  float:left;
-  padding:0 2px 0 2px;
-}
-.sx-navi ol li a span {
-  display:inline-block;
-  min-width: 16px;
-  height:20px;
-}
-.sx-navi .activate {
-  color:#FF0000;
-}
-/* navi end */
-
-/* index start */
-/* contents */
-.sx-contents{
-  position:relative;
-  min-height: 300px;
-}
-.header-contents .swiper-container-visual{
-  height:330px;
-}
-.sx-contents-body{
-  word-break:keep-all;
-  padding:10px;height:100%;
-}
-.sx-about-us h1,
-.sx-user-guide h1{
-  padding:45px 0 30px 0;
-  color:#dda050;
-  font-size:1.250em;
-}
-.sx-user-guide h2{
-  padding-left:80px;
-  font-size:1.4375em;
-}
-
-.sx-about-us p.title,
-.sx-user-guide p.title{
-  font-size:2.000em;
-  font-weight:bold;
-}
-.sx-about-us p.comment{
-  padding-top:25px;
-  font-size:1.0625em;
-  line-height:1.687em;
-  color:#6e6e6e;
-}
-.sx-user-guide{
-  padding-top:35px;
-}
-.sx-user-guide ul{
-  padding-top:55px;
-}
-.sx-user-guide ul li{
-  padding-right:15px;
-  width:100%;
-}
-.sx-user-guide ul li p{
-  padding:20px 0 45px 80px;
-  font-size:1.0625em;
-  line-height:1.687em;
-  color:#6e6e6e;
-}
-.sx-user-guide ul li p > a{
-  color:#333333;
-  text-decoration-line: underline;
-}
-.sx-user-guide ul li p > a:hover{
-  color:#000;
-}
-
-.sx-user-guide ul li > a{
-  float:left;
-  padding-top:10px;
-  width:50px;
-  height:50px;
-  text-align:center;
-  color: #e3e3e3;
-  background-color:#5e5e5e;
-  -webkit-border-radius: 3em;
-      -moz-border-radius: 3em;
-           -o-border-radius: 3em;
-                border-radius: 3em;
-}
-.sx-user-guide ul li > a:hover{
-  color:#000;
-  background-color:#cda25a;
-}
-.swiper-container-contents,
-.swiper-container-visual,
-.swiper-container-mobilegnb{
-  height: 100%;
-}
-.swiper-container-visual {
-  background-color:#d3d3d3;
-}
-.swiper-container-visual img{
-  height: 100%;
-}
-
-.swiper-slide {
-  height: auto;
-}
-.swiper-slide-size{
-  height: 100%;
-}
-/* index end */
 
 /**
  * @layout resize
@@ -580,19 +460,27 @@ button.sx-btn-close{
  */
 @media only screen and (min-width: 768px) {
 
+  .sx-skip-menu > a:focus{
+    top:-60px;
+  }
   .sx-logo{
     position:absolute;
     top: 7px;
-    left:0;
+    left:7px;
     z-index:3;    
     margin-left:0;    
+  }
+
+  .sx-admin-setup a img{
+    width:22px;
+    height:22px;
   }
   
   .sx-header-body{  
     clear: both;
     position: relative;
   }
-  .sx-header-body .sx-btn-search{
+  .sx-btn-search{
     display: inline-block;
     position: absolute;
     z-index: 2;
@@ -602,17 +490,17 @@ button.sx-btn-close{
     padding: 5px 8px;    
     font-size: 1.5em;    
   }
-  .sx-header-body .sx-btn-search:hover{
+.sx-btn-search:hover{
     text-decoration: none;
     color:#9e9e9e;
   }  
 
-  /* serach start */
+  /* serach */
   .sx-search-form{
     display: none;
-    position: relative;
-    top:-60px;
+    position: absolute;
     z-index: 2;
+    width:100%;
     height:59px;
     background-color: #fff;
   }
@@ -664,29 +552,33 @@ button.sx-btn-close{
     position: absolute;
     top:-1000px;
   } 
-  /* search end */
 
-  a.sx-gnb-login{
-    top:14px;
-    right:40px;
+.sx-admin-setup {
+    display: inline-block;
+    position:absolute;
+    top:19px;
+    right: 37px;
+    width: 32px;
   }
+  .sx-gnb-login{
+    top:14px;
+    right:45px;
+  }
+
   .mobile-menu-case{
     display:none;
   }
   .sx-gnb-case{
     display:block;
-  } 
-  .header-contents .swiper-container-visual{
-    height:448px;
   }
-  .sx-user-guide ul li{
-    float: left;
-    width:50%;
+}
+
+@media only screen and (min-width: 1024px) {
+  .sx-logo{
+    left:0;
   }
-  .sx-user-guide ul li:nth-child(3){
-    clear:both;
-  }
-  .sx-user-guide ul li:nth-child(5){
-    clear:both;
+  .sx-gnb-login{
+    top:14px;
+    right:40px;
   }
 }

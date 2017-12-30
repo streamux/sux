@@ -1,11 +1,10 @@
-<div class="wrapper">
-  <div class="header">
-    <div class="util"></div>
+<div class="sx-wrapper">
+  <div class="sx-header">
     <h1 class="logo">
       <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux"> 
     </h1> 
   </div>
-  <div class="container">
+  <div class="sx-container">
     <div class="terms_box sx-edgebox">
       <p>
         <span>streamux에 대한 라이센스 명시입니다.<br>
@@ -31,9 +30,9 @@
       6. 기타 의문사항은 http://streamux.com 을 이용해 주시기 바랍니다.
       (질문등에 대한 내용은 메일로 받지 않습니다)</span>        
     </div>
-    <a href="{$rootPath}setup-db"><img src="{$rootPath}modules/install/tpl/images/btn_agree.gif" width="51" height="23" border="0" alt="동의합니다."></a>
+    <a href="{$rootPath}setup-db" class="sx-btn">동의합니다.</a>
   </div>
-  <div class="footer">
+  <div class="sx-footer">
     {include file="$copyrightPath"}
   </div>
 </div>

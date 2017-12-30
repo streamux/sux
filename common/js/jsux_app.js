@@ -53,7 +53,6 @@ jsux.gnb.Menu = jsux.View.create();
 
         var menu_a =  menu.find('> a');
         menu_a.attr('href', _data[mindex].link);
-        menu_a.attr('title', _data[mindex].label);
         menu_a.text(_data[mindex].label);
 
         var sub_panel = menu.find('.sx-gnb-sub > .panel');
@@ -72,7 +71,6 @@ jsux.gnb.Menu = jsux.View.create();
           subMenu.attr('data-mid', mindex);
           subMenu.attr('data-sid', sindex);
           subMenu.find('> a').attr('href', _data[mindex].menu[sindex].link);
-          subMenu.find('> a').attr('title', _data[mindex].menu[sindex].label);
           subMenu.find('> a').text(_data[mindex].menu[sindex].label);
         });
       });
@@ -120,7 +118,8 @@ jsux.gnb.Menu = jsux.View.create();
         e.preventDefault();
         _scope.stopTimer();
 
-        _m.menuOn( $( this ).parent().attr('data-mid'), -1 ); 
+        var mid = $( this ).parent().attr('data-mid');
+        _m.menuOn( mid, -1 ); 
       });
 
       _stage.find('.sx-mmenu > li > a').on('mouseout', function(e){
@@ -134,7 +133,8 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
 
-        var url = _data[$( this ).parent().attr('data-mid')].link;
+        var mid = $( this ).parent().attr('data-mid');
+        var url = _data[mid].link;
         if (url === '') {
           return;
         }
@@ -145,7 +145,10 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
         _scope.stopTimer();
-        _m.menuOn( $( this ).parent().attr('data-mid'), $( this ).parent().attr('data-sid') );
+
+        var mid = $( this ).parent().attr('data-mid');
+        var sid = $( this ).parent().attr('data-sid');
+        _m.menuOn( mid,  sid);
         
       });
 
@@ -159,7 +162,10 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
 
-        var url = _data[$( this ).parent().attr('data-mid')].menu[$( this ).parent().attr('data-sid')].link;
+        var mid = $( this ).parent().attr('data-mid');
+        var sid = $( this ).parent().attr('data-sid');
+        var url = _data[mid].menu[sid].link;
+
         jsux.goURL( jsux.rootPath + url, '_self' );       
       });
     };
@@ -421,6 +427,18 @@ jsux.mobileGnb.Menu.include({
   _startPosX: "100%",
   _targetPosX: 52,
 
+  addClass: function(parent, target) {
+
+    if (!$(parent).hasClass(target)) {
+      $(parent).addClass(target);
+    }
+  },
+  removeClass: function(parent, target) {
+
+    if ($(parent).hasClass(target)) {
+      $(parent).removeClass(target);
+    }
+  },
   update: function(o, value) {
 
     this._data = value;
@@ -496,21 +514,17 @@ jsux.mobileGnb.Menu.include({
   },
   show: function() {
 
-    $('.sx-bgcover').removeClass('sx-bgcover-off');
-    $('.sx-bgcover').addClass('sx-bgcover-on');
-    $('.mobile-gnb-case').removeClass('mobile-gnb-case-off'); 
-    $('.mobile-gnb-case').addClass('mobile-gnb-case-on');
-    $('html').addClass('sx-hide-scroll');
-    $('.wrapper').addClass('wrapper-reposition');
+    this.addClass('.sx-bgcover', 'sx-bgcover-on');
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.addClass('html', 'sx-hide-scroll');
+    this.addClass('.wrapper', 'wrapper-reposition');
   },
   hide: function() {  
 
-    $('.sx-bgcover').removeClass('sx-bgcover-on');
-    $('.sx-bgcover').addClass('sx-bgcover-off');
-    $('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
-    $('.mobile-gnb-case').addClass('mobile-gnb-case-off');
-    $('html').removeClass('sx-hide-scroll');
-    $('.wrapper').removeClass('wrapper-reposition');
+    this.removeClass('.sx-bgcover', 'sx-bgcover-on');
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.removeClass('html', 'sx-hide-scroll');
+    this.removeClass('.wrapper', 'wrapper-reposition');
   },
   showSitemap: function() {
 
@@ -601,7 +615,7 @@ jsux.mobileGnb.Menu.include({
       }     
     });
 
-    $('.mobile-gnb-case .menu-btn-close').on('click', function(e) {
+    $('.menu-btn-close').on('click', function(e) {
       e.preventDefault();
       self.closeSlide();
       self._isClick = false;  

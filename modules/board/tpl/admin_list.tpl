@@ -95,7 +95,7 @@
 {literal}
   <li>
     <a href="#">
-      <span class="title sx-text-warning">등록회원 없음.</span>
+      <span class="title sx-text-warning">등록된 게시판 없음</span>
       <span class="summary sx-text-warning">${msg}</span>
     </a>           
   </li>

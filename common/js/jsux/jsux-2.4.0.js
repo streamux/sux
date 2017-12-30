@@ -275,7 +275,7 @@ window.trace = function( msg, isConsole ) {
       return result;
     },
     addComma: function(num) {
-      
+
       return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     removeComma: function(num) {

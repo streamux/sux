@@ -3,12 +3,25 @@
 class InstallView extends View
 {
 
+  function checkInstall() {
+
+    $context = Context::getInstance();
+    if ($context->installed()) {
+      
+      $uri = _SUX_ROOT_ . 'login';
+      header("Location: $uri");
+      exit();
+    }
+  }
+
   function displayInstall() {
 
-    $this->displayTerms();
+    $this->displayTerms();  
   }
 
   function displayTerms() {
+
+    $this->checkInstall();
 
     $this->skin_path_list['root'] = _SUX_ROOT_;
     $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
@@ -19,6 +32,8 @@ class InstallView extends View
   }
 
   function displaySetupDb() {
+
+    $this->checkInstall();
 
     $context = Context::getInstance();
     $this->request_data['action'] = 'setupDb';
@@ -32,6 +47,8 @@ class InstallView extends View
   }
 
   function displaySetupAdmin() {
+
+    $this->checkInstall();
 
     $context = Context::getInstance();
     $this->request_data['action'] = 'setupAdmin';

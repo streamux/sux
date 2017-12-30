@@ -86,21 +86,19 @@ jsux.fn.setupAdmin = {
 
   checkForm: function ( f ) {
 
-    var aname = f.admin_id.value.length,
-      apass = f.admin_pwd.value.length;
+    var idList = ['admin_id', 'admin_pwd', 'admin_nickname','admin_email', 'yourhome'],
+          msgList = ['관리자 아이디를', '관리자 비밀번호를', '관리자 닉네임을', '관리자 이메일을', '사이트 주소를'];
 
-    if (aname < 1) {
-      trace("관리자 아이디를 입력하세요.");
-      f.admin_id.focus();
-      return (false);
+    for(var i=0; i<idList.length; i++) {
+      var el = f[idList[i]];      
+      if (!el.value) {
+        trace(msgList[i] + ' 입력하세요.');
+        el.focus();
+        return false;
+      }
     }
 
-    if ( apass < 1 ) {
-      trace("관리자 비밀번호를 입력하세요.");
-      f.admin_pwd.focus();
-      return (false);
-    }
-    return (true);
+    return true;
   },
   createTable: function() {
 
@@ -130,6 +128,7 @@ jsux.fn.setupAdmin = {
         _method: f._method.value,
         admin_id: f.admin_id.value,
         admin_pwd: f.admin_pwd.value,
+        admin_nickname: f.admin_nickname.value,
         admin_email: f.admin_email.value,       
         yourhome: f.yourhome.value
       },
@@ -149,7 +148,7 @@ jsux.fn.setupAdmin = {
 
       isLoading = false;
       trace( e.msg );
-      if (e.result =="Y") {
+      if (e.result =='Y') {
         self.createTable();
       }
     });
@@ -158,11 +157,10 @@ jsux.fn.setupAdmin = {
 
     var self = this;
 
-    $("form").on("submit",function( e ) {
+    $('form[name=f_setup_admin]').on('submit',function( e ) {
       e.preventDefault();
 
-      var bool = self.checkForm( e.target );
-      if ( bool === true) {
+      if (self.checkForm( e.target )) {
         self.sendAndLoad( e.target );
       }
     });

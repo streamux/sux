@@ -27,6 +27,7 @@ jsux.gnb.Menu = jsux.View.create();
     this.update = function( o,  value ) {
 
       _data = value;
+      
       this.setUI();       
       this.setEvent();
     };
@@ -53,7 +54,6 @@ jsux.gnb.Menu = jsux.View.create();
 
         var menu_a =  menu.find('> a');
         menu_a.attr('href', _data[mindex].link);
-        menu_a.attr('title', _data[mindex].label);
         menu_a.text(_data[mindex].label);
 
         var sub_panel = menu.find('.sx-gnb-sub > .panel');
@@ -72,7 +72,6 @@ jsux.gnb.Menu = jsux.View.create();
           subMenu.attr('data-mid', mindex);
           subMenu.attr('data-sid', sindex);
           subMenu.find('> a').attr('href', _data[mindex].menu[sindex].link);
-          subMenu.find('> a').attr('title', _data[mindex].menu[sindex].label);
           subMenu.find('> a').text(_data[mindex].menu[sindex].label);
         });
       });
@@ -120,7 +119,8 @@ jsux.gnb.Menu = jsux.View.create();
         e.preventDefault();
         _scope.stopTimer();
 
-        _m.menuOn( $( this ).parent().attr('data-mid'), -1 ); 
+        var mid = $( this ).parent().attr('data-mid');
+        _m.menuOn( mid, -1 ); 
       });
 
       _stage.find('.sx-mmenu > li > a').on('mouseout', function(e){
@@ -134,7 +134,8 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
 
-        var url = _data[$( this ).parent().attr('data-mid')].link;
+        var mid = $( this ).parent().attr('data-mid');
+        var url = _data[mid].link;
         if (url === '') {
           return;
         }
@@ -145,7 +146,10 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
         _scope.stopTimer();
-        _m.menuOn( $( this ).parent().attr('data-mid'), $( this ).parent().attr('data-sid') );
+
+        var mid = $( this ).parent().attr('data-mid');
+        var sid = $( this ).parent().attr('data-sid');
+        _m.menuOn( mid,  sid);
         
       });
 
@@ -159,7 +163,10 @@ jsux.gnb.Menu = jsux.View.create();
 
         e.preventDefault();
 
-        var url = _data[$( this ).parent().attr('data-mid')].menu[$( this ).parent().attr('data-sid')].link;
+        var mid = $( this ).parent().attr('data-mid');
+        var sid = $( this ).parent().attr('data-sid');
+        var url = _data[mid].menu[sid].link;
+
         jsux.goURL( jsux.rootPath + url, '_self' );       
       });
     };

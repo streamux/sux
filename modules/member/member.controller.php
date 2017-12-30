@@ -60,32 +60,6 @@ class MemberController extends Controller
     $this->callback($data);
   }
 
-  /*function selectMemberField() {
-
-    $msg = '데이터 로드를 완료하였습니다.';
-    $result = $this->model->select('member', '*');
-    if ($result) {
-      $rows = $this->model->getRow();
-      $email_arr = split('@', $rows['email']);
-      $rows['email'] = $email_arr[0];
-      $rows['email_tail2'] = $email_arr[1];
-      $resultYN = "Y";
-
-      $data = array(  'data'=>$rows,
-              'msg'=>$msg);     
-    } else {
-      $msg = '데이터 로드를 실패하였습니다.';
-      $data = array('msg'=>$msg);
-      $resultYN = "N";
-    }   
-    
-    $data = array(  'url'=>$rootPath . 'login',
-            'result'=>$resultYN,
-            'msg'=>$msg);
-
-    $this->callback($data);
-  }*/
-
   function insertMemberJoin() {
 
     $context = Context::getInstance();
@@ -354,6 +328,7 @@ class MemberController extends Controller
     $user_id = $posts['user_id'];
     $password = $posts['password'];
 
+    $returnURL = $context->getServer('REQUEST_URI');    
     $rootPath = _SUX_ROOT_; 
 
     $passwordHash = $context->getPasswordHash($password);
@@ -365,22 +340,33 @@ class MemberController extends Controller
     $where = new QueryWhere();
     $where->set('user_id', $user_id);
     $where->set('password', $passwordHash, '=', 'and');
-    $this->model->select('member', 'password', $where);
+    $this->model->select('member', 'category,password', $where);
     
     $row = $this->model->getRow();
-    if ($passwordHash != $row['password']) {
-      $msg = '비밀번호가 잘못되었습니다.';
+    if (preg_match('/^admin/i', $row['category']) == true) {
+
+      $msg .= '관리자 계정입니다. 일반 회원 전환 후 탈퇴 가능합니다.';
       $resultYN = 'N';
     } else {
-      $result = $this->model->delete('member', $where);
-      if ($result) {
-        $msg = '회원 탈퇴를 완료하였습니다.';
-        $resultYN = 'Y';
-      } else {
-        $msg = '회원 탈퇴를 실패하였습니다.';
+
+      if ($passwordHash != $row['password']) {
+        $msg .= '비밀번호가 일치하지 않습니다.';
         $resultYN = 'N';
+      } else {
+
+        $result = $this->model->delete('member', $where);
+        if ($result) {
+
+          $msg = '회원 탈퇴를 완료하였습니다.';
+          $resultYN = 'Y';
+        } else {
+
+          $msg .= '회원 탈퇴를 실패하였습니다.';
+          $resultYN = 'N';
+        }
       }
-    }
+    }    
+
     //$msg .= Tracer::getInstance()->getMessage();
     $data = array(  'url'=>$rootPath . 'logout?_method=insert',
             'result'=>$resultYN,

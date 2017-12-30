@@ -1,33 +1,32 @@
 /* layout */
-.wrapper{
+.sx-wrapper{
   width:100%;
 }
-.header{
-  margin:0 auto;
+.sx-header{
+  display: inline-block;
+  width:100%;
+  text-align: center;
 }
-.container{
+.sx-container{
   margin:0 auto;
   padding:0 5px 0 5px;
   max-width: 768px;
   text-align:center;
 }
-.footer{
+.sx-footer{
   margin-top:55px;
   padding-top:15px;
   height: 60px;
   text-align: center;
   background-color: #333;
 }
-.footer,
-.footer a{
+.sx-footer,
+.sx-footer a{
   font-size: 0.9375em;
   color:#c3c3c3;
 }
 
 /* header */
-.header .util{
-  height:20px;
-}
 .header .logo{
   text-align:center;
 }
@@ -38,32 +37,33 @@
 }
 
 /* install */
-.container .terms_box{
+.sx-container .terms_box{
   margin-bottom:20px;
   padding:40px 20px 30px 20px;
   background-color:#fcfcfc;
   text-align:left;
 }
-.container .terms_box p{
+.sx-container .terms_box p{
   padding-top:7px;
   padding-bottom:7px;
 }
-.container .terms_box h1{
-  font-size: 1.250em;
+.sx-container .terms_box h1{
+  font-size: 1.5em;
+  margin-bottom: 30px;
   font-weight: bold;
 }
-.container .terms_box ul{
+.sx-container .terms_box ul{
   width:100%;
   border:1px solid #e3e3e3;
 }
-.container .terms_box ul li{
+.sx-container .terms_box ul li{
   padding:7px 10px 7px 10px;
   line-height: 20px;
 }
-.container .terms_box input{
+.sx-container .terms_box input{
   width:100%;
 }
-.container .btn-submit{
+.sx-container .sx-btn{
   margin-top: 20px;  
 }
 

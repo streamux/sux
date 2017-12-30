@@ -86,6 +86,22 @@ jsux.app = jsux.app || {};
         this.swiper.update();    
       }
     },
+    resizeSwiper: function() {
+
+       if (this.swiper) {
+        this.swiper.onResize();    
+      }
+    },
+    slideTo: function(num) {
+
+      if (isNaN(num) || num < 0) {
+        num = 0;
+      }
+
+      if (this.swiper) {
+        this.swiper.slideTo(num);    
+      }
+    },
     hasItem: function(id) {
       
       var result = false;
@@ -130,6 +146,7 @@ jsux.app = jsux.app || {};
 
       this.model.push(item);
       this.setData(this.model);
+      this.slideTo(1);
       this.dispatchEvent({type:'add', target: this, model: item});
     },
     cutItem: function(id) {
@@ -144,6 +161,7 @@ jsux.app = jsux.app || {};
       }
 
       this.setData(this.model);
+      this.resizeSwiper();
 
       return selected;
     },
@@ -230,29 +248,29 @@ jsux.app = jsux.app || {};
       this.model = list;
 
       if (!this.id) {
-        jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 입력하세요.', 'jsux_list_manager.js', 98);
+        jsux.logger.error('\'' + this.id + '\' 아이디 식별자를 입력하세요.', 'jsux_list_manager.js');
         return;
       }
 
       if ($(this.id).length < 1) {
-        jsux.logger.error('\'' + this.id + '\' 아이디 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 103);
+        jsux.logger.error('\'' + this.id + '\' 아이디 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js');
         return;
       }
 
       this.template = this.template || this.tmpl;
       if (!this.template) {
-        jsux.logger.error('\'' + this.template + '\' 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js', 109);
+        jsux.logger.error('\'' + this.template + '\' 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js');
         return;
       }
 
       markup = $(this.template);
       if (markup.length < 1) {
-        jsux.logger.error('\'' + this.id + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 115);
+        jsux.logger.error('\'' + this.id + '\' 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js');
         return;
       }     
 
       this.reset();
-      this.makeMenu(list, markup);
+      this.makeMenu(list, markup);      
     },
     makeMenu: function(list, markup) {
      
@@ -310,7 +328,7 @@ jsux.app = jsux.app || {};
 
       this.msg_template = this.msg_template || this.msg_tmpl;
       if (!this.msg_template) {
-        jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js', 161);
+        jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 식별자를 입력하세요.', 'jsux_list_manager.js');
         return;
       }
 

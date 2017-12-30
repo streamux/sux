@@ -9,50 +9,48 @@ class MenuAdminController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $prefix = $context->getPrefix();
 
-    $name = trim($posts['name']);
-    if (!(isset($name) && $name)) {
+    $menuName = $posts['menu_name'];
+    if (!(isset($menuName) && $menuName)) {
       $msg = '이름을 입력해주세요.';
       $resultYN = 'N';
     } else {
 
-      if (!preg_match('/^[a-zA-Z0-9]{3,}$/', $name)) {
-        $json['msg'] .= '메뉴 카테고리 명은 영문과 숫자만 사용 가능합니다.';
-        $json['result'] = 'N';
-
-        $this->callback($json);
-        exit();
-      }
-      $category = $name;
+      $menu_id = 'menu_id' . Utils::getMicrotimeInt();
 
       $where = new QueryWhere();
-      $where->set('category', $category);
+      $where->set('menu_id', $menu_id);
       $this->model->select('menu', 'id', $where);
+
       $num = $this->model->getNumRows();
       if ($num > 0) {
-        $msg .= "${name}은 이름이 이미 존재합니다.<br>";
+        $msg .= "${menuName}은 이름이 이미 존재합니다.<br>";
         $resultYN = 'N';
       } else {
 
         $columns = array();
         $columns[] = '';
-        $columns[] = $category;
-        $columns[] = $name;
-        $columns[] = $category;
+        $columns[] = $menu_id;
+        $columns[] = $menuName;
+        $columns[] = $menu_id;
         $columns[] = 0;
         $columns[] = 'now()';
+
         $result = $this->model->insert('menu', $columns);
-        if (!$result) {
-          $msg = "메뉴 등록을 실패하였습니다.";
-          $resultYN = 'N';
-        } else {
+        if ($result) {
+          $msg .= "메뉴 등록을 완료하였습니다.";
+          $resultYN = 'Y';
+
           $where = new QueryWhere();
-          $where->set('category', $category);
+          $where->set('menu_id', $menu_id);
           $this->model->select('menu', '*', $where);
+          
           $json['data'] = $this->model->getRows();
+        } else {
+          $msg .= "메뉴 등록을 실패하였습니다.";
+          $resultYN = 'N';
         }
-      }           
+      } 
     }
 
     $json['msg'] .= $msg;
@@ -71,12 +69,12 @@ class MenuAdminController extends Controller
     $posts = $context->getPostAll();
 
     $id = $posts['id'];
-    $name = $posts['name'];
+    $menuName = $posts['menuName'];
     $url = $posts['url'];
     $isActive = (int) $posts['is_active'];
 
     $columns = array();
-    $columns['name'] = $name;
+    $columns['name'] = $menuName;
     $columns['url'] = $url;
     $columns['is_active'] = $isActive;
 
@@ -94,7 +92,7 @@ class MenuAdminController extends Controller
       $resultYN = 'N';
     }
 
-    $msg .= Tracer::getInstance()->getMessage();
+    //$msg .= Tracer::getInstance()->getMessage();
     $json['data'] = $row;
     $json['msg'] = $msg;
     $json['result'] = $resultYN;
@@ -115,10 +113,14 @@ class MenuAdminController extends Controller
     $where = new QueryWhere();
     $where->set('id', $id);
     $result = $this->model->delete('menu', $where);
-    if (!$result) {
-      $msg .= '메뉴 삭제를 실패하였습니다.';
+    if ($result) {
+      $msg .= '메뉴 삭제를 완료하였습니다.';
       $resultYN = 'Y';
+    } else {
+      $msg .= '메뉴 삭제를 실패하였습니다.';
+      $resultYN = 'N';
     }
+
     $json['msg'] = $msg;
     $json['result'] = $resultYN;
 
@@ -147,9 +149,6 @@ class MenuAdminController extends Controller
     if (!$result) {
       $msg .= "메뉴파일 저장을 실패하였습니다.<br>";
       $resultYN = 'N';
-    } else {
-      $msg .= "메뉴파일 저장을 완료하였습니다.<br>";
-      $resultYN = 'Y';
     }
 
     function convertMultiToArray($arr) {
@@ -174,7 +173,7 @@ class MenuAdminController extends Controller
     } // end of func
 
     // reset
-    $columns['is_activated'] = 0;
+    $columns['is_active'] = 0;
     $result = $this->model->update('menu', $columns);
 
     $columns = array();
@@ -191,12 +190,15 @@ class MenuAdminController extends Controller
       foreach ($menuList as $key => $value) {
         $where->set('id', $value, '=', 'or');
       }
-      $columns['is_activated'] = 1;
+      $columns['is_active'] = 1;
       $result = $this->model->update('menu', $columns, $where);
-      if (!$result) {
+      if ($result) {
+        $msg .= '메뉴 수정을 완료하였습니다.';
+        $resultYN = 'Y';
+      } else {
         $msg .= '메뉴 수정을 실패하였습니다.';
         $resultYN = 'N';
-      }      
+      }
     } // end of if
       
     $data = json_decode($jsonData, true);

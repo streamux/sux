@@ -22,7 +22,8 @@
 }
 
 /* swiper start */
-.swiper_container_wrapper_list{
+.swiper_container_wrapper_list,
+.swiper_container_draggable_edit{
   position: relative;
   height:280px; 
 }
@@ -31,7 +32,8 @@
   height:280px; 
 }
 .swiper_container_item_list,
-.swiper_container_draggable_list{
+.swiper_container_draggable_list,
+.swiper_container_draggable_edit{
   height:100%;
 }
 .swiper-slide {
@@ -63,10 +65,10 @@
 
 .menu_list_panel {
   position: relative;
+  padding: 10px 0;
 }
-.menu_list_panel > li {
+.menu_list_panel li {
   position: relative;
-  padding:8px 0px;
   width:100%;
   background-color: #fff;
 }
@@ -77,16 +79,12 @@
 .menu_list_panel li a:hover{
   color: #9e9e9e;
 }
-.menu_list_panel li a span{
-  display: block;
-}
-.menu_list_panel li a > i {
-  position: relative;
+.menu_list_panel li i {
   font-size: 1.125em;
 }
 .menu_list_panel li .sx-btn-group {
   position: absolute;
-  top:6px;
+  top:7px;
   right: 0;
   margin-right:10px;
 }
@@ -98,51 +96,62 @@
   color:#fff;
 }
 
-.selected_menu_list{
-  padding-bottom: 10px;  
-}
-.selected_menu_list > li {
-  padding-bottom: 0;  
+.selected_menu_list li button[name=btn_drag],
+.selected_menu_list li .sx_folder_group,
+.selected_menu_list li .sx_name,
+.selected_menu_list li a{
+  position: relative; 
+  vertical-align: middle;
 }
 .selected_menu_list li button[name=btn_drag] {
   display: none;
-  padding: 2px 3px 0 3px;
+  top:0;
+  padding: 9px 3px 3px;  
   border:1px solid transparent;
   cursor: move;
 }
-
 .selected_menu_list li button[name=btn_drag] > i {
+  top:0;
   font-size: 1.5em;
-}
-.selected_menu_list li a {
-  margin-left:10px;
-  padding:2px 0;
-  vertical-align: middle;
+  color: #3e3e3e;
 }
 
-.selected_menu_list li a i {  
-  position: relative;
-  top:2px;
-  color: #a3d4c9;
-  font-size: 1.5em;
+.selected_menu_list li .sx_folder_group{
+  display: inline-block;
+  margin-left: 10px;
+  padding-top: 9px;
+  padding-bottom: 3px;
+  border: 1px solid transparent;
 }
-.selected_menu_list li a i.xi-folder-open {
+.selected_menu_list li .sx_folder_group i {
+  color: #a3d4c9;
+  font-size: 1.5em;  
+}
+.selected_menu_list li .sx_folder_group i.xi-folder-open {
   display: none;
 }
-.selected_menu_list li a .sx_name {
+
+.selected_menu_list li .sx_name {
   display: inline-block;
+  padding-top:2px;
+}
+.selected_menu_list li a{
+  padding-top:5px;
+}
+.selected_menu_list li a i.xi-external-link {
+  font-size: 1.250em;
+  color: #a3a3a3;
+}
+
+.selected_menu_list li .sx-btn-group {
+  display: none;
 }
 .selected_menu_list li .sub_mask{
   margin-top:8px;
   border: -1px solid transparent;
 }
 .selected_menu_list li .sub_mask ul li {
-  position: relative;
-  padding: 8px 0;
   padding-bottom: 0;
-}
-.selected_menu_list li .sx-btn-group {
-  display: none;
 }
 .addable_menu_list li .sx_text_msg,
 .selected_menu_list li .sx_text_msg{
@@ -159,14 +168,12 @@
   color: #fff;
   background-color: #333;
 }
-
-.selected_menu_list li.icon_folder_active > a > i.xi-folder {
+.selected_menu_list li.icon_folder_active .sx_folder_group i.xi-folder {
   display: none;
 }
-.selected_menu_list li.icon_folder_active > a > i.xi-folder-open {
+.selected_menu_list li.icon_folder_active .sx_folder_group i.xi-folder-open {
   display: inline-block;
 }
-
 .selected_menu_list li.item_drag_true {
   position: relative;
   z-index: 1000;
@@ -181,11 +188,10 @@
 .selected_menu_list li.item_drag_true .sx-btn-group {
   cursor: move;  
 }
-
 .selected_menu_list li.selected_editing button[name=btn_drag] {
   display: inline-block;
 }
-.selected_menu_list li.selected_editing a {
+.selected_menu_list li.selected_editing .sx_folder_group{
   margin-left: 0;
 }
 .selected_menu_list li.selected_editing .sx-btn-group {
@@ -213,6 +219,22 @@
   display: none;
 }
 
+.addable_menu_list li {
+  padding:8px 0;
+}
+.addable_menu_list li span{
+  margin-left:10px;
+}
+.addable_menu_list li a {
+  margin-top:-1px;
+  vertical-align: middle;
+}
+.addable_menu_list li .sx_date{
+  display: block;  
+}
+.addable_menu_list li .sx_date i{
+  vertical-align: middle;
+}
 .addable_menu_list li .sx-btn-group {
   top:12px;
 }
@@ -221,9 +243,6 @@
 }
 .addable_menu_list > li:first-child {
   border-top:1px solid transparent;
-}
-.addable_menu_list > li > a {
-  margin-left:10px;
 }
 
 .sx-box-content footer {

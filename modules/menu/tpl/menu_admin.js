@@ -5,6 +5,24 @@
  * update 2017.10.18
  */
 
+function editSelectedMenu() {
+
+  try{
+    jsux.fn.list.editSelectedMenu();
+  } catch(error) {
+    alert('페이지 로딩 중...');
+  }
+}
+
+function saveGnbJson() {
+
+  try{
+    jsux.fn.list.saveJson();
+  } catch(error) {
+    alert('페이지 로딩 중...');
+  }
+}
+
 //-- MenuListManager
 (function(app, $) {
 
@@ -38,6 +56,7 @@
       restoreItemManager = null;
 
       this.setData(this.model);
+      this.slideTo(1);
       this.dispatchEvent({type:'add', target: this, model: item});
     },
     modify: function(menu) {
@@ -101,6 +120,8 @@
       
       this.setData(this.model);
       this.updateSwiper();
+      this.slideTo(1);
+
       this.dispatchEvent({type:'add', target: this, model: item});
     },
     cutItem: function(id) {
@@ -136,6 +157,7 @@
 
       this.deactivate(elCutitem);
       this.setData(this.model);
+      this.slideTo(1);
       this.dispatchEvent({type:'add', target: this, model: cutItem});
 
        return cutItem[0];
@@ -229,8 +251,8 @@
           }
         } // end of for
 
-      })(this.model);
-
+      });
+      searchMenu(this.model);
       searchMenu = null;
 
       this.setData(this.model);
@@ -522,7 +544,6 @@
         }
 
         $(document).on('mousemove', function(e) {
-
           e.preventDefault();
           self.moveDrag(e);
         });
@@ -530,7 +551,7 @@
         self.startDrag(e);        
       }); 
       
-      $(document).on('mouseup', function(e) {        
+      $(document).on('mouseup', function(e) { 
 
         $(document).off('mousemove');
         self.stopDrag(e);
@@ -584,7 +605,8 @@
     tmpl: '',
     markup: '',
     model: null,
-
+    swiper:null,
+    
     initialize: function(data) {
 
       for (var p in data) {
@@ -622,11 +644,15 @@
       this.model = data || {};
 
       this.setLayout();
-      this.setEvent();
+      this.setEvent();      
     },
     setLayout: function() {
 
+      $(this.id).find('.sx_menu_info').remove();
       $(this.markup).tmpl(this.model).appendTo(this.id);
+     
+      this.swiper = jsux.plugin.createSwiper('.swiper_container_draggable_edit');
+      this.swiper.update();
     },
     setEvent: function() {
 
@@ -756,21 +782,6 @@
     listSwiper: null,
     treeSwiper: null,
 
-    createSwiper: function(className, option) {
-
-      if (!option) {
-        option = {
-          scrollbar: '.swiper-scrollbar',
-          direction: 'vertical',
-          slidesPerView: 'auto',
-          mousewheelControl: true,
-          freeMode: true
-        };
-      }
-
-      var swiper = new Swiper(className, option);
-      return swiper;
-    },
     getMenuModel: function() {
 
       var model = {
@@ -780,7 +791,7 @@
         isDragging:false,
         isModified:false,
         is_active: 0,
-        category: '',
+        menu_id: '',
         name:'',
         posy:0,
         state:'default',
@@ -820,6 +831,7 @@
 
       if (this.treeManager.hasItem(id)) {
         this.treeManager.cutItem(id);
+        this.saveJson();
       }
     },
     selectMenu: function(id) {
@@ -862,9 +874,8 @@
         id: id
       };
 
-      this.listManager.cutItem(id);
+      this.listManager.cutItem(id);      
       this.serviceManager.delete(params);
-      this.saveJson();
     },
     saveJson: function() {
 
@@ -882,7 +893,7 @@
     },
     checkFormVal: function( f ) {
 
-      var labelList = ['메뉴 영문 이름을'];
+      var labelList = ['메뉴 이름을'];
       var inputList = ['menu_name'];
       var isValidForm = true;
       $.each( inputList, function( index, item) {
@@ -902,7 +913,7 @@
 
       return true;  
     },
-    sendJson: function( f ) {
+    createMenu: function( f ) {
 
       var self = this,
             params = {},
@@ -932,10 +943,23 @@
 
       jsux.getJSON( url, params, function( e ) {
 
-        trace( e.msg );     
-        if (e.result == 'Y') {
-          jsux.goURL( jsux.rootPath + 'login');
-        }
+        if (e.result.toUpperCase() === 'Y') {
+          if (e.data && e.data.length > 0) {
+
+            var data = e.data[0];
+            var model = self.getMenuModel();
+            $.each(model, function(key) {
+              if (data[key]) {
+                model[key] = data[key];
+              }            
+            });
+
+            self.listManager.addItem(model);            
+          } //end of if         
+        } else {
+
+          trace( e.msg );
+        } //end of if
       });
     },
     setEvent: function() {
@@ -945,52 +969,29 @@
         e.preventDefault();
 
         if (self.checkFormVal(this)) {
-          self.sendJson( e.target );
+          self.createMenu( e.target );
         }
       });
     },
-    setLayout: function() {
+    getConfig: function() {
 
-      var self = this,
-            gnbJsonUrl = $('input[name=gnb_json_path]').val(),
-            listJsonUrl = $('input[name=list_json_url]').val(),
-            saveJsonUrl = $('input[name=save_json_url]').val(),
-            menuUrl = $('input[name=menu_url]').val(),
-            params = {
-              passover: 0,
-              limit: this.limit
-            };
-
-      //-- menu info view
-      var menuInfoSubmit = function(e) {
-
-        self.updateModifyInfo();
+      return {
+        gnbJsonUrl : $('input[name=gnb_json_path]').val(),
+        listJsonUrl : $('input[name=list_json_url]').val(),
+        saveJsonUrl : $('input[name=save_json_url]').val(),
+        menuUrl : $('input[name=menu_url]').val(),
+        params : {
+          passover: 0,
+          limit: this.limit
+        }
       };
-      this.menuInfoView.initialize({
-        id: '#SlidingBoxPanel',
-        tmpl: '#menuInfoTmpl'
-      });      
-      this.menuInfoView.addEventListener('submit', menuInfoSubmit);
+    },
+    setListManger: function() {
 
-      //-- tree manager
-      var loadedHandler = function(e) {
-
-        console.log('loaded : model.name = ' + e.model.name);
-      };
-      this.treeManager.addEventListener('loaded', loadedHandler);
-      this.treeManager.setResource(gnbJsonUrl);
-      this.treeManager.initialize({
-        id: '#selectedMenuList',
-        tmpl: '#treeListTmpl',
-        msg_tmpl: '#warnMsgTmpl'
-      });
-
-      if (!listJsonUrl) {
-        trace('input[name=gnb_json_path] 경로값을 입력하세요');
-        return;
-      }
-
-      //-- list manager
+      var self = this;
+      var config = this.getConfig();
+      var listSwiper = jsux.plugin.createSwiper('.swiper_container_item_list');
+      
       var changeHandler = function( e ) {
         console.log('type : ', e.type);
         //self.listManager.reloadData( e.page, limit);
@@ -999,37 +1000,20 @@
       //this.listManager.addEventListener('loaded', loadedHandler);
       this.listManager.addEventListener('modify', changeHandler);
       this.listManager.addEventListener('remove', changeHandler);
-      this.listManager.setResource(listJsonUrl);
+      this.listManager.setResource(config.listJsonUrl);
       this.listManager.initialize({
         id: '#addableMenuList',
         tmpl: '#menuListTmpl',
         msg_tmpl: '#warnMsgTmpl'
       });
+      this.listManager.setSwiper(listSwiper);
 
-      var serviceUpdateHandler = function(e) {
+      if (!config.listJsonUrl) {
+        trace('input[name=gnb_json_path] 경로값을 입력하세요');
+        return;
+      }
 
-        //console.log(e.event.data);
-        switch(e.type) {
-          case ServiceManagerEvent.UPDATE_COMPLETE: 
-            self.canceModifyMenu();
-            self.saveJson();
-            break;
-
-          case ServiceManagerEvent.DELETE_COMPLETE:
-            break;
-
-          case ServiceManagerEvent.SAVE_COMPLETE:
-            break;
-
-          default:
-            break;
-        }
-      };
-      this.serviceManager.save_url = saveJsonUrl;
-      this.serviceManager.menu_url = menuUrl;
-      this.serviceManager.addEventListener(ServiceManagerEvent.UPDATE_COMPLETE, serviceUpdateHandler);
-
-      jsux.getJSON(listJsonUrl, params, function( e )  {
+      jsux.getJSON(config.listJsonUrl, config.params, function( e )  {
 
         var data = e.data;
         if (data && data.list && data.list.length > 0) {
@@ -1050,18 +1034,39 @@
           self.listManager.setData(collection);
           self.listManager.updateSwiper();
         } else {
-          self.listManager.reset();
+
           e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
+
+          self.listManager.reset();          
           self.listManager.setMsg(e.msg);
         }
       });
+    },
+    setTreeManager: function() {
 
-      if (!gnbJsonUrl) {
+      var self = this;
+      var config = this.getConfig();
+      var treeSwiper = jsux.plugin.createSwiper('.swiper_container_draggable_list');      
+      var loadedHandler = function(e) {
+
+        console.log('loaded : model.name = ' + e.model.name);
+      };
+
+      this.treeManager.addEventListener('loaded', loadedHandler);
+      this.treeManager.setResource(config.gnbJsonUrl);
+      this.treeManager.initialize({
+        id: '#selectedMenuList',
+        tmpl: '#treeListTmpl',
+        msg_tmpl: '#warnMsgTmpl'
+      });
+      this.treeManager.setSwiper(treeSwiper);
+
+      if (!config.gnbJsonUrl) {
         trace('input[name=gnb_json_path] 경로값을 입력하세요');
         return;
       }
 
-      jsux.getJSON(gnbJsonUrl, params, function( e )  {
+      jsux.getJSON(config.gnbJsonUrl, config.params, function( e )  {
 
         var data = e.data;
         if (data && data.list && data.list.length > 0) {
@@ -1078,53 +1083,75 @@
 
             collection.push(model);
           });
+
           self.treeManager.setData(collection);
-          
-          var checkLoadded = setTimeout(function() {
-
-            if (self.listManager.getLength() > 0) {
-
-              self.treeManager.updateSwiper();            
-              clearInterval(checkLoadded);
-              checkLoadded = null;
-            }
-          }, 100);        
+          self.treeManager.updateSwiper();
         } else {
-          self.treeManager.reset();
+
           e.msg = e.msg ? e.msg : '설정된 메뉴가 존재하지 않습니다.';
+
+          self.treeManager.reset();          
           self.treeManager.setMsg(e.msg);
         }
-      });   
+      });
+    },
+    setServiceManger: function() {
+
+      var self = this;
+      var config = this.getConfig();
+      var serviceUpdateHandler = function(e) {
+
+        //console.log(e.event.data);
+        switch(e.type) {
+          case ServiceManagerEvent.UPDATE_COMPLETE: 
+            self.canceModifyMenu();
+            self.saveJson();
+            break;
+
+          case ServiceManagerEvent.DELETE_COMPLETE:
+            break;
+
+          case ServiceManagerEvent.SAVE_COMPLETE:
+            break;
+
+          default:
+            break;
+        }
+      };
+      this.serviceManager.save_url = config.saveJsonUrl;
+      this.serviceManager.menu_url = config.menuUrl;
+      this.serviceManager.addEventListener(ServiceManagerEvent.UPDATE_COMPLETE, serviceUpdateHandler);
+    },
+    setMenuInfoView: function() {
+
+      var self = this;
+      var config = this.getConfig();
+
+       //-- menu info view
+      var menuInfoSubmit = function(e) {
+
+        self.updateModifyInfo();
+      };
+      this.menuInfoView.initialize({
+        id: '#SlidingBoxPanel',
+        tmpl: '#menuInfoTmpl'
+      });      
+      this.menuInfoView.addEventListener('submit', menuInfoSubmit);
+    },
+    setLayout: function() {
+
+      this.setMenuInfoView();
+      this.setTreeManager();
+      this.setListManger();
+      this.setServiceManger();
     },
     init: function() {
-
-      var listSwiper = this.createSwiper('.swiper_container_item_list', {
-        scrollbar: '.swiper-scrollbar',
-        direction: 'vertical',
-        slidesPerView: 'auto',
-        mousewheelControl: true,
-        freeMode: true
-      });
-
-      var treeSwiper = this.createSwiper('.swiper_container_draggable_list', {
-        scrollbar: '.swiper-scrollbar',
-        direction: 'vertical',
-        slidesPerView: 'auto',
-        mousewheelControl: true,
-        freeMode: true
-      });
-
-      this.listManager.setSwiper(listSwiper);
-      this.treeManager.setSwiper(treeSwiper);
-
+     
+      this.setLayout();
       this.setEvent();
-      this.setLayout();    
     }
   };
 })(jsux, jQuery);
-
-
-
 
 jsux.fn = jsux.fn || {};
 jsux.fn.modify = {
@@ -1242,11 +1269,6 @@ jsux.fn.modify = {
         self.sendJson( e.target );
       }
     });
-
-    $('#btnCancel').on('click', function(e) {     
-      jsux.goURL( self.returnUrl());
-    });
-
   },
   setLayout: function() {
 

@@ -1,7 +1,7 @@
 <table name="menu">
   <!-- essential -->
   <column name="id" type="int" notnull="not null" auto_increment="auto_increment" primary_key="primary key" />
-  <column name="category" type="varchar" size="120" notnull="not null"/>  
+  <column name="menu_id" type="varchar" size="120" notnull="not null"/>  
   <column name="name" type="varchar" size="50" notnull="not null"/>
   <column name="url" type="varchar" size="120"/>
   <column name="is_active" type="tinyint" size="1"/>  

@@ -102,7 +102,7 @@ jsux.fn.leave = {
       params._method = 'insert';
       jsux.getJSON( url, params, function( e ) {
         
-        if (e.result.toLowerCase() === 'y') {
+        if (e.result.toUpperCase() === 'Y') {
           jsux.goURL(jsux.rootPath + 'login');
         }
       });
@@ -111,7 +111,7 @@ jsux.fn.leave = {
     jsux.getJSON( url, params, function( e ) {
 
       trace( e.msg );
-      if (e.result.toUpperCase() == 'Y') {
+      if (e.result.toUpperCase() === 'Y') {
         logoutHandler(jsux.rootPath + 'logout');
       } else {
         self.resetForm(f);

@@ -220,7 +220,7 @@ class BoardAdminController extends Controller
 
 			// insert into menu	
 			$where->reset();
-			$where->set('category', $category);
+			$where->set('menu_id', $category);
 			$result = $this->model->select('menu', 'id', $where);
 			if ($result) {
 				$numrows = $this->model->getNumRows();
@@ -333,7 +333,7 @@ class BoardAdminController extends Controller
 			}
 
 			$where->reset();
-			$where->set('category', $category);
+			$where->set('menu_id', $category);
 			$result = $this->model->delete('menu', $where);
 			if (!$result) {
 				$msg .= "메뉴 삭제를 실패했습니다.<br>";

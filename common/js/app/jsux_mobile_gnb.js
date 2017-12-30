@@ -9,6 +9,18 @@ jsux.mobileGnb.Menu.include({
   _startPosX: "100%",
   _targetPosX: 52,
 
+  addClass: function(parent, target) {
+
+    if (!$(parent).hasClass(target)) {
+      $(parent).addClass(target);
+    }
+  },
+  removeClass: function(parent, target) {
+
+    if ($(parent).hasClass(target)) {
+      $(parent).removeClass(target);
+    }
+  },
   update: function(o, value) {
 
     this._data = value;
@@ -84,21 +96,17 @@ jsux.mobileGnb.Menu.include({
   },
   show: function() {
 
-    $('.sx-bgcover').removeClass('sx-bgcover-off');
-    $('.sx-bgcover').addClass('sx-bgcover-on');
-    $('.mobile-gnb-case').removeClass('mobile-gnb-case-off'); 
-    $('.mobile-gnb-case').addClass('mobile-gnb-case-on');
-    $('html').addClass('sx-hide-scroll');
-    $('.wrapper').addClass('wrapper-reposition');
+    this.addClass('.sx-bgcover', 'sx-bgcover-on');
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.addClass('html', 'sx-hide-scroll');
+    this.addClass('.wrapper', 'wrapper-reposition');
   },
   hide: function() {  
 
-    $('.sx-bgcover').removeClass('sx-bgcover-on');
-    $('.sx-bgcover').addClass('sx-bgcover-off');
-    $('.mobile-gnb-case').removeClass('mobile-gnb-case-on');
-    $('.mobile-gnb-case').addClass('mobile-gnb-case-off');
-    $('html').removeClass('sx-hide-scroll');
-    $('.wrapper').removeClass('wrapper-reposition');
+    this.removeClass('.sx-bgcover', 'sx-bgcover-on');
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.removeClass('html', 'sx-hide-scroll');
+    this.removeClass('.wrapper', 'wrapper-reposition');
   },
   showSitemap: function() {
 
@@ -189,7 +197,7 @@ jsux.mobileGnb.Menu.include({
       }     
     });
 
-    $('.mobile-gnb-case .menu-btn-close').on('click', function(e) {
+    $('.menu-btn-close').on('click', function(e) {
       e.preventDefault();
       self.closeSlide();
       self._isClick = false;  

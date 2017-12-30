@@ -20,7 +20,7 @@ class DocumentView extends View
 
     $this->document_data['jscode'] = 'contents';
     $this->document_data['module_code'] = $category;
-    $this->document_data['module_name'] = $groupData['document_name'];
+    $this->document_data['module_name'] = $groupData['document_name'];    
 
     /**
      * css, js file path handler
@@ -49,6 +49,8 @@ class DocumentView extends View
       $footerPath = $realPath . "modules/document/tpl/_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
+
+    //$msg .= Tracer::getInstance()->getMessage() . "<br>";
 
     $this->document_data['group'] = $groupData;
     $this->document_data['contents'] = $contentData;

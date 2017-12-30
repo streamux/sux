@@ -1,5 +1,6 @@
 /*jsux.logger.isConsole = false;*/
 /*jsux.logger.logLevel = jsux.LogLevel.WARN;*/
+
 (function(app, $, tweener) {
   var SearchForm = app.View.create();
   SearchForm.include({

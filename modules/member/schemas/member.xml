@@ -11,7 +11,8 @@
   <column name="forget_answer" type="varchar" size="125"/>
   <column name="hp1" type="char" size="3"/>
   <column name="hp2" type="char" size="4"/>
-  <column name="hp3" type="char" size="4"/> 
+  <column name="hp3" type="char" size="4"/>
+  <column name="yoursite" type="varchar" size="120"/> 
   <!-- optional -->
   <column name="recommend_id" type="varchar" size="30"/>
   <column name="job" type="varchar" size="40"/>

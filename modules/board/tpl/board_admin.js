@@ -17,7 +17,7 @@ jsux.fn.list = {
   setLayout: function() {
 
     var self = this,
-          url = $('input[name=list_json_path').val(),
+          url = $('input[name=list_json_path]').val(),
           params = {
             passover: 0,
             limit: this.limit
@@ -441,7 +441,8 @@ jsux.fn.modify = {
 
         formLists = $('input[type=radio]');
         $(formLists).each(function(index) {
-          self.setRadioVal( this.name, e.data[this.name] );
+          var checked = e.data[this.name] ? e.data[this.name] : this.value;
+          self.setRadioVal( this.name, checked );
         });
 
         self.setTextAreaVal('limit_word', e.data.limit_word); 

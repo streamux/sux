@@ -1,0 +1,14 @@
+<query id="insertMemberGroup" action="insert" execution="once">
+  <tables>
+    <table name="member_group"></table>
+  </tables>
+  <columns>
+    <column name="id"></column>
+    <column name="category">administrator</column>
+    <column name="group_name"><![CDATA[관리자]]></column>
+    <column name="summary"><![CDATA[관리자 그룹입니다.]]></column>
+    <column name="header_path"><![CDATA[common/_header.tpl]]></column>
+    <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
+    <column name="date"><![CDATA[now()]]></column>        
+  </columns>  
+</query>

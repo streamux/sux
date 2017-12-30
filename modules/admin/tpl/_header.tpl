@@ -16,30 +16,24 @@
   <div class="sx-container">
     <header>
       <div class="sx-header-bar">
-        <a class="sx-menu-btn" title="메뉴 열기">
-          <ul class="sx-menu">
-            <li></li>
-            <li></li>
-            <li></li>
-          </ul>
-        </a>
         <h1 class="sx-logo">
-          <a href="{$rootPath}admin-admin"><img src="{$rootPath}common/images/sux_logo_white.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"/><span class="sx-logo-title">Admin<span></a>
-        </h1>
+          <a href="{$rootPath}admin-admin"><img src="{$rootPath}common/images/sux_logo_white.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"/><span class="sx-logo-title">Admin</span></a>
+        </h1>             
       </div>  
     </header>
-    <nav class="sx-nav">
-      <div class="sx-nav-bar sx-nav-off">
-        <div id="sxGnbCase" class="sx-gnb-case">
-          <a href="#" class="sx-close-btn" title="메뉴 닫기">
-            <ul class="sx-close">
-              <li></li>
-              <li></li>
-            </ul>
-          </a>      
+    <nav class="sx-nav">      
+      <a href="#" class="sx-menu-btn" title="메뉴 열기">
+        <ul class="sx-menu">
+          <li></li>
+          <li></li>
+          <li></li>
+        </ul>
+      </a>
+      <div class="sx-nav-bar">
+        <div id="sxGnbCase" class="sx-gnb-case">               
           <ul class="sx-gnb lst_group clearfix">
             <li>
-              <a href="#"><i class="xi-bars xi-fw"></i> 메뉴 관리</a>
+              <a href="{$rootPath}menu-admin/list"><i class="xi-bars xi-fw"></i> 메뉴 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}menu-admin/list">메뉴 목록</a></li>
@@ -48,7 +42,7 @@
               </div>
             </li>
             <li>
-              <a href="#"><i class="xi-group xi-fw"></i> 회원 관리</a>
+              <a href="{$rootPath}member-admin/list"><i class="xi-group xi-fw"></i> 회원 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}member-admin/list">회원 목록</a></li>
@@ -60,7 +54,7 @@
               </div>
             </li>
             <li>
-              <a href="#"><i class="xi-comment-o xi-fw"></i> 게시판 관리</a>
+              <a href="{$rootPath}board-admin"><i class="xi-comment-o xi-fw"></i> 게시판 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}board-admin">게시판 목록</a></li>                  
@@ -69,7 +63,7 @@
               </div>
             </li>
             <li>
-              <a href="#"><i class="xi-paper-o xi-fw"></i> 페이지 관리</a>
+              <a href="{$rootPath}document-admin"><i class="xi-paper-o xi-fw"></i> 페이지 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}document-admin" >페이지 목록</a></li>
@@ -78,7 +72,7 @@
               </div>          
             </li>
             <li>
-              <a href="#"><i class="xi-forum-o xi-fw"></i> 팝업 관리</a>
+              <a href="{$rootPath}popup-admin"><i class="xi-forum-o xi-fw"></i> 팝업 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}popup-admin">팝업 목록</a></li>
@@ -87,7 +81,7 @@
               </div>
             </li>
             <li>
-              <a href="#"><i class="xi-chart-line xi-fw"></i> 통계 관리</a>
+              <a href="{$rootPath}analytics-admin/connect-site"><i class="xi-chart-line xi-fw"></i> 통계 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}analytics-admin/connect-site">접속 목록</a></li>
@@ -98,7 +92,13 @@
                 </ul>
               </div>
             </li>
-          </ul>
+          </ul>           
         </div>
-      </div>  
+      </div>
+      <a href="#" class="sx-close-btn" title="메뉴 닫기">
+        <ul class="sx-close">
+          <li></li>
+          <li></li>
+        </ul>
+      </a>
     </nav>

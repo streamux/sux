@@ -55,7 +55,7 @@ class SearchView extends View
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
     $where = new QueryWhere();
-    $where->set('is_activated', true);
+    $where->set('is_active', true);
     $this->model->select('menu', '*', $where);
     $menuRows = $this->model->getRows();
     
@@ -67,7 +67,7 @@ class SearchView extends View
     $where->reset();
     $where->add('(');
     for ($i=0; $i < count($menuRows); $i++) { 
-      $where->set('category', $menuRows[$i]['category'],'=', 'or');
+      $where->set('category', $menuRows[$i]['menu_id'],'=', 'or');
     }
     $where->add(')');
     $where->add('and');
@@ -81,7 +81,6 @@ class SearchView extends View
     $numrows = $this->model->getNumRows();
 
     //echo "<br><br><br><br><br><br>". Tracer::getInstance()->getMessage();
-
     $result = $this->model->select('board', '*', $where, 'id desc', $passover, $limit);    
     if ($result) {
       $contentData['list'] = $this->model->getRows();

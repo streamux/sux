@@ -1,6 +1,39 @@
 .sx-container{
-  padding-top:60px;
   height: 100%;
+}
+.sx-contents{
+  position:relative;
+  min-height: 300px;
+}
+
+.swiper-container-contents,
+.swiper-container-visual,
+.swiper-container-mobilegnb{
+  height: 100%;
+}
+
+/* swiper */
+.swiper-container-visual {
+  height:330px;
+  background-color:#d3d3d3;
+}
+.swiper-container-visual img{
+  height: 100%;
+}
+.swiper-slide {
+  height: auto;
+}
+.swiper-slide-size{
+  height: 100%;
+}
+
+/* main content */
+.starter_title{
+  text-align: center;
+}
+.starter_template {
+    padding: 40px 15px;
+    text-align: center;
 }
 .sx-contents-body{
   word-break:keep-all;
@@ -70,43 +103,13 @@
   background-color:#cda25a;
 }
 
-/* swiper - contents, visual, mobilegnb */
-.swiper-container-contents,
-.swiper-container-visual,
-.swiper-container-mobilegnb{
-  height: 100%;
-}
-.swiper-container-visual {
-  background-color:#d3d3d3;
-}
-.swiper-container-visual img{
-  height: 100%;
-}
-
-.swiper-slide {
-  height: auto;
-}
-.swiper-slide-size{
-  height: 100%;
-}
-
-.starter_title{
-  text-align: center;
-}
-.starter_template {
-    padding: 40px 15px;
-    text-align: center;
-}
-
-/* userguide */
+/* Bootstrap start */
 .container-fluid {
   font-family: Georgia, "Times New Roman", Times, serif;
   color: #555;
 }
 
-/*
- * Globals
- */
+/* Globals */
 .blog-title,
 .starter_title,
 h2, .h2,
@@ -120,20 +123,7 @@ h6, .h6 {
   color: #333;
 }
 
-
-/*
- * Override Bootstrap's default container.
- */
-
-@media (min-width: 1200px) {
-  .container-fluid {
-    width: 970px;
-  }
-}
-/*
- * Blog name and description
- */
-
+/* Blog name and description */
 .blog-header {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -151,10 +141,7 @@ h6, .h6 {
 }
 
 
-/*
- * Main column and sidebar layout
- */
-
+/* Main column and sidebar layout */
 .starter_template,
 .blog-main {
   font-size: 18px;
@@ -191,10 +178,7 @@ h6, .h6 {
 }
 
 
-/*
- * Blog posts
- */
-
+/* Blog posts */
 .blog-post {
   margin-bottom: 60px;
 }
@@ -208,10 +192,7 @@ h6, .h6 {
 }
 
 
-/*
- * Footer
- */
-
+/* Footer */
 .blog-footer {
   padding: 40px 0;
   color: #999;
@@ -223,3 +204,26 @@ h6, .h6 {
   margin-bottom: 0;
 }
 
+/*
+ * Override Bootstrap's default container.
+ */
+@media only screen and (min-width: 768px) {
+  .swiper-container-visual{
+    height:448px;
+  }
+  .sx-user-guide ul li{
+    float: left;
+    width:50%;
+  }
+  .sx-user-guide ul li:nth-child(3){
+    clear:both;
+  }
+  .sx-user-guide ul li:nth-child(5){
+    clear:both;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  .container-fluid {
+    width: 970px;
+  }
+}
