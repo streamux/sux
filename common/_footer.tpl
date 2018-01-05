@@ -14,39 +14,16 @@
   </footer>  
 </div>
 
-<!-- Analytics start -->
 <img src="{$rootPath}analytics/counter" alt="" class="hide">
-<!-- Analytics end //-->
 
 <!-- template start -->
-<script type="sux-templete" id="gnbFirstMenu">
-  <ul class="sx-mmenu">
-    <li data-mid="" data-sid="">
-      <a href="#none"></a>
-      <div class="sx-gnb-sub">
-        <ul class="panel" style="" data-startPosY=""></ul>
+<script type="sux-templete" id="gnbMenuItem">
+  <li class="sx-menu" data-id="-1" data-depth="0">
+    <a href=""></a>
+    <div class="sub_mask">
+        <ul></ul>
       </div>
-    </li>
-  </ul>
-</script>
-<script type="sux-templete" id="gnbSecondMenu">
-  <li class="sx-smenu" data-mid="" data-sid="">
-    <a href="#none"></a>
   </li>
-</script>
-
-<script type="sux-templete" id="suxMobileGnbFirstMenu">
-  <li data-code=""><a href="#"></a></li>
-</script>
-<script type="sux-templete" id="suxMobileGnbSecondMenuCase">
-  <div class="sx-second-menu">
-    <ul>
-      /*display second's depth menu list*/
-    </ul>
-  </div>
-</script>
-<script type="sux-templete" id="suxMobileGnbSecondMenu">
-  <li data-code="" data-sub-code=""><a href="#"></a></li>
 </script>
 
 {if $documentData.group}

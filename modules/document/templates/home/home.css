@@ -6,27 +6,6 @@
   min-height: 300px;
 }
 
-.swiper-container-contents,
-.swiper-container-visual,
-.swiper-container-mobilegnb{
-  height: 100%;
-}
-
-/* swiper */
-.swiper-container-visual {
-  height:330px;
-  background-color:#d3d3d3;
-}
-.swiper-container-visual img{
-  height: 100%;
-}
-.swiper-slide {
-  height: auto;
-}
-.swiper-slide-size{
-  height: 100%;
-}
-
 /* main content */
 .starter_title{
   text-align: center;

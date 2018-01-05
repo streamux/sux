@@ -11,98 +11,112 @@ jsux.gnb.Menu = jsux.View.create();
   var GNB = function( p, m ) {
 
     var _scope = this,
-      _stage = $(p),     
-      _data = null,
-      _list = [],
-      _m = m,
-      _mid = -1,
-      _sid = -1,
-      _oldMid = -1,
-      _oldSid = -1,
-      _activateMid = -1,
-      _activateSid = -1,
-      _timer = -1,
-      _activate = 'active';
+          _path = p,
+          _stage = $(p),     
+          _data = null,
+          _list = [],
+          _m = m,
+          _activateIds = '',
+          _timer = -1,
+
+          _oldItem$ = null;
+
+    this.addClass = function(target, className ) {
+
+      if (!$(target).hasClass(className)) {
+        $(target).addClass(className);
+      }
+    };
+
+    this.removeClass = function(target, className ) {
+
+      if ($(target).hasClass(className)) {
+        $(target).removeClass(className);
+      }
+    };
 
     this.update = function( o,  value ) {
 
       _data = value;
-      
-      this.setUI();       
+    };
+    this.resetUI = function() {
+
+      this.setUI();
       this.setEvent();
     };
-
-    this.setActivateClass = function( className) {
-
-      _activate = className;
-    };
-
     this.setUI = function() {
 
+      var self = this;
       var ty = 0;
-      var markup = $('#gnbFirstMenu').html();
-      var subMarkup = $('#gnbSecondMenu').html();
+      var markup = $('#gnbMenuItem').html();
+      var depth = 0;
 
-      $( _data ).each(function(mindex) {
+      var stage$ = $(_path);
+      if (stage$ && stage$.children().length > 0) {
+        return;
+      }
 
-        ty = (_data[mindex].menu !== undefined) ? -1*_data[mindex].menu.length * 35 : 0;
-      
-        _stage.append(markup);
-        var menu = _stage.find('.sx-mmenu:eq('+mindex+') > li');
-        menu.attr('data-mid', mindex);
-        menu.attr('data-sid', -1);
+      $(_path).empty();
 
-        var menu_a =  menu.find('> a');
-        menu_a.attr('href', _data[mindex].link);
-        menu_a.text(_data[mindex].label);
+      var menuManager = (function f(target, data) {        
 
-        var sub_panel = menu.find('.sx-gnb-sub > .panel');
-        sub_panel.attr('data-startPosY', ty+'px');
-        sub_panel.css('top', ty+'px');
-      });
+        var menu$ = null;
 
-      this.alignUI();
+        $(data).each(function(index) {
 
-      $( _data ).each(function(mindex) {
+          menu$ = $(markup).appendTo(target);
+          menu$.attr('data-id', index);
+          menu$.attr('data-depth', depth);
 
-        $( _data[mindex].menu ).each(function(sindex) {           
-          _stage.find('.sx-mmenu:eq('+mindex+') .sx-gnb-sub > ul').append(subMarkup);
+          var menu_a$ =  menu$.find('> a');
+          menu_a$.attr('href', data[index].link);
+          menu_a$.text(data[index].label);
 
-          var subMenu = _stage.find('.sx-mmenu:eq('+mindex+') .sx-gnb-sub > ul > li:eq('+sindex+')');
-          subMenu.attr('data-mid', mindex);
-          subMenu.attr('data-sid', sindex);
-          subMenu.find('> a').attr('href', _data[mindex].menu[sindex].link);
-          subMenu.find('> a').text(_data[mindex].menu[sindex].label);
+          data[index].depth = depth;
+          data[index].target = target;
         });
+
+        // 1뎁스 메뉴 생성 후 정렬을 먼저 실행 
+        if (depth === 0) self.alignUI();
+
+        for (var i=0; i<data.length; i++) {
+
+          if (data[i].menu && data[i].menu.length > 0) {
+            depth = data[i].depth + 1;
+            target = data[i].target + '> li:eq('+ i + ') > .sub_mask > ul';
+            arguments.callee(target, data[i].menu);
+          }
+        }
       });
+      menuManager(_path, _data);
+      menuManager = null;
     };
 
     this.alignUI = function() {
 
-      var max_width = _stage.width(),
+      var max_width = _stage.outerWidth(),
             max_txtWidth = 0,
             spaceWidth = 0,
             wdRate = 0,
             wd = 0,
-            wd_lastChild = 0,
             sizeList = [];
 
-      _list = _stage.find(".sx-mmenu");
+      _list = _stage.find("> .sx-menu");
 
-      $( _list ).each(function(mindex){
-        max_txtWidth += $(this).find("li > a").width();
+      $( _list ).each(function(index){
+        max_txtWidth += $(this).find("li > a").outerWidth();
       });
 
       spaceWidth = Math.floor((max_width - max_txtWidth)/_data.length);
 
-      $( _list ).each(function(mindex) {
-
-        wdRate = Math.floor((100-0)/(max_width - 0)*(($(this).find("li > a").width()+spaceWidth) - 0) + 0);  
+      $( _list ).each(function(index) {
+        wdRate = Math.floor((100-0)/(max_width - 0)*(($(this).find("li > a").outerWidth()+spaceWidth) - 0) + 0);
 
         // 마지막은 항상 나머지 비율로 100%를 채운다.
-        if (mindex == _list.length-1) {
+        if (index == _list.length-1) {
           wdRate = 100-wd;
         }
+
         wd += wdRate;       
         $( this ).css("width", wdRate+"%");
 
@@ -112,215 +126,132 @@ jsux.gnb.Menu = jsux.View.create();
       _m.setSizeList( sizeList );
     };
 
+    this.getActivatedId = function(el$) {
+
+      var idList = [];
+      var idManager = (function f(target) {
+
+         var depth = target.data('depth');
+         var id = target.data('id');
+         idList.unshift(id);
+
+         if (target && depth && depth >= 0) {
+            arguments.callee(target.parent().parent().parent());
+         }
+      });
+      idManager(el$);
+      idManager = null;
+
+      return idList;
+    };
+
     this.setEvent = function() {
 
-      _stage.find('.sx-mmenu > li > a').on('mouseover', function(e){
+      _stage.find('.sx-menu > a').on('mouseover', function(e){
 
-        e.preventDefault();
         _scope.stopTimer();
 
-        var mid = $( this ).parent().attr('data-mid');
-        _m.menuOn( mid, -1 ); 
+        // ids is same as '1,2,3,...'
+        var ids = _scope.getActivatedId($(this).parent()).toString(',');
+        _m.menuOn(ids);
       });
 
-      _stage.find('.sx-mmenu > li > a').on('mouseout', function(e){
-
-        e.preventDefault();
-        _scope.startTimer();
+      _stage.find('.sx-menu > a').on('mouseout', function(e){
         
-      });
-
-      _stage.find('.sx-mmenu > li > a').on('click', function(e){
-
-        e.preventDefault();
-
-        var mid = $( this ).parent().attr('data-mid');
-        var url = _data[mid].link;
-        if (url === '') {
-          return;
-        }
-        jsux.goURL( jsux.rootPath + url, '_self' ); 
-      });
-
-      _stage.find('.sx-smenu > a').on('mouseover', function(e){
-
-        e.preventDefault();
-        _scope.stopTimer();
-
-        var mid = $( this ).parent().attr('data-mid');
-        var sid = $( this ).parent().attr('data-sid');
-        _m.menuOn( mid,  sid);
-        
-      });
-
-      _stage.find('.sx-smenu > a').on('mouseout', function(e){
-
-        e.preventDefault();
         _scope.startTimer();        
       });
 
-      _stage.find('.sx-smenu > a').on('click', function(e){
+      _stage.find('.sx-menu > a').on('click', function(e){
 
-        e.preventDefault();
+        var url = $( this ).attr('href');
+        if (url === '') {
+          return;
+        }
 
-        var mid = $( this ).parent().attr('data-mid');
-        var sid = $( this ).parent().attr('data-sid');
-        var url = _data[mid].menu[sid].link;
-
-        jsux.goURL( jsux.rootPath + url, '_self' );       
+        jsux.goURL( jsux.rootPath + url, '_self' );
       });
     };
 
-    this.mouseHandler = function(e, obj) {
-      
-      var type = e.type,
-            menu  = null,
-            menu_a = null,
-            oldmenu_a = null,
-            submenu = null,
-            submenu_a = null,
-            old_smenu_a = null,
-            mask = null,
-            panel = null,
-            ty = 0,
-            th = 0,
-            oldMask = null,
-            oldPanel = null,
-            oldth = 0,
-            oldty = 0;
+    this.menuOn = function(ids) {
 
-      _mid  = obj.mid;
-      _sid  = obj.sid;
+      _scope.mouseHandler({type:'mouseover', active_ids: ids});
+    };
+
+    this.menuOff = function() {
+
+      _scope.mouseHandler({type:'mouseout'});
+    };
+
+    this.mouseHandler = function(e) {
+      
+      var self = this;
+      var type = e.type;
+      var activeIds = e.active_ids ? e.active_ids : [];
+      var idList = typeof(activeIds) === 'string' ? activeIds.split(',') : activeIds;
+      var maxDepth = idList.length;
+      var depth = 0;
+      var menuStage$ = $('.sx-gnb');
 
       switch(type) {
 
-        case 'mouseover' :          
-
-          if (_mid > -1) {
-            menu   = _list.eq(_mid);
-            menu_a = menu.find('> li > a');
-            if (!menu_a.hasClass(_activate)) {
-
-              mask = menu.find('.sx-gnb-sub');
-              panel = menu.find('.sx-gnb-sub .panel');
-              ty = 0;
-              th = _list.eq(_mid).find('.sx-gnb-sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-              menu_a.addClass(_activate);
-
-              _scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-
-                var mh = th - panel.css('top').replace(/[^(0-9)]/gi, '');
-                mask.css('height', mh);
-              }});
-            } 
-          }
+        case 'mouseover' :
           
-          if (_sid > -1) {
-            submenu  = _list.eq(_mid).find('.sx-gnb-sub .sx-smenu').eq(_sid);         
-            submenu_a = submenu.find('> li > a');
+          var activeManager = (function f(el$) {
 
-            if (!submenu_a.hasClass(_activate)) {
-              submenu_a = submenu.find('> li > a');
+            var list$ = el$.find('> .sx-menu');
+            list$.each(function(index) {
+
+              var that$ = $(this);
+              if (that$.data('id') == idList[depth]) {
+
+                self.addClass(that$.find('> a'), 'active');
+                self.addClass(that$.find('> .sub_mask'), 'sub_mask_active');
+
+                if (_oldItem$ && that$.data('depth') < _oldItem$.data('depth')) {
+                  self.removeClass(_oldItem$.find('> a'), 'active');
+                  self.removeClass(_oldItem$.find('.sub_mask'), 'sub_mask_active');
+                }
+                _oldItem$ = that$;
+              } else {
+
+                self.removeClass(that$.find('a'), 'active');
+                self.removeClass(that$.find('.sub_mask'), 'sub_mask_active');
+              }
+            });
+
+            depth++;
+            if (depth < maxDepth) {              
+              arguments.callee(list$.find('> .sub_mask > ul'));
             }
-            submenu_a.addClass(_activate);
-          }
-
-          if (_oldMid != _mid && _oldMid > -1) {
-
-            oldmenu_a = _list.eq(_oldMid).find('> li > a');
-
-            oldMask = _list.eq(_oldMid).find('.sx-gnb-sub');
-            oldPanel  = oldMask.find('> .panel');
-            oldty = oldPanel.attr('data-startPosY');
-            oldth = oldPanel.attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-            oldmenu_a.removeClass(_activate);
-
-            _scope.tween( oldPanel, 10, {'top': oldty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-              
-              var mh = oldth - oldPanel.css('top').replace(/[^(0-9)]/gi, '');
-              oldMask.css('height', mh);
-            }});
-          }
-
-          if (_oldSid != _sid && _oldSid > -1) {
-            old_smenu_a = _list.eq(_oldMid).find('.sx-gnb-sub .sx-smenu').eq(_oldSid).find('> li > a');
-            old_smenu_a.removeClass(_activate);
-          }         
-
-          _oldMid = _mid;
-          _oldSid   = _sid;
+          });
+          activeManager(menuStage$);
+          activeManager = null;
           break;
 
         case 'mouseout':
 
-          if (_mid > -1) {
-            menu = _list.eq(_mid);
-            menu_a = menu.find('> li > a');
-            if (menu && menu_a.hasClass(_activate)) {
-
-              panel   = menu.find('.sx-gnb-sub .panel');
-              ty    = menu.find('.sx-gnb-sub .panel').attr('data-startPosY');
-              oldth = _list.eq(_mid).find('.sx-gnb-sub .panel').attr('data-startPosY').replace(/[^(0-9)]/gi, '');
-
-              menu_a.removeClass(_activate);
-              _scope.tween( panel, 10, {'top': ty, ease: Linear.easeOutQuad, useFrames: true, onUpdate: function() {
-              
-                var mh = oldth - $( panel ).css('top').replace(/[^(0-9)]/gi, '');
-                menu.find('.sx-gnb-sub').css('height', mh);
-              }});
-            }
-          }
-
-          if (_sid > -1) {
-            submenu  = menu.find('.sx-gnb-sub .sx-smenu').eq(_sid);
-            submenu_a = submenu.find('> li >a');
-            if (submenu && submenu_a.hasClass(_activate)) {
-              submenu_a.removeClass(_activate);
-            }
-          }
+          self.removeClass(menuStage$.find('a'), 'active');
+           self.removeClass(menuStage$.find('.sub_mask'), 'sub_mask_active');
           break;
 
         default:
           break;
       }
+
+      menuStage$ = null;
     };
 
-    this.activate = function(m, s) {
+    this.activate = function(ids) {
 
-      _activateMid  = parseInt(m, 10);
-      _activateSid  = parseInt(s, 10);
-
-      if (_activateMid <=0 && _activateMid > _data.length) {
-        warn('It not a Avaliable Depth1\'s Number!');
-        return;
-      } 
-
-      if (_activateSid <= 0 && _activateSid > _data[mid].menu.length) {
-        warn('It not a Avaliable Depth2\'s Number!');
-        return;
-      }
-
-      _activateMid  = _activateMid - 1;
-      _activateSid    =  _activateSid - 1;
-
-      this.menuOn( _activateMid, _activateSid);
-    };
-
-    this.menuOn = function(m, s) {
-
-      _scope.mouseHandler({type:'mouseover'}, {mid: m, sid: s});
-    };
-
-    this.menuOff = function() {
-
-      _scope.mouseHandler({type:'mouseout'}, {mid: _mid, sid: _sid});
+      _activateIds = ids;
+      _scope.mouseHandler({type:'mouseover', active_ids: ids});
     };
 
     this.tween = function( target, time, obj) {
 
-      TweenLite.to( target, time, obj);
+      if (TweenLite) {
+        TweenLite.to( target, time, obj);
+      }      
     };
 
     this.startTimer = function() {
@@ -328,8 +259,8 @@ jsux.gnb.Menu = jsux.View.create();
       if (_timer == -1) {
         _timer = setInterval(function(){
 
-          if (_activateMid > -1) {
-            _m.menuOn(_activateMid, _activateSid);
+          if (_activateIds) {
+            _m.menuOn(_activateIds);
           } else {
             _m.menuOff();
           }
@@ -350,7 +281,7 @@ jsux.gnb.Menu = jsux.View.create();
     this.replaceNumber = function( str ) {
 
       return str.replace(/[^(0-9)]/gi, '');
-    };
+    };    
   };
 
   app.create = function( path, m ) {

@@ -8,6 +8,8 @@ jsux.mobileGnb.Menu.include({
   _data: null,
   _startPosX: "100%",
   _targetPosX: 52,
+  _isMobile: false,
+  _isPc: false,
 
   addClass: function(parent, target) {
 
@@ -24,8 +26,136 @@ jsux.mobileGnb.Menu.include({
   update: function(o, value) {
 
     this._data = value;
+
+    this.defaultSetting();
     this.setUI();
     this.setEvent();
+  },
+  resetUI: function() {
+
+  },
+  defaultSetting: function() {
+
+    this._path = jsux.mobileGnb.Menu.path;
+    this._m = jsux.mobileGnb.Menu.m;
+  },
+  setUI: function() {
+
+    var self = this,
+          markup = '',
+          menu$ = null,
+          subMenu = null,
+          menu_stage = null,
+          depth = 0;
+
+    markup = $('#gnbMenuItem').html();
+    menu_stage = $(this._path).empty();
+
+    var menuManager = (function f(target, data) {
+
+      var menu$ = null;
+
+      $(data).each( function( index ){
+
+        menu$ = $(markup).appendTo(target);
+        menu$.attr('data-id', index);
+        menu$.attr('data-depth', depth);
+
+        var menu_a$ =  menu$.find('> a');
+        menu_a$.attr('href', data[index].link);
+        menu_a$.text(data[index].label);
+
+        data[index].depth = depth;
+        data[index].target = target;
+      }); // end of each
+
+      for (var i=0; i<data.length; i++) {
+
+        if (data[i].menu && data[i].menu.length > 0) {
+          depth = data[i].depth + 1;
+          target = data[i].target + '> li:eq('+ i + ') > .sub_mask > ul';
+          arguments.callee(target, data[i].menu);
+        }
+      } //end of for 
+
+
+    });
+    menuManager(this._path, this._data);
+    menuManager = null;
+  },
+  setEvent: function() {
+
+    var self = this;
+
+    $('.mobile-menu-btn').on('mouseover', function(e) {
+      self.addClass('.mobile-menu-bg', 'menu-bg-activate');   
+    });
+
+    $('.mobile-menu-btn').on('mouseout', function(e) {      
+      self.removeClass('.mobile-menu-bg', 'menu-bg-activate');   
+    });
+
+    $('.mobile-menu-btn').on('click', function(e) {
+
+      self.show();
+      self.openSlide();
+      self.hideMobileMenu();
+
+      self._isClick = true;
+    });
+
+    $('.mobile-gnb-case').on('click', function(e) {
+
+      var url = $(e.target).attr('href'),
+        target = $(e.target).attr('target');
+
+      if (!url) {
+         url = $(e.target).parent().attr('href');
+         target = $(e.target).parent().attr('target');
+      }
+
+      if (url) {      
+        self.click(url, target);
+      }     
+    });
+
+    $('.menu-btn-close').on('click', function(e) {
+
+      self.closeSlide();
+      self._isClick = false;  
+    });
+    
+    $('.sx-bgcover').on('click', function(e) {
+
+      self.closeSlide();
+      self._isClick = false;  
+    });
+
+    $(window).on('resize', function(e){
+
+      var tw = $(window).outerWidth();
+      if (tw < 768 && self._isMobile === false) {
+
+        self._isMobile = true;
+        self._isPc = false;
+
+        if (self._isClick === true) {
+          self.show();
+        }
+      } else if (tw >= 768 && self._isPc === false) {
+
+        self._isMobile = false;
+        self._isPc = true;
+
+        self.hide();
+        self._m.resetUI();
+      }
+
+      self._startPosX  = tw;
+    });
+
+    $(window).trigger('resize');
+    this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
   },
   tween: function( target, time, op ) {
     TweenMax.to(target, time, op);
@@ -119,110 +249,6 @@ jsux.mobileGnb.Menu.include({
       jsux.goURL(url, target);
     }
   },
-  setUI: function() {var self = this, markup = '',
-      menu = null,
-      subMenu = null;
-
-    this._path = jsux.mobileGnb.Menu.path;
-    this._m = jsux.mobileGnb.Menu.m;
-    markup = $('#suxMobileGnbFirstMenu').html();
-    var menu_stage = $(this._path).empty();
-
-    $(this._data).each( function( index ){
-
-      menu_stage.append( markup );
-      menu = menu_stage.find('> li:eq('+index+')');
-      menu.attr('data-code', index);
-      menu.find(' > a').attr('href', self._data[index].link);
-      menu.find(' > a').append(self._data[index].label);
-      
-      if (self._data[index].menu !== undefined && self._data[index].menu.length > 0) {        
-        markup = $('#suxMobileGnbSecondMenuCase').html();
-        menu.append( markup );
-        menu.find('.sx-second-menu > ul').empty();
-
-        $(self._data[index].menu).each( function( subIndex){      
-
-          if (self._data[index].menu[subIndex].label) {
-            markup = $('#suxMobileGnbSecondMenu').html();
-            menu.find('.sx-second-menu > ul').append( markup );
-
-            subMenu = menu.find('.sx-second-menu > ul > li:eq('+subIndex+')');
-            subMenu.attr('data-code', index);
-            subMenu.attr('data-sub-code', subIndex);
-            subMenu.find(' > a').attr('href', self._data[index].menu[subIndex].link);
-            subMenu.find(' > a').append(self._data[index].menu[subIndex].label);
-          }           
-        });
-      }     
-    });   
-  },
-  setEvent: function() {
-
-    var self = this;
-    $('.mobile-menu-btn').on('mouseover', function(e) {
-      e.preventDefault();
-      if (!$('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        $('.mobile-menu-bg').addClass('menu-bg-activate');
-      }      
-    });
-    $('.mobile-menu-btn').on('mouseout', function(e) {
-      e.preventDefault();
-      if ($('.mobile-menu-bg').hasClass('menu-bg-activate')) {
-        $('.mobile-menu-bg').removeClass('menu-bg-activate');
-      }      
-    });
-
-    $('.mobile-menu-btn').on('click', function(e) {
-      e.preventDefault();
-      self.show();
-      self.openSlide();
-      self.hideMobileMenu();
-      self._isClick = true;
-    });
-
-    $('.mobile-gnb-case').on('click', function(e) {
-      e.preventDefault();
-
-      var url = $(e.target).attr('href'),
-        target = $(e.target).attr('target');
-
-      if (!url) {
-         url = $(e.target).parent().attr('href');
-         target = $(e.target).parent().attr('target');
-      }
-
-      if (url) {      
-        self.click(url, target);
-      }     
-    });
-
-    $('.menu-btn-close').on('click', function(e) {
-      e.preventDefault();
-      self.closeSlide();
-      self._isClick = false;  
-    });
-    
-    $('.sx-bgcover').on('click', function(e) {
-      e.preventDefault();
-      self.closeSlide();
-      self._isClick = false;  
-    });
-
-    $(window).on('resize', function(e){
-
-      //trace( self._isClick, 1);
-      var tw = $(window).outerWidth();
-      if (tw < 769 && self._isClick === true) {
-        self.show();
-      } else if (tw > 768) {
-        self.hide();
-      }
-      self._startPosX  = tw;
-    });
-    $(window).trigger('resize');
-    this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
-  },
   menuOn: function() {
 
   },
@@ -237,7 +263,7 @@ jsux.mobileGnb.Menu.extend({
 
     if ($(path).length<1) {
 
-      var markup = '<div id="mobileGnb" class="sx-body-panel"><div class="sx-menu-panel"><ul></ul></div></div>';
+      var markup = '<ul id="mobileGnb" class="sx-menu-panel"></ul>';
       $( document.body ).append( markup );
       this.path = '#mobileGnb';
     } else {

@@ -120,7 +120,8 @@ function saveGnbJson() {
       
       this.setData(this.model);
       this.updateSwiper();
-      this.slideTo(1);
+      this.resizeSwiper();
+      /*this.slideTo(1);*/
 
       this.dispatchEvent({type:'add', target: this, model: item});
     },
@@ -157,7 +158,8 @@ function saveGnbJson() {
 
       this.deactivate(elCutitem);
       this.setData(this.model);
-      this.slideTo(1);
+      this.resizeSwiper();
+      /*this.slideTo(1);*/
       this.dispatchEvent({type:'add', target: this, model: cutItem});
 
        return cutItem[0];

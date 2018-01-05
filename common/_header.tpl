@@ -55,8 +55,9 @@
       <div class="mobile-menu-bg"></div>
     </div>
     
+    <!-- GNB  -->
     <div class="sx-gnb-case">
-      <div id="sxGnb" class="sx-gnb"></div>      
+      <ul id="sxGnb" class="sx-gnb"></ul>
     </div>
   
     <!-- Search form -->
@@ -103,7 +104,7 @@
   </header>
 
   <!-- Nav -->
-  <div id="sxNav" class="sx-nav">
+  <div id="nav" class="sx-gnb">
     <div class="mobile-gnb-case mobile-gnb-case-off">
       <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
         <ul class="sx-h-3stick">

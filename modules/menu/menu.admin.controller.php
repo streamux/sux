@@ -16,7 +16,7 @@ class MenuAdminController extends Controller
       $resultYN = 'N';
     } else {
 
-      $menu_id = 'menu_id' . Utils::getMicrotimeInt();
+      $menu_id = 'menu_' . Utils::getMicrotimeInt();
 
       $where = new QueryWhere();
       $where->set('menu_id', $menu_id);

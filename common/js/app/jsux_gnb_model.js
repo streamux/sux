@@ -44,8 +44,15 @@ jsux.gnb.Model = jsux.Model.create();
     setSizeList: function( value ) {
 
       this.sizeList = value;
+    },
+    resetUI: function() {
+      var len = this.observers.length;
+      for (var i=0; i<len; i++) {
+        this.observers[i].resetUI();
+      }
     }
   });
+
 
   app.create = function() {
 

@@ -29,6 +29,7 @@ class LoginAdminController extends Controller {
 
     $adminId = $context->getAdminInfo('admin_id');
     $adminPwd = $context->getAdminInfo('admin_pwd');
+    
     $userPwd = $context->getPasswordHash($userPwd);
 
     if ($userId !== $adminId) {

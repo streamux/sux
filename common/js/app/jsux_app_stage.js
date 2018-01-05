@@ -12,6 +12,14 @@ $(window).ready(function() {
 
   jsux.mobileGnbView = mobileGnbView;
 
+  var mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
+          scrollbar: '.swiper-scrollbar-mobilegnb',
+          direction: 'vertical',
+          slidesPerView: 'auto',
+          mousewheelControl: true,
+          freeMode: true
+        });
+
   pageAppHandler.home = {
 
     init: function() {
@@ -21,10 +29,6 @@ $(window).ready(function() {
   pageAppHandler.sub = {
 
     init: function() {
-
-      $(window).on('scroll touchmove mousewheel', function(e) { 
-        //trace($(e.currentTarget).scrollTop());
-      });
 
       $('.ui-bg-cover').on('scroll touchmove mousewheel', function(e) {
         e.preventDefault();
@@ -46,47 +50,45 @@ $(window).ready(function() {
 
           var data = json.data;
           menuList = [];
-          if (data.length > 0) {            
-            $.each(data, function(index, item) {
-              menuList.push({
-                label: data[index].name,
-                link: data[index].url
-              });
 
-              if (data[index].sub && data[index].sub.length > 0) {
-                menuList[index].menu = [];
-                var sub = data[index].sub;
-                $.each(sub, function(subIndex, suubItem) {
-                  menuList[index].menu.push({
-                    label: sub[subIndex].name,
-                    link: sub[subIndex].url
-                  });
+          if (data.length > 0) {
+
+            var dataManager = (function f(list, data){
+
+              for (var i=0; i<data.length; i++) {
+                list.push({
+                  label: data[i].name,
+                  link: data[i].url,
+                  menu:[]
                 });
+
+                if (data[i].sub && data[i].sub.length > 0) {
+                  arguments.callee(list[i].menu, data[i].sub);
+                }
               }
             });
+
+            dataManager(menuList, data);
+            dataManager = null;
+
+            gnbModel.setData( menuList );
+
+            mobileMenuSlide.update();
+            mobileMenuSlide.onResize();
           }
 
-          gnbModel.setData( menuList );
           //gnbModel.activate( 1, 2 );
-          pageAppHandler.sub.init();
+          pageAppHandler.sub.init();          
         }
       });
     }
   };
 
-  var mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
-    scrollbar: '.swiper-scrollbar-mobilegnb',
-    direction: 'vertical',
-    slidesPerView: 'auto',
-    mousewheelControl: true,
-    freeMode: true
-  });
-
   switch(is_page) {   
     case 'main':
       pageAppHandler.home.init();
       break;
-    default:      
+    default:
       break;      
   }
   pageAppHandler.jsonLoader.load(jsonPath);
