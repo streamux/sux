@@ -30,7 +30,18 @@ class LoginAdminView extends View {
     $this->output();
   }
   function displayLogoutAdmin() {
-    echo 'This is a ViewPage of LogoutAdmin';
+    
+    $context = Context::getInstance();
+    $rootPath = _SUX_ROOT_;
+
+    $context->setSession('admin_ok', '');
+
+    $data = array(  'msg'=>'로그아웃',
+            'result'=>'Y',
+            'url'=>$rootPath . 'login-admin',
+            'delay'=>0);
+      
+    $this->callback($data);
   }
   function displayRegisterAdmin() {
 

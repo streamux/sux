@@ -1,35 +1,34 @@
 <?php
 /**
- * author : streammx@naver.com
- * update date : 2016. 09. 07
- *
- * description : 
- * ----------------------------------------------------------------
- *
- * $navi = New Navi();
- * $navi->passover = 0;     // 게시물 시작 번호 
- * $navi->limit = 10;     // 게시물 노출 개수 
- * $navi->total = 100;      // 게시물 총 개수 
- * $navi->init();
- *
- * $navi->get();          // 속성값 얻기 
- *
- * use $navi's properties like $data.total in smarty's template
- * show sample under code
- *
- * $smarty = new Smarty;
- * $smarty->assign('navi_data', $navi->get());
- * $smarty->display( 'navi_template.tpl' );
- *
- * in 'navi_templete.tpl'
- *
- * {if $navi_data.total > $nowpassover }
- *    <span>Output Numbers</span>
- * {/if}
- *
- * ----------------------------------------------------------------
- * source path : /modules/board/skin/default/_navi.tpl
- *
+ author : streammx@naver.com
+ update date : 2016. 09. 07
+ 
+ description : 
+ ----------------------------------------------------------------
+ 
+ $navi = New Navi();
+ $navi->passover = 0;     // 게시물 시작 번호 
+ $navi->limit = 10;     // 게시물 노출 개수 
+ $navi->total = 100;      // 게시물 총 개수 
+ $navi->init();
+ 
+ $navi->get();          // 속성값 얻기 
+ 
+ use $navi's properties like $data.total in smarty's template
+ show sample under code
+ 
+ $smarty = new Smarty;
+ $smarty->assign('navi_data', $navi->get());
+ $smarty->display( 'navi_template.tpl' );
+ 
+ in 'navi_templete.tpl'
+ 
+ {if $navi_data.total > $nowpassover }
+    <span>Output Numbers</span>
+ {/if}
+ 
+ ----------------------------------------------------------------
+ source path : /modules/board/skin/default/_navi.tpl
  */
 class Navigator extends Object {
 

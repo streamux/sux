@@ -15,6 +15,10 @@ jsux.app = jsux.app || {};
 
     windowListener: function( event, listener) {
 
+      if (!jQuery) {
+        throw new Error('windowListener() : need jQuery plugin');
+      }
+
       $(window).on(event, function(e) {
         listener(e);
       });
@@ -33,19 +37,63 @@ jsux.app = jsux.app || {};
     },
     addClass: function(el, className) {
 
+      if (!jQuery) {
+        throw new Error('addClass() : need jQuery plugin');
+      }
+
       if ($(el).hasClass(className)) {
         return false;
       }
+
       $(el).addClass(className);
       return true;
     },
     removeClass: function(el, className) {
 
-       if (!$(el).hasClass(className)) {
+      if (!jQuery) {
+        throw new Error('removeClass() : need jQuery plugin');
+      }
+      
+      if (!$(el).hasClass(className)) {
         return false;
       }
+
       $(el).removeClass(className);
       return true;
+    },
+    searchParentElement: function(target, className) {
+
+      if (!jQuery) {
+        throw new Error('searchParentElement() : need jQuery plugin');
+      }
+
+      var parent$ = $(target).parent();
+      var str = '';
+
+      do {
+        
+        str += parent$[0].className + "\n";        
+
+        if (parent$.hasClass(className)) {
+          return parent$;
+        } else {
+          parent$ = parent$.parent();
+        }        
+      } while(parent$ !== null);
+      
+      return null;      
+    },
+    hasParentClass: function(target, className) {
+
+      if (!jQuery) {
+        throw new Error('hasParentClass() : need jQuery plugin');
+      }
+
+      if (this.searchParentElement(target, className)) {
+        return true;
+      } else {
+        return false;
+      }
     }
   });
 
@@ -55,11 +103,11 @@ jsux.app = jsux.app || {};
     isLoading: false,
     resource_url: '',
     params: null,
-    id: '',    
-    template: '',
-    msg_template: '',
+    id: '',
     tmpl:'',
+    template: '',
     msg_tmpl: '',
+    msg_template: '',   
     model: [],
     
     setSwiper: function(swiper) {

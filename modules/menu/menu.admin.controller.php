@@ -19,24 +19,24 @@ class MenuAdminController extends Controller
       $menu_id = 'menu_' . Utils::getMicrotimeInt();
 
       $where = new QueryWhere();
-      $where->set('menu_id', $menu_id);
+      $where->set('name', $menuName);
       $this->model->select('menu', 'id', $where);
 
       $num = $this->model->getNumRows();
       if ($num > 0) {
-        $msg .= "${menuName}은 이름이 이미 존재합니다.<br>";
+        $msg .= "이미 등록된 메뉴 이름입니다. 다른 이름을 입력하세요.<br>";
         $resultYN = 'N';
       } else {
 
         $columns = array();
-        $columns[] = '';
-        $columns[] = $menu_id;
-        $columns[] = $menuName;
-        $columns[] = $menu_id;
-        $columns[] = 0;
-        $columns[] = 'now()';
+        $columns['menu_id'] = $menu_id;
+        $columns['name'] = $menuName;
+        $columns['url'] = $menu_id;
+        $columns['date'] = 'now()';
 
         $result = $this->model->insert('menu', $columns);
+
+        $msg .= Tracer::getInstance()->getMessage();
         if ($result) {
           $msg .= "메뉴 등록을 완료하였습니다.";
           $resultYN = 'Y';

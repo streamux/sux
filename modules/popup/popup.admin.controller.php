@@ -65,14 +65,11 @@ class PopupAdminController extends Controller
       $column = array();
       foreach ($columnCaches as $key => $value) {
         if (isset($posts[$value]) && $posts[$value]) {  
-          $column[] = $posts[$value];
-        } else {
-          $column[] = '';
-          if (preg_match('/^(date+)$/', $value) && empty($value)) {
-            $column[] = 'now()';
-          }
+          $column[$key] = $posts[$value];
         }
-      }
+      } //end of foreach
+
+      $column['date'] = 'now()';
 
       $result = $this->model->insert('popup', $column);
       if ($result){

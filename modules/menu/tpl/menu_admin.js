@@ -5,24 +5,6 @@
  * update 2017.10.18
  */
 
-function editSelectedMenu() {
-
-  try{
-    jsux.fn.list.editSelectedMenu();
-  } catch(error) {
-    alert('페이지 로딩 중...');
-  }
-}
-
-function saveGnbJson() {
-
-  try{
-    jsux.fn.list.saveJson();
-  } catch(error) {
-    alert('페이지 로딩 중...');
-  }
-}
-
 //-- MenuListManager
 (function(app, $) {
 
@@ -30,10 +12,6 @@ function saveGnbJson() {
   var MenuListManager = jsux.Model.create(ListManager);
   MenuListManager.include({
     
-    createMenu: function() {
-
-      // 서비스 로직에 추가 
-    },
     addItem: function(item) {
 
       var self = this;
@@ -58,16 +36,6 @@ function saveGnbJson() {
       this.setData(this.model);
       this.slideTo(1);
       this.dispatchEvent({type:'add', target: this, model: item});
-    },
-    modify: function(menu) {
-
-      // 서비스 로직에서 수정 
-      //this.dispatchEvent({type:'modify', target:this, collection: this.model});
-    },
-    remove: function(menu) {
-
-      // 서비스 로직에서 삭제 
-      //this.dispatchEvent({type:'remove', this:this, collection: this.model});
     },
     getLength: function() {
       return this.model.length;
@@ -152,8 +120,8 @@ function saveGnbJson() {
           }
         }
 
-      })(parentModels);
-
+      });
+      searchMenu(parentModels);
       searchMenu = null;
 
       this.deactivate(elCutitem);
@@ -216,8 +184,8 @@ function saveGnbJson() {
           }
         } // end of for
 
-      })(this.model);
-
+      });
+      searchMenu(this.model);
       searchMenu = null;
     },
     unselectMenu: function() {
@@ -235,9 +203,11 @@ function saveGnbJson() {
       var self = this;      
       var editId = this.id + ' > li';
       var editBtn = $('button[name=edit_seleced_menu]');
+      var saveBtn = $('button[name=save_json]');
 
       this.editState = !this.editState;      
       this.setEdittingMode(editBtn, 'sx-btn-active');
+      this.setEdittingMode(saveBtn, 'sx-btn-active');
 
       var searchMenu = (function f(list) {
 
@@ -262,7 +232,11 @@ function saveGnbJson() {
     },
     setEdittingMode: function(item, className) {
 
-      this.editState === true ? ListManager.addClass(item, className) : ListManager.removeClass(item, className);
+      if (this.editState === true) {
+        ListManager.addClass(item, className);
+      } else {
+        ListManager.removeClass(item, className);
+      }
     },
     remove: function(id) {
 
@@ -303,8 +277,8 @@ function saveGnbJson() {
           }
         }
         
-      })(list);
-
+      });
+      childMenuManager(list);
       childMenuManager = null;
 
       if (list.length === 0) {
@@ -401,10 +375,10 @@ function saveGnbJson() {
       }
       return el;
     },
-    startDrag: function(e) {
+    startDrag: function(el , y) {
 
-      var pageY = this.getPageY(e);
-      var el = $(e.target);
+      var pageY = y;
+      var el = $(el);
 
       el = this.searchDraggable(el, 'item_draggable');
       if (!el) {
@@ -426,13 +400,15 @@ function saveGnbJson() {
       this.dragItem$.css({'z-index':1000});
       ListManager.addClass(this.dragItem$[0], 'item_drag_true');
     },
-    moveDrag: function(e) {
+    moveDrag: function(y) {
 
       var self = this;
 
+      console.log('move drag');
+
       if (this.isDragging === false ) return;      
 
-      var pageY = this.getPageY(e);
+      var pageY = y;
 
       // drag 클릭 위치 - drag top 위치의 차이 값
       var offsetY = pageY - this.dragOffsetY;
@@ -502,7 +478,7 @@ function saveGnbJson() {
       this.dragItem$.css({'top': movePosY});
       this.oldOffset = pageY;
     },
-    stopDrag: function(e) {
+    stopDrag: function() {
    
       var self = this;
       if (this.dragItem$) {        
@@ -521,6 +497,8 @@ function saveGnbJson() {
     getLength: function() {
       return this.model.length;
     },
+
+    //setData's method is defined in parent class
     initialize: function(data) {
       
       var self = this;
@@ -528,7 +506,7 @@ function saveGnbJson() {
       for (var p in data) {
         this[p] = data[p];
       }
-      
+
       $(document).on('mousedown', function(e) {
 
         var el = e.target;
@@ -545,19 +523,21 @@ function saveGnbJson() {
           return;
         }
 
+        self.startDrag(e.target, e.pageY);     
+
+        // register event
         $(document).on('mousemove', function(e) {
           e.preventDefault();
-          self.moveDrag(e);
+          self.moveDrag(e.pageY);
         });
 
-        self.startDrag(e);        
-      }); 
-      
-      $(document).on('mouseup', function(e) { 
+        $(document).on('mouseup', function(e) { 
 
-        $(document).off('mousemove');
-        self.stopDrag(e);
-      });
+          $(document).off('mousemove');
+          $(document).off('mouseup');
+          self.stopDrag(e);
+        });       
+      });       
 
       $(document).on('touchstart', function(e) {
 
@@ -573,21 +553,28 @@ function saveGnbJson() {
           return;
         }
 
-        $(document).on('touchmove', function(e) {
-          e.preventDefault();
-          self.moveDrag(e);
-        });
-
-        self.startDrag(e);
+        self.startDrag(e.target, e.originalEvent.touches[0].pageY);
         self.unselectMenu();
-      }); 
 
-      $(window).on('touchend', function(e) {
+        // register event
+        if (self.swiper) {
+          self.swiper.on('touchMove', function(e) {
+            self.moveDrag(e.touches.currentY);
+          });
+        } else {
+          $(document).on('touchmove', function(e) {
+            e.preventDefault();
+            self.moveDrag(e.originalEvent.touches[0].pageY);
+          });
+        }        
 
-        $(document).off('touchmove');
-        e.preventDefault();
-        self.stopDrag(e);
-      });
+        $(document).on('touchend', function(e) {
+          self.swiper.off('touchMove');
+          $(document).off('touchend');
+
+          self.stopDrag();
+        });        
+      });     
     }
   });
 
@@ -849,6 +836,8 @@ function saveGnbJson() {
       this.treeManager.edit();
     },
     modifyMenuInfo: function(id) {
+
+      console.log(id);
       
       var item = this.listManager.getItem(id);
       this.menuInfoView.showPanel();
@@ -946,17 +935,19 @@ function saveGnbJson() {
       jsux.getJSON( url, params, function( e ) {
 
         if (e.result.toUpperCase() === 'Y') {
-          if (e.data && e.data.length > 0) {
 
+          if (e.data && e.data.length > 0) {
             var data = e.data[0];
             var model = self.getMenuModel();
+
             $.each(model, function(key) {
+
               if (data[key]) {
                 model[key] = data[key];
               }            
             });
 
-            self.listManager.addItem(model);            
+            self.listManager.addItem(model);           
           } //end of if         
         } else {
 
@@ -967,12 +958,21 @@ function saveGnbJson() {
     setEvent: function() {
 
       var self = this;
+
       $('form[name=f_admin_menu_add]').on('submit', function( e ) {
         e.preventDefault();
 
         if (self.checkFormVal(this)) {
           self.createMenu( e.target );
         }
+      });
+
+      $('button[name=edit_seleced_menu]').on('click', function(e) {
+        self.editSelectedMenu();
+      });
+
+      $('button[name=save_json]').on('click', function(e) {
+        self.saveJson();
       });
     },
     getConfig: function() {
@@ -1003,12 +1003,12 @@ function saveGnbJson() {
       this.listManager.addEventListener('modify', changeHandler);
       this.listManager.addEventListener('remove', changeHandler);
       this.listManager.setResource(config.listJsonUrl);
+      this.listManager.setSwiper(listSwiper);
       this.listManager.initialize({
         id: '#addableMenuList',
         tmpl: '#menuListTmpl',
         msg_tmpl: '#warnMsgTmpl'
-      });
-      this.listManager.setSwiper(listSwiper);
+      });      
 
       if (!config.listJsonUrl) {
         trace('input[name=gnb_json_path] 경로값을 입력하세요');
@@ -1048,7 +1048,7 @@ function saveGnbJson() {
 
       var self = this;
       var config = this.getConfig();
-      var treeSwiper = jsux.plugin.createSwiper('.swiper_container_draggable_list');      
+      var swiper = jsux.plugin.createSwiper('.swiper_container_draggable_list');      
       var loadedHandler = function(e) {
 
         console.log('loaded : model.name = ' + e.model.name);
@@ -1056,12 +1056,12 @@ function saveGnbJson() {
 
       this.treeManager.addEventListener('loaded', loadedHandler);
       this.treeManager.setResource(config.gnbJsonUrl);
+      this.treeManager.setSwiper(swiper);
       this.treeManager.initialize({
         id: '#selectedMenuList',
         tmpl: '#treeListTmpl',
         msg_tmpl: '#warnMsgTmpl'
-      });
-      this.treeManager.setSwiper(treeSwiper);
+      });      
 
       if (!config.gnbJsonUrl) {
         trace('input[name=gnb_json_path] 경로값을 입력하세요');
@@ -1071,12 +1071,13 @@ function saveGnbJson() {
       jsux.getJSON(config.gnbJsonUrl, config.params, function( e )  {
 
         var data = e.data;
-        if (data && data.list && data.list.length > 0) {
 
+        if (data && data.list && data.list.length > 0) {
           var collection = [];
+
           $.each(data.list, function(index) {
-            
             var model = self.getMenuModel();
+
             $.each(model, function(key) {
               if (data.list[index][key]) {
                 model[key] = data.list[index][key];
@@ -1127,13 +1128,10 @@ function saveGnbJson() {
     setMenuInfoView: function() {
 
       var self = this;
-      var config = this.getConfig();
-
-       //-- menu info view
       var menuInfoSubmit = function(e) {
-
         self.updateModifyInfo();
       };
+
       this.menuInfoView.initialize({
         id: '#SlidingBoxPanel',
         tmpl: '#menuInfoTmpl'

@@ -327,7 +327,8 @@ jsux.fn.groupDelete = {
   },
   sendJSON: function() {
 
-    var params = {
+    var self = this,
+          params = {
             _method: $('input[name=_method]').val(),
             id: $('input[name=id]').val()
           },
@@ -1023,25 +1024,27 @@ jsux.fn.delete = {
 
   returnUrl: function () {
 
-    var id = $('input[name=category]').val(),
+    var id = $('input[name=id]').val(),
          url = jsux.rootPath + 'member-admin/' + id + '/list';
 
     return url;
   },
-  sendJSON: function() {
+  sendJSON: function(f) {
 
     var self = this,
       params = {
         _method:'delete',
-        id :$('input[name=id]').val()
+        category :f.category.value,
+        id :f.id.value,
+        user_id :f.user_id.value
       };
 
     jsux.getJSON(jsux.rootPath + 'member-admin/delete', params, function( e )  {
       
-      if (e.result && e.result.toUpperCase === 'Y') {
+      trace( e.msg );
+
+      if (e.result && e.result.toUpperCase() === 'Y') {
         jsux.goURL( self.returnUrl() );
-      } else {
-        trace( e.msg );
       }
     });
   },
@@ -1049,14 +1052,13 @@ jsux.fn.delete = {
 
     var self = this;
 
-    $('#btnConfirm').on('click', function( e ) {
+    $('form[name=f_member_delete]').on('submit', function( e ) {
       e.preventDefault();
-      self.sendJSON();
+      self.sendJSON(e.target);
     });
 
     $('#btnCancel').on('click', function( e ) {
       e.preventDefault();
-
       jsux.goURL(self.returnUrl());
     });
   },

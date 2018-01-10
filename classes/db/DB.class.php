@@ -2,289 +2,292 @@
 
 class DB extends Object {
 
-	private static $aInstance = NULL;
+  private static $aInstance = NULL;
 
-	var $class_name = 'db_class';
-	var $is_connected = FALSE;
-	var $master_db = NULL;
-	var $query_result = NULL;
-	var $errno = 0;
-	var $errstr = '';
+  var $class_name = 'db_class';
+  var $is_connected = FALSE;
+  var $master_db = NULL;
+  var $query_result = NULL;
+  var $errno = 0;
+  var $errstr = '';
+  var $tracer = null;
 
-	function DB() {
-	
-		$context = Context::getInstance();
-		$db_info = $context->getDBInfo();
-		$db_connect = $this->_connect($db_info);
-		$this->_selectDB($db_info, $db_connect);
-	}
-
-	public static function &getInstance() {
-
-		if (empty(self::$aInstance)) {
-			self::$aInstance = new DB;
-		}
-		return self::$aInstance;
-	}
-
-	function _connect($db_info) {
-
-		$db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
-		if (!$db_connect) {
-			die('SUX cannot connect to DB');
-		}
-
-		if(mysql_error()) {
-
-			$this->setError(mysql_errno(), mysql_error());
-			return;
-		}
-
-		$master_db = 'MYSQL';		
-
-		return $db_connect;
-	}
-
-	function _selectDB($db_info, $db_connect) {
-
-		$select = @mysql_select_db($db_info['db_database'], $db_connect);
-		if (!$select) {
-			die('SUX cannot select DB');
-		}
-		mysql_set_charset("utf8");
-
-		return $select;
-	}
-
-	function isConnected() {
-
-		return $this->master_db ? TRUE : FALSE;
-	}
-
-	function close($connection) {
-
-		@mysql_close();
-	}
-
-	function _selectSql($query=NULL) {
-
-		$select = $query->getField();
-		if ($select != '') {
-			$select = 'SELECT ' . $select;
-		}
+  function DB() {
 
-		$from = $query->getTable();
-		if ($from != '') {
-			$from = ' FROM ' . $from;
-		}
+    $this->tracer = Tracer::getInstance();
 
-		$index_hint_list = $query->getIndexHintList();
-		if ($index_hint_list != '') {
-			$index_hint_list = ' USE INDEX (' . $index_hint_list . ')';
-		}
+    $context = Context::getInstance();
+    $db_info = $context->getDBInfo();
+    $db_connect = $this->_connect($db_info);
+    $this->_selectDB($db_info, $db_connect);
+  }
 
-		$where = $query->getWhere();
-		if ($where != '') {
-			$where = ' WHERE ' . $where;
-		}
+  public static function &getInstance() {
+
+    if (empty(self::$aInstance)) {
+      self::$aInstance = new DB;
+    }
+    return self::$aInstance;
+  }
+
+  function _connect($db_info) {
+
+    $db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
+    if (!$db_connect) {
+      die('SUX cannot connect to DB');
+    }
+
+    if(mysql_error()) {
+
+      $this->setError(mysql_errno(), mysql_error());
+      return;
+    }
+
+    $master_db = 'MYSQL';   
+
+    return $db_connect;
+  }
+
+  function _selectDB($db_info, $db_connect) {
+
+    $select = @mysql_select_db($db_info['db_database'], $db_connect);
+    if (!$select) {
+      die('SUX cannot select DB');
+    }
+    mysql_set_charset("utf8");
+
+    return $select;
+  }
 
-		$groupBy = $query->getGroupBy();
-		if ($groupBy != '') {
-			$groupBy = ' GROUP BY ' . $groupBy;
-		}
+  function isConnected() {
+
+    return $this->master_db ? TRUE : FALSE;
+  }
 
-		$orderBy = $query->getOrderBy();
-		if ($orderBy != '') {
-			$orderBy = ' ORDER BY ' . $orderBy;
-		}
+  function close($connection) {
 
-		$limit = $query->getLimit();
-		if ($limit != '') {
-			$limit = ' LIMIT ' . $limit;
-		}
+    @mysql_close();
+  }
 
-		return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
-	}
+  function _selectSql($query=NULL) {
 
-	/**
-	 * @method _insertSql
-	 * @notice
-	 * 입력 실패 시 필드값에 사칙 연산자( +,-,*,/)가 포함되어 있는지 확인한다.
-	 * Query class 내의 addQuotation 메서드 확인
-	 * Query Class Path : modules/classes/db/query.class.php
-	 */
-	function _insertSql($query=NULL) {
+    $select = $query->getField();
+    if ($select != '') {
+      $select = 'SELECT ' . $select;
+    }
 
-		$tables = $query->getTable();
-		$priority = $query->getPriority();
-		if ($priority != '') {
-			$priority .= ' ';
-		}
-		$keys = $query->getColumn('key');
-		if ($keys != '') {
-			$keys = ' (' . $keys . ')' ;
-		}
-		$values = $query->getColumn('value');
+    $from = $query->getTable();
+    if ($from != '') {
+      $from = ' FROM ' . $from;
+    }
 
-		return 'INSERT ' . $priority . 'INTO ' . $tables . $keys . ' VALUES (' . $values .')';
-	}
+    $index_hint_list = $query->getIndexHintList();
+    if ($index_hint_list != '') {
+      $index_hint_list = ' USE INDEX (' . $index_hint_list . ')';
+    }
 
-	function _updateSql($query=NULL) {
+    $where = $query->getWhere();
+    if ($where != '') {
+      $where = ' WHERE ' . $where;
+    }
 
-		$priority = $query->getPriority();
-		$tables = $query->getTable();
-		$columnList = $query->getColumn();
-		$where = $query->getWhere();	
-		if ($where != '') {
-			$where = ' WHERE ' . $where;
-		}
+    $groupBy = $query->getGroupBy();
+    if ($groupBy != '') {
+      $groupBy = ' GROUP BY ' . $groupBy;
+    }
 
-		return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . $where;
-	}
+    $orderBy = $query->getOrderBy();
+    if ($orderBy != '') {
+      $orderBy = ' ORDER BY ' . $orderBy;
+    }
 
-	function _deleteSql($query=NULL) {
-		
-		$priority = $query->getPriority();
-		$tables = $query->getTable();
-		$where = $query->getWhere();	
+    $limit = $query->getLimit();
+    if ($limit != '') {
+      $limit = ' LIMIT ' . $limit;
+    }
 
-		return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
-	}
+    return $select . ' ' . $from . ' ' . $index_hint_list . ' ' . $where . ' ' . $groupBy . ' ' . $orderBy . ' ' . $limit;
+  }
 
-	function _showSql($query) {
+  /**
+   * @method _insertSql
+   * @notice
+   * 입력 실패 시 필드값에 사칙 연산자( +,-,*,/)가 포함되어 있는지 확인한다.
+   * Query class 내의 addQuotation 메서드 확인
+   * Query Class Path : modules/classes/db/query.class.php
+   */
+  function _insertSql($query=NULL) {
 
-		$db = $query->getDB();
+    $tables = $query->getTable();
+    $priority = $query->getPriority();
+    if ($priority != '') {
+      $priority .= ' ';
+    }
+    $keys = $query->getColumn('key');
+    if ($keys != '') {
+      $keys = ' (' . $keys . ')' ;
+    }
+    $values = $query->getColumn('value');
 
-		return 'SHOW TABLES FROM ' . $db;
-	}
+    return 'INSERT ' . $priority . 'INTO ' . $tables . $keys . ' VALUES (' . $values .')';
+  }
 
-	function _createSql($query) {
+  function _updateSql($query=NULL) {
 
-		$tables = $query->getTable();
-		$schema = $query->getSchema();
+    $priority = $query->getPriority();
+    $tables = $query->getTable();
+    $columnList = $query->getColumn();
+    $where = $query->getWhere();  
+    if ($where != '') {
+      $where = ' WHERE ' . $where;
+    }
 
-		return 'CREATE TABLE ' . $tables . '(' . $schema . ')';
-	}
+    return 'UPDATE ' . $priority . $tables . ' SET ' . $columnList . $where;
+  }
 
-	function _dropSql($query) {
+  function _deleteSql($query=NULL) {
+    
+    $priority = $query->getPriority();
+    $tables = $query->getTable();
+    $where = $query->getWhere();  
 
-		$tables = $query->getTable();
+    return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
+  }
 
-		return 'DROP TABLE ' . $tables;
-	}
+  function _showSql($query) {
 
-	function _query($sql) {
+    $db = $query->getDB();
 
-		return mysql_query($sql);
-	}
+    return 'SHOW TABLES FROM ' . $db;
+  }
 
-	function _fetchArray($result) {
+  function _createSql($query) {
 
-		return mysql_fetch_array($result);
-	}
+    $tables = $query->getTable();
+    $schema = $query->getSchema();
 
-	function _numRows($result) {
+    return 'CREATE TABLE ' . $tables . '(' . $schema . ')';
+  }
 
-		return mysql_num_rows($result);
-	}
+  function _dropSql($query) {
 
-	function select($query) {
+    $tables = $query->getTable();
 
-		$sql = $this->_selectSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+    return 'DROP TABLE ' . $tables;
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function _query($sql) {
 
-	function insert($query) {
+    return mysql_query($sql);
+  }
 
-		$sql = $this->_insertSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);	
+  function _fetchArray($result) {
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+    return mysql_fetch_array($result);
+  }
 
-	function update($query) {
+  function _numRows($result) {
 
-		$sql = $this->_updateSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+    return mysql_num_rows($result);
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function select($query) {
 
-	function delete($query) {
+    $sql = $this->_selectSql($query);
+    
 
-		$sql = $this->_deleteSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function insert($query) {
 
-	function showTables($query) {
+    $sql = $this->_insertSql($query);
+    $this->setLogger($sql);  
 
-		$sql = $this->_showSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function update($query) {
 
-	function createTable($query) {
+    $sql = $this->_updateSql($query);
+    $this->setLogger($sql);
 
-		$sql = $this->_createSql($query);
-		$tracer = Tracer::getInstance();
-		//$tracer->setMessage($sql);
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function delete($query) {
 
-	function dropTable($query) {
+    $sql = $this->_deleteSql($query);
+    $this->setLogger($sql);
 
-		$sql = $this->_dropSql($query);
-		$tracer = Tracer::getInstance();
-		$tracer->setMessage($sql);
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-		$this->query_result = $this->_query($sql);
-		return $this->query_result;
-	}
+  function showTables($query) {
 
-	function getFetchArray($result) {
+    $sql = $this->_showSql($query);
+    $this->setLogger($sql);
 
-		if (isset($result) && $result) {
-			$this->query_result = $result;
-		}
-		//echo $this->query_result;
-		return $this->_fetchArray($this->query_result);
-	}
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-	function getNumRows($result) {
+  function createTable($query) {
 
-		if (isset($result) && $result) {
-			$this->query_result = $result;
-		}
+    $sql = $this->_createSql($query);
+    //$this->setLogger($sql);
 
-		return$this->_numRows($this->query_result);
-	}
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-	function setError($errno = 0, $errstr = 'success') {
+  function dropTable($query) {
 
-		$this->errno = $errno;
-		$this->errstr = $errstr;
-	}
+    $sql = $this->_dropSql($query);
+    $this->setLogger($sql);
 
-	function getError() {
+    $this->query_result = $this->_query($sql);
+    return $this->query_result;
+  }
 
-		return array('no'=>$this->errno, 'msg'=>$this->errstr);
-	}
+  function getFetchArray($result) {
+
+    if (isset($result) && $result) {
+      $this->query_result = $result;
+    }
+    //echo $this->query_result;
+    return $this->_fetchArray($this->query_result);
+  }
+
+  function getNumRows($result) {
+
+    if (isset($result) && $result) {
+      $this->query_result = $result;
+    }
+
+    return$this->_numRows($this->query_result);
+  }
+
+  function setError($errno = 0, $errstr = 'success') {
+
+    $this->errno = $errno;
+    $this->errstr = $errstr;
+  }
+
+  function getError() {
+
+    return array('no'=>$this->errno, 'msg'=>$this->errstr);
+  }
+
+  function setLogger($msg) {
+
+    if (isset($this->tracer) && $this->tracer) {
+      $this->tracer->setMessage($msg);
+    }
+  }
 }
 ?>

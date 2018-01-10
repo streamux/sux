@@ -147,6 +147,15 @@ jsux.gnb.Menu = jsux.View.create();
 
     this.setEvent = function() {
 
+      _stage.find('.sx-menu > a').on('focus', function(e){
+
+        _scope.stopTimer();
+
+        // ids is same as '1,2,3,...'
+        var ids = _scope.getActivatedId($(this).parent()).toString(',');
+        _m.menuOn(ids);
+      });
+
       _stage.find('.sx-menu > a').on('mouseover', function(e){
 
         _scope.stopTimer();
@@ -154,6 +163,11 @@ jsux.gnb.Menu = jsux.View.create();
         // ids is same as '1,2,3,...'
         var ids = _scope.getActivatedId($(this).parent()).toString(',');
         _m.menuOn(ids);
+      });
+
+      _stage.find('.sx-menu > a').on('blur', function(e){
+        
+        _scope.startTimer();        
       });
 
       _stage.find('.sx-menu > a').on('mouseout', function(e){
@@ -231,7 +245,7 @@ jsux.gnb.Menu = jsux.View.create();
         case 'mouseout':
 
           self.removeClass(menuStage$.find('a'), 'active');
-           self.removeClass(menuStage$.find('.sub_mask'), 'sub_mask_active');
+          self.removeClass(menuStage$.find('.sub_mask'), 'sub_mask_active');
           break;
 
         default:
@@ -583,15 +597,15 @@ jsux.mobileGnb.Menu.include({
   },
   show: function() {
 
-    this.addClass('.sx-bgcover', 'sx-bgcover-on');
-    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.addClass('.sx-bgcover', 'sx-bgcover-active');
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.addClass('html', 'sx-hide-scroll');
     this.addClass('.wrapper', 'wrapper-reposition');
   },
   hide: function() {  
 
-    this.removeClass('.sx-bgcover', 'sx-bgcover-on');
-    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.removeClass('.sx-bgcover', 'sx-bgcover-active');
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.removeClass('html', 'sx-hide-scroll');
     this.removeClass('.wrapper', 'wrapper-reposition');
   },

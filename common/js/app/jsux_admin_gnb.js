@@ -38,7 +38,7 @@ var SXAdminMobilePanel = function() {
     });
     $('.sx-menu-btn .sx-menu > li:first-child').animate(option, duration, easing);
 
-     option = {'margin-top':0,'margin-bottom':0};
+    option = {'margin-top':0,'margin-bottom':0};
     $('.sx-menu-btn .sx-menu > li:nth-child(2)').animate(option, duration, easing);
 
     option = {'margin-top':-2,'margin-bottom':10};
@@ -57,19 +57,22 @@ var SXAdminMobilePanel = function() {
     $('.sx-menu-btn .sx-menu > li:last-child').animate(option, duration, easing);
   };
 
-  this.hideCloseBtn = function() {
-    this.removeClass('.sx-close-btn', 'active');
+  this.hideCloseBtn = function() {    
+    this.removeClass('.sx-close-btn', 'sx-close-inactive');
+    this.removeClass('.sx-header', 'sx-header-active');
+    this.removeClass('.sx-bgcover', 'sx-bgcover-active');
   };
 
   this.showCloseBtn = function() {
-    this.removeClass('.sx-close-btn', 'inactive');
-    this.addClass('.sx-close-btn', 'active');
+    this.addClass('.sx-close-btn', 'sx-close-active');    
   };
 
   this.slideInGnbPanel = function() {
 
-    this.removeClass('.sx-gnb-case', 'sx-slide-out');
+    this.addClass('.sx-header', 'sx-header-active');
     this.addClass('.sx-gnb-case', 'sx-slide-in');
+    this.addClass('.sx-bgcover', 'sx-bgcover-active');
+    this.addClass('html', 'sx-hide-scroll');
     this.hideMobileMenu();
     this.removeTransitionEnd();
 
@@ -79,8 +82,9 @@ var SXAdminMobilePanel = function() {
   this.slideOutGnbPanel = function() {
 
     this.removeClass('.sx-gnb-case', 'sx-slide-in');
-    this.addClass('.sx-gnb-case', 'sx-slide-out');
-    this.addClass('.sx-close-btn', 'inactive');
+    this.removeClass('.sx-close-btn', 'sx-close-active');
+    this.removeClass('html', 'sx-hide-scroll');
+    this.addClass('.sx-close-btn', 'sx-close-inactive');
     this.addTransitionEnd();
   };
 
@@ -106,12 +110,12 @@ var SXAdminMobilePanel = function() {
 
   this.showNavPanel = function() {
 
-    this.addClass('.sx-nav-bar', 'sx-nav-on');
+    this.addClass('.sx-nav-bar', 'sx-nav-active');
   };
 
   this.hideNavPanel = function() {
 
-    this.removeClass('.sx-nav-bar', 'sx-nav-on');
+    this.removeClass('.sx-nav-bar', 'sx-nav-active');
   };
 
   this.setEvent = function() {
@@ -173,10 +177,14 @@ var SXAdminMenu = function(){
   this.setEvent = function() {
 
     var menuList = $('.sx-gnb > li > a'),
-          subPanelList = $('.sx-drap-menu');
+          subPanelList = $('.sx-drap-menu'),
+          oldMenu$ = null;
 
     menuList.on('mouseover', function(e){
 
+      e.preventDefault();
+
+      
       var mindex = menuList.index(this);
       var sub = subPanelList[mindex];
       self.showSubMenu(sub);
@@ -188,21 +196,31 @@ var SXAdminMenu = function(){
       selectedSub = sub;   
     });
 
-    menuList.on('touchstart', function(e){
+    menuList.on('touchstart', function(e) {
+      e.preventDefault();
 
-      var mindex = menuList.index(this);
-      var sub = subPanelList[mindex];
-      self.showSubMenu(sub);
+      var menu$ = $(this);
+      self.addClass(menu$[0], 'active');
 
-      if (selectedSub && selectedSub !== sub) {
-         self.hideSubMenu(selectedSub);
-      }     
- 
-      selectedSub = sub;   
+      if (oldMenu$) {
+        self.removeClass(oldMenu$[0], 'active');
+      }
+
+      var url = menu$.attr('href');
+      var target = $(this).attr('target');
+      target = target ? target : '_self';
+
+      if (url && url.match('#') !== true) {
+        jsux.goURL(url, target);
+      }
+
+      oldMenu$ = menu$;
     });
 
     var menuAllList = $('.sx-gnb li a');
     menuAllList.on('focus', function(e) {
+
+      e.preventDefault();
 
       var el$ = $(e.target).parent().parent().parent();
       var className = el$.attr('class');
@@ -222,7 +240,7 @@ var SXAdminMenu = function(){
     });
 
     $('body').on('click', function(e) {
-      
+
       if (e.target.nodeName && e.target.nodeName.toUpperCase() === 'A') {
         e.stopImmediatePropagation();
         return;

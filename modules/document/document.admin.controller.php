@@ -19,8 +19,8 @@ class DocumentAdminController extends Controller
     $where = new QueryWhere();
     $where->set('category', $category);
     $this->model->select('document', 'id', $where);
-
     $numrows = $this->model->getNumRows();
+
     if ($numrows > 0) {
       $msg = $category . '페이지가 이미 등록되어 있습니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -28,12 +28,13 @@ class DocumentAdminController extends Controller
     } else {
       $this->model->select('board_group', 'id', $where);
       $numrows = $this->model->getNumRows();
+
       if ($numrows> 0) {
         $msg = "${category}는 게시판에서 이미 사용하고 있습니다.";
         UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
         exit;
       }
-    }
+    }// end of if
 
     /**
      * @cache's columns 
@@ -43,37 +44,40 @@ class DocumentAdminController extends Controller
     $savePath = 'files/document/';
     $cachePath = './files/caches/queries/document.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
     if ($columnCaches) {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];
         $value = $posts[$key];
 
         if (isset($value) && $value) {
+
           if (preg_match('/^(contents_path)+$/', $key)) {
             $value = $savePath . $category;
           }
-          $columns[] = $value;
-        } else {          
-          if ($key === 'date') {
-            $columns[] = 'now()';
-          } else if ($key === 'ip') {
-            $columns[] = $_SEVER['REMOTE_ADDR'];
-          }  else {
-            $columns[] = '';
-          }       
-        }           
-      }
+          $columns[$key] = $value;
+        } 
+      } //end of for
+
+      $columns['date'] = 'now()';
     } else {
       $msg .= "QueryCacheFile Do Not Exists<br>";
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
     } // end of if
 
     $result = $this->model->insert('document', $columns);
+
     if ($result) {
+      $msg .= "\"${category}\" 페이지 등록을 완료하였습니다.<br>";
+
       $realPath = _SUX_PATH_ . $savePath;
 
       // make new template dir
       $saveFileRealDir = $realPath . $category;
+
       if (!file_exists($saveFileRealDir)) {
         FileHandler::makeDir($saveFileRealDir, false);
       }
@@ -92,10 +96,12 @@ class DocumentAdminController extends Controller
 
       foreach ($buffers as $key => $value) {
         $buffer = $posts['contents_' . $key];
+
         if (isset($buffer) && $buffer) {
           $buffers[$key] = $buffer;
         } else {
           $tempPath = $readtemplatePathList[$key];
+
           if (file_exists($tempPath)) {
             $buffers[$key] = FileHandler::readFile($tempPath);
           } else {
@@ -106,12 +112,14 @@ class DocumentAdminController extends Controller
 
       foreach ($buffers as $key => $value) {
         $buffers[$key] = $posts['contents_' . $key];
+
         if (empty($buffers[$key])) {
           $buffers[$key] = $key . ' 내용을 입력해주세요';
         }
       }
 
       $buffer = $posts['contents'];
+
       if (!empty($buffer)) {
           $buffers['tpl'] = $buffer;
       }
@@ -123,8 +131,10 @@ class DocumentAdminController extends Controller
       $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
 
       foreach ($saveTemplatePathList as $key => $value) {
-        if (isset($buffers[$key]) && $buffers[$key]) {
+
+        if (isset($buffers[$key]) && $buffers[$key]) {          
           $result = FileHandler::writeFile($value, $buffers[$key]);
+
           if (!$result) {
             $msg .= "${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
           }      
@@ -135,28 +145,28 @@ class DocumentAdminController extends Controller
       $routes = array();
       $cacheFilePath = './files/caches/routes/document.cache.php';
       $routeCaches = CacheFile::readFile($cacheFilePath);      
+
       if (isset($routeCaches) && $routeCaches) {
         $routes['categories'] = $routeCaches['categories'];
         $routes['action'] = $routeCaches['action'];
-
         $pattern = sprintf('/(%s)+/i', $category);
         $routeList =  implode(',', $routes['categories']);
+
         if (!preg_match($pattern, $routeList)) {
           $routes['categories'][] = $category;
         }
+
         CacheFile::writeFile($cacheFilePath, $routes);
       }
 
       // insert into menu
       $columns = array();
-      $columns[] = '';
-      $columns[] = $posts['category'];
-      $columns[] = $posts['document_name'];
-      $columns[] = $posts['category'];
-      $columns[] = 0;
-      $columns[] = 'now()';
-
+      $columns['menu_id'] = $posts['category'];
+      $columns['name'] = $posts['document_name'];
+      $columns['url'] = $posts['category'];
+      $columns['date'] = 'now()';
       $result = $this->model->insert('menu', $columns);
+
       if (!$result) {
         $msg .= "메뉴 등록을 실패하였습니다.";
         $resultYN = 'N';
@@ -165,6 +175,7 @@ class DocumentAdminController extends Controller
       $where->reset();
       $where->set('category', $category);
       $result = $this->model->select('document', '*',  $where);
+
       if ($result) {
         $dataObj['list'] = $this->model->getRows();
       } else {
@@ -298,12 +309,10 @@ class DocumentAdminController extends Controller
             }
           } else {
             $columns = array();
-            $columns[] = '';
-            $columns[] = $category;
-            $columns[] = $title;
-            $columns[] = $category;
-            $columns[] = 0;
-            $columns[] = 'now()';
+            $columns['menu_id'] = $category;
+            $columns['name'] = $title;
+            $columns['url'] = $category;
+            $columns['date'] = 'now()';
 
             $result = $this->model->insert('menu', $columns);
             if (!$result) {

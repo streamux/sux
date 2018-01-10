@@ -2,7 +2,7 @@
       <section class="sx-document-panel">
         <h1 class="title">페이지 추가</h1>
         <div class="sx-box-content">
-          <form action="{$rootPath}document-admin/add" method="post" class="sx-form-horizontal">
+          <form action="{$rootPath}document-admin/add" name="f_document_add" method="post" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="insert">
             <input type="hidden" name="skin_path" value="{$rootPath}document-admin/skin-resource">
             <input type="hidden" name="location_back" value="{$rootPath}document-admin">
@@ -67,7 +67,7 @@
               <input type="text" id="footerPath" name="footer_path" size="25" maxlength="50" value="common/_footer.tpl" class="sx-form-control">
             </div>
             <div class="row btn_group text-center">
-              <input type="submit" id="btnConfirm" class="sx-btn" value="확인">
+              <input type="submit" name="btn_confirm" id="btnConfirm" class="sx-btn" value="확인">
               <a href="#" id="btnCancel" class="sx-btn">취소</a>
             </div> 
           </form>

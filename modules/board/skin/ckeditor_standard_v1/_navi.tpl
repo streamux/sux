@@ -6,10 +6,11 @@
 {/if}
 
 {assign var=routLink value="{$routeURI}?passover={$pagination.prevpassover}{$params}"}
-{if $pagination.prevpassover <= 0}
-  {$pagination.prevpassover=0}
+{if $pagination.prevpassover >= 0}
+  <a href="{$routeURI}?passover={$pagination.prevpassover}{$params}" class="sx-pagination-control sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
+{else}
+  <a href="#" class="sx-pagination-control unactive sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
 {/if}
-<a href="{$routeURI}?passover={$pagination.prevpassover}{$params}" class="sx-pagination-control sx-space-right"><i class="xi-angle-left xi-2x"></i></a>
 
 {section name=page start=$pagination.nowpage loop=$pagination.nowpageend}
   {assign var=index value=$smarty.section.page.index}
@@ -27,7 +28,9 @@
     {/if}
   {/if}
 {/section}
-{if $pagination.total <= $pagination.hanpassoverpage }
-  {$pagination.newpassover = $pagination.endpage}
+
+{if $pagination.total > $pagination.hanpassoverpage }
+  <a href="{$uri}?passover={$pagination.newpassover}{$params}" class="sx-pagination-control sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
+{else}
+  <a href="#" class="sx-pagination-control unactive sx-space-left"><i class="xi-angle-right xi-2x"></i></a>
 {/if}
-<a href="{$uri}?passover={$pagination.newpassover}{$params}" class="sx-pagination-control sx-space-left"><i class="xi-angle-right xi-2x"></i></a>

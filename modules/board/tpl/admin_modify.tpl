@@ -159,17 +159,6 @@
               </div>
             </div>
             <div class="sx-form-inline">
-              <label for="" class="sx-control-label label_width">취미</label>
-              <div class="sx-input-group">
-                <input type="checkbox" id="hoby1" name="hobby" value="인터넷"><label for="hoby1" class="sx-control-label">인터넷</label>
-                <input type="checkbox" id="hoby2" name="hobby" value="독서"><label for="hoby2" class="sx-control-label sx-control-label">독서</label>
-                <input type="checkbox" id="hoby3" name="hobby" value="여행"><label for="hoby3" class="sx-control-label">여행</label>
-                <input type="checkbox" id="hoby4" name="hobby" value="낚시"><label for="hoby4" class="sx-control-label">낚시</label>
-                <input type="checkbox" id="hoby5" name="hobby" value="바둑"><label for="hoby5" class="sx-control-label">바둑</label>
-                <input type="checkbox" id="hoby6" name="hobby" value="기타"><label for="hoby6" class="sx-control-label">기타</label>
-              </div>                   
-            </div>
-            <div class="sx-form-inline">
               <label for="emptyName" class="sx-control-label label_width">최근 게시물</label>              
               <div class="sx-input-group">
                 <input type="radio" id="isLatestYes" name="is_latest" value="y">

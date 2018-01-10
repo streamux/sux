@@ -4,7 +4,7 @@
     <p class="sx_subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</p>
   </header>      
   <div class="sx_contents_box sx-edgebox-2px">        
-    <form action="{$rootPath}login-admin" name="f_login" method="post">
+    <form action="{$rootPath}login-admin" name="f_login_admin" method="post">
       <input type="hidden" name="_method" value="insert">
       <div class="sx-form-group">
         <i class="xi-user xi-2x"></i>

@@ -3,33 +3,30 @@ jsux.fn.loginAdmin = {
 
   checkForm: function( f ) {
 
-    var id = f.user_id,
-      pwd = f.user_pwd;
+    var errorMsg = {
+        user_id: '아이디를 입력하세요',
+        user_pwd: '비밀번호를 입력하세요.'
+      };
 
-    if ( id.value.length < 1) {
-      trace("아이디를 입력하세요.");
-      id.focus();
-      return false;       
+    for (var key in errorMsg) {
+     
+      var input = f[key];
+      if (input.value === 0 || input.value === '') {
+        trace(errorMsg[key]);
+        input.focus();
+        return false;
+      }
     }
 
-    if ( pwd.value.length < 1) {
-      trace("비밀번호를 입력하세요.");
-      pwd.focus();
-      return false;       
-    }
     return true;
   },
   setEvent: function() {
 
     var self = this;
-    $('input[type=submit]').on('click',function(e) {
-      e.preventDefault();
+    $('form[name=f_login_admin]').on('submit',function(e) {
 
-      var $form = $('form')[0],
-        key = $(this).attr('name');
-
-      if (key === 'btn_confirm' && self.checkForm($form)) {
-        $('form').submit();
+      if (!self.checkForm(e.target)) {
+        e.preventDefault();
       } 
     });
   },

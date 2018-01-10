@@ -27,16 +27,17 @@ class LoginAdminController extends Controller {
       exit;
     } 
 
-    $adminId = $context->getAdminInfo('admin_id');
-    $adminPwd = $context->getAdminInfo('admin_pwd');
-    
     $userPwd = $context->getPasswordHash($userPwd);
 
-    if ($userId !== $adminId) {
-      UIError::alertToBack('아이디가 일치하지 않습니다.');
-      exit;
-    } else if ($userPwd !== $adminPwd) {
-      UIError::alertToBack('비밀번호가 일치하지 않습니다.');
+    $where = new QueryWhere();
+    $where->set('category', 'administrator');
+    $where->set('user_id', $userId, '=', 'and');
+    $where->set('password', $userPwd, '=', 'and');
+    $this->model->select('member', 'id', $where);
+
+    $rownum = $this->model->getNumRows();
+    if ($rownum < 1) {
+      UIError::alertToBack('정보가 일치하지 않습니다.');
       exit;
     }
 

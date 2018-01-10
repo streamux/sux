@@ -1,4 +1,3 @@
-<div class="sx-contents">
   <section class="sx-menu-panel">
     <header class="header">
       <h1 class="title">메뉴 관리</h1>    
@@ -27,8 +26,10 @@
             <header class="sx-header-panel">
               <h2>메뉴 리스트</h2>
               <div class="sx-btn-group">
-                <button name="edit_seleced_menu" onclick="editSelectedMenu();" class="sx-btn">편집하기</button>
-                <button name="save_json" onclick="saveGnbJson();" class="sx-btn">저장하기</button>
+                <button name="edit_seleced_menu" class="sx-btn">
+                  <span class="editing_label">편집하기</span><span class="edited_label">편집완료</span>
+                </button>
+                <button name="save_json" class="sx-btn">저장하기</button>
               </div>
             </header>
             <div class="swiper_container_wrapper_tree">
@@ -79,7 +80,7 @@
                           <input type="text" id="urllink" name="url" size="25" maxlength="120" value="{literal}${url}{/literal}" class="sx-form-control">
                         </div>
                         <div class="sx-form-group">
-                          <label for="activateState" class="sx-control-label label_width">활성화 상태</label>
+                          <label for="activateState" class="sx-control-label label_width">컨텐츠 활성화 상태</label>
                           <select id="activateState" name="is_active" class="sx-form-control">
                             {assign var=states value=['On'=>1,'Off'=>0]}
                             {foreach $states as $key=>$value}
@@ -132,7 +133,6 @@
       </div>
     </div>
   </section>
-</div>
 
 <!-- mobile start -->
 <script type="jquery-templete" id="treeListTmpl">
@@ -162,7 +162,7 @@
 </script>
 
 <script type="jquery-templete" id="menuListTmpl">
-  <li>    
+  <li>
     <span class="sx_name">
       {literal}${name}{/literal}
     </span>
@@ -188,5 +188,3 @@
 {/literal}
 </script>
 <!-- mobile end -->
-
-<!--<a href="{$rootPath}menu-admin/{literal}${id}{/literal}/modify" class="sx-btn sx-btn-info" onclick="jsux.fn.list.modifyInfo({literal}${id}{/literal});">정보수정</a>-->

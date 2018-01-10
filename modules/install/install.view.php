@@ -6,8 +6,9 @@ class InstallView extends View
   function checkInstall() {
 
     $context = Context::getInstance();
-    if ($context->installed()) {
-      
+
+    // 관리자 로그인 없이 설치를 시도한 경우 
+    if ($context->installed() && $context->isAdminLogin() == false) {
       $uri = _SUX_ROOT_ . 'login';
       header("Location: $uri");
       exit();

@@ -1,9 +1,9 @@
-    <footer>
-      <div class="sx-footer">
-        <span>{include file="$copyrightPath"}</span>
-      </div>    
+  </div><!-- end of container -->
+  <footer>
+    <div class="sx-footer">
+      <span>{include file="$copyrightPath"}</span>
+    </div>    
   </footer>
-  </div>  
 </div>
 
 <script type="text/javascript">
@@ -36,12 +36,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
 <script>window.Swiper || document.write('<script src="{$rootPath}common/js/swiper.min.js"><\/script>')</script>
 
-<script src="{$rootPath}common/js/jsux.min.js"></script>
+<script src="{$rootPath}common/js/jsux.min.js?20180110"></script>
 <script>  jsux.rootPath = {$rootPath};</script>
-<script src="{$rootPath}common/js/jsux_common.min.js"></script>
-<script src="{$rootPath}common/js/jsux_admin_app.min.js"></script>
+<script src="{$rootPath}common/js/jsux_common.min.js?20180110"></script>
+<script src="{$rootPath}common/js/jsux_admin_app.min.js?20180110_2"></script>
+
 {if $documentData.jscode != ''}
-<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.js"></script>
+<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.js?20180110"></script>
+
 <script type="text/javascript">
   jsux.fn['{$documentData.jscode}'].init();
 </script>

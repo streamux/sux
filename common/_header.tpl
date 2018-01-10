@@ -7,13 +7,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
   <link rel="icon" href="./favicon.ico" type="image/x-icon">
-  <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css"> -->
-  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> -->
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/xeicon.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/bootstrap.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.css"> 
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/xeicon/2/xeicon.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css">
+  
   {if $documentData.module_code}
   <link rel="stylesheet" type="text/css" href="{$skinPath}{$documentData.module_code}.css">
   {/if}
@@ -45,62 +44,62 @@
       </h1>
 
       <div class="mobile-menu-case">      
-      <a href="#" class="mobile-menu-btn" title="메뉴 열기" alt="메뉴 열기">        
-        <ul class="sx-h-3stick">
-          <li class="sx-hline1"></li>
-          <li class="sx-hline2"></li>
-          <li class="sx-hline3"></li>
-        </ul>        
+        <a href="#" class="mobile-menu-btn" title="메뉴 열기" alt="메뉴 열기">        
+          <ul class="sx-h-3stick">
+            <li class="sx-hline1"></li>
+            <li class="sx-hline2"></li>
+            <li class="sx-hline3"></li>
+          </ul>        
+        </a>
+        <div class="mobile-menu-bg"></div>
+      </div>
+    
+      <!-- GNB  -->
+      <div class="sx-gnb-case">
+        <ul id="sxGnb" class="sx-gnb"></ul>
+      </div>
+    
+      <!-- Search form -->
+      <button id="btnShowSearchForm" class="sx-btn-search" title="검색" alt="검색">
+        <i class="xi-search"></i>
+      </button>    
+      <div id="gnbSearchForm" class="sx-search-form">
+        <form action="{$rootPath}search" name="gnb_form_search">
+          <div class="sx-form-inline">
+            <label for="searchControlInput" class="sx-control-label">
+              <i class="xi-search"></i><span class="sr-only">검색</span>
+            </label>
+            <input type="text" id="searchControlInput" name="search" class="sx-search-control" placeholder="Search">
+            <input type="submit">
+          </div>
+        </form>
+        <button class="search-btn-close sx-btn-close" title="검색창 닫기" alt="검색창 닫기">
+          <ul class="sx-h-3stick">
+            <li class="sx-hline1"></li>
+            <li class="sx-hline2"></li>
+            <li class="sx-hline3"></li>
+          </ul>
+        </button>
+      </div>
+      
+      <!-- Admin setup -->
+      {if isset($sessionData.grade) && $sessionData.grade > 9}
+      <div class="sx-admin-setup">
+        <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
+      </div>
+      {/if}
+      
+      <!--  Login  -->
+      {if isset($sessionData.user_name) && $sessionData.user_name}
+      <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
+        <i class="xi-user-o xi-2x"></i>
       </a>
-      <div class="mobile-menu-bg"></div>
-    </div>
-    
-    <!-- GNB  -->
-    <div class="sx-gnb-case">
-      <ul id="sxGnb" class="sx-gnb"></ul>
-    </div>
-  
-    <!-- Search form -->
-    <button id="btnShowSearchForm" class="sx-btn-search" title="검색" alt="검색">
-      <i class="xi-search"></i>
-    </button>    
-    <div id="gnbSearchForm" class="sx-search-form">
-      <form action="{$rootPath}search" name="gnb_form_search">
-        <div class="sx-form-inline">
-          <label for="searchControlInput" class="sx-control-label">
-            <i class="xi-search"></i><span class="sr-only">검색</span>
-          </label>
-          <input type="text" id="searchControlInput" name="search" class="sx-search-control" placeholder="Search">
-          <input type="submit">
-        </div>
-      </form>
-      <button class="search-btn-close sx-btn-close" title="검색창 닫기" alt="검색창 닫기">
-        <ul class="sx-h-3stick">
-          <li class="sx-hline1"></li>
-          <li class="sx-hline2"></li>
-          <li class="sx-hline3"></li>
-        </ul>
-      </button>
-    </div>
-    
-    <!-- Admin setup -->
-    {if isset($sessionData.grade) && $sessionData.grade > 9}
-    <div class="sx-admin-setup">
-      <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
-    </div>
-    {/if}
-    
-    <!--  Login  -->
-    {if isset($sessionData.user_name) && $sessionData.user_name}
-    <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
-      <i class="xi-user-o xi-2x"></i>
-    </a>
-    {else}
-    <a href="{$rootPath}login" class="sx-gnb-login" title="로그인" alt="로그인">
-      <i class="xi-user xi-2x"></i>
-    </a>
-    {/if} 
-  </div>    
+      {else}
+      <a href="{$rootPath}login" class="sx-gnb-login" title="로그인" alt="로그인">
+        <i class="xi-user xi-2x"></i>
+      </a>
+      {/if} 
+    </div>    
   </header>
 
   <!-- Nav -->
@@ -158,4 +157,5 @@
     <div class="sx-bgcover"></div>
   </div>
 
+  <!-- content -->
   <div id="sxContents" class="sx-container">

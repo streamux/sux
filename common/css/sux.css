@@ -821,6 +821,7 @@ select.sx-form-group {
   -moz-border-radius: 0.2em;
   -o-border-radius: 0.2em;
   border-radius: 0.2em;
+
   -webkit-transition: all 0.15s ease-out;
   -o-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
@@ -846,6 +847,7 @@ select.sx-form-group {
   color: #555;
   background-color: #fff;
   background-image: none;
+  
   -webkit-transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;
   -o-transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;
   transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;

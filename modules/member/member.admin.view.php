@@ -327,19 +327,18 @@ class MemberAdminView extends View {
     
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-    $sid = $context->getParameter('sid');
 
     $this->document_data['jscode'] = 'delete';
     $this->document_data['module_code'] = 'member';
 
     $where = new QueryWhere();
-    $where->set('id', $sid);
+    $where->set('id', $id);
     $this->model->select('member', 'user_id', $where);
     $row = $this->model->getRow();
 
     $this->document_data['user_id'] = $row['user_id'];
-    $this->document_data['category'] = $id;
-    $this->document_data['id'] = $sid;    
+    $this->document_data['category'] = $row['category'];
+    $this->document_data['id'] = $id;    
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";

@@ -6,9 +6,10 @@ class MemberAdminController extends Controller
 
     $labelList = array('아이디를','비밀번호를','닉네임을','이메일을');
     $ckeckList = array('user_id','password','nick_name','email_address');
-    foreach ($ckeckList as $key => $value) {
 
+    foreach ($ckeckList as $key => $value) {
       if (empty($post[$value])) {
+
         $msg = $post[$value] . $labelList[$key] . ' 입력해주세요.';
         return $msg;
       }
@@ -25,6 +26,7 @@ class MemberAdminController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $prefix = $context->getPrefix();
+
     foreach ($posts as $key => $value) {
       ${$key} = $value;
     }
@@ -37,8 +39,10 @@ class MemberAdminController extends Controller
     $where = new QueryWhere();
     $where->set('category', $category);
     $result = $this->model->select('member_group', 'id', $where);
+
     $rownum = $this->model->getNumrows();
     if ($rownum > 0) {
+
       UIError::alertToBack("'${category}' 그룹 이름이 이미 존재합니다.");
       exit;
     }
@@ -50,30 +54,29 @@ class MemberAdminController extends Controller
     $cachePath = './files/caches/queries/member_group.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
     if (!$columnCaches) {
+
       $msg .= "QueryCacheFile Do Not Exists<br>";
     } else {
+
       $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
+
         $key = $columnCaches[$i];
         $value = $posts[$key];
-
         if (isset($value) && $value) {
-          $columns[] = $value;
-        } else {          
-          if ($key === 'date') {
-            $columns[] = 'now()';
-          } else {
-            $columns[] = '';
-          }
-        }           
-      }
+          $columns[$key] = $value;
+        }        
+      } // end of for
+      $columns['date'] = 'now()';
     } // end of if
 
     $result = $this->model->insert('member_group', $columns);
     if ($result) {
+
       $msg .= "${group_name} 회원그룹을 등록하였습니다.";
       $resultYN = "Y";        
     } else {
+
       $msg .= "${group_name} 레코드 등록을 실패하였습니다.";
       $resultYN = "N";    
     }
@@ -110,19 +113,23 @@ class MemberAdminController extends Controller
     } 
     
     if (isset($category)) {
+
       $where = new QueryWhere();
       $where->set('category', $category);
       $this->model->select('member_group', 'id', $where);
 
       $numrows = $this->model->getNumRows();
       if ($numrows > 0) {
+
         $msg = "'${category}'는 이미 존재하는 카테고리 이름입니다.";
         $resultYN = "N";
       } else {
+
         $msg = "'${category}'는 사용할 수 있는 카테고리 이름입니다.";
         $resultYN = "Y";
       }
     }else{
+
       $msg = "카테고리 이름을 넣고 중복체크를 하세요.";
       $resultYN = "N";
     }
@@ -144,6 +151,7 @@ class MemberAdminController extends Controller
     $id = $posts['id'];
     
     if (empty($posts)) {
+
       UIError::alertToBack("그룹 정보가 존재하지 않습니다.");
       exit;
     }
@@ -159,12 +167,14 @@ class MemberAdminController extends Controller
     } else {
       $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
+
         $key = $columnCaches[$i];
         $value = $posts[$key];
-
         if (isset($value) && $value) {
+
           $columns[$key] = $value;
-        } else {          
+        } else {      
+
           if ($key === 'date') {
             $columns[$key] = 'now()';
           } 
@@ -206,9 +216,11 @@ class MemberAdminController extends Controller
 
     $result = $this->model->delete('member_group', $where);
     if (!$result) {
+
       $msg .= "${category} 그룹 삭제를 실패하였습니다.";
       $resultYN = "N";        
     } else {
+
       $where->reset();
       $where->set('category', $category);
       $this->model->delete('member', $where);
@@ -237,6 +249,7 @@ class MemberAdminController extends Controller
     // validation
     $msg = $this->checkValidation($posts);
     if (isset($msg) && $msg) {
+
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
               'result'=>$resultYN,
@@ -251,6 +264,7 @@ class MemberAdminController extends Controller
     $index = 0;
     foreach ($posts as $key => $value) {
       if (preg_match('/^hobby+/', $key)) {
+
         $hobby .= ($index === 0) ? $value : ',' . $value;
         $index++;
       }     
@@ -258,8 +272,9 @@ class MemberAdminController extends Controller
 
     // email validation
     $email = $posts['email_address']; 
-    $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
+    $check_email = filter_var($email, FILTER_VALIDATE_EMAIL);
     if ($check_email != true) {
+
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
@@ -275,13 +290,34 @@ class MemberAdminController extends Controller
     $posts['email_address'] = $email;
     $posts['hobby'] = $hobby;
 
+    /* check id */
     $where = new QueryWhere();
     $where->set('user_id', $user_id);
     $this->model->select('member', 'id', $where);
 
     $numrows = $this->model->getNumRows();
     if ($numrows > 0) {
+
       $msg = "아이디가 이미 존재합니다.";
+      $resultYN = "N";
+
+      $data = array(  'url'=>$returnURL,
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* check email */
+    $where->reset();
+    $where->set('email_address', $email);
+    $this->model->select('member', 'id', $where);
+
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0) {
+
+      $msg = "이미 사용된 이메일 입니다. 다른 이메일을 등록하세요.";
       $resultYN = "N";
 
       $data = array(  'url'=>$returnURL,
@@ -295,6 +331,7 @@ class MemberAdminController extends Controller
     $cachePath = './files/caches/queries/member.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
     if (!$columnCaches) {
+
       $msg .= "QueryCacheFile Do Not Exists<br>";
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
@@ -309,37 +346,24 @@ class MemberAdminController extends Controller
 
     $columns = array();
     for($i=0; $i<count($columnCaches); $i++) {
+
       $key = $columnCaches[$i];
       $value = $posts[$key];
-
       if (isset($value) && $value) {
-        if ($key === 'password') {
-          $value = $value;
-        }
-        $columns[] = $value;
-      } else {
-        switch ($key) {
-          case 'grade':
-            $columns[] = 1;
-            break;
-          case 'date':
-            $columns[] = 'now()';
-            break;
-          case 'ip':
-            $columns[] = $context->getServer('REMOTE_ADDR');
-            break;
-          default:
-            $columns[] = '';
-            break;
-        } 
+        $columns[$key] = $value;
       }           
-    }
+    } //end of for
+
+    $columns['date'] = 'now()';
+    $columns['ip'] = $context->getServer('REMOTE_ADDR');
 
     $result = $this->model->insert('member', $columns);
     if ($result) {
+
       $msg .= '신규회원 가입을 완료하였습니다.' . PHP_EOL;
       $resultYN = "Y";
     }  else {
+
       $msg .= '신규회원 가입을 실패하였습니다.' . PHP_EOL;
       $resultYN = "N";      
     }
@@ -364,6 +388,7 @@ class MemberAdminController extends Controller
 
     $msg = $this->checkValidation($posts);    
     if (isset($msg) && $msg) {
+
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
               'result'=>$resultYN,
@@ -378,6 +403,7 @@ class MemberAdminController extends Controller
     $index = 0;
     foreach ($posts as $key => $value) {
       if (preg_match('/^hobby+/', $key)) {
+
         $hobby .= ($index === 0) ? $value : ',' . $value;
         $index++;
       }     
@@ -387,6 +413,7 @@ class MemberAdminController extends Controller
     $email = $posts['email_address']; 
     $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
     if ($check_email != true) {
+
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
@@ -402,12 +429,14 @@ class MemberAdminController extends Controller
     
     $passwordHash = $context->getPasswordHash($posts['password']);
     if (isset($posts['new_password']) && $posts['new_password']) {
+
       $newpasswordHash = $context->getPasswordHash($posts['new_password']);
     } 
 
     $cachePath = './files/caches/queries/member.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
     if (!$columnCaches) {
+
       $msg .= "QueryCacheFile Do Not Exists<br>";
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
@@ -424,6 +453,7 @@ class MemberAdminController extends Controller
     $column = array();  
     foreach ($columnCaches as $key) {
       if (!preg_match($ignorePattern, $key)) {
+
         $value = $posts[$key];        
         if (isset($value) && $value) {
           if (preg_match('/^(password)$/', $key)) { 
@@ -440,14 +470,18 @@ class MemberAdminController extends Controller
 
     $this->model->select('member', 'password', $where);
     $row = $this->model->getRow();
+
     $passwordPattern = '/^'.$row['password'].'$/';
     $newPassword = $column['password'];
     if (preg_match($passwordPattern, $newPassword)) {
+
       $result = $this->model->update('member', $column, $where);
-      if ($result) {      
+      if ($result) {
+
         $msg .= "${user_name} 님의 회원정보를 수정하였습니다.\n";     
         $resultYN = "Y";  
       } else {
+
         $msg .= "${user_name} 님의 회원정보 수정을 실패하였습니다.\n";
         $resultYN = "N";  
       }
@@ -456,8 +490,8 @@ class MemberAdminController extends Controller
     }
     
     //$msg = Tracer::getInstance()->getMessage();
-    $json = array(  "result"=>$resultYN,
-            "msg"=>$msg);
+    $json = array(  'result'=>$resultYN,
+                            'msg'=>$msg);
 
     $this->callback($json);
   }
@@ -467,30 +501,29 @@ class MemberAdminController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $id = $posts['id'];
+    $userId = $posts['user_id'];
 
-    $dataObj  = "";
-    $msg = "";
-    $resultYN = "Y";
+    $dataObj  = null;
+    $msg = '';
+    $resultYN = 'Y';
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('member', 'user_id', $where);
-    $row = $this->model->getRow();
-    $user_id = $row['user_id'];
-
     $result = $this->model->delete('member', $where);
     if ($result) {
-      $msg = "${user_id} 회원정보를 삭제하였습니다.";
+
+      $msg .= "${userId} 회원정보를 삭제하였습니다.";
       $resultYN = "Y";
     } else {
       
-      $msg = "${user_id} 회원정보 삭제를 실패하였습니다.";
+      $msg .= "${userId} 회원정보 삭제를 실패하였습니다.";
       $resultYN = "N";  
      }
+
     //$msg = Tracer::getInstance()->getMessage();
-    $data = array(  "member"=>$dataObj,
-            "result"=>$resultYN,
-            "msg"=>$msg);
+    $data = array(  'member'=>$dataObj,
+            'result'=>$resultYN,
+            'msg'=>$msg);
 
     $this->callback($data);
   }

@@ -35,15 +35,11 @@ class InstallController extends Controller
       $resultYN = 'Y';
     }
 
-    if ($resultYN === 'N') {
-      UIError::alertToBack($msg);
-    } else {
-      $data = array(  'msg'=>$msg,
-              'result'=>$resultYN,
-              'url'=>$rootPath . 'setup-admin');
+    $data = array(  'msg'=>$msg,
+            'result'=>$resultYN,
+            'url'=>$rootPath . 'setup-admin');
 
-      $this->callback($data);
-    }   
+    $this->callback($data);
   }
 
   function insertSetupAdmin() {
@@ -100,12 +96,12 @@ class InstallController extends Controller
     $rootPath = _SUX_ROOT_;
     $resultYN = 'Y';
     $msg = '';
-
-    $tableList = array();
-    $tracer = Tracer::getInstance();
+    
     $context = Context::getInstance();
     $context->init();
 
+    $tableList = array();
+    $tracer = Tracer::getInstance();
     $returnURL = $context->getServer('REQUEST_URI');
 
     $query = new Query();
@@ -113,23 +109,23 @@ class InstallController extends Controller
     $cacheFile = CacheFile::getInstance();
 
     // 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
-    $oDB = DB::getInstance();   
-
+    $oDB = DB::getInstance();
     $tablePrefix = $context->getPrefix();
     $moduleList = FileHandler::readDir('./modules');
+
     foreach ($moduleList as $key => $value) {
       $module = $value['file_name'];
 
       // create table and make cache's column file'
       $shemasDir = './modules/' . $module . '/schemas';
       $schemasList = FileHandler::readDir($shemasDir);
+
       foreach ($schemasList as $key => $value) {
 
         if (preg_match('/(.xml+)$/', $value['file_name'] )) {
-
           $xmlPath = $shemasDir . '/' . $value['file_name'];
-          if (file_exists($xmlPath)) {
 
+          if (file_exists($xmlPath)) {
             $query->resetSchema();
             $schemas->reset();
 
@@ -139,8 +135,8 @@ class InstallController extends Controller
 
             $cacheColumn = array();
             $columns = $tableXml[0]->column;
-            foreach ($columns as $key => $value) {
 
+            foreach ($columns as $key => $value) {
               $name = $value['name'];
               $type = $value['type'];
               $size = $value['size'];
@@ -148,8 +144,8 @@ class InstallController extends Controller
               $notnull = isset($value['notnull']) ? $value['notnull'] : null;         
               $autoincrement = isset($value['auto_increment']) ? $value['auto_increment'] : null;
               $primarykey = isset($value['primary_key']) ? $value['primary_key'] : null;
-              $schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
 
+              $schemas->add($name, $type, $size, $default, $notnull, $autoincrement, $primarykey);
               $cacheColumn[] = $name;
             } // end of foreach
 
@@ -165,6 +161,7 @@ class InstallController extends Controller
 
             $query->setSchema($schemas);
             $result = $oDB->createTable($query);
+
             if (!$result) {
               $resultYN = 'N';
               $msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
@@ -181,22 +178,23 @@ class InstallController extends Controller
        */
       $queryDir = './modules/' . $module . '/queries';        
       $queryList = FileHandler::readDir($queryDir);
+
       if ($queryList) {
 
         foreach ($queryList as $key => $value) {
+
           if (preg_match('/(.xml+)$/', $value['file_name'] )) {
-
             $xmlPath = $queryDir . '/' . $value['file_name'];
-            if (file_exists($xmlPath)) {
 
+            if (file_exists($xmlPath)) {
               $query = new Query();
               $columns = array();       
               $queryXml = simplexml_load_file($xmlPath);  
 
               $moduleType = (string) $queryXml['execution'];  
               $actionType = (string) $queryXml['action'];
-              if ($actionType === 'insert' && $moduleType === 'once') {
 
+              if ($actionType === 'insert' && $moduleType === 'once') {
                 $propTableName = $queryXml[0]->tables[0]->table['name'];
                 $tableName = $tablePrefix . $propTableName;
                 $query->setTable($tableName);
@@ -222,7 +220,7 @@ class InstallController extends Controller
                     $contentsPath = $rootPath . $nodeValue;         
                   }
                   $columns[] = $nodeValue;
-                } //end of foreach
+                }
 
                 if (isset($where) && $where) {
                   $query->setWhere($where);
@@ -259,29 +257,21 @@ class InstallController extends Controller
                   }
 
                   $columns = array();
+
                   for($i=0; $i<count($columnCaches); $i++) {
                     $key = $columnCaches[$i];
                     $value = $adminInfo[$key];
 
                     if (isset($value) && $value) {
-                      $columns[] = $value;
-                    } else {
-                      switch ($key) {
-                        case 'grade':
-                          $columns[] = 10;
-                          break;
-                        case 'date':
-                          $columns[] = 'now()';
-                          break;
-                        case 'ip':
-                          $columns[] = $context->getServer('REMOTE_ADDR');
-                          break;
-                        default:
-                          $columns[] = '';
-                          break;
-                      } 
-                    } // end of if
-                  } // end of for
+                      $columns[$key] = $value;
+                    }
+
+                    $columns['grade'] = 10;
+                    $columns['is_writable'] = 'y';
+                    $columns['is_kickout'] = 'n';
+                    $columns['date'] = 'now()';
+                    $columns['ip'] = $context->getServer('REMOTE_ADDR');
+                  }
 
                   $query = new Query();
                   $query->setTable($tablePrefix . 'member');
@@ -290,10 +280,11 @@ class InstallController extends Controller
 
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
-                  if ($numrows < 1) {
 
+                  if ($numrows < 1) {
                     $query->setColumn($columns);
                     $result = $oDB->insert($query);
+
                     if ($result) {
                       $msg .= '관리자 계정 등록을 완료하였습니다.' . PHP_EOL;
                       $resultYN = "Y";
@@ -305,13 +296,14 @@ class InstallController extends Controller
                     $msg .= '관리자 계정이 이미 존재합니다.' . PHP_EOL;
                     $resultYN = "N";      
                   }               
-                } // end of member's if
+                }
 
                 // copy template to files's dir to read  a template in module
                 if ($module == 'document') {
 
                   // $contentsPath was written in xml data
                   $saveFileRealDir = Utils::convertAbsolutePath($contentsPath, $realPath);
+
                   if (!file_exists($saveFileRealDir)) {
                     FileHandler::makeDir($saveFileRealDir, false);
                   }
@@ -330,6 +322,7 @@ class InstallController extends Controller
 
                   foreach ($buffers as $key => $value) {
                     $tempPath = $readtemplatePathList[$key];
+
                     if (file_exists($tempPath)) {
                       $buffers[$key] .= FileHandler::readFile($tempPath);
                     } else {
@@ -346,23 +339,26 @@ class InstallController extends Controller
                   $saveTemplatePathList['js'] = $saveFileRealDir . '/home.js';
 
                   foreach ($saveTemplatePathList as $key => $value) {
+
                     if (isset($buffers[$key]) && $buffers[$key]) {
                       $result = FileHandler::writeFile($value, $buffers[$key]);
+
                       if (!$result) {
                         $msg .= $value . "<br>${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
                       }      
                     }           
-                  } //end of foreach
+                  }
 
                   // write route's key
                   $routes = array();
                   $filePath = $realPath . 'files/caches/routes/document.cache.php';
-                  $routeCaches = CacheFile::readFile($filePath);      
+                  $routeCaches = CacheFile::readFile($filePath); 
+
                   if (isset($routeCaches) && $routeCaches) {
                     $routes['categories'] = $routeCaches['categories'];
                     $routes['action'] = $routeCaches['action'];
-
                     $pattern = sprintf('/(%s)+/i', $category);
+
                     if (!preg_match($pattern, implode(',', $routes['categories']))) {
                       array_push($routes['categories'], $category); 
                     }
@@ -374,9 +370,12 @@ class InstallController extends Controller
                   $query->setWhere($where);
                   $result = $oDB->select($query);
                   $datas = array();
+
                   while($rows = $oDB->getFetchArray($result)) {
                     $fields = array();
+
                     foreach ($rows as $key => $value) {
+
                       if (is_string($key) !== false) {
                         $fields[$key] = $value;
                       }       
@@ -387,6 +386,7 @@ class InstallController extends Controller
 
                   $contentsPath = 'files/gnb/gnb.json';
                   $filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
+
                   if (!file_exists($filePath)) {
                     $jsonData = array();
                     $jsonData['data'] = array();
@@ -394,6 +394,7 @@ class InstallController extends Controller
 
                     $jsonData = JsonEncoder::parse($jsonData);
                     $result = FileHandler::writeFile($filePath, $jsonData);
+
                     if (!$result) {
                       $msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
                       $resultYN = 'N';
@@ -401,18 +402,16 @@ class InstallController extends Controller
                       $msg .= "기본 메뉴를 생성하 였습니다.<br>";
                       $resultYN = 'Y';
                     }
-                  }              
-                } // end of 'module === document ''
-
-              } // end 'moduleType === once'
-            } // end of if (file_exists)
-          }
+                  } // end of if
+                } // end of if
+              } // end of if : if 'actionType === insert && $moduleType === once'
+            } // end of if : file_exists
+          } // end of if
         } // end of foreach   
-      }
+      } //end of if : preg_match(xml)
     } // end of foreach
 
     //$msg .= Tracer::getInstance()->getMessage();
-
     // write table list
     $tableDir = './files/config/config.table.php';
     $pathinfo = pathinfo($tableDir);
@@ -420,6 +419,7 @@ class InstallController extends Controller
     $buffer = array();
     $buffer['table_list'] = $tableList;   
     $result = CacheFile::writeFile($tableDir, $buffer);
+
     if (!$result) {
       $msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
       $resultYN = 'N';
@@ -429,8 +429,8 @@ class InstallController extends Controller
     }
 
     $data = array(  'msg'=>$msg,
-            'result'=>$resultYN,
-            'url'=>$rootPath);
+                            'result'=>$resultYN,
+                            'url'=>$rootPath);
 
     $this->callback($data);
     $oDB->close();

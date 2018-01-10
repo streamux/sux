@@ -517,7 +517,14 @@ class Context
   }
 
   function installed() {
-    return isset($this->db_info) == true;
+
+    return isset($this->db_info['db_database']) == true && isset($this->admin_info) == true;
+  }
+
+  function isAdminLogin() {
+
+    $admin_ok = $this->getSession('admin_ok');
+    return isset($admin_ok) && $admin_ok;
   }
 
   function _getTrimRequestData($dataes) {

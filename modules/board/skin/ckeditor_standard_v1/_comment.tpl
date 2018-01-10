@@ -8,9 +8,9 @@
       <div class="sx-form-inline">
          <div class="sx-input-group">
             <label for="nickName" class="sx-control-label label_width">닉네임</label>
-            <input type="text" name="nickname" id="nickName" size="12" maxlength="24" value="임꺽정" class="sx-form-control">
+            <input type="text" name="nickname" id="nickName" size="12" maxlength="24" class="sx-form-control">
             <label for="password" class="sx-control-label label_width">비밀번호</label>
-            <input type="password" name="password" id="password" size="12" maxlength="24" value="12" class="sx-form-control">
+            <input type="password" name="password" id="password" size="12" maxlength="24" class="sx-form-control">
         </div>
       </div>      
       <div class="sx-form-group">

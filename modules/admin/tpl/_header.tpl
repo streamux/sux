@@ -4,24 +4,33 @@
   <title>{$title}</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/xeicon.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css?20180109">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css?20180109">
+  
   {if $documentData.module_code != ''}
-  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.css?20180109_2">
   {/if}
 <body>
 <div class="sx-wrapper">
-  <div class="sx-container">
-    <header>
-      <div class="sx-header-bar">
-        <h1 class="sx-logo">
-          <a href="{$rootPath}admin-admin"><img src="{$rootPath}common/images/sux_logo_white.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"/><span class="sx-logo-title">Admin</span></a>
-        </h1>             
-      </div>  
-    </header>
-    <nav class="sx-nav">      
+
+  <!-- Skip -->
+  <p class="sx-skip-menu">
+    <a href="#sxGnb">Skip to menu</a>  
+    <a href="#sxContents">Skip to content</a>  
+  </p>
+ 
+  <header class="sx-header">
+    <div class="sx-bgcover"></div>
+
+    <div class="sx-header-bar">
+      <h1 class="sx-logo">
+        <a href="{$rootPath}admin-admin"><img src="{$rootPath}common/images/sux_logo_white.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"/><span class="sx-logo-title">Admin</span></a>
+      </h1>             
+    </div>
+    <nav id="sxGnb" class="sx-nav">
+      <div></div>
       <a href="#" class="sx-menu-btn" title="메뉴 열기">
         <ul class="sx-menu">
           <li></li>
@@ -29,6 +38,7 @@
           <li></li>
         </ul>
       </a>
+
       <div class="sx-nav-bar">
         <div id="sxGnbCase" class="sx-gnb-case">               
           <ul class="sx-gnb lst_group clearfix">
@@ -80,18 +90,6 @@
                 </ul>
               </div>
             </li>
-            <li>
-              <a href="{$rootPath}analytics-admin/connect-site"><i class="xi-chart-line xi-fw"></i> 통계 관리</a>
-              <div class="sx-sub-case">
-                <ul class="sx-drap-menu">
-                  <li><a href="{$rootPath}analytics-admin/connect-site">접속 목록</a></li>
-                  <li><a href="{$rootPath}analytics-admin/connect-site-add">접속 키워드 추가</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{$rootPath}analytics-admin/pageview">페이지뷰 목록</a></li>
-                  <li><a href="{$rootPath}analytics-admin/pageview-add">페이지뷰 키워드 추가</a></li>
-                </ul>
-              </div>
-            </li>
           </ul>           
         </div>
       </div>
@@ -101,4 +99,15 @@
           <li></li>
         </ul>
       </a>
+
+      <!--  Login  -->
+      {if isset($sessionData.admin_ok) && $sessionData.admin_ok}
+      <a href="{$rootPath}logout-admin" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
+        <i class="xi-user xi-2x"></i>
+      </a>
+      {/if}
     </nav>
+  </header>  
+
+  <!-- Content -->
+  <div id="sxContents" class="sx-container sx-contents">

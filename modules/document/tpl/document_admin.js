@@ -223,7 +223,9 @@ jsux.fn.add = {
   sendJson:  function( f ) {
 
     var self = this,
-      params = {},
+      params = {
+        _method: f._method.value
+      },
       indexCheckbox = 0;
 
     $.each(f, function(index, item) {
@@ -255,10 +257,10 @@ jsux.fn.add = {
 
     jsux.getJSON( url, params, function( e ) {
       
+      trace( e.msg );
+
       if (e.result && e.result.toUpperCase() === 'Y') {
         jsux.goURL(self.returnUrl());
-      } else {
-        trace( e.msg );
       }
     });
   },
@@ -309,16 +311,15 @@ jsux.fn.add = {
 
     var self = this;
 
-    $('form').on('submit',function( e ) {
+    $('form[name=f_document_add]').on('submit',function( e ) {
       e.preventDefault();
 
-      var bool = self.checkFormVal( e.target );
-      if (bool === true) {
+      if (self.checkFormVal( e.target )) {
         self.sendJson( e.target );
       }
     });
     $('#btnCancel').on('click', function(e) {
-
+      e.preventDefault();
       jsux.goURL(self.returnUrl());
     });
     $('#btnCheckCategory').on('click',function(e) {       

@@ -1,5 +1,7 @@
 /* admin login */
 .sx-header{
+  position: relative;
+  display: block;
   margin-top:10px;
   text-align: center;
 }

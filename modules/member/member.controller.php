@@ -133,6 +133,24 @@ class MemberController extends Controller
       $this->callback($data);
       exit;
     }
+
+    /* check email */
+    $where->reset();
+    $where->set('email_address', $email);
+    $this->model->select('member', 'id', $where);
+
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0) {
+      $msg = "이미 사용된 이메일 입니다. 다른 이메일을 등록하세요.";
+      $resultYN = "N";
+
+      $data = array(  'url'=>$returnURL,
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
     
     $cachePath = './files/caches/queries/member.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');

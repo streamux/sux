@@ -10,6 +10,15 @@
   max-width: 1024px;
   height: 100%;
 }
+.sx-header{
+  position: fixed;
+  top:0;
+  z-index: 1000;
+  width: 100%;
+}
+.sx-header-active{
+  height:100%;
+}
 .sx-container{ 
   overflow: hidden;
   position: relative;  
@@ -37,15 +46,31 @@ nav{
   height: 100%;
 }
 
-/* logo */
-.sx-header-bar{
-  height: 55px;
-  background-color: #3e3e3e;
+/* Skip */
+.sx-skip-menu{  
+  position: absolute;
 }
+.sx-skip-menu > a{
+   position: relative;
+   display: block;
+   top:-1000px;
+   padding:15px 30px;
+   font-size: 1.250em;
+   font-weight: bold;
+   text-decoration: none;
+   background-color: #fff;
+}
+.sx-skip-menu > a:focus{
+  top:0;
+  z-index: 1000;
+}
+
+/* logo */
 .sx-logo{
   position: absolute;
   top: 4px;
   left: -54px;
+  z-index: 1000;
   margin-top:0;
   margin-left:50%;
 }
@@ -68,8 +93,33 @@ nav{
 .sx-gnb-case{
   height:55px;
 }
+.sx-gnb-login{
+  position: absolute;
+  top:14px;
+  left:100%;
+  transform: translateX(-45px);
+}
+.sx-gnb-login i{
+  color: #e3e3e3;
+}
+
+.sx-bgcover {
+  display: none;
+  position:fixed;
+  -webkit-transform: translateZ(0);
+  z-index:0;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color:rgba(000,000,000,0.5);
+}
+.sx-bgcover-active{
+  display:block;
+}
 .sx-nav{  
   margin-top: -55px;
+  background-color: #3e3e3e;
 }
 .sx-menu-btn{
   position: absolute;
@@ -100,18 +150,24 @@ nav{
   display: inline-block;
   padding-top:14px;
   height: 30px;
+
+  -webkit-transform: rotate(0deg);
+  -o-transform: rotate(0deg);
+  transform: rotate(0deg);
+
   -webkit-transition: transform 0.7s ease-out;
   -o-transition: transform 0.7s ease-out;
   transition: transform 0.7s ease-out;
   cursor: pointer;
 }
-.sx-close-btn.active{
+.sx-close-active{
   top:10px;
   -webkit-transform: rotate(360deg);
   -o-transform: rotate(360deg);
   transform: rotate(360deg);
 }
-.sx-close-btn.inactive{
+.sx-close-inactive{
+  top:10px;
   -webkit-transform: rotate(0deg);
   -o-transform: rotate(0deg);
   transform: rotate(0deg);
@@ -133,12 +189,12 @@ nav{
 /* gnb panel */
 .sx-nav-bar{
   position: absolute;
-  z-index: 100;
+  z-index: 1001;
   left:100%;
   width: 100%;
   height: 100%; 
 }
-.sx-nav-on{
+.sx-nav-active{
   left: 55px;
 }
 .sx-gnb-case{
@@ -147,23 +203,18 @@ nav{
   -o-transform: translateX(100%);
   transform: translateX(100%);
 
-  -webkit-transition: transform 0.3s ease-out;
-  -o-transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out;
+  -webkit-transition: transform 0.25s ease-out;
+  -o-transition: transform 0.25s ease-out;
+  transition: transform 0.25s ease-out;
 }
 .sx-gnb-case.sx-slide-in{  
   -webkit-transform: translateX(0);
   -o-transform: translateX(0);
   transform: translateX(0);  
 }
-.sx-gnb-case.sx-slide-out{  
-  -webkit-transform: translateX(100%);
-  -o-transform: translateX(100%);
-  transform: translateX(100%);  
-}
 
 .sx-gnb{  
-  background-color: #333;
+  background-color: #3e3e3e;
   height: 100%;
 }
 .sx-gnb a{ 
@@ -171,7 +222,8 @@ nav{
   -webkit-transition: background-color .2s ease-out;
           -o-transition: background-color .2s ease-out;
                transition: background-color .2s ease-out;
-}  
+}
+.sx-gnb a.active,
 .sx-gnb a:hover{  
   background-color: #4e4e4e;  
 }
@@ -180,6 +232,7 @@ nav{
   padding:16px 10px;
   color:#e3e3e3;
   font-size: 0.9375em;
+  background-color: #3e3e3e;  
 }
 .sx-gnb > li > a > i{
   position: relative;
@@ -259,7 +312,7 @@ nav{
 /* home contents layout*/
 .sx-contents {
   position: relative;
-  margin-top: 15px;
+  margin-top: 55px;
   margin-bottom: 55px;
   padding: 0 10px;
   width: 100%;
@@ -310,10 +363,6 @@ nav{
   border: 1px solid #ddd;
 }
 
-.sx-contents .mybox{
-  border:1px solid #f00;
-}
-
 .sx-text-warning > i{
   position: relative;
   top:3px;
@@ -322,20 +371,27 @@ nav{
 }
 
 @media (min-width: 768px) {
+  .sx-header{
+    height: auto;
+  }
   .sx-logo{
     margin-left: 70px;
   }
   .sx-nav{
     position: relative;
-    margin-left:140px;
+    padding-left:175px;
+    max-width: 1024px;
   }
-  .sx-nav .sx-menu-btn{
+  .sx-menu-btn{
    display: none;
   }
   .sx-nav-bar{
-    left:40px;
-    z-index: 100;
+    position: relative;
+    left:0;
     height: auto;
+  }
+  .sx-bgcover-active{
+    display:none;
   }
   .sx-gnb-case {
     position: absolute;

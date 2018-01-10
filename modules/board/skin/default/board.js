@@ -38,24 +38,24 @@ jsux.fn.read = {
   checkTailDocumentForm: function ( f ) {
 
     var nickname = f.nickname.value.length,
-      pass = f.pass.value.length,
+      password = f.password.value.length,
       comment = f.comment.value.length;
 
     if ( nickname < 1 ) {
       alert("이름을 입력하세요.");
       f.nickname.focus();
-      return (false);
-    }else if ( pass < 1 ) {
+      return false;
+    }else if ( password < 1 ) {
       alert("비밀번호를 입력하세요.");
-      f.pass.focus();
-      return (false);
+      f.password.focus();
+      return false;
     }else if ( comment < 1 ) {
       alert("내용을 입력하세요.");
       f.comment.focus();
-      return (false);
+      return false;
     }
 
-    return (true);
+    return true;
   },
   checkOpkeyForm: function ( f ) {
 
@@ -75,8 +75,24 @@ jsux.fn.read = {
     msg += '를(을) 선택하였습니다.';
     alert(msg);
   },
+  setEvent: function() {
+
+    var self = this;
+
+    $('form[name=f_comment]').on('submit', function(e) {
+      
+      if (!self.checkTailDocumentForm(e.target)) {
+        e.preventDefault();
+      }
+    });
+  },
+  setLayout: function() {
+    
+  },
   init: function() {
 
+    this.setLayout();
+    this.setEvent();
   }
 };
 jsux.fn.write = {

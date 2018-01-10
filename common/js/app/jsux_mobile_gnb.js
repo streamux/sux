@@ -226,15 +226,15 @@ jsux.mobileGnb.Menu.include({
   },
   show: function() {
 
-    this.addClass('.sx-bgcover', 'sx-bgcover-on');
-    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.addClass('.sx-bgcover', 'sx-bgcover-active');
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.addClass('html', 'sx-hide-scroll');
     this.addClass('.wrapper', 'wrapper-reposition');
   },
   hide: function() {  
 
-    this.removeClass('.sx-bgcover', 'sx-bgcover-on');
-    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-on');
+    this.removeClass('.sx-bgcover', 'sx-bgcover-active');
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.removeClass('html', 'sx-hide-scroll');
     this.removeClass('.wrapper', 'wrapper-reposition');
   },

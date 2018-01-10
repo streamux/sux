@@ -101,9 +101,7 @@ class BoardController extends Controller
 
     $cachePath = './files/caches/queries/board.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if (!$columnCaches) {
-      $msg .= "QueryCacheFile Do Not Exists<br>";
-    } else {
+    if ($columnCaches) {
       $columns = array();
 
       for($i=0; $i<count($columnCaches); $i++) {
@@ -121,35 +119,25 @@ class BoardController extends Controller
           }
 
           if (isset($value) && $value) {
-            $columns[] = $value;
-          } else {
-            $columns[] = '';
+            $columns[$key] = $value;
           }
         } else {
           $value = $posts[$key];
           
           if (isset($value) && $value ) {
-            $columns[] = $value;
-          } else {
-            if ($key === 'is_notice') {
-              $columns[] = 'n';
-            } else if ($key === 'igroup_count') {
-              $columns[] = $igroup_count;
-            } else if ($key === 'space_count') {
-              $columns[] = 0;
-            } else if ($key === 'ssunseo_count') {
-              $columns[] = 0;
-            } else if ($key === 'date') {
-              $columns[] = 'now()';
-            } else if ($key === 'ip') {
-              $columns[] = $context->getServer('REMOTE_ADDR');
-            }  else {
-              $columns[] = '';
-            }       
+            $columns[$key] = $value;
           }
-        }   // end of if     
+        } // end of if
       } // end of for
-    } 
+
+      $columns['igroup_count'] = $igroup_count;
+      $columns['date'] = 'now()';
+      $columns['ip'] = $context->getServer('REMOTE_ADDR');
+    } else {
+      $msg .= "QueryCacheFile Do Not Exists<br>";
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }
 
     $result = $this->model->insert('board', $columns);
     if (!isset($result)) {
@@ -357,9 +345,8 @@ class BoardController extends Controller
 
     $cachePath = './files/caches/queries/board.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if (!$columnCaches) {
-      $msg .= "QueryCacheFile Do Not Exists<br>";
-    } else {
+    if ($columnCaches) {
+
       $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];       
@@ -388,7 +375,7 @@ class BoardController extends Controller
               $value = $ssunseo_count + 1;
             }
 
-            $columns[] = $value;
+            $columns[$key] = $value;
           } else {
             if ($key === 'is_notice') {
               $columns[] = 'n';
@@ -400,8 +387,16 @@ class BoardController extends Controller
               $columns[] = '';
             }       
           }
-        }       
-      }
+        } // end of if
+      } // end of for
+
+      $columns['date'] = 'now()';
+      $columns['ip'] = $context->getServer('REMOTE_ADDR');
+    } else {
+
+      $msg .= "QueryCacheFile Do Not Exists<br>";
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
     }
     
     $result = $this->model->insert('board', $columns);
@@ -562,35 +557,34 @@ class BoardController extends Controller
 
     $cachePath = './files/caches/queries/comment.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if (!$columnCaches) {
-      $msg .= "QueryCacheFile Do Not Exists<br>";
-    } else {
-      $columns = array('');
+    if ($columnCaches) {
+
+      $columns = array();
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];
 
-        $msg .= $key . "<br>";
+        //$msg .= $key . "<br>";
         $value = $posts[$key];
         if (isset($value) && $value) {
           if ($key === 'password') {
             $value = $context->getPasswordHash($value); 
           }
-          $columns[] = $value;              
-        } else {
-          if ($key === 'date') {
-            $columns[] = 'now()';
-          } else if (($key === 'voted_count') || ($key === 'blamed_count')) {
-            $columns[] = 0;
-          }
-        }   
-      }
+          $columns[$key] = $value;              
+        }
+      } //end of for
+
+      $columns['date'] = 'now()';
+    } else {
+
+      $msg .= "QueryCacheFile Do Not Exists<br>";
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit();
     }
 
     $result = $this->model->insert('comment', $columns);
-    if (!isset($result)) {
+    //$msg .= Tracer::getInstance()->getMessage();
+    if (!$result) {
       $msg .= '댓글 입력을 실패하였습니다.';
-      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-      exit();
     }
 
     $data = array(  'url'=>$rootPath . $category . '/' . $id,

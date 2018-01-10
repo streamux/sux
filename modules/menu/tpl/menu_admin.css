@@ -57,10 +57,34 @@
   -o-box-shadow: 1px 1px 1px #fff;
   box-shadow: 1px 1px 1px #fff;
 }
-.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active{
-  color:#fff;
-  background-color: #f0ad4e;
-  border:1px solid #f0fafe;  
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=save_json],
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu]:focus{
+  color: #3e3e3e;
+  background-color: #f3f3f3;
+  border-color: #c3c3c3;
+  text-decoration: none;
+}
+
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu] .editing_label{
+  display: inline;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu] .edited_label{
+  display: none;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active .editing_label{
+  display: none;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active .edited_label{
+  display: inline;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=save_json]{
+  display: none;
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=save_json].sx-btn-active{
+  display: inline-block;
 }
 
 .menu_list_panel {
@@ -108,6 +132,7 @@
   top:0;
   padding: 9px 3px 3px;  
   border:1px solid transparent;
+  background-color: #fff;
   cursor: move;
 }
 .selected_menu_list li button[name=btn_drag] > i {
@@ -218,6 +243,12 @@
 .draggable_action .sx-btn i.xi-angle-right{
   display: none;
 }
+.draggable_action .sx-btn:first-child{
+  margin-right: 5px;
+}
+.draggable_action .sx-btn:not(:first-child){
+  margin-left: 5px;
+}
 
 .addable_menu_list li {
   padding:8px 0;
@@ -274,6 +305,10 @@
   -o-transition: all ease-out 0.25s;
   transition: all ease-out 0.25s;
 }
+.sx_plugin_panel .sx_draggable_list .sx_sliding_box_active{
+  margin-left: -100%;
+}
+
 .sx_plugin_panel .sx_draggable_list .sx_sliding_box .sx_menu{
   display: inline-block;
   position: relative;  
@@ -291,11 +326,6 @@
 }
 .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group{
   padding:0 5px;
-}
-
-/* activate */
-.sx_plugin_panel .sx_draggable_list .sx_sliding_box_active{
-  margin-left: -100%;
 }
 
 /* common */
@@ -356,5 +386,13 @@
   .draggable_action .sx-btn i.xi-angle-up,
   .draggable_action .sx-btn i.xi-angle-down{
     display: none;
+  }
+  .draggable_action .sx-btn:first-child{
+    margin-right: 0;
+    margin-bottom: 5px;
+  }
+  .draggable_action .sx-btn:not(:first-child){
+    margin-top: 5px;
+    margin-left: 0;
   }
 }
