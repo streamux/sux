@@ -1,5 +1,5 @@
  
-    <div class="sx-contents sx-admin-main">          
+    <div class="sx-content sx-admin-main">          
       <section class="sx-board-panel">
         <header class="header">
           <h1 class="title">게시판 관리</h1>

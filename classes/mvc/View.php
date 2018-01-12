@@ -29,8 +29,8 @@ class View extends Object {
 
     $context = Context::getInstance();
     $this->session_data = $context->getSessionAll();
-    $this->requestData = $context->getRequestAll();
-    $this->postData = $context->getPostAll();
+    $this->request_data = $context->getRequestAll();
+    $this->post_data = $context->getPostAll();
     $this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
   }
 

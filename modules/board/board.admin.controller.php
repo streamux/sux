@@ -121,8 +121,8 @@ class BoardAdminController extends Controller
       }
 
       $columns = array();
-      $columns['menu_id'] = $category;
-      $columns['name'] = $board_name;
+      $columns['category'] = $category;
+      $columns['menu_name'] = $board_name;
       $columns['url'] = $category;
       $columns['date'] = 'now()';
       $result = $this->model->insert('menu', $columns);
@@ -207,13 +207,13 @@ class BoardAdminController extends Controller
 
       // insert into menu 
       $where->reset();
-      $where->set('menu_id', $category);
+      $where->set('category', $category);
       $result = $this->model->select('menu', 'id', $where);
       if ($result) {
         $numrows = $this->model->getNumRows();
         if ($numrows > 0) {
           $columns = array();
-          $columns['name'] = $title;
+          $columns['menu_name'] = $title;
           $columns['url'] = $category;
           
           $result = $this->model->update('menu', $columns, $where);
@@ -223,8 +223,8 @@ class BoardAdminController extends Controller
           }
         } else {
           $columns = array();
-          $columns['menu_id'] = $category;
-          $columns['name'] = $title;
+          $columns['category'] = $category;
+          $columns['menu_name'] = $title;
           $columns['url'] = $category;
           $columns['date'] = 'now()';
 
@@ -318,7 +318,7 @@ class BoardAdminController extends Controller
       }
 
       $where->reset();
-      $where->set('menu_id', $category);
+      $where->set('category', $category);
       $result = $this->model->delete('menu', $where);
       if (!$result) {
         $msg .= "메뉴 삭제를 실패했습니다.<br>";

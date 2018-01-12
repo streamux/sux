@@ -82,12 +82,12 @@
         </button>
       </div>
       
-      <!-- Admin setup -->
-      {if isset($sessionData.grade) && $sessionData.grade > 9}
+      <!-- Admin setup -->      
       <div class="sx-admin-setup">
+        {if isset($sessionData.grade) && $sessionData.grade > 9}
         <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
-      </div>
-      {/if}
+        {/if}
+      </div>      
       
       <!--  Login  -->
       {if isset($sessionData.user_name) && $sessionData.user_name}
@@ -104,14 +104,7 @@
 
   <!-- Nav -->
   <div id="nav" class="sx-gnb">
-    <div class="mobile-gnb-case mobile-gnb-case-off">
-      <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
-        <ul class="sx-h-3stick">
-          <li class="sx-hline1"></li>
-          <li class="sx-hline2"></li>
-          <li class="sx-hline3"></li>
-        </ul>
-      </button>
+    <div class="mobile-gnb-case">      
       <div class="header-panel">
         <div class="sx-user-info">
           <div class="sx-user-picture"></div>
@@ -124,11 +117,10 @@
           </span>
           <div class="sx-admin-setup">
             {if isset($sessionData.grade) && $sessionData.grade > 9}
-              <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' alt="관리자 설정" /></a>
+              <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' title="관리자 설정" alt="관리자 설정" /></a>
             {/if}
           </div>      
         </div>
-
         <div class="sx-user-member">
           <ul class="clearfix">
           {if isset($sessionData.user_name) && $sessionData.user_name}
@@ -152,10 +144,17 @@
           </div>
           <div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
         </div>
-      </div>  
+      </div>      
+      <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
+        <ul class="sx-h-3stick">
+          <li class="sx-hline1"></li>
+          <li class="sx-hline2"></li>
+          <li class="sx-hline3"></li>
+        </ul>
+      </button>
     </div>   
     <div class="sx-bgcover"></div>
   </div>
 
-  <!-- content -->
+  <!-- container -->
   <div id="sxContents" class="sx-container">

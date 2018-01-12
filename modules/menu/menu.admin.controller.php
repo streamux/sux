@@ -16,10 +16,10 @@ class MenuAdminController extends Controller
       $resultYN = 'N';
     } else {
 
-      $menu_id = 'menu_' . Utils::getMicrotimeInt();
+      $category = 'menu_' . Utils::getMicrotimeInt();
 
       $where = new QueryWhere();
-      $where->set('name', $menuName);
+      $where->set('menu_name', $menuName);
       $this->model->select('menu', 'id', $where);
 
       $num = $this->model->getNumRows();
@@ -29,9 +29,9 @@ class MenuAdminController extends Controller
       } else {
 
         $columns = array();
-        $columns['menu_id'] = $menu_id;
-        $columns['name'] = $menuName;
-        $columns['url'] = $menu_id;
+        $columns['category'] = $category;
+        $columns['menu_name'] = $menuName;
+        $columns['url'] = $category;
         $columns['date'] = 'now()';
 
         $result = $this->model->insert('menu', $columns);
@@ -42,7 +42,7 @@ class MenuAdminController extends Controller
           $resultYN = 'Y';
 
           $where = new QueryWhere();
-          $where->set('menu_id', $menu_id);
+          $where->set('category', $category);
           $this->model->select('menu', '*', $where);
           
           $json['data'] = $this->model->getRows();
@@ -69,20 +69,22 @@ class MenuAdminController extends Controller
     $posts = $context->getPostAll();
 
     $id = $posts['id'];
-    $menuName = $posts['menuName'];
+    $menuName = $posts['menu_name'];
+
     $url = $posts['url'];
     $isActive = (int) $posts['is_active'];
 
     $columns = array();
-    $columns['name'] = $menuName;
+    $columns['menu_name'] = $menuName;
     $columns['url'] = $url;
     $columns['is_active'] = $isActive;
 
     $where = new QueryWhere();
     $where->set('id', $id);
     $result = $this->model->update('menu', $columns, $where);
+
     if ($result) {
-      $msg .= '메뉴 수정 완료하였습니다.';
+      $msg .= '메뉴 수정을 완료하였습니다.';
       $resultYN = 'Y';
       
       $this->model->select('menu', '*', $where);
@@ -146,9 +148,9 @@ class MenuAdminController extends Controller
     $filePath = Utils::convertAbsolutePath($contents_path, $realPath);
     
     $result = FileHandler::writeFile($filePath, $jsonData);
-    if (!$result) {
-      $msg .= "메뉴파일 저장을 실패하였습니다.<br>";
-      $resultYN = 'N';
+    if ($result) {
+      $msg .= "메뉴파일을 저장하였습니다.<br>";
+      $resultYN = 'Y';
     }
 
     function convertMultiToArray($arr) {
@@ -192,10 +194,7 @@ class MenuAdminController extends Controller
       }
       $columns['is_active'] = 1;
       $result = $this->model->update('menu', $columns, $where);
-      if ($result) {
-        $msg .= '메뉴 수정을 완료하였습니다.';
-        $resultYN = 'Y';
-      } else {
+      if (!$result) {
         $msg .= '메뉴 수정을 실패하였습니다.';
         $resultYN = 'N';
       }

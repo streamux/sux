@@ -1,64 +1,64 @@
 /* home contents */
-.sx-contents .table{
+.sx-content .table{
   width:100%;
 }
-.sx-contents section{
+.sx-content section{
   margin-bottom: 35px;
 }
-.sx-contents .connecter{
+.sx-content .connecter{
   display: inline-block;
   clear:both;
   width:100%;  
 }
-.sx-contents .connecter > li{
+.sx-content .connecter > li{
   margin: 5px 0;
 }
-.sx-contents .connecter > li .view-type-textfield,
-.sx-contents .connecter > li .sx-label{ 
+.sx-content .connecter > li .view-type-textfield,
+.sx-content .connecter > li .sx-label{ 
   display: inline-block;
   padding:5px 15px;
   font-size: 0.875em;
   line-height:20px;
   font-weight: normal; 
 }
-.sx-contents .sx-box-content .table > tbody > tr:last-child > td{
+.sx-content .sx-box-content .table > tbody > tr:last-child > td{
   border-bottom: 1px dashed transparent;
 }
 
-.sx-contents .table > thead > tr > th {
+.sx-content .table > thead > tr > th {
   padding: 8px 5px;
   background-color: #e3e3e3;
   text-align: center;
 }
-.sx-contents .table > thead > tr > th.sx_no{
+.sx-content .table > thead > tr > th.sx_no{
   width:60px;
 }
-.sx-contents .table > thead > tr > th.sx_name,
-.sx-contents .table > thead > tr > th.sx_date,
-.sx-contents .table > thead > tr > th.sx_hit{
+.sx-content .table > thead > tr > th.sx_name,
+.sx-content .table > thead > tr > th.sx_date,
+.sx-content .table > thead > tr > th.sx_hit{
   width: 120px;
 }
-.sx-contents .table > tbody > tr > td{
+.sx-content .table > tbody > tr > td{
   padding: 12px 5px;
   text-align: center;
   border-bottom: 1px dashed #e3e3e3;
 }
-.sx-contents .table > tbody > tr:hover {
+.sx-content .table > tbody > tr:hover {
   background-color: #f9f9f9;
 }
-.sx-contents .sx-service-config ul > li > span{
+.sx-content .sx-service-config ul > li > span{
   display: inline-block;
   width: 50%;
   line-height: 32px;
 }
-.sx-contents .sx-service-config ul > li .service_label{  
+.sx-content .sx-service-config ul > li .service_label{  
   padding:5px 3px;
   text-align: right;
 }
-.sx-contents .sx-service-config ul > li .service_label .badge{
+.sx-content .sx-service-config ul > li .service_label .badge{
   margin: 0 3px;
 }
-.sx-contents .sx-service-config ul > li .view-type-icon{
+.sx-content .sx-service-config ul > li .view-type-icon{
   padding: 0 23px;
   border:1px;
   width:40%;
@@ -67,49 +67,49 @@
 
 @media (min-width: 768px) {
   /* contents */
-  .sx-contents{
+  .sx-content{
     position: relative;
   }
-  .sx-contents section{
+  .sx-content section{
     float: left;
     width:50%;    
   }
-  .sx-contents .connecter > li{
+  .sx-content .connecter > li{
     float: left;
     margin: 0 0;
   }
-  .sx-contents .connecter > li .view-type-textfield{
+  .sx-content .connecter > li .view-type-textfield{
     min-width: 100px;
   }
-  .sx-contents section.pageview{
+  .sx-content section.pageview{
     clear: both;
   }
-  .sx-contents .member,
-  .sx-contents .pageview{
+  .sx-content .member,
+  .sx-content .pageview{
     padding-right: 5px;
   }
-  .sx-contents .board,
-  .sx-contents .connect-path{
+  .sx-content .board,
+  .sx-content .connect-path{
    padding-left: 5px;
   }
 
-  .sx-contents .connect{
+  .sx-content .connect{
     clear: both;
     width:100%;
   }
-  .sx-contents .service{
+  .sx-content .service{
     width:100%;
   }
-  .sx-contents .sx-service-config ul > li{
+  .sx-content .sx-service-config ul > li{
     float: left;
   }
-  .sx-contents .sx-service-config ul > li > .view-type-icon{
+  .sx-content .sx-service-config ul > li > .view-type-icon{
     width:auto;
   }
-  .sx-contents .sx-service-config ul > li > .service_label{
+  .sx-content .sx-service-config ul > li > .service_label{
     width:120px;
   }
-  .sx-contents .sx-service-config ul > li:last-child > .view-type-icon{
+  .sx-content .sx-service-config ul > li:last-child > .view-type-icon{
     margin-right: 0;
   }
 }

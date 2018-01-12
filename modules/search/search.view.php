@@ -67,7 +67,7 @@ class SearchView extends View
     $where->reset();
     $where->add('(');
     for ($i=0; $i < count($menuRows); $i++) { 
-      $where->set('category', $menuRows[$i]['menu_id'],'=', 'or');
+      $where->set('category', $menuRows[$i]['category'],'=', 'or');
     }
     $where->add(')');
     $where->add('and');

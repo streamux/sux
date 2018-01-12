@@ -5,20 +5,21 @@ $(window).ready(function() {
         mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
         pageAppHandler = {},
         jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
-        menuList = null;
+        menuList = null,
+        mobileMenuSlide = null;
 
   gnbModel.addObserver( gnbView );
   gnbModel.addObserver( mobileGnbView );
 
   jsux.mobileGnbView = mobileGnbView;
 
-  var mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
-          scrollbar: '.swiper-scrollbar-mobilegnb',
-          direction: 'vertical',
-          slidesPerView: 'auto',
-          mousewheelControl: true,
-          freeMode: true
-        });
+  mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
+      scrollbar: '.swiper-scrollbar-mobilegnb',
+      direction: 'vertical',
+      slidesPerView: 'auto',
+      mousewheelControl: true,
+      freeMode: true
+    });
 
   pageAppHandler.home = {
 
@@ -35,6 +36,16 @@ $(window).ready(function() {
         e.stopPropagation();
         return;
       });
+
+      $(window).on('resize', function(e){
+
+        var tw = $(window).outerWidth();
+        mobileGnbView.resizeUI(tw);
+        mobileMenuSlide.onResize();        
+      });
+
+      $(window).trigger('resize');
+      mobileGnbView.hideGnbCase();
     }
   };
 
@@ -57,7 +68,7 @@ $(window).ready(function() {
 
               for (var i=0; i<data.length; i++) {
                 list.push({
-                  label: data[i].name,
+                  label: data[i].menu_name,
                   link: data[i].url,
                   menu:[]
                 });
@@ -72,9 +83,7 @@ $(window).ready(function() {
             dataManager = null;
 
             gnbModel.setData( menuList );
-
             mobileMenuSlide.update();
-            mobileMenuSlide.onResize();
           }
 
           //gnbModel.activate( 1, 2 );

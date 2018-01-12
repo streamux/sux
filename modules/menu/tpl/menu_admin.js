@@ -178,7 +178,7 @@
         } // end of for
 
         for (var j=0; j<list.length; j++) {
-          if (list[j] && list[j].sub && list[j].sub.length > 0) {            
+          if (list[j] && list[j].sub && list[j].sub.length > 0) {
             self.elId += ' > .sub_mask > ul > li';
             arguments.callee(list[j].sub);
           }
@@ -397,20 +397,17 @@
       this.moveHeight = this.dragItem$.outerHeight();  
       this.startOffsetY = pageY - this.dragOffsetY;
 
-      this.dragItem$.css({'z-index':1000});
       ListManager.addClass(this.dragItem$[0], 'item_drag_true');
     },
     moveDrag: function(y) {
 
+      if (this.isDragging === false ) return; 
+
       var self = this;
-
-      console.log('move drag');
-
-      if (this.isDragging === false ) return;      
-
+      var gapY = 8;
       var pageY = y;
 
-      // drag 클릭 위치 - drag top 위치의 차이 값
+      // drag 클릭 위치 - drag top 위치 )의 차이 값
       var offsetY = pageY - this.dragOffsetY;
 
       // drag top 위치 
@@ -429,6 +426,7 @@
 
         // drag up
         var prevItem$ = this.dragItem$.prev();
+
         if (prevItem$ && prevItem$.data('id')) {
 
           var prevHeight = prevItem$.outerHeight();
@@ -438,9 +436,7 @@
           if (prevPosY > dragPosY) {
             prevItem$.insertAfter(this.dragItem$);
             this.animate(prevItem$, 300, -1*this.moveHeight);
-            this.swapArray(this.dragModels, index, index-1);
-
-            var gapY = 8;
+            this.swapArray(this.dragModels, index, index-1);            
 
             // 드래그 위치 값 갱신 
             movePosY += prevHeight + gapY; 
@@ -464,8 +460,6 @@
             this.animate(nextItem$, 300, this.moveHeight);
             this.swapArray(this.dragModels, index, index+1);
             
-            var gapY = 8;
-
             // 드래그 위치 값 갱신  
             movePosY -= nextHeight + gapY;
 
@@ -718,7 +712,7 @@
 
       jsux.getJSON(this.menu_url, data, function(e) {
 
-        console.log(e.msg);
+        trace(e.msg);
         self.dispatchEvent({type:ServiceManagerEvent.UPDATE_COMPLETE, target: self, event: e})
       });
     },
@@ -732,7 +726,7 @@
 
       jsux.getJSON(this.menu_url, data, function(e) {
 
-        console.log(e.msg);
+        trace(e.msg);
         self.dispatchEvent({type:ServiceManagerEvent.DELETE_COMPLETE, target: self, event: e})
       });
     },
@@ -742,7 +736,7 @@
 
       jsux.getJSON(this.save_url, data, function(e) {
 
-        console.log(e.msg);
+        trace(e.msg);
         self.dispatchEvent({type:ServiceManagerEvent.SAVE_COMPLETE, target: self, event: e})
       });
     }
@@ -780,8 +774,8 @@
         isDragging:false,
         isModified:false,
         is_active: 0,
-        menu_id: '',
-        name:'',
+        category: '',
+        menu_name:'',
         posy:0,
         state:'default',
         sub:[],
@@ -837,8 +831,6 @@
     },
     modifyMenuInfo: function(id) {
 
-      console.log(id);
-      
       var item = this.listManager.getItem(id);
       this.menuInfoView.showPanel();
       this.menuInfoView.update(item);
@@ -1129,6 +1121,8 @@
 
       var self = this;
       var menuInfoSubmit = function(e) {
+
+        console.log(e.model);
         self.updateModifyInfo();
       };
 
@@ -1196,7 +1190,7 @@ jsux.fn.modify = {
   checkFormVal: function( f ) {
 
     var labelList = ['메뉴이름을','링크주소를'];
-    var checkList = ['name','url'];
+    var checkList = ['menu_name','url'];
 
     $.each( checkList, function( index, item) {
 

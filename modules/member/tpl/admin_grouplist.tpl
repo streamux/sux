@@ -1,7 +1,7 @@
-    <div class="sx-contents sx-admin-main">       
+    <div class="sx-content sx-admin-main">       
       <section class="section">
         <header class="header">
-          <h1 class="title">회원 그룹 관리</h1>
+          <h1 class="title">회원그룹 관리</h1>
           <div class="sx-row clearfix">
             <span class="search_title">전체 그룹(0)</span>     
             <a href="{$rootPath}member-admin/group-add" class="sx-btn sx-btn-info pull-right" title="그룹 추가">그룹 추가</a>

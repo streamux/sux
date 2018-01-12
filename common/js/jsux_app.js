@@ -402,6 +402,31 @@ jsux.mobileGnb.Menu.include({
     this.setUI();
     this.setEvent();
   },
+  resizeUI: function(value) {
+
+    var tw = parseInt(value);
+
+    if (isNaN(tw)) {
+      throw new Error('not a valid number');
+    }
+    
+    if (tw < 768 && this._isMobile === false) {
+      this._isMobile = true;
+      this._isPc = false;
+
+      if (this._isClick === true) {
+        this.show();
+      }
+    } else if (tw >= 768 && this._isPc === false) {
+      this._isMobile = false;
+      this._isPc = true;
+
+      this.hide();
+      this._m.resetUI();
+    }
+
+    this._startPosX  = tw;
+  },
   resetUI: function() {
 
   },
@@ -454,6 +479,20 @@ jsux.mobileGnb.Menu.include({
     menuManager(this._path, this._data);
     menuManager = null;
   },
+  jumpFocus: function(id) {
+
+    $(id).focus();
+  },
+  hideGnbCase: function() {
+
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-inactive');   
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-active');      
+  },
+  showGnbCase: function() {
+
+    this.addClass('.mobile-gnb-case', 'mobile-gnb-case-active');   
+    this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-inactive');   
+  },
   setEvent: function() {
 
     var self = this;
@@ -471,12 +510,15 @@ jsux.mobileGnb.Menu.include({
       self.show();
       self.openSlide();
       self.hideMobileMenu();
+      self.jumpFocus('.sx-gnb-login');
 
       self._isClick = true;
     });
 
     $('.mobile-gnb-case').on('click', function(e) {
 
+      e.preventDefault();
+      
       var url = $(e.target).attr('href'),
         target = $(e.target).attr('target');
 
@@ -495,38 +537,30 @@ jsux.mobileGnb.Menu.include({
       self.closeSlide();
       self._isClick = false;  
     });
-    
-    $('.sx-bgcover').on('click', function(e) {
+
+    $('.menu-btn-close').on('blur', function(e) {
+
+      if (self._isClick === false) {
+        return;
+      }
 
       self.closeSlide();
       self._isClick = false;  
     });
 
-    $(window).on('resize', function(e){
+    $('.menu-btn-close').on('keydown', function(e) {
 
-      var tw = $(window).outerWidth();
-      if (tw < 768 && self._isMobile === false) {
-
-        self._isMobile = true;
-        self._isPc = false;
-
-        if (self._isClick === true) {
-          self.show();
-        }
-      } else if (tw >= 768 && self._isPc === false) {
-
-        self._isMobile = false;
-        self._isPc = true;
-
-        self.hide();
-        self._m.resetUI();
+      var key = e.key.toUpperCase();
+      if (key.match('Enter') === true) {
+        self.jumpFocus('.mobile-menu-btn');
       }
-
-      self._startPosX  = tw;
     });
 
-    $(window).trigger('resize');
-    this.tween('.mobile-gnb-case', 1, {x:this._startPosX, useFrames:true});
+    $('.sx-bgcover').on('click', function(e) {
+
+      self.closeSlide();
+      self._isClick = false;  
+    });  
   },
   tween: function( target, time, op ) {
     TweenMax.to(target, time, op);
@@ -536,8 +570,9 @@ jsux.mobileGnb.Menu.include({
   },
   showCloseX: function() {
 
-    this.killTween('.menu-btn-close');
     this.killTween('.menu-btn-close .sx-h-3stick');
+    this.killTween('.menu-btn-close');
+    
     this.tween('.menu-btn-close', 1, {opacity:0, useFrames:true});
     this.tween('.menu-btn-close', 13, {opacity:1, ease: Expo.easeOut, useFrames:true});
     this.tween('.menu-btn-close .sx-h-3stick', 65, {rotation:360, useFrames:true});
@@ -545,8 +580,9 @@ jsux.mobileGnb.Menu.include({
   hideCloseX: function() {
 
     var self = this;
-    this.killTween('.menu-btn-close');
     this.killTween('.menu-btn-close .sx-h-3stick');
+    this.killTween('.menu-btn-close');
+    
     this.tween('.menu-btn-close', 13, {opacity:0, useFrames:true, onComplete: $.proxy(self.showMobileMenu, self)});
     this.tween('.menu-btn-close .sx-h-3stick', 65, {rotation:0, useFrames:true});
   },
@@ -555,6 +591,7 @@ jsux.mobileGnb.Menu.include({
     var self = this;
 
     this.killTween('.mobile-menu-btn .sx-h-3stick');
+
     $('.mobile-menu-btn .sx-h-3stick').find('> li').each(function(index) {
       self.tween(this, 21, {opacity:1, useFrames:true});
     });
@@ -565,7 +602,9 @@ jsux.mobileGnb.Menu.include({
   hideMobileMenu: function() {
 
     var self = this;
+
     this.killTween('.mobile-menu-btn .sx-h-3stick');
+
     $('.mobile-menu-btn .sx-h-3stick').find('> li').each(function(index) {
       self.tween(this, 21, {opacity:0, useFrames:true});
     });
@@ -573,11 +612,9 @@ jsux.mobileGnb.Menu.include({
   openSlide: function() {
 
     self = this;
+
     $('.mobile-gnb-case').css({'transform':'translateX('+this._startPosX+'px)'});
-
-    $('#test_startPosX').val(this._startPosX);
-
-    this.killTween('.mobile-gnb-case');
+  
     this.killTween('.mobile-menu-btn .sx-h-3stick .sx-hline1');
     this.killTween('.mobile-menu-btn .sx-h-3stick .sx-hline3');
     this.tween('.mobile-gnb-case', 17, {x:this._targetPosX, useFrames:true,onComplete: $.proxy(self.showCloseX, self)});
@@ -588,7 +625,6 @@ jsux.mobileGnb.Menu.include({
 
     var self = this;
 
-    this.killTween('.mobile-gnb-case');
     this.killTween('.mobile-menu-btn .sx-h-3stick .sx-hline1');
     this.killTween('.mobile-menu-btn .sx-h-3stick .sx-hline3');
     this.tween('.mobile-gnb-case', 17, {x:this._startPosX, useFrames:true, onComplete: $.proxy(self.hide, self)});    
@@ -597,6 +633,7 @@ jsux.mobileGnb.Menu.include({
   },
   show: function() {
 
+    this.showGnbCase();
     this.addClass('.sx-bgcover', 'sx-bgcover-active');
     this.addClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.addClass('html', 'sx-hide-scroll');
@@ -604,6 +641,7 @@ jsux.mobileGnb.Menu.include({
   },
   hide: function() {  
 
+    this.hideGnbCase();
     this.removeClass('.sx-bgcover', 'sx-bgcover-active');
     this.removeClass('.mobile-gnb-case', 'mobile-gnb-case-active');
     this.removeClass('html', 'sx-hide-scroll');

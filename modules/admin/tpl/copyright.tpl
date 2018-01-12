@@ -1,1 +1,1 @@
-Copyright @ <a href="{$rootPath}">StreamUX Corp</a>
+Powered by <a href="{$rootPath}">StreamUX</a>

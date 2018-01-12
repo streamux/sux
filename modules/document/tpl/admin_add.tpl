@@ -1,4 +1,4 @@
-    <div class="sx-contents sx-admin-main">
+    <div class="sx-content sx-admin-main">
       <section class="sx-document-panel">
         <h1 class="title">페이지 추가</h1>
         <div class="sx-box-content">

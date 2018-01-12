@@ -1,8 +1,8 @@
-    <div class="sx-contents sx-admin-main">
+    <div class="sx-content sx-admin-main">
       <section class="sx-member-panel">
         <h1 class="title">회원그룹정보 수정</h1>
         <div class="sx-box-content">                    
-          <form action="{$rootPath}member-admin/group-modify" class="sx-form-horizontal">
+          <form action="{$rootPath}member-admin/group-modify" name="f_group_modify" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="update">
             <input type="hidden" name="id" maxlength="16" value="{$documentData.id}">  
             <input type="hidden" name="category" maxlength="16" value="{$documentData.category}">  

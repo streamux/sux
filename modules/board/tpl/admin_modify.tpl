@@ -1,4 +1,4 @@
-    <div class="sx-contents sx-admin-main">
+    <div class="sx-content sx-admin-main">
       <section class="sx-board-panel">
         <h1 class="title">게시판 수정</h1>
         <div class="sx-box-content">                    

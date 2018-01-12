@@ -241,14 +241,14 @@ jsux.fn.modify = {
     var panelPwd = $('#panelNewPassword');
     var btn = $('input[name=check_newpassword]');
     if (panelPwd.css('display') === 'none') {
-      btn.val('비밀번호 변경 취소하기');
+      btn.val('변경 취소하기');
       panelPwd.css('display','block');
 
       if (!btn.hasClass('active')) {
         btn.addClass('active');
       }
     } else {
-      btn.val('비밀번호 변경하기');
+      btn.val('변경하기');
       panelPwd.css('display','none');
       btn.removeClass('active');
       btn.blur();

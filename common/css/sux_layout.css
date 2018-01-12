@@ -36,9 +36,7 @@
 .sx-nav,
 .sx-header-body,
 .sx-search-form,
-.sx-container,
-.footer ul, 
-.footer p {
+.sx-container{
   margin:0 auto;
   max-width: 1024px;
 }
@@ -91,50 +89,17 @@
 /* Footer */
 .footer {
   margin-top: 45px;
-  height: 120px;
+  line-height: 90px;
   text-align: center;
-  background-color:#4a4a4a;
-  color:#e3e3e3;
+  background-color:#f9f9f9;
+  color:#3e3e3e;
+  border-top:1px solid #d3d3d3;
 }
 .footer-off{
   height:0;
 }
-
-.footer a {
-  color:#e3e3e3;
-}
-.footer ul {
-  clear: both;
-  font-size:0.875em;
-  background-color:#505050;
-}
-.footer ul li {
-  float: left;
-  width:33%;
-  border:1px solid #333333;
-  border-left:none;
-}
-.footer ul li:first-child {
-  width:34%;
-  border-right: none;
-}
-.footer ul li a {
-  display:inline-block;
-  padding:15px 0;  
-  width:100%;
-  height:100%;
-  text-decoration:none;
-}
-.footer ul li a:hover {
-  background-color:#3e3e3e;
-}
-.footer p {
-  margin-top: 15px;
-}
-.footer p span {
-  font-size:0.750em;
-  line-height:40px;
-  vertical-align:middle;
+.footer > a {
+  color: #3e3e3e;
 }
 
 /* logo */
@@ -167,6 +132,9 @@
 }
 
 /* search */
+.sx-header-body > .sx-admin-setup{
+  display: none;
+}
 .sx-admin-setup,
 .sx-btn-search,
 .sx-search-form{
@@ -332,11 +300,14 @@ button.sx-btn-close{
   background-color: #ffffff;
 }
 .mobile-menu-case .mobile-menu-btn{
+  display: inline-block;
   position: absolute;
   top: 12px;
   left: 8px;
-  z-index: 1;
-  display: inline-block;
+  z-index: 1;  
+}
+.mobile-menu-case .mobile-menu-btn-hide{
+  display: none;
 }
 .mobile-menu-case .mobile-menu-bg{
   position: absolute;
@@ -375,8 +346,13 @@ button.sx-btn-close{
   height:100%;
 }
 .mobile-gnb-case-active{
+  display: block;
   left:0;
 }
+.mobile-gnb-case-inactive{
+  display: none;
+}
+
 .mobile-gnb-case a:hover{
   text-decoration:none;
 }
@@ -428,6 +404,7 @@ button.sx-btn-close{
   width:100%;
   background-color: #fff;
 }
+.mobile-gnb-case .header-panel .sx-user-member ul li a.sx-btn:focus,
 .mobile-gnb-case .header-panel .sx-user-member ul li a.sx-btn:hover{
   width:100%;
   background-color: #3e3e3e;
@@ -547,7 +524,10 @@ button.sx-btn-close{
     position: absolute;
     top:-1000px;
   } 
-
+  
+  .sx-header-body > .sx-admin-setup{
+    display: inline-block;
+  }
   .sx-admin-setup {
     display: inline-block;
     position:absolute;

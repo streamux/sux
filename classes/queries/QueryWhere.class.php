@@ -2,11 +2,22 @@
 
 class QueryWhere extends Object {
   
+  public static $_instance = null;
   var $class_name = 'query_where';
   var $sql = '';
   var $counter = 0;
 
   function __construct() {}
+
+  public static function &getInstance() {
+
+    if (self::$_instance === null) {
+      self::$_instance = new self();
+    }
+
+    self::$_instance->reset();
+    return self::$_instance;
+  }
 
   function get() {
 

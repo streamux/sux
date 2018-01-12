@@ -1,6 +1,6 @@
-      <div class="sx-contents sx-admin-main">
+      <div class="sx-content sx-admin-main">
         <section class="sx-member-panel">
-          <h1 class="title">회원 정보 수정</h1>
+          <h1 class="title">회원정보 수정</h1>
           <div class="sx-box-content">
             <form action="{$rootPath}member-admin/modify" class="sx-form-horizontal">
               <input type="hidden" name="_method" value="update">
@@ -28,7 +28,7 @@
               <div class="sx-form-group">
                 <label for="password" class="sx-control-label label_width">*비밀번호</label>
                 <input type="password" id="password" name="password" class="sx-form-control">
-                <input type="button" id="btnChangePassword" name="btn_change_password" value="비밀번호 변경하기" class="sx-btn sx-btn-block">
+                <input type="button" id="btnChangePassword" name="btn_change_password" value="변경하기" class="sx-btn sx-btn-block">
               </div>
               <div id="panelNewPassword" class="panel_newpassword">
                 <div class="sx-form-group">

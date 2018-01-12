@@ -81,15 +81,6 @@
                 </ul>
               </div>          
             </li>
-            <li>
-              <a href="{$rootPath}popup-admin"><i class="xi-forum-o xi-fw"></i> 팝업 관리</a>
-              <div class="sx-sub-case">
-                <ul class="sx-drap-menu">
-                  <li><a href="{$rootPath}popup-admin">팝업 목록</a></li>
-                  <li><a href="{$rootPath}popup-admin/add">팝업 추가</a></li>
-                </ul>
-              </div>
-            </li>
           </ul>           
         </div>
       </div>
@@ -110,4 +101,4 @@
   </header>  
 
   <!-- Content -->
-  <div id="sxContents" class="sx-container sx-contents">
+  <div id="sxContents" class="sx-container">

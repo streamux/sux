@@ -1,17 +1,7 @@
-  </div><!-- end of content -->
+  </div><!-- end of container -->
   
   <footer id="sxfooter" class="footer">
-    <ul class="copyright clearfix">
-      {if isset($sessionData.user_name) && $sessionData.user_name}
-      <li><a href="{$rootPath}logout?_method=insert">로그아웃</a></li>
-      <li><a href="{$rootPath}member-modify">회원정보수정</a></li>
-      {else}
-      <li><a href="{$rootPath}login">로그인</a></li>
-      <li><a href="{$rootPath}member-join">회원가입</a></li>    
-      {/if}
-      <li><a href="#" onclick="jsux.mobileGnbView.showSitemap();">사이트 맵</a></li>
-    </ul> 
-    <p>{include file="$copyrightPath"}</p>
+    {include file="$copyrightPath"}
   </footer>  
 </div>
 
@@ -40,15 +30,13 @@
 
 <!-- api start -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script>window.jQuery || document.write('<script src="{$rootPath}common/js/
-    jquery.min.js"><\/script>')</script>
-<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/
-    jquery.tmpl.min.js"></script>
-<script>window.jQuery.tmpl || document.write('<script src="{$rootPath}common/js/jquery.tmpl.min.js"><\/script>')</script>
+<script>window.jQuery || document.write('<script src="{$rootPath}common/js/api/jquery.min.js"><\/script>')</script>
+<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+<script>window.jQuery.tmpl || document.write('<script src="{$rootPath}common/js/api/jquery.tmpl.min.js"><\/script>')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.19.0/TweenMax.min.js"></script>
-<script>window.TweenMax || document.write('<script src="{$rootPath}common/js/TweenMax.min.js"><\/script>')</script>
+<script>window.TweenMax || document.write('<script src="{$rootPath}common/js/api/TweenMax.min.js"><\/script>')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
-<script>window.Swiper || document.write('<script src="{$rootPath}common/js/idangerous.swiper.min.js"><\/script>')</script>
+<script>window.Swiper || document.write('<script src="{$rootPath}common/js/api/idangerous.swiper.min.js"><\/script>')</script>
 <!-- api end //-->
 
 <!-- customize start -->

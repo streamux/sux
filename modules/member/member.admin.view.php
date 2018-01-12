@@ -91,16 +91,22 @@ class MemberAdminView extends View {
   function displayGroupDelete() {
     
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-    $this->request_data['id'] = $context->getParameter('id');
+    $id = $context->getParameter('id');
 
     $this->document_data['jscode'] = 'groupDelete';
     $this->document_data['module_code'] = 'member';
+    
+    $where = QueryWhere::getInstance();
+    $where->set('id', $id);
+    $this->model->select('member_group', 'group_name', $where);
+    $row = $this->model->getRow();
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
+    $this->request_data['id'] = $id;           
+    $this->document_data['contents'] = $row;    
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -192,9 +198,9 @@ class MemberAdminView extends View {
     } 
 
     //$msg .= Tracer::getInstance()->getMessage();
-    $json = array(  "data"=>$dataObj,
-            "result"=>$resultYN,
-            "msg"=>$msg); 
+    $json = array(  'data'=>$dataObj,
+                            'result'=>$resultYN,
+                            'msg'=>$msg); 
 
     $this->callback($json);
   }

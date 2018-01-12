@@ -161,8 +161,8 @@ class DocumentAdminController extends Controller
 
       // insert into menu
       $columns = array();
-      $columns['menu_id'] = $posts['category'];
-      $columns['name'] = $posts['document_name'];
+      $columns['category'] = $posts['category'];
+      $columns['menu_name'] = $posts['document_name'];
       $columns['url'] = $posts['category'];
       $columns['date'] = 'now()';
       $result = $this->model->insert('menu', $columns);
@@ -293,13 +293,13 @@ class DocumentAdminController extends Controller
 
         // insert into menu 
         $where->reset();
-        $where->set('menu_id', $category);
+        $where->set('category', $category);
         $result = $this->model->select('menu', 'id', $where);
         if ($result) {
           $numrows = $this->model->getNumRows();
           if ($numrows > 0) {
             $columns = array();
-            $columns['name'] = $title;
+            $columns['menu_name'] = $title;
             $columns['url'] = $category;
             
             $result = $this->model->update('menu', $columns, $where);
@@ -309,8 +309,8 @@ class DocumentAdminController extends Controller
             }
           } else {
             $columns = array();
-            $columns['menu_id'] = $category;
-            $columns['name'] = $title;
+            $columns['category'] = $category;
+            $columns['menu_name'] = $title;
             $columns['url'] = $category;
             $columns['date'] = 'now()';
 
@@ -397,7 +397,7 @@ class DocumentAdminController extends Controller
 
       // delete menu
       $where = new QueryWhere();
-      $where->set('menu_id', $category);
+      $where->set('category', $category);
       $result = $this->model->delete('menu', $where);
       if (!$result) {
         $msg .= "메뉴 삭제를 실패하였습니다.";

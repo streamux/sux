@@ -297,10 +297,11 @@ jsux.fn.groupModify = {
             markup = '',
             labelList = null;
 
-      if (e.result && e.result.toUpperCase === 'Y') {
-
+      if (e.result && e.result.toUpperCase() === 'Y') {
         formLists = $('input[type=text]');
-        $(formLists).each(function(index) {
+
+        $(formLists).each(function(key, value) {
+
           if (e.data[this.name]) {
             this.value = e.data[this.name];
             //console.log(this.name , this.value)
@@ -744,15 +745,16 @@ jsux.fn.modify = {
 
     var panelPwd = $('#panelNewPassword');
     var btn = $('#btnChangePassword');
+
     if (panelPwd.css('display') === 'none') {
-      btn.val('비밀번호 변경 취소하기');
+      btn.val('변경 취소하기');
       panelPwd.css('display','block');
 
       if (!btn.hasClass('active')) {
         btn.addClass('active');
       }
     } else {
-      btn.val('비밀번호 변경하기');
+      btn.val('변경하기');
       panelPwd.css('display','none');
       btn.removeClass('active');
       btn.blur();
@@ -897,6 +899,7 @@ jsux.fn.modify = {
     jsux.getJSON( url, params, function( e ) {
       
       trace( e.msg );
+
       if (e.result && e.result.toUpperCase() == 'Y') {
         jsux.goURL( self.returnUrl());
       }

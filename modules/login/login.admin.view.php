@@ -6,20 +6,22 @@ class LoginAdminView extends View {
 
   function displayLoginAdmin() {
 
-    $context = Context::getInstance();    
+    $context = Context::getInstance();
 
-    $this->session_data = $context->getSessionAll();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'loginAdmin';
-    $this->document_data['module_code'] = 'login';
-    $this->document_data['module_name'] = '관리자 로그인';
-    
     /**
      * skin directory path
      */
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_PATH_ . "modules/login/tpl"; 
+
+    $this->document_data['jscode'] = 'loginAdmin';
+    $this->document_data['module_code'] = 'login';
+    $this->document_data['module_name'] = '관리자 로그인';
+    
+    if ($context->isAdminLogin()) {
+      Utils::goURL($rootPath . 'admin-admin');
+      exit;
+    }    
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = $skinPath;

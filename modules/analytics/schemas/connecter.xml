@@ -1,5 +1,0 @@
-<table name="connecter">
-  <column name="id" type="int" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-  <column name="ip" type="varchar" size="30"/>
-  <column name="date" type="date"/>
-</table>

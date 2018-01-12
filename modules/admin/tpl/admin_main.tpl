@@ -1,4 +1,4 @@
-    <div class="sx-contents">
+    <div class="sx-content">
       <h1 class="title">대시보드</h1>
       <section class="connect">
         <h2>방문자 수</h2>       

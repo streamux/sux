@@ -310,55 +310,55 @@ nav{
 }
 
 /* home contents layout*/
-.sx-contents {
+.sx-content {
   position: relative;
-  margin-top: 55px;
+  margin-top: 75px;
   margin-bottom: 55px;
   padding: 0 10px;
   width: 100%;
 }
-.sx-contents .sx-edgebox{
+.sx-content .sx-edgebox{
   padding:10px 10px;
 }
-.sx-contents h1{
+.sx-content h1{
   font-size: 1.875em;
   margin-bottom: 35px;
 }
-.sx-contents h2{
+.sx-content h2{
   font-size: 1.250em;
   margin-bottom: 10px;
 }
-.sx-contents h1.title{
+.sx-content h1.title{
   padding-bottom: 15px;
   border-bottom: 2px solid #e3e3e3;
 }
 
-.sx-contents section > header > .sx-row .search_title,
-.sx-contents section > header > .search_form .title_down,
-.sx-contents section > header > .search_form .sx-form-inline .search_title {
+.sx-content section > header > .sx-row .search_title,
+.sx-content section > header > .search_form .title_down,
+.sx-content section > header > .search_form .sx-form-inline .search_title {
   font-weight: bold;
   display: inline-block;
   margin-bottom: 5px; 
 }
-.sx-contents section > header .sx-row,
-.sx-contents section > header .search_form .sx-form-inline{
+.sx-content section > header .sx-row,
+.sx-content section > header .search_form .sx-form-inline{
   display:inline-block;
   width:100%;
   margin-bottom: 5px;
 }
  /*pull-right 클래스 사용 시 우즉 5px 밀림 증상 제거 */ 
-.sx-contents section > header .search_form .sx-form-inline .sx-input-group,
-.sx-contents section > header  .sx-row a.sx-btn{
+.sx-content section > header .search_form .sx-form-inline .sx-input-group,
+.sx-content section > header  .sx-row a.sx-btn{
   margin-right: 0;
 }
-.sx-contents section > header .search_form .sx-form-inline .sx-input-group,
-.sx-contents section > header .sx-row a.sx-btn,
-.sx-contents section > header .search_form input.sx-btn,
-.sx-contents section > header .search_form a.sx-btn{
+.sx-content section > header .search_form .sx-form-inline .sx-input-group,
+.sx-content section > header .sx-row a.sx-btn,
+.sx-content section > header .search_form input.sx-btn,
+.sx-content section > header .search_form a.sx-btn{
   width:100%;
 }
 
-.sx-contents .sx-box-content{
+.sx-content .sx-box-content{
   padding:10px 10px;
   border: 1px solid #ddd;
 }
@@ -438,31 +438,31 @@ nav{
   }
 
   /* search start */
-  .sx-contents section > header .sx-row,
-  .sx-contents section > header .search_form .sx-form-inline{
+  .sx-content section > header .sx-row,
+  .sx-content section > header .search_form .sx-form-inline{
     position: relative;
   }
   
-  .sx-contents section > header > .sx-row .search_title,
-  .sx-contents section > header > .search_form .title_down,
-  .sx-contents section > header > .search_form .sx-form-inline .search_title {
+  .sx-content section > header > .sx-row .search_title,
+  .sx-content section > header > .search_form .title_down,
+  .sx-content section > header > .search_form .sx-form-inline .search_title {
     position: absolute;
     bottom: 0; 
     margin-bottom: 0;
   }
 
-  .sx-contents section > header > .sx-row a.sx-btn,
-  .sx-contents section > header > .search_form .sx-form-inline .sx-input-group{
+  .sx-content section > header > .sx-row a.sx-btn,
+  .sx-content section > header > .search_form .sx-form-inline .sx-input-group{
     margin-right: 0;
     margin-bottom: 0;
     width:auto;
   }
-  .sx-contents section > header > .search_form select {
+  .sx-content section > header > .search_form select {
     margin-right: 3px;
   }
-  .sx-contents section > header > .search_form select.sx-form-control,
-  .sx-contents section > header > .search_form input.sx-btn,
-  .sx-contents section > header > .search_form a.sx-btn{  
+  .sx-content section > header > .search_form select.sx-form-control,
+  .sx-content section > header > .search_form input.sx-btn,
+  .sx-content section > header > .search_form a.sx-btn{  
     width:auto;
   }
   /* seart end */

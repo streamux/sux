@@ -54,6 +54,7 @@ class InstallController extends Controller
     $rootPath = _SUX_ROOT_;
     $filePath = 'files/config/config.admin.php';
     $buffer = array('admin_info'=>array());
+
     foreach ($admin_info as $key => $value) {
       if (preg_match('/(admin_pwd)+/', $value)) {
         $buffer['admin_info'][$value] = $context->getPasswordHash($posts[$value]);
@@ -65,24 +66,25 @@ class InstallController extends Controller
     }
 
     $result = CacheFile::writeFile($filePath, $buffer);
-    if(!$result) {
-      $msg = "관리자 설정을 실패했습니다.";
-      $resultYN = "N";
-    } else {
+    if($result) {
       $msg = "관리자계정 설정을 완료하였습니다.<br>";
       $resultYN = 'Y';
+    } else {
+      $msg = "관리자 설정을 실패했습니다.";
+      $resultYN = "N";      
     }
 
     if ($resultYN === 'N') {
       UIError::alertToBack($msg);
-    } else {
-      $data = array(
-        'msg'=>$msg,
-        'result'=>$resultYN,
-        'url'=>$rootPath . 'create-table' . '?_method=insert');
+      exit;
+    } 
 
-      $this->callback($data);
-    }
+    $data = array(
+      'msg'=>$msg,
+      'result'=>$resultYN,
+      'url'=>$rootPath . 'create-table' . '?_method=insert');
+
+    $this->callback($data);
   }
 
   /**
@@ -164,9 +166,9 @@ class InstallController extends Controller
 
             if (!$result) {
               $resultYN = 'N';
-              $msg .= '@ table->' . $tableName . " [ result : fail ] ----<br>";
+              $msg .= "@ create table->" . $tableName . " [ result : fail ] --- X" . PHP_EOL;
             } else {                                
-              $msg .= "[ result : success ] @ table->" . $tableName . " ---- <br>";
+              $msg .= "@ create table->" . $tableName . " [ result : success ] --- O" . PHP_EOL;
             }
           }
         }
@@ -195,26 +197,28 @@ class InstallController extends Controller
               $actionType = (string) $queryXml['action'];
 
               if ($actionType === 'insert' && $moduleType === 'once') {
-                $propTableName = $queryXml[0]->tables[0]->table['name'];
+                $propTableName = trim($queryXml[0]->tables[0]->table['name']);
                 $tableName = $tablePrefix . $propTableName;
                 $query->setTable($tableName);
                 $query->setField('*');
-
                 $queryColumns = $queryXml[0]->columns[0]->column;
+                $menuActive = 0;
+
                 foreach ($queryColumns as $key => $value) {
 
                   $nodeValue = (string) $value;
                   $propValue = (string) $value['name'];
 
-                  // 카테고리 값이 있으면 검색 조건 추가 
+                  // xml > columns > column 내 name='category' 를 쿼리 검색 조건으로 설정 
                   if ($propValue === 'category') {
                     $where = array('category'=>$nodeValue);
                     $category = $nodeValue;
                   }
 
-                  if ($propValue === 'document_name') {
-                    $moduleName = $nodeValue;
-                  }           
+                  // 메뉴 모들 중 xml 쿼리 내 컬럼명 'is_active'가 있으면 값을 설정 
+                  if ($propValue === 'is_active') {
+                    $menuActive = (int) $nodeValue;
+                  }
 
                   if (preg_match('/^(contents_path)+$/i', $propValue)) {
                     $contentsPath = $rootPath . $nodeValue;         
@@ -225,15 +229,19 @@ class InstallController extends Controller
                 if (isset($where) && $where) {
                   $query->setWhere($where);
                   $oDB->select($query);
-
                   $numrows = $oDB->getNumRows();
 
-                  // 아직 등록이 안됐다면 
-                  if ($numrows < 1) {
+                  if ($numrows < 1 && $propTableName === 'menu' && $menuActive > 0) {                    
                     $query->setColumn($columns);
                     $oDB->insert($query);
                   }
-                }
+
+                  // 아직 등록이 안됐다면 
+                  if ($numrows < 1 && $propTableName !== 'menu') {
+                    $query->setColumn($columns);
+                    $oDB->insert($query);
+                  }
+                } // end of for
                 
                 // 관리자 계정 등록 
                 if ($module === 'member' && preg_match('/^admin/i', $category) == true) {
@@ -285,10 +293,7 @@ class InstallController extends Controller
                     $query->setColumn($columns);
                     $result = $oDB->insert($query);
 
-                    if ($result) {
-                      $msg .= '관리자 계정 등록을 완료하였습니다.' . PHP_EOL;
-                      $resultYN = "Y";
-                    }  else {
+                    if (!$result) {
                       $msg .= '관리자 계정 등록을 실패하였습니다.' . PHP_EOL;
                       $resultYN = "N";      
                     }
@@ -296,7 +301,7 @@ class InstallController extends Controller
                     $msg .= '관리자 계정이 이미 존재합니다.' . PHP_EOL;
                     $resultYN = "N";      
                   }               
-                }
+                } // end of if : regist admin info
 
                 // copy template to files's dir to read  a template in module
                 if ($module == 'document') {
@@ -309,11 +314,11 @@ class InstallController extends Controller
                   }
 
                   // read files of template to module's directory      
-                  $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/home';
+                  $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $category;
                   $readtemplatePathList = array();
-                  $readtemplatePathList['tpl'] = $readtemplatePath . '/home.tpl';
-                  $readtemplatePathList['css'] = $readtemplatePath . '/home.css';
-                  $readtemplatePathList['js'] = $readtemplatePath . '/home.js';
+                  $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $category . '.tpl';
+                  $readtemplatePathList['css'] = $readtemplatePath . '/' . $category . '.css';
+                  $readtemplatePathList['js'] = $readtemplatePath . '/' . $category . '.js';
 
                   $buffers = array();
                   $buffers['tpl'] = '';
@@ -326,7 +331,7 @@ class InstallController extends Controller
                     if (file_exists($tempPath)) {
                       $buffers[$key] .= FileHandler::readFile($tempPath);
                     } else {
-                      $msg .= $tempPath . ' 파일이 존재하지 않습니다.';
+                      $msg .= $tempPath . ' 파일이 존재하지 않습니다.' . PHP_EOL;
                     }      
                   }
 
@@ -334,9 +339,9 @@ class InstallController extends Controller
 
                   // Save files of skin to files's directory
                   $saveTemplatePathList = array();
-                  $saveTemplatePathList['tpl'] = $saveFileRealDir . '/home.tpl';
-                  $saveTemplatePathList['css'] = $saveFileRealDir . '/home.css';
-                  $saveTemplatePathList['js'] = $saveFileRealDir . '/home.js';
+                  $saveTemplatePathList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
+                  $saveTemplatePathList['css'] = $saveFileRealDir . '/' . $category . '.css';
+                  $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
 
                   foreach ($saveTemplatePathList as $key => $value) {
 
@@ -344,7 +349,7 @@ class InstallController extends Controller
                       $result = FileHandler::writeFile($value, $buffers[$key]);
 
                       if (!$result) {
-                        $msg .= $value . "<br>${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
+                        $msg .= $value . "<br>${category} 템플릿 ${key} 파일 등록을 실패하였습니다." . PHP_EOL;
                       }      
                     }           
                   }
@@ -363,53 +368,40 @@ class InstallController extends Controller
                       array_push($routes['categories'], $category); 
                     }
                     CacheFile::writeFile($filePath, $routes);
-                  }
+                  }                  
+                }  // end of if
+              }  // end of if : if 'actionType === insert && $moduleType === once'
+            }  // end of if : file_exists
+          }  // end of if
+        }  // end of foreach
 
-                  // make default menu of gnb
-                  $where = array('category'=>'home');
-                  $query->setWhere($where);
-                  $result = $oDB->select($query);
-                  $datas = array();
+        // make default json for gnb's menu
+        $contentsPath = 'files/gnb/gnb.json';
+        $filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
 
-                  while($rows = $oDB->getFetchArray($result)) {
-                    $fields = array();
+        if (!file_exists($filePath)) {
+          $query = new Query();
+          $query->setTable($tablePrefix . 'menu');
+          $query->setField('*');
+          $query->setOrderBy('id desc');
+          $result = $oDB->select($query);
+          $jsonData = array();
+          $jsonData['data'] = array();
 
-                    foreach ($rows as $key => $value) {
+          while($row = $oDB->getFetchArray($result)) {
+            $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
+          }          
 
-                      if (is_string($key) !== false) {
-                        $fields[$key] = $value;
-                      }       
-                    }
-                    $datas[] = $fields;
-                  }
-                  //$msg .= Tracer::getInstance()->getMessage() . "<br>";
+          $jsonData = JsonEncoder::parse($jsonData);
+          $result = FileHandler::writeFile($filePath, $jsonData);
 
-                  $contentsPath = 'files/gnb/gnb.json';
-                  $filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-
-                  if (!file_exists($filePath)) {
-                    $jsonData = array();
-                    $jsonData['data'] = array();
-                    $jsonData['data'][] = array('id'=>$datas[0]['id'],'sid'=>0,'name'=>$datas[0]['document_name'],'url'=>$datas[0]['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
-
-                    $jsonData = JsonEncoder::parse($jsonData);
-                    $result = FileHandler::writeFile($filePath, $jsonData);
-
-                    if (!$result) {
-                      $msg .= "기본 메뉴 생성을 실패하였습니다.<br>";
-                      $resultYN = 'N';
-                    } else {
-                      $msg .= "기본 메뉴를 생성하 였습니다.<br>";
-                      $resultYN = 'Y';
-                    }
-                  } // end of if
-                } // end of if
-              } // end of if : if 'actionType === insert && $moduleType === once'
-            } // end of if : file_exists
-          } // end of if
-        } // end of foreach   
-      } //end of if : preg_match(xml)
-    } // end of foreach
+          if (!$result) {
+            $msg .= "기본 메뉴 Json 파일 생성을 실패하였습니다." . PHP_EOL;
+            $resultYN = 'N';
+          }
+        }  // end of if
+      }  //end of if : preg_match(xml)
+    }  // end of foreach
 
     //$msg .= Tracer::getInstance()->getMessage();
     // write table list
@@ -423,9 +415,6 @@ class InstallController extends Controller
     if (!$result) {
       $msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
       $resultYN = 'N';
-    } else {
-      $msg .= $pathinfo['filename'] . " 설정을 완료하였습니다.<br>";
-      $resultYN = 'Y';
     }
 
     $data = array(  'msg'=>$msg,

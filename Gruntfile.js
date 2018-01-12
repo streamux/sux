@@ -28,7 +28,7 @@ module.exports = function(grunt) {
         src: [
           'common/js/app/jsux_admin_gnb.js',
           'common/js/app/jsux_list_manager.js',
-          '!*.back'
+          '!*.back*'
         ],
         dest: 'common/js/jsux_admin_app.js'
       },
@@ -88,10 +88,8 @@ module.exports = function(grunt) {
           '**/jquery-*.js',
           '**/jquery.*.js',
           '**/*.min.js',
-          'common/js/idangerous*.js',
-          'common/js/Tween*.js',
           'common/js/api/*.js',
-          'modules/**/skin/**/ckeditor/**',
+          'libs/**',
           'test/**'
         ]
       }
@@ -132,9 +130,7 @@ module.exports = function(grunt) {
       src: [
         'classes/**/*.php',
         'config/*.php',
-        'modules/**/*.php',
-        'modules/board/skin/*.php',
-        'modules/board/skin/**/*.php'
+        'modules/**/*.php'
       ]
     },
     watch: {

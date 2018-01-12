@@ -1,6 +1,6 @@
-    <div class="sx-contents sx-admin-main">
+    <div class="sx-content sx-admin-main">
       <section class="sx-member-panel">
-        <h1 class="title">회원 그룹 추가</h1>
+        <h1 class="title">회원그룹 추가</h1>
         <div class="sx-box-content">                    
           <form action="{$rootPath}member-admin/group-add" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="insert">

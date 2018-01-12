@@ -1,0 +1,17 @@
+<query id="insertDocument" action="insert" execution="once">
+  <tables>
+    <table name="document"></table>
+  </tables>
+  <columns>
+    <column name="id"></column>
+    <column name="category">userguide</column>
+    <column name="document_name"><![CDATA[사용자 가이드]]></column>
+    <column name="summary"><![CDATA[사용자 가이드]]></column>
+    <column name="is_readable" type="char">y</column>
+    <column name="document_width"><![CDATA[100%]]></column>
+    <column name="header_path"><![CDATA[common/_header.tpl]]></column>
+    <column name="contents_path"><![CDATA[files/document/userguide]]></column>
+    <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
+    <column name="date"><![CDATA[now()]]></column>        
+  </columns>
+</query>
