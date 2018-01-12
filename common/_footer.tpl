@@ -41,7 +41,7 @@
 
 <!-- customize start -->
 <script src="{$rootPath}common/js/jsux.min.js?20180110"></script>
-<script>jsux.rootPath = {$rootPath};</script>
+<script>jsux.rootPath = "{$rootPath}";</script>
 <script src="{$rootPath}common/js/jsux_common.min.js?20180110"></script>
 <script src="{$rootPath}common/js/jsux_app.min.js?20160110"></script>
 <script src="{$rootPath}common/js/jsux_app_stage.min.js?20180110"></script>
