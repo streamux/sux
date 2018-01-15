@@ -45,10 +45,7 @@
             <li>
               <a href="{$rootPath}menu-admin/list"><i class="xi-bars xi-fw"></i> 메뉴 관리</a>
               <div class="sx-sub-case">
-                <ul class="sx-drap-menu">
-                  <li><a href="{$rootPath}menu-admin/list">메뉴 목록</a></li>
-                  <li><a href="{$rootPath}menu-admin/add">메뉴 추가</a></li>
-                </ul>
+                <ul class="sx-drap-menu"></ul>
               </div>
             </li>
             <li>
@@ -78,6 +75,21 @@
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}document-admin" >페이지 목록</a></li>
                   <li><a href="{$rootPath}document-admin/add">페이지 추가</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{$rootPath}popup-admin" >팝업 목록</a></li>
+                  <li><a href="{$rootPath}popup-admin/add">팝업 추가</a></li>
+                </ul>
+              </div>          
+            </li>
+            <li>
+              <a href="{$rootPath}document-admin"><i class="xi-chart-pie-o xi-fw"></i> 통계 관리</a>
+              <div class="sx-sub-case">
+                <ul class="sx-drap-menu">
+                  <li><a href="{$rootPath}analytics-admin/pageview" >페이지뷰 목록</a></li>
+                  <li><a href="{$rootPath}analytics-admin/pageview-add">페이지뷰 추가</a></li>
+                  <li class="divider"></li>
+                  <li><a href="{$rootPath}analytics-admin/connect-site" >접속경로 목록</a></li>
+                  <li><a href="{$rootPath}analytics-admin/connect-site-add">접속경로 추가</a></li>
                 </ul>
               </div>          
             </li>
