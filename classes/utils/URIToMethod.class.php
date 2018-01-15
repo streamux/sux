@@ -27,8 +27,13 @@ class URIToMethod
     }
     $uries = explode('/', $uriName);
 
-    for ($i=0; $i<count($uries); $i++) {        
-      $arr[] = $uries[$i];
+    for ($i=0; $i<count($uries); $i++) {
+      $typeInt = (int) $uries[$i];
+
+      // 문자열 값만 저장 
+      if ($typeInt === 0) {
+        $arr[] = $uries[$i];
+      }      
     }
 
     $this->lists['module-key'] = $arr[0];    
@@ -41,6 +46,7 @@ class URIToMethod
     if (strstr($action, '-') != -1) {
       $pieces = explode('-', $action);
       $action = $pieces[0];
+      
       for ($i=1; $i<count($pieces); $i++) {
         $action .= ucfirst($pieces[$i]);
       }
