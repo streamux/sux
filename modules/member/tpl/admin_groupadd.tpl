@@ -12,7 +12,7 @@
               <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>
             </p>
             <div class="sx-form-group">
-              <label for="category" class="sx-control-label label_width">* 카테고리(영문)</label>
+              <label for="category" class="sx-control-label label_width">카테고리(영문) *</label>
               <input type="text" id="category" name="category" maxlength="16" class="sx-form-control">
               <input type="button" name="check_member_group" value="중복체크" class="sx-btn btn_check">           
             </div>

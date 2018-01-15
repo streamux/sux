@@ -13,26 +13,26 @@
       <span class="sx-form-control" disabled>{$sessionData.user_id}</span>
     </div>
     <div class="sx-form-group">
-      <label for="password" class="sx-control-label label_width">* 비밀번호</label>
+      <label for="password" class="sx-control-label label_width">비밀번호 *</label>
       <input type="password" id="password" name="password" maxlength="23" class="sx-form-control">
       <input type="button" name="check_newpassword" value="비밀번호 변경하기" class="sx-btn sx-btn-block">
     </div>
     <div id="panelNewPassword" class="panel_newpassword">
       <div class="sx-form-group">
-        <label for="newPassword" class="sx-control-label label_width">* 신규 비밀번호</label>
+        <label for="newPassword" class="sx-control-label label_width">신규 비밀번호 *</label>
         <input type="password" id="newPassword" name="new_password" maxlength="23" class="sx-form-control">
       </div>
       <div class="sx-form-group">
-        <label for="newPasswordConf" class="sx-control-label label_width">* 신규 비밀번호 확인</label>
+        <label for="newPasswordConf" class="sx-control-label label_width">신규 비밀번호 확인 *</label>
         <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
       </div>
     </div>
     <div class="sx-form-group">
-      <label for="nickName" class="sx-control-label label_width">* 닉네임</label>
+      <label for="nickName" class="sx-control-label label_width">닉네임 *</label>
       <input type="text" id="nickName" name="nick_name" maxlength="12"  value="{$contentData.nick_name}" class="sx-form-control">
     </div>     
     <div class="sx-form-group">
-      <label for="emailAddress" class="sx-control-label label_width">* 이메일</label>
+      <label for="emailAddress" class="sx-control-label label_width">이메일 *</label>
       <input type="text" id="emailAddress" name="email_address" value="{$contentData.email_address}" class="sx-form-control">
     </div>    
     <p class="text_notice">

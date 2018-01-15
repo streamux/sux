@@ -21,20 +21,20 @@
               </select>
             </div>
             <div class="sx-form-group">
-              <label for="userId" class="sx-control-label label_width">* 아이디</label><input type="text" id="userId" name="user_id" class="sx-form-control">
+              <label for="userId" class="sx-control-label label_width">아이디 *</label><input type="text" id="userId" name="user_id" class="sx-form-control">
               <input type="button" name="checkID" value='아이디 중복체크' class="sx-btn sx-btn-block">
             </div>
             <div class="sx-form-group">
-              <label for="password" class="sx-control-label label_width">* 비밀번호</label><input type="password" id="password" name="password" class="sx-form-control">
+              <label for="password" class="sx-control-label label_width">비밀번호 *</label><input type="password" id="password" name="password" class="sx-form-control">
             </div>
             <div class="sx-form-group">
-              <label for="passwordConf" class="sx-control-label label_width">* 비밀번호 확인</label><input type="password" id="passwordConf" name="password_conf" class="sx-form-control">
+              <label for="passwordConf" class="sx-control-label label_width">비밀번호 확인 *</label><input type="password" id="passwordConf" name="password_conf" class="sx-form-control">
             </div>
             <div class="sx-form-group">
-              <label for="nickName" class="sx-control-label label_width">* 닉네임</label><input type="text" id="nickName" name="nick_name" class="sx-form-control">
+              <label for="nickName" class="sx-control-label label_width">닉네임 *</label><input type="text" id="nickName" name="nick_name" class="sx-form-control">
             </div>
             <div class="sx-form-group">
-              <label for="emailAddress" class="sx-control-label label_width">* 이메일</label><input type="text" id="emailAddress" name="email_address" class="sx-form-control">
+              <label for="emailAddress" class="sx-control-label label_width">이메일 *</label><input type="text" id="emailAddress" name="email_address" class="sx-form-control">
             </div>
             <p class="text_notice">
               <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
