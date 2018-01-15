@@ -184,10 +184,12 @@ var SXAdminMenu = function(){
 
       e.preventDefault();
 
-      
       var mindex = menuList.index(this);
       var sub = subPanelList[mindex];
-      self.showSubMenu(sub);
+
+      if($(sub).children().length > 0) {
+        self.showSubMenu(sub);
+      }
 
       if (selectedSub && selectedSub !== sub) {
          self.hideSubMenu(selectedSub);
@@ -225,12 +227,16 @@ var SXAdminMenu = function(){
       var el$ = $(e.target).parent().parent().parent();
       var className = el$.attr('class');
       var mindex = $(this).parent().index();
+      
       if (className.match(/^sx-sub-case/i)) {        
         mindex = $(el$.parent()).index();
       }
 
       var sub = subPanelList[mindex];
-      self.showSubMenu(sub);
+
+      if($(sub).children().length > 0) {
+        self.showSubMenu(sub);
+      }
 
       if (selectedSub && selectedSub !== sub) {
          self.hideSubMenu(selectedSub);

@@ -18,8 +18,14 @@ class URIToMethod
     $arr = array();
     $uri = explode('?', $uri);
     $uriName = $uri[0];
-    $uries = explode(_SUX_ROOT_, $uriName);
-    $uries = explode('/', $uries[1]);
+
+    if (strlen(_SUX_ROOT_) == 1 && substr_compare(_SUX_ROOT_, '/', 0, 1) == 0) {
+      $uriName = substr($uriName, 1);
+    } else {
+      $uriName = explode(_SUX_ROOT_, $uriName);
+      $uriName = $uriName[1];
+    }
+    $uries = explode('/', $uriName);
 
     for ($i=0; $i<count($uries); $i++) {        
       $arr[] = $uries[$i];

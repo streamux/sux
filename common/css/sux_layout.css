@@ -65,7 +65,9 @@
   position:fixed;
   top:0;
   z-index:100;
-  -webkit-transform: translateZ(0);  
+  -webkit-transform: translateZ(0);
+  -o-transform: translateZ(0);  
+  transform: translateZ(0);  
   width:100%;
   border-bottom: 1px solid #e3e3e3;
   background-color:#ffffff;
@@ -154,7 +156,7 @@
 }
 .sx-gnb-login:hover{
   color: #ff0000;
-  text-decoration-line: none;
+  text-decoration: none;
 }
 .sx-gnb-login i{
   line-height: 36px;
@@ -240,9 +242,9 @@ button.sx-btn-close{
 .sx-btn-close {
   cursor:pointer;
   opacity: 0;
-  filter:alpha(opacity=0); 
   -moz-opacity: 0;
   -khtml-opacity: 0;
+  /*IE 8 */
   -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
 }
 .sx-btn-close .sx-h-3stick .sx-hline1,
@@ -250,13 +252,14 @@ button.sx-btn-close{
 .sx-btn-close .sx-h-3stick .sx-hline3{
   background-color: #ffffff;
   height:2px;
+
+  -webkit-transform-origin:50%, 50%;
+        -ms-transform-origin:50%, 50%;
+      -moz-transform-origin:50%, 50%;
+           -o-transform-origin:50%, 50%;
+                transform-origin:50%, 50%;
 }
-.sx-btn-close .sx-h-3stick .sx-hline1{  
-  -webkit-transform-origin(50%, 50%);
-        -ms-transform-origin(50%, 50%);
-      -moz-transform-origin(50%, 50%);
-           -o-transform-origin(50%, 50%);
-                transform-origin(50%, 50%);
+.sx-btn-close .sx-h-3stick .sx-hline1{
   -webkit-transform:translateY(6px) rotate(45deg);
         -ms-transform:translateY(6px) rotate(45deg);
       -moz-transform:translateY(6px) rotate(45deg);
@@ -267,11 +270,6 @@ button.sx-btn-close{
 .sx-btn-close .sx-h-3stick .sx-hline2,
 .sx-btn-close .sx-h-3stick .sx-hline3{margin-top:4px;}
 .sx-btn-close .sx-h-3stick .sx-hline3{
-  -webkit-transform-origin(50%, 50%);
-      -moz-transform-origin(50%, 50%);
-        -ms-transform-origin(50%, 50%);    
-           -o-transform-origin(50%, 50%);
-                transform-origin(50%, 50%);
   -webkit-transform:translateY(-6px) rotate(135deg);
       -moz-transform:translateY(-6px) rotate(135deg);
         -ms-transform:translateY(-6px) rotate(135deg); 
@@ -281,13 +279,19 @@ button.sx-btn-close{
 .sx-bgcover{
   display:none;
   position:fixed;
-  -webkit-transform: translateZ(0);
   z-index:500;
   top:0;
   left:0;
   width:100%;
   height:100%;
+  background-color:rgb(000,000,000);
   background-color:rgba(000,000,000,0.5);
+  /* IE8 */
+  -ms-filter:"progid:DXImageTransform.Microsoft.gradient( startColorStr=#80000000, endColorStr=#80000000)";
+
+  -webkit-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .sx-bgcover-active{
   display:block;
@@ -318,18 +322,17 @@ button.sx-btn-close{
 }
 .mobile-menu-case .menu-bg-activate{  
   background-color: #000;
-  opacity: .1; 
-  filter:alpha(opacity=10); 
-  -moz-opacity: .1;
-  -khtml-opacity: .1;
-  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opactity=10)";
+  opacity: 0;
+  -moz-opacity: 0;
+  -khtml-opacity: 0;
+  -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
 }
 .mobile-menu-btn{
   cursor:pointer;
 }
 .menu-btn-close{
   position: absolute;
-  z-index: 3px;
+  z-index: 3;
   top:12px;
   left:-46px;
 }
@@ -337,13 +340,16 @@ button.sx-btn-close{
 .mobile-gnb-case{
   position:fixed;
   top:0;
-  left:-10000px;
-  -webkit-transform: translateZ(0);
+  left:-10000px; 
   z-index:1000;
   padding-right:52px;
   padding-bottom: 115px;
   width:100%;
   height:100%;
+
+  -webkit-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
 }
 .mobile-gnb-case-active{
   display: block;
@@ -481,7 +487,7 @@ button.sx-btn-close{
   }
   .sx-search-form .search-btn-close{
     position: absolute;
-    z-index: 3px;
+    z-index: 3;
     top:12px;
     right:0;
   }
@@ -493,7 +499,6 @@ button.sx-btn-close{
     margin-top:13px;
     margin-left: 30%;
     opacity: 0;
-    filter:alpha(opacity=0); 
     -moz-opacity: 0;
     -khtml-opacity: 0;
     -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
@@ -511,7 +516,7 @@ button.sx-btn-close{
     border: 1px solid transparent;
   }
   .sx-search-form .sx-form-inline .sx-search-control:focus{
-    outline: 0;
+    outline: 0 solid transparent;
   }
   .sx-search-form .sx-form-inline .sx-control-label{
     position: relative;
@@ -551,7 +556,7 @@ button.sx-btn-close{
     top:auto;
   }
   .sx-gnb .sx-menu a {
-    text-indent: 0px;
+    text-indent: 0;
     line-height:60px; 
   }  
   .sx-gnb > .sx-menu > .sub_mask {
@@ -563,7 +568,7 @@ button.sx-btn-close{
     width:120px;
     background-color: #fff;
     border: 1px solid #e3e3e3;
-    border-bottom: 0px solid transparent;
+    border-bottom: 0 solid transparent;
   }
   .sx-gnb > .sx-menu > .sub_mask > ul .sx-menu:last-child{
     border-bottom: 1px solid #e3e3e3;
