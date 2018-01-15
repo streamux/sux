@@ -1,7 +1,7 @@
 <div class="articles">        
   <div class="sx_login">
     <h1>회원 탈퇴</h1>
-    <p class="sx_subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</p>
+    <p class="sx_subtitle">SUX CMS를 이용해 주셔서 진심으로 감사합니다.</p>
     <div class="sx_login_box sx-edgebox-2px">
       <form name="f_loginleave" action="{$rootPath}member" method="post">
       <input type="hidden" name="_method" value="delete">

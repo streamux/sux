@@ -14,7 +14,7 @@
                 <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>
               </p>
               <div class="sx-form-group">
-                <label for="category" class="sx-control-label label_width">* 회원 그룹</label>
+                <label for="category" class="sx-control-label label_width">회원 그룹 *</label>
                 <select name="category" id="category" class="sx-form-control">
                   {foreach from=$documentData.categories item=value}
                     <option value="{$value.category}" {if $documentData.category === $value.category} selected="selected" {/if}>{$value.category}</option>
@@ -26,26 +26,26 @@
                 <span class="sx-form-control" disabled="disabled">{$documentData.user_id}</span>
               </div>
               <div class="sx-form-group">
-                <label for="password" class="sx-control-label label_width">*비밀번호</label>
+                <label for="password" class="sx-control-label label_width">비밀번호 *</label>
                 <input type="password" id="password" name="password" class="sx-form-control">
                 <input type="button" id="btnChangePassword" name="btn_change_password" value="변경하기" class="sx-btn sx-btn-block">
               </div>
               <div id="panelNewPassword" class="panel_newpassword">
                 <div class="sx-form-group">
-                  <label for="newPassword" class="sx-control-label label_width">신규 비밀번호</label>
+                  <label for="newPassword" class="sx-control-label label_width">신규 비밀번호 *</label>
                   <input type="password" id="newPassword" name="new_password" maxlength="23" class="sx-form-control">
                 </div>
                 <div class="sx-form-group">
-                  <label for="newPasswordConf" class="sx-control-label label_width">신규 비밀번호 확인</label>
+                  <label for="newPasswordConf" class="sx-control-label label_width">신규 비밀번호 확인 *</label>
                   <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
                 </div>
               </div>
               <div class="sx-form-group">
-                <label for="nickName" class="sx-control label_width">*닉네임</label>
+                <label for="nickName" class="sx-control label_width">닉네임 *</label>
                 <input type="text" id="nickName" name="nick_name" class="sx-form-control">
               </div>
               <div class="sx-form-group">
-                <label for="emailAddress" class="sx-control label_width">*이메일</label>
+                <label for="emailAddress" class="sx-control label_width">이메일 *</label>
                 <input type="text" id="emailAddress" name="email_address" class="sx-form-control">
               </div>
               <p class="text_notice">
