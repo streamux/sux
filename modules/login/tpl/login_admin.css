@@ -34,7 +34,7 @@
   font-size: 1.250em;
 }
 .sx_contents_box .sx_login_btn{
-  margin-top: 35px;
+  margin-top: 15px;
 }
 .sx_contents_box a.sx-btn,
 .sx_contents_box input[type=button].sx-btn,
@@ -42,6 +42,12 @@
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: 1.500em;
+}
+.sx_contents_box .sx-form-group .input_login_keeper{
+  vertical-align: top;
+}
+.sx_contents_box .sx-form-group .label_login_keeper{
+  font-size:1em;
 }
 .sx_contents_box .sx_btn_md {
   width: 100px;

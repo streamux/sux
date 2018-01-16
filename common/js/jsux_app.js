@@ -70,6 +70,7 @@ jsux.gnb.Menu = jsux.View.create();
 
           var menu_a$ =  menu$.find('> a');
           menu_a$.attr('href', data[index].link);
+          menu_a$.attr('target', data[index].target);
           menu_a$.text(data[index].label);
 
           data[index].depth = depth;
@@ -459,6 +460,7 @@ jsux.mobileGnb.Menu.include({
 
         var menu_a$ =  menu$.find('> a');
         menu_a$.attr('href', data[index].link);
+        menu_a$.attr('target', data[index].target);
         menu_a$.text(data[index].label);
 
         data[index].depth = depth;

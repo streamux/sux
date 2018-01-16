@@ -6,23 +6,24 @@ class LoginController extends Controller
   function insertLogin() {
     
     $context = Context::getInstance();
-    $this->session_data = $context->getSessionAll();
-    $this->post_data = $context->getPostAll();
+    $sessionData = $context->getSessionAll();
+    $postData = $context->getPostAll();
 
     $rootPath = _SUX_ROOT_;
     $token = Utils::getMicrotimeInt() . 'SHIFLEFT';
-    $userId = (isset($this->post_data['user_id']) && $this->post_data['user_id']) ?
-                    $this->post_data['user_id'] : $this->session_data['user_id'];
+    $userId = (isset($postData['user_id']) && $postData['user_id']) ?
+                    $postData['user_id'] : $sessionData['user_id'];
     $userId = trim($userId);
+    $loginKeeper = trim($postData['login_keeper']);
 
     if (empty($userId)) {
       UIError::alertToBack('아이디를 입력하세요.');     
       exit;
     }
 
-    $password = trim($this->post_data['password']);
+    $password = trim($postData['password']);
     $passwordHash = (isset($password) && $password) ?
-                     $context->getPasswordHash($password) : $this->session_data['password'];
+                     $context->getPasswordHash($password) : $sessionData['password'];
     
     if (empty($passwordHash)) {
       UIError::alertToBack('비밀번호를 입력하세요.');     
@@ -67,15 +68,25 @@ class LoginController extends Controller
       $context->setSession($value, $row[$value]);
     }
 
-    if ($row['category'] === 'administrator') {
+    $grade = (int) $row['grade'];
+    if ($row['category'] === 'administrator' && $grade === 10) {
       $adminHash = $context->getPasswordHash($token);
       $context->setSession('admin_ok', $adminHash);
-    }    
+    }
+
+    $loginKeeper = strtoupper($loginKeeper);
+    if ($loginKeeper === 'TRUE') {
+      $loginCookieId = $context->getCookieId('login_keeper');
+      $context->setCookie($loginCookieId, date('Y-m-d H:i:s'), time() + 86400 * 30 * 12);
+    } else {
+      $loginCookieId = $context->getCookieId('login_keeper');
+      $context->setCookie($loginCookieId, '', -1);
+    }
 
     $data = array(
       'msg'=>'로그인 성공',
       'result'=>'Y',
-      'url'=>$rootPath . 'login'
+      'url'=>$rootPath
     );
     
     $this->callback($data);
@@ -86,15 +97,10 @@ class LoginController extends Controller
     $context = Context::getInstance();
 
     $rootPath = _SUX_ROOT_;
-    $this->session_data = $context->getSessionAll();
-    foreach ($this->session_data as $key => $value) {
-      if (strpos($key, 'admin_ok') !== false) {
-        continue;
-      }
+    $sessionData = $context->getSessionAll();
+    foreach ($sessionData as $key => $value) {
       $context->setSession($key, '');
     }
-
-    $context->setSession('admin_ok', '');
 
     $data = array(
       'msg'=>'로그아웃',

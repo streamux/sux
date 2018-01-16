@@ -13,6 +13,9 @@
 }
 /* header pannel setting end */
 
+.swiper_container_draggable_edit {
+  padding-bottom: 20px;
+}
 .sx-box-content header .xi-info-o {
   position: absolute;
   font-size: 1.5em;
