@@ -10,9 +10,8 @@ class AdminAdminView extends View
   function displayMain() {
 
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
     $action = $this->request_data['action'];
+
     $this->document_data['jscode'] = 'main';
     $this->document_data['module_code'] = 'admin';
 

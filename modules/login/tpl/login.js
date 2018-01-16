@@ -3,33 +3,44 @@ jsux.fn.login = {
 
   checkForm: function( f ) {
 
-    var userId = f.user_id,
-          pwd = f.password;
+    var errorMsg = {
+        user_id: '아이디를 입력하세요',
+        password: '비밀번호를 입력하세요.'
+      };
 
-    if ( userId.value.length < 1) {
-      trace('아이디를 입력하세요.');
-      userId.focus();
-      return false;       
+    for (var key in errorMsg) {
+     
+      var input = f[key];
+      if (input.value === 0 || input.value === '') {
+        trace(errorMsg[key]);
+        input.focus();
+        return false;
+      }
     }
 
-    if ( pwd.value.length < 1) {
-      trace('비밀번호를 입력하세요.');
-      pwd.focus();
-      return false;       
-    }
     return true;
   },
   sendJson: function(f) {
 
-    var params = '',
-      url = '';
-      
-    params = {
-      _method: f._method.value,
-      user_id: f.user_id.value,
-      password: f.password.value
-    };
-    
+    var inputs = $(f).find('input'),
+          normalFilter = /^(hidden|text|password)+$/,
+          chkFilter = /^(checkbox)+$/,
+          params = {},
+          url = '',
+          key = '';
+
+    for (var i=0; i<inputs.length; i++) {
+      if (inputs[i] && inputs[i].type.match(normalFilter)) {
+        key = inputs[i].name;
+        params[key] = inputs[i].value;
+      }
+
+      if (inputs[i] && inputs[i].type.match(chkFilter)) {
+        key = inputs[i].name;
+        params[key] = inputs[i].checked;
+      }
+    }
+
     if (!f.action) {
       alert('Not Exists URL');
     }

@@ -105,7 +105,7 @@
 
       <!--  Login  -->
       {if isset($sessionData.admin_ok) && $sessionData.admin_ok}
-      <a href="{$rootPath}logout-admin" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
+      <a href="{$rootPath}logout-admin?_method=insert" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
         <i class="xi-user xi-2x"></i>
       </a>
       {/if}

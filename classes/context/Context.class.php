@@ -10,7 +10,7 @@ class Context
   private $parameter_list = array();
   public $db_info = NULL;
   private $admin_info = Null;
-  private$cookie_id = 'sux_version_date';
+  private$cookie_list = array('version'=>'sux_version_date', 'login_keeper'=>'sux_login_keeper');
 
   public static function &getInstance() {
 
@@ -339,32 +339,37 @@ class Context
    * value    date('Y-m-d H:i:s')
    * expiry time() + 86400 * 30 * 12
    */
-  function setCookie($name, $value, $expiry, $path='/') {
-    
-    $path = './files/cookie/version.cookie.php';
+  function setCookie($name, $value, $expiry, $path='/', $file_path='') {
+        
     if (isset($value) && $value) {
       setcookie($name, $value, $expiry, $path);
 
-      $buf = array();
-      $buf[] = "<?php\n";
-      $buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";
-      $buf[] = "return \$version;\n";
-      $buf[] = "?>";
-      FileHandler::writeFile( $path, $buf);
+      if ($file_path !== '') {
+        $buf = array();
+        $buf[] = "<?php\n";
+        $buf[] = "\$version=array('" . $name . "'=>'" . $value . "');\n";
+        $buf[] = "return \$version;\n";
+        $buf[] = "?>";
+        FileHandler::writeFile( $filePath, $buf);
+      }      
     } else {
       unset($_COOKIE[$name]);
-      setcookie($name, '', time()-1);
-      unlink($path);
+      setcookie($name, '', time()-1, $path);
+
+      if ($file_path !== '') {
+        unlink($path);
+      }
     }   
   }
 
   function getCookie($name) {
+
     return $_COOKIE[$name];
   }
 
-  function getCookieId()
+  function getCookieId($key)
   {
-    return $this->cookie_id;
+    return $this->cookie_list[$key];
   }
 
   function getRequestToArray($key) {

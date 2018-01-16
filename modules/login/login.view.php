@@ -8,10 +8,10 @@ class LoginView extends View
   function displayLogin() {
 
     $UIError = UIError::getInstance();
-
     $context = Context::getInstance();
-    $this->session_data = $context->getSessionAll();
-    $this->request_data = $context->getRequestAll();
+
+    $loginCookieId = $context->getCookieId('login_keeper');
+    $loginKeeper = $context->getCookie($loginCookieId);
 
     /**
      * css, js file path handler
@@ -39,8 +39,8 @@ class LoginView extends View
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $user_id = $this->session_data['user_id'];
-
+    $user_id = $context->getSession('user_id');
+    
     /**
      * get data from DB
      */
@@ -52,6 +52,7 @@ class LoginView extends View
       $contentsPath = $skinRealPath . 'info.tpl';
     } 
 
+    $this->document_data['loginKeeper'] = $loginKeeper;
     $this->document_data['isLogon'] = 'success';
     $this->document_data['group'] = $groupData;
 
