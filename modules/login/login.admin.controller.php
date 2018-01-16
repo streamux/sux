@@ -11,10 +11,10 @@ class LoginAdminController extends Controller {
     $userId = $posts['user_id'];
     $userPwd = $posts['user_pwd'];
     $token = $posts['token'];
+    $loginKeeper = $posts['login_keeper'];
 
     $rootPath = _SUX_ROOT_;   
     $msg = '';
-
     $token = $token . 'SHIFLEFT';
 
     if (empty($userId)) {
@@ -33,16 +33,39 @@ class LoginAdminController extends Controller {
     $where->set('category', 'administrator');
     $where->set('user_id', $userId, '=', 'and');
     $where->set('password', $userPwd, '=', 'and');
-    $this->model->select('member', 'id', $where);
-
+    $this->model->select('member', '*', $where);    
     $rownum = $this->model->getNumRows();
+
     if ($rownum < 1) {
       UIError::alertToBack('정보가 일치하지 않습니다.');
       exit;
     }
 
+    $row = $this->model->getRow();
+    $row['automod1'] = 'yes';
+    $row['IsAuthorized'] = 'ok';
+    $row['chatip'] = $context->getServer('REMOTE_ADDR');
+    $sessionList = array('category','user_id','password','user_name','nick_name','email_address','is_writable','point','hit_count','grade','automod1','chatip', 'IsAuthorized');
+
+    for ($i=0; $i<count($sessionList); $i++) {
+      $key = $sessionList[$i];
+
+      if (isset($row[$key]) && $row[$key]) {
+        $context->setSession($key, $row[$key]);
+      }
+    }
+
     $adminHash = $context->getPasswordHash($token);
     $context->setSession('admin_ok', $adminHash);
+
+    $loginKeeper = strtoupper($loginKeeper);
+    if ($loginKeeper === 'ON') {
+      $loginCookieId = $context->getCookieId('login_keeper');
+      $context->setCookie($loginCookieId, date('Y-m-d H:i:s'), time() + 86400 * 30 * 12);
+    } else {
+      $loginCookieId = $context->getCookieId('login_keeper');
+      $context->setCookie($loginCookieId, '', -1);
+    }
 
     $data = array(  'token'=>$adminHash,
             'msg'=>'로그인 성공',
@@ -128,10 +151,13 @@ class LoginAdminController extends Controller {
 
   function insertLogoutAdmin() {
 
-    $context = Context::getInstance();
+    $context = Context::getInstance();    
+    $sessionData = $context->getSessionAll();
     $rootPath = _SUX_ROOT_;
 
-    $context->setSession('admin_ok', '');
+    foreach ($sessionData as $key => $value) {
+      $context->setSession($key, '');
+    }
 
     $data = array(  'msg'=>'로그아웃',
             'result'=>'Y',

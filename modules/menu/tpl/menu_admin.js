@@ -781,6 +781,7 @@
         sub:[],
         top:'0px',
         url:'',
+        url_target:'',
         date:''
       };
 
@@ -844,11 +845,10 @@
     updateModifyInfo: function() {
 
       var params = this.menuInfoView.getModel();
-      params._method = $('form[name=f_admin_menu_modify]')[0]._method.value;
 
-      this.serviceManager.update(params);
       this.listManager.updateItem(params);
       this.treeManager.updateItem(params);
+      this.canceModifyMenu();
     },
     removeMenu: function(id) {
 
@@ -879,9 +879,10 @@
       var labelList = ['메뉴 이름을'];
       var inputList = ['menu_name'];
       var isValidForm = true;
-      $.each( inputList, function( index, item) {
 
+      $.each( inputList, function( index, item) {
         var $input = f[item];
+
         if ($input.value.length < 1) {
           trace(labelList[index] + ' 입력 하세요.');
           $input.focus();
@@ -1099,7 +1100,6 @@
         //console.log(e.event.data);
         switch(e.type) {
           case ServiceManagerEvent.UPDATE_COMPLETE: 
-            self.canceModifyMenu();
             self.saveJson();
             break;
 
@@ -1122,7 +1122,7 @@
       var self = this;
       var menuInfoSubmit = function(e) {
 
-        console.log(e.model);
+        //console.log(e.model);
         self.updateModifyInfo();
       };
 

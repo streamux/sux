@@ -1,7 +1,7 @@
 <section class="section admin_login">
   <header class="header">
     <h1>관리자 로그인</h1>
-    <p class="sx_subtitle">SMX 솔루션을 이용해 주셔서 진심으로 감사합니다.</p>
+    <p class="sx_subtitle">SUX CMS를 이용해 주셔서 진심으로 감사합니다.</p>
   </header>      
   <div class="sx_contents_box sx-edgebox-2px">        
     <form action="{$rootPath}login-admin" name="f_login_admin" method="post">
@@ -16,6 +16,12 @@
         <label for="userPassword" class="sx-control-label">비밀번호</label>
         <input type="password" name="user_pwd" id="userPassword" maxlength="22" class="sx-form-control">
       </div>
+      <div class="sx-form-group">          
+        <label for="loginKeeper" class="label_login_keeper sx-control-label">
+          <input type="checkbox" name="login_keeper" id="loginKeeper" class="input_login_keeper" {if $documentData['loginKeeper']}checked{/if}> 로그인 상태유지
+        </label>          
+      </div>
+
       <!-- 
         @ class 'panel-fail'
         @ 설명 :  초기값 설정은 'login.css' > .panel-fail { display: none; },

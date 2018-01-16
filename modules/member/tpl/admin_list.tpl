@@ -33,9 +33,9 @@
 
           <ul class="list_mobile_panel" id="dataMobileList">
             <li>
-            <a href="#">
-              <span class="summary">로딩 중...</span>
-            </a>     
+              <a href="#">
+                <span class="summary">로딩 중...</span>
+              </a>     
             </li>
             <!--
               @ jquery templete

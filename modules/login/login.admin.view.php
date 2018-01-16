@@ -7,6 +7,8 @@ class LoginAdminView extends View {
   function displayLoginAdmin() {
 
     $context = Context::getInstance();
+    $loginCookieId = $context->getCookieId('login_keeper');
+    $loginKeeper = $context->getCookie($loginCookieId);
 
     /**
      * skin directory path
@@ -17,11 +19,12 @@ class LoginAdminView extends View {
     $this->document_data['jscode'] = 'loginAdmin';
     $this->document_data['module_code'] = 'login';
     $this->document_data['module_name'] = '관리자 로그인';
+    $this->document_data['loginKeeper'] = $loginKeeper;
     
     if ($context->isAdminLogin()) {
       Utils::goURL($rootPath . 'admin-admin');
       exit;
-    }    
+    }
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = $skinPath;
@@ -31,20 +34,7 @@ class LoginAdminView extends View {
 
     $this->output();
   }
-  function displayLogoutAdmin() {
-    
-    $context = Context::getInstance();
-    $rootPath = _SUX_ROOT_;
-
-    $context->setSession('admin_ok', '');
-
-    $data = array(  'msg'=>'로그아웃',
-            'result'=>'Y',
-            'url'=>$rootPath . 'login-admin',
-            'delay'=>0);
-      
-    $this->callback($data);
-  }
+  
   function displayRegisterAdmin() {
 
     $context = Context::getInstance();    

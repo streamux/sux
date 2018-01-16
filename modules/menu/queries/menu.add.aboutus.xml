@@ -7,6 +7,7 @@
     <column name="category">aboutus</column>
     <column name="menu_name"><![CDATA[ABOUT US]]></column>
     <column name="url"><![CDATA[aboutus]]></column>
+    <column name="url_target"><![CDATA[_self]]></column>
     <column name="is_active">1</column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>

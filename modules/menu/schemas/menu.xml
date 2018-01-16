@@ -4,6 +4,7 @@
   <column name="category" type="varchar" size="120" notnull="not null"/>  
   <column name="menu_name" type="varchar" size="50" notnull="not null"/>
   <column name="url" type="varchar" size="120"/>
+  <column name="url_target" type="varchar" size="120" default="_self" notnull="not null"/>
   <column name="is_active" type="tinyint" size="1" default="0" notnull="not null"/>  
   <column name="date" type="datetime"/>
 </table>

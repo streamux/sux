@@ -7,6 +7,7 @@
     <column name="category">userguide</column>
     <column name="menu_name"><![CDATA[사용자 가이드]]></column>
     <column name="url"><![CDATA[userguide]]></column>
+    <column name="url_target"><![CDATA[_self]]></column>
     <column name="is_active">1</column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>

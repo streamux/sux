@@ -77,11 +77,15 @@
                             <input type="text" id="menuName" name="menu_name" size="20" maxlength="20" value="{literal}${menu_name}{/literal}" class="sx-form-control">
                           </div>
                           <div class="sx-form-group">
-                            <label for="urllink" class="sx-control-label label_width">URL 링크</label>
+                            <label for="urllink" class="sx-control-label label_width">URL Link</label>
                             <input type="text" id="urllink" name="url" size="25" maxlength="120" value="{literal}${url}{/literal}" class="sx-form-control">
                           </div>
                           <div class="sx-form-group">
-                            <label for="activateState" class="sx-control-label label_width">컨텐츠 활성화 상태</label>
+                            <label for="urlTarget" class="sx-control-label label_width">URL Target</label>
+                            <input type="text" id="urlTarget" name="url_target" size="25" maxlength="120" value="{literal}${url_target}{/literal}" class="sx-form-control">
+                          </div>
+                          <div class="sx-form-group">
+                            <label for="activateState" class="sx-control-label label_width">활성화 상태</label>
                             <select id="activateState" name="is_active" class="sx-form-control">
                               {assign var=states value=['On'=>1,'Off'=>0]}
                               {foreach $states as $key=>$value}
@@ -98,7 +102,7 @@
                     </div>
                     <div class="swiper-scrollbar"></div>
                   </div>
-                </div>
+                </div><!-- end of swiper -->
               </div>
             </script>
           </div><!-- sliding box -->

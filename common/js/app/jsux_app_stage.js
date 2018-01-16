@@ -70,6 +70,7 @@ $(window).ready(function() {
                 list.push({
                   label: data[i].menu_name,
                   link: data[i].url,
+                  target: data[i].url_target,
                   menu:[]
                 });
 
