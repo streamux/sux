@@ -30,7 +30,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_grouplist.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_grouplist.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -52,7 +52,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupadd.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupadd.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -82,7 +82,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupmodify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupmodify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -106,11 +106,11 @@ class MemberAdminView extends View {
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
     $this->request_data['id'] = $id;           
-    $this->document_data['contents'] = $row;    
+    $this->document_data['content'] = $row;    
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupdelete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupdelete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -225,7 +225,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_setup.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_setup.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -262,7 +262,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -288,7 +288,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -323,7 +323,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -353,7 +353,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();

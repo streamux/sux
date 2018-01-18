@@ -3,11 +3,11 @@
   padding-right: 20px;
   width:auto;
 }
-.contents_header {
+.content_header {
   position: relative;
   background-color: #3b3c3b;
 }
-.contents_header .btn_write {
+.content_header .btn_write {
   position: absolute;
   margin-top: 9px;
   margin-left: 8px;
@@ -18,28 +18,28 @@
   text-align: center;
   border-radius:0.25em;
 }
-.contents_header .btn_write:hover{
+.content_header .btn_write:hover{
   border:1px solid #fff;
 }
-.contents_header .btn_write a {
+.content_header .btn_write a {
   display:inline-block;
   width:34px;
   height:32px;
 }
-.contents_header .btn_write a i{
+.content_header .btn_write a i{
   color: #e3e3e3;
 }
-.contents_header .btn_write a i:hover{
+.content_header .btn_write a i:hover{
   color: #fff;
 }
-.contents_header h1 {
+.content_header h1 {
   line-height:50px;
   font-size:1.250em;
   font-weight: normal;  
   text-align: center;
   color:#fff;
 }
-.contents_header p{  
+.content_header p{  
   display:none;
 }
 .form_search_panel {
@@ -189,7 +189,7 @@
 .board_read .body_panel {
   padding: 0 10px 55px 10px;
 }
-.board_read .body_panel .contents {
+.board_read .body_panel .content {
   padding: 15px 15px 30px 15px;
   min-height:200px;  
   line-height: 20px;
@@ -505,23 +505,23 @@
     padding-right: 20px;
     width:100px;
   }
-  .contents_header  {
+  .content_header  {
     overflow:hidden;
     padding-bottom: 35px;
     background-color: #f6f6f6;    
   }
-  .contents_header h1 {
+  .content_header h1 {
     margin-top:25px;
     margin-left: 15px;
     text-align:left;
     font-size: 2.00em;
     color: #333333;
   }
-  .contents_header p {
+  .content_header p {
     display: block;
     margin-left:15px;
   }
-  .contents_header .btn_write {
+  .content_header .btn_write {
     display: none;  
   }
   .form_search_panel .sx-input-group .form_control_width{

@@ -39,8 +39,8 @@
               <input type="text" id="header_path" name="header_path" size="25" maxlength="50" value="common/_header.tpl" class="sx-form-control">
             </div>
             <div class="sx-form-group">
-              <label for="contentsPath" class="sx-control-label label_width">컨텐츠 템플릿</label>
-              <select id="contentsPath" name="contents_path" onchange="jsux.fn.add.loadTemplateContents(this.value);" class="sx-form-control">
+              <label for="contentPath" class="sx-control-label label_width">컨텐츠 템플릿</label>
+              <select id="contentPath" name="content_path" onchange="jsux.fn.add.loadTemplatecontent(this.value);" class="sx-form-control">
                 {foreach from=$documentData.skinList key=k item=v}
                 <option value="{$v}" {if $v === 'default'} selected {/if}>{$v}</option>
                 {/foreach}
@@ -50,14 +50,14 @@
               <label for="emptyName" class="sx-control-label label_width">컨텐츠 내용</label>
               <div class="sx-form-group">
                 <ul class="sx-nav-tabs">
-                  <li class="active"><a href="#" data-target="contents_tpl" alt="템플릿 입력 탭">HTML</a></li>
-                  <li><a href="#" data-target="contents_css" alt="CSS 입력 탭">CSS</a></li>
-                  <li><a href="#" data-target="contents_js" alt="자바스크립트 입력 탭">JS</a></li>
+                  <li class="active"><a href="#" data-target="content_tpl" alt="템플릿 입력 탭">HTML</a></li>
+                  <li><a href="#" data-target="content_css" alt="CSS 입력 탭">CSS</a></li>
+                  <li><a href="#" data-target="content_js" alt="자바스크립트 입력 탭">JS</a></li>
                 </ul>
-                <div class="contents_panel">
-                  <textarea id="contentsTpl" name="contents_tpl" rows="15" class="sx-form-control"></textarea>
-                  <textarea id="contentsCss" name="contents_css" rows="15" class="sx-form-control hide"></textarea>    
-                  <textarea id="contentsJs" name="contents_js" rows="15" class="sx-form-control hide"></textarea>     
+                <div class="content_panel">
+                  <textarea id="contentTpl" name="content_tpl" rows="15" class="sx-form-control"></textarea>
+                  <textarea id="contentCss" name="content_css" rows="15" class="sx-form-control hide"></textarea>    
+                  <textarea id="contentJs" name="content_js" rows="15" class="sx-form-control hide"></textarea>     
                 </div>
                 <p class="text_caption">컨텐츠 내용을 입력하세요.</p>
               </div> 

@@ -29,7 +29,7 @@ class LoginAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = $skinPath;
     $this->skin_path_list['header'] = "{$skinPath}/_header_admin.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/login_admin.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/login_admin.tpl";
     $this->skin_path_list['footer'] = "{$skinPath}/_footer_admin.tpl";
 
     $this->output();
@@ -55,7 +55,7 @@ class LoginAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = $skinPath;
     $this->skin_path_list['header'] = "{$skinPath}/_header_admin.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/register_admin.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/register_admin.tpl";
     $this->skin_path_list['footer'] = "{$skinPath}/_footer_admin.tpl";
 
     $this->output();

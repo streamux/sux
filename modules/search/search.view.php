@@ -74,7 +74,7 @@ class SearchView extends View
     $where->add('(');
     $where->set('user_name', $search, 'like', '');
     $where->set('title', $search, 'like', 'or');
-    $where->set('contents', $search, 'like', 'or');
+    $where->set('content', $search, 'like', 'or');
     $where->add(')');    
     
     $result = $this->model->select('board', '*', $where);
@@ -94,7 +94,7 @@ class SearchView extends View
         $name =htmlspecialchars($contentData['list'][$i]['user_name']); 
         $title = trim(htmlspecialchars($contentData['list'][$i]['title']));
 
-        $contents = trim(htmlspecialchars($contentData['list'][$i]['contents']));
+        $contents = trim(htmlspecialchars($contentData['list'][$i]['content']));
         $contents = Utils::ignoreNewline($contents);
         $contents = Utils::trimText($contents, 120, '..');
 
@@ -160,7 +160,7 @@ class SearchView extends View
         $subject['icon_progress_color'] = 'sx-bg-progress';
 
         $contentData['list'][$i]['name'] = $name;
-        $contentData['list'][$i]['contents'] = $contents;
+        $contentData['list'][$i]['content'] = $contents;
         $contentData['list'][$i]['hit'] = $hit;
         $contentData['list'][$i]['space'] = $space;
         $dateArr = split(' ', $date);
@@ -184,7 +184,7 @@ class SearchView extends View
     $this->request_data = $requestData;
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
     $this->document_data['category'] = $category;
     $this->document_data['categories'] = $categories;
     $this->document_data['total_num'] = $numrows;
@@ -196,7 +196,7 @@ class SearchView extends View
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
 
-    $this->skin_path_list['contents'] = "{$skinRealPath}/list.tpl";    
+    $this->skin_path_list['content'] = "{$skinRealPath}/list.tpl";    
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();

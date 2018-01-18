@@ -23,7 +23,7 @@ class AdminAdminView extends View
     $this->skin_path_list['skinPath'] = $skinPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$skinRealPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_main.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/admin_main.tpl";
     $this->skin_path_list['footer'] = "{$skinRealPath}/_footer.tpl";
 
     $this->output();

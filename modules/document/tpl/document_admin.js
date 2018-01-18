@@ -116,7 +116,7 @@ jsux.fn.add = {
     }
     return backUrl;
   },
-  loadTemplateContents: function(value) { 
+  loadTemplatecontent: function(value) { 
 
     var self = this,
           skinPath = $('input[name=skin_path]').val(),
@@ -264,11 +264,11 @@ jsux.fn.add = {
       }
     });
   },
-  setContentsByTab: function(e) {
+  setcontentByTab: function(e) {
 
     var targetName = $(e.target).data('target');
-    $contents = $('textarea[name^=contents]');
-    $contents.each(function(index) {
+    $content = $('textarea[name^=content]');
+    $content.each(function(index) {
 
       var $this = $(this);
       var itemName = $this.attr('name');
@@ -327,12 +327,12 @@ jsux.fn.add = {
       self.checkCategoryName();
     });
 
-    // contents tab event
+    // content tab event
     $('.sx-nav-tabs > li > a').on('click', function(e) {
       e.preventDefault();
       
       self.setTab(e);
-      self.setContentsByTab(e);
+      self.setcontentByTab(e);
     });
   },
   setLayout: function() {
@@ -345,7 +345,7 @@ jsux.fn.add = {
       }
     });
 
-    this.loadTemplateContents('default');    
+    this.loadTemplatecontent('default');    
   },
   init: function() {
 
@@ -367,7 +367,7 @@ jsux.fn.modify = {
     }
     return backUrl;
   },
-  loadTemplateContents: function(value) {
+  loadTemplatecontent: function(value) {
 
     var self = this,
           skinPath = $('input[name=skin_path]').val(),
@@ -493,11 +493,11 @@ jsux.fn.modify = {
       }
     });
   },
-  setContentsByTab: function(e) {
+  setcontentByTab: function(e) {
 
     var targetName = $(e.target).data('target');
-    $contents = $('textarea[name^=contents]');
-    $contents.each(function(index) {
+    $content = $('textarea[name^=content]');
+    $content.each(function(index) {
 
       var $this = $(this);
       var itemName = $this.attr('name');
@@ -552,12 +552,12 @@ jsux.fn.modify = {
       jsux.goURL(self.returnUrl());
     });
 
-    // contents tab event
+    // content tab event
     $('.sx-nav-tabs > li > a').on('click', function(e) {
       e.preventDefault();
       
       self.setTab(e);
-      self.setContentsByTab(e);
+      self.setcontentByTab(e);
     });
   },
   setLayout: function() {
@@ -617,9 +617,9 @@ jsux.fn.modify = {
             self.setRadioVal( this.name, list[this.name] );
           });
 
-          self.setTextAreaVal('contents_tpl', list.contents_tpl);
-          self.setTextAreaVal('contents_css', list.contents_css); 
-          self.setTextAreaVal('contents_js', list.contents_js); 
+          self.setTextAreaVal('content_tpl', list.content_tpl);
+          self.setTextAreaVal('content_css', list.content_css); 
+          self.setTextAreaVal('content_js', list.content_js); 
         } else {
           trace( e.msg );
         }       

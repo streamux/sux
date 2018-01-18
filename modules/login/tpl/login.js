@@ -49,7 +49,7 @@ jsux.fn.login = {
     jsux.getJSON( url, params, function( e ) {
       
       if (e.result.toLowerCase() == 'y') {
-        jsux.goURL(jsux.rootPath + 'login');
+        jsux.goURL(jsux.rootPath);
       } else {
         jsux.goURL(jsux.rootPath + 'login-fail');
       }

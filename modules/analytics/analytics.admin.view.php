@@ -26,7 +26,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_connect_site_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -46,7 +46,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_connect_site_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -76,7 +76,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_reset.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_connect_site_reset.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -112,7 +112,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_connect_site_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_connect_site_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -210,7 +210,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_pageview_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -230,7 +230,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_pageview_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -260,7 +260,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_reset.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_pageview_reset.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -290,7 +290,7 @@ class AnalyticsAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_pageview_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_pageview_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();

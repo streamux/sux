@@ -11,13 +11,13 @@
     <p class="sub_info">{$contentData.user_name} &nbsp; {$contentData.date} &nbsp; 조회 {$contentData.readed_count}</p>
   </div>
   <div class="body_panel">
-    <div class="contents">
+    <div class="content">
       <p class="{$contentData.css_down}">      
         <a href="{$contentData.fileup_path}">{$contentData.file_name}&nbsp;<b>[ 다운로드 ]</b></a>
       </p>
       <p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
       <p>
-        <pre>{$contentData.contents}</pre>
+        <pre>{$contentData.content}</pre>
       </p>
     </div> 
     <div class="btn_groups">    

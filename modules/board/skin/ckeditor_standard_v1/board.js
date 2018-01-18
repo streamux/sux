@@ -111,10 +111,10 @@ jsux.fn.write = {
 
   checkDocumentForm: function (f) {
 
-    jsux.fn.ckeditor.updateElement('contents');
+    jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address.value.length;
     var result = true;
 
@@ -143,7 +143,7 @@ jsux.fn.write = {
   },
   setLayout: function() {
     
-    jsux.fn.ckeditor.replace('contents');
+    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -156,10 +156,10 @@ jsux.fn.reply = {
   
   checkDocumentForm: function (f) {
 
-    jsux.fn.ckeditor.updateElement('contents');
+    jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address.value.length;
     var result = true;
 
@@ -188,7 +188,7 @@ jsux.fn.reply = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('contents');
+    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -201,10 +201,10 @@ jsux.fn.modify = {
 
   checkDocumentForm: function (f) {
 
-    jsux.fn.ckeditor.updateElement('contents');
+    jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var result = true;
 
     $.each( checkList, function( index, item) {
@@ -232,7 +232,7 @@ jsux.fn.modify = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('contents');
+    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
     

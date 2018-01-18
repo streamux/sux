@@ -32,6 +32,7 @@ class MenuAdminController extends Controller
         $columns['category'] = $category;
         $columns['menu_name'] = $menuName;
         $columns['url'] = $category;
+        $columns['url_target'] = '_self';
         $columns['date'] = 'now()';
 
         $result = $this->model->insert('menu', $columns);
@@ -70,13 +71,14 @@ class MenuAdminController extends Controller
 
     $id = $posts['id'];
     $menuName = $posts['menu_name'];
-
     $url = $posts['url'];
+    $urlTarget = $posts['url_target'] ? $posts['url_target'] : 0;
     $isActive = (int) $posts['is_active'];
 
     $columns = array();
     $columns['menu_name'] = $menuName;
     $columns['url'] = $url;
+    $columns['url_target'] = $urlTarget;
     $columns['is_active'] = $isActive;
 
     $where = new QueryWhere();

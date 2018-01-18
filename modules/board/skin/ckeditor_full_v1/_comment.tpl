@@ -4,7 +4,7 @@
     <form action="{$routeURI}/{$contentData.id}/comment" name="f_comment" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="insert">
       <input type="hidden" name="category" value="{$documentData.category}">
-      <input type="hidden" name="contents_id" value="{$documentData.id}">
+      <input type="hidden" name="content_id" value="{$documentData.id}">
       <div class="sx-form-inline">
          <div class="sx-input-group">
             <label for="nickName" class="sx-control-label label_width">닉네임</label>
@@ -14,38 +14,39 @@
         </div>
       </div>      
       <div class="sx-form-group">
-        <textarea name="comment" id="comment" rows="23" class="sx-form-control"></textarea>
+        <textarea name="comment" id="comment" rows="23" class="sx-form-control">테스트입니다.</textarea>
       </div>
       <div class="btn_group sx-form-group">
         <input type="submit" name="comfirm" value="댓글등록" class="sx-btn">
-        <input type="reset" name="rewrite" value="다시쓰기" class="sx-btn">
       </div>      
     </form>
   </div>
 
   <div class="list_panel">
+    <input type="hidden" name="url_comment_json" value="{$routeURI}/{$contentData.id}/comment-json">
     <p class="title">댓글 {$commentData.num}</p>
      <table summary="댓글 리스트 입니다.">
-      <tbody>
-        {foreach from=$commentData.list item=$item}
-        <tr>
-          <td class="clearfix">
-            <div class="user_info clearfix">
-              <div class="sx-user-picture pull-left"></div>
-              <p class="nick_name pull-left">{$item.nickname}<br>{$item.date}</p>
-            </div>
-            <div class="comment_body">
-              <span class="comment">{$item.comment}</span>
-              <p class="btn_group">
-                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs"><i class="xi-heart-o"></i>좋아요(+1)</a>
-                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">댓글</a>
-                <a href="{$routeURI}/{$contentData.id}/delete-comment/{$item.id}" class="sx-btn sx-btn-xs">삭제</a>
-              </p>
-            </div>            
-          </td>
-        </tr>
-        {/foreach}
+      <tbody id="commentList">
+        <!-- boardTailCommentTmpl -->
       </tbody>
     </table>
   </div>
 </div>
+
+<script type="text/x-jquery-tmpl" id="boardTailCommentTmpl">
+  <tr>
+    <td class="clearfix">
+      <div class="user_info clearfix">
+        <div class="sx-user-picture pull-left"></div>
+        <p class="nick_name pull-left">{literal}${nickname}{/literal}<br>{literal}${date}{/literal}</p>
+      </div>
+      <div class="comment_body">
+        <span class="comment">{literal}${comment}{/literal}</span>
+        <p class="btn_group">
+          <button class="sx-btn sx-btn-xs" onclick=""><i class="xi-heart-o"></i>좋아요(+1)</button>
+          <button class="sx-btn sx-btn-xs" onclick="">삭제</button>
+        </p>
+      </div>            
+    </td>
+  </tr>
+</script>

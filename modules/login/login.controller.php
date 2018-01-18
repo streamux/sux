@@ -77,7 +77,8 @@ class LoginController extends Controller
     $loginKeeper = strtoupper($loginKeeper);
     if ($loginKeeper === 'TRUE') {
       $loginCookieId = $context->getCookieId('login_keeper');
-      $context->setCookie($loginCookieId, date('Y-m-d H:i:s'), time() + 86400 * 30 * 12);
+      $loginKeeperVal = Utils::getMicrotimeInt();
+      $context->setCookie($loginCookieId, $loginKeeperVal, time() + 86400 * 30 * 12);
     } else {
       $loginCookieId = $context->getCookieId('login_keeper');
       $context->setCookie($loginCookieId, '', -1);

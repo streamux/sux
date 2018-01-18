@@ -12,7 +12,7 @@ class BoardView extends View
   }
 
   function displayList() {
-    
+
     $context = Context::getInstance();
     $UIError = UIError::getInstance();
 
@@ -95,7 +95,7 @@ class BoardView extends View
           $user_id = FormSecurity::decodeByNonTags($contentData['list'][$i]['user_id']);          
           $name = FormSecurity::decodeByNonTags($contentData['list'][$i]['user_name']); 
           $title = FormSecurity::decodeBySimpleTags($contentData['list'][$i]['title']);
-          $contents = FormSecurity::decodeByText($contentData['list'][$i]['contents']);
+          $content = FormSecurity::decodeByText($contentData['list'][$i]['content']);
           $progressStep = FormSecurity::decodeByNonTags($contentData['list'][$i]['progress_step']);
           $hit = (int) $contentData['list'][$i]['readed_count'];
           $space = (int) $contentData['list'][$i]['space_count'];
@@ -165,7 +165,7 @@ class BoardView extends View
           }
 
           $where->reset();
-          $where->set('contents_id', $id, '=');
+          $where->set('content_id', $id, '=');
           $this->model->select('comment', 'id', $where);
 
           $commentNums = $this->model->getNumRows();
@@ -212,14 +212,14 @@ class BoardView extends View
     $this->document_data['module_name'] = '게시판 목록'; 
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
     $this->document_data['category'] = $category;
     
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = "{$skinRealPath}/list.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/list.tpl";
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();
@@ -261,7 +261,7 @@ class BoardView extends View
     $headerPath = $groupData['header_path'];
     $skinName = $groupData['skin_path'];
     $footerPath = $groupData['footer_path'];
-    $contentsType = $groupData['board_type'];
+    $contentType = $groupData['board_type'];
 
     /**
      * css, js file path handler
@@ -333,12 +333,12 @@ class BoardView extends View
     $filetype = $contentData['filetype'];
     $filesize = $contentData['filesize'];
 
-    switch ($contentsType) {
+    switch ($contentType) {
       case 'text':
-        $contentData['contents'] = FormSecurity::decodeByText($contentData['contents']);
+        $contentData['content'] = FormSecurity::decodeByText($contentData['content']);
         break;
       case 'html':
-        $contentData['contents'] = FormSecurity::decodeByHtml($contentData['contents']);    
+        $contentData['content'] = FormSecurity::decodeByHtml($contentData['content']);    
         break;
     }
 
@@ -395,7 +395,7 @@ class BoardView extends View
       $contentData['css_comment'] = 'show';
 
       $where->reset();
-      $where->set('contents_id',$id,'=');
+      $where->set('content_id',$id,'=');
       $this->model->select('comment','*', $where);
 
       $commentData['num'] = $this->model->getNumRows();
@@ -411,7 +411,7 @@ class BoardView extends View
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
     $this->document_data['comments'] = $commentData;
     $this->document_data['category'] = $category;
 
@@ -419,7 +419,7 @@ class BoardView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}read.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}read.tpl";
     $this->skin_path_list['footer'] = $footerPath;
     $this->skin_path_list['comment'] =  "{$skinRealPath}_comment.tpl";
     $this->skin_path_list['progress_step'] =  "{$skinRealPath}_progress_step.tpl"; 
@@ -499,8 +499,8 @@ class BoardView extends View
       $contentData['wallkey'] = "a";
     }
 
-    $contentsType = $contentData['contents_type'];
-    $contentData['contents_type_' . $contentsType] = 'checked';
+    $contentType = $contentData['content_type'];
+    $contentData['content_type_' . $contentType] = 'checked';
     
     if (isset($grade) && $grade) {
       $level = $grade;
@@ -552,13 +552,13 @@ class BoardView extends View
     $this->document_data['module_name'] = '게시판 쓰기';
     $this->document_data['category'] = $category;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;    
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}/write.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/write.tpl";
     $this->skin_path_list['footer'] = $footerPath;    
 
     $this->output();
@@ -634,10 +634,10 @@ class BoardView extends View
     $contentData = $this->model->getRow();
     $contentData['user_name'] = $contentData['user_name'];
     $contentData['title'] = $contentData['title'];
-    $contentData['contents'] = FormSecurity::decodeByHtml($contentData['contents']);    
+    $contentData['content'] = FormSecurity::decodeByHtml($contentData['content']);    
     
-    $contentsType = $contentData['contents_type'];
-    $contentData['contents_type_' . $contentsType] = 'checked';
+    $contentType = $contentData['content_type'];
+    $contentData['content_type_' . $contentType] = 'checked';
     unset($contentData['password']);
 
     $where = new QueryWhere();
@@ -690,13 +690,13 @@ class BoardView extends View
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath; 
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}/modify.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/modify.tpl";
     $this->skin_path_list['footer'] = $footerPath;    
 
     $this->output();
@@ -764,16 +764,16 @@ class BoardView extends View
     $contentData = $this->model->getRow();    
     $contentData['user_name'] = empty($user_name) ? 'Guest' : $user_name;
     $contentData['title'] = htmlspecialchars($contentData['title']);
-    $contentsType = trim($contentData['conetents_type']);
+    $contentType = trim($contentData['conetents_type']);
 
     $is_download = $contentData['is_download'];
     $filename = $contentData['filename'];
     $filetype = $contentData['filetype'];
     
-    if ($contentsType === 'html'){
-      $contentData['contents'] = htmlspecialchars_decode($contentData['contents']);
-    }else if ($contentsType === 'text'){
-      $contentData['contents'] = nl2br(htmlspecialchars($contentData['contents']));
+    if ($contentType === 'html'){
+      $contentData['content'] = htmlspecialchars_decode($contentData['content']);
+    }else if ($contentType === 'text'){
+      $contentData['content'] = nl2br(htmlspecialchars($contentData['content']));
     }
     
     $contentData['css_down'] = 'hide';
@@ -819,8 +819,8 @@ class BoardView extends View
       $contentData['wallkey'] = "a";
     }
 
-    $contentsType = $contentData['contents_type'];
-    $contentData['contents_type_' . $contentsType] = 'checked';
+    $contentType = $contentData['content_type'];
+    $contentData['content_type_' . $contentType] = 'checked';
     
     if (isset($grade) && $grade) {
       $level = $grade;
@@ -874,14 +874,14 @@ class BoardView extends View
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
     $this->document_data['uri'] = $rootPath.$category;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath; 
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}/reply.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/reply.tpl";
     $this->skin_path_list['footer'] = $footerPath;    
 
     $this->output();
@@ -936,16 +936,47 @@ class BoardView extends View
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath; 
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}/delete.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/delete.tpl";
     $this->skin_path_list['footer'] = $footerPath;    
 
     $this->output();
+  }
+
+  function displayCommentJson() {
+
+    $resultYN = 'Y';
+    $msg = '';
+
+    $context = Context::getInstance();
+
+    $category = $context->getParameter('category');
+    $id = $context->getParameter('id');
+    $rootPath = _SUX_ROOT_;
+
+    $where = QueryWhere::getInstance();
+    $where->set('content_id',$id);
+    $result = $this->model->select('comment','*', $where);
+    //$msg .= Tracer::getInstance()->getMessage();
+
+    if (!$result) {
+      $msg .= '댓글 가져오기를  실패하였습니다.';
+    }
+    $rows= $this->model->getRows();
+    
+    $data = array(
+            'data'=>$rows,
+            'url'=>$rootPath . $category,
+            'result'=>$resultYN,
+            'msg'=>$msg,
+            'delay'=>0);
+
+    $this->callback($data);
   }
 
   function displayDeleteComment() {
@@ -1000,13 +1031,13 @@ class BoardView extends View
     $contentData = $this->model->getRow();
     $contentData['id'] = $id;
     $this->document_data['group'] = $groupData;
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
 
     $this->skin_path_list['root'] =$rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath; 
     $this->skin_path_list['header'] = $headerPath;    
-    $this->skin_path_list['contents'] = "{$skinRealPath}/delete_comment.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/delete_comment.tpl";
     $this->skin_path_list['footer'] = $footerPath;  
 
     $this->output();

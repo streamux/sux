@@ -9,7 +9,7 @@ class BoardController extends Controller
     return array(  array('key'=>'user_name', 'msg'=>'이름을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
-                          array('key'=>'contents', 'msg'=>'내용을'));
+                          array('key'=>'content', 'msg'=>'내용을'));
   }
 
   function getIntegerFields() {
@@ -58,7 +58,7 @@ class BoardController extends Controller
     Forms::validateFile($files);
     $posts = $this->setEncodeFormValue($posts);
 
-    /*echo $posts['contents'];
+    /*echo $posts['content'];
     return;*/
     
     $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
@@ -536,7 +536,7 @@ class BoardController extends Controller
 
     $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];
-    $id = $posts['contents_id'];
+    $cid = $posts['contents_id'];
 
     $rootPath = _SUX_ROOT_;
     $msg = '';
@@ -557,14 +557,14 @@ class BoardController extends Controller
 
     $cachePath = './files/caches/queries/comment.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if ($columnCaches) {
 
+    if ($columnCaches) {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];
-
-        //$msg .= $key . "<br>";
         $value = $posts[$key];
+
         if (isset($value) && $value) {
           if ($key === 'password') {
             $value = $context->getPasswordHash($value); 
@@ -587,7 +587,18 @@ class BoardController extends Controller
       $msg .= '댓글 입력을 실패하였습니다.';
     }
 
-    $data = array(  'url'=>$rootPath . $category . '/' . $id,
+    $id = $this->model->getInsertId();
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $where->set('contents_id', $cid, '=', 'and');
+
+    // 추가된 마지막 입력값 선택 
+    $this->model->select('comment', '*', $where);
+    $row = $this->model->getRow();
+
+    $data = array( 
+            'data'=>$row,
+            'url'=>$rootPath . $category . '/' . $id,
             'result'=>$resultYN,
             'msg'=>$msg,
             'delay'=>0);
