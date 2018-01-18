@@ -6,7 +6,7 @@
 class PageModule
 {
 	function display( $id, $sid)
-	{		
+	{
 		$context = Context::getInstance();
 		$returnURL = $context->getServer('REQUEST_URI');
 
@@ -101,14 +101,14 @@ class PageModule
 						// when user connect from Base URL
 						if (empty($action)) {
 							$category = 'home';
-							$action = 'contents';
+							$action = 'content';
 						} else {
 							$category = $action;
 							$context->setParameter('category', $category);
 							if (preg_match('/^(board|documentadmin)+/i', $className)) {
 								$action = isset($id) ? 'read' : 'list';
 							} else {
-								$action = 'contents';
+								$action = 'content';
 							}
 						}
 					}
