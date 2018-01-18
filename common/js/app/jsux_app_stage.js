@@ -59,20 +59,19 @@ $(window).ready(function() {
         jsonpCallback: 'JSON_CALLBACK',
         success: function(json) {
 
-          var data = json.data;
-          menuList = [];
+          var data = json.data,
+                menuList = [];
 
           if (data.length > 0) {
 
             var dataManager = (function f(list, data){
 
               for (var i=0; i<data.length; i++) {
-                list.push({
-                  label: data[i].menu_name,
-                  link: data[i].url,
-                  target: data[i].url_target,
-                  menu:[]
-                });
+                list[i] = {};
+                list[i].label = data[i].menu_name;
+                list[i].link = data[i].url;
+                list[i].link_target = data[i].url_target;
+                list[i].menu = [];
 
                 if (data[i].sub && data[i].sub.length > 0) {
                   arguments.callee(list[i].menu, data[i].sub);
