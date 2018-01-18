@@ -194,7 +194,7 @@ class DB extends Object {
   function select($query) {
 
     $sql = $this->_selectSql($query);
-    
+    $this->setLogger($sql);
 
     $this->query_result = $this->_query($sql);
     return $this->query_result;
@@ -203,7 +203,7 @@ class DB extends Object {
   function insert($query) {
 
     $sql = $this->_insertSql($query);
-    $this->setLogger($sql);  
+    $this->setLogger($sql);
 
     $this->query_result = $this->_query($sql);
     return $this->query_result;
@@ -227,6 +227,11 @@ class DB extends Object {
     return $this->query_result;
   }
 
+  function getInsertId() {
+
+    return mysql_insert_id();
+  }
+
   function showTables($query) {
 
     $sql = $this->_showSql($query);
@@ -239,7 +244,7 @@ class DB extends Object {
   function createTable($query) {
 
     $sql = $this->_createSql($query);
-    //$this->setLogger($sql);
+    $this->setLogger($sql);
 
     $this->query_result = $this->_query($sql);
     return $this->query_result;
@@ -259,7 +264,6 @@ class DB extends Object {
     if (isset($result) && $result) {
       $this->query_result = $result;
     }
-    //echo $this->query_result;
     return $this->_fetchArray($this->query_result);
   }
 
