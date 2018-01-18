@@ -8,9 +8,9 @@
 <img src="{$rootPath}analytics/counter" alt="" class="hide">
 
 <!-- template start -->
-<script type="sux-templete" id="gnbMenuItem">
+<script type="text/x-jquery-templete" id="gnbMenuItem">
   <li class="sx-menu" data-id="-1" data-depth="0">
-    <a href=""></a>
+    <a href="" target=""></a>
     <div class="sub_mask">
         <ul></ul>
       </div>
@@ -22,7 +22,7 @@
   var loginObj = loginObj || {};
   loginObj.memberList = {$documentData.group};
 </script>
-<script type="x-jquery-templete" id="memberGroupTmpl">
+<script type="text/x-jquery-templete" id="memberGroupTmpl">
   <option>{literal}${name}{/literal}</option>
 </script>
 {/if}
