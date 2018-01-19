@@ -3,7 +3,7 @@ class BoardView extends View
 {
   function getNonTagFields() {
 
-    return array('category','user_id','user_name','nick_name');
+    return array('category','user_id','user_name','nickname');
   }
 
   function getSimpleTagFields() {
@@ -373,7 +373,7 @@ class BoardView extends View
 
     // opkey
     $contentData['css_progress_step'] = 'hide';
-    if (($is_progress_step === 'y') || ($grade > 9)) {
+    if ($is_progress_step === 'y') {
       $contentData['css_progress_step'] = 'show';
       $progressSteps = array(
         '진행완료'=>'progress_step_done',
@@ -403,7 +403,7 @@ class BoardView extends View
     }
 
     $this->request_data = $requestData;
-    $this->session_data = $sessionDat;
+    $this->session_data = $sessionData;
 
     $this->document_data['jscode'] = 'read';
     $this->document_data['module_code'] = 'board';
@@ -445,7 +445,7 @@ class BoardView extends View
     $PHP_SELF = $context->getServer("PHP_SELF");
     $category = $context->getParameter('category');
     $grade = $sessionData['grade'];
-    $user_name = empty($sessionData['user_name']) ? $sessionData['nick_name'] : $sessionData['user_name'];
+    $user_name = empty($sessionData['user_name']) ? $sessionData['nickname'] : $sessionData['user_name'];
     $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
@@ -586,7 +586,7 @@ class BoardView extends View
     $grade = $this->session_data['grade'];   
     $user_name = $this->session_data['user_name'];
     if (empty($user_name)) {
-      $user_name = $this->session_data['nick_name'];
+      $user_name = $this->session_data['nickname'];
     }  
 
     $password = $this->session_data['password'];  
@@ -721,7 +721,7 @@ class BoardView extends View
     $category = $context->getParameter('category');
     $id = $context->getParameter('id');
     $grade = $sessionData['grade'];
-    $user_name = empty($sessionData['user_name']) ? $sessionData['nick_name'] : $sessionData['user_name'];
+    $user_name = empty($sessionData['user_name']) ? $sessionData['nickname'] : $sessionData['user_name'];
     $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
@@ -956,19 +956,19 @@ class BoardView extends View
     $context = Context::getInstance();
 
     $category = $context->getParameter('category');
-    $id = $context->getParameter('id');
+    $cid = $context->getParameter('id');
     $rootPath = _SUX_ROOT_;
 
     $where = QueryWhere::getInstance();
-    $where->set('content_id',$id);
+    $where->set('content_id',$cid);
     $result = $this->model->select('comment','*', $where);
-    //$msg .= Tracer::getInstance()->getMessage();
+    $msg .= Tracer::getInstance()->getMessage();
 
     if (!$result) {
       $msg .= '댓글 가져오기를  실패하였습니다.';
     }
-    $rows= $this->model->getRows();
-    
+    $rows = $this->model->getRows();
+ 
     $data = array(
             'data'=>$rows,
             'url'=>$rootPath . $category,

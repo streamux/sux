@@ -105,7 +105,7 @@ class BoardAdminController extends Controller
       $columns['category'] = $category;
       $columns['user_id'] = $adminId;
       $columns['user_name'] = '운영자';
-      $columns['nick_name'] = '운영자';
+      $columns['nickname'] = '운영자';
       $columns['password'] = $passwordHash;
       $columns['title'] = '게시판 시동 테스트';
       $columns['content'] = '본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br>본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.';

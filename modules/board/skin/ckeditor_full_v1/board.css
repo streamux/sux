@@ -286,24 +286,23 @@
 .board_comment .list_panel {
   margin-top:10px;
 }
-.board_comment .list_panel table {
+.board_comment .list_panel ul {
   width: 100%;
   padding: 0 10px 0 10px;
 }
-.board_comment .list_panel table tbody tr{
+.board_comment .list_panel ul li {
+  padding:20px 10px 20px 20px;
   border-bottom:1px dotted #D6D7D6; 
-}
-.board_comment .list_panel table tbody tr td {
-  padding:20px 10px 20px 20px;  
-}
-.board_comment .list_panel table tbody tr td .user_info{
   vertical-align: top;
 }
-.board_comment .list_panel table tbody tr td .user_info .sx-user-picture{
+.board_comment .list_panel ul li .user_info{
+  vertical-align: top;
+}
+.board_comment .list_panel ul li .user_info .sx-user-picture{
   width:50px;
   height:50px;
 }
-.board_comment .list_panel table tbody tr td .user_info .nick_name {
+.board_comment .list_panel ul li .user_info .nickname {
   position: relative;
   top:7px;
   margin-bottom: 15px;
@@ -312,15 +311,15 @@
   line-height: 18px;
   font-size: 0.9275em;
 }
-.board_comment .list_panel table tbody tr td .comment_body {
+.board_comment .list_panel ul li .comment_body {
   margin-left: 59px;
 }
-.board_comment .list_panel table tbody tr td .comment_body .comment {
+.board_comment .list_panel ul li .comment_body .comment {
   font-size: 1.0625em;
   line-height: 26px; 
 }
-.board_comment .list_panel table tbody tr td .comment_body .btn_group {
-  margin-top:25px;
+.board_comment .list_panel ul li .comment_body .btn_group {
+  margin-top: 35px;
   text-align: right;
 }
 .board_comment .sx-form-inline .sx-input-group .sx-form-control{
@@ -536,7 +535,7 @@
   .form_search_panel .sx-input-group a.sx-btn{
     display: inline-block;
   }
-  .board_comment .list_panel table tbody tr td .user_info{
+  .board_comment .list_panel ul li .user_info{
     float: left;
   }
   .board_list ul.list_mobile_panel {

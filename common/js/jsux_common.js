@@ -243,6 +243,7 @@ jsux.app = jsux.app || {};
     msg_tmpl: '',
     msg_template: '',   
     model: [],
+    msg: '데이터가 존재하지 않습니다.',
     
     setSwiper: function(swiper) {
 
@@ -424,8 +425,7 @@ jsux.app = jsux.app || {};
     },
     setData: function( list ) {
 
-      var markup = null,      
-            msg = null;
+      var markup = null;
 
       this.model = list;
 
@@ -494,19 +494,15 @@ jsux.app = jsux.app || {};
       }).appendTo(this.id);
 
       if (list.length === 0) {
-        this.setMsg('등록 가능 메뉴가 존재하지 않습니다.');
+        this.setMsg( this.msg );
       }
 
       this.updateSwiper();
     },
     setMsg: function(msg) {
 
-      var data = msg ? msg : '데이터가 존재하지 않습니다.',
+      var data = typeof(msg) === 'object' ? msg : {msg: msg},
             markup = '';            
-
-      if (typeof(msg) === 'string') {
-        data = {msg: msg};
-      }
 
       this.msg_template = this.msg_template || this.msg_tmpl;
       if (!this.msg_template) {
@@ -515,8 +511,8 @@ jsux.app = jsux.app || {};
       }
 
       markup = $(this.msg_template);
-     if (markup.length < 1) {
-      jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 167);
+      if (markup.length < 1) {
+        jsux.logger.error('\'' + this.msg_template + '\' 메세지 템플릿 DOM 객체가 존재하지 않습니다.', 'jsux_list_manager.js', 167);
         return;
       }
 

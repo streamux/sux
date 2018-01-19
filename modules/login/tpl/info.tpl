@@ -8,7 +8,7 @@
         <label for="emptyId" class="sx-control-label"><a href="{$rootPath}member-modify">회원정보수정</a> | <a href="{$rootPath}leave">회원탈퇴</a></label>
       </div>
       <div class="sx-form-group">
-        <label for="emptyName" class="sx_label_with">닉네임</label><span class="sx_char_colon">:</span><span>'{$sessionData.nick_name}' 님<span>
+        <label for="emptyName" class="sx_label_with">닉네임</label><span class="sx_char_colon">:</span><span>'{$sessionData.nickname}' 님<span>
       </div>
       <div class="sx-form-group">
         <label for="emptyName" class="sx_label_with">적립포인트</label><span class="sx_char_colon">:</span><span>'{$sessionData.point}' Point</span>

@@ -311,6 +311,76 @@ window.trace = function( msg, isConsole ) {
       }
 
       return hpNum.replace(reg, '$1 - $2 - $3');
+    },
+
+    /*
+    @ validateForm
+    @ param string f
+    @ param object list
+    @ param string nodeFilter
+    @ param string typeFilter
+    */
+    validateForm: function(f, itemFilter, tagFilter, typeFilter) {
+
+      var inputs = itemFilter ? itemFilter : f;
+      var tagFilter = tagFilter ? RegExp(tagFilter, 'i') : RegExp('input', 'i');
+      var typeFilter = typeFilter ? RegExp(typeFilter, 'i') : RegExp('text', 'i');
+
+      if (!f) {
+        throw new Error('ValidateForm\'s argument is not available');
+      }
+
+      for(var p in inputs) {
+        var input = f[p];
+        var msg = '';
+
+        if (input && tagFilter.test(input.tagName) && typeFilter.test(input.type)) {
+
+          if (itemFilter[input.name] && itemFilter[input.name].ignore &&
+              itemFilter[input.name].ignore === true) {
+            continue;
+          }
+
+          if (input.value) {
+
+            // 입력값 패턴 적용 
+            if (itemFilter && itemFilter[input.name] && itemFilter[input.name].pattern) {
+              var reg = RegExp(itemFilter[input.name].pattern.value);
+
+              if (!reg.test(input.value)) {
+                msg = input.name + ' 의' + ' 입력값이 잘못되었습니다.';
+
+                if (itemFilter[input.name].pattern.msg) {
+                  msg = itemFilter[input.name].pattern.msg;
+                }
+
+                alert(msg);
+                return false;
+              }             
+            } // end of if
+
+            return true;
+
+          // 빈 값일 경우 
+          } else {
+            msg = input.name + ' 값을 입력해주세요.';
+
+            if (itemFilter[input.name].validate.ignore && (itemFilter[input.name].validate.ignore === true)) {
+              return true;
+            }
+
+            if (itemFilter && itemFilter[input.name] && itemFilter[input.name].validate) {
+              msg = itemFilter[input.name].validate.msg || itemFilter[input.name].validate;
+            }
+
+            alert(msg);
+            input.focus();
+            return false;         
+          }  // end of if
+        }  // end of if
+      }  // end of for
+
+      return true;
     }
   };
 

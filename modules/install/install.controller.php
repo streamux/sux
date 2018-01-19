@@ -249,7 +249,7 @@ class InstallController extends Controller
                   $adminInfo = array(
                     'category'=>$category,
                     'user_id'=>$_SESSION['admin_id'],
-                    'nick_name'=>$_SESSION['admin_nickname'],
+                    'nickname'=>$_SESSION['admin_nickname'],
                     'user_name'=>$_SESSION['admin_nickname'],
                     'password'=>$_SESSION['admin_pwd'],
                     'email_address'=>$_SESSION['admin_email'],

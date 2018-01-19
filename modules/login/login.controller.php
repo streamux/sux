@@ -62,7 +62,7 @@ class LoginController extends Controller
     $columns['hit'] = $row['hit_count'];
     $this->model->update('member', $columns, $where);
 
-    $sessionList = array('category','user_id','password','user_name','nick_name','email_address','is_writable','point','hit_count','grade','automod1','chatip', 'IsAuthorized');
+    $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','hit_count','grade','automod1','chatip', 'IsAuthorized');
 
     foreach ($sessionList as $key => $value) {
       $context->setSession($value, $row[$value]);

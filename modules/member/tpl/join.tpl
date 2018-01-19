@@ -18,7 +18,7 @@
       <label for="passwordConf" class="sx-control-label label_width">비밀번호 확인 *</label><input type="password" id="passwordConf" name="password_conf" class="sx-form-control">
     </div>
     <div class="sx-form-group">
-      <label for="nickName" class="sx-control-label label_width">닉네임 *</label><input type="text" id="nickName" name="nick_name" class="sx-form-control">
+      <label for="nickName" class="sx-control-label label_width">닉네임 *</label><input type="text" id="nickName" name="nickname" class="sx-form-control">
     </div>
     <div class="sx-form-group">
       <label for="emailAddress" class="sx-control-label label_width">이메일 *</label><input type="text" id="emailAddress" name="email_address" class="sx-form-control">

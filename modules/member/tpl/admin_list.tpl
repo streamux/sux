@@ -80,18 +80,18 @@
     </div>
 
 <!-- pc start -->
-<script type="jquery-templete" id="warnMsgTmpl">
+<script type="text/jquery-templete" id="warnMsgTmpl">
 {literal}
   <tr>
     <td colspan="8"><span class="sx-text-warning"><i class="xi-warning"></i>${msg}</span></td>
   </tr>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListTmpl">
+<script type="text/jquery-templete" id="dataListTmpl">
   <tr>
     {literal}
     <td>${user_id}</td>
-    <td>${nick_name}</td>
+    <td>${nickname}</td>
     <td>${email_address}</td>
     <td>${category}</td>
     <td>${$item.editDate(date)}</td>             
@@ -108,7 +108,7 @@
 <!-- pc end -->
 
 <!-- mobile start -->
-<script type="jquery-templete" id="warnMsgMobileTmpl">
+<script type="text/jquery-templete" id="warnMsgMobileTmpl">
 {literal}
   <li>
     <a href="#">
@@ -118,11 +118,11 @@
   </li>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListMobileTmpl">
+<script type="text/jquery-templete" id="dataListMobileTmpl">
   <li>
     <a href="{$rootPath}member-admin/{$documentData.id}/modify/{literal}${id}{/literal}">
       <span class="title">
-        {literal}${nick_name}{/literal}
+        {literal}${nickname}{/literal}
       </span>      
       <span class="email_address"><i class="xi-mail-o"></i>{literal}${email_address}{/literal}</span> 
       <span class="user_id"><i class="xi-user-o"></i>{literal}${user_id}{/literal}</span>
@@ -138,7 +138,7 @@
 <!-- mobile end -->
 
 <!-- pagination start -->
-<script type="x-jquery-templete" id="paginationTmpl">
+<script type="text/jquery-templete" id="paginationTmpl">
 {literal}
   <a href="#" class="sx-pagination">${no}</a>
 {/literal}

@@ -5,7 +5,7 @@ class MemberController extends Controller
   function checkValidation( $post ) {
 
     $labelList = array('아이디를','비밀번호를','닉네임을','이메일을');
-    $ckeckList = array('user_id','password','nick_name','email_address');
+    $ckeckList = array('user_id','password','nickname','email_address');
     foreach ($ckeckList as $key => $value) {
 
       if (empty($post[$value])) {
@@ -72,7 +72,7 @@ class MemberController extends Controller
 
     $userId = trim($posts['user_id']);
     if (empty($posts['user_name'])) {
-      $posts['user_name'] = trim($posts['nick_name']);
+      $posts['user_name'] = trim($posts['nickname']);
     }
     $returnURL = $context->getServer('REQUEST_URI');
 

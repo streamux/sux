@@ -927,7 +927,7 @@ jsux.fn.modify = {
   checkFormVal: function( f ) {
 
     var labelList = ['아이디를','비밀번호를','닉네임을','이메일을'];
-    var checkList = ['user_id','password','nick_name','email_address'];
+    var checkList = ['user_id','password','nickname','email_address'];
 
     $.each( checkList, function( index, item) {
 

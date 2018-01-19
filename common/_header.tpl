@@ -90,7 +90,7 @@
       </div>      
       
       <!--  Login  -->
-      {if isset($sessionData.user_name) && $sessionData.user_name}
+      {if $sessionData.nickname || $sessionData.user_name}
       <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
         <i class="xi-user-o xi-2x"></i>
       </a>
@@ -109,8 +109,8 @@
         <div class="sx-user-info">
           <div class="sx-user-picture"></div>
           <span class="sx-user-nickname">
-          {if isset($sessionData.user_name) && $sessionData.user_name}
-            {$sessionData.user_name}
+          {if $sessionData.nickname || $sessionData.user_name}
+            {$sessionData.nickname}
           {else}
             Guest
           {/if}
@@ -123,7 +123,7 @@
         </div>
         <div class="sx-user-member">
           <ul class="clearfix">
-          {if isset($sessionData.user_name) && $sessionData.user_name}
+          {if $sessionData.nickname || $sessionData.user_name}
             <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그아웃</a></li>
             <li><a href="{$rootPath}member-modify" class="sx-btn">회원정보수정</a></li>
           {else}

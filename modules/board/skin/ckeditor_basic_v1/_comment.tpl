@@ -32,7 +32,7 @@
           <td class="clearfix">
             <div class="user_info clearfix">
               <div class="sx-user-picture pull-left"></div>
-              <p class="nick_name pull-left">{$item.nickname}<br>{$item.date}</p>
+              <p class="nickname pull-left">{$item.nickname}<br>{$item.date}</p>
             </div>
             <div class="comment_body">
               <span class="comment">{$item.comment}</span>

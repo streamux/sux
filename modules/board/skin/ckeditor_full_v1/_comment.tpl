@@ -5,16 +5,9 @@
       <input type="hidden" name="_method" value="insert">
       <input type="hidden" name="category" value="{$documentData.category}">
       <input type="hidden" name="content_id" value="{$documentData.id}">
-      <div class="sx-form-inline">
-         <div class="sx-input-group">
-            <label for="nickName" class="sx-control-label label_width">닉네임</label>
-            <input type="text" name="nickname" id="nickName" size="12" maxlength="24" value="임꺽정" class="sx-form-control">
-            <label for="password" class="sx-control-label label_width">비밀번호</label>
-            <input type="password" name="password" id="password" size="12" maxlength="24" value="12" class="sx-form-control">
-        </div>
-      </div>      
       <div class="sx-form-group">
-        <textarea name="comment" id="comment" rows="23" class="sx-form-control">테스트입니다.</textarea>
+        <label for="comment" class="sr-only">댓글입력</label>
+        <textarea name="comment" id="comment" rows="23" class="sx-form-control" placeholder="내용을 입력해주세요."></textarea>
       </div>
       <div class="btn_group sx-form-group">
         <input type="submit" name="comfirm" value="댓글등록" class="sx-btn">
@@ -25,28 +18,39 @@
   <div class="list_panel">
     <input type="hidden" name="url_comment_json" value="{$routeURI}/{$contentData.id}/comment-json">
     <p class="title">댓글 {$commentData.num}</p>
-     <table summary="댓글 리스트 입니다.">
-      <tbody id="commentList">
-        <!-- boardTailCommentTmpl -->
-      </tbody>
-    </table>
+     <ul id="commentList">
+      <!-- boardTailCommentTmpl -->
+    </ul>
   </div>
 </div>
 
-<script type="text/x-jquery-tmpl" id="boardTailCommentTmpl">
-  <tr>
-    <td class="clearfix">
-      <div class="user_info clearfix">
-        <div class="sx-user-picture pull-left"></div>
-        <p class="nick_name pull-left">{literal}${nickname}{/literal}<br>{literal}${date}{/literal}</p>
-      </div>
-      <div class="comment_body">
-        <span class="comment">{literal}${comment}{/literal}</span>
-        <p class="btn_group">
-          <button class="sx-btn sx-btn-xs" onclick=""><i class="xi-heart-o"></i>좋아요(+1)</button>
-          <button class="sx-btn sx-btn-xs" onclick="">삭제</button>
-        </p>
-      </div>            
-    </td>
-  </tr>
+<script type="text/x-jquery-templete" id="boardTailCommentTmpl"> 
+  <li class="clearfix">
+    <div class="user_info clearfix">
+      <div class="sx-user-picture pull-left"></div>
+      <p class="nickname pull-left">{literal}${user_id}<br>${date}{/literal}</p>
+    </div>
+    <div class="comment_body">
+      <span class="comment">{literal}${comment}{/literal}</span>
+      <p class="btn_group">
+      {literal}
+        <button class="sx-btn sx-btn-xs" onclick="jsux.fn.read.voteComment(${id});"><i class="xi-heart-o"></i>좋아요(+${voted_count})</button>
+      {/literal}
+      {literal}{{if user_id == '{/literal}{$sessionData.user_id}{literal}' || ('{/literal}{$sessionData.category}{literal}' === 'administrator' && '{/literal}{$sessionData.grade}{literal}' === '10' ) }}{/literal}
+      {literal}
+        <button class="sx-btn sx-btn-xs" onclick="jsux.fn.read.deleteComment(${content_id},${id});">삭제</button>
+        {{/if}}
+      {/literal}        
+      </p>
+    </div>     
+  </li>
 </script>
+
+<script type="text/jquery-templete" id="warnMsgTmpl">
+{literal}
+  <li>
+    <span class="comment">${msg}</span>
+  </li>
+{/literal}
+</script>
+<!-- mobile end -->

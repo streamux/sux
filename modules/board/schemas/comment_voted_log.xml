@@ -1,0 +1,7 @@
+<table name="comment_voted_log">
+  <column name="comment_id" type="int" size="12" notnull="not null"/>
+  <column name="user_id" type="varchar" size="75" notnull="not null"/>
+  <column name="nickname" type="varchar" size="75" notnull="not null"/>
+  <column name="ipaddress" type="varchar" size="128"/>  
+  <column name="date" type="datetime"/>
+</table>

@@ -4,7 +4,7 @@
   <column name="is_notice" type="char" size="1" default="n" notnull="not null"/>
   <column name="user_id" type="varchar" size="75" notnull="not null"/>
   <column name="user_name" type="varchar" size="75" notnull="not null"/>
-  <column name="nick_name" type="varchar" size="75" notnull="not null"/>
+  <column name="nickname" type="varchar" size="75" notnull="not null"/>
   <column name="password" type="varchar" size="75" notnull="not null"/>
   <column name="title" type="varchar" size="200" notnull="not null"/>
   <column name="content" type="text" notnull="not null"/>

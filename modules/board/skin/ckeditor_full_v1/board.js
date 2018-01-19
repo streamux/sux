@@ -22,18 +22,48 @@ jsux.fn.list = {
 
   checkSearchForm: function(f) {
 
-    var search = f.search.value.length;
-    if ( search < 1 ) {
-      alert("검색어를 입력하세요.");
-      f.search.focus();
-      return false;
+    /*
+    @ validateForm
+    @ param string f
+    @ param object list
+    @ param string nodeFilter
+    @ param string typeFilter
+    */
+
+    var itemFilter = {
+      search : {
+        ignore: false,
+        validate: {
+          ignore: true,
+          msg: '검색어를 입력해주세요.'  
+        },
+        pattern: {
+          value: '^[a-zA-Z0-9_ㄱ-ㅎㅏ-ㅏ가-힣]+$',
+          msg: '검색어는 한글, 영문, 숫자, _(언더라인)만 입력가능합니다.'
+        }
+      }
     }
-    return true;
+    
+    return jsux.utils.validateForm(f, itemFilter, 'input', 'text|checkbox');
+  },
+  setEvent: function() {
+
+    var self = this;
+
+    $('form[name=f_board_list_search]').on('submit', function(e) {
+
+      var bool = self.checkSearchForm(e.target);
+      if (!bool) {
+        e.preventDefault();
+      }
+    });
   },
   init: function() {
-    
+
+    this.setEvent();
   }
 };
+
 jsux.fn.read = jsux.fn.read || {};
 
 //-- CommentListManager
@@ -87,6 +117,7 @@ jsux.fn.read = {
     return {
       id: '',
       content_id: '',
+      user_id: '',
       nickname: '',
       password: '',
       comment: '',
@@ -98,6 +129,7 @@ jsux.fn.read = {
   checkSearchForm: function ( f ) {
 
     var searcho = f.search.value.length;
+
     if ( searcho < 1 ) {
       alert("검색어를 입력하세요.");
       f.search.focus();
@@ -107,21 +139,11 @@ jsux.fn.read = {
   },
   checkTailDocumentForm: function ( f ) {
 
-    var nickname = f.nickname.value.length,
-      password = f.password.value.length,
-      comment = f.comment.value.length;
+    var comment = f.comment;
 
-    if ( nickname < 1 ) {
-      alert("이름을 입력하세요.");
-      f.nickname.focus();
-      return false;
-    }else if ( password < 1 ) {
-      alert("비밀번호를 입력하세요.");
-      f.password.focus();
-      return false;
-    }else if ( comment < 1 ) {
+    if ( comment.value.length < 1 ) {
       alert("내용을 입력하세요.");
-      f.comment.focus();
+      comment.focus();
       return false;
     }
 
@@ -158,14 +180,11 @@ jsux.fn.read = {
     }
 
     jsux.getJSON( url, function( e ) {
-      var models = [];
-
+      
       if (e.result.toUpperCase() === 'Y') {
         if (e.data) {
           var models = [];
           var data = e.data;
-
-          data = data && data.length > 0 ? data : [data];
 
           for (var i=0, len=data.length; i<len; i++) {
             var model = self.getCommentModel();
@@ -178,7 +197,8 @@ jsux.fn.read = {
             });
             models.push(model);
           }
-          self.listManager.setData(models);   
+          self.listManager.msg = '등록된 댓글이 존재하지 않습니다.';
+          self.listManager.setData(models);
         } //end of if         
       } else {
         trace( e.msg );
@@ -232,6 +252,8 @@ jsux.fn.read = {
             });
 
             self.listManager.addItem(model);
+
+            f.comment.value = '';
           }          
         } //end of if         
       } else {
@@ -239,8 +261,88 @@ jsux.fn.read = {
       } //end of if
     });
   },
-  deleteComment: function(content_id) {
+  voteComment: function(id) {
 
+    var self = this,
+          params = {
+            _method: 'update',
+            id: id
+          },
+          form = $('form[name=f_comment]')[0],
+          url = '';
+
+    if (!form.action) {
+      alert('Comment\'s url do not exists');
+      return;
+    }
+    url = form.action;
+
+    jsux.getJSON( url, params, function( e ) {
+
+      if (e.result.toUpperCase() === 'Y') {
+        if (e.data) {
+          var data = e.data;
+          data = data.length ? data : [data];
+
+          for (var i=0, len=data.length; i<len; i++) {
+            var model = self.getCommentModel();
+
+            $.each(model, function(key) {
+
+              if (data[i][key]) {
+                model[key] = data[i][key];
+              }            
+            });
+            self.listManager.updateItem(model);
+          }          
+        } //end of if       
+      } else {
+        trace( e.msg );
+      } //end of if  
+    });
+  },
+  deleteComment: function(contentId, id) {
+
+    var self = this,
+          params = {
+            _method: 'delete',
+            content_id: contentId,
+            id: id,
+            category: $('input[name=category]').val()
+          },
+          form = $('form[name=f_comment]')[0];
+
+    if (!form.action) {
+      alert('Comment\'s url do not exists');
+      return;
+    }
+    url = form.action;
+
+    jsux.getJSON( url, params, function( e ) {
+      var models = [];
+
+      if (e.result.toUpperCase() === 'Y') {
+        if (e.data) {
+          var data = e.data;
+          data = data.length ? data : [data];
+
+          for (var i=0, len=data.length; i<len; i++) {
+            var model = self.getCommentModel();
+
+            $.each(model, function(key) {
+
+              if (data[i][key]) {
+                model[key] = data[i][key];
+              }            
+            });
+
+            self.listManager.cutItem(model.id);
+          }          
+        } //end of if       
+      } else {
+        trace( e.msg );
+      } //end of if  
+    });
   },
   setEvent: function() {
 
