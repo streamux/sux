@@ -296,17 +296,25 @@ class MemberAdminView extends View {
 
   function displayModify() {
     
-    $context = Context::getInstance();
+    $context = Context::getInstance();    
+    $sessions = $context->getSessionAll();
     $id = $context->getParameter('id');
+    $category = $sessions['category'];
+    $userId = $sessions['user_id'];
 
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'member';
 
     $this->model->select('member_group', 'category');
     $categories = $this->model->getRows();
-
     $where = new QueryWhere();
-    $where->set('id', $id);
+
+    if (isset($id) && $id) {
+      $where->set('id', $id);
+    } else {
+      $where->set('category', $category);
+      $where->set('user_id', $userId);
+    }    
     $this->model->select('member', 'category, user_id, user_name', $where);
     $row = $this->model->getRow();
 
@@ -422,7 +430,7 @@ class MemberAdminView extends View {
       $resultYN = 'N';
     }
 
-    $msg .= Tracer::getInstance()->getMessage();
+    //$msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);
@@ -433,6 +441,9 @@ class MemberAdminView extends View {
   function displayModifyJson() {
     
     $context = Context::getInstance();
+    $sessions = $context->getSessionAll();
+    $category = $sessions['category'];
+    $userId = $sessions['user_id'];
     $id = $context->getPost('id');
 
     $dataObj = array();
@@ -440,11 +451,17 @@ class MemberAdminView extends View {
     $resultYN = "Y";
 
     $where = new QueryWhere();
-    $where->set('id', $id);
+
+    if (isset($id) && $id) {
+      $where->set('id', $id);
+    } else {
+      $where->set('category', $category);
+      $where->set('user_id', $userId);
+    }
 
     $result = $this->model->select('member', '*', $where);
-    if ($result) {
 
+    if ($result) {
       $row = $this->model->getRow();
       foreach ($row as $key => $value) {
         $dataObj[$key] = $value;

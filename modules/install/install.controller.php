@@ -220,8 +220,8 @@ class InstallController extends Controller
                     $menuActive = (int) $nodeValue;
                   }
 
-                  if (preg_match('/^(contents_path)+$/i', $propValue)) {
-                    $contentsPath = $rootPath . $nodeValue;         
+                  if (preg_match('/^(content_path)+$/i', $propValue)) {
+                    $contentPath = $rootPath . $nodeValue;         
                   }
                   $columns[] = $nodeValue;
                 }
@@ -306,8 +306,8 @@ class InstallController extends Controller
                 // copy template to files's dir to read  a template in module
                 if ($module == 'document') {
 
-                  // $contentsPath was written in xml data
-                  $saveFileRealDir = Utils::convertAbsolutePath($contentsPath, $realPath);
+                  // $contentPath was written in xml data
+                  $saveFileRealDir = Utils::convertAbsolutePath($contentPath, $realPath);
 
                   if (!file_exists($saveFileRealDir)) {
                     FileHandler::makeDir($saveFileRealDir, false);
@@ -374,36 +374,35 @@ class InstallController extends Controller
             }  // end of if : file_exists
           }  // end of if
         }  // end of foreach
-
-        // make default json for gnb's menu
-        $contentsPath = 'files/gnb/gnb.json';
-        $filePath = Utils::convertAbsolutePath($contentsPath, $realPath);
-
-        if (!file_exists($filePath)) {
-          $query = new Query();
-          $query->setTable($tablePrefix . 'menu');
-          $query->setField('*');
-          $query->setOrderBy('id desc');
-          $result = $oDB->select($query);
-          $jsonData = array();
-          $jsonData['data'] = array();
-
-          while($row = $oDB->getFetchArray($result)) {
-            $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
-          }          
-
-          $jsonData = JsonEncoder::parse($jsonData);
-          $result = FileHandler::writeFile($filePath, $jsonData);
-
-          if (!$result) {
-            $msg .= "기본 메뉴 Json 파일 생성을 실패하였습니다." . PHP_EOL;
-            $resultYN = 'N';
-          }
-        }  // end of if
       }  //end of if : preg_match(xml)
     }  // end of foreach
 
-    //$msg .= Tracer::getInstance()->getMessage();
+    // make default json for gnb's menu
+    $gnbPath = 'files/gnb/gnb.json';
+    $gnbFilePath = Utils::convertAbsolutePath($gnbPath, $realPath);
+
+    if (!file_exists($gnbFilePath)) {
+      $query = new Query();
+      $query->setTable($tablePrefix . 'menu');
+      $query->setField('*');
+      $query->setOrderBy('id desc');
+      $result = $oDB->select($query);
+      $jsonData = array();
+      $jsonData['data'] = array();
+
+      while($row = $oDB->getFetchArray($result)) {
+        $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
+      }          
+
+      $jsonData = JsonEncoder::parse($jsonData);
+      $result = FileHandler::writeFile($gnbFilePath, $jsonData);
+
+      if (!$result) {
+        $msg .= "기본 메뉴 Json 파일 생성을 실패하였습니다." . PHP_EOL;
+        $resultYN = 'N';
+      }
+    }  // end of if
+
     // write table list
     $tableDir = './files/config/config.table.php';
     $pathinfo = pathinfo($tableDir);
@@ -412,6 +411,7 @@ class InstallController extends Controller
     $buffer['table_list'] = $tableList;   
     $result = CacheFile::writeFile($tableDir, $buffer);
 
+    //$msg .= Tracer::getInstance()->getMessage();
     if (!$result) {
       $msg .= $pathinfo['filename'] . ' 파일을 저장하는데 실패했습니다.<br>';
       $resultYN = 'N';

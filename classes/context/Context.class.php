@@ -226,7 +226,7 @@ class Context
   function getAdminInfo($key) {
 
     if (isset($key) && $key) {
-      return $this->admin_info[$key];
+      return trim($this->admin_info[$key]);
     } else {
       return $this->admin_info;
     }
@@ -234,13 +234,13 @@ class Context
 
   function getDB($key) {
 
-    return $this->db_info['db_database'];
+    return trim($this->db_info['db_database']);
   }
 
   function getDBInfo($key) {
 
     if (isset($key)) {
-      return $this->db_info[$key];
+      return trim($this->db_info[$key]);
     } else {
       return $this->db_info;
     }   

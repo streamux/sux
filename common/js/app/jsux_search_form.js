@@ -89,12 +89,20 @@
 
     checkValidation: function(f) {
 
-      var search = f.search;
-      if (search.value.length < 1) {
-        jsux.logger.warn( search.name + ' 값을 입력해주세요.', 'jsux_search_form.js', 86);
-        return false;
-      }
-      return true;
+      var itemFilter = {
+        search : {
+          validate: {
+            ignore: true,
+            msg: '검색어를 입력해주세요.'  
+          },
+          pattern: {
+            value: '^[a-zA-Z0-9_ㄱ-ㅎㅏ-ㅏ가-힣]+$',
+            msg: '검색어는 한글, 영문, 숫자, _(언더라인)만 입력가능합니다.'
+          }
+        }
+      };
+
+      return jsux.utils.validateForm(f, itemFilter, 'input', 'text');
     },
     create: function( id ) {
 

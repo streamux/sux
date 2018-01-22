@@ -22,17 +22,8 @@ jsux.fn.list = {
 
   checkSearchForm: function(f) {
 
-    /*
-    @ validateForm
-    @ param string f
-    @ param object list
-    @ param string nodeFilter
-    @ param string typeFilter
-    */
-
     var itemFilter = {
       search : {
-        ignore: false,
         validate: {
           ignore: true,
           msg: '검색어를 입력해주세요.'  
@@ -42,9 +33,9 @@ jsux.fn.list = {
           msg: '검색어는 한글, 영문, 숫자, _(언더라인)만 입력가능합니다.'
         }
       }
-    }
-    
-    return jsux.utils.validateForm(f, itemFilter, 'input', 'text|checkbox');
+    };
+
+    return jsux.utils.validateForm(f, itemFilter, 'input', 'text');
   },
   setEvent: function() {
 
@@ -125,17 +116,6 @@ jsux.fn.read = {
       blamed_count: 0,
       date: null
     };
-  },
-  checkSearchForm: function ( f ) {
-
-    var searcho = f.search.value.length;
-
-    if ( searcho < 1 ) {
-      alert("검색어를 입력하세요.");
-      f.search.focus();
-      return false;
-    }
-    return true;
   },
   checkTailDocumentForm: function ( f ) {
 
@@ -245,7 +225,6 @@ jsux.fn.read = {
             var model = self.getCommentModel();
 
             $.each(model, function(key) {
-
               if (data[i][key]) {
                 model[key] = data[i][key];
               }            
@@ -288,7 +267,6 @@ jsux.fn.read = {
             var model = self.getCommentModel();
 
             $.each(model, function(key) {
-
               if (data[i][key]) {
                 model[key] = data[i][key];
               }            
@@ -316,8 +294,8 @@ jsux.fn.read = {
       alert('Comment\'s url do not exists');
       return;
     }
-    url = form.action;
 
+    url = form.action;
     jsux.getJSON( url, params, function( e ) {
       var models = [];
 
@@ -330,7 +308,6 @@ jsux.fn.read = {
             var model = self.getCommentModel();
 
             $.each(model, function(key) {
-
               if (data[i][key]) {
                 model[key] = data[i][key];
               }            
@@ -348,8 +325,7 @@ jsux.fn.read = {
 
     var self = this;
 
-    $('form[name=f_comment]').on('submit', function(e) {
-      
+    $('form[name=f_comment]').on('submit', function(e) {      
       e.preventDefault();
 
       if (self.checkTailDocumentForm(e.target)) {
@@ -385,8 +361,8 @@ jsux.fn.write = {
     var result = true;
 
     $.each( checkList, function( index, item) {
-
       var $input = f[item];
+
       if ($input.value.length < 1) {
         trace(labelList[index] + ' 입력 하세요.');
         $input.focus();
@@ -400,8 +376,8 @@ jsux.fn.write = {
   setEvent: function() {
 
     var self = this;
-    $('form[name=f_board_write]').on('submit', function(e) {
-      
+
+    $('form[name=f_board_write]').on('submit', function(e) {      
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
@@ -415,6 +391,7 @@ jsux.fn.write = {
 
     this.setLayout();
     this.setEvent();
+
     jsux.setAutoFocus();  
   }
 };
@@ -430,8 +407,8 @@ jsux.fn.reply = {
     var result = true;
 
     $.each( checkList, function( index, item) {
-
       var $input = f[item];
+
       if ($input.value.length < 1) {
         trace(labelList[index] + ' 입력 하세요.');
         $input.focus();
@@ -445,8 +422,8 @@ jsux.fn.reply = {
   setEvent: function() {
 
     var self = this;
-    $('form[name=f_board_reply]').on('submit', function(e) {
-      
+
+    $('form[name=f_board_reply]').on('submit', function(e) {      
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
@@ -474,8 +451,8 @@ jsux.fn.modify = {
     var result = true;
 
     $.each( checkList, function( index, item) {
-
       var $input = f[item];
+
       if ($input.value.length < 1) {
         trace(labelList[index] + ' 입력 하세요.');
         $input.focus();
@@ -489,8 +466,8 @@ jsux.fn.modify = {
   setEvent: function() {
 
     var self = this;
-    $('form[name=f_board_modify]').on('submit', function(e) {     
 
+    $('form[name=f_board_modify]').on('submit', function(e) {
       if (!self.checkDocumentForm(e.target)) {       
          e.preventDefault();
       }
@@ -513,6 +490,7 @@ jsux.fn.delete = {
 
     var result = true;
     var pass = f.password.value.length;
+
     if ( pass < 1) {
       trace('비밀번호를 입력하세요.');
       f.password.focus();
@@ -524,14 +502,15 @@ jsux.fn.delete = {
   setEvent: function (f) {
 
     var self = this;
-    $('form[name=f_board_delpass]').on('submit', function(e) {      
 
+    $('form[name=f_board_delpass]').on('submit', function(e) {
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
     });   
   },
   init: function() {
+
     this.setEvent();
     jsux.setAutoFocus();
   }

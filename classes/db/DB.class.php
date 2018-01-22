@@ -33,14 +33,15 @@ class DB extends Object {
   function _connect($db_info) {
 
     $db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
+
     if (!$db_connect) {
-      die('SUX cannot connect to DB');
+      die('Cannot connect to DB');
     }
 
     if(mysql_error()) {
 
       $this->setError(mysql_errno(), mysql_error());
-      return;
+      return false;
     }
 
     $master_db = 'MYSQL';   

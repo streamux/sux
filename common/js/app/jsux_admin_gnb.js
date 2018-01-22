@@ -180,17 +180,16 @@ var SXAdminMenu = function(){
           subPanelList = $('.sx-drap-menu'),
           oldMenu$ = null;
 
-    menuList.on('mouseover', function(e){
-
-      e.preventDefault();
-
+    menuList.on('click', function(e){
+      
       var mindex = menuList.index(this);
       var sub = subPanelList[mindex];
 
       if($(sub).children().length > 0) {
         self.showSubMenu(sub);
-      }
-
+        e.preventDefault();
+      } 
+      
       if (selectedSub && selectedSub !== sub) {
          self.hideSubMenu(selectedSub);
       }     

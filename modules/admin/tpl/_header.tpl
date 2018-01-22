@@ -105,9 +105,21 @@
 
       <!--  Login  -->
       {if isset($sessionData.admin_ok) && $sessionData.admin_ok}
-      <a href="{$rootPath}logout-admin?_method=insert" class="sx-gnb-login" title="로그아웃" alt="로그아웃">
-        <i class="xi-user xi-2x"></i>
-      </a>
+      <div class="sx-gnb-login-wrap">
+        <a href="{$rootPath}login" class="sx-gnb-login" title="회원 정보" alt="회원 정보">
+          <i class="xi-user xi-2x"></i>
+        </a>
+        <div class="sx-login-panel">
+          <div class="sx-user-case">
+            <div class="sx-user-picture"></div>
+          </div>
+          <div class="sx-info-case">
+            <a href="{$rootPath}member-admin/modify" class="sx-user-info">{$sessionData.user_id|upper}</a>
+            <a href="{$rootPath}member-admin/modify" class="sx-user-info">내 정보 수정</a>
+            <a href="{$rootPath}logout?_method=insert" class="sx-user-logout">로그 아웃</a>
+          </div>
+        </div>
+      </div>
       {/if}
     </nav>
   </header>  
