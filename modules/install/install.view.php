@@ -27,7 +27,7 @@ class InstallView extends View
     $this->skin_path_list['root'] = _SUX_ROOT_;
     $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
     $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
-    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/terms.tpl';
+    $this->skin_path_list['content'] = _SUX_PATH_ . 'modules/install/tpl/terms.tpl';
 
     $this->output();
   }
@@ -42,7 +42,7 @@ class InstallView extends View
     $this->skin_path_list['root'] = _SUX_ROOT_;
     $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
     $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
-    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/db_setup.tpl';
+    $this->skin_path_list['content'] = _SUX_PATH_ . 'modules/install/tpl/db_setup.tpl';
 
     $this->output();
   }
@@ -51,13 +51,17 @@ class InstallView extends View
 
     $this->checkInstall();
 
+    // DB 접속 테스트 
+    $oDB = DB::getInstance();
+    $oDB->close();
+
     $context = Context::getInstance();
     $this->request_data['action'] = 'setupAdmin';
 
     $this->skin_path_list['root'] = _SUX_ROOT_;
     $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
     $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
-    $this->skin_path_list['contents'] = _SUX_PATH_ . 'modules/install/tpl/admin_setup.tpl';
+    $this->skin_path_list['content'] = _SUX_PATH_ . 'modules/install/tpl/admin_setup.tpl';
 
     $this->output();
   } 

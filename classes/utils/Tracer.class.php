@@ -1,36 +1,35 @@
 <?php
 
 class Tracer extends Object{
-	
-	static $otInstance = null;
-	var $message = '';
+  
+  static $otInstance = null;
+  var $message = '';
 
-	static function &getInstance() {
+  static function &getInstance() {
 
-		if (!self::$otInstance) {
-			self::$otInstance = new self;
-		}
-		return self::$otInstance;
-	}
+    if (!self::$otInstance) {
+      self::$otInstance = new self;
+    }
+    return self::$otInstance;
+  }
 
-	function setMessage( $message, $type=null ) {
+  function setMessage( $message, $type=null ) {
 
-		$newline = "<br>"; 
-		$context = Context::getInstance();
-		if ($context->ajax()) {
-			$newline = "\n"; 
-		}
-		$this->message .= $message . $newline;
-	}
+    $this->message .= $message . PHP_EOL;
+  }
 
-	function getMessage() {
+  function getMessage() {
 
-		return $this->message;
-	}
+    return $this->message;
+  }
 
-	function output() {
+  function output() {
 
-		parent::output( $this->message );
-	}
+    parent::output( $this->message );
+  }
+
+  function reset() {
+    $this->message = '';
+  }
 }
 ?>

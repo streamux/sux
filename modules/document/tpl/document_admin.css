@@ -22,7 +22,7 @@
 .sx-content .sx-box-content .table > thead > tr > th.sx_date{
   width: 100px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_contents{
+.sx-content .sx-box-content .table > thead > tr > th.sx_content{
   width: 200px;
 }
 .sx-content .sx-box-content .table > thead > tr > th.sx_modify_btn{
@@ -60,7 +60,7 @@
 .text_caption{
   margin-top: 10px;
 }
-.sx-content .sx-box-content .contents_panel textarea.sx-form-control{
+.sx-content .sx-box-content .content_panel textarea.sx-form-control{
   width:100%;
 }
 
@@ -89,13 +89,13 @@
   margin-top: 3px;
   font-size: 1em;
 }
-.list_mobile_panel > li > a > .sx_contents,
+.list_mobile_panel > li > a > .sx_content,
 .list_mobile_panel > li > a > .sx_date{
   display: inline-block;
   margin-top: 5px;
   font-size: 0.9375em;
 }
-.list_mobile_panel > li > a > .sx_contents > i,
+.list_mobile_panel > li > a > .sx_content > i,
 .list_mobile_panel > li > a > .sx_date > i{
   position: relative;
   top:2px;
@@ -159,7 +159,7 @@
   .sx-form-inline .sx-form-group{
     width: 75%;
   }
-  .sx-form-inline .sx-form-group .contents_panel {
+  .sx-form-inline .sx-form-group .content_panel {
     margin-top:5px;
   }
   .text_caption{

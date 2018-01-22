@@ -53,7 +53,7 @@
               </div>
             </div>
 
-            <script type="jquery-templete" id="menuInfoTmpl">
+            <script type="text/jquery-templete" id="menuInfoTmpl">
               <div class="sx_menu sx_menu_info">
                 <header class="sx-header-panel">
                   <h2>메뉴 정보 수정</h2>
@@ -141,7 +141,7 @@
   </div>
 
 <!-- mobile start -->
-<script type="jquery-templete" id="treeListTmpl">
+<script type="text/jquery-templete" id="treeListTmpl">
   <li data-id="{literal}${id}{/literal}" data-type="item_draggable">
     <button type="button" name="btn_drag">
       <i class="xi-drag-vertical"></i>      
@@ -167,7 +167,7 @@
   </li>
 </script>
 
-<script type="jquery-templete" id="menuListTmpl">
+<script type="text/jquery-templete" id="menuListTmpl">
   <li>
     <span class="sx_name">
       {literal}${menu_name}{/literal}
@@ -186,7 +186,7 @@
   </li>
 </script>
 
-<script type="jquery-templete" id="warnMsgTmpl">
+<script type="text/jquery-templete" id="warnMsgTmpl">
 {literal}
   <li>
     <span class="sx_text_msg sx-text-warning">${msg}</span>         

@@ -21,7 +21,7 @@ class DocumentAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -57,7 +57,7 @@ class DocumentAdminView extends View
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/tpl/admin_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/tpl/admin_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -116,7 +116,7 @@ class DocumentAdminView extends View
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -146,7 +146,7 @@ class DocumentAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
     
     $this->output();
@@ -239,9 +239,9 @@ class DocumentAdminView extends View
 
       $category = $rows[0]['category'];
       $templatePathList = array();
-      $templatePathList['contents_tpl'] = $rows[0]['contents_path'] . '/' . $category . '.tpl'; 
-      $templatePathList['contents_css'] = $rows[0]['contents_path'] . '/' . $category . '.css'; 
-      $templatePathList['contents_js'] = $rows[0]['contents_path'] . '/' . $category . '.js'; 
+      $templatePathList['content_tpl'] = $rows[0]['content_path'] . '/' . $category . '.tpl'; 
+      $templatePathList['content_css'] = $rows[0]['content_path'] . '/' . $category . '.css'; 
+      $templatePathList['content_js'] = $rows[0]['content_path'] . '/' . $category . '.js'; 
   
       foreach ($templatePathList as $key => $value) {
         $readTemplatePath = Utils::convertAbsolutePath($value, _SUX_PATH_);
@@ -250,7 +250,7 @@ class DocumentAdminView extends View
         }
       }
     }
-    $dataObj['list'][0]['contents_path'] = $category . '_remote';
+    $dataObj['list'][0]['content_path'] = $category . '_remote';
 
     $msg .= $category . '_remote';
 
@@ -283,9 +283,9 @@ class DocumentAdminView extends View
     $readFilePath = $readFileDir[$pathKey];
     $msg = $readFilePath;
     
-    $templatePathList['contents_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
-    $templatePathList['contents_css'] = $readFilePath . $template . '/' . $template . '.css'; 
-    $templatePathList['contents_js'] = $readFilePath . $template . '/' . $template . '.js'; 
+    $templatePathList['content_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
+    $templatePathList['content_css'] = $readFilePath . $template . '/' . $template . '.css'; 
+    $templatePathList['content_js'] = $readFilePath . $template . '/' . $template . '.js'; 
 
     $dataObj = array();
     foreach ($templatePathList as $key => $value) {

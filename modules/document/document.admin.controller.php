@@ -12,7 +12,7 @@ class DocumentAdminController extends Controller
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);
-    $templateName = $posts['contents_path'];
+    $templateName = $posts['content_path'];
     $title = $posts['document_name'];
     $returnURL = $context->getServer('REQUEST_URI');  
 
@@ -54,7 +54,7 @@ class DocumentAdminController extends Controller
 
         if (isset($value) && $value) {
 
-          if (preg_match('/^(contents_path)+$/', $key)) {
+          if (preg_match('/^(content_path)+$/', $key)) {
             $value = $savePath . $category;
           }
           $columns[$key] = $value;
@@ -95,7 +95,7 @@ class DocumentAdminController extends Controller
       $buffers['js'] = '';
 
       foreach ($buffers as $key => $value) {
-        $buffer = $posts['contents_' . $key];
+        $buffer = $posts['content_' . $key];
 
         if (isset($buffer) && $buffer) {
           $buffers[$key] = $buffer;
@@ -111,14 +111,14 @@ class DocumentAdminController extends Controller
       }
 
       foreach ($buffers as $key => $value) {
-        $buffers[$key] = $posts['contents_' . $key];
+        $buffers[$key] = $posts['content_' . $key];
 
         if (empty($buffers[$key])) {
           $buffers[$key] = $key . ' 내용을 입력해주세요';
         }
       }
 
-      $buffer = $posts['contents'];
+      $buffer = $posts['content'];
 
       if (!empty($buffer)) {
           $buffers['tpl'] = $buffer;
@@ -207,7 +207,7 @@ class DocumentAdminController extends Controller
     $id = $posts['id'];
     $category = $posts['category'];
     $title = $posts['document_name'];
-    $contents_path = $posts['contents_path'];
+    $content_path = $posts['content_path'];
 
     /**
      * @cache's columns 
@@ -222,11 +222,11 @@ class DocumentAdminController extends Controller
       $value = $posts[$key];
 
       if (isset($value) && $value) {
-        if (preg_match('/^(contents_path)+$/', $key)) {
+        if (preg_match('/^(content_path)+$/', $key)) {
           if (!preg_match('/(.tpl+)$/i', $value)) {
             $value = 'files/document/' . $category;
           }
-          $contents_path = $value;
+          $content_path = $value;
         }
         $columns[$key] = $value;
       }           
@@ -238,7 +238,7 @@ class DocumentAdminController extends Controller
     $result = $this->model->update('document', $columns, $where);   
     if ($result) {
 
-      if (isset($contents_path) && $contents_path) {
+      if (isset($content_path) && $content_path) {
         $realPath = _SUX_PATH_ . 'files/document/';
 
         $buffers = array();
@@ -247,15 +247,15 @@ class DocumentAdminController extends Controller
         $buffers['js'] = '';
 
         foreach ($buffers as $key => $value) {
-          $buffers[$key] = $posts['contents_' . $key];
+          $buffers[$key] = $posts['content_' . $key];
           if (empty($buffers[$key])) {
             $buffers[$key] = $key . ' 내용을 입력해주세요';
           }
         }
 
         // Save files of skin to files's directory
-        $contents_path = _SUX_ROOT_ . $contents_path;
-        $saveTemplatePath =Utils::convertAbsolutePath($contents_path, $realPath);
+        $content_path = _SUX_ROOT_ . $content_path;
+        $saveTemplatePath =Utils::convertAbsolutePath($content_path, $realPath);
 
         if (!file_exists($saveTemplatePath)) {
           FileHandler::makeDir($saveTemplatePath, false);
@@ -363,7 +363,7 @@ class DocumentAdminController extends Controller
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('document', 'contents_path', $where);
+    $this->model->select('document', 'content_path', $where);
     $row = $this->model->getRow();    
       
     $result = $this->model->delete('document', $where);
@@ -371,9 +371,9 @@ class DocumentAdminController extends Controller
       $msg .= "${category} 페이지을 삭제하였습니다.<br>";
 
       $realPath = _SUX_PATH_ . 'files/document/' . $category;
-      $contents_path = _SUX_ROOT_ . $row['contents_path'];
-      $contentsPath =Utils::convertAbsolutePath($contents_path, $realPath);
-      $result = FileHandler::deleteAll($contentsPath);
+      $content_path = _SUX_ROOT_ . $row['content_path'];
+      $contentPath =Utils::convertAbsolutePath($content_path, $realPath);
+      $result = FileHandler::deleteAll($contentPath);
       if (!$result) {
         $msg .= "$category 컨텐츠 파일 삭제를 실패하였습니다.<br>";
       }

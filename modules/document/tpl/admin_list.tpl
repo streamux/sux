@@ -29,7 +29,7 @@
                   <th class="sx_no">번호</th>
                   <th class="sx_name">그룹 이름</th>
                   <th class="sx_summary">설명</th>
-                  <th class="sx_contents">템플릿 경로</th>
+                  <th class="sx_content">템플릿 경로</th>
                   <th class="sx_date">생성일</th>
                   <th class="sx_modify_btn">수정</th>
                   <th class="sx_delete_btn">삭제</th>
@@ -58,14 +58,14 @@
     </div>
 
 <!-- pc start -->
-<script type="jquery-templete" id="warnMsgTmpl">
+<script type="text/jquery-templete" id="warnMsgTmpl">
 {literal}
   <tr>
     <td colspan="7"><span class="sx-text-warning"><i class="xi-warning"></i>${msg}</span></td>
   </tr>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListTmpl">
+<script type="text/jquery-templete" id="dataListTmpl">
   <tr>
     <td><span>{literal}${no}{/literal}</span></td>
     <td>
@@ -74,8 +74,8 @@
     <td class="sx_summary">
       <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${summary}{/literal}</a>
     </td>
-    <td class="sx_contents">
-      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${contents_path}{/literal}</a>
+    <td class="sx_content">
+      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${content_path}{/literal}</a>
     </td>
     <td>{literal}${$item.editDate(date)}{/literal}</td>    
     <td>
@@ -88,7 +88,7 @@
 <!-- pc end -->
 
 <!-- mobile start -->
-<script type="jquery-templete" id="warnMsgMobileTmpl">
+<script type="text/jquery-templete" id="warnMsgMobileTmpl">
 {literal}
   <li>
     <a href="#">
@@ -98,14 +98,14 @@
   </li>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListMobileTmpl">
+<script type="text/jquery-templete" id="dataListMobileTmpl">
   <li>
     <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">
       <span class="title">
         {literal}${document_name}{/literal}
       </span>      
       <span class="sx_summary">{literal}${summary}{/literal}</span> 
-      <span class="sx_contents"><i class="xi-file-text-o"></i>{literal}${contents_path}{/literal}</span>      
+      <span class="sx_content"><i class="xi-file-text-o"></i>{literal}${content_path}{/literal}</span>      
       <span class="sx_date"><i class="xi-clock-o"></i>{literal}${$item.editDate(date)}{/literal}</span>
     </a>
     <div class="sx-btn-group">
@@ -117,7 +117,7 @@
 <!-- mobile end -->
 
 <!-- pagination start -->
-<script type="x-jquery-templete" id="paginationTmpl">
+<script type="text/jquery-templete" id="paginationTmpl">
 {literal}
   <a href="#" class="sx-pagination">${no}</a>
 {/literal}

@@ -16,11 +16,11 @@
         </div>
         <div class="sx-form-group">
           <label for="dbUserid" class="sx-control-label">계정</label>
-          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="streamuxcom" placeholder="id">
+          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="root" placeholder="id">
         </div>
         <div class="sx-form-group">
           <label for="dbPassword" class="sx-control-label">비밀번호</label>
-          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="!27522752n" placeholder="password">
+          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="root" placeholder="password">
         </div>
         <div class="sx-form-group">
           <label for="dbDatabase" class="sx-control-label">데이터베이스 이름</label>

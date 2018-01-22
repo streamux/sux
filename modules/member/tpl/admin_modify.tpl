@@ -42,7 +42,7 @@
               </div>
               <div class="sx-form-group">
                 <label for="nickName" class="sx-control label_width">닉네임 *</label>
-                <input type="text" id="nickName" name="nick_name" class="sx-form-control">
+                <input type="text" id="nickName" name="nickname" class="sx-form-control">
               </div>
               <div class="sx-form-group">
                 <label for="emailAddress" class="sx-control label_width">이메일 *</label>
@@ -153,7 +153,7 @@
           </div>
         </section>
       </div>
-<script type="jquery-templete" id="memberLabel_tmpl">
+<script type="text/jquery-templete" id="memberLabel_tmpl">
 {literal}
   ${label}
 {/literal}

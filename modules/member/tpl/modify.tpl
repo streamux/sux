@@ -29,7 +29,7 @@
     </div>
     <div class="sx-form-group">
       <label for="nickName" class="sx-control-label label_width">닉네임 *</label>
-      <input type="text" id="nickName" name="nick_name" maxlength="12"  value="{$contentData.nick_name}" class="sx-form-control">
+      <input type="text" id="nickName" name="nickname" maxlength="12"  value="{$contentData.nickname}" class="sx-form-control">
     </div>     
     <div class="sx-form-group">
       <label for="emailAddress" class="sx-control-label label_width">이메일 *</label>

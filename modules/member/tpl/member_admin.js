@@ -540,7 +540,7 @@ jsux.fn.add = {
   checkFormVal: function( f ) {
 
     var labelList = ['아이디를','비밀번호를','비밀번호 확인을','닉네임을','이메일을'];
-    var inputList = ['user_id','password','passwordConf','nick_name','email_address'];
+    var inputList = ['user_id','password','passwordConf','nickname','email_address'];
     var isValidForm = true;
     $.each( inputList, function( index, item) {
 
@@ -828,7 +828,7 @@ jsux.fn.modify = {
   checkFormVal: function( f ) {
 
     var labelList = ['비밀번호를','닉네임을','이메일을'];
-    var inputList = ['password','nick_name','email_address'];
+    var inputList = ['password','nickname','email_address'];
     var isValidForm = true;
     $.each( inputList, function( index, item) {
 

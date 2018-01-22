@@ -37,7 +37,7 @@
               <span>아래 내용은 선택 사항입니다.</span>
             </p>
             <div class="sx-form-group">
-              <label for="nickName" class="sx-control-label label_width">닉네임</label><input type="text" id="nickName" name="nick_name" class="sx-form-control">
+              <label for="nickName" class="sx-control-label label_width">닉네임</label><input type="text" id="nickName" name="nickname" class="sx-form-control">
             </div>
             <div class="sx-form-group">
               <label for="hp" class="sx-control-label label_width">휴대폰 번호</label>

@@ -60,7 +60,7 @@ class LoginView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();
@@ -109,7 +109,7 @@ class LoginView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
     
     $this->output();
@@ -154,7 +154,7 @@ class LoginView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();
@@ -232,7 +232,7 @@ class LoginView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();
@@ -340,7 +340,7 @@ class LoginView extends View
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();

@@ -43,7 +43,11 @@ class Context
 
   function startSession() {
     
-    session_set_cookie_params(0, _SUX_ROOT_);
+    $keeperId = self::getCookieId('login_keeper');
+    $keeperCookie = self::getCookie($keeperId);
+    if (isset($keeperCookie) && $keeperCookie) {
+      session_set_cookie_params(0, _SUX_ROOT_);
+    }    
     session_start();
   }
 
@@ -222,7 +226,7 @@ class Context
   function getAdminInfo($key) {
 
     if (isset($key) && $key) {
-      return $this->admin_info[$key];
+      return trim($this->admin_info[$key]);
     } else {
       return $this->admin_info;
     }
@@ -230,13 +234,13 @@ class Context
 
   function getDB($key) {
 
-    return $this->db_info['db_database'];
+    return trim($this->db_info['db_database']);
   }
 
   function getDBInfo($key) {
 
     if (isset($key)) {
-      return $this->db_info[$key];
+      return trim($this->db_info[$key]);
     } else {
       return $this->db_info;
     }   

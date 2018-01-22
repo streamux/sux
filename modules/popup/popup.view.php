@@ -88,11 +88,11 @@ class PopupView extends View
     $contentData['bg_width'] = $imgInfo['width'];
     $contentData['bg_height'] = $imgInfo['height'];
 
-    $this->document_data['contents'] = $contentData;
+    $this->document_data['content'] = $contentData;
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['header'] = "{$skinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/index.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/index.tpl";
     $this->skin_path_list['footer'] = "{$skinPath}/_footer.tpl";
 
     $this->output();

@@ -23,7 +23,8 @@ class ModuleHandler
 
     if (!$isEqual) {
       $filePath = './files/cookie/version.cookie.php';
-      $context->setCookie($versionCookieId, date('Y-m-d H:i:s'), time() + 86400 * 30 * 12, '/', $filePath);
+      $versionCookieVal = Utils::getMicrotimeInt();
+      $context->setCookie($versionCookieId, $versionCookieVal, time() + 86400 * 30 * 12, '/', $filePath);
       $context->makeRouteCaches();
       /*echo 'set cookie version is ' . date('Y-m-d H:i:s') . ' : location -> 25 line in ModuleHandler.class.php' . "<br>";*/
     }

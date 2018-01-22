@@ -10,8 +10,7 @@
   var is_page = 'admin_main';
 </script>
 
-<!-- js template start -->
-<script type="sux-templete" id="gnbFirstMenu">
+<script type="text/jquery-templete" id="gnbFirstMenu">
   <ul class="sx-mmenu">
     <li data-mid="" data-sid="">
       <a href="#none"><span></span></a>
@@ -21,7 +20,8 @@
     </li>
   </ul>
 </script>
-<script type="sux-templete" id="gnbSecondMenu">
+
+<script type="text/jquery-templete" id="gnbSecondMenu">
   <li class="sx-smenu" data-mid="" data-sid="">
     <a href="#none"><span></span></a>
   </li>

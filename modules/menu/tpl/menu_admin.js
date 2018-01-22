@@ -72,7 +72,11 @@
     dragGap: 20,
     isDragging: false, 
     
-    getJson: function() {
+    /*
+    @method getModel
+    @return this.model : Array
+    */
+    getModel: function() {
 
       return this.model;
     },
@@ -712,7 +716,10 @@
 
       jsux.getJSON(this.menu_url, data, function(e) {
 
-        trace(e.msg);
+        if (e.result.toUpperCase() === 'N') {
+          trace(e.msg);
+          return;
+        }        
         self.dispatchEvent({type:ServiceManagerEvent.UPDATE_COMPLETE, target: self, event: e})
       });
     },
@@ -726,7 +733,10 @@
 
       jsux.getJSON(this.menu_url, data, function(e) {
 
-        trace(e.msg);
+         if (e.result.toUpperCase() === 'N') {
+          trace(e.msg);
+          return;
+        }   
         self.dispatchEvent({type:ServiceManagerEvent.DELETE_COMPLETE, target: self, event: e})
       });
     },
@@ -737,6 +747,7 @@
       jsux.getJSON(this.save_url, data, function(e) {
 
         trace(e.msg);
+
         self.dispatchEvent({type:ServiceManagerEvent.SAVE_COMPLETE, target: self, event: e})
       });
     }
@@ -848,7 +859,7 @@
 
       this.listManager.updateItem(params);
       this.treeManager.updateItem(params);
-      this.canceModifyMenu();
+      this.serviceManager.update(params);      
     },
     removeMenu: function(id) {
 
@@ -864,7 +875,7 @@
 
       var params = {
         _method: 'insert',
-        data: JSON.stringify({data: this.treeManager.getJson()})
+        data: JSON.stringify({data: this.treeManager.getModel()})
       };
 
       this.serviceManager.saveJson(params);
@@ -1100,7 +1111,7 @@
         //console.log(e.event.data);
         switch(e.type) {
           case ServiceManagerEvent.UPDATE_COMPLETE: 
-            self.saveJson();
+            self.canceModifyMenu();
             break;
 
           case ServiceManagerEvent.DELETE_COMPLETE:

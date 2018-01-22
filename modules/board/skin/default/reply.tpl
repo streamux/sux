@@ -32,9 +32,9 @@
     </div>
     <div class="body_panel">
       <div class="sx-form-group">
-        <label for="contents" class="sx-control-label label_width">내용</label>
+        <label for="content" class="sx-control-label label_width">내용</label>
         <div class="textarea_panel">
-          <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control"></textarea>
+          <textarea name="content" id="content" cols="64" rows="14" class="sx-form-control"></textarea>
         </div> 
       </div>    
     </div>

@@ -16,7 +16,7 @@
         </div>
         <div class="sx-form-group">
           <label for="adminPwd" class="sx-control-label">관리자 비밀번호</label>
-          <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="s25722572!" placeholder="password">
+          <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="1234" placeholder="password">
         </div>
         <div class="sx-form-group">
           <label for="adminNickname" class="sx-control-label">닉네임</label>

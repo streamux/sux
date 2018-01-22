@@ -4,10 +4,10 @@
   <column name="is_notice" type="char" size="1" default="n" notnull="not null"/>
   <column name="user_id" type="varchar" size="75" notnull="not null"/>
   <column name="user_name" type="varchar" size="75" notnull="not null"/>
-  <column name="nick_name" type="varchar" size="75" notnull="not null"/>
+  <column name="nickname" type="varchar" size="75" notnull="not null"/>
   <column name="password" type="varchar" size="75" notnull="not null"/>
   <column name="title" type="varchar" size="200" notnull="not null"/>
-  <column name="contents" type="text" notnull="not null"/>
+  <column name="content" type="text" notnull="not null"/>
   <column name="email_address" type="varchar" size="50" notnull="not null"/>
   <column name="date" type="datetime"/>
   <column name="ip" type="varchar" size="30"/>
@@ -19,7 +19,7 @@
   <column name="space_count" type="int" size="12" default="0" notnull="not null"/>
   <column name="ssunseo_count" type="int" size="12" default="0" notnull="not null"/>
   <column name="wall" type="char" size="1"/>
-  <column name="contents_type" type="char" size="4" default="text" notnull="not nul"/>
+  <column name="content_type" type="char" size="4" default="text" notnull="not nul"/>
   <column name="filename" type="varchar" size="50"/>
   <column name="filesize" type="varchar" size="50"/>
   <column name="filetype" type="varchar" size="50"/>  

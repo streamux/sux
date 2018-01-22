@@ -4,7 +4,7 @@
     <form action="{$routeURI}/{$contentData.id}/comment" name="f_comment" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="insert">
       <input type="hidden" name="category" value="{$documentData.category}">
-      <input type="hidden" name="contents_id" value="{$documentData.id}">
+      <input type="hidden" name="content_id" value="{$documentData.id}">
       <div class="sx-form-inline">
          <div class="sx-input-group">
             <label for="nickName" class="sx-control-label label_width">닉네임</label>
@@ -32,7 +32,7 @@
           <td class="clearfix">
             <div class="user_info clearfix">
               <div class="sx-user-picture pull-left"></div>
-              <p class="nick_name pull-left">{$item.nickname}<br>{$item.date}</p>
+              <p class="nickname pull-left">{$item.nickname}<br>{$item.date}</p>
             </div>
             <div class="comment_body">
               <span class="comment">{$item.comment}</span>

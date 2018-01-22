@@ -5,7 +5,7 @@ class MemberAdminController extends Controller
   function checkValidation( $post ) {
 
     $labelList = array('아이디를','비밀번호를','닉네임을','이메일을');
-    $ckeckList = array('user_id','password','nick_name','email_address');
+    $ckeckList = array('user_id','password','nickname','email_address');
 
     foreach ($ckeckList as $key => $value) {
       if (empty($post[$value])) {
@@ -370,13 +370,13 @@ class MemberAdminController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $id = $posts['id'];
-    $user_name = $posts['user_name'];
+    $nickname = $posts['nickname'];
     $msg = $this->checkValidation($posts);
     $posts['password'] = $context->getPasswordHash($posts['password']);
 
     if (isset($posts['new_password']) && $posts['new_password']) {
       $newPassword = $context->getPasswordHash($posts['new_password']);
-    }
+    } 
 
     if (isset($msg) && $msg) {
       $resultYN = 'N';
@@ -449,31 +449,36 @@ class MemberAdminController extends Controller
       }  // end of if
     }  // end of foreach
 
-    $where = new QueryWhere();
+    $where = QueryWhere::getInstance();
     $where->set('id', $id);
-    $where->set('password', $column['password']);
-    $this->model->select('member', 'password', $where);
+    $where->set('password', $column['password'], '=', 'and');
+    $result = $this->model->select('member', 'password', $where);
     $numrow = $this->model->getNumrows();
 
     if ($numrow > 0 ) {
       $row = $this->model->getRow();
 
       if ($row['password'] === $column['password']) {
-        $column['password'] = $newPassword;
+        if (isset($newPassword) && $newPassword) {
+          $column['password'] = $newPassword;
+        }
+
         $result = $this->model->update('member', $column, $where);
 
         if ($result) {
-          $msg .= "${user_name} 님의 회원정보를 수정하였습니다." . PHP_EOL;     
+          $msg .= "'${nickname}' 님의 회원정보를 수정하였습니다." . PHP_EOL;     
           $resultYN = "Y";  
         } else {
-          $msg .= "${user_name} 님의 회원정보 수정을 실패하였습니다." . PHP_EOL;
+          $msg .= "'${nickname}' 님의 회원정보 수정을 실패하였습니다." . PHP_EOL;
           $resultYN = "N";  
         }
       } else {        
         $msg .= '비밀번호가 일치하지 않습니다.' . PHP_EOL;
+        $resultYN = 'N';
       }
     } else {
       $msg .= '일치하는 정보가 존재하지 않습니다.';
+      $resultYN = 'N';
     }
     
     //$msg .= Tracer::getInstance()->getMessage();

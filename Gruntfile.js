@@ -20,6 +20,7 @@ module.exports = function(grunt) {
         src: [
           'common/js/app/jsux_cookie.js',
           'common/js/app/jsux_popup.js',
+          'common/js/app/jsux_list_manager.js',
           'common/js/app/jsux_pagination.js'
         ],
         dest: 'common/js/jsux_common.js'
@@ -27,7 +28,6 @@ module.exports = function(grunt) {
       'common-admin-app': {
         src: [
           'common/js/app/jsux_admin_gnb.js',
-          'common/js/app/jsux_list_manager.js',
           '!*.back*'
         ],
         dest: 'common/js/jsux_admin_app.js'

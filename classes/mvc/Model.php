@@ -45,6 +45,11 @@ class Model extends Object {
     return $this->result;
   }
 
+  function getInsertId() {
+
+    return $this->db->getInsertId();
+  }
+
   function createTable($query) {
 
     $this->result = $this->db->createTable($query);

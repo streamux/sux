@@ -36,10 +36,11 @@
       <div class="sx-form-group sx_login_btn">
         <input type="submit" name="btn_confirm" value="로그인" class="sx-btn sx-btn-block">
       </div>
-
       <div class="sx_login_footer">
-        <a href="{$rootPath}register-admin" title="관리자 정보 등록">관리자 정보 등록</a>
-      </div>  
+          <a href="{$rootPath}member-join">회원가입</a>
+          <span>|</span>
+          <a href="{$rootPath}search-id" title="아이디 찾기">아이디</a> / <a href="{$rootPath}search-password" title="비밀번호 찾기">비밀번호 찾기</a>
+        </div> 
     </form>         
   </div>
   <footer class="notice_panel">
