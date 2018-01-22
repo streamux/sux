@@ -24,7 +24,7 @@ class MenuAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_list.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/admin_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -47,7 +47,7 @@ class MenuAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();    
@@ -68,7 +68,7 @@ class MenuAdminView extends View
     $this->model->select('menu', '*', $where);
     $row = $this->model->getRow();
 
-    $this->document_data['contents'] = $row;
+    $this->document_data['content'] = $row;
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'menu';
     $this->request_data = $requestData;
@@ -76,7 +76,7 @@ class MenuAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinRealPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinRealPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();    

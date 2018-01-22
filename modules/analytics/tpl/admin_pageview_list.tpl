@@ -57,14 +57,14 @@
     </div>
 
 <!-- pc start -->
-<script type="jquery-templete" id="warnMsgTmpl">
+<script type="text/jquery-templete" id="warnMsgTmpl">
 {literal}
   <tr>
     <td colspan="6"><span class="sx-text-warning"><i class="xi-warning"></i>${msg}</span></td>
   </tr>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListTmpl">
+<script type="text/jquery-templete" id="dataListTmpl">
   <tr>
     {literal}
     <td>${no}</td>
@@ -83,7 +83,7 @@
 <!-- pc end -->
 
 <!-- mobile start -->
-<script type="jquery-templete" id="warnMsgMobileTmpl">
+<script type="text/jquery-templete" id="warnMsgMobileTmpl">
 {literal}
   <li>
     <a href="#">
@@ -93,7 +93,7 @@
   </li>
 {/literal}
 </script>
-<script type="jquery-templete" id="dataListMobileTmpl">
+<script type="text/jquery-templete" id="dataListMobileTmpl">
   <li>
     <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">
       <span class="sx_name">
@@ -112,7 +112,7 @@
 <!-- mobile end -->
 
 <!-- pagination start -->
-<script type="x-jquery-templete" id="paginationTmpl">
+<script type="text/jquery-templete" id="paginationTmpl">
 {literal}
   <a href="#" class="sx-pagination">${no}</a>
 {/literal}

@@ -1,6 +1,7 @@
 <table name="comment">
   <column name="id" type="int" size="12" notnull="notnull" auto_increment="auto_increment" primary_key="primary key" />
-  <column name="contents_id" type="int" size="12" notnull="not null"/>
+  <column name="content_id" type="int" size="12" notnull="not null"/>
+  <column name="user_id" type="varchar" size="75" notnull="not null"/>
   <column name="nickname" type="varchar" size="75" notnull="not null"/>
   <column name="password" type="varchar" size="75" notnull="not null"/>
   <column name="comment" type="text" notnull="not null"/>

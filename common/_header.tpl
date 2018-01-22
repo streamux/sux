@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
   <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.min.css">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux_layout.css">
   
   {if $documentData.module_code}
   <link rel="stylesheet" type="text/css" href="{$skinPath}{$documentData.module_code}.css">
@@ -22,7 +22,6 @@
   <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
   <![endif]-->
   <script type="text/javascript">
-
     // 컨텐츠 내 값 설정
     var is_page = '';
   </script>
@@ -84,21 +83,33 @@
       
       <!-- Admin setup -->      
       <div class="sx-admin-setup">
-        {if isset($sessionData.grade) && $sessionData.grade > 9}
+      {if isset($sessionData.grade) && $sessionData.grade > 9}
         <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
-        {/if}
+      {/if}
       </div>      
       
       <!--  Login  -->
-      {if isset($sessionData.user_name) && $sessionData.user_name}
-      <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
-        <i class="xi-user-o xi-2x"></i>
-      </a>
+      <div class="sx-gnb-login-wrap">
+      {if $sessionData.user_id || $sessionData.nickname}
+        <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
+          <i class="xi-user-o xi-2x"></i>
+        </a>
+        <div class="sx-login-panel">
+          <div class="sx-user-case">
+            <div class="sx-user-picture"></div>
+          </div>
+          <div class="sx-info-case">
+            <a href="{$rootPath}member-modify" class="sx-user-info">{$sessionData.user_id|upper}</a>
+            <a href="{$rootPath}member-modify" class="sx-user-info">내 정보 수정</a>
+            <a href="{$rootPath}logout?_method=insert" class="sx-user-logout">로그 아웃</a>
+          </div>
+        </div>        
       {else}
-      <a href="{$rootPath}login" class="sx-gnb-login" title="로그인" alt="로그인">
-        <i class="xi-user xi-2x"></i>
-      </a>
+        <a href="{$rootPath}login" class="sx-gnb-login" title="로그인" alt="로그인">
+          <i class="xi-user xi-2x"></i>
+        </a>
       {/if} 
+      </div>      
     </div>    
   </header>
 
@@ -109,8 +120,8 @@
         <div class="sx-user-info">
           <div class="sx-user-picture"></div>
           <span class="sx-user-nickname">
-          {if isset($sessionData.user_name) && $sessionData.user_name}
-            {$sessionData.user_name}
+          {if $sessionData.user_id || $sessionData.nickname}
+            {$sessionData.nickname}
           {else}
             Guest
           {/if}
@@ -123,12 +134,12 @@
         </div>
         <div class="sx-user-member">
           <ul class="clearfix">
-          {if isset($sessionData.user_name) && $sessionData.user_name}
-            <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그아웃</a></li>
-            <li><a href="{$rootPath}member-modify" class="sx-btn">회원정보수정</a></li>
+          {if $sessionData.nickname || $sessionData.user_name}
+            <li><a href="{$rootPath}logout?_method=insert" class="sx-btn">로그 아웃</a></li>
+            <li><a href="{$rootPath}member-modify" class="sx-btn">내 정보 수정</a></li>
           {else}
-            <li><a href="{$rootPath}login" class="sx-btn">로그인</a></li>
-            <li><a href="{$rootPath}member-join" class="sx-btn">회원가입</a></li>
+            <li><a href="{$rootPath}login" class="sx-btn">로그 인</a></li>
+            <li><a href="{$rootPath}member-join" class="sx-btn">회원 가입</a></li>
           {/if}
           </ul>
         </div>

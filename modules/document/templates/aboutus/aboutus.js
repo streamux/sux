@@ -1,5 +1,5 @@
 jsux.fn = jsux.fn || {};
-jsux.fn.contents = {
+jsux.fn.content = {
 
   init: function() {
    // console.log('document init');

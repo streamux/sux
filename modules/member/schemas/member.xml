@@ -5,7 +5,7 @@
   <column name="user_id" type="varchar" size="30" notnull="not null"/>
   <column name="password" type="varchar" size="75" notnull="not null"/>
   <column name="user_name" type="varchar" size="50" notnull="not null"/>
-  <column name="nick_name" type="varchar" size="50"/>
+  <column name="nickname" type="varchar" size="50"/>
   <column name="email_address" type="varchar" size="125" notnull="not null"/>
   <column name="forget_asking" type="varchar" size="125"/>
   <column name="forget_answer" type="varchar" size="125"/>

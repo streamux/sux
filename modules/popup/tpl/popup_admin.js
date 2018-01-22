@@ -363,7 +363,7 @@ jsux.fn.modify = {
           $(markup).tmpl( data ).appendTo('#'+label);
         });
 
-        self.setTextAreaVal('contents', list.contents); 
+        self.setTextAreaVal('content', list.contents); 
       } else {
         trace( e.msg );
       }

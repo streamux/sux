@@ -178,28 +178,28 @@
       </section>
     </div>
 
-<script type="x-jquery-templete" id="textfield_tmpl">
+<script type="text/jquery-templete" id="textfield_tmpl">
 {literal}
   <span>${$item.getUnit( label )}</span>
 {/literal}
 </script>
-<script type="x-jquery-templete" id="warnMsg_tmpl">
+<script type="text/jquery-templete" id="warnMsg_tmpl">
 {literal}
   <tr>
     <td colspan="3"><span class="sx-text-warning">${msg}</span></td>
   </tr>
 {/literal}
 </script>
-<script type="x-jquery-templete" id="newMemberList_tmpl">
+<script type="text/jquery-templete" id="newMemberList_tmpl">
 {literal}
   <tr>
-    <td class="sx_name">${nick_name}</td>
+    <td class="sx_name">${nickname}</td>
     <td class="sx_email">${email_address}</td>
     <td class="sx_date">${date}</td>
   </tr>
 {/literal}
 </script>
-<script type="x-jquery-templete" id="latestCommentList_tmpl">
+<script type="text/jquery-templete" id="latestCommentList_tmpl">
 {literal}
   <tr>
     <td class="sx_no">${no}</td>
@@ -208,7 +208,7 @@
   </tr>
 {/literal}
 </script>
-<script type="x-jquery-templete" id="hitAnalyticsList_tmpl">
+<script type="text/jquery-templete" id="hitAnalyticsList_tmpl">
 {literal}
   <tr>
     <td class="sx_no">${no}</td>
@@ -217,7 +217,7 @@
   </tr>
 {/literal}
 </script>
-<script type="x-jquery-templete" id="pagination_tmpl">
+<script type="text/jquery-templete" id="pagination_tmpl">
 {literal}
   <a href="#" class="sx-pagination">${no}</a>
 {/literal}

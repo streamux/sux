@@ -3,11 +3,11 @@
   padding-right: 20px;
   width:auto;
 }
-.contents_header {
+.content_header {
   position: relative;
   background-color: #3b3c3b;
 }
-.contents_header .btn_write {
+.content_header .btn_write {
   position: absolute;
   margin-top: 9px;
   margin-left: 8px;
@@ -18,28 +18,28 @@
   text-align: center;
   border-radius:0.25em;
 }
-.contents_header .btn_write:hover{
+.content_header .btn_write:hover{
   border:1px solid #fff;
 }
-.contents_header .btn_write a {
+.content_header .btn_write a {
   display:inline-block;
   width:34px;
   height:32px;
 }
-.contents_header .btn_write a i{
+.content_header .btn_write a i{
   color: #e3e3e3;
 }
-.contents_header .btn_write a i:hover{
+.content_header .btn_write a i:hover{
   color: #fff;
 }
-.contents_header h1 {
+.content_header h1 {
   line-height:50px;
   font-size:1.250em;
   font-weight: normal;  
   text-align: center;
   color:#fff;
 }
-.contents_header p{  
+.content_header p{  
   display:none;
 }
 .form_search_panel {
@@ -189,7 +189,7 @@
 .board_read .body_panel {
   padding: 0 10px 55px 10px;
 }
-.board_read .body_panel .contents {
+.board_read .body_panel .content {
   padding: 15px 15px 30px 15px;
   min-height:200px;  
   line-height: 20px;
@@ -286,24 +286,23 @@
 .board_comment .list_panel {
   margin-top:10px;
 }
-.board_comment .list_panel table {
+.board_comment .list_panel ul {
   width: 100%;
   padding: 0 10px 0 10px;
 }
-.board_comment .list_panel table tbody tr{
+.board_comment .list_panel ul li {
+  padding:20px 10px 20px 20px;
   border-bottom:1px dotted #D6D7D6; 
-}
-.board_comment .list_panel table tbody tr td {
-  padding:20px 10px 20px 20px;  
-}
-.board_comment .list_panel table tbody tr td .user_info{
   vertical-align: top;
 }
-.board_comment .list_panel table tbody tr td .user_info .sx-user-picture{
+.board_comment .list_panel ul li .user_info{
+  vertical-align: top;
+}
+.board_comment .list_panel ul li .user_info .sx-user-picture{
   width:50px;
   height:50px;
 }
-.board_comment .list_panel table tbody tr td .user_info .nick_name {
+.board_comment .list_panel ul li .user_info .nickname {
   position: relative;
   top:7px;
   margin-bottom: 15px;
@@ -312,15 +311,15 @@
   line-height: 18px;
   font-size: 0.9275em;
 }
-.board_comment .list_panel table tbody tr td .comment_body {
+.board_comment .list_panel ul li .comment_body {
   margin-left: 59px;
 }
-.board_comment .list_panel table tbody tr td .comment_body .comment {
+.board_comment .list_panel ul li .comment_body .comment {
   font-size: 1.0625em;
   line-height: 26px; 
 }
-.board_comment .list_panel table tbody tr td .comment_body .btn_group {
-  margin-top:25px;
+.board_comment .list_panel ul li .comment_body .btn_group {
+  margin-top: 35px;
   text-align: right;
 }
 .board_comment .sx-form-inline .sx-input-group .sx-form-control{
@@ -505,23 +504,23 @@
     padding-right: 20px;
     width:100px;
   }
-  .contents_header  {
+  .content_header  {
     overflow:hidden;
     padding-bottom: 35px;
     background-color: #f6f6f6;    
   }
-  .contents_header h1 {
+  .content_header h1 {
     margin-top:25px;
     margin-left: 15px;
     text-align:left;
     font-size: 2.00em;
     color: #333333;
   }
-  .contents_header p {
+  .content_header p {
     display: block;
     margin-left:15px;
   }
-  .contents_header .btn_write {
+  .content_header .btn_write {
     display: none;  
   }
   .form_search_panel .sx-input-group .form_control_width{
@@ -536,7 +535,7 @@
   .form_search_panel .sx-input-group a.sx-btn{
     display: inline-block;
   }
-  .board_comment .list_panel table tbody tr td .user_info{
+  .board_comment .list_panel ul li .user_info{
     float: left;
   }
   .board_list ul.list_mobile_panel {

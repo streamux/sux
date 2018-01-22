@@ -50,6 +50,7 @@ jsux.gnb.Menu = jsux.View.create();
       var ty = 0;
       var markup = $('#gnbMenuItem').html();
       var depth = 0;
+      var linkFilter = /^([a-zA-Z0-9-]+)(\.[a-zA-Z])+$/;
 
       var stage$ = $(_path);
       if (stage$ && stage$.children().length > 0) {
@@ -60,17 +61,21 @@ jsux.gnb.Menu = jsux.View.create();
 
       var menuManager = (function f(target, data) {        
 
-        var menu$ = null;
-
         $(data).each(function(index) {
 
-          menu$ = $(markup).appendTo(target);
+          var menu$ = $(markup).appendTo(target);
           menu$.attr('data-id', index);
           menu$.attr('data-depth', depth);
 
-          var menu_a$ =  menu$.find('> a');
-          menu_a$.attr('href', data[index].link);
-          menu_a$.attr('target', data[index].target);
+          var menu_a$ =  menu$.find('> a');          
+          var link = data[index].link;
+
+          if (!linkFilter.test(link)) {
+            link = jsux.rootPath + link;
+          }
+
+          menu_a$.attr('href', link);
+          menu_a$.attr('target', data[index].link_target);
           menu_a$.text(data[index].label);
 
           data[index].depth = depth;
@@ -87,7 +92,7 @@ jsux.gnb.Menu = jsux.View.create();
             target = data[i].target + '> li:eq('+ i + ') > .sub_mask > ul';
             arguments.callee(target, data[i].menu);
           }
-        }
+        }  // end of for
       });
       menuManager(_path, _data);
       menuManager = null;
@@ -177,13 +182,17 @@ jsux.gnb.Menu = jsux.View.create();
       });
 
       _stage.find('.sx-menu > a').on('click', function(e){
+        e.preventDefault();
 
         var url = $( this ).attr('href');
-        if (url === '') {
+        var target = $( this ).attr('target');
+
+        if (url === '#none' || url === '' || url === undefined) {
           return;
         }
 
-        jsux.goURL( jsux.rootPath + url, '_self' );
+        target = target ? target : '_self';
+        jsux.goURL(url, target );
       });
     };
 
@@ -439,8 +448,8 @@ jsux.mobileGnb.Menu.include({
   setUI: function() {
 
     var self = this,
+          linkFilter = /^[a-zA-Z0-9-]+.[a-zA-Z]+/,
           markup = '',
-          menu$ = null,
           subMenu = null,
           menu_stage = null,
           depth = 0;
@@ -450,17 +459,21 @@ jsux.mobileGnb.Menu.include({
 
     var menuManager = (function f(target, data) {
 
-      var menu$ = null;
-
       $(data).each( function( index ){
 
-        menu$ = $(markup).appendTo(target);
+        var menu$ = $(markup).appendTo(target);
         menu$.attr('data-id', index);
         menu$.attr('data-depth', depth);
 
-        var menu_a$ =  menu$.find('> a');
-        menu_a$.attr('href', data[index].link);
-        menu_a$.attr('target', data[index].target);
+        var menu_a$ =  menu$.find('> a');          
+        var link = data[index].link;
+
+        if (!linkFilter.test(link)) {
+          link = jsux.rootPath + link;
+        }
+
+        menu_a$.attr('href', link);
+        menu_a$.attr('target', data[index].link_target);
         menu_a$.text(data[index].label);
 
         data[index].depth = depth;
@@ -656,9 +669,11 @@ jsux.mobileGnb.Menu.include({
   click: function( url, target) {
 
     //console.log( 'url : %s / target : %s', url, target);
-    if (!(url === '#none' || url === '' || url === undefined)){
-      jsux.goURL(url, target);
+    if (url === '#none' || url === '' || url === undefined){
+      return;
     }
+
+    jsux.goURL(url, target);
   },
   menuOn: function() {
 

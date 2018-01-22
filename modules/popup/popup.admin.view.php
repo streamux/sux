@@ -23,7 +23,7 @@ class PopupAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -51,7 +51,7 @@ class PopupAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -80,7 +80,7 @@ class PopupAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -110,7 +110,7 @@ class PopupAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();

@@ -31,7 +31,7 @@
       <div class="sx-form-group">
         <label for="emptyName" class="sx-control-label label_width">내용</label>
         <div class="textarea_panel">
-          <textarea name="contents" id="contents" cols="64" rows="14" class="sx-form-control">{$contentData.contents}</textarea>
+          <textarea name="content" id="content" cols="64" rows="14" class="sx-form-control">{$contentData.content}</textarea>
         </div>
       </div>    
     </div>

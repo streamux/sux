@@ -1,7 +1,7 @@
 .sx-container{
   height: 100%;
 }
-.sx-contents{
+.sx-content{
   position:relative;
   min-height: 300px;
 }
@@ -14,7 +14,7 @@
     padding: 40px 15px;
     text-align: center;
 }
-.sx-contents-body{
+.sx-content-body{
   word-break:keep-all;
   padding:10px;height:100%;
 }

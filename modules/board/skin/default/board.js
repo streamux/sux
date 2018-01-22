@@ -100,7 +100,7 @@ jsux.fn.write = {
   checkDocumentForm: function (f) {
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address.value.length;
     var result = true;
 
@@ -138,7 +138,7 @@ jsux.fn.reply = {
   checkDocumentForm: function (f) {
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address.value.length;
     var result = true;
 
@@ -171,7 +171,7 @@ jsux.fn.modify = {
   checkDocumentForm: function (f) {
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','contents','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var result = true;
 
     $.each( checkList, function( index, item) {

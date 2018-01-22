@@ -13,7 +13,7 @@ class View extends Object {
   var $document_data = array();
 
   function __construct($m=NULL, $c=NULL) {
-    
+
     $this->model = $m;
     $this->controller = $c;
   }
@@ -58,7 +58,7 @@ class View extends Object {
     $__template->assign('postData', $this->post_data);
     $__template->assign('documentData', $this->document_data);
     $__template->assign('groupData', $this->document_data['group']);
-    $__template->assign('contentData', $this->document_data['contents']);
+    $__template->assign('contentData', $this->document_data['content']);
     $__template->assign('browserTitle', $this->document_data['module_name']);
     $__template->assign('skinPathList', $this->skin_path_list);
 
@@ -69,8 +69,8 @@ class View extends Object {
       $UIError->useHtml = TRUE;
     }
 
-    if (is_readable($this->skin_path_list['contents'])) {
-      $__template->display( $this->skin_path_list['contents'] );  
+    if (is_readable($this->skin_path_list['content'])) {
+      $__template->display( $this->skin_path_list['content'] );  
     } else {
       $UIError->add('스킨 파일경로가 올바르지 않습니다.');
       $UIError->useHtml = TRUE;

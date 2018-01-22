@@ -49,7 +49,7 @@ class MemberView extends View {
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();
@@ -103,13 +103,13 @@ class MemberView extends View {
       $contentsData['hobby'] = explode(',', $contentsData['hobby']);
     } 
 
-    $this->document_data['contents'] = $contentsData;
+    $this->document_data['content'] = $contentsData;
     
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['contents'] = $contentsPath;
+    $this->skin_path_list['content'] = $contentsPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();

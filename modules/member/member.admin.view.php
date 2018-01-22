@@ -30,7 +30,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_grouplist.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_grouplist.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -52,7 +52,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupadd.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupadd.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -82,7 +82,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupmodify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupmodify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -106,11 +106,11 @@ class MemberAdminView extends View {
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
     $this->request_data['id'] = $id;           
-    $this->document_data['contents'] = $row;    
+    $this->document_data['content'] = $row;    
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_groupdelete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_groupdelete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -225,7 +225,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_setup.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_setup.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -262,7 +262,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_list.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_list.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -288,7 +288,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -296,17 +296,25 @@ class MemberAdminView extends View {
 
   function displayModify() {
     
-    $context = Context::getInstance();
+    $context = Context::getInstance();    
+    $sessions = $context->getSessionAll();
     $id = $context->getParameter('id');
+    $category = $sessions['category'];
+    $userId = $sessions['user_id'];
 
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'member';
 
     $this->model->select('member_group', 'category');
     $categories = $this->model->getRows();
-
     $where = new QueryWhere();
-    $where->set('id', $id);
+
+    if (isset($id) && $id) {
+      $where->set('id', $id);
+    } else {
+      $where->set('category', $category);
+      $where->set('user_id', $userId);
+    }    
     $this->model->select('member', 'category, user_id, user_name', $where);
     $row = $this->model->getRow();
 
@@ -323,7 +331,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -353,7 +361,7 @@ class MemberAdminView extends View {
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['contents'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
@@ -422,7 +430,7 @@ class MemberAdminView extends View {
       $resultYN = 'N';
     }
 
-    $msg .= Tracer::getInstance()->getMessage();
+    //$msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);
@@ -433,6 +441,9 @@ class MemberAdminView extends View {
   function displayModifyJson() {
     
     $context = Context::getInstance();
+    $sessions = $context->getSessionAll();
+    $category = $sessions['category'];
+    $userId = $sessions['user_id'];
     $id = $context->getPost('id');
 
     $dataObj = array();
@@ -440,11 +451,17 @@ class MemberAdminView extends View {
     $resultYN = "Y";
 
     $where = new QueryWhere();
-    $where->set('id', $id);
+
+    if (isset($id) && $id) {
+      $where->set('id', $id);
+    } else {
+      $where->set('category', $category);
+      $where->set('user_id', $userId);
+    }
 
     $result = $this->model->select('member', '*', $where);
-    if ($result) {
 
+    if ($result) {
       $row = $this->model->getRow();
       foreach ($row as $key => $value) {
         $dataObj[$key] = $value;

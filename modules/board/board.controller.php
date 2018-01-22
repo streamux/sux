@@ -9,7 +9,7 @@ class BoardController extends Controller
     return array(  array('key'=>'user_name', 'msg'=>'이름을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
-                          array('key'=>'contents', 'msg'=>'내용을'));
+                          array('key'=>'content', 'msg'=>'내용을'));
   }
 
   function getIntegerFields() {
@@ -19,7 +19,7 @@ class BoardController extends Controller
 
   function getNoneTagFields() {
 
-    return array('category', 'is_notice', 'user_id', 'user_name', 'nick_name', 'password', 'email_address', 'progress_step', 'wall', 'contents_type');
+    return array('category', 'is_notice', 'user_id', 'user_name', 'nickname', 'password', 'email_address', 'progress_step', 'wall', 'contents_type');
   }
 
   function getSimpleTagFields() {
@@ -58,7 +58,7 @@ class BoardController extends Controller
     Forms::validateFile($files);
     $posts = $this->setEncodeFormValue($posts);
 
-    /*echo $posts['contents'];
+    /*echo $posts['content'];
     return;*/
     
     $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
@@ -531,44 +531,50 @@ class BoardController extends Controller
 
   function insertComment() {
 
-    $context = Context::getInstance();
-    $posts = $context->getPostAll();
-
-    $returnURL = $context->getServer('REQUEST_URI');
-    $category = $posts['category'];
-    $id = $posts['contents_id'];
-
-    $rootPath = _SUX_ROOT_;
     $msg = '';
     $resultYN = 'Y';
 
-    $checkLabel = array('이름을', '비밀번호를', '내용을');
-    $checkList = array('nickname', 'password', 'comment');
+    $context = Context::getInstance();
+    $posts = $context->getPostAll();
+    $sessions = $context->getSessionAll();
+
+    $sessionUserId = $sessions['user_id'];
+    if (empty($sessionUserId)) {
+      $msg .= '로그인 후 이용해주세요.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      return false;
+    } 
+
+    $returnURL = $context->getServer('REQUEST_URI');
+    $category = $posts['category'];
+    $cid = $posts['content_id'];
+
+    $rootPath = _SUX_ROOT_;    
+    $checkLabel = array('내용을');
+    $checkList = array('comment');
 
     $index = 0;
     foreach ($checkList as $key => $value) {      
       if (empty($posts[$value])) {
-        $msg = $checkLabel[$index] . ' 입력해주세요.';
+        $msg .= $checkLabel[$index] . ' 입력해주세요.';
         UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
         return false;
       }
       $index++;
     }
 
+    // comment column
     $cachePath = './files/caches/queries/comment.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if ($columnCaches) {
 
+    if ($columnCaches) {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];
-
-        //$msg .= $key . "<br>";
         $value = $posts[$key];
+
         if (isset($value) && $value) {
-          if ($key === 'password') {
-            $value = $context->getPasswordHash($value); 
-          }
           $columns[$key] = $value;              
         }
       } //end of for
@@ -581,13 +587,89 @@ class BoardController extends Controller
       exit();
     }
 
-    $result = $this->model->insert('comment', $columns);
-    //$msg .= Tracer::getInstance()->getMessage();
-    if (!$result) {
-      $msg .= '댓글 입력을 실패하였습니다.';
-    }
+    $columns['user_id'] = trim($sessions['user_id']);
+    $columns['nickname'] = trim($sessions['nickname']);
+    $columns['password'] = trim($sessions['password']);
 
-    $data = array(  'url'=>$rootPath . $category . '/' . $id,
+    $result = $this->model->insert('comment', $columns); 
+
+    if ($result) {
+      $id = $this->model->getInsertId();
+      $where = new QueryWhere();
+      $where->set('id', $id);
+      $where->set('content_id', $cid, '=', 'and');
+
+      // 추가된 마지막 입력값 선택 
+      $this->model->select('comment', '*', $where);
+      $row = $this->model->getRow();
+    } else {
+      $msg .= '댓글 입력을 실패하였습니다.';
+    }    
+    $msg .= Tracer::getInstance()->getMessage();
+
+    $data = array( 
+            'data'=>$row,
+            'url'=>$rootPath . $category . '/' . $id,
+            'result'=>$resultYN,
+            'msg'=>$msg,
+            'delay'=>0);
+
+    $this->callback($data);
+  }
+  function updateComment() {
+
+    $msg = '';
+    $resultYN = 'Y';
+
+    $context = Context::getInstance();
+    $posts = $context->getPostAll();
+    $sessions = $context->getSessionAll();
+    $id = $posts['id'];
+    $userId = $sessions['user_id'];
+    $nickName = $sessions['nickname'];
+    $ipaddress = $context->getServer('REMOTE_ADDR');
+
+    // insert voted_log
+    $where = QueryWhere::getInstance();
+    $where->set('comment_id', $id);
+    $where->set('ipaddress', $ipaddress, '=', 'and'); 
+    $this->model->select('comment_voted_log', '*', $where);
+    $logNum = (int) $this->model->getNumRows();
+
+    // 해당 댓글에 동일한 ip 값이 적용되어 있는지 검사 
+    if ($logNum === 0) {
+      $columns = array();
+      $columns['comment_id'] = $id;
+      $columns['user_id'] = $userId;
+      $columns['nickname'] = $nickName;
+      $columns['ipaddress'] = $ipaddress;
+      $columns['date'] = 'now()';
+      $this->model->insert('comment_voted_log', $columns);
+
+      $where = QueryWhere::getInstance();
+      $where->set('id', $id);   
+      $this->model->select('comment', '*', $where);
+      $numrow = $this->model->getNumRows();
+
+      if ($numrow > 0) {
+        $row = $this->model->getRow();
+        $columns = array();
+        $row['voted_count'] = $columns['voted_count'] = (int) $row['voted_count'] + 1;
+        $result = $this->model->update('comment', $columns, $where);
+
+        if (!$result) {
+          $msg .= '댓글 카운터 업데이트를 실패하였습니다.';
+          $resultYN = 'N';
+        }
+      } else {
+        $msg .= '댓글 선택을 실패하였습니다.';
+        $resultYN = 'N';
+      }
+    }
+    
+    $data = array( 
+            'data'=>$row,
+            'url'=>$rootPath . $category . '/' . $id,
             'result'=>$resultYN,
             'msg'=>$msg,
             'delay'=>0);
@@ -595,51 +677,58 @@ class BoardController extends Controller
     $this->callback($data);
   }
 
-  function deleteDeleteComment() {
+  function deleteComment() {
 
-    $rootPath = _SUX_ROOT_;
     $msg = '';
     $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
 
     $context = Context::getInstance();
-    $posts = $context->getPostAll();  
+    $posts = $context->getPostAll(); 
+    $sessions =$context->getSessionAll();
+    $ipaddress = $context->getServer('REMOTE_ADDR');
 
     $category = $posts['category'];
-    $mid = $posts['mid'];
-    $id = $posts['cid'];
+    $contentId = $posts['content_id'];
+    $id = $posts['id'];    
 
-    $returnURL = $context->getServer('REQUEST_URI');
-    $password = trim($posts['password']);
-    if (!(isset($password) && $password)) {
-      $msg .= '비밀번호를 입력해주세요.';
+    $sessionUserId = $sessions['user_id'];
+    if (empty($sessionUserId)) {
+      $msg .= '로그인이 필요합니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-      exit;
+      return false;
     }
 
-    $passwordHash = $context->getPasswordHash($password);
-    $adminPassword = $context->getAdminInfo('admin_pwd');
-    $adminPasswordHash = $context->getPasswordHash($adminPassword);
+    $sessionCategory = $sessions['category'];
+    $sessionPassword = $sessions['password'];
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('comment', '*', $where);
 
+    if ($sessionCategory !== 'administrator') {
+      $where->set('user_id', $sessionUserId, '=', 'and');
+      $where->set('password', $sessionPassword, '=', 'and');
+    }
+
+    $this->model->select('comment', '*', $where);
     $row = $this->model->getRow();
-    $msg .= $passwordHash . ' === ' . $row['password'] . "<br>";
-    if (($passwordHash === $row['password']) || ($passwordHash === $adminPasswordHash)) {
-      $result = $this->model->delete('comment', $where);
-      if (!isset($result)) {
-        $msg .= '댓글 삭제를 실패하였습니다.';
-        UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-        exit;
-      }     
-    } else  {
-      $msg .= '비밀번호가 일치하지 않습니다..';
+    $result = $this->model->delete('comment', $where);
+
+    if (!$result) {
+      $msg .= '댓글 삭제를 실패하였습니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
 
-    $data = array(  'url'=>$rootPath . $category . '/' . $mid,
+    // delete voted log  
+    $where->reset();
+    $where->set('comment_id', $id);
+    $result = $this->model->delete('comment_voted_log', $where);
+    //$msg .= Tracer::getInstance()->getMessage();
+
+    $data = array(
+            'data'=>$row,
+            'url'=>$rootPath . $category . '/' . $contentId,
             'result'=>$resultYN,
             'msg'=>$msg,
             'delay'=>0);
