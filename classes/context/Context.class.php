@@ -494,15 +494,6 @@ class Context
     return $result;
   }
 
-  function checkAdminPass() {
-
-    $is_logged = false;
-    if ($this->getPasswordHash($this->getAdminInfo('admin_id')) == $this->getSession('admin_id')) {
-      $is_logged = true;
-    }
-    return $is_logged;
-  }
-
   function ajax() {
 
     $uri =  strtolower($this->getServer('REQUEST_URI'));
@@ -528,6 +519,15 @@ class Context
   function installed() {
 
     return isset($this->db_info['db_database']) == true && isset($this->admin_info) == true;
+  }
+
+  function checkAdminPass() {
+
+    $is_logged = false;
+    if ($this->getAdminInfo('admin_id') == $this->getSession('user_id')) {
+      $is_logged = true;
+    }
+    return $is_logged;
   }
 
   function isAdminLogin() {

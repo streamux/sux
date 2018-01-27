@@ -12,8 +12,8 @@
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>
           <label for="userId" class="sx-control-label">작성자</label>
-          <div class="sx-form-control">{$contentData.user_name}</div>
-          <input type="hidden" name="user_id" maxlength="22" class="{$contentData.user_name}">
+          <div class="sx-form-control">{$contentData.nickname}</div>
+          <input type="hidden" name="user_id" maxlength="22" class="{$contentData.nickname}">
         </div>
         <div class="sx-form-group">
           <i class="xi-lock-o xi-2x"></i>

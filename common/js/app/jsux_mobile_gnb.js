@@ -67,7 +67,7 @@ jsux.mobileGnb.Menu.include({
   setUI: function() {
 
     var self = this,
-          linkFilter = /^[a-zA-Z0-9-]+.[a-zA-Z]+/,
+          linkFilter = /^([a-zA-Z0-9-])+(\.[a-zA-Z])+/,
           markup = '',
           subMenu = null,
           menu_stage = null,

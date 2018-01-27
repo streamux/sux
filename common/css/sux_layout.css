@@ -113,7 +113,7 @@
   margin-top:0;
   margin-left:-30px;
   width:60px;
-  text-align: center;       
+  text-align: center;  
 }
 .sx-logo img {
   width:50px;
@@ -145,44 +145,80 @@
 
 /* login */
 .sx-gnb-login-wrap{
-  position: relative;
   display: inline-block;
-  top: -60px;
-  right: 54px;
-  margin-left:100%;
-  width: 54px;
-  height: 120px;
+  position: absolute;  
+  top: 0;
+  left:auto;
+  right: 0;
+  z-index: 0;
+  width: 45px;
+  height: 61px;
 }
 .sx-gnb-login-wrap .sx-gnb-login{
-  position:relative;
   display: inline-block;
-  top: 10px;
-  left: 7px;
+  position:relative;  
+  top: 13px;
+  left:100%;
+  transform:translateX(-100%);
   width:40px;
-  text-align:center;  
+  text-align: center;
 }
+.sx-gnb-login-wrap:hover {
+ left: 0;
+ right:auto;
+ width: 100%;
+}
+.sx-gnb-login-wrap:hover .sx-gnb-login,
 .sx-gnb-login-wrap .sx-gnb-login:hover{
   color: #ff0000;
   text-decoration: none;
+}
+.sx-gnb-login-wrap:hover .sx-login-panel {
+  display: block;
+  width: 100%;
 }
 .sx-gnb-login-wrap .sx-gnb-login i{
   line-height: 36px;
 }
 .sx-gnb-login-wrap .sx-login-panel {
+  clear:both;
   display: none;
   position: absolute;
-  top:60px;
+  top:61px;
   right: 0;
-  z-index: 9999;
-  width: 250px;
+  width: 240px;
   height: 120px;
   background-color: #fff;
   border:1px solid #e3e3e3;
   border-top:0 solid #e3e3e3;
 }
-.sx-gnb-login-wrap .sx-login-panel li {
+.sx-gnb-login-wrap .sx-login-panel div {
   float: left;
-  border: 1px solid #f00;
+}
+.sx-gnb-login-wrap .sx-login-panel .sx-user-case{
+  margin-top:17px;
+  margin-left: 15px;
+}
+.sx-gnb-login-wrap .sx-login-panel .sx-user-case .sx-user-picture{
+  width: 80px;
+  height: 80px;
+  border:1px solid #cecece;
+  -webkit-border-radius: 4em;
+  -moz-border-radius: 4em;
+  -o-border-radius: 4em;
+  border-radius: 4em;
+}
+.sx-gnb-login-wrap .sx-login-panel .sx-info-case{
+  margin-top:15px;
+  margin-left:25px;
+}
+.sx-gnb-login-wrap .sx-login-panel .sx-info-case > a{    
+  display: block;
+  padding:4px;
+  width: 100px;
+  color:#5e5e5e;
+  font-family: "WebNanum", Dotum, sans-serif;
+  font-weight: bold;
 }
 .sx-admin-setup a img{
   width:25px;
@@ -195,6 +231,7 @@
   display: none;
   position:relative;
   top:-1px;
+  z-index: 100;
   margin-left: 100px;
   margin-right: 150px;
   max-width: 768px;
@@ -331,7 +368,7 @@ button.sx-btn-close{
   position: absolute;
   top: 12px;
   left: 8px;
-  z-index: 1;  
+  z-index: 1; 
 }
 .mobile-menu-case .mobile-menu-btn-hide{
   display: none;
@@ -470,7 +507,6 @@ button.sx-btn-close{
     z-index:3;    
     margin-left:0;    
   }
-
   .sx-admin-setup a img{
     width:22px;
     height:22px;
@@ -500,7 +536,7 @@ button.sx-btn-close{
     display: none;
     position: absolute;
     top:0;
-    z-index: 2;
+    z-index: 1000;
     width:100%;
     height:59px;
     background-color: #fff;
@@ -552,54 +588,23 @@ button.sx-btn-close{
     position: absolute;
     top:-1000px;
   } 
-  
-  .sx-header-body > .sx-admin-setup{
-    display: inline-block;
-  }
-  .sx-admin-setup {
+
+  .sx-header-body > .sx-admin-setup {
     display: inline-block;
     position:absolute;
     top:19px;
-    right: 37px;
+    right: 39px;
     width: 32px;
+    z-index: 100;
   }
-  .sx-gnb-login-wrap .sx-gnb-login{
-    position: absolute;
-    top:14px;
-  }
-  .sx-gnb-login-wrap .sx-login-panel {
-    clear:both;
+  .sx-gnb-login-wrap:hover {
+    left:auto;
+    right: 0;
+    z-index: 0;
+    width: 45px;
   }
   .sx-gnb-login-wrap:hover .sx-login-panel {
-    display: block;
-  }
-  .sx-gnb-login-wrap .sx-login-panel > div{
-    float: left;
-  }
-  .sx-gnb-login-wrap .sx-login-panel .sx-user-case{
-    margin-top:17px;
-    margin-left: 15px;
-  }
-  .sx-gnb-login-wrap .sx-login-panel .sx-user-case .sx-user-picture{
-    width: 80px;
-    height: 80px;
-    border:1px solid #cecece;
-    -webkit-border-radius: 4em;
-    -moz-border-radius: 4em;
-    -o-border-radius: 4em;
-    border-radius: 4em;
-  }
-  .sx-gnb-login-wrap .sx-login-panel .sx-info-case{
-    margin-top:15px;
-    margin-left:25px;
-  }
-  .sx-gnb-login-wrap .sx-login-panel .sx-info-case > a{    
-    display: block;
-    padding:4px;
-    width: 100px;
-    color:#5e5e5e;
-    font-family: "WebNanum", Dotum, sans-serif;
-    font-weight: bold;
+    width: 240px;
   }
 
   .sx-gnb .sx-menu {

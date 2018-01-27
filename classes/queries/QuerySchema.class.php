@@ -1,97 +1,101 @@
 <?php
 
 class QuerySchema extends Object {
-	
-	var $class_name = 'query_schema';
-	var $_schemas;
-	var $_schema;
-	var $_name = '';
-	var $_type = '';
-	var $_length = 0;
-	var $_notnull = null;
-	var $_autoincrement = null;
-	var $_primarykey = null;
-	var $_counter = 0;
+  
+  public static $aInstance = null;
+  var $class_name = 'query_schema';
+  var $_schemas = array();
+  var $_schema;
+  var $_name = '';
+  var $_type = '';
+  var $_length = 0;
+  var $_notnull = null;
+  var $_autoincrement = null;
+  var $_primarykey = null;
+  var $_counter = 0;
 
-	function __construct() {
+  public static function &getInstance() {
 
-		$this->_schemas = array();
-	}
+    if (empty(self::$aInstance)) {
+      self::$aInstance = new self;
+    }
+    return self::$aInstance;
+  }
+  
+  function reset() {
 
-	function reset() {
+    $this->_schemas = array();
+  }
 
-		$this->_schemas = array();
-	}
+  function get() {
 
-	function get() {
+    return $this->_schemas;
+  }
 
-		return $this->_schemas;
-	}
+  function add($name, $type, $size=0, $default=null, $notnull=null, $autoincrement=null, $primarykey=null) {
 
-	function add($name, $type, $size=0, $default=null, $notnull=null, $autoincrement=null, $primarykey=null) {
+    $str = '';
+    $str .= $name . ' ' . $type;
 
-		$str = '';
-		$str .= $name . ' ' . $type;
+    if ($size > 0) {
+      $str .=  '(' . $size . ')';
+    }
 
-		if ($size > 0) {
-			$str .=  '(' . $size . ')';
-		}
+    if (isset($default) || $default != '' || !is_null($default )) {
+      $str .= " default '" . $default . "'";
+    }
 
-		if (isset($default) || $default != '' || !is_null($default )) {
-			$str .= " default '" . $default . "'";
-		}
+    if (isset($notnull) || $notnull != '' || !is_null($notnull)) {
+      $str .=  ' not null';
+    }
 
-		if (isset($notnull) || $notnull != '' || !is_null($notnull)) {
-			$str .=  ' not null';
-		}
+    if (isset($autoincrement) || $autoincrement != '' || !is_null($autoincrement)) {
+      $str .=  ' auto_increment';
+    }
 
-		if (isset($autoincrement) || $autoincrement != '' || !is_null($autoincrement)) {
-			$str .=  ' auto_increment';
-		}
+    if (isset($primarykey) || $primarykey != '' || !is_null($primarykey)) {
+      $str .= ' primary key';
+    }
 
-		if (isset($primarykey) || $primarykey != '' || !is_null($primarykey)) {
-			$str .= ' primary key';
-		}
+    $this->_schemas[] = $str;
+  }
 
-		$this->_schemas[] = $str;
-	}
+  function setName($name) {
 
-	function setName($name) {
+    $this->_schema = &$this->_schemas[$this->_counter];
+    $this->_schema = $name;
+    $this->_counter++;
+    //return self;
+  }
 
-		$this->_schema = &$this->_schemas[$this->_counter];
-		$this->_schema = $name;
-		$this->_counter++;
-		//return self;
-	}
+  function setType($type) {
+    
+    $this->_schema .= ' ' . $type;    
+    //return self;
+  }
 
-	function setType($type) {
-		
-		$this->_schema .= ' ' . $type;		
-		//return self;
-	}
+  function setLength($length) {
+    
+    $this->_schema .= '(' . $length . ')';
+    //return self;
+  }
 
-	function setLength($length) {
-		
-		$this->_schema .= '(' . $length . ')';
-		//return self;
-	}
+  function setNotnull() {
 
-	function setNotnull() {
+    $this->_schema .= ' not not';
+    //return self;
+  }
 
-		$this->_schema .= ' not not';
-		//return self;
-	}
+  function setAutoincrement() {
 
-	function setAutoincrement() {
+    $this->_schema .= ' auto_increment';
+    //return self;
+  }
 
-		$this->_schema .= ' auto_increment';
-		//return self;
-	}
+  function setPrimarykey( $key ) {
 
-	function setPrimarykey( $key ) {
-
-		$this->_schemas[] = 'primary key(' . $key . ')';
-		//return self;
-	}
+    $this->_schemas[] = 'primary key(' . $key . ')';
+    //return self;
+  }
 }
 ?>

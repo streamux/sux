@@ -99,26 +99,25 @@ class InstallController extends Controller
     $resultYN = 'Y';
     $msg = '';
     
+    
     $context = Context::getInstance();
     $context->init();
 
-    $tableList = array();
-    $tracer = Tracer::getInstance();
     $returnURL = $context->getServer('REQUEST_URI');
-
-    $query = new Query();
-    $schemas = new QuerySchema();
+    $tablePrefix = $context->getPrefix();
+    $tableList = array(); 
+    $query = Query::getInstance();
+    $schemas = QuerySchema::getInstance();
     $cacheFile = CacheFile::getInstance();
 
-    // 반응이 없을 땐 DB계정 정보가 바른지 확인한다.
-    $oDB = DB::getInstance();
-    $tablePrefix = $context->getPrefix();
+    // 반응이 없을 땐 DB계정 정보가 올바른지 확인한다.
+    $oDB = DB::getInstance();    
     $moduleList = FileHandler::readDir('./modules');
 
     foreach ($moduleList as $key => $value) {
       $module = $value['file_name'];
 
-      // create table and make cache's column file'
+      // Create Table and Cache's Column File for Database'
       $shemasDir = './modules/' . $module . '/schemas';
       $schemasList = FileHandler::readDir($shemasDir);
 
@@ -172,9 +171,10 @@ class InstallController extends Controller
             }
           }
         }
-      } // end of foreach
+      }  // end of foreach : schema
 
       /**
+       * Insert First Data Into Database
        * 초기 값을 갖는 테이블 일 경우 '모듈 폴더 > queries > 모듈.액션.이름.xml'  파일을 추가해서 등록한다.
        * 참고 URL : modules/document/queries/document.add.home.xml
        */
@@ -182,17 +182,15 @@ class InstallController extends Controller
       $queryList = FileHandler::readDir($queryDir);
 
       if ($queryList) {
-
         foreach ($queryList as $key => $value) {
 
           if (preg_match('/(.xml+)$/', $value['file_name'] )) {
             $xmlPath = $queryDir . '/' . $value['file_name'];
 
             if (file_exists($xmlPath)) {
-              $query = new Query();
+              $query->reset();
               $columns = array();       
-              $queryXml = simplexml_load_file($xmlPath);  
-
+              $queryXml = simplexml_load_file($xmlPath); 
               $moduleType = (string) $queryXml['execution'];  
               $actionType = (string) $queryXml['action'];
 
@@ -205,108 +203,63 @@ class InstallController extends Controller
                 $menuActive = 0;
 
                 foreach ($queryColumns as $key => $value) {
-
                   $nodeValue = (string) $value;
                   $propValue = (string) $value['name'];
+                  $columns[$propValue] = $nodeValue;
+                }   // end of foreach : columns
 
-                  // xml > columns > column 내 name='category' 를 쿼리 검색 조건으로 설정 
-                  if ($propValue === 'category') {
-                    $where = array('category'=>$nodeValue);
-                    $category = $nodeValue;
-                  }
+                $category = $columns['category'];
+                $templateName = $columns['template_type'];
+                $query->setWhere(array('category'=>$category));
 
-                  // 메뉴 모들 중 xml 쿼리 내 컬럼명 'is_active'가 있으면 값을 설정 
-                  if ($propValue === 'is_active') {
-                    $menuActive = (int) $nodeValue;
-                  }
-
-                  if (preg_match('/^(content_path)+$/i', $propValue)) {
-                    $contentPath = $rootPath . $nodeValue;         
-                  }
-                  $columns[] = $nodeValue;
-                }
-
-                if (isset($where) && $where) {
-                  $query->setWhere($where);
+                if (isset($category) && $category) {                  
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
 
-                  if ($numrows < 1 && $propTableName === 'menu' && $menuActive > 0) {                    
+                  // Not yet register
+                  if ($numrows < 1) {
                     $query->setColumn($columns);
                     $oDB->insert($query);
                   }
-
-                  // 아직 등록이 안됐다면 
-                  if ($numrows < 1 && $propTableName !== 'menu') {
-                    $query->setColumn($columns);
-                    $oDB->insert($query);
-                  }
-                } // end of for
+                } 
                 
-                // 관리자 계정 등록 
+                // Member Admin : Insert Into Member
                 if ($module === 'member' && preg_match('/^admin/i', $category) == true) {
-
-                  $adminInfo = array(
-                    'category'=>$category,
-                    'user_id'=>$_SESSION['admin_id'],
-                    'nickname'=>$_SESSION['admin_nickname'],
-                    'user_name'=>$_SESSION['admin_nickname'],
-                    'password'=>$_SESSION['admin_pwd'],
-                    'email_address'=>$_SESSION['admin_email'],
-                    'yoursite'=>$_SESSION['yourhome']
-                  );
-
-                  $cachePath = './files/caches/queries/member.getColumns.cache.php';
-                  $columnCaches = CacheFile::readFile($cachePath, 'columns');
-                  if (!$columnCaches) {
-                    $msg .= "QueryCacheFile Do Not Exists<br>";
-                    UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
-                    exit;
-                  }
-
-                  $columns = array();
-
-                  for($i=0; $i<count($columnCaches); $i++) {
-                    $key = $columnCaches[$i];
-                    $value = $adminInfo[$key];
-
-                    if (isset($value) && $value) {
-                      $columns[$key] = $value;
-                    }
-
-                    $columns['grade'] = 10;
-                    $columns['is_writable'] = 'y';
-                    $columns['is_kickout'] = 'n';
-                    $columns['date'] = 'now()';
-                    $columns['ip'] = $context->getServer('REMOTE_ADDR');
-                  }
-
-                  $query = new Query();
                   $query->setTable($tablePrefix . 'member');
                   $query->setField('id');
-                  $query->setWhere(array('category'=>$category));
-
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
 
                   if ($numrows < 1) {
-                    $query->setColumn($columns);
+                    $mColumns = array();
+                    $mColumns['category'] = $category;
+                    $mColumns['user_id'] = $_SESSION['admin_id'];
+                    $mColumns['nickname'] = $_SESSION['admin_nickname'];
+                    $mColumns['user_name'] = $_SESSION['admin_nickname'];
+                    $mColumns['password'] = $_SESSION['admin_pwd'];
+                    $mColumns['email_address'] = $_SESSION['admin_email'];
+                    $mColumns['yoursite'] = $_SESSION['yourhome'];
+                    $mColumns['grade'] = '10';
+                    $mColumns['ip'] = $context->getServer('REMOTE_ADDR');
+                    $mColumns['date'] = 'now()';
+
+                    $query->setField('');
+                    $query->setColumn($mColumns);
                     $result = $oDB->insert($query);
 
                     if (!$result) {
                       $msg .= '관리자 계정 등록을 실패하였습니다.' . PHP_EOL;
-                      $resultYN = "N";      
+                      $resultYN = "N";
                     }
                   } else {
                     $msg .= '관리자 계정이 이미 존재합니다.' . PHP_EOL;
                     $resultYN = "N";      
-                  }               
-                } // end of if : regist admin info
+                  } 
+                } // end of if : member
 
-                // copy template to files's dir to read  a template in module
-                if ($module == 'document') {
-
-                  // $contentPath was written in xml data
+                // Document : Create Template Files
+                if ($module === 'document') {
+                  $contentPath = 'files/document/' . $category;    // File Path of XML
                   $saveFileRealDir = Utils::convertAbsolutePath($contentPath, $realPath);
 
                   if (!file_exists($saveFileRealDir)) {
@@ -314,11 +267,11 @@ class InstallController extends Controller
                   }
 
                   // read files of template to module's directory      
-                  $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $category;
+                  $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $templateName;
                   $readtemplatePathList = array();
-                  $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $category . '.tpl';
-                  $readtemplatePathList['css'] = $readtemplatePath . '/' . $category . '.css';
-                  $readtemplatePathList['js'] = $readtemplatePath . '/' . $category . '.js';
+                  $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $templateName . '.tpl';
+                  $readtemplatePathList['css'] = $readtemplatePath . '/' . $templateName . '.css';
+                  $readtemplatePathList['js'] = $readtemplatePath . '/' . $templateName . '.js';
 
                   $buffers = array();
                   $buffers['tpl'] = '';
@@ -334,7 +287,6 @@ class InstallController extends Controller
                       $msg .= $tempPath . ' 파일이 존재하지 않습니다.' . PHP_EOL;
                     }      
                   }
-
                   $buffers['tpl'] .= $buffHeader;
 
                   // Save files of skin to files's directory
@@ -344,7 +296,6 @@ class InstallController extends Controller
                   $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
 
                   foreach ($saveTemplatePathList as $key => $value) {
-
                     if (isset($buffers[$key]) && $buffers[$key]) {
                       $result = FileHandler::writeFile($value, $buffers[$key]);
 
@@ -352,11 +303,38 @@ class InstallController extends Controller
                         $msg .= $value . "<br>${category} 템플릿 ${key} 파일 등록을 실패하였습니다." . PHP_EOL;
                       }      
                     }           
-                  }
+                  }               
+                }  // end of if : document                 
 
-                  // write route's key
+                if ($module === 'board') {                  
+                  $bColumns = array();
+                  $bColumns['category'] = $category;
+                  $bColumns['user_id'] = $_SESSION['admin_id'];
+                  $bColumns['user_name'] = $_SESSION['admin_nickname'];
+                  $bColumns['nickname'] = $_SESSION['admin_nickname'];
+                  $bColumns['password'] = $_SESSION['admin_pwd'];
+                  $bColumns['title'] = '게시판 설정 안내입니다.';
+                  $bColumns['content'] = "SUX CMS 최초 설치 시 등록되는 게시판은 관리자 페이지에서 변경, 삭제가 가능합니다.<br>또한 귀하의 사이트 환경에 맞게 수정하려면 관리자 권한 로그인 후<br>우측 상단 톱니바퀴 아이콘을 클릭해서 대시보드로 이동한 후 게시판 관리 페이지를 이용해 주세요.";
+                  $bColumns['email_address'] = $_SESSION['admin_email'];
+                  $bColumns['wall'] = 'a';
+                  $bColumns['date'] = 'now()';
+                  $bColumns['ip'] = $context->getServer('REMOTE_ADDR');
+
+                  $query->setTable($tablePrefix . 'board');
+                  $query->setField('');
+                  $query->setColumn($bColumns);
+                  $result = $oDB->insert($query);
+
+                  if (!$result) {
+                    $msg .= "시동 게시글 등록을 실패하였습니다.<br>";
+                    $resultYN = 'N';    
+                  }
+                }                
+
+                // Document And Board : Write into Route File
+                if ($module === 'document' || $module === 'board') {
                   $routes = array();
-                  $filePath = $realPath . 'files/caches/routes/document.cache.php';
+                  $filePath = $realPath . "files/caches/routes/${module}.cache.php";
                   $routeCaches = CacheFile::readFile($filePath); 
 
                   if (isset($routeCaches) && $routeCaches) {
@@ -365,19 +343,20 @@ class InstallController extends Controller
                     $pattern = sprintf('/(%s)+/i', $category);
 
                     if (!preg_match($pattern, implode(',', $routes['categories']))) {
-                      array_push($routes['categories'], $category); 
+                      $routes['categories'][] = $category; 
                     }
                     CacheFile::writeFile($filePath, $routes);
-                  }                  
-                }  // end of if
+                  }
+                }  // end of if : route
               }  // end of if : if 'actionType === insert && $moduleType === once'
+
             }  // end of if : file_exists
           }  // end of if
         }  // end of foreach
       }  //end of if : preg_match(xml)
-    }  // end of foreach
+    }  // end of foreach : modules
 
-    // make default json for gnb's menu
+    // Make Json File of GNB
     $gnbPath = 'files/gnb/gnb.json';
     $gnbFilePath = Utils::convertAbsolutePath($gnbPath, $realPath);
 
@@ -385,7 +364,7 @@ class InstallController extends Controller
       $query = new Query();
       $query->setTable($tablePrefix . 'menu');
       $query->setField('*');
-      $query->setOrderBy('id desc');
+      $query->setWhere(array('is_active'=>1));
       $result = $oDB->select($query);
       $jsonData = array();
       $jsonData['data'] = array();
@@ -403,10 +382,9 @@ class InstallController extends Controller
       }
     }  // end of if
 
-    // write table list
+    // Make Config Table File
     $tableDir = './files/config/config.table.php';
     $pathinfo = pathinfo($tableDir);
-
     $buffer = array();
     $buffer['table_list'] = $tableList;   
     $result = CacheFile::writeFile($tableDir, $buffer);

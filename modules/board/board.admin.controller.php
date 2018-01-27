@@ -10,11 +10,9 @@ class BoardAdminController extends Controller
     $dataObj = array();
 
     $context = Context::getInstance();
-    $posts = $context->getPostAll();  
-
+    $posts = $context->getPostAll(); 
     $returnURL = $context->getServer('REQUEST_URI');
-    $adminId = $context->getAdminInfo('admin_id');
-    $adminEmail = $context->getAdminInfo('admin_email');
+    
 
     /**
      * @cache's columns 
@@ -98,19 +96,23 @@ class BoardAdminController extends Controller
           $routes['categories'][] = $category;  
         }
         CacheFile::writeFile($filePath, $routes);
-      }       
+      }
 
-      $passwordHash = $context->getPasswordHash('12');
+      $adminId = $context->getAdminInfo('admin_id');
+      $adminPassword = $context->getAdminInfo('admin_pwd');
+      $adminNickname = $context->getAdminInfo('admin_nickname');
+      $adminEmail = $context->getAdminInfo('admin_email');
+
       $columns = array();
       $columns['category'] = $category;
       $columns['user_id'] = $adminId;
-      $columns['user_name'] = '운영자';
-      $columns['nickname'] = '운영자';
-      $columns['password'] = $passwordHash;
+      $columns['user_name'] = $adminNickname;
+      $columns['nickname'] = $adminNickname;
+      $columns['password'] = $adminPassword;
       $columns['title'] = '게시판 시동 테스트';
-      $columns['content'] = '본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br>본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.';
+      $columns['content'] = "본 게시물은 게시판 시동을 위해 자동 등록된 것입니다.<br>본 게시물을 삭제하기 전에 반드시 하나를 등록하시기 바랍니다.";
 
-      $columns['email_address'] = $passwordHash;
+      $columns['email_address'] = $adminEmail;
       $columns['date'] = 'now()';
       $columns['ip'] = $context->getServer('REMOTE_ADDR');
       $result = $this->model->insert('board', $columns);

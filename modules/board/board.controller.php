@@ -6,7 +6,7 @@ class BoardController extends Controller
   // Form Value Validation && Security
   function getFormCheckList() {
 
-    return array(  array('key'=>'user_name', 'msg'=>'이름을'),
+    return array(  array('key'=>'nickname', 'msg'=>'이름을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
                           array('key'=>'content', 'msg'=>'내용을'));
@@ -47,6 +47,8 @@ class BoardController extends Controller
 
     $msg = '';
     $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
+    $saveDir = _SUX_PATH_ . "files/board/";
 
     $context = Context::getInstance();
     $sessions = $context->getSessionAll();
@@ -58,9 +60,6 @@ class BoardController extends Controller
     Forms::validateFile($files);
     $posts = $this->setEncodeFormValue($posts);
 
-    /*echo $posts['content'];
-    return;*/
-    
     $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
     $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
 
@@ -78,9 +77,6 @@ class BoardController extends Controller
       exit;
     }    
 
-    $rootPath = _SUX_ROOT_;
-    $saveDir = _SUX_PATH_ . "files/board/";
-
     if (is_uploaded_file($imageUpTempName )) {
       $mktime = mktime();
       $imageUpName =$mktime . "_" . $imageUpName;
@@ -95,12 +91,12 @@ class BoardController extends Controller
     $where = new QueryWhere();
     $where->set('category', $category, '=');
     $this->model->select('board', 'id', $where, 'id desc', 0, 1);
-
     $row = $this->model->getRow();
     $igroup_count = $row['id'] + 1;
 
     $cachePath = './files/caches/queries/board.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
     if ($columnCaches) {
       $columns = array();
 
@@ -172,19 +168,29 @@ class BoardController extends Controller
     $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];
     $id = $posts['id'];
-    $user_name = $posts['user_name'];
+    $nickname = $posts['nickname'];
     $passwordHash = $context->getPasswordHash($posts['password']);
     $adminPassword = $context->getAdminInfo('admin_pwd');
     $adminPasswordHash = $context->getPasswordHash($adminPassword);
     $imageUpName = $files['imgup']['name'];
     $imageUpTempName = $files['imgup']['tmp_name'];
+
+    $wall = $posts['wall'];
+    $wallname = $posts['wallname'];
+    $wallok = $posts['wallok'];
+
+    if ($wallname !== $wallok) {
+      $msg = '경고! 잘못된 등록키입니다.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    } 
    
     $rootPath = _SUX_ROOT_;
     $saveDir = _SUX_PATH_ . "files/board/";
     
     $where = new QueryWhere();
     $where->set('id', $id, '=');
-    $where->set('user_name', $user_name, '=');
+    $where->set('nickname', $nickname, '=', 'and');
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('board','password, igroup_count, filename', $where);
 
@@ -201,6 +207,7 @@ class BoardController extends Controller
 
         if ($delFileName) {
           $delFileName = $saveDir . $delFileName;
+
           if(!@unlink($delFileName)) {
             $resultYN = 'N';
             $msg .= "' " . $delFileName . "' 파일삭제를 실패했습니다.";
@@ -211,22 +218,23 @@ class BoardController extends Controller
           $mktime = mktime();
           $imageUpName = $mktime."_".$imageUpName;
           $dest = $saveDir . $imageUpName;
+
           if (!move_uploaded_file($imageUpTempName, $dest)) {
             $resultYN = 'N';
             $msg .= "파일을 지정한 디렉토리에 저장하는데 실패했습니다.";  
           }
         }
         $context->set('fileup_name', $imageUpName);
-
         $cachePath = './files/caches/queries/board.getColumns.cache.php';
         $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
         if (!$columnCaches) {
           $msg .= "QueryCacheFile Do Not Exists<br>";
         } else {
           $regFilters = '/^(category|id|password|user_id|user_name)+$/';
           $columns = array();
-          for($i=0; $i<count($columnCaches); $i++) {
 
+          for($i=0; $i<count($columnCaches); $i++) {
             $key = $columnCaches[$i];
             
             if (strpos($key,'file') !== false) {
@@ -286,6 +294,8 @@ class BoardController extends Controller
 
     $resultYN = 'Y';
     $msg = '';
+    $rootPath = _SUX_ROOT_;
+    $saveDir = _SUX_PATH_ . "files/board/";
 
     $context = Context::getInstance();
     $sessions = $context->getSessionAll();
@@ -302,9 +312,9 @@ class BoardController extends Controller
     $id = $posts['id'];
     $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
 
-    $igroup_count = $posts['igroup_count'];
-    $space_count = $posts['space_count'];
-    $ssunseo_count = $posts['ssunseo_count'];
+    $igroup_count = (int) $posts['igroup_count'];
+    $space_count = (int) $posts['space_count'];
+    $ssunseo_count = (int) $posts['ssunseo_count'];
 
     $wallname = $posts['wallname'];
     $wallok = $posts['wallok'];
@@ -316,9 +326,6 @@ class BoardController extends Controller
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
-    
-    $rootPath = _SUX_ROOT_;
-    $saveDir = _SUX_PATH_ . "files/board/";
 
     if (is_uploaded_file($imageUpTempName )) {      
       $mktime = mktime();
@@ -338,6 +345,7 @@ class BoardController extends Controller
     $where->set('ssunseo_count', $ssunseo_count, '>');
     $where->set('igroup_count', $igroup_count, '=','and');
     $result = $this->model->update('board',$columns, $where);
+
     if (!isset($result)) {
       $resultYN = 'N';
       $msg .= '순서를 변경하는데 실패했습니다'; 
@@ -345,9 +353,10 @@ class BoardController extends Controller
 
     $cachePath = './files/caches/queries/board.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
-    if ($columnCaches) {
 
+    if ($columnCaches) {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];       
         
@@ -360,40 +369,25 @@ class BoardController extends Controller
           } 
 
           if (isset($value) && $value) {
-            $columns[] = $value;
-          } else {
-            $columns[] = '';
-          }
-        } else {
-
-          $value = $posts[$key];
-          if ((isset($value) && $value) || is_numeric($value)) {
-
-            if ($key === 'space_count') {
-              $value = $space_count + 1;
-            } else if ($key === 'ssunseo_count') {
-              $value = $ssunseo_count + 1;
-            }
-
             $columns[$key] = $value;
           } else {
-            if ($key === 'is_notice') {
-              $columns[] = 'n';
-            } else if ($key === 'date') {
-              $columns[] = 'now()';
-            } else if ($key === 'ip') {
-              $columns[] = $context->getServer('REMOTE_ADDR');
-            }  else {
-              $columns[] = '';
-            }       
+            $columns[$key] = '';
+          }
+        } else {
+          $value = $posts[$key];
+
+          if (isset($value) && $value) {
+            $columns[$key] = $value;
           }
         } // end of if
       } // end of for
 
+      $columns['space_count'] = $space_count + 1;
+      $columns['ssunseo_count'] = $ssunseo_count + 1;
+      $columns['is_notice'] = 'n';
       $columns['date'] = 'now()';
       $columns['ip'] = $context->getServer('REMOTE_ADDR');
     } else {
-
       $msg .= "QueryCacheFile Do Not Exists<br>";
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
@@ -416,28 +410,27 @@ class BoardController extends Controller
 
   function deleteDelete() {
 
+    $msg = '';
+    $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
+    $deletePath = _SUX_PATH_ . "files/board/";    
+
     $context = Context::getInstance();
     $posts =  $context->getPostAll();
 
     Forms::validates($posts);
     $posts = FormSecurity::encodes($posts);
-
     $returnURL = $context->getServer('REQUEST_URI');    
     $password = trim($posts['password']);
+    $category = $posts['category'];
+    $id = $posts['id'];
+
     if (empty($password)) {
       $msg .= '비밀번호를 입력해주세요.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
-
-    $category = $posts['category'];
-    $id = $posts['id'];
-
-    $rootPath = _SUX_ROOT_;
-    $deletePath = _SUX_PATH_ . "files/board/";
-    $msg = '';
-    $resultYN = 'Y';
-
+    
     $passwordHash = $context->getPasswordHash($password);
     $adminPassword = $context->getAdminInfo('admin_pwd');
     $adminPasswordHash = $context->getPasswordHash($adminPassword);
@@ -445,10 +438,11 @@ class BoardController extends Controller
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('board', 'password,filename', $where); 
-
     $row = $this->model->getRow();    
+
     if (($passwordHash == $row['password']) || ($passwordHash == $adminPasswordHash)) {
       $delFileName = $row['filename'];
+
       if(isset($delFileName) && $delFileName != '') {
         $deletePath = $deletePath . $delFileName;
 
@@ -461,6 +455,7 @@ class BoardController extends Controller
       $where = new QueryWhere();
       $where->set('id', $id);
       $result = $this->model->delete('board', $where);
+
       if (!isset($result)) {
         $msg .= '글을 삭제하는데 실패했습니다.';
         UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -483,27 +478,30 @@ class BoardController extends Controller
 
   function updateProgressStep() {
 
+    $msg = '';
+    $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
+
     $context = Context::getInstance();
     $posts = $context->getPostAll();
 
-    $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];
     $id = $posts['id'];
     $progressStep = $posts['progress_step'];
-
-    $rootPath = _SUX_ROOT_;
-    $msg = '';
-    $resultYN = 'Y';
+    $returnURL = $context->getServer('REQUEST_URI');  
 
     $cachePath = './files/caches/queries/board.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
     if (!$columnCaches) {
       $msg .= "QueryCacheFile Do Not Exists<br>";
     } else {
       $columns = array();
+
       for($i=0; $i<count($columnCaches); $i++) {
         $key = $columnCaches[$i];     
         $value = $posts[$key];
+
         if (isset($value) && $value) {
           if (!preg_match('/^(id|category)+$/', $key)) {
             $columns[$key] = $value;
@@ -515,6 +513,7 @@ class BoardController extends Controller
     $where = new QueryWhere();
     $where->set('id', $id);
     $result = $this->model->update('board', $columns, $where);
+
     if (!isset($result)) {
       $msg .= '진행상황 설정을 실패하였습니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -538,7 +537,7 @@ class BoardController extends Controller
     $posts = $context->getPostAll();
     $sessions = $context->getSessionAll();
 
-    $sessionUserId = $sessions['user_id'];
+    $sessionUserId = $sessions['user_id'];    
     if (empty($sessionUserId)) {
       $msg .= '로그인 후 이용해주세요.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -590,7 +589,6 @@ class BoardController extends Controller
     $columns['user_id'] = trim($sessions['user_id']);
     $columns['nickname'] = trim($sessions['nickname']);
     $columns['password'] = trim($sessions['password']);
-
     $result = $this->model->insert('comment', $columns); 
 
     if ($result) {
@@ -605,8 +603,8 @@ class BoardController extends Controller
     } else {
       $msg .= '댓글 입력을 실패하였습니다.';
     }    
-    $msg .= Tracer::getInstance()->getMessage();
 
+    //$msg .= Tracer::getInstance()->getMessage();
     $data = array( 
             'data'=>$row,
             'url'=>$rootPath . $category . '/' . $id,
@@ -624,6 +622,7 @@ class BoardController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $sessions = $context->getSessionAll();
+
     $id = $posts['id'];
     $userId = $sessions['user_id'];
     $nickName = $sessions['nickname'];
@@ -691,16 +690,15 @@ class BoardController extends Controller
     $category = $posts['category'];
     $contentId = $posts['content_id'];
     $id = $posts['id'];    
-
     $sessionUserId = $sessions['user_id'];
+    $sessionCategory = $sessions['category'];
+    $sessionPassword = $sessions['password'];
+
     if (empty($sessionUserId)) {
       $msg .= '로그인이 필요합니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
       return false;
     }
-
-    $sessionCategory = $sessions['category'];
-    $sessionPassword = $sessions['password'];
 
     $where = new QueryWhere();
     $where->set('id', $id);
@@ -720,7 +718,7 @@ class BoardController extends Controller
       exit;
     }
 
-    // delete voted log  
+    // Delete Voted Log  
     $where->reset();
     $where->set('comment_id', $id);
     $result = $this->model->delete('comment_voted_log', $where);

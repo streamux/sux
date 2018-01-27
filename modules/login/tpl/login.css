@@ -19,7 +19,7 @@
   margin-top:25px;
   margin-bottom: 30px;
   padding:35px 20px 20px 20px;
-  width: 356px;
+  max-width: 356px;
 }
 .sx_login .sx_login_box label {
   position: relative;

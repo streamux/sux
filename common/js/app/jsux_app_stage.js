@@ -3,17 +3,16 @@ $(window).ready(function() {
   var gnbModel = jsux.gnb.Model.create(),
         gnbView = jsux.gnb.Menu.create("#sxGnb", gnbModel),
         mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
-        pageAppHandler = {},
+        pageManager = {},
         jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
-        menuList = null,
-        mobileMenuSlide = null;
+        mobileMenuSlider = null;
 
   gnbModel.addObserver( gnbView );
   gnbModel.addObserver( mobileGnbView );
 
   jsux.mobileGnbView = mobileGnbView;
 
-  mobileMenuSlide = new Swiper('.swiper-container-mobilegnb', {
+  mobileMenuSlider = new Swiper('.swiper-container-mobilegnb', {
       scrollbar: '.swiper-scrollbar-mobilegnb',
       direction: 'vertical',
       slidesPerView: 'auto',
@@ -21,13 +20,13 @@ $(window).ready(function() {
       freeMode: true
     });
 
-  pageAppHandler.home = {
+  pageManager.main = {
 
     init: function() {
-      var visualView = jsux.visual.View.create();
+      var visualView = jsux.app.MainBanner.create();
     }
   };
-  pageAppHandler.sub = {
+  pageManager.common = {
 
     init: function() {
 
@@ -41,7 +40,7 @@ $(window).ready(function() {
 
         var tw = $(window).outerWidth();
         mobileGnbView.resizeUI(tw);
-        mobileMenuSlide.onResize();        
+        mobileMenuSlider.onResize();        
       });
 
       $(window).trigger('resize');
@@ -49,7 +48,7 @@ $(window).ready(function() {
     }
   };
 
-  pageAppHandler.jsonLoader = {
+  pageManager.jsonLoader = {
 
     load: function(path) {
 
@@ -83,22 +82,19 @@ $(window).ready(function() {
             dataManager = null;
 
             gnbModel.setData( menuList );
-            mobileMenuSlide.update();
+            mobileMenuSlider.update();
           }
 
           //gnbModel.activate( 1, 2 );
-          pageAppHandler.sub.init();          
+          pageManager.common.init();          
         }
       });
     }
   };
 
-  switch(is_page) {   
-    case 'main':
-      pageAppHandler.home.init();
-      break;
-    default:
-      break;      
+  if (is_page && is_page.toLowerCase() === 'main') {
+    pageManager.main.init();
   }
-  pageAppHandler.jsonLoader.load(jsonPath);
+
+  pageManager.jsonLoader.load(jsonPath);
 });

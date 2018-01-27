@@ -1,34 +1,32 @@
 /**
  * Swiper 3.3.1
  */
+jsux.app = jsux.app || {};
 
-jsux.visual = jsux.visual || {};
-jsux.visual.View = jsux.View.create();
-jsux.visual.View.create = function() {
+(function(app, $) {
 
-  var mainVisual = new Swiper('.swiper-container-visual',{
+  app.MainBanner = jsux.View.create();
+  app.MainBanner.extend({
+    create: function() {
 
-    direction: 'horizontal',
-    speed: 500,
-    effect: 'slide',
-    pagination: '.swiper-pagination-visual',
-    paginationClickable: true,
-    preloadImages: false,
-    lazyLoading: true,
-    loop:true,
-    grabCursor: false
+      var swiper = null;
+
+      try{
+        swiper = new Swiper('.swiper-container-visual',{
+          direction: 'horizontal',
+          speed: 500,
+          effect: 'slide',
+          pagination: '.swiper-pagination-visual',
+          paginationClickable: true,
+          preloadImages: false,
+          lazyLoading: true,
+          loop:true,
+          grabCursor: false
+        });
+      }catch(error) {
+        console.log('Swiper do not exists');
+      }
+      return swiper;
+    }
   });
-
-  mainVisual.on('slideChangeStart', function ( e ) {
-    //console.log( e.activeIndex + ' : ' +  e.touches.diff );
-  });
-  
-  /*$('.arrow-left').on('click', function(e){
-    e.preventDefault()
-    mySwiper.swipePrev()
-  });
-  $('.arrow-right').on('click', function(e){
-    e.preventDefault()
-    mySwiper.swipeNext()
-  });*/
-};
+})(jsux.app, jQuery);

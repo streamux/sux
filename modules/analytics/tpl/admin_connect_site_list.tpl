@@ -57,7 +57,7 @@
     </div>
 
 <!-- pc start -->
-<script type="text/jquery-templete" id="warnMsg_tmpl">
+<script type="text/jquery-templete" id="warnMsgTmpl">
 {literal}
   <tr>
     <td colspan="6"><span class="sx-text-warning"><i class="xi-warning"></i>${msg}</span></td>
