@@ -2,12 +2,12 @@
       <section class="sx-document-panel">
         <h1 class="title">페이지 수정</h1>
         <div class="sx-box-content">
-          <form action="{$rootPath}document-admin/modify" method="post" class="sx-form-horizontal">
+          <form action="{$rootPath}document-admin/modify" name="f_modify" method="post" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="update">
             <input type="hidden" name="category" value="{$documentData.category}">
             <input type="hidden" name="id" value="{$documentData.id}">
             <input type="hidden" name="modify_info_path" value="{$rootPath}document-admin/modify-json">
-            <input type="hidden" name="skin_path" value="{$rootPath}document-admin/skin-resource">
+            <input type="hidden" name="template_path" value="{$rootPath}document-admin/template-resource">
             <input type="hidden" name="location_back" value="{$rootPath}document-admin">
 
             <p class="text_notice">
@@ -41,12 +41,21 @@
               <input type="text" id="header_path" name="header_path" size="25" maxlength="50" class="sx-form-control">
             </div>
             <div class="sx-form-group">
-              <label for="contentPath" class="sx-control-label label_width">컨텐츠 템플릿</label>
-              <select id="contentPath" name="content_path" onchange="jsux.fn.add.loadTemplatecontent(this.value);" class="sx-form-control">
+              <label for="templateType" class="sx-control-label label_width">템플릿 타입</label>
+              <select id="templateType" name="template_type" class="sx-form-control" disabled="true">
                 {foreach from=$documentData.skinList key=k item=v}
-                <option value="{$v}" {if $v === 'default'} selected {/if}>{$v}</option>
+                <option value="{$v}" {if $v === $documentData.template_type } selected {/if}>{$v}</option>
                 {/foreach}
               </select>
+            </div>
+            <div class="sx-form-inline">
+              <label for="emptyName" class="sx-control-label label_width">템플릿 모드</label>              
+              <div class="sx-input-group">
+                <input type="radio" id="templateModeOrigin" name="template_mode" value="o">
+                <label for="templateModeOrigin" class="sx-control-label">Original</label>
+                <input type="radio" id="templateModePublished" name="template_mode" value="p">
+                <label for="templateModePublished" class="sx-control-label">Published</label>
+              </div>
             </div>
             <div class="sx-form-inline">
               <label for="emptyName" class="sx-control-label label_width">컨텐츠 내용</label>
@@ -60,9 +69,8 @@
                   <textarea id="contentTpl" name="content_tpl" rows="15" class="sx-form-control"></textarea>
                   <textarea id="contentCss" name="content_css" rows="15" class="sx-form-control hide"></textarea>    
                   <textarea id="contentJs" name="content_js" rows="15" class="sx-form-control hide"></textarea>
-                </div>
-                <p class="text_caption">컨텐츠 내용을 입력하세요.</p>
-              </div> 
+                </div>                
+              </div>
             </div>
             <div class="sx-form-group">
               <label for="footerPath" class="sx-control-label label_width">하단 경로</label>

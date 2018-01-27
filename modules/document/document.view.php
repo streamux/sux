@@ -9,36 +9,39 @@ class DocumentView extends View
     $this->session_data = $context->getSessionAll();
 
     $where = new QueryWhere();
-    $where->set('category',$category,'=');
-    
+    $where->set('category',$category,'=');    
     $this->model->select('document', '*', $where);
     
     $groupData = $this->model->getRow();
     $headerPath = $groupData['header_path'];
-    $contentPath = $groupData['content_path'];
+    $templateType = $groupData['template_type'];
+    $templateMode = $groupData['template_mode'];
     $footerPath = $groupData['footer_path'];
-
-    $this->document_data['jscode'] = 'content';
-    $this->document_data['module_code'] = $category;
-    $this->document_data['module_name'] = $groupData['document_name'];    
 
     /**
      * css, js file path handler
      */
     $rootPath = _SUX_ROOT_;
     $realPath = _SUX_PATH_;
-    $skinPath = _SUX_ROOT_ . $contentPath . '/';
-    $skinRealPath = _SUX_PATH_."modules/document/skin/";    
-    $contentPath = $contentPath . '/' . $category . '.tpl';
+    
+    $templateDir = array();    
+    $templateDir['o'] = 'modules/document/templates/';
+    $templateDir['p'] = 'files/document/';    
+    $templateName = $templateMode === 'o' ? $templateType : $category;
+    $templatePath = $templateDir[$templateMode] . $templateName . '/';
+
+    $this->document_data['jscode'] = 'content';
+    $this->document_data['module_code'] = $templateName;
+    $this->document_data['module_name'] = $groupData['document_name'];    
 
     /**
      * @var headerPath, contentPath, footerPath
      * @descripttion
      * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수를 이용해 절대경로 처리 함.
      */   
-    $headerPath = Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
-    $contentPath = Utils::convertAbsolutePath($contentPath, _SUX_PATH_);
-    $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
+    $headerPath = Utils::convertAbsolutePath($headerPath, $realPath);
+    $templateRealPath = Utils::convertAbsolutePath($templatePath, $realPath);
+    $footerPath = Utils::convertAbsolutePath($footerPath, $realPath);
 
     if (!is_readable($headerPath)) {
       $headerPath = $realPath . "modules/document/tpl/_header.tpl";
@@ -50,17 +53,18 @@ class DocumentView extends View
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    //$msg .= Tracer::getInstance()->getMessage() . "<br>";
+    $templateRealPath = $templateRealPath . '/'. $templateName . '.tpl';
 
+    //$msg .= Tracer::getInstance()->getMessage() . "<br>";
     $this->document_data['group'] = $groupData;
     $this->document_data['content'] = $contentData;
     $this->document_data['category'] = $category;
-    
+
     $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['path'] = $templatePath;
     $this->skin_path_list['realPath'] = $skinRealPath;
     $this->skin_path_list['header'] = $headerPath;
-    $this->skin_path_list['content'] = $contentPath;
+    $this->skin_path_list['content'] = $templateRealPath;
     $this->skin_path_list['footer'] = $footerPath;
 
     $this->output();

@@ -2,7 +2,7 @@
  * write here  library and plugin
  */
 
-//document.write('<script src="' + jsux.rootPath +'libs/ckeditor/standard_20171127/ckeditor.js"><\/script>');
+document.write('<script src="' + jsux.rootPath +'libs/ckeditor/basic_20171127/ckeditor.js"><\/script>');
 ///////////////////////////////////////////////
 
 jsux.fn = jsux.fn || {};
@@ -10,11 +10,11 @@ jsux.fn.ckeditor = {
 
   updateElement: function(id) {
 
-     //CKEDITOR.instances[id].updateElement();
+     CKEDITOR.instances[id].updateElement();
   },
   replace: function(id) {
 
-    //CKEDITOR.replace(id);
+    CKEDITOR.replace(id);
   }
 };
 
@@ -356,7 +356,7 @@ jsux.fn.write = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -412,7 +412,7 @@ jsux.fn.reply = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -467,7 +467,7 @@ jsux.fn.modify = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 

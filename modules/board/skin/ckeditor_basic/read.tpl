@@ -16,8 +16,8 @@
         <a href="{$contentData.fileup_path}">{$contentData.file_name}&nbsp;<b>[ 다운로드 ]</b></a>
       </p>
       <p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
-      <p class="content_text">
-        {$contentData.content}
+      <p>
+        <pre>{$contentData.content}</pre>
       </p>
     </div> 
     <div class="btn_groups">    

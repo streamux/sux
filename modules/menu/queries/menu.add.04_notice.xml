@@ -1,0 +1,14 @@
+<query id="insertMenu" action="insert" execution="once">
+  <tables>
+    <table name="menu"></table>
+  </tables>
+  <columns>
+    <column name="id"></column>
+    <column name="category">notice</column>
+    <column name="menu_name"><![CDATA[공지사항]]></column>
+    <column name="url"><![CDATA[notice]]></column>
+    <column name="url_target"><![CDATA[_self]]></column>
+    <column name="is_active">1</column>
+    <column name="date"><![CDATA[now()]]></column>        
+  </columns>
+</query>

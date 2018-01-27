@@ -75,7 +75,7 @@
       <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${summary}{/literal}</a>
     </td>
     <td class="sx_content">
-      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${content_path}{/literal}</a>
+      <a href="{$rootPath}{literal}${category}{/literal}" target="_blank">{literal}${template_type}{/literal}</a>
     </td>
     <td>{literal}${$item.editDate(date)}{/literal}</td>    
     <td>
@@ -105,7 +105,7 @@
         {literal}${document_name}{/literal}
       </span>      
       <span class="sx_summary">{literal}${summary}{/literal}</span> 
-      <span class="sx_content"><i class="xi-file-text-o"></i>{literal}${content_path}{/literal}</span>      
+      <span class="sx_content"><i class="xi-file-text-o"></i>{literal}${template_type}{/literal}</span>      
       <span class="sx_date"><i class="xi-clock-o"></i>{literal}${$item.editDate(date)}{/literal}</span>
     </a>
     <div class="sx-btn-group">

@@ -138,7 +138,6 @@ class FormSecurity extends Object {
     //$input = self::flameStripTags($input);
     $input = htmlspecialchars($input);
 
-
     return $input;
   }  
 

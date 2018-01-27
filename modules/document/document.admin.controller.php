@@ -6,13 +6,13 @@ class DocumentAdminController extends Controller
 
     $msg = '';
     $resultYN = 'Y';
-    $dataObj = array();
+    $dataObj = array();    
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);
-    $templateName = $posts['content_path'];
+    $templateType = $posts['template_type'];
     $title = $posts['document_name'];
     $returnURL = $context->getServer('REQUEST_URI');  
 
@@ -41,7 +41,8 @@ class DocumentAdminController extends Controller
      *  페이지에서 넘어온 데이터 값들은 캐시에 저장된 컬럼키와 매칭이 된 값만 저장된다.
      */
 
-    $savePath = 'files/document/';
+    $realPath = _SUX_PATH_;
+    $savePath = 'files/document/' . $category;
     $cachePath = './files/caches/queries/document.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
 
@@ -53,14 +54,11 @@ class DocumentAdminController extends Controller
         $value = $posts[$key];
 
         if (isset($value) && $value) {
-
-          if (preg_match('/^(content_path)+$/', $key)) {
-            $value = $savePath . $category;
-          }
           $columns[$key] = $value;
         } 
       } //end of for
 
+      $columns['template_type'] = $templateType;
       $columns['date'] = 'now()';
     } else {
       $msg .= "QueryCacheFile Do Not Exists<br>";
@@ -69,25 +67,23 @@ class DocumentAdminController extends Controller
     } // end of if
 
     $result = $this->model->insert('document', $columns);
-
     if ($result) {
       $msg .= "\"${category}\" 페이지 등록을 완료하였습니다.<br>";
-
-      $realPath = _SUX_PATH_ . $savePath;
-
-      // make new template dir
-      $saveFileRealDir = $realPath . $category;
-
+      
+      // Make Directory Into Files
+      $saveFileRealDir = Utils::convertAbsolutePath($savePath, $realPath);
       if (!file_exists($saveFileRealDir)) {
         FileHandler::makeDir($saveFileRealDir, false);
       }
 
-      // read files of template to module's directory      
-      $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $templateName;
-      $readtemplatePathList = array();
-      $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $templateName . '.tpl';
-      $readtemplatePathList['css'] = $readtemplatePath . '/' . $templateName . '.css';
-      $readtemplatePathList['js'] = $readtemplatePath . '/' . $templateName . '.js';
+      // Read Template In Modules
+      $readPath = 'modules/document/templates/' . $templateType;
+      $readTemplatePath = Utils::convertAbsolutePath($readPath, $realPath);
+
+      $readTemplateList = array();
+      $readTemplateList['tpl'] = $readTemplatePath . '/' . $templateType . '.tpl';
+      $readTemplateList['css'] = $readTemplatePath . '/' . $templateType . '.css';
+      $readTemplateList['js'] = $readTemplatePath . '/' . $templateType . '.js';
 
       $buffers = array();
       $buffers['tpl'] = '';
@@ -100,7 +96,7 @@ class DocumentAdminController extends Controller
         if (isset($buffer) && $buffer) {
           $buffers[$key] = $buffer;
         } else {
-          $tempPath = $readtemplatePathList[$key];
+          $tempPath = $readTemplateList[$key];
 
           if (file_exists($tempPath)) {
             $buffers[$key] = FileHandler::readFile($tempPath);
@@ -124,14 +120,13 @@ class DocumentAdminController extends Controller
           $buffers['tpl'] = $buffer;
       }
 
-      // Save files of skin to files's directory
-      $saveTemplatePathList = array();
-      $saveTemplatePathList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
-      $saveTemplatePathList['css'] = $saveFileRealDir . '/' . $category . '.css';
-      $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
+      // Save Info Files
+      $saveTemplateList = array();
+      $saveTemplateList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
+      $saveTemplateList['css'] = $saveFileRealDir . '/' . $category . '.css';
+      $saveTemplateList['js'] = $saveFileRealDir . '/' . $category . '.js';
 
-      foreach ($saveTemplatePathList as $key => $value) {
-
+      foreach ($saveTemplateList as $key => $value) {
         if (isset($buffers[$key]) && $buffers[$key]) {          
           $result = FileHandler::writeFile($value, $buffers[$key]);
 
@@ -199,7 +194,7 @@ class DocumentAdminController extends Controller
     $dataObj = array();
     $resultYN = "Y";
     $msg = "";
-    $is_document = 'N';
+    $is_document = 'N';    
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
@@ -207,7 +202,8 @@ class DocumentAdminController extends Controller
     $id = $posts['id'];
     $category = $posts['category'];
     $title = $posts['document_name'];
-    $content_path = $posts['content_path'];
+    $templateType = $posts['template_type'];
+    $templateMode = $posts['template_mode'];
 
     /**
      * @cache's columns 
@@ -222,25 +218,23 @@ class DocumentAdminController extends Controller
       $value = $posts[$key];
 
       if (isset($value) && $value) {
-        if (preg_match('/^(content_path)+$/', $key)) {
-          if (!preg_match('/(.tpl+)$/i', $value)) {
-            $value = 'files/document/' . $category;
-          }
-          $content_path = $value;
-        }
         $columns[$key] = $value;
       }           
-    }   
-    // end of page
+    }
 
+    if ($templateMode === 'p') {
+      unset($columns['template_type']);
+    } 
+
+    // end of page
     $where = new QueryWhere();
     $where->set('id', $id);
-    $result = $this->model->update('document', $columns, $where);   
+    $result = $this->model->update('document', $columns, $where); 
+
     if ($result) {
+      $savePath = 'files/document/' . $category;
 
-      if (isset($content_path) && $content_path) {
-        $realPath = _SUX_PATH_ . 'files/document/';
-
+      if (isset($savePath) && $savePath) {
         $buffers = array();
         $buffers['tpl'] = '';
         $buffers['css'] = '';
@@ -254,9 +248,7 @@ class DocumentAdminController extends Controller
         }
 
         // Save files of skin to files's directory
-        $content_path = _SUX_ROOT_ . $content_path;
-        $saveTemplatePath =Utils::convertAbsolutePath($content_path, $realPath);
-
+        $saveTemplatePath = Utils::convertAbsolutePath($savePath, _SUX_PATH_);
         if (!file_exists($saveTemplatePath)) {
           FileHandler::makeDir($saveTemplatePath, false);
         }
@@ -269,6 +261,7 @@ class DocumentAdminController extends Controller
         foreach ($saveTemplatePathList as $key => $value) {
           if (isset($buffers[$key]) && $buffers[$key]) {
             $result = FileHandler::writeFile($value, $buffers[$key]);
+
             if (!$result) {
               $msg .= "${category} 템플릿 ${key} 파일 등록을 실패하였습니다.<br>";
             }      
@@ -278,16 +271,18 @@ class DocumentAdminController extends Controller
         // rewrite route's key
         $routes = array();
         $filePath = './files/caches/routes/document.cache.php';
-        $routeCaches = CacheFile::readFile($filePath);      
+        $routeCaches = CacheFile::readFile($filePath);
+
         if (isset($routeCaches) && $routeCaches) {
           $routes['categories'] = $routeCaches['categories'];
-          $routes['action'] = $routeCaches['action'];
-          
+          $routes['action'] = $routeCaches['action'];          
           $pattern = sprintf('/(%s)+/i', $category);
+
           if (!preg_match($pattern, implode(',', $routes['categories']))) {
             //array_push($routes['categories'], $category);
             $routes['categories'][] = $category;       
           }
+
           CacheFile::writeFile($filePath, $routes);
         }
 
@@ -295,14 +290,16 @@ class DocumentAdminController extends Controller
         $where->reset();
         $where->set('category', $category);
         $result = $this->model->select('menu', 'id', $where);
+
         if ($result) {
           $numrows = $this->model->getNumRows();
+
           if ($numrows > 0) {
             $columns = array();
             $columns['menu_name'] = $title;
-            $columns['url'] = $category;
-            
+            $columns['url'] = $category;            
             $result = $this->model->update('menu', $columns, $where);
+
             if (!$result) {
               $msg .= "메뉴 업데이트를 실패하였습니다.";
               $resultYN = 'N';
@@ -313,8 +310,8 @@ class DocumentAdminController extends Controller
             $columns['menu_name'] = $title;
             $columns['url'] = $category;
             $columns['date'] = 'now()';
-
             $result = $this->model->insert('menu', $columns);
+
             if (!$result) {
               $msg .= "메뉴 등록을 실패하였습니다.<br>";
               $resultYN = 'N';
@@ -325,6 +322,7 @@ class DocumentAdminController extends Controller
         $where->reset();
         $where->set('category', $category);
         $result = $this->model->select('document', '*',  $where);
+
         if ($result) {
           $dataObj['list'] = $this->model->getRows();
         } else {
@@ -363,17 +361,16 @@ class DocumentAdminController extends Controller
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('document', 'content_path', $where);
+    $this->model->select('document', 'template_type', $where);
     $row = $this->model->getRow();    
       
     $result = $this->model->delete('document', $where);
     if ($result) {
       $msg .= "${category} 페이지을 삭제하였습니다.<br>";
 
-      $realPath = _SUX_PATH_ . 'files/document/' . $category;
-      $content_path = _SUX_ROOT_ . $row['content_path'];
-      $contentPath =Utils::convertAbsolutePath($content_path, $realPath);
-      $result = FileHandler::deleteAll($contentPath);
+      $templatePath = 'files/document/' . $category;
+      $deletePath =Utils::convertAbsolutePath($templatePath, _SUX_PATH_);
+      $result = FileHandler::deleteAll($deletePath);
       if (!$result) {
         $msg .= "$category 컨텐츠 파일 삭제를 실패하였습니다.<br>";
       }

@@ -9,8 +9,8 @@
 }
 .content_header .btn_write {
   position: absolute;
-  top:11px;
-  left: 8px;
+  margin-top: 9px;
+  margin-left: 8px;
   width:34px;
   height:32px;
   line-height: 23px;
@@ -33,12 +33,11 @@
   color: #fff;
 }
 .content_header h1 {
-  margin:0 0;
-  color:#fff;
-  line-height: 55px;
+  line-height:50px;
   font-size:1.250em;
   font-weight: normal;  
   text-align: center;
+  color:#fff;
 }
 .content_header p{  
   display:none;
@@ -69,25 +68,18 @@
 .board_list {
   padding-bottom:20px;
 }
-.board_list .list_mobile_panel li {
+.board_list ul.list_mobile_panel li {
   padding: 0 15px;
 }
-.board_list .list_mobile_panel li .subject{
+.board_list ul.list_mobile_panel li p.subject{
   margin-bottom: 10px;
+  line-height: 24px;
 }
-.board_list .list_mobile_panel li .subject .prefix_icon{
-  position: relative;
-  top:-1px;
-}
-.board_list .list_mobile_panel li .subject .title{
-  position: relative;
-  top:1px;
-}
-.board_list .list_mobile_panel li .info{
+.board_list ul.list_mobile_panel li p.info{
   font-size: 0.875em;
   color: #aeaeae;
 }
-.board_list .list_mobile_panel li p i{
+.board_list ul.list_mobile_panel li p i{
   position: relative;
   top:-1px;
   vertical-align: middle;
@@ -108,52 +100,45 @@
   font-size: 1.250em;
 }
 .board_list .list_pc_panel table thead th,
-.board_list .list_pc_panel table tbody tr td{
+.board_list table tbody tr td{
   min-height:55px; 
   font-weight: normal;
   text-align:center;
 }
-.board_list .list_pc_panel table tbody .sx-btn-activate:hover {
+.board_list .list_pc_panel table tbody tr.sx-btn-activate:hover {
    background-color: #f6f6f6;
 }
-.board_list .list_pc_panel table thead .author {
-  width:140px;
-}
-.board_list .list_pc_panel table thead .date {
-  width:130px;
-}
-.board_list .list_pc_panel table thead .hit {
-  width:90px;
-}
-.board_list .list_pc_panel table tbody tr .subject .link_area {
-  display:inline-block;
-  width:100%;
-}
-.board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon{
-  position: relative;
-  top:-1px;
-}
-.board_list .list_pc_panel table tbody tr .subject .link_area .title {
-  position: relative;
-  top:1px;
-}
-.board_list .list_mobile_panel li a:hover {
-  text-decoration: none;
-}
-.board_list .list_mobile_panel li,
-.board_list .list_pc_panel table tbody tr td {
+.board_list ul.list_mobile_panel li,
+.board_list table tbody tr td{
   font-size: 1.125em;
 }
-.board_list .list_mobile_panel li,
-.board_list .list_pc_panel table tbody tr .subject {
+.board_list table thead th.author {
+  width:140px;
+}
+.board_list table thead th.date {
+  width:130px;
+}
+.board_list table thead th.hit {
+  width:90px;
+}
+.board_list ul.list_mobile_panel li,
+.board_list .list_pc_panel table tbody tr td.subject {
   padding-top:20px;
   padding-bottom:20px;
   text-align: left;
 }
-.board_list .list_mobile_panel li .subject .prefix_icon,
-.board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon {
+.board_list .list_pc_panel table tbody tr td.subject span.link_area {
+  display:inline-block;
+  width:100%;
+}
+.board_list ul.list_mobile_panel li p.subject span.label,
+.board_list .list_pc_panel table tbody tr td.subject span.link_area .label {
   border:none;
   font-weight: normal;
+  vertical-align: middle;
+}
+.board_list ul.list_mobile_panel li a:hover {
+  text-decoration-line: none;
 }
 .board_list .warn_subject {
   padding-left:10px;
@@ -183,7 +168,7 @@
 .board_pagination .sx-space-right {
   margin-right: 25px;
 }
-.board_pagination .pagin_pc {
+.board_list .board_pagination .pagin_pc {
   display:none;
 }
 
@@ -192,11 +177,11 @@
   margin-top:30px;
   padding: 25px 15px;
 }
-.board_read .head_panel .title {
+.board_read .head_panel p.title {
   font-size: 1.6250em;
   line-height:34px;  
 }
-.board_read .head_panel .sub_info {
+.board_read .head_panel p.sub_info {
   margin-top: 5px;
   line-height: 20px;
   font-size: 0.9375em;
@@ -211,7 +196,7 @@
   line-height: 20px;
   border:1px solid #ececec;
 }
-.board_read .body_panel .content .content_text{
+.board_read .body_panel .content pre{
   font-size: 1.125em;  
   word-spacing: -2px;
   line-height: 1.625em;
@@ -404,7 +389,7 @@
   display: block;
   margin-top: 10px;
 }
-.board_write .foot_panel .wall_key_comment {
+.board_write .foot_panel p.wall_key_comment {
   line-height: 32px;
 }
 .board_write .foot_panel .button_panel {
@@ -559,16 +544,16 @@
   .board_comment .list_panel ul li .user_info{
     float: left;
   }
-  .board_list .list_mobile_panel {
+  .board_list ul.list_mobile_panel {
     display: none;
   }
   .board_list .list_pc_panel {
     display: block; 
   }
-  .board_pagination .pagin_pc {
+  .board_list .board_pagination .pagin_pc {
     display:block;
   }
-  .board_pagination .pagin_mobile {
+  .board_list .board_pagination .pagin_mobile {
     display:none;
   }
   .board_read .btn_groups a.sx-btn {
@@ -586,7 +571,7 @@
   .board_write .body_panel .textarea_panel {
     padding-left: 103px;
   }
-  .board_write .head_panel .sx-form-group .sx-form-control {
+  .board_write .head_panel .sx-form-group div.sx-form-control {
     width: 350px;
   }
   .board_write .foot_panel .input_file_div {
@@ -614,7 +599,7 @@
     display:inline-block;
     width: 250px;
   }
-  .board_write .foot_panel .wall_key_comment {
+  .board_write .foot_panel p.wall_key_comment {
     margin-left: 103px;
   }
   .sx-btn-block {

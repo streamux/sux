@@ -54,12 +54,11 @@ jsux.fn.list = {
     loadedHandler = function(e) {
 
       var data = e.data;
-      if (data && data.list && data.list.length > 0) {
 
+      if (data && data.list && data.list.length > 0) {
         self.listManager.setData( data.list );
         self.listMobileManager.setData( data.list);
       } else {
-
         self.listManager.reset();
         self.listManager.setMsg(e.msg);
         self.listMobileManager.reset();
@@ -116,17 +115,22 @@ jsux.fn.add = {
     }
     return backUrl;
   },
-  loadTemplatecontent: function(value) { 
+  loadTemplateContent: function( tmpl,  mode) { 
 
     var self = this,
-          skinPath = $('input[name=skin_path]').val(),
+          templatePath = $('input[name=template_path]').val(),
           url = '';
 
-    if (!skinPath) {
-      trace('input[name=skin_path] 경로값을 입력하세요.');
+    if (!tmpl) {
+      trace('loadTemplateContent : tmpl 파람값을 입력해주세요.');
       return;
     }
-    url = skinPath + '?template=' + value;
+
+    if (!templatePath) {
+      trace('input[name=template_path] 경로값을 입력하세요.');
+      return;
+    }
+    url = templatePath + '?template=' + tmpl + '&template_mode=' + mode;
   
     jsux.getJSON( url, function(e) {
 
@@ -230,7 +234,7 @@ jsux.fn.add = {
 
     $.each(f, function(index, item) {
 
-      var filters = 'checkbox|button|submit';
+      var filters = 'select|radio|checkbox|button|submit';
       var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
       var glue ='';
 
@@ -241,11 +245,9 @@ jsux.fn.add = {
       } else if (type === 'radio' && item.checked) {
         //console.log(item.name + ' : ' + item.value);
         params[item.name] = item.value;       
-      } else {
-         if (!type.match(filters)) {
+      } else  if (!type.match(filters)) {
           //console.log(item.name + ' : ' + item.value);          
           params[item.name] = item.value;
-        }
       }     
     });
 
@@ -318,12 +320,17 @@ jsux.fn.add = {
         self.sendJson( e.target );
       }
     });
+
+    $('#templateType').on('change', function(e) {
+      jsux.fn.modify.loadTemplateContent(this.value, 'o')
+    });
+
     $('#btnCancel').on('click', function(e) {
       e.preventDefault();
       jsux.goURL(self.returnUrl());
     });
-    $('#btnCheckCategory').on('click',function(e) {       
 
+    $('#btnCheckCategory').on('click',function(e) {
       self.checkCategoryName();
     });
 
@@ -345,7 +352,7 @@ jsux.fn.add = {
       }
     });
 
-    this.loadTemplatecontent('default');    
+    this.loadTemplateContent('default', 'o');    
   },
   init: function() {
 
@@ -360,6 +367,7 @@ jsux.fn.modify = {
   activedTab: null,
 
   returnUrl: function() {
+
     var backUrl = $('input[name=location_back]').val();
     if (!backUrl) {
       trace('input[name=location_back] 경로값을 확인해주세요.');
@@ -367,17 +375,23 @@ jsux.fn.modify = {
     }
     return backUrl;
   },
-  loadTemplatecontent: function(value) {
+  loadTemplateContent: function( tmpl, mode) {
 
     var self = this,
-          skinPath = $('input[name=skin_path]').val(),
+          templatePath = $('input[name=template_path]').val(),
+          mode = mode ? mode : 'p';
           url = '';
 
-    if (!skinPath) {
-      trace('input[name=skin_path] 경로값을 입력하세요.');
+    if (!tmpl) {
+      trace('loadTemplateContent : tmpl 파람값을 입력해주세요.');
       return;
     }
-    url = skinPath + '?template=' + value;
+
+    if (!templatePath) {
+      trace('input[name=template_path] 경로값을 입력하세요.');
+      return;
+    }
+    url = templatePath + '?template=' + tmpl + '&template_mode=' + mode;
 
     jsux.getJSON( url, function(e) {
 
@@ -385,7 +399,9 @@ jsux.fn.modify = {
         $.each(e.data, function(key, item) {
           self.setTextAreaVal(key,item)
         });
-      }      
+      } else {
+        trace(e.msg);
+      }    
     });
   },
   getSelectVal: function( id ) {
@@ -459,7 +475,7 @@ jsux.fn.modify = {
 
     $.each(f, function(index, item) {
 
-      var filters = 'checkbox|button|submit';
+      var filters = 'select|radio|checkbox|button|submit';
       var type = $(item).attr('type') ? $(item).attr('type') : item.nodeName.toLowerCase();
       var glue ='';
 
@@ -467,14 +483,12 @@ jsux.fn.modify = {
         //console.log(item.name + ' : ' + item.value);
         item.value = self.getSelectVal(item.name);          
         params[item.name] = item.value;
-      } else if (type === 'radio' && item.checked) {
-        //console.log(item.name + ' : ' + item.value);
+      } else if (type === 'radio' && item.checked === true) {
+        //console.log(item.name + ' : ' + item.value, item.checked);
         params[item.name] = item.value;       
-      } else {
-         if (!type.match(filters)) {
-          //console.log(item.name + ' : ' + item.value);          
-          params[item.name] = item.value;
-        }
+      } else if (!type.match(filters)) {
+        //console.log(item.name + ' : ' + item.value);          
+        params[item.name] = item.value;
       }     
     });
 
@@ -485,7 +499,7 @@ jsux.fn.modify = {
     }
 
     jsux.getJSON(url, params, function( e ) {
-      
+
       if (e.result && e.result.toUpperCase() === 'Y') {
         jsux.goURL(self.returnUrl());
       } else {
@@ -538,13 +552,35 @@ jsux.fn.modify = {
   },
   setEvent: function() {
 
-    var self = this;
+    var self = this,
+          category = $('input[name=category]').val(),
+          template = $('#templateType').val(),
+          templateMode = 'p';
 
-    $('form').on('submit', function( e ) {
+    $('form[name=f_modify]').on('submit', function( e ) {
       e.preventDefault();
 
       if (self.checkFormVal( e.target ) === true) {
         self.sendJson( e.target );
+      }
+    });
+
+    $('#templateType').on('change', function(e) {
+
+      var tmpl = templateMode === 'o' ? this.value : category;
+      jsux.fn.modify.loadTemplateContent( tmpl, templateMode);
+    });
+
+    $('input[name=template_mode]').on('change', function(e) {
+
+      templateMode = this.value;
+
+      if (templateMode === 'p') {
+        $('#templateType').trigger('change');
+        $('#templateType').val(template);
+        $('#templateType').attr('disabled', true);
+      } else {
+        $('#templateType').attr('disabled', false);
       }
     });
 
@@ -588,8 +624,6 @@ jsux.fn.modify = {
         labelList = null,
         list = null;
 
-        trace( e.msg , 1);
-
       if ( e.result && e.result.toUpperCase() === 'Y') {
         if (e.data && e.data.list) {
 
@@ -614,7 +648,10 @@ jsux.fn.modify = {
 
           formLists = $('input[type=radio]');
           $(formLists).each(function(index) {
-            self.setRadioVal( this.name, list[this.name] );
+
+            if (this.value === list[this.name]) {
+              self.setRadioVal( this.name, list[this.name] );
+            }
           });
 
           self.setTextAreaVal('content_tpl', list.content_tpl);
@@ -625,6 +662,11 @@ jsux.fn.modify = {
         }       
       } else {
         trace( e.msg );
+      }
+
+      var tmode = self.getRadioVal('template_mode');
+      if (tmode === 'o') {
+        $('#templateType').attr('disabled', false);
       }
 
       jsux.setAutoFocus();

@@ -73,11 +73,9 @@ class Utils extends Object {
   }
 
   /**
-   * method convertJsonToArray
-   * @params $json
-   * @ conver json to Array
-   */  
-
+  *
+  * @param array $json
+  */
   function convertArrayToObject($arr) {
     
     if (empty($arr) || count($arr) === 0) {
@@ -105,27 +103,58 @@ class Utils extends Object {
   //----- File
   ///////////////////////////////////////////////
 
-  function getRealPath($source)
-  {
-    if(strlen($source) >= 2 && substr_compare($source, './', 0, 2) === 0) {
-      return _SUX_PATH_ . substr($source, 2);
+  function getRealPath($path) {
+
+    if(strlen($path) >= 2 && substr_compare($path, './', 0, 2) === 0) {
+      return _SUX_PATH_ . substr($path, 2);
     }
 
-    return $source;
+    return $path;
   }
 
   /**
-   * @param $convert_url '외부에서 불러지는 상대경로 주소'
-   * @param $skin_dir 'Real Path'
-   **/
-  function convertAbsolutePath( $convert_url, $skin_dir ) {
+  * @param string $path same of './, ../, /, ../../ etc...'
+  * @return string
+  */
+  function convertRealPath($path) {
 
-    $result = $convert_url;
+    if (strlen($path) >= 1) {
+      $path = preg_replace('/^((\.)*\\/)*/', '', $path);
+    }
+
+    $splits = explode('/', $path);
+    $fistFolder = $splits[0];
+
+    $realSplits = explode('/', _SUX_PATH_);
+    $len = count($realSplits);
+    $dir = array();
+
+    for ($i=0; $i<$len; $i++) {
+      if (isset($realSplits[$i]) && $realSplits[$i]) {
+         if ($realSplits[$i] === $fistFolder) {
+          break;
+        }
+        $dir[] = $realSplits[$i];
+      }     
+    }
+    $realPath = implode('/', $dir) . '/' . $path;
+
+    return $realPath;
+  }
+
+  /**
+   * @param string $convert_url Path of directory
+   * @param string $real_path _SUX_PAPH_
+   **/
+  function convertAbsolutePath( $convert_url, $real_path ) {
+
+    return self::convertRealPath($convert_url);
+
+    /*$result = $convert_url;
 
     if (preg_match('/(\.\.\/)+/', $convert_url)) {
-
       preg_match('/(^[\.\.\/]+)([a-zA-Z0-9_\.\/]*)?$/', $convert_url, $matches);
-      $absoluteDir = preg_split('/[\/]+/',$skin_dir);
+      $absoluteDir = preg_split('/[\/]+/',$real_path);
       $headerDir = preg_split('/[\.\.]+/', $matches[1]);
       
       $dirLength = count($headerDir)-1;
@@ -143,10 +172,10 @@ class Utils extends Object {
       }
       $rootDirLabel =  '\/' . $rootDirLabel;
 
-      $skinDirArr = preg_split('/' . $rootDirLabel . '/',$skin_dir);
+      $skinDirArr = preg_split('/' . $rootDirLabel . '/',$real_path);
       $result = $skinDirArr[0] . $convert_url;
     }
-    return $result;
+    return $result;*/
   }
 
   function deleteDir($path) {
@@ -256,7 +285,7 @@ class Utils extends Object {
     return $num;
   }
 
-  function trimText( $text, $size, $etcstr="..") { 
+  function trimText( $text, $size, $etcstr='..') { 
 
     $resultStr = '';
     $len = strlen($text);
@@ -271,6 +300,31 @@ class Utils extends Object {
   function ignoreNewline($str) {
 
     return preg_replace('/[\\n\\r]+/', ' ', $str );
+  }
+
+  function getRandomStr( $str, $str_len=0, $charset='utf-8') {
+
+    if (!$str) {
+      UIError::alert('Utils::getRandomStr : Not available Param Value');
+    }
+
+    $resultStr = '';
+    $maxLen = mb_strlen($str)-1;    
+    $i =0;
+
+    while ($i<$str_len) {
+      $randNum = rand(0, $maxLen);
+      $resultStr .= mb_substr($str, $randNum, 1, $charset);
+      $i++;
+    }
+
+    return $resultStr;
+  }
+
+  function getWallKey() {
+
+    $wallWords = '가갛나낲다닽라랔마맟바밪사상아앗자잡차참카칼타탇파판하학';
+    return self::getRandomStr($wallWords, 5);
   }
 
   //----- Time

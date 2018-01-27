@@ -531,7 +531,7 @@ a.sx-text-danger:hover {
   background-color: #FF0000;
 }
 
-.sx-bg-replay {
+.sx-bg-reply {
   background-color: #fa7000;
 }
 
@@ -734,8 +734,11 @@ select.sx-form-group {
 .sx-form-inline .sx-form-group .sx-control-label, .sx-form-inline .sx-input-group .sx-control-label {
   font-weight: normal;
 }
-.sx-form-inline .sx-form-group .sx-control-control, .sx-form-inline .sx-input-group .sx-control-control {
+.sx-form-inline .sx-form-group .sx-form-control, .sx-form-inline .sx-input-group .sx-form-control {
   margin-bottom: 15px;
+}
+.sx-form-inline .sx-input-group {
+  margin-bottom: 25px;
 }
 
 .sx-form-horizontal .sx-form-control {
@@ -761,6 +764,9 @@ select.sx-form-group {
   .sx-form-inline .sx-radio, .sx-form-inline .sx-checkbo, .sx-form-inline .sx-input-group {
     display: inline-table;
     vertical-align: middle;
+  }
+  .sx-form-inline .sx-input-group {
+    margin-bottom: 9px;
   }
   .sx-form-inline .sx-form-group {
     display: inline-block;
@@ -821,7 +827,6 @@ select.sx-form-group {
   -moz-border-radius: 0.2em;
   -o-border-radius: 0.2em;
   border-radius: 0.2em;
-
   -webkit-transition: all 0.15s ease-out;
   -o-transition: all 0.15s ease-out;
   transition: all 0.15s ease-out;
@@ -847,7 +852,6 @@ select.sx-form-group {
   color: #555;
   background-color: #fff;
   background-image: none;
-  
   -webkit-transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;
   -o-transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;
   transition: color ease-in-out 0.15s, background-color ease-in-out 0.15s;
@@ -1309,32 +1313,32 @@ a.sx-label:hover, a.sx-label:focus {
   opacity: 1;
   -moz-opacity: 1;
   -khtml-opacity: 1;
-  filter: "alpha(opacity=${opacity-ie})";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
+  filter: "alpha(opacity=${opacity-ie})";
 }
 
 .sx-opacity-50 {
   opacity: 0.5;
   -moz-opacity: 0.5;
   -khtml-opacity: 0.5;
-  filter: "alpha(opacity=${opacity-ie})";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
+  filter: "alpha(opacity=${opacity-ie})";
 }
 
 .sx-opacity-25 {
   opacity: 0.25;
   -moz-opacity: 0.25;
   -khtml-opacity: 0.25;
-  filter: "alpha(opacity=${opacity-ie})";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
+  filter: "alpha(opacity=${opacity-ie})";
 }
 
 .sx-opacity-0 {
   opacity: 0;
   -moz-opacity: 0;
   -khtml-opacity: 0;
-  filter: "alpha(opacity=${opacity-ie})";
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
+  filter: "alpha(opacity=${opacity-ie})";
 }
 
 .sx-show-scroll {

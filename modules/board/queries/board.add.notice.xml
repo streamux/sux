@@ -1,0 +1,18 @@
+<query id="insertBoardGroup" action="insert" execution="once">
+  <tables>
+    <table name="board_group"></table>
+  </tables>
+  <columns>
+    <column name="id"></column>
+    <column name="category">notice</column>
+    <column name="board_name"><![CDATA[공지사항]]></column>
+    <column name="summary"><![CDATA[샘플 게시판 입니다. 사이트 용도에 맞게 변경, 삭제가 가능합니다.]]></column>
+    <column name="header_path"><![CDATA[common/_header.tpl]]></column>
+    <column name="skin_path"><![CDATA[ckeditor_standard]]></column>
+    <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
+    <column name="board_width"><![CDATA[100%]]></column>
+    <column name="limit_choice"><![CDATA[title]]></column>
+    <column name="limit_word"><![CDATA[광고, 대출]]></column>
+    <column name="date"><![CDATA[now()]]></column>       
+  </columns>
+</query>

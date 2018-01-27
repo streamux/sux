@@ -73,31 +73,17 @@ class DocumentAdminView extends View
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/document/tpl";
-
-    $skinBuffer = array();
-    $skinList = array();
+    $skinPath = _SUX_PATH_ . "modules/document/tpl";    
     $skinLocalDir = _SUX_PATH_ . "modules/document/templates/";
+
     $skinTempList = FileHandler::readDir($skinLocalDir);
     if (!$skinTempList) {
       $msg .= "'modules/document/templates/' 스킨폴더가 존재하지 않습니다.";
       $resultYN = "N";
     }
 
-    $skinFilesDir = _SUX_PATH_ . "files/document/";
-    $skinFiles = FileHandler::readDir($skinFilesDir);
-    if (!$skinFiles) {
-      $msg .= "'files/document/' 스킨폴더가 존재하지 않습니다.";
-      $resultYN = "N";
-    } 
-
-    $skinModuleList = array();
-    foreach ($skinFiles as $key => $value) {
-      $skinModuleList[] = array('file_name'=>$value['file_name'] . '_remote');
-    }
-
-    $skinList = array_merge($skinTempList, $skinModuleList);
-    foreach ($skinList as $key => $value) {
+    $skinBuffer = array();
+    foreach ($skinTempList as $key => $value) {
       if (preg_match('/^(\w)+$/', $value['file_name'])) {
         $skinBuffer[] = $value['file_name'];
       }      
@@ -238,21 +224,27 @@ class DocumentAdminView extends View
       }
 
       $category = $rows[0]['category'];
+      $templateMode = $rows[0]['template_mode'];
+      $templateType = $rows[0]['template_type'];      
+      $templateName = $templateMode === 'o' ? $templateType : $category;
+      
+      $readFileDir = array();
+      $readFileDir['o'] = 'modules/document/templates/';
+      $readFileDir['p'] = 'files/document/';      
+      $readDir = $readFileDir[$templateMode];
+            
       $templatePathList = array();
-      $templatePathList['content_tpl'] = $rows[0]['content_path'] . '/' . $category . '.tpl'; 
-      $templatePathList['content_css'] = $rows[0]['content_path'] . '/' . $category . '.css'; 
-      $templatePathList['content_js'] = $rows[0]['content_path'] . '/' . $category . '.js'; 
-  
-      foreach ($templatePathList as $key => $value) {
-        $readTemplatePath = Utils::convertAbsolutePath($value, _SUX_PATH_);
+      $templatePathList['content_tpl'] = $readDir . $templateName . '/' . $templateName . '.tpl'; 
+      $templatePathList['content_css'] = $readDir . $templateName . '/' . $templateName . '.css'; 
+      $templatePathList['content_js'] = $readDir . $templateName . '/' . $templateName . '.js'; 
+
+      foreach ($templatePathList as $key => $path) {
+        $readTemplatePath = Utils::convertAbsolutePath($path, _SUX_PATH_);
         if (file_exists($readTemplatePath)) {
           $dataObj['list'][0][$key] = FileHandler::readFile($readTemplatePath);
         }
       }
     }
-    $dataObj['list'][0]['content_path'] = $category . '_remote';
-
-    $msg .= $category . '_remote';
 
     //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
@@ -262,38 +254,46 @@ class DocumentAdminView extends View
     $this->callback($data);
   }
 
-  function displaySkinResource() {
+  function displayTemplateResource() {
 
     $msg = '';
     $resultYN = 'Y';
 
     $context = Context::getInstance();
+    $templateMode = $context->getRequest('template_mode');
     $template = $context->getRequest('template');
 
     $readFileDir = array();
-    $readFileDir['origin'] = _SUX_PATH_ . 'modules/document/templates/';
-    $readFileDir['remote'] = _SUX_PATH_ . 'files/document/';
+    $readFileDir['o'] = _SUX_PATH_ . 'modules/document/templates/';
+    $readFileDir['p'] = _SUX_PATH_ . 'files/document/';
 
-    $pathKey = 'origin';
-    if (preg_match('/(_remote)+$/', $template)) {
-      $pathKey = 'remote';
-      $template = str_replace('_remote', '',$template);
+    $filter = '/^[a-z]+$/';
+    if (!preg_match($filter, $templateMode)) {
+      $msg = '템플릿 구분자는 영문 소문자만 사용 가능합니다.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
     }
 
-    $readFilePath = $readFileDir[$pathKey];
-    $msg = $readFilePath;
-    
+    $readFilePath = $readFileDir[$templateMode];    
     $templatePathList['content_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
     $templatePathList['content_css'] = $readFilePath . $template . '/' . $template . '.css'; 
     $templatePathList['content_js'] = $readFilePath . $template . '/' . $template . '.js'; 
 
     $dataObj = array();
     foreach ($templatePathList as $key => $value) {
-      //$msg .= $value . "\n";
       if (file_exists($value)) {
         $dataObj[$key] = FileHandler::readFile($value);
+      } else {
+        switch ($templateMode) {
+          case 'o':
+            $dataObj[$key] = '템플릿이 아직 등록되지 않습니다.';
+            break;
+          case 'p':
+            $dataObj[$key] = '컨텐츠가 아직 출판되지 않았습니다.';
+            break;
+        }
       }
-    }
+    }   // end of for
     
    $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,

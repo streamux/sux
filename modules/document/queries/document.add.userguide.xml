@@ -10,7 +10,7 @@
     <column name="is_readable" type="char">y</column>
     <column name="document_width"><![CDATA[100%]]></column>
     <column name="header_path"><![CDATA[common/_header.tpl]]></column>
-    <column name="content_path"><![CDATA[files/document/userguide]]></column>
+    <column name="template_type"><![CDATA[userguide]]></column>
     <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>

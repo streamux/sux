@@ -153,8 +153,6 @@ window.jsuxApp = window.jsuxApp || {};
     };
   };
 
-
-
   app.getModel = function() {
 
     return new Model();

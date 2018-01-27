@@ -20,10 +20,6 @@ class Query extends Object {
   var $limit;
   var $schema;
 
-  function __construct() {
-      
-  }
-
   public static function &getInstance() {
 
     if (empty(self::$aInstance)) {
@@ -218,6 +214,10 @@ class Query extends Object {
     return $this->limit;
   }
 
+  function reset() {
+
+    $this->schema = '';
+  }
   function resetSchema() {
 
     $this->schema = '';
