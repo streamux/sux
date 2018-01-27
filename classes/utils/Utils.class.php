@@ -137,7 +137,7 @@ class Utils extends Object {
         $dir[] = $realSplits[$i];
       }     
     }
-    $realPath = implode('/', $dir) . '/' . $path;
+    $realPath = '/' . implode('/', $dir) . '/' . $path;
 
     return $realPath;
   }
@@ -149,33 +149,6 @@ class Utils extends Object {
   function convertAbsolutePath( $convert_url, $real_path ) {
 
     return self::convertRealPath($convert_url);
-
-    /*$result = $convert_url;
-
-    if (preg_match('/(\.\.\/)+/', $convert_url)) {
-      preg_match('/(^[\.\.\/]+)([a-zA-Z0-9_\.\/]*)?$/', $convert_url, $matches);
-      $absoluteDir = preg_split('/[\/]+/',$real_path);
-      $headerDir = preg_split('/[\.\.]+/', $matches[1]);
-      
-      $dirLength = count($headerDir)-1;
-      for ($i=0; $i<$dirLength; $i++) {
-        array_pop($absoluteDir);
-      }
-      $result = join($absoluteDir, '/') . '/' . $matches[2];      
-    } else {
-
-      $rootDirArr = preg_split('/[\/]+/',$convert_url);
-      $rootDirLabel = $rootDirArr[1];
-
-      if ($rootDirArr[0] != '') {
-        $rootDirLabel = $rootDirArr[0];
-      }
-      $rootDirLabel =  '\/' . $rootDirLabel;
-
-      $skinDirArr = preg_split('/' . $rootDirLabel . '/',$real_path);
-      $result = $skinDirArr[0] . $convert_url;
-    }
-    return $result;*/
   }
 
   function deleteDir($path) {

@@ -55,10 +55,6 @@ class BoardView extends View
     $headerPath = Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
 
-    $testPath = '../files/document/';
-    $templateRealPath = Utils::getRealPath($testPath);
-    echo "<br><br><br> - " . $testPath . "<br>" . $templateRealPath . "<br>" . $templateRealPath;
-
     if (!is_readable($headerPath)) {
       $headerPath = "{$skinRealPath}/_header.tpl";
       $UIError->add("상단 파일경로가 올바르지 않습니다.");
@@ -276,12 +272,6 @@ class BoardView extends View
     $headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);
     $skinRealPath =Utils::convertAbsolutePath($skinRealPath, _SUX_PATH_);
     $footerPath = Utils::convertAbsolutePath($footerPath, _SUX_PATH_);
-
-    $testPath = "/modules/board/skin/${skinName}/";
-    $getRealPath = Utils::getRealPath($testPath);
-    $convertRealPath = Utils::convertRealPath($testPath);
-
-    echo "<br><br><br> sux_path : " . _SUX_PATH_ . "<br>test : " . $getRealPath . "<br> real : " . $convertRealPath . "<br> absolute : " . $skinRealPath;
 
     if (!is_readable($headerPath)) {
       $headerPath = "{$skinRealPath}/_header.tpl";
