@@ -4,10 +4,11 @@
   </tables>
   <columns>
     <column name="id"></column>
-    <column name="category">aboutus</column>
-    <column name="menu_name"><![CDATA[ABOUT US]]></column>
-    <column name="url"><![CDATA[aboutus]]></column>
+    <column name="category">sample_board</column>
+    <column name="menu_name"><![CDATA[샘플 게시판]]></column>
+    <column name="url"><![CDATA[sample_board]]></column>
     <column name="url_target"><![CDATA[_self]]></column>
+    <column name="sunseo">4</column>
     <column name="is_active">1</column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>

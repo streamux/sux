@@ -368,10 +368,17 @@ class InstallController extends Controller
       $result = $oDB->select($query);
       $jsonData = array();
       $jsonData['data'] = array();
+      $sunseo = array();
 
       while($row = $oDB->getFetchArray($result)) {
-        $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0');
-      }          
+        $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0', 'sunseo'=>$row['sunseo']);
+      }
+
+      foreach ($jsonData['data'] as $key => $row) {
+        $sunseo[$key] = $row['sunseo'];
+      }
+
+      array_multisort($sunseo, SORT_ASC, SORT_NUMERIC,$jsonData['data']);
 
       $jsonData = JsonEncoder::parse($jsonData);
       $result = FileHandler::writeFile($gnbFilePath, $jsonData);

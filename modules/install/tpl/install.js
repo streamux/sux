@@ -58,7 +58,7 @@ jsux.fn.setupDb = {
 
       isLoading= false;
       alert(e.msg);
-      if (e.result == "Y") {        
+      if (e.result == "Y") {
         jsux.goURL( jsux.rootPath + "setup-admin");
       } 
     });
