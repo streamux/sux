@@ -174,7 +174,7 @@ class BoardAdminController extends Controller
 
     $filters = '/^(id|category|date)+$/i';
     $columns = array();
-    foreach ($columnCaches as $key => $value) {     
+    foreach ($columnCaches as $key => $value) {
       if (!preg_match($filters, $value)) {
         if (isset($posts[$value]) && $posts[$value]) {
           $columns[$value] = $posts[$value];

@@ -734,7 +734,7 @@ select.sx-form-group {
 .sx-form-inline .sx-form-group .sx-control-label, .sx-form-inline .sx-input-group .sx-control-label {
   font-weight: normal;
 }
-.sx-form-inline .sx-form-group .sx-form-control, .sx-form-inline .sx-input-group .sx-form-control {
+.sx-form-inline .sx-form-group select.sx-form-control {
   margin-bottom: 15px;
 }
 .sx-form-inline .sx-input-group {
@@ -786,14 +786,14 @@ select.sx-form-group {
     margin-bottom: 0;
     width: auto;
   }
+  .sx-form-inline .sx-form-group select.sx-form-control {
+    margin-bottom: 0;
+  }
   .sx-form-inline .sx-input-group .sx-control-label {
     font-weight: normal;
   }
   .sx-form-inline .sx-input-group .sx-form-control {
     display: inline-block;
-  }
-  .sx-form-inline .sx-input-group select.sx-form-control {
-    width: auto;
   }
 
   .sx-form-horizontal .sx-form-control {

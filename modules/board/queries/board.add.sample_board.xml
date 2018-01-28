@@ -4,8 +4,8 @@
   </tables>
   <columns>
     <column name="id"></column>
-    <column name="category">notice</column>
-    <column name="board_name"><![CDATA[공지사항]]></column>
+    <column name="category">sample_board</column>
+    <column name="board_name"><![CDATA[Sample Board]]></column>
     <column name="summary"><![CDATA[샘플 게시판 입니다. 사이트 용도에 맞게 변경, 삭제가 가능합니다.]]></column>
     <column name="header_path"><![CDATA[common/_header.tpl]]></column>
     <column name="skin_path"><![CDATA[ckeditor_standard]]></column>

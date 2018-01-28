@@ -1,5 +1,5 @@
   <div class="sx-content">
-    <h1 class="title">메뉴 관리</h1>
+    <h1 class="title">메뉴 관리</h1>    
     <section class="sx-menu-panel">      
       <header class="header">          
         <form action="{$rootPath}menu-admin/menu" name="f_admin_menu_add" class="search_form sx-form-horizontal">
