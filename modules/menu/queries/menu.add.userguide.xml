@@ -4,10 +4,11 @@
   </tables>
   <columns>
     <column name="id"></column>
-    <column name="category">notice</column>
-    <column name="menu_name"><![CDATA[공지사항]]></column>
-    <column name="url"><![CDATA[notice]]></column>
+    <column name="category">userguide</column>
+    <column name="menu_name"><![CDATA[사용자 가이드]]></column>
+    <column name="url"><![CDATA[userguide]]></column>
     <column name="url_target"><![CDATA[_self]]></column>
+    <column name="sunseo">3</column>
     <column name="is_active">1</column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>
