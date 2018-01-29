@@ -25,7 +25,7 @@
   <div class="article sx-about-us">
     <h1>ABOUT US</h1>
     <p class="title">WELCOME TO STREAMUX</p>
-    <p class="comment">StreamUX는 사용자 친화적인 UX에 기반을 둔 설치형 CMS입니다. 간편한 설치와 설정을 통하여 반응형 웹페이지를 쉽고 빠르게 만들 수 있습니다.</p>    
+    <p class="comment">StreamUX는 디자인과 마크업을 좀더 유연하게 적용할 수 있도록 설계된 반응형 웹사이트 스크립트 CMS입니다. 몇번의 클릭만으로 반응형 웹사이트를 만들 수 있으며, 관리자 페이지의 직관적인 메뉴와 컨텐츠 구성은 귀하가 웹사이트를 쉽게 관리할 수 있도록 도와줄 것입니다.</p>
   </div>
   <div class="article sx-user-guide">
     <h1>USER GUIDE</h1>

@@ -30,7 +30,6 @@ class Object {
 		}
 
 		$context = Context::getInstance();
-
 		if ($context->ajax()) {
 			$data = array("msg"=>$msg);
 			$this->callback($data);			
@@ -47,6 +46,7 @@ class Object {
 			$callback = $context->getRequest('callback');
 			$strcallback = strtolower($callback);
 			$strJson = JsonEncoder::parse($data);
+
 			if (preg_match('/(jsonp|jquery)+/', $strcallback) === 1) {
 				echo $callback . '('.$strJson.')';				
 			} else {

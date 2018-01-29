@@ -20,7 +20,6 @@ class MenuAdminView extends View
     $this->document_data['module_code'] = 'menu';
 
     $this->request_data = $requestData;
-
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -43,7 +42,6 @@ class MenuAdminView extends View
     $this->document_data['module_code'] = 'menu';
 
     $this->request_data = $requestData;
-
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -99,7 +97,6 @@ class MenuAdminView extends View
       $resultYN = 'N';
     }
 
-    //$msg .= Tracer::getInstance()->getMessage();
     $json['result'] = $resultYN;
     $json['msg'] = $msg;
 
@@ -123,13 +120,5 @@ class MenuAdminView extends View
     $json['msg'] = $msg;
    
     $this->callback($json);
-
-      /*$context = Context::getInstance();
-    $callback = $context->getRequest('callback');
-  if (preg_match('/(jsonp)+/', strtolower($callback)) === 1) {
-      echo $callback . '(' . $json . ')';
-    } else {
-      $this->callback($json);
-    }*/
   }
 }
