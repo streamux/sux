@@ -53,7 +53,7 @@ class DocumentView extends View
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $templateRealPath = $templateRealPath . '/'. $templateName . '.tpl';
+    $templateRealPath = $templateRealPath . $templateName . '.tpl';
 
     //$msg .= Tracer::getInstance()->getMessage() . "<br>";
     $this->document_data['group'] = $groupData;

@@ -80,16 +80,17 @@ class Model extends Object {
   function getRows() {
 
     $datas = array();
-    while($rows = $this->db->getFetchArray($this->result)) {    
-
+    while($row = $this->db->getFetchArray($this->result)) {
       $fields = array();
-      foreach ($rows as $key => $value) {
+
+      foreach ($row as $key => $value) {
         if (is_string($key) !== false) {
           $fields[$key] = $value;
         }       
       }
       $datas[] = $fields;
     }
+    
     return $datas;
   }
 
@@ -106,7 +107,8 @@ class Model extends Object {
       $str_data = $this->getRows();
     } else {
       $str_data = $this->getRow();
-    }   
+    }
+
     return JsonEncoder::getInstance()->parse($str_data);
   }
 

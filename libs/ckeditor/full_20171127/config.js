@@ -35,7 +35,6 @@ CKEDITOR.editorConfig = function( config ) {
       // 100% of the editor width).
       config.image2_alignClasses = [ 'image-align-left', 'image-align-center', 'image-align-right' ];
       config.image2_disableResizer = true;
-
       config.embed_provider = '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}';
 
       // set ui
