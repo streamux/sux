@@ -24,7 +24,7 @@
         </div>
         <div class="sx-form-group">
           <label for="adminEmail" class="sx-control-label">이메일</label>
-          <input type="text" id="adminEmail" name="admin_email" class="sx-form-control" value="dd" placeholder="E-Mail">
+          <input type="text" id="adminEmail" name="admin_email" class="sx-form-control" value="" placeholder="E-Mail">
         </div>
         <div class="sx-form-group">
           <label for="yourhomeUrl" class="sx-control-label">홈페이지 주소</label>
