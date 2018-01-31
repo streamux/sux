@@ -17,7 +17,6 @@ class BoardView extends View
     $context = Context::getInstance();
     $UIError = UIError::getInstance();
 
-    $returnURL = $context->getServer('REQUEST_URI');
     $requestData = $context->getRequestAll();
     $sessionData = $context->getSessionAll();
     
@@ -66,7 +65,6 @@ class BoardView extends View
     }
 
     $where = new QueryWhere();    
-
     if (isset($search) && $search) {
       $where->set($find, $search, 'like');
     }
@@ -289,29 +287,32 @@ class BoardView extends View
       $level = 0;
     }
 
-    $returnURL = $rootPath . $category;
+    $queryString = '';
     if (isset($search) && $search) {
-      $returnURL .= "?find=${find}&search=${search}";
+      $queryString = "?find=${find}&search=${search}";
+    }
+    $returnURL = $rootPath . $category . $queryString;
+
+    // Allow Nonmember 허용 : Y 
+    if (strtolower($nonmember) !== 'y' && empty($nickname)) {
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '이곳은 회원 전용 게시판 입니다.<br>회원가입 후 이용하세요.';
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
+      exit;
     }
 
     // level
     if ($level < $grade_r) {
-      $msg .= '죄송합니다. 읽기 권한이 없습니다.';
-      UIError::alertTo($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      $context->setSession( 'return_url', $returnURL);
+      $msg .= '읽기 권한이 없습니다.';  
+      UIError::alertTo($msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
       exit;
     }
 
-    // nonmember's authority
-    if ($nonmember != 'y' && empty($nickname)) {
-      $returnToURL = $rootPath . $category . '/'. $id ;
-      $msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
-      exit;
-    }
-
-    // admin
-    if ($is_readable == 'n' && $context->checkAdminPass() === FALSE) {
-      $msg = '죄송합니다. 이곳은 관리자 전용 게시판입니다.';
+    // Check Admin
+    if (strtolower($is_readable) !== 'y' && $context->checkAdminPass() === FALSE) {
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '이곳은 관리자 전용 게시판입니다.';
       UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
@@ -348,16 +349,17 @@ class BoardView extends View
 
     $contentData['content'] = nl2br($content);
     $content = '';    
-    $contentData['css_down'] = 'hide';
-    $contentData['css_img'] = 'hide';
+    $contentData['is_down'] = 'hide';
+    $contentData['is_img'] = 'hide';
 
     if (isset($filename) && $filetype) {
       $fileupPath = $rootPath . "files/board/${filename}";
 
-      if (($is_download === 'y') && preg_match( '/(application\/x-zip-compressed|application\/zip)+', $filetype)) {
-        $contentData['css_down'] = 'sx-show';
-      } else if (preg_match( '/(jpg|jpeg|gif|png)+/i', $filetype)){
+      if ($is_download === 'y') {
+        $contentData['is_down'] = 'sx-show';
+      }
 
+      if (preg_match( '/(jpg|jpeg|gif|png)+/i', $filetype)){
         $imageInfo = getimagesize($fileupPath);
         $imageType = $imageInfo[2];
 
@@ -369,8 +371,8 @@ class BoardView extends View
           $image = imagecreatefrompng($fileupPath);
         }
 
-        $contentData['css_img'] = 'sx-show';
-        $contentData['css_img_width'] = imagesx($image) . 'px';
+        $contentData['is_img'] = 'sx-show';
+        $contentData['is_img_width'] = imagesx($image) . 'px';
       }
       $contentData['fileup_name'] = $filename;
       $contentData['fileup_path'] = $fileupPath;
@@ -479,13 +481,7 @@ class BoardView extends View
     if (!is_readable($footerPath)) {
       $footerPath = "{$skinRealPath}/_footer.tpl";
       $UIError->add('하단 파일경로가 올바르지 않습니다.');
-    }
-
-    if ($nonemember === 'n' && empty($nickname)) {
-      $returnToURL = $rootPath . $category . '/write';
-      $msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
-    }
+    }    
 
     if (isset($grade) && $grade) {
       $level = $grade;
@@ -493,27 +489,30 @@ class BoardView extends View
       $level = 0;
     }
 
-    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
-    if ($level < $grade_r) {
-      $returnURL = $rootPath . $category;
-    }
-
+    $queryString = '';
     if (isset($search) && $search) {
-      $returnURL .= "?find=${find}&search=${search}";
+      $queryString = "?find=${find}&search=${search}";
+    }
+    $returnURL = $rootPath . $category . $queryString;
+    
+    if (strtolower($nonemember) !== 'y' && empty($nickname)) {      
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
     }
 
     if ($level < $grade_w) {
-      $msg .= '죄송합니다. 쓰기 권한이 없습니다.';      
-      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      $context->setSession( 'return_url', $returnURL);
+      $msg .= '쓰기 권한이 없습니다.';      
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
       exit;
     }
 
-    if ($is_writable === 'n') {
-      if ($admin_pass === FALSE) {
-        $msg = '죄송합니다. 이곳은 관리자 전용게시판입니다.';
-        UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
-        exit;
-      }
+    if (strtolower($is_writable) !== 'y' && $admin_pass === FALSE) {
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '죄송합니다. 이곳은 관리자 전용게시판입니다.';
+      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
     }
 
     $contentData = array();
@@ -619,36 +618,35 @@ class BoardView extends View
     unset($contentData['password']);
     $contentData['wallname'] = Utils::getWallKey();
 
-    if ($nonemember === 'n' && empty($nickname)) {
-      $returnToURL = $rootPath . $category . ' / '. $id . '/modify';
-      $msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
-    }
-
     if (isset($grade) && $grade) {
       $level = $grade;
     } else {
       $level = 0;
     }
 
-    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
-    if ($level < $grade_r) {
-      $returnURL = $rootPath . $category;
-    }
-
+    $queryString = '';
     if (isset($search) && $search) {
-      $returnURL .= "?find=${find}&search=${search}";
+      $queryString = "?find=${find}&search=${search}";
+    }
+    $returnURL = $rootPath . $category . $queryString;
+
+    if (strtolower($nonemember) !== 'y' && empty($nickname)) {
+      $context->setSession('return_url', $returnURL);
+      $msg = '이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
     }
 
     if ($level < $grade_m) {
-      $msg = '죄송합니다. 수정권한이 없습니다.';
+      $context->setSession('return_url', $returnURL);
+      $msg = '수정권한이 없습니다.';
       UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
 
     $admin_pass = $context->checkAdminPass(); 
-    if ($is_modifiable === 'n' && $admin_pass === false) {
-      $msg = '죄송합니다. 이곳은 관리자 전용 게시판입니다.';
+    if (strtolower($is_modifiable) !== 'y' && $admin_pass === false) {
+      $context->setSession('return_url', $returnURL);
+      $msg = '이곳은 관리자 전용 게시판입니다.';
       UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
     }
 
@@ -738,15 +736,15 @@ class BoardView extends View
       $contentData['content'] = nl2br(htmlspecialchars($contentData['content']));
     }
     
-    $contentData['css_down'] = 'hide';
-    $contentData['css_img'] = 'hide';
+    $contentData['is_down'] = 'hide';
+    $contentData['is_img'] = 'hide';
     $fileupPath = '';
 
     if ($filename) {
       $fileupPath = $rootPath . "files/board/${filename}";
 
       if (($is_download == 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
-        $contentData['css_down'] = 'sx-show';
+        $contentData['is_down'] = 'sx-show';
       } else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
         $image_info = getimagesize($fileupPath);
         $image_type = $image_info[2];
@@ -758,7 +756,7 @@ class BoardView extends View
         } elseif( $image_type === IMAGETYPE_PNG ) {
           $image = imagecreatefrompng($fileupPath);
         }
-        $contentData['css_img'] = 'sx-show';
+        $contentData['is_img'] = 'sx-show';
         $contentData['img_width'] = imagesx($image) . 'px';
       }
       $contentData['fileup_name'] = $filename;
@@ -770,41 +768,37 @@ class BoardView extends View
     $contentType = $contentData['content_type'];
     $contentData['content_type_' . $contentType] = 'checked';
     
-    // 비회원 허용 유무 
-    if ($nonemember === 'n' && empty($user_name)) {
-      $returnToURL = $rootPath . $category . '/'. $id . '/reply' ;
-      $msg = '죄송합니다. 이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
-    }
-
     if (isset($grade) && $grade) {
       $level = $grade;
     } else {
       $level = 0;
     }
 
-    $returnURL = urldecode($context->getServer('HTTP_REFERER'));
-
-    if ($level < $grade_r) {
-      $returnURL = $rootPath . $category;
-    }
-
+    $queryString = '';
     if (isset($search) && $search) {
-      $returnURL .= "?find=${find}&search=${search}";
+      $queryString = "?find=${find}&search=${search}";
+    }
+    $returnURL = $rootPath . $category . $queryString;
+
+    // 비회원 허용 유무 
+    if (strtolower($nonemember) !== 'y' && empty($user_name)) {      
+      $context->setSession('return_url', $returnURL);
+      $msg = '이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
     }
 
     if ($level < $grade_re) {
-      $msg = '죄송합니다. 답변권한이 없습니다.';
+      $context->setSession('return_url', $returnURL);
+      $msg = '답변권한이 없습니다.';
       UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
 
-    if ($is_repliable === 'n') {
-      if ($admin_pass == false) {
-        $msg = '죄송합니다. 이곳은 관리지 전용게시판입니다.';
-        UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
-        exit;
-      }
+    if (strtolower($is_repliable) !== 'y' && $admin_pass === false) {
+      $context->setSession('return_url', $returnURL);
+      $msg = '이곳은 관리지 전용게시판입니다.';
+      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
     }
 
     if (isset($nickname) && $nickname) {
@@ -883,7 +877,7 @@ class BoardView extends View
     
     $where->reset();
     $where->set('id', $id, '=');
-    $this->model->select('board', 'id, category, user_name', $where);
+    $this->model->select('board', 'id, category, user_name, nickname', $where);
     $contentData = $this->model->getRow();
 
     $this->document_data['jscode'] = 'delete';
@@ -918,13 +912,12 @@ class BoardView extends View
     $where = QueryWhere::getInstance();
     $where->set('content_id',$cid);
     $result = $this->model->select('comment','*', $where);
-    $msg .= Tracer::getInstance()->getMessage();
+    //$msg .= Tracer::getInstance()->getMessage();
 
     if (!$result) {
       $msg .= '댓글 가져오기를  실패하였습니다.';
     }
     $rows = $this->model->getRows();
- 
     $data = array(
             'data'=>$rows,
             'url'=>$rootPath . $category,

@@ -6,7 +6,7 @@ class BoardController extends Controller
   // Form Value Validation && Security
   function getFormCheckList() {
 
-    return array(  array('key'=>'nickname', 'msg'=>'이름을'),
+    return array(  array('key'=>'nickname', 'msg'=>'닉네임을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
                           array('key'=>'content', 'msg'=>'내용을'));
