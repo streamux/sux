@@ -15,16 +15,16 @@
           <input type="text" id="dbHostName" name="db_hostname" value="localhost" class="sx-form-control">
         </div>
         <div class="sx-form-group">
-          <label for="dbUserid" class="sx-control-label">계정</label>
-          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="root" placeholder="id">
+          <label for="dbUserid" class="sx-control-label">데이터베이스 계정</label>
+          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="" placeholder="ID">
         </div>
         <div class="sx-form-group">
           <label for="dbPassword" class="sx-control-label">비밀번호</label>
-          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="root" placeholder="password">
+          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="" placeholder="Password">
         </div>
         <div class="sx-form-group">
           <label for="dbDatabase" class="sx-control-label">데이터베이스 이름</label>
-          <input type="text" id="dbDatabase" name="db_database" class="sx-form-control" value="streamuxcom" placeholder="database name">
+          <input type="text" id="dbDatabase" name="db_database" class="sx-form-control" value="" placeholder="Database Name">
         </div>
         <div class="sx-form-group">
           <label for="dbTablePrefix" class="sx-control-label">테이블 접두사</label>
