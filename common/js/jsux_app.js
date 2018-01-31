@@ -50,7 +50,7 @@ jsux.gnb.Menu = jsux.View.create();
       var ty = 0;
       var markup = $('#gnbMenuItem').html();
       var depth = 0;
-      var linkFilter = /^([a-zA-Z0-9-]+)(\.[a-zA-Z])+$/;
+      var linkFilter = /^(http(s)?:\/\/(www\.)?)?([a-zA-Z0-9-_]+)\.([a-zA-Z]+)/;
 
       var stage$ = $(_path);
       if (stage$ && stage$.children().length > 0) {
@@ -448,7 +448,7 @@ jsux.mobileGnb.Menu.include({
   setUI: function() {
 
     var self = this,
-          linkFilter = /^([a-zA-Z0-9-])+(\.[a-zA-Z])+/,
+          linkFilter = /^(http(s)?:\/\/(www\.)?)?([a-zA-Z0-9-_]+)\.([a-zA-Z]+)/,
           markup = '',
           subMenu = null,
           menu_stage = null,
