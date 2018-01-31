@@ -43,7 +43,7 @@
       <a href="{$routeURI}/{$item.subject.id}">
       {/if}
         <p class="subject" style="padding-left:{$item.subject.space}px">
-          <span class="sx-label sx-label-primary">{$item.subject.prefix_icon}</span>            
+          <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>
           <span class="title">{$item.subject.title|nl2br}</span>
           <span class="sx-badge">{$item.subject.comment_num}</span>
           {if $item.subject.icon_img_name != ''}
@@ -88,7 +88,7 @@
               <a href="{$routeURI}/{$item.subject.id}">
             {/if}
             <span class="link_area" style="padding-left:{$item.subject.space+25}px">
-              <span class="label label-primary {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
+              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
               <span class="title">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
               {if $item.subject.icon_img_name != ''}

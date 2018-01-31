@@ -7,12 +7,12 @@
     <input type="hidden" name="_method" value="update">
     <input type="hidden" name="category" value="{$contentData.category}">
     <input type="hidden" name="id" value="{$contentData.id}">
-    <input type="hidden" name="user_name" maxlength="20" value="{$contentData.user_name}">
+    <input type="hidden" name="nickname" maxlength="20" value="{$contentData.nickname}">
 
     <div class="head_panel">
       <div class="sx-form-group">
         <label for="emptyName" class="sx-control-label label_width">이름</label>
-        <div class="sx-form-control">{$contentData.user_name}</div>        
+        <div class="sx-form-control">{$contentData.nickname}</div>        
       </div>
       <div class="sx-form-group">
         <label for="password" class="sx-control-label label_width">비밀번호</label>
