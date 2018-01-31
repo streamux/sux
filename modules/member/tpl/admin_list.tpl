@@ -28,6 +28,7 @@
           </form>
         </header> 
         <div class="sx-box-content">
+          {$documentData.category}
           <input type="hidden" name="category" value="{$documentData.category}">
           <input type="hidden" name="list_json_path" value="{$rootPath}member-admin/list-json">
 

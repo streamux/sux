@@ -830,9 +830,10 @@ jsux.fn.modify = {
     var labelList = ['비밀번호를','닉네임을','이메일을'];
     var inputList = ['password','nickname','email_address'];
     var isValidForm = true;
-    $.each( inputList, function( index, item) {
 
+    $.each( inputList, function( index, item) {
       var $input = f[item];
+
       if ($input.value.length < 1) {
         trace(labelList[index] + ' 입력 하세요.');
         $input.focus();
@@ -890,7 +891,7 @@ jsux.fn.modify = {
     /*$.each(params, function( index, item ) {
       console.log(index + ' : ' + item);
     });*/
-
+    
     if (!f.action) {
       alert('Not Exists URL');
     }
@@ -898,8 +899,6 @@ jsux.fn.modify = {
 
     jsux.getJSON( url, params, function( e ) {
       
-      trace( e.msg );
-
       if (e.result && e.result.toUpperCase() == 'Y') {
         jsux.goURL( self.returnUrl());
       }

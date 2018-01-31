@@ -205,16 +205,30 @@
 .board_read .body_panel {
   padding: 0 10px 55px 10px;
 }
+
 .board_read .body_panel .content {
   padding: 15px 15px 30px 15px;
   min-height:200px;  
   line-height: 20px;
   border:1px solid #ececec;
 }
+
+.board_read .body_panel .content .download_panel{
+  position: relative;
+  text-align: right;
+  margin:15px 2px 25px 0;
+}
+.board_read .body_panel .content .img_panel{
+  position: relative;
+  margin-bottom: 25px;
+}
 .board_read .body_panel .content .content_text{
   font-size: 1.125em;  
   word-spacing: -2px;
-  line-height: 1.625em;
+  line-height: 2em;
+}
+.board_read .body_panel .content .content_text p{
+  line-height: 1.125em;
 }
 .board_read .btn_groups {
   margin-top:35px;
@@ -337,7 +351,8 @@
 }
 .board_comment .list_panel ul li .comment_body .comment {
   font-size: 1.0625em;
-  line-height: 26px; 
+  line-height: 26px;
+  white-space: pre;
 }
 .board_comment .list_panel ul li .comment_body .btn_group {
   margin-top: 35px;
@@ -558,6 +573,9 @@
   }
   .board_comment .list_panel ul li .user_info{
     float: left;
+  }
+  .board_comment .list_panel ul li .comment_body .comment {
+    margin-left: 150px;
   }
   .board_list .list_mobile_panel {
     display: none;

@@ -8,17 +8,17 @@
   <!-- end --> 
   <div class="head_panel">
     <p class="title">{$contentData.title}</p>
-    <p class="sub_info">{$contentData.user_name} &nbsp; {$contentData.date} &nbsp; 조회 {$contentData.readed_count}</p>
+    <p class="sub_info">{$contentData.nickname} &nbsp; {$contentData.date} &nbsp; 조회 {$contentData.readed_count}</p>
   </div>
   <div class="body_panel">
-    <div class="content">
-      <p class="{$contentData.css_down}">      
-        <a href="{$contentData.fileup_path}">{$contentData.file_name}&nbsp;<b>[ 다운로드 ]</b></a>
+    <div class="content"> 
+      <p class="download_panel {$contentData.is_down}">
+        <a href="{$contentData.fileup_path}">{$contentData.file_name} <b>다운로드</b></a>
       </p>
-      <p class="{$contentData.css_img}" style="max-width:{$contentData.css_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
-      <p>
-        <pre>{$contentData.content}</pre>
-      </p>
+      <p class="{if isset($contentData.is_img)}img_panel{/if} {$contentData.is_img}" style="max-width:{$contentData.is_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
+      <div class="content_text">
+        {$contentData.content}
+      </div>
     </div> 
     <div class="btn_groups">    
       <a href="{$routeURI}{$params}" class="sx-btn">목록</a>
@@ -29,7 +29,6 @@
     </div>   
   </div>   
 </div>
-
 <!-- comment -->
 {if $commentSkinPath != ''}  
   {include file="$commentSkinPath"}

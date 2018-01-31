@@ -14,7 +14,9 @@ class LoginController extends Controller
     $userId = (isset($postData['user_id']) && $postData['user_id']) ?
                     $postData['user_id'] : $sessionData['user_id'];
     $userId = trim($userId);
-    $loginKeeper = trim($postData['login_keeper']);
+    $loginKeeper = trim($postData['login_keeper']);    
+    $returnURL = $context->getSession('return_url');
+    $context->unsetSession('return_url');
 
     if (empty($userId)) {
       UIError::alertToBack('아이디를 입력하세요.');     
@@ -87,7 +89,7 @@ class LoginController extends Controller
     $data = array(
       'msg'=>'로그인 성공',
       'result'=>'Y',
-      'url'=>$rootPath
+      'url'=>$returnURL
     );
     
     $this->callback($data);

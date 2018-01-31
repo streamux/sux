@@ -31,7 +31,7 @@
       <p class="nickname pull-left">{literal}${user_id}<br>${date}{/literal}</p>
     </div>
     <div class="comment_body">
-      <span class="comment">{literal}${comment}{/literal}</span>
+      <p class="comment">{literal}${comment}{/literal}</p>
       <p class="btn_group">
       {literal}
         <button class="sx-btn sx-btn-xs" onclick="jsux.fn.read.voteComment(${id});"><i class="xi-heart-o"></i>좋아요(+${voted_count})</button>

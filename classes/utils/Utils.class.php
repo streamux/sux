@@ -296,8 +296,8 @@ class Utils extends Object {
 
   function getWallKey() {
 
-    $wallWords = '가갛나낲다닽라랔마맟바밪사상아앗자잡차참카칼타탇파판하학';
-    return self::getRandomStr($wallWords, 5);
+    $wallWords = 'ABCDEFGHIJKLMNOPQRSTUVWXYG1234567890';
+    return self::getRandomStr($wallWords, 6);
   }
 
   //----- Time

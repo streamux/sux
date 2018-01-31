@@ -427,6 +427,12 @@ class Context
     $_SESSION[$key] = $value;
   }
 
+  function unsetSession($key) {
+
+    $_SESSION[$key] = '';
+    unset($_SESSION[$key]);
+  }
+
   function getSessionAll() {
 
     return $this->_getTrimRequestData($_SESSION);

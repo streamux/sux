@@ -97,7 +97,7 @@ nav{
   display: inline-block;
   position: relative;  
   right: 65px;
-  z-index: 3000;
+  z-index: 1000;
   margin-left:100%;
   width: 65px;
   height: 55px;

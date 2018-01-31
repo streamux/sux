@@ -7,4 +7,3 @@
     <p><a href="">home</a> &gt; {$groupData.board_name}</p> 
   </div>
 {/if}
-  

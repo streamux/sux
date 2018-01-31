@@ -356,7 +356,7 @@ jsux.fn.write = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','content','wallname'];
+    var checkList = ['nickname','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -412,7 +412,7 @@ jsux.fn.reply = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','content','wallname'];
+    var checkList = ['nickname','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -467,7 +467,7 @@ jsux.fn.modify = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['user_name','password','title','content','wallname'];
+    var checkList = ['nickname','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
