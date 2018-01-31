@@ -37,7 +37,7 @@
               <label for="skinList" class="sx-control-label label_width">스킨</label>
               <select id="skinList" name="skin_path" class="sx-form-control">
                 {foreach from=$documentData.skin_list item=$item}
-                  <option>{$item.file_name}</option>
+                  <option {if $item.file_name === "ckeditor_standard"} selected="true"{/if}>{$item.file_name}</option>
                 {/foreach}
               </select>
             </div>
@@ -171,8 +171,8 @@
               <label for="emptyName" class="sx-control-label label_width">게시판 형식</label>          
               <div class="sx-input-group">
                 <input type="radio" id="boardTypeHtml" name="board_type" value="html">
-                <label for="boardTypeHtml" class="sx-control-label sx-text-normal">HTML</label>
-                <input type="radio" id="boardTypeTextl" name="board_type" value="text" checked="checked">
+                <label for="boardTypeHtml" class="sx-control-label sx-text-normal" checked="checked">HTML</label>
+                <input type="radio" id="boardTypeTextl" name="board_type" value="text">
                 <label for="boardTypeTextl" class="sx-control-label sx-text-normal">TEXT</label>
               </div>
             </div>

@@ -8,7 +8,7 @@
               <input type="hidden" name="user_id" value="{$documentData.user_id}">
               <input type="hidden" name="id" value="{$documentData.id}">
               <input type="hidden" name="modify_info_path" value="{$rootPath}member-admin/modify-json">
-              <input type="hidden" name="location_back" value="{$rootPath}member-admin/{$documentData.id}/list">
+              <input type="hidden" name="location_back" value="{$rootPath}member-admin/list">
 
               <p class="text_notice">
                 <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice"><span class="sx-text-notice">*(별표)는 필수 입력 사항입니다.</span>

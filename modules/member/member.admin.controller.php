@@ -435,40 +435,34 @@ class MemberAdminController extends Controller
     }
 
     $ignorePattern = 'id';
-    $column = array(); 
+    $columns = array(); 
 
     foreach ($columnCaches as $key) {
       if ($ignorePattern !== $key) {
         $value = $posts[$key];
 
-        if (isset($value) && $value) {
-          $column[$key] = $value;
-        } else {
-          $column[$key] = '';
+        if (isset($value)) {
+          $columns[$key] = $value;
         }
       }  // end of if
     }  // end of foreach
 
     $where = QueryWhere::getInstance();
     $where->set('id', $id);
-    $where->set('password', $column['password'], '=', 'and');
+    $where->set('password', $columns['password'], '=', 'and');
     $result = $this->model->select('member', 'password', $where);
     $numrow = $this->model->getNumrows();
 
     if ($numrow > 0 ) {
       $row = $this->model->getRow();
 
-      if ($row['password'] === $column['password']) {
+      if ($row['password'] === $columns['password']) {
         if (isset($newPassword) && $newPassword) {
-          $column['password'] = $newPassword;
+          $columns['password'] = $newPassword;
         }
 
-        $result = $this->model->update('member', $column, $where);
-
-        if ($result) {
-          $msg .= "'${nickname}' 님의 회원정보를 수정하였습니다." . PHP_EOL;     
-          $resultYN = "Y";  
-        } else {
+        $result = $this->model->update('member', $columns, $where);
+        if (!$result) {
           $msg .= "'${nickname}' 님의 회원정보 수정을 실패하였습니다." . PHP_EOL;
           $resultYN = "N";  
         }

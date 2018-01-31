@@ -307,8 +307,8 @@ class MemberAdminView extends View {
 
     $this->model->select('member_group', 'category');
     $categories = $this->model->getRows();
-    $where = new QueryWhere();
 
+    $where = new QueryWhere();
     if (isset($id) && $id) {
       $where->set('id', $id);
     } else {
@@ -381,8 +381,6 @@ class MemberAdminView extends View {
     $passover = $posts['passover'];
     $limit = $posts['limit'];
 
-    $msg .= 'category ' . $category;
-
     if (!$limit) {
       $limit = 10;  
     }
@@ -390,7 +388,7 @@ class MemberAdminView extends View {
       $passover = 0;
     }
 
-    $where = null;    
+    $where = null;
     if (isset($category) && $category) {
       $where = new QueryWhere();
       $where->set('category', $category);
@@ -398,6 +396,9 @@ class MemberAdminView extends View {
 
     $this->model->select('member', '*', $where);      
     $numrows = $this->model->getNumRows();
+
+    $msg .= Tracer::getInstance()->getMessage();
+
     if ($numrows > 0){        
       $a = $numrows - $passover;
 
