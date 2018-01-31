@@ -58,7 +58,6 @@ jsux.gnb.Menu = jsux.View.create();
       }
 
       $(_path).empty();
-
       var menuManager = (function f(target, data) {        
 
         $(data).each(function(index) {
@@ -110,13 +109,13 @@ jsux.gnb.Menu = jsux.View.create();
       _list = _stage.find("> .sx-menu");
 
       $( _list ).each(function(index){
-        max_txtWidth += $(this).find("li > a").outerWidth();
+        max_txtWidth += $(this).find("> a").outerWidth();
       });
 
       spaceWidth = Math.floor((max_width - max_txtWidth)/_data.length);
 
       $( _list ).each(function(index) {
-        wdRate = Math.floor((100-0)/(max_width - 0)*(($(this).find("li > a").outerWidth()+spaceWidth) - 0) + 0);
+        wdRate = Math.floor((100-0)/(max_width - 0)*(($(this).find("> a").outerWidth()+spaceWidth) - 0) + 0);
 
         // 마지막은 항상 나머지 비율로 100%를 채운다.
         if (index == _list.length-1) {

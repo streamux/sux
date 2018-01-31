@@ -778,21 +778,25 @@
 
     getMenuModel: function() {
 
-      var model = {
-        badge:0,
+      var model = {        
         id:'',
-        isClicked:false,
-        isDragging:false,
-        isModified:false,
-        is_active: 0,
-        category: '',
+        sid: '',
         menu_name:'',
-        posy:0,
-        state:'default',
-        sub:[],
-        top:'0px',
         url:'',
         url_target:'',
+        depth:1,        
+        isClicked:false,        
+        isModified:false,
+        isDragging:false,
+        is_active: 0,
+        category: '',
+        
+        posy:0,
+        state:'default',
+        badge:0,
+        sub:[],
+        top:'0px',
+        
         date:''
       };
 

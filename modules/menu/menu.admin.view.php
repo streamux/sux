@@ -88,7 +88,15 @@ class MenuAdminView extends View
 
     $context = Context::getInstance();
 
-    $result = $this->model->select('menu', '*');    
+    $id = $context->getRequest('id');
+    $where = null;
+
+    if (isset($id) && $id) {
+        $where = QueryWhere::getInstance();
+        $where->set('id', $id);
+    }
+
+    $result = $this->model->select('menu', '*', $where);    
     if ($result) {      
       $json['data']['list'] = $this->model->getRows();
       $json['data']['total_num'] = $this->model->getNumRows();
