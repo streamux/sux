@@ -38,9 +38,8 @@ jsux.mobileGnb.Menu.include({
     if (isNaN(tw)) {
       throw new Error('not a valid number');
     }
-    console.log(tw , this._isMobile);
+
     if (tw < 768 && this._isMobile === false) {
-      console.log('mobile');
       this._isMobile = true;
       this._isPc = false;
 
@@ -48,7 +47,6 @@ jsux.mobileGnb.Menu.include({
         this.show();
       }
     } else if (tw >= 768 && this._isPc === false) {
-      console.log('pc');
       this._isMobile = false;
       this._isPc = true;
 
