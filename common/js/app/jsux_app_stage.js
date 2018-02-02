@@ -38,9 +38,16 @@ $(window).ready(function() {
 
       $(window).on('resize', function(e){
 
-        var tw = $(window).outerWidth();
+        var tw = $(window).width();
+        var winHt = $(window).height();
+        var pageHt = $('body').height() + 62;
+
+        if (pageHt > winHt) {
+          tw += 15;
+        }
+
         mobileGnbView.resizeUI(tw);
-        mobileMenuSlider.onResize();        
+        mobileMenuSlider.onResize();
       });
 
       $(window).trigger('resize');

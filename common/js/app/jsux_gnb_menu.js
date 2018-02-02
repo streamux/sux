@@ -44,7 +44,7 @@ jsux.gnb.Menu = jsux.View.create();
       this.setUI();
       this.setEvent();
     };
-    this.setUI = function() {
+    this.setUI = function() {      
 
       var self = this;
       var ty = 0;
