@@ -20,7 +20,7 @@ class ModuleHandler
     $context = Context::getInstance();
     $isEqual = $context->equalCookieVersion();
 
-    if (!$isEqual) {      
+    if (!$isEqual) {
       $context->setCookieVersion();
       $context->makeRouteCaches();
     }

@@ -13,34 +13,29 @@ class PageModule
 		// URI 값을 이용해 모듈, 카테고리, 액션 값을 생성한다.
 		$uriMethod = URIToMethod::getInstance();
 		$uriMethod->setURI($returnURL);
-
-		// Module Router 클래스 내에서 값이 세팅된다.
 		$moduleKey = $uriMethod->getMethod('module-key');
 		$category = $uriMethod->getMethod('category');
 		$action = $uriMethod->getMethod('action');			
 
 		/**
-		 * @route uri's construct
-		 * type 1 - your ste / action
-		 * type 2 - your site / category / action 
+		 * @route uri structure
+		 * type 1 - your site / action
+		 * type 2 - your site / category /:mid/action /:id
 		 */		
 
 		// action값이 uri 값에 없을 때 document 클래스의 Home 화면을 보여준다. 
 		if ($action === null) {
 			$className = 'Document';
 		} else {
-
-			// ModuleRouter Class 에서 등록된 값 
 			$className = $context->getModule($moduleKey);
 		}
 
 		if ($context->getDB() || strtolower($className) === 'install') {
-
 			$ModelClass = ucfirst($className) . 'Model';
 			$ControllerClass = ucfirst($className) . 'Controller';			
 			$ViewClass = ucfirst($className) . 'View';
-
 			$toLowerClassName = strtolower($className);
+
 			if ($toLowerClassName !== 'install') {
 				$oDB = DB::getInstance();
 			}
@@ -56,6 +51,7 @@ class PageModule
 			$httpMethod = strtolower($context->getRequest('_method'));
 			$regMethod = preg_match('/^(create|insert|put|update|delete)+/', $httpMethod);
 			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
+
 			if ($regMethod) {
 
 				// 값을 저장할 때 올바른 경로를 통해서 유입되는지 체크
@@ -67,7 +63,6 @@ class PageModule
 
 				$yourdomain = $context->getServer('HTTP_HOST');
 				if (isset($yourdomain) && $yourdomain) {
-
 					if (preg_match('/(www)+', $yourdomain)) {
 						str_replace('www.', '',$yourdomain);
 					}

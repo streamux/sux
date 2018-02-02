@@ -2,36 +2,48 @@
 
 class Controller extends Object {
 
-	var $class_name = "base_controller";
-	var $model = NULL;
-	
-	function __construct($m=NULL) {
+  var $class_name = "base_controller";
+  var $model = NULL;
+  
+  function __construct($m=NULL) {
 
-		$this->model = $m;
-	}
+    $this->model = $m;
+  }
 
-	function select($query=NULL) {
+  function setCookieVersion() {
 
-		$result = $this->model->select($query);
-		return $result;
-	}
+    $context = Context::getInstance();
+    $context->setCookieVersion();
+  }
 
-	function insert($query=NULL) {
+  function select($query=NULL) {
 
-		$result = $this->model->insert($query);
-		return $result;
-	}
+    $result = $this->model->select($query);
+    return $result;
+  }
 
-	function update($query=NULL) {
+  function insert($query=NULL) {
 
-		$result = $this->model->update($query);
-		return $result;
-	}
+    $this->setCookieVersion();
+    
+    $result = $this->model->insert($query);
+    return $result;
+  }
 
-	function delete($query=NULL) {
+  function update($query=NULL) {
 
-		$result = $this->model->delete($query);
-		return $result;
-	}	
+   $this->setCookieVersion();
+
+    $result = $this->model->update($query);
+    return $result;
+  }
+
+  function delete($query=NULL) {
+
+    $this->setCookieVersion();
+
+    $result = $this->model->delete($query);
+    return $result;
+  } 
 }
 ?>
