@@ -11,6 +11,7 @@ class View extends Object {
   var $request_data = null;
   var $post_data = null;
   var $document_data = array();
+  var $cookie_version = '';
 
   function __construct($m=NULL, $c=NULL) {
 
@@ -32,6 +33,9 @@ class View extends Object {
     $this->request_data = $context->getRequestAll();
     $this->post_data = $context->getPostAll();
     $this->copyright_path = _SUX_PATH_ . 'modules/admin/tpl/copyright.tpl';
+
+    $versionCookieId = $context->getCookieId('version');
+    $this->cookie_version = $context->getCookie($versionCookieId);
   }
 
   function output() {
@@ -59,6 +63,7 @@ class View extends Object {
     $__template->assign('documentData', $this->document_data);
     $__template->assign('groupData', $this->document_data['group']);
     $__template->assign('contentData', $this->document_data['content']);
+    $__template->assign('cookieVersion', $this->cookie_version);
     $__template->assign('browserTitle', $this->document_data['module_name']);
     $__template->assign('skinPathList', $this->skin_path_list);
 

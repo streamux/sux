@@ -16,17 +16,13 @@ class ModuleHandler
   }
 
   public function init()
-  {
+  {    
     $context = Context::getInstance();
-    $versionCookieId = $context->getCookieId('version');
-    $isEqual = $context->equalVersion($versionCookieId);
+    $isEqual = $context->equalCookieVersion();
 
-    if (!$isEqual) {
-      $filePath = './files/cookie/version.cookie.php';
-      $versionCookieVal = Utils::getMicrotimeInt();
-      $context->setCookie($versionCookieId, $versionCookieVal, time() + 86400 * 30 * 12, '/', $filePath);
+    if (!$isEqual) {      
+      $context->setCookieVersion();
       $context->makeRouteCaches();
-      /*echo 'set cookie version is ' . date('Y-m-d H:i:s') . ' : location -> 25 line in ModuleHandler.class.php' . "<br>";*/
     }
     
     $router = RouterModule::getInstance();

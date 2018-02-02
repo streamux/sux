@@ -7,10 +7,15 @@ class Context
   private $hashmap_params = array();
   private $table_list = array();
   private $module_list = array();
-  private $parameter_list = array();
-  public $db_info = NULL;
+  private $parameter_list = array();  
   private $admin_info = Null;
-  private$cookie_list = array('version'=>'sux_version_date', 'login_keeper'=>'sux_login_keeper');
+  private $cookie_list = array('version'=>'sux_version_date', 'login_keeper'=>'sux_login_keeper');
+  private $cookie_version_path = 'files/cookie/version.cookie.php';
+  private $config_db_path = 'files/config/config.db.php';
+  private $config_admin_path = 'files/config/config.admin.php';
+  private $config_table_path = 'files/config/config.table.php';
+
+  public $db_info = NULL;
 
   public static function &getInstance() {
 
@@ -150,23 +155,24 @@ class Context
   function loadDBInfo() {
 
     $filename = $this->getConfigFile();
+
     if (is_readable($filename)) {
-      $result = include $filename;      
+      $result = include $filename; 
       $this->db_info = $result['db_info'];
       unset($result);
     }   
   }
 
   function getConfigFile() {    
-
-    return _SUX_PATH_ . 'files/config/config.db.php';
+    
+    return Utils::convertRealPath($this->config_db_path);
   }
 
   function loadAdminInfo() {
 
     $admin_file = $this->getAdminFile();
     if (is_readable($admin_file)) {
-      $result = include $admin_file;
+      $result = include $admin_file;      
       $this->admin_info = $result['admin_info'];
       unset($result);
     }
@@ -174,7 +180,7 @@ class Context
 
   function getAdminFile() {
 
-    return _SUX_PATH_ . 'files/config/config.admin.php';
+    return Utils::convertRealPath($this->config_admin_path);
   }
 
   function loadTableInfo() {
@@ -191,7 +197,7 @@ class Context
 
   function getTableFile() {
 
-    return _SUX_PATH_ . 'files/config/config.table.php';
+    return Utils::convertRealPath($this->config_table_path);
   }
 
   function getPrefix() {
@@ -366,6 +372,29 @@ class Context
     }   
   }
 
+  function setCookieVersion() {
+
+    $context = Context::getInstance();
+    $filePath = Utils::convertRealPath($cookie_version_path);
+    $versionId = $context->getCookieId('version');
+    $versionCookieVal = Utils::getMicrotimeInt();
+    $context->setCookie($versionId, $versionCookieVal, time() + 86400 * 30 * 12, '/', $filePath);
+  }
+
+  function equalCookieVersion() {
+
+    $context = Context::getInstance();
+    $versionId = $context->getCookieId('version');
+    $path = Utils::convertRealPath($cookie_version_path);
+    if (!file_exists($path) || empty($versionId)) {
+      return false;
+    }
+    $cookieVersion = trim($this->getCookie($versionId));
+    $fileVersion = CacheFile::readFile($path, $versionId);
+
+    return $cookieVersion === $fileVersion;
+  }
+
   function getCookie($name) {
 
     return $_COOKIE[$name];
@@ -508,18 +537,6 @@ class Context
     }
 
     return false;
-  }
-
-  function equalVersion($name) {
-
-    $path = './files/cookie/version.cookie.php';    
-    if (!file_exists($path) || empty($name)) {
-      return false;
-    }
-    $cookieVersion = trim($this->getCookie($name));
-    $fileVersion = CacheFile::readFile($path, $name);
-
-    return $cookieVersion === $fileVersion;
   }
 
   function installed() {
