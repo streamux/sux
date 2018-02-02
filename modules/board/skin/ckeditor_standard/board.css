@@ -352,7 +352,7 @@
 .board_comment .list_panel ul li .comment_body .comment {
   font-size: 1.0625em;
   line-height: 26px;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 .board_comment .list_panel ul li .comment_body .btn_group {
   margin-top: 35px;
