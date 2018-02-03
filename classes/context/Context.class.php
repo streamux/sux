@@ -522,11 +522,44 @@ class Context
     return md5($password);
   }
 
+  function _getTrimRequestData($dataes) {
+
+    if (!is_array($dataes)) {
+      return trim($dataes);
+    }
+
+    foreach ($dataes as $key => $value) {
+      $dataes[$key] = trim($value);
+    }
+    return $dataes;
+  }
+
   function isLocalhost() {
 
     $domain = $this->getServer('HTTP_HOST');
     $result = preg_match('/^(http\:\/\/)?(localhost|127.0.0.1)+/', $domain);
     return $result;
+  }
+
+  function isCrossDomain() {
+
+    $prevDomain = $this->getServer('HTTP_REFERER');
+    $ownerDomain = $this->getServer('HTTP_HOST');
+
+    if (empty($prevDomain)) {
+      return false;
+    }
+
+    if (preg_match('/^(www)+', $ownerDomain)) {
+      str_replace('www.', '',$ownerDomain);
+    }
+    
+    $regURL = sprintf('/^(http(s)?\:\/\/)?(www.)?(%s)/', $ownerDomain);
+    if (!preg_match($regURL, $prevDomain)) {
+      return false;
+    }
+
+    return true;
   }
 
   function ajax() {
@@ -557,18 +590,6 @@ class Context
 
     $admin_ok = $this->getSession('admin_ok');
     return isset($admin_ok) && $admin_ok;
-  }
-
-  function _getTrimRequestData($dataes) {
-
-    if (!is_array($dataes)) {
-      return trim($dataes);
-    }
-
-    foreach ($dataes as $key => $value) {
-      $dataes[$key] = trim($value);
-    }
-    return $dataes;
-  }
+  }  
 }
 ?>

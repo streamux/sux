@@ -5,123 +5,92 @@
 */
 class PageModule
 {
-	function display( $id, $sid)
-	{
-		$context = Context::getInstance();
-		$returnURL = $context->getServer('REQUEST_URI');
+  function display( $id, $sid)
+  {
+    $context = Context::getInstance();
+    $returnURL = $context->getServer('REQUEST_URI');
 
-		// URI 값을 이용해 모듈, 카테고리, 액션 값을 생성한다.
-		$uriMethod = URIToMethod::getInstance();
-		$uriMethod->setURI($returnURL);
-		$moduleKey = $uriMethod->getMethod('module-key');
-		$category = $uriMethod->getMethod('category');
-		$action = $uriMethod->getMethod('action');			
+    /**
+     * Create Module, Category, Action Key of URIFrom Value made
+     * in ModuleRouter Class
+     * @route uri's construct
+     * - /action/:id
+     * - /category/:id/action /:id
+     */
 
-		/**
-		 * @route uri structure
-		 * type 1 - your site / action
-		 * type 2 - your site / category /:mid/action /:id
-		 */		
+    $uriMethod = URIToMethod::getInstance();
+    $uriMethod->setURI($returnURL);   
+    $moduleKey = $uriMethod->getMethod('module-key');
+    $category = $uriMethod->getMethod('category');
+    $action = $uriMethod->getMethod('action');      
 
-		// action값이 uri 값에 없을 때 document 클래스의 Home 화면을 보여준다. 
-		if ($action === null) {
-			$className = 'Document';
-		} else {
-			$className = $context->getModule($moduleKey);
-		}
+    // Base Router Key is  HomeClass of Document 
+    $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
+    $classLowerName = strtolower($className);
 
-		if ($context->getDB() || strtolower($className) === 'install') {
-			$ModelClass = ucfirst($className) . 'Model';
-			$ControllerClass = ucfirst($className) . 'Controller';			
-			$ViewClass = ucfirst($className) . 'View';
-			$toLowerClassName = strtolower($className);
+    if ($context->getDB() || strtolower($className) === 'install') {
+      if ($classLowerName !== 'install') {
+        $oDB = DB::getInstance();
+      }
 
-			if ($toLowerClassName !== 'install') {
-				$oDB = DB::getInstance();
-			}
+      $ModelClass = ucfirst($className) . 'Model';
+      $ControllerClass = ucfirst($className) . 'Controller';      
+      $ViewClass = ucfirst($className) . 'View';
 
-			$model = new $ModelClass();
-			$controller = new $ControllerClass($model);
-			$view = new $ViewClass( $model, $controller);
-			
-			/**
-			 * @var httpMethod
-			 * receive 'create' || 'insert' || 'put' || 'update' || 'delete'
-			 */			
-			$httpMethod = strtolower($context->getRequest('_method'));
-			$regMethod = preg_match('/^(create|insert|put|update|delete)+/', $httpMethod);
-			//echo 'method : [' . $httpMethod . '] ' . $className . ' => /' . $category . '/' . $action . "<br>";
+      $model = new $ModelClass();
+      $controller = new $ControllerClass($model);
+      $view = new $ViewClass( $model, $controller);
+          
+      $httpMethod = $context->getRequest('_method');
+      $httpMethod = strtolower($httpMethod);
+      $regMethod = '/^(insert|select|update|delete)+$/';
 
-			if ($regMethod) {
+      if (preg_match($regMethod, $httpMethod)) {
+        if ($context->isCrossDomain() === false) {
+          Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
+        }
 
-				// 값을 저장할 때 올바른 경로를 통해서 유입되는지 체크
-				$referURL = $_SERVER['HTTP_REFERER'];
-				if (empty($returnURL)) {
-					Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access URL is not valid');
-					exit;
-				}
+        $controller->{$httpMethod . ucfirst($action)}();
+      } else {
 
-				$yourdomain = $context->getServer('HTTP_HOST');
-				if (isset($yourdomain) && $yourdomain) {
-					if (preg_match('/(www)+', $yourdomain)) {
-						str_replace('www.', '',$yourdomain);
-					}
-					
-					$urlReg = sprintf('/^(http(s)?\:\/\/)?(www.)?(%s)/', $yourdomain);
-					if (!preg_match($urlReg, $referURL)) {
-						Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
-						exit;
-					}
-				}
+        // Check admin login for Dashboard
+        $regAdmin = preg_match('/(admin)+$/i', $className);
+        if ($classLowerName !== 'loginadmin' && $regAdmin) {
 
-				$referURL = null;
-				$yourdomain = null;
+          $isAdminLogin = $context->getSession('admin_ok');
+          if (empty($isAdminLogin)) {
+            Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
+          }
+        }
 
-				$controller->{$httpMethod.ucfirst($action)}();
-				//$controller->tester($httpMethod . ucfirst($action), 'js');
-			} else {
+        if (empty($category) && preg_match('/^(board|document)+/i', $className)) {
+          if (empty($action)) {
+            $category = 'home';
+            $action = 'content';
+          } else {
 
-				//-- Check Login  of Admin Page  start
-				$isLogged = $context->getSession('admin_ok');
-				if (empty($isLogged)) {
-					if (!preg_match('/^(loginadmin)+/', $toLowerClassName) && preg_match('/(admin)+$/', $toLowerClassName)) {
-						Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
-						exit;
-					}
-				}
+            $category = $action;
+            if (preg_match('/^(board|documentadmin)+/i', $className)) {
+              $action = isset($id) ? 'read' : 'list';
+            } else {
+              $action = 'content';
+            }
+          }
+        }   // end of if
 
-				if (empty($category)) {
-					if (preg_match('/^(board|document)+/i', $className)) {
-								
-						// when user connect from Base URL
-						if (empty($action)) {
-							$category = 'home';
-							$action = 'content';
-						} else {
-							$category = $action;
-							$context->setParameter('category', $category);
-							if (preg_match('/^(board|documentadmin)+/i', $className)) {
-								$action = isset($id) ? 'read' : 'list';
-							} else {
-								$action = 'content';
-							}
-						}
-					}
-				}
+        $context->setParameter('category', $category);
+        $context->setParameter('action', $action);
+        $context->setParameter('id', $id);
+        $context->setParameter('sid', $sid);
 
-				$context->setParameter('category', $category);
-				$context->setParameter('action', $action);
-				$context->setParameter('id', $id);
-				$context->setParameter('sid', $sid);
+        $view->display($action, $category, $id, $sid);
+      }
 
-				$view->display($action, $category, $id, $sid);
-			}
-
-			if (strtolower($className) !== 'install') {
-				$oDB->close();
-			}
-		} else {
-			Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');			
-		}
-	}
+      if (isset($oDB) && $oDB) {
+        $oDB->close();
+      }
+    } else {
+      Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');     
+    }
+  }
 }
