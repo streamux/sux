@@ -679,7 +679,8 @@ class BoardView extends View
     $search = $requestData['search'];
     $category = $context->getParameter('category');
     $id = $context->getParameter('id');
-    $grade = $sessionData['grade'];    
+    $grade = $sessionData['grade'];
+    $nonemember = $groupData['allow_nonmember'];
     $nickname = $sessionData['nickname'] | $sessionData['user_name'];
     $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
@@ -736,33 +737,6 @@ class BoardView extends View
       $contentData['content'] = nl2br(htmlspecialchars($contentData['content']));
     }
     
-    $contentData['is_down'] = 'hide';
-    $contentData['is_img'] = 'hide';
-    $fileupPath = '';
-
-    if ($filename) {
-      $fileupPath = $rootPath . "files/board/${filename}";
-
-      if (($is_download == 'y') && ($filetype === ("application/x-zip-compressed" || "application/zip"))) {
-        $contentData['is_down'] = 'sx-show';
-      } else if ($filetype !== ("application/x-zip-compressed" || "application/zip")){
-        $image_info = getimagesize($fileupPath);
-        $image_type = $image_info[2];
-
-        if ( $image_type === IMAGETYPE_JPEG ) {
-          $image = imagecreatefromjpeg($fileupPath);
-        } elseif( $image_type === IMAGETYPE_GIF ) {
-          $image = imagecreatefromgif($fileupPath);
-        } elseif( $image_type === IMAGETYPE_PNG ) {
-          $image = imagecreatefrompng($fileupPath);
-        }
-        $contentData['is_img'] = 'sx-show';
-        $contentData['img_width'] = imagesx($image) . 'px';
-      }
-      $contentData['fileup_name'] = $filename;
-      $contentData['fileup_path'] = $fileupPath;
-    }  
-
     // Create Wall Key
     $contentData['wallname'] = Utils::getWallKey();    
     $contentType = $contentData['content_type'];
@@ -781,7 +755,7 @@ class BoardView extends View
     $returnURL = $rootPath . $category . $queryString;
 
     // 비회원 허용 유무 
-    if (strtolower($nonemember) !== 'y' && empty($user_name)) {      
+    if (strtolower($nonemember) !== 'y' && empty($nickname)) {      
       $context->setSession('return_url', $returnURL);
       $msg = '이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
       UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
