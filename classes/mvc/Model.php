@@ -13,27 +13,75 @@ class Model extends Object {
   function __construct() {
 
     $this->db = DB::getInstance();
-  } 
+  }
+  
+  function select( $table_name, $field = '*', $where = null, $orderby = null,
+      $passover = 0, $limit = null) {
 
-  function select($query=NULL) {
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
 
-    $this->result = $this->db->select($query);
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setField($field);
+
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
+
+    if (isset($orderby) && $orderby) {
+      $query->setOrderBy($orderby);
+    }
+
+    if (isset($limit) && $limit) {
+      $query->setLimit($passover, $limit);
+    }
+
+   $this->result = $this->db->select($query);
     return $this->result;
   }
 
-  function insert($query=NULL) {
+  function insert( $table_name, $columns = null) {
+
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
+
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($columns);
 
     $this->result = $this->db->insert($query);
     return $this->result;
   }
 
-  function update($query=NULL) {
+  function update( $table_name, $columns, $where = null) {
+
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
+
+    $query = new Query();
+    $query->setTable($tableName);
+    $query->setColumn($columns);
+
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
     $this->result = $this->db->update($query);
     return $this->result;
   }
 
-  function delete($query=NULL) {
+  function delete( $table_name, $where = null) {
+
+    $context = Context::getInstance();
+    $tableName = $context->getTable($table_name);
+
+    $query = new Query();
+    $query->setTable($tableName);
+    
+    if (isset($where) && $where) {
+      $query->setWhere($where);
+    }
 
     $this->result = $this->db->delete($query);
     return $this->result;

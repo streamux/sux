@@ -10,40 +10,9 @@ class Controller extends Object {
     $this->model = $m;
   }
 
-  function setCookieVersion() {
+  function getModel() {
 
-    $context = Context::getInstance();
-    $context->setCookieVersion();
+    return $this->model;
   }
-
-  function select($query=NULL) {
-
-    $result = $this->model->select($query);
-    return $result;
-  }
-
-  function insert($query=NULL) {
-
-    $this->setCookieVersion();
-    
-    $result = $this->model->insert($query);
-    return $result;
-  }
-
-  function update($query=NULL) {
-
-   $this->setCookieVersion();
-
-    $result = $this->model->update($query);
-    return $result;
-  }
-
-  function delete($query=NULL) {
-
-    $this->setCookieVersion();
-
-    $result = $this->model->delete($query);
-    return $result;
-  } 
 }
 ?>

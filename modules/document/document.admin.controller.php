@@ -9,12 +9,13 @@ class DocumentAdminController extends Controller
     $dataObj = array();    
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);
     $templateType = $posts['template_type'];
     $title = $posts['document_name'];
-    $returnURL = $context->getServer('REQUEST_URI');  
+    $returnURL = $context->getServer('REQUEST_URI'); 
 
     $where = new QueryWhere();
     $where->set('category', $category);
@@ -197,6 +198,7 @@ class DocumentAdminController extends Controller
     $is_document = 'N';    
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll();
 
     $id = $posts['id'];
@@ -354,6 +356,7 @@ class DocumentAdminController extends Controller
     $msg = "";  
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);

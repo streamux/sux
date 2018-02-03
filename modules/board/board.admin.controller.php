@@ -10,6 +10,7 @@ class BoardAdminController extends Controller
     $dataObj = array();
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll(); 
     $returnURL = $context->getServer('REQUEST_URI');
     
@@ -153,6 +154,7 @@ class BoardAdminController extends Controller
     $msg = "";
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll();
 
     $id = $posts['id'];
@@ -253,6 +255,7 @@ class BoardAdminController extends Controller
   function deleteDelete() {
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $posts = $context->getPostAll();
 
     $category = $posts['category'];

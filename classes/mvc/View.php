@@ -19,6 +19,16 @@ class View extends Object {
     $this->controller = $c;
   }
 
+  function getModel() {
+
+    return $this->model;
+  }
+
+  function getController() {
+
+    return $this->controller;
+  }
+
   function display( $methodName, $category=null, $mid=-1, $id=-1) {
     
     $methodName = 'display' . ucfirst($methodName);
