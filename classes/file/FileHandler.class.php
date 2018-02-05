@@ -120,7 +120,11 @@ class FileHandler
     return $msg;
   }
 
-  function deleteAll($directory, $empty = false) { 
+  /**
+   *@param $directory
+   *@param $empty 폴더 삭제 유무
+   */
+  function deleteAll($directory, $empty = true) { 
 
     if (substr($directory,-1) == "/") { 
       $directory = substr($directory,0,-1); 
@@ -140,16 +144,16 @@ class FileHandler
           $path = $directory . "/" . $contents; 
           
           if(is_dir($path)) { 
-            deleteAll($path); 
+            self::deleteAll($path); 
           } else { 
             unlink($path); 
           } 
-        } 
-      } 
+        }   // end of if
+      }   // end of while
       
       closedir($directoryHandle); 
 
-      if ($empty == false) { 
+      if ($empty === true) { 
         if (!rmdir($directory)) { 
           return false; 
         } 
