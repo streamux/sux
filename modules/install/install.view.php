@@ -8,8 +8,8 @@ class InstallView extends View
     $context = Context::getInstance();
 
     // 관리자 로그인 없이 설치를 시도한 경우 
-    if ($context->installed() && $context->isAdminLogin() == false) {
-      $uri = _SUX_ROOT_ . 'login';
+    if ($context->installed() && $context->isAdminLogin() === false) {
+      $uri = _SUX_ROOT_ . 'login-admin';
       header("Location: $uri");
       exit();
     }
@@ -65,4 +65,19 @@ class InstallView extends View
 
     $this->output();
   } 
+
+  function displayUninstall() {
+
+    $this->checkInstall();
+
+    $context = Context::getInstance();
+    $this->request_data['action'] = 'uninstall';
+
+    $this->skin_path_list['root'] = _SUX_ROOT_;
+    $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
+    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
+    $this->skin_path_list['content'] = _SUX_PATH_ . 'modules/install/tpl/uninstall.tpl';
+
+    $this->output();
+  }
 }

@@ -170,3 +170,10 @@ jsux.fn.setupAdmin = {
     jsux.setAutoFocus();
   }
 };
+jsux.fn = jsux.fn || {};
+jsux.fn.uninstall = {
+
+  init: function() {
+    
+  }
+}

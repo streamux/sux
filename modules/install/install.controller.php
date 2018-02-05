@@ -409,4 +409,69 @@ class InstallController extends Controller
     $this->callback($data);
     $oDB->close();
   }
+
+  function deleteCaches() {
+
+    FileHandler::deleteAll('./templates_c/');
+  }
+
+  function deleteFiles() {
+
+    FileHandler::deleteAll('./files/');
+  }
+
+  function deleteTables() {
+
+    $context = Context::getInstance();
+    $oDB = DB::getInstance();
+    $dbName = $context->getDB();
+
+    $query = new Query();
+    $query->setDB( $dbName );
+    $result = $oDB->showTables($query);
+
+    $tables = array();
+    while (($row = $oDB->getFetchArray($result)) !== false) {
+      $tables[] = $row[0];
+    }
+
+    $query = new Query();
+    $query->setTable( implode(',', $tables) );
+    $result = $oDB->dropTable( $query );
+  }
+  
+  function deleteUninstall() {
+
+    $context = Context::getInstance();
+    $mode = $context->getPost('uninstall_mode');
+
+    switch ($mode) {
+      case 'cache':
+        $this->deleteCaches();
+        $returnURL = _SUX_ROOT_;
+        break;
+
+      case 'file':        
+        $this->deleteCaches();
+        $this->deleteFiles();
+        $returnURL = _SUX_ROOT_ . 'install';
+        break;
+
+      case 'all':        
+        $this->deleteCaches();
+        $this->deleteFiles();
+        $this->deleteTables();
+        $returnURL = _SUX_ROOT_ . 'install';
+        break;
+      
+      default:
+        break;
+    }
+
+    $data = array(  'url'=>$returnURL,
+                            'result'=>$resultYN,
+                            'msg'=>$msg);
+
+    $this->callback($data);
+  }
 }
