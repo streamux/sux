@@ -6,12 +6,12 @@ class DocumentView extends View
 
     $context = Context::getInstance();
     $category = $context->getParameter('category');
-    $this->session_data = $context->getSessionAll();
 
     $where = new QueryWhere();
     $where->set('category',$category,'=');    
     $this->model->select('document', '*', $where);    
     $groupData = $this->model->getRow();
+
     $headerPath = $groupData['header_path'];
     $templateType = $groupData['template_type'];
     $templateMode = $groupData['template_mode'];
