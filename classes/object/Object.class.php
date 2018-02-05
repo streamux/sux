@@ -6,7 +6,7 @@ class Object {
 
 	function output( $msg) {
 
-		echo $msg;
+		echo $msg . "<br>";
 	}	
 
 	function setName($name=NULL) {
