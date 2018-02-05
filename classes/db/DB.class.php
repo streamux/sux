@@ -25,26 +25,25 @@ class DB extends Object {
   public static function &getInstance() {
 
     if (empty(self::$aInstance)) {
-      self::$aInstance = new DB;
+      self::$aInstance = new DB();
     }
+
     return self::$aInstance;
   }
 
   function _connect($db_info) {
 
-    $db_connect = @mysql_connect($db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
+    $db_connect = @mysql_connect( $db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
 
     if (!$db_connect) {
       die('Cannot connect to DB');
     }
 
     if(mysql_error()) {
-
-      $this->setError(mysql_errno(), mysql_error());
+      $this->setError( mysql_errno(), mysql_error());
       return false;
     }
-
-    $master_db = 'MYSQL';   
+    $this->master_db = 'MYSQL';
 
     return $db_connect;
   }
@@ -124,6 +123,7 @@ class DB extends Object {
     if ($priority != '') {
       $priority .= ' ';
     }
+
     $keys = $query->getColumn('key');
     if ($keys != '') {
       $keys = ' (' . $keys . ')' ;
@@ -138,7 +138,8 @@ class DB extends Object {
     $priority = $query->getPriority();
     $tables = $query->getTable();
     $columnList = $query->getColumn();
-    $where = $query->getWhere();  
+    $where = $query->getWhere();
+
     if ($where != '') {
       $where = ' WHERE ' . $where;
     }
@@ -150,7 +151,7 @@ class DB extends Object {
     
     $priority = $query->getPriority();
     $tables = $query->getTable();
-    $where = $query->getWhere();  
+    $where = $query->getWhere();
 
     return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
   }
@@ -196,8 +197,8 @@ class DB extends Object {
 
     $sql = $this->_selectSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -205,8 +206,8 @@ class DB extends Object {
 
     $sql = $this->_insertSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -214,8 +215,8 @@ class DB extends Object {
 
     $sql = $this->_updateSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -223,8 +224,8 @@ class DB extends Object {
 
     $sql = $this->_deleteSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -237,8 +238,8 @@ class DB extends Object {
 
     $sql = $this->_showSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -246,17 +247,19 @@ class DB extends Object {
 
     $sql = $this->_createSql($query);
     $this->setLogger($sql);
-
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
   function dropTable($query) {
 
     $sql = $this->_dropSql($query);
-    $this->setLogger($sql);
+    mysql_query($sql);
 
+    $this->setLogger($sql);
     $this->query_result = $this->_query($sql);
+
     return $this->query_result;
   }
 
@@ -265,6 +268,7 @@ class DB extends Object {
     if (isset($result) && $result) {
       $this->query_result = $result;
     }
+
     return $this->_fetchArray($this->query_result);
   }
 
@@ -274,7 +278,7 @@ class DB extends Object {
       $this->query_result = $result;
     }
 
-    return$this->_numRows($this->query_result);
+    return $this->_numRows($this->query_result);
   }
 
   function setError($errno = 0, $errstr = 'success') {

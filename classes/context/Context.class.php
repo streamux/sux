@@ -238,7 +238,7 @@ class Context
     }
   }
 
-  function getDB($key) {
+  function getDB($key='') {
 
     return trim($this->db_info['db_database']);
   }
