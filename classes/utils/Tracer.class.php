@@ -15,7 +15,7 @@ class Tracer extends Object{
 
   function setMessage( $message, $type=null ) {
 
-    $this->message .= $message . PHP_EOL;
+    $this->message .= $message . "<br>";
   }
 
   function getMessage() {
@@ -23,9 +23,13 @@ class Tracer extends Object{
     return $this->message;
   }
 
-  function output() {
+  function output( $msg='' ) {
 
-    parent::output( $this->message );
+    if ($msg === '') {
+     $msg =  $this->message;
+    }
+
+    parent::output( $msg );
   }
 
   function reset() {
