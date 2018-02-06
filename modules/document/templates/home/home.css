@@ -197,7 +197,8 @@ h6, .h6 {
   }  
   
   .img_panel{
-    height: 100vh;
+    overflow:hidden;
+    height: 100vh;    
     background-attachment: fixed;
   }
   .img_panel .title {

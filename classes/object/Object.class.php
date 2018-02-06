@@ -57,7 +57,7 @@ class Object {
 			if ($delay > 0) {
 				echo $data['msg'];
 			}			
-			$url = $data['url'];			
+			$url = $data['url'];		
 			if (!empty($url)) {
 				printf("<meta http-equiv='Refresh' content='%s; URL=%s'>", $delay, $url);
 			} 		

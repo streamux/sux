@@ -255,8 +255,6 @@ class DB extends Object {
   function dropTable($query) {
 
     $sql = $this->_dropSql($query);
-    mysql_query($sql);
-
     $this->setLogger($sql);
     $this->query_result = $this->_query($sql);
 
