@@ -35,7 +35,7 @@ h6, .h6 {
   overflow:hidden;
   display: relative;
 }
-.img_panel .title,
+.img_panel .title_panel .title,
 .swiper-container-visual .swiper-slide .title{
   position: absolute;
   top:40%;
@@ -45,7 +45,7 @@ h6, .h6 {
   font-size: 2.5em;
   font-weight: 600;
 }
-.img_panel .title small,
+.img_panel .title_panel .title small,
 .swiper-container-visual .swiper-slide .title small{
   position: absolute;
   top: 45px;
@@ -97,6 +97,7 @@ h6, .h6 {
   position: relative;
 }
 .img_panel{
+  overflow: hidden;
   position: relative;
   height: 50vh;
   background-position: center center;
@@ -104,14 +105,14 @@ h6, .h6 {
   -webkit-background-size:cover;
   background-size:cover;
 }
-.img_panel .title {
+.img_panel .title_panel .title {
   position: absolute;
   top:54%;
   left:2%;
   padding-left:0;
   text-align: center;
 }
-.img_panel .title small{
+.img_panel .title_panel .title small{
   position: absolute;
   top:42px;
   left:0;
@@ -197,16 +198,38 @@ h6, .h6 {
   }  
   
   .img_panel{
-    overflow:hidden;
+    overflow: visible;
     height: 100vh;    
-    background-attachment: fixed;
+    background-attachment: fixed;    
   }
-  .img_panel .title {
+  .img_panel .title_panel{
+    position: absolute;
     display: inline-block;
-    top:55%;
-    font-size: 3em;
+    top:0;
+    width:100%;
+    height: 100%;
+    clip: rect(0, auto, auto, 0);
   }
-  .img_panel .title small{
+  .img_panel .title_panel .title {
+    position: fixed;
+    display: inline-block;
+    top:60%;
+    font-size: 3em;
+    -webkit-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+
+    -webkit-transform: scale(25);
+    -o-transform: scale(25);
+    transform: scale(25);
+
+    opacity: 0;
+    -moz-opacity: 0;
+    -khtml-opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
+    filter: "alpha(opacity=0)";
+  }
+  .img_panel .title_panel .title small{
     top: 55px;   
   }
   .swiper-container-visual .slide_banner2 .title{

@@ -43,7 +43,9 @@
 
   <div class="panel_userguide">
     <div class="img_panel" style="background-image: url(modules/document/tpl/images/parallax_1920_img1.jpg);">
-      <span class="title">GOAL<small>FOR BEST STREAMUX WEBSITE</small></span>
+      <div class="title_panel">
+        <span class="title">GOAL<small>FOR BEST STREAMUX WEBSITE</small></span>
+      </div>      
     </div>
     <div class="panel_content">
       <div class="wrap">

@@ -9,10 +9,16 @@ jsux.fn.content = {
   isFixed: false,
   isShow: true,
 
+  getRate(value) {
+
+     return (this.MAX_NUM - this.MIN_NUM) / (this.MAX_POSY - this.MIN_POSY) * (value - this.MIN_POSY);
+  },
   resizeTitle: function(currentY) {
 
-    var self = this;
-    var percent = (this.MAX_NUM - this.MIN_NUM) / (this.MAX_POSY - this.MIN_POSY) * (currentY - this.MIN_POSY);
+    var self = this,
+          percent = this.getRate(currentY),
+          targetSize = 0,
+          maxY = 0;
    
     if (percent <= 1) {
       percent = 1;
@@ -22,41 +28,30 @@ jsux.fn.content = {
       percent = 100;
     }
 
-    var targetSize = this.MAX_NUM - percent;
+    targetSize = this.MAX_NUM - percent;
+    maxY = this.MAX_POSY + this.MIN_POSY/2;
 
-    if (targetSize < 20 && this.isFixed === false) {
+    if (targetSize < 20 && currentY < maxY && this.isFixed === false) {
       this.isFixed = true;
-      this.title.addClass('title_fixed');
       TweenMax.to( this.title, 5, {opacity: 1, ease: Quart.easeOut, useFrames: true});
-      TweenMax.to( this.title, 17, {scale: 1, ease: Quart.easeOut, useFrames: true});
-    } else if ( targetSize > 25 && this.isFixed === true) {
+      TweenMax.to( this.title, 13, {scale: 1, ease: Quart.easeOut, useFrames: true});
+    } else if ( targetSize > 20 && currentY < maxY && this.isFixed === true) {
       this.isFixed = false;
-      this.title.removeClass('title_fixed');
-      TweenMax.to( this.title, 21, {opacity: 0, ease: Quad.easeOut, useFrames: true});
-      TweenMax.to( this.title, 17, {scale: targetSize, ease: Quad.easeOut, useFrames: true});
+      TweenMax.to( this.title, 12, {scale: targetSize, opacity: 0,ease: Quad.easeOut, useFrames: true});
     }
 
-    var maxY = this.MAX_POSY + this.MAX_POSY/5;
-
-    if (targetSize === 0 && currentY > maxY && this.isShow === true) {
-      this.isShow = false;
-      TweenMax.to( this.title, 21, {scale: 0, ease: Quad.easeOut, useFrames: true}, function() {
-         self.title.addClass('sx-hide');
-      });
-     
-    } else if (targetSize === 0 && currentY < maxY && this.isShow === false) {
-      this.isShow = true;
-      TweenMax.to( this.title, 21, {scale: 1, ease: Quad.easeOut, useFrames: true});
-      this.title.removeClass('sx-hide');
+    targetSize = Math.round(targetSize);
+    if (targetSize === 0 && currentY > maxY) {
+      TweenMax.to( this.title, 21, {scale: 0, ease: Quad.easeOut, useFrames: true});     
+    } else if (targetSize === 0 && currentY < maxY) {
+      TweenMax.to( this.title, 21, {scale: 1, ease: Quad.easeOut, useFrames: true});      
     }
   },
   setEvent: function() {
 
-    var self = this;
-   
+    var self = this;   
     
     $(window).on('scroll', function(e) {
-
       self.resizeTitle(e.currentTarget.scrollY);
     });
   },
@@ -65,7 +60,6 @@ jsux.fn.content = {
     this.title = $('.img_panel .title ');
     this.MIN_POSY = this.title.parent().offset().top - this.title.parent().css('height').replace(/[^\d]+$/, '');
     this.MAX_POSY = this.title.parent().offset().top;
-    TweenMax.to( this.title, 0, {opacity: 0});
   },
   init: function() {
 
