@@ -1313,32 +1313,32 @@ a.sx-label:hover, a.sx-label:focus {
   opacity: 1;
   -moz-opacity: 1;
   -khtml-opacity: 1;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
-  filter: "alpha(opacity=${opacity-ie})";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=100)";
+  filter: "alpha(opacity=100)";
 }
 
 .sx-opacity-50 {
   opacity: 0.5;
   -moz-opacity: 0.5;
   -khtml-opacity: 0.5;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
-  filter: "alpha(opacity=${opacity-ie})";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=50)";
+  filter: "alpha(opacity=50)";
 }
 
 .sx-opacity-25 {
   opacity: 0.25;
   -moz-opacity: 0.25;
   -khtml-opacity: 0.25;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
-  filter: "alpha(opacity=${opacity-ie})";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=25)";
+  filter: "alpha(opacity=25)";
 }
 
 .sx-opacity-0 {
   opacity: 0;
   -moz-opacity: 0;
   -khtml-opacity: 0;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=${opacity-ie})";
-  filter: "alpha(opacity=${opacity-ie})";
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
+  filter: "alpha(opacity=0)";
 }
 
 .sx-show-scroll {
