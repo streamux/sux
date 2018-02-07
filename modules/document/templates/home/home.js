@@ -31,12 +31,10 @@ jsux.fn.content = {
     targetSize = this.MAX_NUM - percent;
     maxY = this.MAX_POSY + this.MIN_POSY/2;
 
-    if (targetSize < 20 && currentY < maxY && this.isFixed === false) {
-      this.isFixed = true;
+    if (targetSize < 41 && currentY < maxY) {
       TweenMax.to( this.title, 5, {opacity: 1, ease: Quart.easeOut, useFrames: true});
       TweenMax.to( this.title, 13, {scale: 1, ease: Quart.easeOut, useFrames: true});
-    } else if ( targetSize > 20 && currentY < maxY && this.isFixed === true) {
-      this.isFixed = false;
+    } else if ( targetSize > 41 && currentY < maxY) {
       TweenMax.to( this.title, 12, {scale: targetSize, opacity: 0,ease: Quad.easeOut, useFrames: true});
     }
 
