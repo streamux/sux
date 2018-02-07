@@ -29,7 +29,7 @@
         <div class="btn_group_panel">
           <div class="sx-btn-group">
             <input type="submit" name="btn_submit" value='설치 삭제' class="sx-btn">
-            <input type="button" name="btn_cancel" value='취소' class="sx-btn" onclick="history.back();">
+            <a href="{$rootPath}" name="btn_cancel" class="sx-btn">취소</a>
           </div>
         </div>
       </form>

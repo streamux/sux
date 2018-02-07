@@ -84,6 +84,6 @@
 .sx-container .uninstall_box .btn_group_panel{
   text-align: center;
 }
-.sx-container .uninstall_box input[name=btn_cancel]{
+.sx-container .uninstall_box a[name=btn_cancel]{
   margin-left: 5px;
 }
