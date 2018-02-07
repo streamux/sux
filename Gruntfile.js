@@ -47,7 +47,7 @@ module.exports = function(grunt) {
           banner: banner_jsux_js
         },
         files: {
-          'common/js/jsux.min.js': ['common/js/jsux/jsux.js']
+          'common/js/jsux.min.js': ['common/js/api-jsux/jsux.js']
         }
       },
       'common-apps': {
