@@ -45,7 +45,8 @@ class RouterModule
 
         if (file_exists($cachePath)) {
           $this->loadCacheFile($cachePath);
-          $Class = $classList[$i]['class'];
+
+          $Class = $classList[$i]['class'];                    
           $actionList = $this->getRouteKey('action');
 
           if (!empty($actionList) &&  count($actionList) > 0) {
