@@ -17,7 +17,7 @@ jsux.fn.list = {
   setLayout: function() {
 
     var self = this,
-          url = $('input[name=list_json_path').val(),
+          url = $('input[name=list_json_path]').val(),
           params = {
             passover: 0,
             limit: this.limit
