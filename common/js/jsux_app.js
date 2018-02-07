@@ -23,7 +23,7 @@ jsux.gnb.Menu = jsux.View.create();
 
     this.addClass = function(target, className ) {
 
-      if (!$(target).hasClass(className)) {
+      if (!$(target).hasClass(className)) { 
         $(target).addClass(className);
       }
     };
