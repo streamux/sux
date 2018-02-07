@@ -130,8 +130,7 @@ class Context
           }
 
           $categories = array_merge($classCategories, $routedCategories);
-          $categories = array_unique($categories);
-          $routes['categories'] = $categories;
+          $routes['categories'] = array_unique($categories);
 
           // set action
           if (isset($Class::$action) && $Class::$action) {
@@ -142,9 +141,8 @@ class Context
             $routedAction = $routedValue['action'];             
           }
 
-          $actions = array_merge($classAction, $routedAction);          
-          $actions = array_unique($actions);
-          $routes['action'] = $actions;
+          $actions = array_merge($classAction, $routedAction);
+          $routes['action'] = array_unique($actions);
 
           CacheFile::writeFile( $routePath, $routes);
         }
