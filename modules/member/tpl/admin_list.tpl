@@ -1,26 +1,27 @@
-    <div class="sx-content sx-admin-main">           
-      <section class="sx-member-panel">
+    <div class="sx-content sx-admin-member">           
+      <section class="section">
         <header class="header">
           <h1 class="title">회원 관리</h1>
-          <form action="" class="search_form sx-form-horizontal">
+          <form action="{$rootPath}member-admin/list" method="post" name="f_search" class="search_form sx-form-horizontal">
             <div class="sx-form-inline clearfix">
               <span class="search_title">전체 회원({$documentData.total_num})</span>
               <div class="sx-input-group pull-right">
-                <label for="searchGroup" class="sr-only">그룹 정보 설정</label>               
-                <select name="search_group" id="searchGroup" class="sx-form-control">
-                  <option value="" selected="selected">그룹 전체</option>
+                <label for="findGroup" class="sr-only">그룹 정보 설정</label>               
+                <select id="findGroup" name="find_group" class="sx-form-control">
+                  <option value="" selected="selected">전체</option>
                   {foreach from=$documentData.categories item=item}
-                      <option value="{$item.category}">{$item.category}</option>
+                      <option value="{$item.category}" {if $documentData.category ===$item.category} selected="selected" {/if}>{$item.category}</option>
                   {/foreach}
                 </select>
-                <label for="search" class="sr-only">회원 정보 설정</label>
-                <select name="search" id="search" class="sx-form-control">
-                  <option value="id">아이디</option>
+                <label for="find" class="sr-only">회원 정보 설정</label>
+                <select name="find" id="find" class="sx-form-control">
+                  <option value="user_id">아이디</option>
                   <option value="nickname">닉네임</option>
-                  <option value="email">이메일</option>
+                  <option value="email_address">이메일</option>
                 </select>
-                <input type="text" name="find" value="" class="sx-form-control">
-                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">                
+                <label for="search" class="sr-only">검색어</label>
+                <input type="text" name="search" value="" class="sx-form-control">
+                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">
                 <a href="{$rootPath}member-admin/group" class="sx-btn" title="그룹 목록">그룹 목록</a>
                 <a href="{$rootPath}member-admin/add" class="sx-btn sx-btn-info" title="회원추가">회원 추가</a>
               </div>            
@@ -28,7 +29,6 @@
           </form>
         </header> 
         <div class="sx-box-content">
-          {$documentData.category}
           <input type="hidden" name="category" value="{$documentData.category}">
           <input type="hidden" name="list_json_path" value="{$rootPath}member-admin/list-json">
 

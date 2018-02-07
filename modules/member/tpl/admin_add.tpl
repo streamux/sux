@@ -87,8 +87,7 @@
             <div class="row btn_group text-center">
               <input type="submit" id="btnConfirm" class="sx-btn" value="확인">
               <a href="#" id="btnCancel" class="sx-btn">취소</a>
-            </div>     
-            </div>     
+            </div>       
           </form>
         </div>
       </section>

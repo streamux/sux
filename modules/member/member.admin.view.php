@@ -205,31 +205,6 @@ class MemberAdminView extends View {
     $this->callback($json);
   }
 
-  function displaySetup() {
-    
-    $context = Context::getInstance();
-    $requests = $context->getRequestAll();
-
-    $this->model->select('member_group', 'category');
-    $group = $this->model->getRows();    
-    
-    $this->request_data = $requests;
-    $this->document_data['jscode'] = 'setup';
-    $this->document_data['module_code'] = 'member';
-    $this->document_data['group'] = $group; 
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
-
-    $this->skin_path_list['root'] = $rootPath;
-    $this->skin_path_list['dir'] = '';
-    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['content'] = "{$skinPath}/admin_setup.tpl";
-    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
-
-    $this->output();
-  }
   function displayList() {
     
     $context = Context::getInstance();
@@ -381,6 +356,13 @@ class MemberAdminView extends View {
     $passover = $posts['passover'];
     $limit = $posts['limit'];
 
+    $findGroup = $posts['find_group'];
+    if (isset($findGroup) && $findGroup) {
+      $category = $findGroup;
+    }
+    $find = $posts['find'];
+    $search = $posts['search'];
+
     if (!$limit) {
       $limit = 10;  
     }
@@ -388,16 +370,17 @@ class MemberAdminView extends View {
       $passover = 0;
     }
 
-    $where = null;
+    $where = new QueryWhere();
+    if (isset($search) && $search) {      
+      $where->set($find, $search, 'like');
+    }
+
     if (isset($category) && $category) {
-      $where = new QueryWhere();
-      $where->set('category', $category);
+      $where->set('category', $category, '=', 'and');
     }
 
     $this->model->select('member', '*', $where);      
     $numrows = $this->model->getNumRows();
-
-    $msg .= Tracer::getInstance()->getMessage();
 
     if ($numrows > 0){        
       $a = $numrows - $passover;

@@ -1,3 +1,11 @@
+.sx-form-horizontal .sx-form-inline .sx-input-group a.sx-btn{
+  float: left;
+  width:50%;
+}
+.sx-form-horizontal .sx-form-inline .sx-input-group a.sx-btn::after{
+  clear: both;
+}
+
 /* list pc */
 .list_pc_panel{
   display: none;
@@ -153,6 +161,13 @@
 
   .sx-content{
     position: relative;
+  }
+  .sx-form-horizontal .sx-form-inline .sx-input-group select.sx-form-control{
+    height:33px;
+  }
+  .sx-form-horizontal .sx-form-inline .sx-input-group a.sx-btn{
+    float: none;
+    width:auto;
   }
 
   .list_pc_panel{
