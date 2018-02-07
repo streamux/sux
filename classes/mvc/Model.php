@@ -44,6 +44,7 @@ class Model extends Object {
   function insert( $table_name, $columns = null) {
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $tableName = $context->getTable($table_name);
 
     $query = new Query();
@@ -57,6 +58,7 @@ class Model extends Object {
   function update( $table_name, $columns, $where = null) {
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $tableName = $context->getTable($table_name);
 
     $query = new Query();
@@ -74,6 +76,7 @@ class Model extends Object {
   function delete( $table_name, $where = null) {
 
     $context = Context::getInstance();
+    $context->setCookieVersion();
     $tableName = $context->getTable($table_name);
 
     $query = new Query();
