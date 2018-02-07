@@ -27,9 +27,7 @@
               <header class="sx-header-panel">
                 <h2>메뉴 리스트</h2>
                 <div class="sx-btn-group">
-                  <button name="edit_seleced_menu" class="sx-btn">
-                    <span class="editing_label">편집하기</span><span class="edited_label">편집완료</span>
-                  </button>
+                  <button name="edit_menu" class="sx-btn sx-btn-active">편집하기</button>
                   <button name="save_json" class="sx-btn">저장하기</button>
                 </div>
               </header>
@@ -43,7 +41,7 @@
                           @ name  warnMsgTmpl, menuListTmpl
                         -->
                         <li>
-                          <span class="sx_text_msg">로딩 중...</span>   
+                          <span class="sx_text_msg">로딩 중...</span>
                         </li>
                       </ul>
                     </div>

@@ -113,7 +113,6 @@ class MenuAdminView extends View
 
   function displayGnbList() {
 
-    $msg = '';
     $resultYN = 'Y';
     $json = array('data'=>array());
 

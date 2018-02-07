@@ -99,8 +99,9 @@
     },
     cutItem: function(id) {
 
-      if (this.model.length == 0) return;
-
+      if (this.model.length == 0) {
+        return;
+      }
       this.elId = this.id + ' > li';
       
       var self = this;
@@ -202,16 +203,22 @@
       this.selectedModels = this.model;
       this.selectedId = '';
     },
-    edit: function() {
+    editable: function() {
+
+      this.editState = true;
+      this.updateEdit();
+    },
+    uneditable: function() {
+
+      this.editState = false;
+      this.updateEdit();
+    },
+    updateEdit: function() {
 
       var self = this;      
       var editId = this.id + ' > li';
-      var editBtn = $('button[name=edit_seleced_menu]');
-      var saveBtn = $('button[name=save_json]');
-
-      this.editState = !this.editState;      
-      this.setEdittingMode(editBtn, 'sx-btn-active');
-      this.setEdittingMode(saveBtn, 'sx-btn-active');
+            
+      this.toggleButtonMode();
 
       var searchMenu = (function f(list) {
 
@@ -241,6 +248,21 @@
       } else {
         ListManager.removeClass(item, className);
       }
+    },
+    toggleButtonMode: function() {
+
+      var editBtn = $('button[name=edit_menu]');
+      var saveBtn = $('button[name=save_json]');
+      var className = 'sx-btn-active';
+
+      if (this.editState === true) {
+        ListManager.addClass(saveBtn, className);
+        ListManager.removeClass(editBtn, className);
+      } else {
+        ListManager.addClass(editBtn, className);
+        ListManager.removeClass(saveBtn, className);
+      }
+      
     },
     remove: function(id) {
 
@@ -807,6 +829,7 @@
       if (!this.treeManager.hasItem(id)) {
         var menu = this.listManager.getItem(id);
         this.treeManager.addItem(menu);
+        this.editableSelectedMenu();
       }       
     },
     addMenues: function(models) {
@@ -830,7 +853,6 @@
 
       if (this.treeManager.hasItem(id)) {
         this.treeManager.cutItem(id);
-        this.saveJson();
       }
     },
     selectMenu: function(id) {
@@ -841,9 +863,13 @@
 
       this.treeManager.unselectMenu();
     },
-    editSelectedMenu: function() {
+    editableSelectedMenu: function() {
 
-      this.treeManager.edit();
+      this.treeManager.editable();
+    },
+    uneditableSelectedMenu: function() {
+
+      this.treeManager.uneditable();
     },
     modifyMenuInfo: function(id) {
 
@@ -975,8 +1001,8 @@
         }
       });
 
-      $('button[name=edit_seleced_menu]').on('click', function(e) {
-        self.editSelectedMenu();
+      $('button[name=edit_menu]').on('click', function(e) {
+        self.editableSelectedMenu();
       });
 
       $('button[name=save_json]').on('click', function(e) {
@@ -1058,8 +1084,7 @@
       var config = this.getConfig();
       var swiper = jsux.plugin.createSwiper('.swiper_container_draggable_list');      
       var loadedHandler = function(e) {
-
-        console.log('loaded : model.name = ' + e.model.name);
+        //console.log('loaded : model.name = ' + e.model.name);
       };
 
       this.treeManager.addEventListener('loaded', loadedHandler);
@@ -1122,6 +1147,7 @@
             break;
 
           case ServiceManagerEvent.SAVE_COMPLETE:
+            self.uneditableSelectedMenu();
             break;
 
           default:
@@ -1131,6 +1157,7 @@
       this.serviceManager.save_url = config.saveJsonUrl;
       this.serviceManager.menu_url = config.menuUrl;
       this.serviceManager.addEventListener(ServiceManagerEvent.UPDATE_COMPLETE, serviceUpdateHandler);
+      this.serviceManager.addEventListener(ServiceManagerEvent.SAVE_COMPLETE, serviceUpdateHandler);
     },
     setMenuInfoView: function() {
 

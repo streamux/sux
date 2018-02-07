@@ -58,18 +58,12 @@
   -o-box-shadow: 1px 1px 1px #fff;
   box-shadow: 1px 1px 1px #fff;
 }
-.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu] .editing_label{
-  display: inline;
-}
-.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu] .edited_label{
-  display: none;
-}
 
-.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active .editing_label{
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_menu]{
   display: none;
 }
-.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_seleced_menu].sx-btn-active .edited_label{
-  display: inline;
+.sx_plugin_panel .sx-header-panel .sx-btn-group button[name=edit_menu].sx-btn-active{
+  display: inline-block;
 }
 
 .sx_plugin_panel .sx-header-panel .sx-btn-group button[name=save_json]{
