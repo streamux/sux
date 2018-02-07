@@ -18,7 +18,7 @@ window.jsux.define = function( var_name, value) {
 };
 
 window.trace = function( msg, isConsole ) {
-
+ 
   if (isConsole) {
     console.log( msg );
     return;
