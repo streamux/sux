@@ -4,7 +4,7 @@ $(window).ready(function() {
         gnbView = jsux.gnb.Menu.create("#sxGnb", gnbModel),
         mobileGnbView = jsux.mobileGnb.Menu.create("#mobileGnb", gnbModel),
         pageManager = {},
-        jsonPath = jsux.rootPath + 'files/gnb/gnb.json',
+        jsonPath = jsux.rootPath + 'files/gnb/gnb.json?' + jsux.cookieVersion,
         mobileMenuSlider = null;
 
   gnbModel.addObserver( gnbView );
