@@ -29,6 +29,7 @@
 
 <script src="{$rootPath}common/js/jsux.min.js?20180202"></script>
 <script>jsux.rootPath = "{$rootPath}";</script>
+<script>jsux.cookieVersion = "{$cookieVersion}";</script>
 <script src="{$rootPath}common/js/jsux_common.min.js?20180202"></script>
 <script src="{$rootPath}common/js/jsux_app.min.js?20180202"></script>
 <script src="{$rootPath}common/js/jsux_app_stage.min.js?20180202"></script>
