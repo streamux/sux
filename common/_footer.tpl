@@ -27,6 +27,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
 <script>window.Swiper || document.write('<script src="{$rootPath}common/js/api/idangerous.swiper.min.js"><\/script>')</script>
 
+<script src="{$rootPath}common/js/plugins/ckeditor/ckeditor.js"></script>;
 <script src="{$rootPath}common/js/jsux.min.js?20180202"></script>
 <script>jsux.rootPath = "{$rootPath}";</script>
 <script>jsux.cookieVersion = "{$cookieVersion}";</script>
