@@ -8,7 +8,7 @@ jsux.fn.ckeditor = {
   replace: function(id) {
 
     var editConfig = {
-      height:'450px',
+      height:'350px',
       toolbar: [            
         { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
         { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Superscript', 'Subscript', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
