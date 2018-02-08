@@ -155,7 +155,7 @@
       <i class="xi-external-link"></i>
     </a>
     <div class="sx-btn-group">
-      <button class="sx-btn btn_select" onclick="jsux.fn.list.selectMenu({literal}${id}{/literal}{literal}${depth}{/literal});">submenu</button>
+      <button class="sx-btn btn_select" onclick="jsux.fn.list.selectMenu({literal}${id}{/literal});">submenu</button>
       <button class="sx-btn sx-btn-info" onclick="jsux.fn.list.modifyMenuInfo({literal}${id}{/literal});">info</button>
       <button class="sx-btn sx-btn-warning" onclick="jsux.fn.list.removeTreeMenu({literal}${id}{/literal});">del</button>
     </div>

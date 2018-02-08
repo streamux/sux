@@ -167,7 +167,6 @@
       var searchMenu = (function f(list) {
 
         for (var i=0; i<list.length; i++) {
-
           if (list[i].id == id) {
             if (self.oldItem)  {
               ListManager.removeClass(self.oldItem, 'selected_menu_active');
@@ -435,7 +434,6 @@
 
       // drag 클릭 위치 - drag top 위치 )의 차이 값
       var offsetY = pageY - this.dragOffsetY;
-
       // drag top 위치 
       var movePosY = offsetY - this.startOffsetY;
 
@@ -452,7 +450,6 @@
 
         // drag up
         var prevItem$ = this.dragItem$.prev();
-
         if (prevItem$ && prevItem$.data('id')) {
 
           var prevHeight = prevItem$.outerHeight();
@@ -533,7 +530,7 @@
         var elName = self.getAttr(el, 'name');
 
         // 이름이 없거나, 'btn_drag' 이름이 아닌 경우 
-        var nodeName = el.nodeName.toUpperCase();
+        var nodeName = el.nodeName.toUpperCase();        
         if (!(nodeName === 'I' || nodeName === 'A' || nodeName === 'BUTTON')) {
           self.unselectMenu();
           return;
