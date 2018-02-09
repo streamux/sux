@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "init": "^0.1.2",
-    "npm": "^3.8.1"
+    "install": "^0.8.9",
+    "lodash": "^4.17.5",
+    "npm": "^3.10.10"
   },
   "devDependencies": {
     "bootstrap": "^3.3.7",
@@ -23,7 +25,8 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-phplint": "0.0.8",
     "install": "^0.8.9",
-    "npm": "^3.10.10"
+    "npm": "^3.10.10",
+    "webpack": "^3.10.0"
   },
   "scripts": {
     "test": "grunt test"
