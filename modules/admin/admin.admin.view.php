@@ -151,28 +151,25 @@ class AdminAdminView extends View
 
     $msg = '';
     $resultYN = 'Y';
-    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0,);
+    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);
     
     $result = $this->model->select('connect_day', '*');
     if ($result) {
-      // today total
       $rows = $this->model->getRows();
+
       for ($i=0; $i<count($rows); $i++) {
-        $connecterArr['total'] += $rows[$i]['total_count'];
+        $connecterArr['total'] += (int) $rows[$i]['total_count'];
       }     
 
       $where = new QueryWhere();
       $where->set('date', date('Y-m-d', time()-86400), '<');
-      $result = $this->model->delete('connecter' , $where);
-      if (!$result) {
-        $msg .= '24시 이전 접속통계 레코드 삭제를 실패하였습니다.';
-        $resultYN = 'N';
-      }
+      $this->model->delete('connecter' , $where);
 
       // today
       $where->reset();
       $where->set('date', date('Y-m-d'), '=');
       $result = $this->model->select('connecter', 'id', $where);
+
       if ($result) {
         $today = $this->model->getNumRows();
         if (!$today) {
@@ -188,25 +185,29 @@ class AdminAdminView extends View
       $where->reset();
       $where->set('date', date('Y-m-d', time()-86400), '=');
       $result = $this->model->select('connecter', 'id', $where);
+
       if ($result) {
         $yesterday = $this->model->getNumRows();
+
         if (!$yesterday) {
           $yesterday = 0;
         }
+
         $connecterArr['yester'] = $yesterday;
       } else {
         $msg .= '어제 접속통계 레코드 선택을 실패하였습니다.';
         $resultYN = 'N';
       }
-
     } else {
       $msg .= '접속통계 테이블 접근을 실패하였습니다.';
       $resultYN = 'N';
     }
+
     //Tracer::getInstance()->output();
     $data = array(  'data'=>$connecterArr,
             'result'=>$resultYN,
-            'msg'=>$msg); 
+            'msg'=>$msg);
+
     return $data;
   }
 
@@ -214,13 +215,12 @@ class AdminAdminView extends View
 
     $msg = '';
     $resultYN = 'Y';
-    $connecterArr = array('real_today'=>0, 'real_yester'=>0,'real_total'=>0,);
-
+    $connecterArr = array('real_today'=>0, 'real_yester'=>0,'real_total'=>0);
     $result = $this->model->select('connect_day','*');
-    if ($result) {
 
-      // today total
+    if ($result) {
       $rows = $this->model->getRows();
+
       for ($i=0; $i<count($rows); $i++) {
         $connecterArr['real_total'] += $rows[$i]['real_total_count'];
       }
@@ -228,6 +228,7 @@ class AdminAdminView extends View
       $where = new QueryWhere();
       $where->set('date', date('Y-m-d', time()-86400), '<');
       $result = $this->model->delete('connecter_real', $where);
+
       if (!$result) {
         $msg .= '24시 이전 실접속통계 레코드 삭제를 실패하였습니다.';
         $resultYN = 'N';
@@ -237,8 +238,10 @@ class AdminAdminView extends View
       $where->reset();
       $where->set('date', date('Y-m-d'), '=');
       $result = $this->model->select('connecter_real', 'id', $where);
+
       if ($result) {
         $real_totay = $this->model->getNumRows();
+
         if (!$real_totay) {
           $real_totay = 0;
         }
@@ -253,8 +256,10 @@ class AdminAdminView extends View
       $where->reset();
       $where->set('date', date('Y-m-d', time()-86400), '=');
       $result = $this->model->select('connecter_real', 'id', $where);
+
       if ($result) {
         $real_yester = $this->model->getNumRows();
+
         if (!$real_yester) {
           $real_yester = 0;
         }
@@ -272,6 +277,7 @@ class AdminAdminView extends View
     $data = array(  'data'=>$connecterArr,
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -285,33 +291,33 @@ class AdminAdminView extends View
     $context = Context::getInstance();
     $limit = $context->getRequest('limit');
     $passover = $context->getRequest('passover');
-
     $result = $this->model->select('pageview', '*');
-    if ($result) {
-      
-      $numrows = $this->model->getNumRows();
-      if ($numrows) {
 
+    if ($result) {      
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows) {
         $total = 0;
-        $rows = $this->model->getRows();        
+        $rows = $this->model->getRows();
+
         for($i=0; $i<$numrows; $i++) {
           $total += $rows['hit_count'];
         }       
 
         if (!$limit) {
           $limit = 10;
-        }       
+        }
+
         if (!$passover) {
           $passover = 0;
         }
 
         $result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
         if ($result) {
-
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
-          for ($i=0; $i<count($rows_limit); $i++) {
 
+          for ($i=0; $i<count($rows_limit); $i++) {
             $pageViewList[] = array(
               'no'=>$a,
               'name'=>$rows_limit[$i]['name'],
@@ -338,6 +344,7 @@ class AdminAdminView extends View
             'mode'=>'pageview',
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -351,33 +358,33 @@ class AdminAdminView extends View
     $context = Context::getInstance();
     $limit = $context->getRequest('limit');
     $passover = $context->getRequest('passover');
-
     $result = $this->model->select('connect_site', '*');
-    if ($result) {
-      
-      $numrows = $this->model->getNumRows();
-      if ($numrows) {
 
+    if ($result) {      
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows) {
         $total = 0;
-        $rows = $this->model->getRows();        
+        $rows = $this->model->getRows();
+
         for($i=0; $i<$numrows; $i++) {
           $total += $rows['hit_count'];
         }       
 
         if (!$limit) {
           $limit = 10;
-        } 
+        }
+
         if (!$passover) {
           $passover = 0;
         }
 
         $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
         if ($result) {
-
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
-          for ($i=0; $i<count($rows_limit); $i++) {
 
+          for ($i=0; $i<count($rows_limit); $i++) {
             $connecterList[] = array(
               'no'=>$a,
               'name'=>$rows_limit[$i]['name'],
@@ -404,6 +411,7 @@ class AdminAdminView extends View
             'mode'=>'connectsite',
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -422,6 +430,7 @@ class AdminAdminView extends View
       $d=str_replace(".","-",$d);
       $d=str_replace("/","-",$d);
       $d = date('Y-m-d', strtotime($d));
+
       return $d;
     }
 
@@ -433,6 +442,7 @@ class AdminAdminView extends View
     
     if ($result) {
       $rows = $this->model->getRows();
+
       for($i=0; $i<count($rows); $i++) {
         $connectdayArr[] = array('date'=>getDateFormat($rows[$i]['date']), 'real_total_count'=>$rows[$i]['real_total_count'], 'total_count'=>$rows[$i]['total_count']);
       }
@@ -442,6 +452,7 @@ class AdminAdminView extends View
     $data = array(  'data'=>$connectdayArr,
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -455,14 +466,16 @@ class AdminAdminView extends View
     $where->set('date', date('Y-m-d'), '>=', 'and');
     $where->set('date', date('Y-m-d', time() + 86400), '<');
     $result = $this->model->select('member', '*', $where);
+
     if ($result) {
       $newmember['list'] = array();
-
       $rows = $this->model->getRows();
       $newmember['total_num'] = count($rows);
+
       if (count($rows) > 0) {
         for($i=0; $i<count($rows); $i++) {
           $field = array();
+
           foreach ($rows[$i] as $key => $value) {
             $field[$key] = $value;
           }
@@ -479,6 +492,7 @@ class AdminAdminView extends View
             'mode'=>'newmember',
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -492,18 +506,23 @@ class AdminAdminView extends View
     $where->set('date', date('Y-m-d'), '>=', 'and');
     $where->set('date', date('Y-m-d', time() + 86400), '<');
     $result = $this->model->select('board', '*', $where, 'id desc');
+
     if ($result) {
       $newcomment['list'] = array();
       $rows = $this->model->getRows();
       $newcomment['total_num'] = count($rows);
       $len = count($rows);
+
       if ($len > 0) {
+
         for($i=0; $i<$len; $i++) {
           $field = array();
           $field['no'] = $len-$i;
+
           foreach ($rows[$i] as $key => $value) {
             $field[$key] = $value;
           }
+
           $newcomment['list'][] = $field;
           $newcomment['result'] = $resultYN;
         }
@@ -517,6 +536,7 @@ class AdminAdminView extends View
             'mode'=>'latestcomment',
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 
@@ -532,42 +552,52 @@ class AdminAdminView extends View
       'analysisNum'=>0 );
 
     $where = new QueryWhere();
-    $where->set('choice', 'y');
+    $where->set('choice', 'y');    
     $result = $this->model->select('popup', 'id', $where);
+
     if ($result) {
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0) {
         $serviceConfig['popupNum']  = $numrows;
       }
     }
 
     $result = $this->model->select('board_group', 'id');
+
     if ($result) {
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0) {
         $serviceConfig['boardNum']  = $numrows;
       } 
     }
 
     $result = $this->model->select('member_group', 'id');
+
     if ($result) {
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0) {
         $serviceConfig['memberGroupNum'] = $numrows;
       }
     }
 
     $result = $this->model->select('pageview', 'id');
+
     if ($result) {
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0) {
         $serviceConfig['pageviewNum'] = $numrows;
       }
     }
 
     $result = $this->model->select('connect_site', 'id');
+
     if ($result) {
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0) {
         $serviceConfig['analysisNum'] = $numrows;
       }
@@ -576,6 +606,7 @@ class AdminAdminView extends View
     $data = array(  'data'=>$serviceConfig,
             'result'=>$resultYN,
             'msg'=>$msg);
+
     return $data;
   }
 }

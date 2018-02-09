@@ -5,7 +5,7 @@
   </footer>  
 </div>
 
-<img src="{$rootPath}analytics/counter" alt="" class="hide">
+<img src="{$rootPath}analytics/connecter" alt="" class="hide">
 
 <!-- template start -->
 <script type="text/x-jquery-templete" id="gnbMenuItem">
