@@ -20,8 +20,9 @@ class AnalyticsView extends View
 
     //  오늘 접속자 수 
     $where = new QueryWhere();
-    $where->set('date',$now,'=');
+    $where->set('date', $now,'=');
     $result = $this->model->select('connecter', 'id', $where);
+
     if ($result) {
       $today_num = $this->model->getNumRows();
     } else {
@@ -30,8 +31,9 @@ class AnalyticsView extends View
 
     // 어제 접속자 수 
     $where->reset();
-    $where->set('date',$now,'<');
+    $where->set('date', $now,'<');
     $result = $this->model->select('connecter', 'id', $where);
+
     if ($result) {
       $yesterday_num = $this->model->getNumRows();
     } else {
@@ -39,9 +41,11 @@ class AnalyticsView extends View
     }
     
     $result = $this->model->select('connect_day', 'total_count');
+
     if ($result) {
       $total_num =  0;
       $rows = $this->model->getRows();
+
       for ($i=0; $i < count($rows); $i++) { 
         $total_num += $rows[$i]['total_count'];   
       }   
@@ -51,8 +55,9 @@ class AnalyticsView extends View
 
     // 실 접속자 수 
     $where->reset();
-    $where->set('date',$now,'=');
+    $where->set('date', $now,'=');
     $result = $this->model->select('connecter_real', 'id', $where);
+
     if (!$result) {
       $msg .= "오늘 실접속자 수 선택을 실패하였습니다.\n";
     }
@@ -61,15 +66,18 @@ class AnalyticsView extends View
     $where->reset();
     $where->set('date',$now,'<');
     $result = $this->model->select('connecter_real', 'id', $where);
+
     if (!$result) {
       $msg .= "어제 실접속자 수 선택을 실패하였습니다.\n";
     }
-    $real_yesterday_num = $this->model->getNumRows();
 
+    $real_yesterday_num = $this->model->getNumRows();
     $result = $this->model->select('connect_day', 'real_total_count');
+
     if ($result) {
       $real_total_num = 0;
       $rows = $this->model->getRows();
+
       for ($i=0; $i < count($rows); $i++) { 
         $real_total_num += $rows[$i]['real_total_count'];
       }
@@ -81,6 +89,7 @@ class AnalyticsView extends View
   }
 
   function displayConnecter() {
+    
     $this->controller->addConnecter();
   }
 

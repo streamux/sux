@@ -24,7 +24,7 @@ jsux.fn.main = {
 
     var self = this;
     var markup = $('#textfield_tmpl');
-    var list = $('.sx-contents .sx-service-config .view-type-textfield');
+    var list = $('.sx-content .sx-service-config .view-type-textfield');
 
     $(list).each(function( index ) {
       self.convertJsonToObj( markup, this.id, data[this.id], {
@@ -35,7 +35,7 @@ jsux.fn.main = {
       });
     });
 
-    list = $('.sx-contents .sx-service-config .view-type-icon');
+    list = $('.sx-content .sx-service-config .view-type-icon');
     $(list).each(function( index ) {
 
       var id = $(this).parent().find('.service_label > .view-type-textfield').attr('id');
@@ -140,10 +140,10 @@ jsux.fn.main = {
     };
     var self = this;
     var markup = $('#textfield_tmpl');
-    var list = $('.sx-contents .connecter .view-type-textfield');
+    var list = $('.sx-content .connecter .view-type-textfield');
 
     $(list).each(function( index ) {
-      self.convertJsonToObj( markup, this.id,data[this.id], {
+      self.convertJsonToObj( markup, this.id, data[this.id], {
         getUnit: function( label ) {
           return addComma(label);
         }
