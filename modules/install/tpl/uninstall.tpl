@@ -1,10 +1,4 @@
-<div class="sx-wrapper">
-  <div class="sx-header">
-    <h1 class="logo">
-      <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux"> 
-    </h1> 
-  </div>
-  <div class="sx-container"> 
+
     <div class="uninstall_box sx-edgebox">
       <h1>SUX CMS 삭제</h1>
 
@@ -34,9 +28,3 @@
         </div>
       </form>
     </div>
-  </div>
-  <div class="sx-footer">
-    {include file="$copyrightPath"}
-  </div>
-</div>
-<div class="ui-panel-msg"></div>

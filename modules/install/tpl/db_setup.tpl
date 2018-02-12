@@ -1,10 +1,3 @@
-<div class="sx-wrapper">
-  <div class="sx-header">
-    <h1 class="logo">
-      <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" alt="streamxux"> 
-    </h1> 
-  </div>
-  <div class="sx-container"> 
     <form name="f_setup_db" action="{$rootPath}setup-db" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="insert"> 
       <div class="terms_box sx-edgebox">
@@ -33,9 +26,3 @@
       </div>
       <input type="submit" value=' 다 음 ' class="sx-btn">
     </form>
-  </div>
-  <div class="sx-footer">
-    {include file="$copyrightPath"}
-  </div>
-</div>
-<div class="ui-panel-msg"></div>
