@@ -105,7 +105,7 @@
 
       <!--  Login  -->
       {if isset($sessionData.admin_ok) && $sessionData.admin_ok}
-      <div class="sx-gnb-login-wrap">
+      <div id="sxGnbLoginWrap" class="sx-gnb-login-wrap">
         <a href="{$rootPath}member-admin/modify" class="sx-gnb-login" title="회원 정보" alt="회원 정보">
           <i class="xi-user xi-2x"></i>
         </a>

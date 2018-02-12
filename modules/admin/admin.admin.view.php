@@ -35,43 +35,50 @@ class AdminAdminView extends View
     $msg = '';
 
     $connecterArr1 = $this->_getConnecterData();
+
     if ($connecterArr1['resultYN'] === 'N') {
       $resultYN = $connecterArr1['resultYN'];
       $msg .= $connecterArr1['msg'];
     }
 
     $connecterArr2 = $this->_getConnecterrealData();
+
     if ($connecterArr2['resultYN'] === 'N') {
       $resultYN = $connecterArr2['resultYN'];
       $msg .= $connecterArr2['msg'];
     }
-    $connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
 
+    $connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
     $newMemberArr = $this->_getNewmemberData();
+
     if ($newMemberArr['resultYN'] === 'N') {
       $resultYN = $newMemberArr['resultYN'];
       $msg .= $newMemberArr['msg'];
     }
 
     $newCommentArr = $this->_getNewcommentData();
+
     if ($newCommentArr['resultYN'] === 'N') {
       $resultYN = $newCommentArr['resultYN'];
       $msg .= $newCommentArr['msg'];
     }
 
     $pageviewArr = $this->_getPageviewData();
+
     if ($pageviewArr['resultYN'] === 'N') {
       $resultYN = $pageviewArr['resultYN'];
       $msg .= $pageviewArr['msg'];
     }
 
     $connectsiteArr = $this->_getConnectsiteData();
+
     if ($connectsiteArr['resultYN'] === 'N') {
       $resultYN = $connectsiteArr['resultYN'];
       $msg .= $connectsiteArr['msg'];
     }
 
     $serviceConfigArr = $this->_getServiceData();
+
     if ($serviceConfigArr['resultYN'] === 'N') {
       $resultYN = $serviceConfigArr['resultYN'];
       $msg .= $serviceConfigArr['msg'];
@@ -151,9 +158,9 @@ class AdminAdminView extends View
 
     $msg = '';
     $resultYN = 'Y';
-    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);
-    
+    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);    
     $result = $this->model->select('connect_day', '*');
+
     if ($result) {
       $rows = $this->model->getRows();
 
@@ -172,6 +179,7 @@ class AdminAdminView extends View
 
       if ($result) {
         $today = $this->model->getNumRows();
+
         if (!$today) {
           $today = 0;
         }
@@ -313,6 +321,7 @@ class AdminAdminView extends View
         }
 
         $result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
+
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -380,6 +389,7 @@ class AdminAdminView extends View
         }
 
         $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
+
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -473,6 +483,7 @@ class AdminAdminView extends View
       $newmember['total_num'] = count($rows);
 
       if (count($rows) > 0) {
+
         for($i=0; $i<count($rows); $i++) {
           $field = array();
 
@@ -487,6 +498,7 @@ class AdminAdminView extends View
         $newmember['result'] = $resultYN;
       }      
     }
+    
     //$msg .= Tracer::getInstance()->getMessage();
     $data= array( 'data'=>$newmember,
             'mode'=>'newmember',
