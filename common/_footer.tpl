@@ -5,8 +5,6 @@
   </footer>  
 </div>
 
-<img src="{$rootPath}analytics/connecter" alt="" class="hide">
-
 <!-- template start -->
 <script type="text/x-jquery-templete" id="gnbMenuItem">
   <li class="sx-menu" data-id="-1" data-depth="0">

@@ -90,7 +90,7 @@
       </div>      
       
       <!--  Login  -->
-      <div class="sx-gnb-login-wrap">
+      <div id="sxGnbLoginWrap" class="sx-gnb-login-wrap">
       {if $sessionData.user_id || $sessionData.nickname}
         <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
           <i class="xi-user-o xi-2x"></i>
