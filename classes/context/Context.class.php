@@ -553,6 +553,7 @@ class Context
     }
     
     $regURL = sprintf('/^(http(s)?\:\/\/)?(www.)?(%s)/', $ownerDomain);
+
     if (!preg_match($regURL, $prevDomain)) {
       return false;
     }
@@ -578,7 +579,7 @@ class Context
   function checkAdminPass() {
 
     $is_logged = false;
-    if ($this->getAdminInfo('admin_id') == $this->getSession('user_id')) {
+    if ($this->getAdminInfo('admin_id') == $this->getSession('user_id') && $this->getAdminInfo('admin_pwd') == $this->getSession('password')) {
       $is_logged = true;
     }
     return $is_logged;
@@ -587,7 +588,7 @@ class Context
   function isAdminLogin() {
 
     $admin_ok = $this->getSession('admin_ok');
-    return isset($admin_ok) && $admin_ok;
+    return isset($admin_ok) && $admin_ok && $this->checkAdminPass();
   }  
 }
 ?>

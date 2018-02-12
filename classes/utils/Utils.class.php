@@ -245,6 +245,7 @@ class Utils extends Object {
             'msg'=>$msg);
 
     Object::callback($data);
+    exit;
   }
 
   //----- String
