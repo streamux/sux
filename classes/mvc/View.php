@@ -46,6 +46,7 @@ class View extends Object {
 
     $versionCookieId = $context->getCookieId('version');
     $this->cookie_version = $context->getCookie($versionCookieId);
+    $this->document_data['is_admin_login'] = $context->isAdminLogin();
   }
 
   function output() {

@@ -84,7 +84,7 @@
       
       <!-- Admin setup -->      
       <div class="sx-admin-setup">
-      {if isset($sessionData.grade) && $sessionData.grade > 9}
+      {if $documentData.is_admin_login !== false}
         <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
       {/if}
       </div>      
@@ -128,7 +128,7 @@
           {/if}
           </span>
           <div class="sx-admin-setup">
-            {if isset($sessionData.grade) && $sessionData.grade > 9}
+            {if $documentData.is_admin_login !== false}
               <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' title="관리자 설정" alt="관리자 설정" /></a>
             {/if}
           </div>      

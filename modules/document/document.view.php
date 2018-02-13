@@ -31,7 +31,7 @@ class DocumentView extends View
 
     $this->document_data['jscode'] = 'content';
     $this->document_data['module_code'] = $templateName;
-    $this->document_data['module_name'] = $groupData['document_name'];    
+    $this->document_data['module_name'] = $groupData['document_name'];
 
     /**
      * @var headerPath, contentPath, footerPath
