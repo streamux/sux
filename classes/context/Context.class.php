@@ -53,7 +53,7 @@ class Context
     $keeperCookie = self::getCookie($keeperId);
 
     if (isset($keeperCookie) && $keeperCookie) {
-      session_set_cookie_params(0, _SUX_ROOT_);
+      session_set_cookie_params(12*3600, _SUX_ROOT_);
     }    
     
     if ( ! session_id() ) @session_start();
