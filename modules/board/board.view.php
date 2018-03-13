@@ -74,126 +74,129 @@ class BoardView extends View
 
     if ($result) {      
       $numrows = $this->model->getNumRows();
-      $where->reset();
 
-      if (isset($search) && $search) {
-        $where->set($find, $search, 'like');
-      }
-
-      $where->set('category', $category, '=');
-      $result = $this->model->select('board', '*', $where, 'igroup_count desc, ssunseo_count asc', $passover, $limit);
-
-      if ($result) {
-        $numrows2 = $this->model->getNumRows();
-        $contentData['list'] = $this->model->getRows();         
-        $today = date("Y-m-d");
-
-        for ($i=0; $i<count($contentData['list']); $i++) {
-
-          $id = (int) $contentData['list'][$i]['id'];
-          $user_id = FormSecurity::decodeByNonTags($contentData['list'][$i]['user_id']);          
-          $name = $contentData['list'][$i]['nickname'] | $contentData['list'][$i]['user_name'];
-          $name = FormSecurity::decodeByNonTags($name); 
-          $title = FormSecurity::decodeBySimpleTags($contentData['list'][$i]['title']);
-          $content = FormSecurity::decodeByText($contentData['list'][$i]['content']);
-          $progressStep = FormSecurity::decodeByNonTags($contentData['list'][$i]['progress_step']);
-          $hit = (int) $contentData['list'][$i]['readed_count'];
-          $space = (int) $contentData['list'][$i]['space_count'];
-          $filename = $contentData['list'][$i]['filename'];
-          $filetype = $contentData['list'][$i]['filetype'];
-          
-          $date =$contentData['list'][$i]['date'];        
-          $compareDayArr = split(' ', $date);
-          $compareDay = $compareDayArr[0];
-          
-          if (isset($search) && $search != '') {
-            $search_replace = sprintf('<span class="sx-text-success">%s</span>', $search);
-            $find_key = strtolower($find);
-
-            switch ($find_key) {
-              case 'title':
-                $title = str_replace($search,$search_replace,$title);
-                break;
-              case 'name':
-                $name = str_replace($search,$search_replace,$name);
-                break;
-              default:
-                break;
-            }
-          }
-
-          $subject = array();
-          $subject['id'] = $id;
-          $subject['title'] = $title;         
-          $subject['icon_img_name'] = '';
-          $subject['progress_step_name'] = '';
-
-          // 'hide' in value is a class name of CSS
-          $subject['space'] = 0;
-          $subject['prefix_icon_label'] = '';
-          $subject['prefix_icon_type'] = 0;
-
-          $subject['icon_img'] = 'sx-hide';
-          $subject['comment_num'] = '';
-          $subject['icon_new'] = 'sx-hide';
-          $subject['icon_opkey'] = 'sx-hide';
-
-          if (isset($space) && $space) {
-            $subject['space'] = $space*10;
-            $subject['prefix_icon_label'] = '답변';
-            $subject['prefix_icon_color'] = 'sx-bg-reply';
-          }
-
-          //공지글 설정은 개발 예정 
-          /*if (isset($isNotice) && $isNotice != '') {
-            $subject['space'] = '10px';
-            $subject['prefix_icon'] = '공지';
-            $subject['prefix_icon_color'] = 'sx-bg-notice';
-          }*/
-
-          if (isset($filename) && $filename){
-            $imgname = '';
-
-            if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {             
-              $imgname = "icon_img.png";
-            } else if ($download === 'y'  && preg_match('/(application/x-zip-compressed|application/zip)+/', $filetype)) { 
-              $imgname = "icon_down.png";
-            }
-
-            if ($imgname !== '') {
-              $subject['icon_img'] = 'sx-show-inline';
-              $subject['icon_img_name'] = $imgname;
-            } 
-          }
-
+      if ($numrows > 0) {
           $where->reset();
-          $where->set('content_id', $id, '=');
-          $this->model->select('comment', 'id', $where);
-          $commentNums = $this->model->getNumRows();
 
-          if ($commentNums > 0) {
-            $subject['comment_num'] = $commentNums;
+        if (isset($search) && $search) {
+          $where->set($find, $search, 'like');
+        }
+
+        $where->set('category', $category, '=');
+        $result = $this->model->select('board', '*', $where, 'igroup_count desc, ssunseo_count asc', $passover, $limit);
+
+        if ($result) {
+          $contentData['list'] = $this->model->getRows();         
+          $today = date("Y-m-d");
+
+          for ($i=0; $i<count($contentData['list']); $i++) {
+
+            $id = (int) $contentData['list'][$i]['id'];
+            $user_id = FormSecurity::decodeWithoutTags($contentData['list'][$i]['user_id']);          
+            $name = $contentData['list'][$i]['nickname'] | $contentData['list'][$i]['user_name'];
+            $name = FormSecurity::decodeWithoutTags($name); 
+            $title = FormSecurity::decodeWithSimpleTags($contentData['list'][$i]['title']);
+            $content = FormSecurity::decodeToText($contentData['list'][$i]['content']);
+            $progressStep = FormSecurity::decodeWithoutTags($contentData['list'][$i]['progress_step']);
+            $hit = (int) $contentData['list'][$i]['readed_count'];
+            $space = (int) $contentData['list'][$i]['space_count'];
+            $filename = $contentData['list'][$i]['filename'];
+            $filetype = $contentData['list'][$i]['filetype'];
+            
+            $date =$contentData['list'][$i]['date'];        
+            $compareDayArr = split(' ', $date);
+            $compareDay = $compareDayArr[0];
+            
+            if (isset($search) && $search != '') {
+              $search_replace = sprintf('<span class="sx-text-success">%s</span>', $search);
+              $find_key = strtolower($find);
+
+              switch ($find_key) {
+                case 'title':
+                  $title = str_replace($search,$search_replace,$title);
+                  break;
+                case 'name':
+                  $name = str_replace($search,$search_replace,$name);
+                  break;
+                default:
+                  break;
+              }
+            }
+            
+
+            $subject = array();
+            $subject['id'] = $id;
+            $subject['title'] = $title;         
+            $subject['icon_img_name'] = '';
+            $subject['progress_step_name'] = '';
+
+            // 'hide' in value is a class name of CSS
+            $subject['space'] = 0;
+            $subject['prefix_icon_label'] = '';
+            $subject['prefix_icon_type'] = 0;
+
+            $subject['icon_img'] = 'sx-hide';
+            $subject['comment_num'] = '';
+            $subject['icon_new'] = 'sx-hide';
+            $subject['icon_opkey'] = 'sx-hide';
+
+            if (isset($space) && $space) {
+              $subject['space'] = $space*10;
+              $subject['prefix_icon_label'] = '답변';
+              $subject['prefix_icon_color'] = 'sx-bg-reply';
+            }
+
+            //공지글 설정은 개발 예정 
+            /*if (isset($isNotice) && $isNotice != '') {
+              $subject['space'] = '10px';
+              $subject['prefix_icon'] = '공지';
+              $subject['prefix_icon_color'] = 'sx-bg-notice';
+            }*/
+
+            if (isset($filename) && $filename){
+              $imgname = '';
+
+              if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {             
+                $imgname = "icon_img.png";
+              } else if ($download === 'y'  && preg_match('/(application/x-zip-compressed|application/zip)+/', $filetype)) { 
+                $imgname = "icon_down.png";
+              }
+
+              if ($imgname !== '') {
+                $subject['icon_img'] = 'sx-show-inline';
+                $subject['icon_img_name'] = $imgname;
+              } 
+            }
+
+            $where->reset();
+            $where->set('content_id', $id, '=');
+            $this->model->select('comment', 'id', $where);
+            $commentNums = $this->model->getNumRows();
+
+            if ($commentNums > 0) {
+              $subject['comment_num'] = $commentNums;
+            }
+
+            if ($compareDay == $today){
+              $subject['icon_new'] = 'sx-show-inline';
+              $subject['icon_new_title'] = 'new';
+            }
+            
+            $subject['progress_step_name'] = ($progressStep === '초기화') ? '' : $progressStep;
+            $subject['icon_progress_color'] = 'sx-bg-progress';
+
+            $contentData['list'][$i]['name'] = $name;
+            $contentData['list'][$i]['hit'] = $hit;
+            $contentData['list'][$i]['space'] = $space;
+            $dateArr = split(' ', $date);
+            $contentData['list'][$i]['date'] = $dateArr[0];
+            $contentData['list'][$i]['subject'] = $subject;
+
+            $subject = null;
           }
-
-          if ($compareDay == $today){
-            $subject['icon_new'] = 'sx-show-inline';
-            $subject['icon_new_title'] = 'new';
-          }
-          
-          $subject['progress_step_name'] = ($progressStep === '초기화') ? '' : $progressStep;
-          $subject['icon_progress_color'] = 'sx-bg-progress';
-
-          $contentData['list'][$i]['name'] = $name;
-          $contentData['list'][$i]['hit'] = $hit;
-          $contentData['list'][$i]['space'] = $space;
-          $dateArr = split(' ', $date);
-          $contentData['list'][$i]['date'] = $dateArr[0];
-          $contentData['list'][$i]['subject'] = $subject;
-
-          $subject = null;
         }
       } else {
-        $UIError->add('게시물 목록 가져오기를 실패하였습니다.');
+        $contentData['list'] = array();
       }
     } else {
       $UIError->add('게시물 전체 목록 가져오기를 실패하였습니다.');
@@ -212,6 +215,8 @@ class BoardView extends View
     $this->document_data['jscode'] = 'list';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 목록'; 
+    $this->document_data['module_type'] = 'board';
+
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
     $this->document_data['content'] = $contentData;
@@ -328,9 +333,9 @@ class BoardView extends View
 
     $contentData = $this->model->getRow();
     $nickname = $contentData['nickname'] | $contentData['user_name'];
-    $contentData['nickname'] = FormSecurity::decodeByNonTags($nickname);
+    $contentData['nickname'] = FormSecurity::decodeWithoutTags($nickname);
     $nickname = '';
-    $contentData['title'] = FormSecurity::decodeBySimpleTags($contentData['title']);    
+    $contentData['title'] = FormSecurity::decodeWithSimpleTags($contentData['title']);    
 
     $filename = $contentData['filename'];
     $filetype = $contentData['filetype'];
@@ -339,14 +344,14 @@ class BoardView extends View
 
     switch ($contentType) {
       case 'text':
-        $content = FormSecurity::decodeByText($content);
+        $content = FormSecurity::decodeToText($content);
         break;
       case 'html':
-        $content = FormSecurity::decodeByHtml($content);    
+        $content = FormSecurity::decodeToHtml($content); 
         break;
     }
 
-    $contentData['content'] = nl2br($content);
+    $contentData['content'] = $content;    
     $content = '';    
     $contentData['is_down'] = 'hide';
     $contentData['is_img'] = 'hide';
@@ -415,6 +420,8 @@ class BoardView extends View
     $this->document_data['jscode'] = 'read';
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 읽기';
+    $this->document_data['module_type'] = 'board';
+
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
     $this->document_data['group'] = $groupData;
@@ -610,7 +617,7 @@ class BoardView extends View
     $contentData['user_name'] = $contentData['user_name'];
     $contentData['nickname'] = $contentData['nickname'] | $contentData['user_name'];
     $contentData['title'] = $contentData['title'];
-    $contentData['content'] = FormSecurity::decodeByHtml($contentData['content']);    
+    $contentData['content'] = FormSecurity::decodeForForm($contentData['content']);
     
     $contentType = $contentData['content_type'];
     $contentData['content_type_' . $contentType] = 'checked';
@@ -820,7 +827,7 @@ class BoardView extends View
 
     $where = new QueryWhere();
     $where->set('category', $category, '=');
-    $this->model->select('board_group', '*');
+    $this->model->select('board_group', '*', $where);
 
     $groupData = $this->model->getRow();
     $headerPath = $groupData['header_path'];
@@ -833,6 +840,7 @@ class BoardView extends View
     $rootPath = _SUX_ROOT_;
     $skinPath = _SUX_ROOT_ . "modules/board/skin/${skinName}/";
     $skinRealPath = _SUX_PATH_ . "modules/board/skin/${skinName}/";   
+    
     $this->document_data['uri'] = $rootPath.$category;
 
     $headerPath =Utils::convertAbsolutePath($headerPath, _SUX_PATH_);

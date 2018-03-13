@@ -18,7 +18,7 @@
         <div class="sx-form-inline">
           <div class="sx-input-group">
             <label for="find" class="sr-only">검색 분류</label>
-            <select name="find" class="sx-form-control form_control_width">
+            <select name="find" class="sx-form-control">
               <option value='title'>제 목</option>
               <option value='name'>작성자</option>
               <option value='comment'>내 용</option>
@@ -57,13 +57,12 @@
         <span class="sx-space-right">{$item.name}</span><i class="xi-clock sx-space-center"></i><span class="sx-space-right">{$item.date}</span><i class="xi-eye sx-space-center"></i>{$item.hit}
       </p>      
     </li>
+    {else if}
+    <li>
+      <span class="warn_subject sx-bg-warning">등록된 게시물이 없습니다.</span>      
+    </li>
     {/if}
   {/foreach}
-  {if count($contentData.list) == 0}
-   <li class="warn_subject sx-bg-warning">
-    등록된 게시물이 존재하지 않습니다.
-  </li>
-  {/if}
   </ul>
   <!-- end -->
 
@@ -103,13 +102,12 @@
           <td><span>{$item.date}</span></td>
           <td><span>{$item.hit}</span></td>
         </tr>
+        {else if}
+        <tr>
+          <td colspan="4" class="warn_subject sx-bg-warning"><span>등록된 게시물이 없습니다.</span></td>
+        </tr>
         {/if}
       {/foreach}
-      {if count($contentData.list) == 0}
-        <tr>
-          <td colspan="4" class="warn_subject sx-bg-warning">등록된 게시물이 존재하지 않습니다.</td>
-        </tr>
-      {/if}
       </tbody>
     </table>
   </div>

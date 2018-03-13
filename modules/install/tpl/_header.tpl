@@ -12,7 +12,7 @@
 <div class="sx-wrapper">
   <div class="sx-header">
     <h1 class="logo">
-      <a href="{1rootPath}admin-admin">
+      <a href="{$rootPath}admin-admin">
         <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" title="streamxux" alt="streamxux"> 
       </a>      
     </h1> 

@@ -88,11 +88,8 @@
         </div>   
       </div>
     </div>
-    <br>
-    <br>
-    <br><br>
-  </div>            
-</div>
+  </div><!-- panel_userguide -->
+</div><!-- header-content -->
 
 <!-- 
   @var is_page

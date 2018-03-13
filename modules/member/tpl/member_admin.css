@@ -5,6 +5,23 @@
 .sx-form-horizontal .sx-form-inline .sx-input-group a.sx-btn::after{
   clear: both;
 }
+.sx-admin-member .header .btn_group,
+.sx-admin-member .footer .btn_group{
+  margin:0 0;
+  padding: 0 0;
+  width:100%;
+}
+.sx-admin-member .header .btn_group .sx-btn,
+.sx-admin-member .footer .btn_group .sx-btn{
+  float: left;
+  width:50%;
+}
+.sx-form-horizontal .sx-form-inline .sx-input-group select.sx-form-control{
+  display: none;
+}
+.sx-form-horizontal .sx-form-inline .sx-input-group input.sx-btn{
+  display: none;
+}
 
 /* list pc */
 .list_pc_panel{
@@ -61,6 +78,9 @@
 }
 .list_pc_panel .table > tbody > tr:hover{
   background-color: #f9f9f9;
+}
+.sx-admin-member .footer .btn_group{
+  margin-top: 5px;
 }
 
 /* list mobile */
@@ -162,20 +182,42 @@
   .sx-content{
     position: relative;
   }
+  .sx-admin-member .header .btn_group,
+  .sx-admin-member .footer .btn_group{
+    padding: 0 0;
+    width:auto;
+  }
+  .sx-admin-member .header .btn_group .sx-btn,
+  .sx-admin-member .footer .btn_group .sx-btn{
+    float: none;
+    width:auto;
+  }
   .sx-form-horizontal .sx-form-inline .sx-input-group select.sx-form-control{
     height:33px;
   }
+  .sx-form-horizontal .sx-form-inline .sx-input-group select.sx-form-control{
+    display: inline-block;
+  }
+  .sx-form-horizontal .sx-form-inline .sx-input-group input.sx-btn{
+    display: inline-block;
+  }
+  .sx-admin-member .header .sx-row a.sx-btn,
   .sx-form-horizontal .sx-form-inline .sx-input-group a.sx-btn{
     float: none;
     width:auto;
   }
-
+  .sx-admin-member-list .header input.sx-btn,
+  .sx-admin-member-list .header a.sx-btn {
+    margin-right: 3px;
+  }
   .list_pc_panel{
     display: block;
   }
-
   .list_mobile_panel{
     display: none;
+  }
+  .sx-admin-member .footer .btn_group{
+    margin-top: 10px;
   }
 
   /* add, modify */

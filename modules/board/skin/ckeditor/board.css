@@ -145,7 +145,7 @@
   font-size: 1.125em;
 }
 .board_list .list_mobile_panel li,
-.board_list .list_pc_panel table tbody tr .subject {
+.board_list .list_pc_panel table tbody tr td {
   padding-top:20px;
   padding-bottom:20px;
   text-align: left;
@@ -156,10 +156,8 @@
   font-weight: normal;
 }
 .board_list .warn_subject {
-  padding-left:10px;
-  text-align: left;
+  text-align-last:center;
 }
-
 .board_pagination {
   margin-top:65px;
   margin-bottom: 55px;
@@ -223,13 +221,20 @@
   margin-bottom: 25px;
 }
 .board_read .body_panel .content .content_text{
-  font-size: 1.125em;  
+  font-size: 1.0625em;  
   word-spacing: -2px;
   line-height: 2em;
 }
 .board_read .body_panel .content .content_text p{
   line-height: 1.125em;
 }
+.board_read .body_panel .content .content_text ul {
+  margin-left: 25px;
+}
+.board_read .body_panel .content .content_text ul li {
+  list-style: disc;
+}
+
 .board_read .btn_groups {
   margin-top:35px;
   text-align: right;

@@ -6,6 +6,36 @@
  */
 
 jsux.fn = jsux.fn || {};
+jsux.fn.ckeditor = {
+
+  updateElement: function(id) {
+
+     CKEDITOR.instances[id].updateElement();
+  },
+  replace: function(id) {
+
+    var editConfig = {
+      height:'350px',
+      toolbar: [            
+        { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Superscript', 'Subscript', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
+        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
+        { name: 'align', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },     
+        { name: 'insert', items: [ 'Image', '-', 'Youtube', '-', 'Table', '-', 'HorizontalRule' ] },
+        { name: 'document', items: [ 'Print' ] },
+        '/',        
+        { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },
+        { name: 'links', items: [ 'Link', 'Unlink' ] },
+        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },    
+        { name: 'editing', items: [ 'Scayt', '-' , 'Source' ] },
+        { name: 'tools', items: [ 'Maximize' ] }
+      ],
+    };
+
+    CKEDITOR.replace(id, editConfig); 
+  }
+};
+
 jsux.fn.list = {
 
   limit: 10,
@@ -90,6 +120,10 @@ jsux.fn.list = {
           limitGroup: self.limitGroup
         });        
         self.pagination.activateControl();
+
+        var totalTitleNum$ = $('.sx-board-panel .header .total_num');
+        totalTitleNum$.empty();
+        totalTitleNum$.text(data.total_num);
       } else {
 
         // pagination start
@@ -103,7 +137,175 @@ jsux.fn.list = {
     this.setLayout();
   }
 };
+
 jsux.fn.add = {
+
+  checkDocumentForm: function (f) {
+
+    jsux.fn.ckeditor.updateElement('content');
+
+    var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
+    var checkList = ['nickname','password','title','content','wallname'];
+    var email = f.email_address;
+    var result = true;
+
+    $.each( checkList, function( index, item) {
+      var $input = f[item];
+
+      if ($input.value.length < 1) {
+        trace(labelList[index] + ' 입력 하세요.');
+        $input.focus();
+        result = false;
+        return false;
+      }
+    });
+
+    if (email && email.value && email.value.length > 0) {
+      var mailFlag = jsux.utils.validateEmail(email.value);
+
+      if (!mailFlag) {
+        trace('이메일 주소가 잘못되었습니다.');
+        email.focus();
+        result = false;
+      }
+    }
+
+    return result;
+  },
+  setEvent: function() {
+
+    var self = this;
+
+    $('form[name=f_board_write]').on('submit', function(e) {      
+      if (!self.checkDocumentForm(e.target)) {
+        e.preventDefault();
+      }
+    });
+  },
+  setLayout: function() {
+
+    jsux.fn.ckeditor.replace('content');
+  },
+  init: function() {
+
+    this.setLayout();
+    this.setEvent();
+
+    jsux.setAutoFocus();  
+  }
+};
+jsux.fn.modify = {
+
+  checkDocumentForm: function (f) {
+
+    jsux.fn.ckeditor.updateElement('content');
+
+    var labelList = ['제목을','내용을','등록키를'];
+    var checkList = ['title','content','wallname'];
+    var email = f.email_address;
+    var result = true;
+
+    $.each( checkList, function( index, item) {
+      var $input = f[item];
+
+      if ($input.value.length < 1) {
+        trace(labelList[index] + ' 입력 하세요.');
+        $input.focus();
+        result = false;
+        return false;
+      }
+    });
+
+    if (email && email.value && email.value.length > 0) {
+      var mailFlag = jsux.utils.validateEmail(email.value);
+
+      if (!mailFlag) {
+        trace('이메일 주소가 잘못되었습니다.');
+        email.focus();
+        result = false;
+      }
+    }
+
+    return result;
+  },
+  setEvent: function() {
+
+    var self = this;
+
+    $('form[name=f_board_modify]').on('submit', function(e) {
+      if (!self.checkDocumentForm(e.target)) {       
+         e.preventDefault();
+      }
+    });
+  },
+   setLayout: function() {
+
+    jsux.fn.ckeditor.replace('content');
+  },
+  init: function() {
+
+    this.setLayout();
+    this.setEvent();
+
+    //jsux.setAutoFocus();  
+  }
+};
+jsux.fn.delete = {
+
+  returnUrl: function() {
+    var backUrl = $('input[name=location_back]').val();
+    if (!backUrl) {
+      trace('input[name=location_back] 경로값을 확인해주세요.');
+      return '';
+    }
+    return backUrl;
+  },
+  sendJson: function() {
+
+    var self = this,
+          params = {
+            _method:$('input[name=_method]').val(),
+            category:$('input[name=category]').val(),
+            id:$('input[name=id]').val()
+          },
+          $form = $('form'),
+          url = $form[0].action;
+
+    if (!url) {
+      trace('Form action 호출 경로가 존재하지 않습니다.');
+    }
+
+    jsux.getJSON(url,params, function( e )  {
+
+      if (e.result == 'Y') {
+        jsux.goURL(self.returnUrl());
+      } else {
+        trace( e.msg );
+      }
+    });
+  },
+  setEvent: function() {
+
+    var self = this;
+
+    $('#btnConfirm').on('click', function( e ) {
+      e.preventDefault();
+      self.sendJson();
+    });
+
+    $('#btnCancel').on('click', function( e ) {
+      e.preventDefault();
+
+      jsux.goURL(self.returnUrl());
+    });
+  },
+  init: function() {
+
+    this.setEvent();
+  }
+};
+
+jsux.fn.groupAdd = {
 
   returnUrl: function() {
     var backUrl = $('input[name=location_back]').val();
@@ -263,7 +465,7 @@ jsux.fn.add = {
     jsux.setAutoFocus();
   }
 };
-jsux.fn.modify = {
+jsux.fn.groupModify = {
 
    returnUrl: function() {
     var backUrl = $('input[name=location_back]').val();
@@ -458,7 +660,7 @@ jsux.fn.modify = {
     this.setEvent();    
   }
 };
-jsux.fn.delete = {
+jsux.fn.groupDelete = {
 
   returnUrl: function() {
     var backUrl = $('input[name=location_back]').val();

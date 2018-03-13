@@ -431,6 +431,10 @@ jsux.fn.list = {
             limit: self.limit
           };
 
+      if ($(window).width() < 768) {
+        params.find = 'user_id,nickname,email_address';
+      }
+
       self.sendAndLoad(url, params);
     });
   },

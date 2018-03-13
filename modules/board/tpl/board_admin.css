@@ -1,54 +1,74 @@
 /* list */
+.sx-admin-main .header .sx-row,
+.sx-admin-main .footer .sx-row{
+  clear:both;
+  position: relative;
+}
+.sx-admin-main .header .btn_group,
+.sx-admin-main .footer .btn_group{
+  margin:0 0;
+  padding: 0 0;
+  width:100%;
+}
+.sx-admin-main .header .btn_group .sx-btn,
+.sx-admin-main .footer .btn_group .sx-btn{
+  float: left;
+  width:50%;
+}
 .list_pc_panel{
   display: none;
 }
-.sx-content .sx-box-content .table > tbody > tr > td{
-  padding:8px 5px;
-}
-.sx-content .sx-box-content .table{
+.list_pc_panel .table{
   width:100%;
 }
-.sx-content .sx-box-content .table > thead > tr > th{
-  padding: 8px 5px;
+.list_pc_panel .table > thead > tr > th{
+  padding: 15px 5px 15px 15px;
   background-color: #e3e3e3;
-  text-align: center;
+  text-align: left;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_no{
+.list_pc_panel .table > thead > tr > .sx_no{
   width:55px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_name{
-  width: 120px;
+.list_pc_panel .table > thead > tr > .sx_group{
+  width:130px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_skin{
+.list_pc_panel .table > thead > tr > .sx_nickname,
+.list_pc_panel .table > thead > tr > .sx_name{
   width: 100px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_type{
-  width: 60px;
-}
-.sx-content .sx-box-content .table > thead > tr > th.sx_date{
+.list_pc_panel .table > thead > tr > .sx_skin{
   width: 120px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_modify_btn{
-  width: 40px;
+.list_pc_panel .table > thead > tr > .sx_type{
+  width: 60px;
 }
-.sx-content .sx-box-content .table > thead > tr > th.sx_delete_btn{
-  width: 40px;
+.list_pc_panel .table > thead > tr > .sx_date{
+  width: 120px;
 }
-.sx-content .sx-box-content .table > tbody > tr > td.sx_summary{
-  padding-left: 10px;
-  text-align: left;  
+.list_pc_panel .table > thead > tr > .sx_modify_btn{
+  width: 50px;
 }
-.sx-content .sx-box-content .table > tbody > tr > td{
-  padding: 12px 5px;
+.list_pc_panel .table > thead > tr > .sx_delete_btn{
+  width: 50px;
+}
+.list_pc_panel .table > tbody > tr > td{
+  padding: 15px 5px 15px 15px;
+  text-align: left;
+}
+.list_pc_panel .table > thead > tr > .sx_modify_btn,
+.list_pc_panel .table > thead > tr > .sx_delete_btn,
+.list_pc_panel .table > tbody > tr > .sx_modify_btn,
+.list_pc_panel .table > tbody > tr > .sx_delete_btn{
+  padding: 15px 0;
   text-align: center;
-  border-bottom: 1px dashed #e3e3e3;
 }
-.sx-content .sx-box-content .table > tbody > tr > td .sx-btn-info,
-.sx-content .sx-box-content .table > tbody > tr > td .sx-btn-warning{
+
+.list_pc_panel .table > tbody > tr > td .sx-btn-info,
+.list_pc_panel .table > tbody > tr > td .sx-btn-warning{
   padding:4px 7px;
   font-size:0.875em;
 }
-.sx-content .sx-box-content .table > tbody > tr:hover{
+.list_pc_panel .table > tbody > tr:hover{
   background-color: #f9f9f9;
 }
 
@@ -70,7 +90,6 @@
   margin-right: 5px;
 }
 .list_mobile_panel > li > a > .title{
-  font-weight: bold;
   font-size: 1.250em;
 }
 .list_mobile_panel > li > a > .sx_summary{
@@ -84,6 +103,7 @@
   display: inline-block;
   margin-top: 5px;
   font-size: 0.9375em;
+  color: #7e7e7e;
 }
 .list_mobile_panel > li > a > .sx_skin > i,
 .list_mobile_panel > li > a > .sx_type > i,
@@ -95,7 +115,7 @@
 }
 .list_mobile_panel > li > .sx-btn-group{
   position: absolute;
-  top:42px;
+  top:13px;
   right: 0;
 }
 .list_mobile_panel > li > .sx-btn-group > a{  
@@ -103,6 +123,9 @@
 }
 .list_mobile_panel > li > .sx-btn-group > a.sx-btn-warning{
   margin-left: 3px;
+}
+.sx-admin-main .footer .btn_group{
+  margin-top: 5px;
 }
 
 /* add, modify */
@@ -116,27 +139,95 @@
 .text_caption{
   margin-top: 10px;
 }
-.sx-content .sx-box-content textarea.sx-form-control{
+.list_pc_panel textarea.sx-form-control{
   width:75%;
 }
 
+.sx-admin-board .sx-add-panel .head_panel,
+.sx-admin-board .sx-add-panel .body_panel,
+.sx-admin-board .sx-add-panel .foot_panel {
+  margin-top:30px;
+  padding-left:10px;
+  padding-right:10px;
+}
+.sx-admin-board .sx-add-panel .body_panel .sx-input-group {
+  display: inline-block;
+  position: relative;
+  top:-4px;
+}
+.sx-admin-board .sx-add-panel .body_panel .textarea_panel textarea {
+  margin-top:7px;
+  width:100%;
+  line-height: 22px;
+}
+
+.sx-admin-board .sx-add-panel .foot_panel {
+  margin-top:20px;
+  margin-bottom: 65px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .button_width {
+  width: 100px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .input_file_div {
+  overflow: hidden;
+  display: inline-block; 
+  position: relative;
+  vertical-align: top;
+  height:37px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .input_file_div,
+.sx-admin-board .sx-add-panel .foot_panel .sx-btn {
+  margin-bottom: 5px;
+  width:100%; 
+}
+.sx-admin-board .sx-add-panel .foot_panel .file_uploader_button {
+  padding:6px 21px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .file_uploader_input {
+  position: absolute;
+  padding: 6px 50px;
+  top:0px;
+  cursor: pointer;
+}
+.sx-admin-board .sx-add-panel .foot_panel .wall_key {
+  height: 100px;
+  text-align: center;
+  border: 1px solid #000;
+  background-color: #000234;
+}
+.sx-admin-board .sx-add-panel .foot_panel .wall_key span{
+  font-size: 2.5em;
+  color: #fff;
+  line-height: 100px;
+}
+.sx-admin-board .sx-add-panel .foot_panel input[name=wallname] {
+  display: block;
+  margin-top: 10px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .wall_key_comment {
+  line-height: 32px;
+}
+.sx-admin-board .sx-add-panel .foot_panel .button_panel {
+  margin-top:45px;
+  text-align: center;
+}
+
 /* del */
-.sx-content .sx-box-content .title_group{
+.sx-content .title_group{
   position: relative;
  }
-.sx-content .sx-box-content .title_group img{
+.sx-content .title_group img{
   position: absolute;
   top:7px;
   vertical-align: top;
 }
-.sx-content .sx-box-content .title_group span{
+.sx-content .title_group span{
   display: block;
   margin-left: 34px;
   line-height: 28px;
 }
-
 /* common */
-.sx-content .sx-box-content .btn_group{
+.sx-content .btn_group{
   padding-top: 25px;
   padding-bottom: 35px;
 }
@@ -146,11 +237,24 @@
   .sx-content{
     position: relative;
   }
+  .sx-admin-main .header .btn_group,
+  .sx-admin-main .footer .btn_group{
+    padding: 0 0;
+    width:auto;
+  }
+  .sx-admin-main .header .btn_group .sx-btn,
+  .sx-admin-main .footer .btn_group .sx-btn{
+  float: none;
+  width:auto;
+}
   .list_pc_panel{
     display: block;
   }
   .list_mobile_panel{
     display: none;
+  }
+  .sx-admin-main .footer .btn_group{
+    margin-top: 10px;
   }
 
   /* add, modify */
@@ -158,6 +262,11 @@
     padding-right: 10px;
     text-align: right;
     width:170px;
+  }
+  .sx-admin-board .sx-add-panel .label_width{
+    padding-right: 10px;
+    text-align: right;
+    width:100px;
   }
   .btn_check{
     width:auto;
@@ -167,12 +276,49 @@
     margin-left:170px;
   }
 
-  /* del */
-  .sx-content .sx-box-content .title_group img{
-    position: relative;
+  .sx-admin-board .sx-add-panel .head_panel input[type=text] {
+    width: 350px;
   }
-  .sx-content .sx-box-content .title_group .title1{
-    display: inline-block;
-    margin-left: 0;
+  .sx-admin-board .sx-add-panel .body_panel label {
+    position: absolute;
+  }
+  .sx-admin-board .sx-add-panel .body_panel .textarea_panel {
+    padding-left: 103px;
+  }
+  .sx-admin-board .sx-add-panel .head_panel .sx-form-group .sx-form-control {
+    width: 350px;
+  }
+  .sx-admin-board .sx-add-panel .foot_panel .input_file_div {
+    margin-top: 0;
+    width:100px;
+  }
+  .sx-admin-board .sx-add-panel .foot_panel .sx-btn {
+    margin-bottom: 0;
+    width:auto;
+  }
+  .sx-admin-board .sx-add-panel .button_panel {
+    margin-top:45px;
+    text-align: center;
+  }
+  .sx-admin-board .sx-add-panel .button_panel .sx-btn {
+    width: 70px;
+  }
+  .sx-admin-board .sx-add-panel .button_panel input[name=cancel] {
+    margin-left: 5px;
+  }
+  .sx-admin-board .sx-add-panel .foot_panel input[name=wallname] {
+    margin-left: 103px;
+  }
+  .sx-admin-board .sx-add-panel .foot_panel .wall_key {
+    display:inline-block;
+    width: 250px;
+  }
+  .sx-admin-board .sx-add-panel .foot_panel .wall_key_comment {
+    margin-left: 103px;
+  }
+
+  /* del */
+  .list_pc_panel .title_group img{
+    position: relative;
   }
 }
