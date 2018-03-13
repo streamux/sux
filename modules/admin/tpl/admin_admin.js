@@ -52,54 +52,25 @@ jsux.fn.main = {
       }        
     });
   },
-  setConnectPath: function(data) {
+  setEventNews: function(data) {
 
-     var url = 'admin-admin/connectsite-json',
-          params = {
-            category: $('input[name=category]').val(),
-          },
+    var url = 'http://streamux.com/notice/list-json',
           listOption = {
-            id: '#connectPathList',
-            template: '#hitAnalyticsList_tmpl',
-            msg_tmpl: '#warnMsg_tmpl'
+            id: '#eventNewsList',
+            template: '#eventNewsList_tmpl',
+            msg_tmpl: '#ulWarnMsg_tmpl'
           },
-          paginOption = {
-            el: '.pagin_connect_path',
-            id: '#connectPathPaginList',
-            tmpl: '#pagination_tmpl',
-            control: {
-              'prev':'.pagin_connect_path .sx-nav-prev',
-              'next':'.pagin_connect_path .sx-nav-next'
-            }
-          };
+          paginOption = null;
+
     this.displayList(data, url, listOption, paginOption);
   },
-  setPageview: function(data) {
-
-    var url = 'admin-admin/pageview-json',
-          listOption = {
-            id: '#pageviewHitList',
-            template: '#hitAnalyticsList_tmpl',
-            msg_tmpl: '#warnMsg_tmpl'
-          },
-          paginOption = {
-            el: '.pagin_pageview',
-            id: '#pageviewPaginList',
-            tmpl: '#pagination_tmpl',
-            control: {
-              'prev':'.pagin_pageview .sx-nav-prev',
-              'next':'.pagin_pageview .sx-nav-next'
-            }
-          };
-    this.displayList(data, url, listOption, paginOption);    
-  },  
   setLatestComment: function(data) {
 
     var url = 'admin-admin/latestcomment-json',
           listOption = {
             id: '#latestCommentList',
             template: '#latestCommentList_tmpl',
-            msg_tmpl: '#warnMsg_tmpl'
+            msg_tmpl: '#tableWarnMsg_tmpl'
           },
           paginOption = {
             el: '.pagin_comment',
@@ -118,7 +89,7 @@ jsux.fn.main = {
           listOption = {
             id: '#newMemberList',
             template: '#newMemberList_tmpl',
-            msg_tmpl: '#warnMsg_tmpl'
+            msg_tmpl: '#tableWarnMsg_tmpl'
           },
           paginOption = {
             el: '.pagin_member',
@@ -150,7 +121,7 @@ jsux.fn.main = {
       });
     });
   },
-  displayList: function(data, url, list_option, pagin_option, params=null) {
+  displayList: function(data, url, list_option, pagin_option, params) {
 
     var self = this,
           limit =5,
@@ -168,14 +139,19 @@ jsux.fn.main = {
 
     listManager.setResource(url);
     listManager.initialize(list_option);
-    pagination.initialize(pagin_option);
 
+    if (pagin_option !== null) {
+      pagination.initialize(pagin_option);
+    }
+    
     changeHandler = function( e ) {
+      
       listManager.reloadData( e.page, limit);
     };
     loadedHandler = function(e) {
 
       var data = e.data;
+
       if (data && data.list && data.list.length > 0) {       
         listManager.setData( data.list );
       } else {
@@ -184,22 +160,29 @@ jsux.fn.main = {
       }
     };
     listManager.addEventListener('loaded', loadedHandler);
-    pagination.addEventListener('change', changeHandler);
+
+    if (pagin_option !== null) {
+      pagination.addEventListener('change', changeHandler);
+    }
 
     if (data && data.list && data.list.length > 0) {
 
-      // pagination start     
-      pagination.setData({
-        total: data.total_num,
-        limit: limit,
-        limitGroup: limitGroup,
-        originLimitGroup: originLimitGroup
-      });
-      
-      pagination.activateControl();
+      // pagination start
+      if (pagin_option !== null) {
+        pagination.setData({
+          total: data.total_num,
+          limit: limit,
+          limitGroup: limitGroup,
+          originLimitGroup: originLimitGroup
+        });
+
+        pagination.activateControl();
+      }
     } else {
       // pagination start
-      pagination.deactivateControl();
+      if (pagin_option !== null) {
+        pagination.deactivateControl();
+      }
     }
     loadedHandler({data:data});
   }, 
@@ -219,9 +202,26 @@ jsux.fn.main = {
       self.setConnectCount(e.data.connecter);
       self.setNewMember(e.data.newmember);
       self.setLatestComment(e.data.latestcomment);
-      self.setPageview(e.data.pageview);
-      self.setConnectPath(e.data.connectersite);
       self.setServiceConfig(e.data.serviceConfig);
+    });
+
+    try {
+      var _img = document.getElementById('#imgCountUpdater');
+
+      if (_img === null) {        
+        _img = document.createElement('img');
+      }
+      
+      _img.src = 'http://streamux.com/analytics/install-user?domain='+window.location.href;
+      _img.style.position = 'absolute';
+      _img.style.top = '-1000px';
+      _img.id = 'imgCountUpdater';
+      document.getElementById('sxGnbLoginWrap').appendChild(_img);
+    } catch(e) {}
+
+    jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
+
+      self.setEventNews(e.data);
     });
   },
   init: function() {
@@ -270,7 +270,7 @@ jsux.fn.member = {
           markup = $("#memberList_tmpl");
           $(markup).tmpl(e.data.list).appendTo("#memberList");
         } else {            
-          markup = $("#memberWarnMsg_tmpl");
+          markup = $("#membertableWarnMsg_tmpl");
           $(markup).tmpl( e ).appendTo("#memberList");
         }
 
@@ -278,7 +278,7 @@ jsux.fn.member = {
         markup = $("#articleMemberDelTitle_tmpl");
         $(markup).tmpl(e.data).appendTo("#articleMemberDelTitle");            
       } else {
-        markup = $("#memberWarnMsg_tmpl");
+        markup = $("#membertableWarnMsg_tmpl");
         $(markup).tmpl( e ).appendTo("#memberList");
       }
     });

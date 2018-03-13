@@ -35,50 +35,43 @@ class AdminAdminView extends View
     $msg = '';
 
     $connecterArr1 = $this->_getConnecterData();
-
     if ($connecterArr1['resultYN'] === 'N') {
       $resultYN = $connecterArr1['resultYN'];
       $msg .= $connecterArr1['msg'];
     }
 
     $connecterArr2 = $this->_getConnecterrealData();
-
     if ($connecterArr2['resultYN'] === 'N') {
       $resultYN = $connecterArr2['resultYN'];
       $msg .= $connecterArr2['msg'];
     }
-
     $connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
-    $newMemberArr = $this->_getNewmemberData();
 
+    $newMemberArr = $this->_getNewmemberData();
     if ($newMemberArr['resultYN'] === 'N') {
       $resultYN = $newMemberArr['resultYN'];
       $msg .= $newMemberArr['msg'];
     }
 
-    $newCommentArr = $this->_getNewcommentData();
-
+    $newCommentArr = $this->_getLatestcommentData();
     if ($newCommentArr['resultYN'] === 'N') {
       $resultYN = $newCommentArr['resultYN'];
       $msg .= $newCommentArr['msg'];
     }
 
     $pageviewArr = $this->_getPageviewData();
-
     if ($pageviewArr['resultYN'] === 'N') {
       $resultYN = $pageviewArr['resultYN'];
       $msg .= $pageviewArr['msg'];
     }
 
     $connectsiteArr = $this->_getConnectsiteData();
-
     if ($connectsiteArr['resultYN'] === 'N') {
       $resultYN = $connectsiteArr['resultYN'];
       $msg .= $connectsiteArr['msg'];
     }
 
     $serviceConfigArr = $this->_getServiceData();
-
     if ($serviceConfigArr['resultYN'] === 'N') {
       $resultYN = $serviceConfigArr['resultYN'];
       $msg .= $serviceConfigArr['msg'];
@@ -142,9 +135,9 @@ class AdminAdminView extends View
     $this->callback($data);
   }
 
-  function displayNewcommentJson() {
+  function displayLatestcommentJson() {
 
-    $data = $this->_getNewcommentData();
+    $data = $this->_getLatestcommentData();
     $this->callback($data);
   }
 
@@ -158,9 +151,9 @@ class AdminAdminView extends View
 
     $msg = '';
     $resultYN = 'Y';
-    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);    
+    $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);
+    
     $result = $this->model->select('connect_day', '*');
-
     if ($result) {
       $rows = $this->model->getRows();
 
@@ -179,7 +172,6 @@ class AdminAdminView extends View
 
       if ($result) {
         $today = $this->model->getNumRows();
-
         if (!$today) {
           $today = 0;
         }
@@ -320,8 +312,7 @@ class AdminAdminView extends View
           $passover = 0;
         }
 
-        $result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
-
+        $result = $this->model->select('pageview', 'name, hit_count, date', null, 'id desc', $passover, $limit);
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -367,7 +358,7 @@ class AdminAdminView extends View
     $context = Context::getInstance();
     $limit = $context->getRequest('limit');
     $passover = $context->getRequest('passover');
-    $result = $this->model->select('connect_site', '*');
+    $result = $this->model->select('connect_site', 'id');
 
     if ($result) {      
       $numrows = $this->model->getNumRows();
@@ -388,8 +379,7 @@ class AdminAdminView extends View
           $passover = 0;
         }
 
-        $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
-
+        $result = $this->model->select('connect_site', 'name, hit_count, date', null, 'id desc', $passover, $limit);
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -475,7 +465,7 @@ class AdminAdminView extends View
     $where = new QueryWhere();
     $where->set('date', date('Y-m-d'), '>=', 'and');
     $where->set('date', date('Y-m-d', time() + 86400), '<');
-    $result = $this->model->select('member', '*', $where);
+    $result = $this->model->select('member', 'nickname, date', $where);
 
     if ($result) {
       $newmember['list'] = array();
@@ -483,7 +473,6 @@ class AdminAdminView extends View
       $newmember['total_num'] = count($rows);
 
       if (count($rows) > 0) {
-
         for($i=0; $i<count($rows); $i++) {
           $field = array();
 
@@ -498,7 +487,6 @@ class AdminAdminView extends View
         $newmember['result'] = $resultYN;
       }      
     }
-    
     //$msg .= Tracer::getInstance()->getMessage();
     $data= array( 'data'=>$newmember,
             'mode'=>'newmember',
@@ -508,7 +496,7 @@ class AdminAdminView extends View
     return $data;
   }
 
-  function _getNewcommentData() {
+  function _getLatestcommentData() {
 
     $msg = '';
     $resultYN = 'Y';
@@ -517,7 +505,7 @@ class AdminAdminView extends View
     $where = new QueryWhere();
     $where->set('date', date('Y-m-d'), '>=', 'and');
     $where->set('date', date('Y-m-d', time() + 86400), '<');
-    $result = $this->model->select('board', '*', $where, 'id desc');
+    $result = $this->model->select('board', 'title, date', $where, 'id desc');
 
     if ($result) {
       $newcomment['list'] = array();
@@ -557,11 +545,65 @@ class AdminAdminView extends View
     $msg = '';
     $resultYN = 'Y';
     $serviceConfig = array(
-      'popupNum'=>0,
-      'boardNum'=>0,
       'memberNum'=>0,
+      'memberGoupNum'=>0,
+      'boardNum'=>0,
+      'boardGoupNum'=>0,
+      'documentNum'=>0,
+      'popupNum'=>0,
       'pageviewNum'=>0,
       'analysisNum'=>0 );
+
+    $result = $this->model->select('member', 'id');
+
+    if ($result) {
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $serviceConfig['memberNum'] = $numrows;
+      }
+    }
+
+    $result = $this->model->select('member_group', 'id');
+
+    if ($result) {
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $serviceConfig['memberGroupNum'] = $numrows;
+      }
+    }
+
+    $result = $this->model->select('board', 'id');
+
+    if ($result) {
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $serviceConfig['boardNum']  = $numrows;
+      } 
+    }
+
+    $result = $this->model->select('board_group', 'id');
+
+    if ($result) {
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $serviceConfig['boardGoupNum']  = $numrows;
+      } 
+    }
+
+    $result = $this->model->select('document', 'id');
+
+    if ($result) {
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $serviceConfig['documentNum']  = $numrows;
+      } 
+    }
+
 
     $where = new QueryWhere();
     $where->set('choice', 'y');    
@@ -572,26 +614,6 @@ class AdminAdminView extends View
 
       if ($numrows > 0) {
         $serviceConfig['popupNum']  = $numrows;
-      }
-    }
-
-    $result = $this->model->select('board_group', 'id');
-
-    if ($result) {
-      $numrows = $this->model->getNumRows();
-
-      if ($numrows > 0) {
-        $serviceConfig['boardNum']  = $numrows;
-      } 
-    }
-
-    $result = $this->model->select('member_group', 'id');
-
-    if ($result) {
-      $numrows = $this->model->getNumRows();
-
-      if ($numrows > 0) {
-        $serviceConfig['memberGroupNum'] = $numrows;
       }
     }
 

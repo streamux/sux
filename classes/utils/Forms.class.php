@@ -15,8 +15,7 @@ class Forms extends Object {
 
     $is_matched = 0;
 
-    if (isset($img_name) && $img_name) {
-      
+    if (isset($img_name) && $img_name) {      
       $is_matched += preg_match('/(php|php3|html|htm|cgi|pl)+/', $img_name);
       $is_matched += !preg_match('/(jpg|jpeg|gif|png|zip)+$/', $img_name);
 

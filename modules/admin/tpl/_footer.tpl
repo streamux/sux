@@ -35,14 +35,15 @@
 <script>window.jQuery.tmpl || document.write('<script src="{$rootPath}common/js/api/jquery.tmpl.min.js"><\/script>')</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
 <script>window.Swiper || document.write('<script src="{$rootPath}common/js/api/swiper.min.js"><\/script>')</script>
+<script src="{$rootPath}common/plugins/ckeditor/ckeditor.js"></script>
 
 <script src="{$rootPath}common/js/jsux.min.js?20180110"></script>
-<script>  jsux.rootPath = {$rootPath};</script>
+<script>  jsux.rootPath = "{$rootPath}";</script>
 <script src="{$rootPath}common/js/jsux_common.min.js?20180110"></script>
 <script src="{$rootPath}common/js/jsux_admin_app.min.js?20180110_2"></script>
 
 {if $documentData.jscode != ''}
-<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.js?20180110"></script>
+<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.min.js?20180110"></script>
 
 <script type="text/javascript">
   jsux.fn['{$documentData.jscode}'].init();

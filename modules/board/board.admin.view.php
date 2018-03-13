@@ -11,14 +11,13 @@ class BoardAdminView extends View
   function displayList() {
 
     $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'list';
-    $this->document_data['module_code'] = 'board';
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'board';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -31,10 +30,294 @@ class BoardAdminView extends View
 
   function displayAdd() {
 
+    $msg = '';
+
+    $context = Context::getInstance();
+    $sessionData = $context->getSessionAll();
+    $category = $context->getParameter('category');
+    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $password = $sessionData['password'];
+    $admin_pass = $context->checkAdminPass();
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $returnURL = $rootPath . $category;
+    
+    if ($admin_pass === FALSE) {
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '관리자 로그인이 필요합니다.';
+      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }
+
+    $this->model->select('board_group','category, board_name');
+    $board_list = $this->model->getRows();
+
+
+    $contentData = array();
+    $contentData['wallname'] = Utils::getWallKey();
+
+    if (isset($nickname) && $nickname) {
+      $contentData['css_user_label'] = 'sx-hide';
+      $contentData['user_name_type'] = 'hidden';
+      $contentData['user_pass_type'] = 'hidden';
+      $contentData['nickname'] = $nickname;
+      $contentData['user_password'] = $password;
+    } else {
+      $contentData['css_user_label'] = 'sx-show-inline';      
+      $contentData['user_name_type'] = 'text';
+      $contentData['user_pass_type'] = 'password';
+      $contentData['nickname'] = 'Guest';
+      $contentData['user_password'] = '';
+    }
+
+    $this->document_data['category'] = $category;
+    $this->document_data['content'] = $contentData;
+    $this->document_data['board_list'] = $board_list;
+
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'board';
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;    
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+
+  function displayModify() {
+
+    $msg = '';
+
+    $context = Context::getInstance();
+    $sessionData = $context->getSessionAll();
+    $id = $context->getParameter('id');
+    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $password = $sessionData['password'];
+    $admin_pass = $context->checkAdminPass();
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $returnURL = $rootPath . $category;
+    
+    if ($admin_pass === FALSE) {
+      $context->setSession( 'return_url', $returnURL);
+      $msg = '관리자 로그인이 필요합니다.';
+      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }
+
+    $this->model->select('board_group','category, board_name');
+    $board_list = $this->model->getRows();
+
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board','id, category, is_notice, nickname, user_name, title, email_address, content', $where);
+    
+    $contentData = $this->model->getRow();
+    $contentData['nickname'] = $contentData['nickname'] | $contentData['user_name'];
+    $contentData['title'] = $contentData['title'];
+    $contentData['content'] = FormSecurity::decodeForForm($contentData['content']);
+    
+    $contentType = $contentData['content_type'];
+    $contentData['content_type_' . $contentType] = 'checked';
+    $contentData['wallname'] = Utils::getWallKey();
+
+    if (isset($nickname) && $nickname) {
+      $contentData['css_user_label'] = 'sx-hide';
+      $contentData['user_name_type'] = 'hidden';
+      $contentData['user_pass_type'] = 'hidden';
+      $contentData['nickname'] = $nickname;
+      $contentData['user_password'] = $password;
+    } else {
+      $contentData['css_user_label'] = 'sx-show-inline';      
+      $contentData['user_name_type'] = 'text';
+      $contentData['user_pass_type'] = 'password';
+      $contentData['nickname'] = 'Guest';
+      $contentData['user_password'] = '';
+    }
+
+    $this->document_data['category'] = $category;
+    $this->document_data['content'] = $contentData;
+    $this->document_data['board_list'] = $board_list;
+
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'board';
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['path'] = $skinPath;
+    $this->skin_path_list['realPath'] = $skinRealPath;    
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+
+  function displayDelete() {
+
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+    
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board', 'id, title', $where);
+    $row = $this->model->getRow();
+
+    foreach ($row as $key => $value) {
+      $this->document_data[$key] = $value;
+    }
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'board';
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+    
+    $this->output();
+  }
+
+  function displayListJson() {
+
+    $dataObj = null;
+    $dataList = array();
+    $msg = "";
+    $resultYN = "Y";
+
+    $context = Context::getInstance();
+    $id = $context->getRequest('id');
+    $limit = $context->getRequest('limit');
+    $passover = $context->getRequest('passover');
+
+    if (empty($limit)) {
+      $limit = 10;
+    }       
+    if (empty($passover)) {
+      $passover = 0;
+    }
+
+    if (isset($id) && $id) {
+      $where = new QueryWhere();
+      $where->set('id', $id);
+      $this->model->select('board','*', $where);
+      $totalNum = 1;
+    } else {
+      $this->model->select('board', 'id');
+      $totalNum = $this->model->getNumRows();
+      $this->model->select('board','*', null, 'id desc', $passover, $limit);
+    }
+    
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0){
+
+      $dataObj['list'] = array();
+      $dataObj['total_num'] = $totalNum;
+      $dataList = array();
+
+      $a = $numrows;
+      $rows = $this->model->getRows();
+      foreach ($rows as $key => $row) {
+
+        $fields = array('no'=>$a);
+        foreach ($row as $key => $value) {
+          $fields[$key] = $value;
+        }
+
+        $dataList[] = $fields;
+        $a--;
+      }
+
+      $dataObj['list'] =$dataList;
+    } else {
+      $msg = "게시글이 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    //$msg = Tracer::getInstance()->getMessage();
+    $data = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg);
+
+    $this->callback($data);
+  }
+
+  function displayModifyJson() {
+
+    $context = Context::getInstance();
+    $id = $context->getPost('id');
+
+    $dataObj = array();
+    $msg = "";
+    $resultYN = "Y";
+
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board_group','*', $where);
+
+    $numrows = $this->model->getNumRows();
+    if ($numrows > 0) {
+      $row = $this->model->getRow();
+      foreach ($row as $key => $value) {
+        $dataObj[$key] = $value;
+        //$msg .= $key . " : " . $value . "<br>";
+      }
+      $resultYN = "Y";
+    } else {
+      $resultYN = "N";
+      $msg = '게시판이 존재하지 않습니다.';
+    }
+    $data = array(  "data"=>$dataObj,
+            "result"=>$resultYN,
+            "msg"=>$msg);
+
+    $this->callback($data);
+  }
+
+  function displayGroup() {
+
+    $this->displayGroupList();
+  }
+
+  function displayGroupList() {
+
     $context = Context::getInstance();
     $this->request_data = $context->getRequestAll();
 
-    $this->document_data['jscode'] = 'add';
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'board';
+
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $this->skin_path_list['root'] = $rootPath;
+    $this->skin_path_list['dir'] = '';
+    $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_group_list.tpl";
+    $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
+
+    $this->output();
+  }
+
+  function displayGroupAdd() {
+
+    $context = Context::getInstance();
+    $this->request_data = $context->getRequestAll();
+
+    $this->document_data['jscode'] = 'groupAdd';
     $this->document_data['module_code'] = 'board';
 
     $rootPath = _SUX_ROOT_;
@@ -52,19 +335,19 @@ class BoardAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['content'] = "{$skinPath}/admin_add.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_group_add.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
   }
 
-  function displayModify() {
+  function displayGroupModify() {
 
     $context = Context::getInstance();
     $id = $context->getParameter('id');   
     $this->request_data = $context->getRequestAll();
 
-    $this->document_data['jscode'] = 'modify';
+    $this->document_data['jscode'] = 'groupModify';
     $this->document_data['module_code'] = 'board';
 
     $rootPath = _SUX_ROOT_;
@@ -91,20 +374,20 @@ class BoardAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['content'] = "{$skinPath}/admin_modify.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_group_modify.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
 
     $this->output();
   }
 
-  function displayDelete() {
+  function displayGroupDelete() {
 
     
     $context = Context::getInstance();
     $id = $context->getParameter('id');
     $this->request_data = $context->getRequestAll();
 
-    $this->document_data['jscode'] = 'delete';
+    $this->document_data['jscode'] = 'groupDelete';
     $this->document_data['module_code'] = 'board';
     
     $where = new QueryWhere();
@@ -123,34 +406,13 @@ class BoardAdminView extends View
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
-    $this->skin_path_list['content'] = "{$skinPath}/admin_delete.tpl";
+    $this->skin_path_list['content'] = "{$skinPath}/admin_group_delete.tpl";
     $this->skin_path_list['footer'] = "{$adminSkinPath}/_footer.tpl";
     
     $this->output();
   }
 
-  function displaySkinJson() {
-
-    $skinDir = _SUX_PATH_ . "modules/board/skin/";
-    
-    $msg = "";
-    $resultYN = "Y";
-
-    $skinList = Utils::readDir($skinDir);
-    if (!$skinList) {
-      $msg = "스킨폴더가 존재하지 않습니다.";
-      $resultYN = "N";
-    }
-    
-    sort($skinList);
-    $data = array(  "data"=>array("list"=>$skinList),
-            "result"=>$resultYN,
-            "msg"=>$msg);
-
-    $this->callback($data);
-  }
-
-  function displayListJson() {
+  function displayGroupListJson() {
 
     $dataObj = null;
     $dataList = array();
@@ -212,7 +474,7 @@ class BoardAdminView extends View
     $this->callback($data);
   }
 
-  function displayModifyJson() {
+  function displayGroupModifyJson() {
 
     $context = Context::getInstance();
     $id = $context->getPost('id');
@@ -302,6 +564,85 @@ class BoardAdminView extends View
             "msg"=>$msg);
 
     $this->callback($data);
-  } 
+  }
+
+  function displaySkinJson() {
+
+    $skinDir = _SUX_PATH_ . "modules/board/skin/";
+    
+    $msg = "";
+    $resultYN = "Y";
+
+    $skinList = Utils::readDir($skinDir);
+    if (!$skinList) {
+      $msg = "스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+    
+    sort($skinList);
+    $data = array(  "data"=>array("list"=>$skinList),
+            "result"=>$resultYN,
+            "msg"=>$msg);
+
+    $this->callback($data);
+  }
+
+  function displayNewsListJson() {
+
+    $msg = '';
+    $resultYN = 'Y';
+    $dataObj = array();
+
+    $context = Context::getInstance();
+    $UIError = UIError::getInstance();
+    $requestData = $context->getRequestAll();
+    $sessionData = $context->getSessionAll(); 
+
+    $rootPath = _SUX_ROOT_;
+    $domain = $context->getServer('HTTP_HOST');
+
+    // total rows from board
+    $where = new QueryWhere();
+    $where->set('date', date('Y-m-d', time()), '>=');
+    $where->set('date', date('Y-m-d', time() + 518400), '<');
+    $where->add('and (');
+    $where->set('category', 'notice', '=', '');
+    $where->set('category', 'release', '=', 'or');
+    $where->add(')');
+    $result = $this->model->select('board', 'id,category,nickname, title, date', $where, 'igroup_count asc', 0, 5);
+
+    if ($result) {
+      $dataObj = array();
+      $numrows = $this->model->getNumRows();
+
+      if ($numrows > 0) {
+        $dataObj['total_num'] = $numrows;
+        $dataObj['list'] = $this->model->getRows();
+
+        for ($i=0; $i<count($dataObj['list']); $i++) {        
+          $dataObj['list'][$i]['nickname'] = FormSecurity::decodeWithoutTags($dataObj['list'][$i]['nickname']); 
+          $dataObj['list'][$i]['title'] = FormSecurity::decodeWithSimpleTags($dataObj['list'][$i]['title']);
+          $compareDayArr = split(' ', $dataObj['list'][$i]['date']);
+          $dataObj['list'][$i]['date'] = $compareDayArr[0];
+
+          $rowCategory = $dataObj['list'][$i]['category'];
+          $rowId = $dataObj['list'][$i]['id'];
+          $url = 'http://' . $domain . $rootPath . $rowCategory . '/' . $rowId;
+          $dataObj['list'][$i]['url'] =  $url;
+        }   // end of for
+      } else {
+        $dataObj['msg'] .= '최근 소식이 존재하지 않습니다.';
+      }      
+    } else {
+      $UIError->add('게시물 목록 가져오기를 실패하였습니다.');
+    }
+
+    //$msg .= Tracer::getInstance()->getMessage();
+    $json = array(  "data"=> $dataObj,
+                            "result"=>$resultYN,
+                            "msg"=>$msg);
+
+    $this->callback($json);
+  }
 }
 ?>
