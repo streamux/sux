@@ -28,7 +28,7 @@ class PageModule
     $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
     $classLowerName = strtolower($className);
 
-    if ($context->getDB() || strtolower($className) === 'install') {
+    if ($context->getDB() || strtolower($className) === 'install') {      
       if ($classLowerName !== 'install') {
         $oDB = DB::getInstance();
       }
@@ -55,9 +55,10 @@ class PageModule
 
         // Check admin login for Dashboard
         $regAdmin = preg_match('/(admin)+$/i', $className);
-        if ($classLowerName !== 'loginadmin' && $regAdmin) {
 
-          $isAdminLogin = $context->getSession('admin_ok');
+        if ($classLowerName !== 'loginadmin' && $regAdmin) {
+          $isAdminLogin = $context->isAdminLogin();
+
           if (empty($isAdminLogin)) {
             Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
           }
@@ -70,6 +71,7 @@ class PageModule
           } else {
 
             $category = $action;
+            
             if (preg_match('/^(board|documentadmin)+/i', $className)) {
               $action = isset($id) ? 'read' : 'list';
             } else {

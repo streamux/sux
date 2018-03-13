@@ -27,7 +27,9 @@ module.exports = function(grunt) {
       },
       'common-admin-app': {
         src: [
-          'common/js/app/jsux_admin_gnb.js',
+          'common/js/app/jsux_admin_constructor.js',
+          'common/js/app/jsux_admin_menu.js',
+          'common/js/app/jsux_admin_mobile_panel.js',
           '!*.back*'
         ],
         dest: 'common/js/jsux_admin_app.js'
@@ -55,8 +57,21 @@ module.exports = function(grunt) {
           'common/js/jsux_common.min.js':['common/js/jsux_common.js'],
           'common/js/jsux_app.min.js':['common/js/jsux_app.js'],
           'common/js/jsux_app_stage.min.js': ['common/js/app/jsux_app_stage.js'],
-          'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js'],
-          'common/js/jsux_admin_app_stage.min.js': ['common/js/app/jsux_admin_app_stage.js']
+          'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js']
+        }
+      },
+      'module-admin': {
+        files: {
+          'modules/admin/tpl/admin_admin.min.js':['modules/admin/tpl/admin_admin.js'],
+          'modules/analytics/tpl/analytics_admin.min.js':['modules/analytics/tpl/analytics_admin.js'],
+          'modules/board/tpl/board_admin.min.js':['modules/board/tpl/board_admin.js'],
+          'modules/document/tpl/document_admin.min.js':['modules/document/tpl/document_admin.js'],
+          'modules/install/tpl/install.min.js':['modules/install/tpl/install.js'],
+          'modules/login/tpl/login_admin.min.js':['modules/login/tpl/login_admin.js'],
+          'modules/member/tpl/member_admin.min.js':['modules/member/tpl/member_admin.js'],
+          'modules/menu/tpl/menu_admin.min.js':['modules/menu/tpl/menu_admin.js'],
+          'modules/popup/tpl/popup_admin.min.js':['modules/popup/tpl/popup_admin.js'],
+          'modules/search/tpl/search.min.js':['modules/search/tpl/search.js']
         }
       }
     },

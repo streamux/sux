@@ -40,7 +40,7 @@ class LoginView extends View
     }
 
     $user_id = $context->getSession('user_id');
-    
+        
     /**
      * get data from DB
      */

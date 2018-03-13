@@ -9,3 +9,12 @@
   <link rel="stylesheet" type="text/css" href="{$rootPath}modules/install/tpl/layout.css">  
 </head>
 <body>
+<div class="sx-wrapper">
+  <div class="sx-header">
+    <h1 class="logo">
+      <a href="{$rootPath}admin-admin">
+        <img class="logo" src="{$rootPath}modules/install/tpl/images/logo.png" title="streamxux" alt="streamxux"> 
+      </a>      
+    </h1> 
+  </div>
+  <div class="sx-container"> 

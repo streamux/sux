@@ -29,9 +29,10 @@ class BoardController extends Controller
 
   function setEncodeFormValue($input) {
 
-    $input = FormSecurity::encodeByInteger($input, $this->getIntegerFields());
-    $input = FormSecurity::encodeByNonTags($input, $this->getNoneTagFields());
-    $input = FormSecurity::encodeBySimpleTags($input, $this->getSimpleTagFields());
+    $input = FormSecurity::encodeToInteger($input, $this->getIntegerFields());
+    $input = FormSecurity::encodeWithoutTags($input, $this->getNoneTagFields());
+    $input = FormSecurity::encodeWithSimpleTags($input, $this->getSimpleTagFields());
+
     $input = FormSecurity::encodes($input);
 
     return $input;
@@ -135,6 +136,9 @@ class BoardController extends Controller
       exit;
     }
 
+    /*echo $columns['content'];
+    return;*/
+
     $result = $this->model->insert('board', $columns);
     if (!isset($result)) {
       $resultYN = 'N';
@@ -142,7 +146,7 @@ class BoardController extends Controller
     }
 
     /*Tracer::getInstance()->output();
-    return;*/    
+    return;    */
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -193,12 +197,8 @@ class BoardController extends Controller
     $where->set('nickname', $nickname, '=', 'and');
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('board','password, igroup_count, filename', $where);
-
-    /*Tracer::getInstance()->output();
-    echo $passwordHash . ' : ' . $row['password'];
-    return;*/
-
     $numrow = $this->model->getNumRows();
+
     if ($numrow > 0) {      
       $row = $this->model->getRow();
    
@@ -279,8 +279,8 @@ class BoardController extends Controller
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
     }
 
-    //$msg .=  "<br>" . Tracer::getInstance()->getMessage();
-    //return;
+    /*Tracer::getInstance()->output();
+    return;*/
 
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,

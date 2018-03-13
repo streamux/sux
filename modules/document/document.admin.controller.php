@@ -13,6 +13,7 @@ class DocumentAdminController extends Controller
     $posts = $context->getPostAll();
 
     $category = strtolower($posts['category']);
+    $posts['category'] = $category;
     $templateType = $posts['template_type'];
     $title = $posts['document_name'];
     $returnURL = $context->getServer('REQUEST_URI'); 

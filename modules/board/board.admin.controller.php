@@ -2,8 +2,363 @@
 
 class BoardAdminController extends Controller
 {
+  // Form Value Validation && Security
+  function getFormCheckList() {
+
+    return array(  array('key'=>'nickname', 'msg'=>'닉네임을'),
+                          array('key'=>'password', 'msg'=>'비밀번호를'),
+                          array('key'=>'title', 'msg'=>'제목을'),
+                          array('key'=>'content', 'msg'=>'내용을'));
+  }
+
+  function getModifyFormCheckList() {
+
+    return array(  array('key'=>'title', 'msg'=>'제목을'),
+                          array('key'=>'content', 'msg'=>'내용을'));
+  }
+
+  function getIntegerFields() {
+
+    return array('id', 'readed_count', 'voted_count', 'blamed_count', 'igroup_count', 'space_count');
+  }
+
+  function getNoneTagFields() {
+
+    return array('category', 'is_notice', 'user_id', 'user_name', 'nickname', 'password', 'email_address', 'progress_step', 'wall', 'contents_type');
+  }
+
+  function getSimpleTagFields() {
+
+    return array('title');
+  }
+
+  function setEncodeFormValue($input) {
+
+    $input = FormSecurity::encodeToInteger($input, $this->getIntegerFields());
+    $input = FormSecurity::encodeWithoutTags($input, $this->getNoneTagFields());
+    $input = FormSecurity::encodeWithSimpleTags($input, $this->getSimpleTagFields());
+
+    $input = FormSecurity::encodes($input);
+
+    return $input;
+  }
+  // end 
+
+  function getUniqueId() {
+
+    return 'Guest' . Utils::getMicrotimeInt();
+  }
 
   function insertAdd() {
+
+    $msg = '';
+    $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
+    $saveDir = _SUX_PATH_ . "files/board/";
+
+    $context = Context::getInstance();
+    $sessions = $context->getSessionAll();
+    $posts = $context->getPostAll();    
+    $files = $context->getFiles();
+
+    // security - ref : utils/Forms.class.php
+    Forms::validates($posts, $this->getFormCheckList());
+    Forms::validateFile($files);
+    $posts = $this->setEncodeFormValue($posts);
+
+    $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
+    $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
+
+    $returnURL = $context->getServer('REQUEST_URI');
+    $category = $posts['category']; 
+    $wall = $posts['wall'];
+    $wallname = $posts['wallname'];
+    $wallok = $posts['wallok'];
+    $imageUpName = $files['imgup']['name'];
+    $imageUpTempName = $files['imgup']['tmp_name'];
+
+    if ($wallname !== $wallok) {
+      $msg = '경고! 잘못된 등록키입니다.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }    
+
+    if (is_uploaded_file($imageUpTempName )) {
+      $mktime = mktime();
+      $imageUpName =$mktime . "_" . $imageUpName;
+      $dest = $saveDir . $imageUpName;
+
+      if (!move_uploaded_file($imageUpTempName , $dest)) {
+        $resultYN = 'N';
+        $msg .= '파일을 지정한 디렉토리에 저장하는데 실패했습니다.';
+      }
+    }
+
+    $where = new QueryWhere();
+    $where->set('category', $category, '=');
+    $this->model->select('board', 'id', $where, 'id desc', 0, 1);
+    $row = $this->model->getRow();
+    $igroup_count = $row['id'] + 1;
+
+    $cachePath = './files/caches/queries/board.getColumns.cache.php';
+    $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
+    if ($columnCaches) {
+      $columns = array();
+
+      for($i=0; $i<count($columnCaches); $i++) {
+        $key = $columnCaches[$i];
+
+        // image file
+        if (strpos($key, 'file') !== false) {
+
+          // filetype의 'type' 추출 
+          $prop = substr($key, 4);
+          $value = $files['imgup'][$prop];  
+
+          if ($prop === 'name') {
+            $value = $imageUpName;
+          }
+
+          if (isset($value) && $value) {
+            $columns[$key] = $value;
+          }
+        } else {
+          $value = $posts[$key];
+          
+          if (isset($value) && $value ) {
+            $columns[$key] = $value;
+          }
+        } // end of if
+      } // end of for
+
+      $columns['igroup_count'] = $igroup_count;
+      $columns['date'] = 'now()';
+      $columns['ip'] = $context->getServer('REMOTE_ADDR');
+    } else {
+      $msg .= "QueryCacheFile Do Not Exists<br>";
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }
+
+    $result = $this->model->insert('board', $columns);
+    if (!isset($result)) {
+      $resultYN = 'N';
+      $msg .= '글을 저장하는데 실패했습니다.';
+    }
+
+    /*Tracer::getInstance()->output();
+    return;*/
+    $data = array(  'url'=>$rootPath . $category,
+            'result'=>$resultYN,
+            'msg'=>$msg,
+            'delay'=>0);
+
+    $this->callback($data); 
+  }
+
+  function updateModify() {
+
+    $msg = '';
+    $resultYN = 'Y';
+
+    $context = Context::getInstance();
+    $sessions = $context->getSessionAll();
+    $posts = $context->getPostAll();
+    $files = $context->getFiles();
+    
+    Forms::validates($posts, $this->getModifyFormCheckList());
+    Forms::validateFile($files);
+    $posts = $this->setEncodeFormValue($posts);
+
+    $returnURL = $context->getServer('REQUEST_URI');
+    $category = $posts['category'];
+    $id = $posts['id'];
+    $nickname = $posts['nickname'];
+    $passwordHash = $context->getPasswordHash($posts['password']);
+    $adminPassword = $context->getAdminInfo('admin_pwd');
+    $adminPasswordHash = $context->getPasswordHash($adminPassword);
+    $imageUpName = $files['imgup']['name'];
+    $imageUpTempName = $files['imgup']['tmp_name'];
+
+    $wall = $posts['wall'];
+    $wallname = $posts['wallname'];
+    $wallok = $posts['wallok'];
+
+    if ($wallname !== $wallok) {
+      $msg = '경고! 잘못된 등록키입니다.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    } 
+   
+    $rootPath = _SUX_ROOT_;
+    $saveDir = _SUX_PATH_ . "files/board/";
+    
+    $where = new QueryWhere();
+    $where->set('id', $id, '=');
+    $this->model->select('board','password, igroup_count, filename', $where);
+    $numrow = $this->model->getNumRows();
+
+    if ($numrow > 0) {      
+      $row = $this->model->getRow();
+   
+      if ($passwordHash === $adminPasswordHash) { 
+        $delFileName = $row['filename'];
+
+        if ($delFileName) {
+          $delFileName = $saveDir . $delFileName;
+
+          if(!@unlink($delFileName)) {
+            $resultYN = 'N';
+            $msg .= "' " . $delFileName . "' 파일삭제를 실패했습니다.";
+          } 
+        }
+
+        if (is_uploaded_file($imageUpTempName)) {
+          $mktime = mktime();
+          $imageUpName = $mktime."_".$imageUpName;
+          $dest = $saveDir . $imageUpName;
+
+          if (!move_uploaded_file($imageUpTempName, $dest)) {
+            $resultYN = 'N';
+            $msg .= "파일을 지정한 디렉토리에 저장하는데 실패했습니다.";  
+          }
+        }
+        $context->set('fileup_name', $imageUpName);
+        $cachePath = './files/caches/queries/board.getColumns.cache.php';
+        $columnCaches = CacheFile::readFile($cachePath, 'columns');
+
+        if (!$columnCaches) {
+          $msg .= "QueryCacheFile Do Not Exists<br>";
+        } else {
+          $regFilters = '/^(category|id|password|user_id|user_name)+$/';
+          $columns = array();
+
+          for($i=0; $i<count($columnCaches); $i++) {
+            $key = $columnCaches[$i];
+            
+            if (strpos($key,'file') !== false) {
+              $option = substr($key, 4);  
+              $value = $files['imgup'][$option];
+
+              if ($option === 'name') {
+                $value = $imageUpName;
+              } 
+
+              if (isset($value) && $value) {
+                $columns[$key] = $value;
+              } else {
+                $columns[$key] = '';
+              }
+            } else {
+
+              if (!preg_match($regFilters, $key)) {
+                $value = $posts[$key];
+
+                if (isset($value) && $value) {
+                  $columns[$key] = $value;
+                }              
+              }
+            }             
+          }
+        }
+
+        $result = $this->model->update('board', $columns, $where);        
+        if (!isset($result)) {
+          $msg .= '글을 수정하는데 실패했습니다.';
+          UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+          exit();
+        }
+      } else {
+        $msg .= '관리자 로그인이 필요합니다.';
+        UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+        exit();
+      }
+    } else {
+      $msg .= '데이터가 존재하지 않습니다..';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+    }
+
+    /*Tracer::getInstance()->output();
+    return;*/
+
+    $data = array(  'url'=>$rootPath . 'board-admin/list',
+                            'result'=>$resultYN,
+                            'msg'=>$msg,
+                            'delay'=>0);
+
+    $this->callback($data); 
+  }
+
+  function deleteDelete() {
+
+    $msg = '';
+    $resultYN = 'Y';
+    $rootPath = _SUX_ROOT_;
+    $deletePath = _SUX_PATH_ . "files/board/";    
+
+    $context = Context::getInstance();
+    $posts =  $context->getPostAll();
+    $sessions = $context->getSessionAll();
+
+    Forms::validates($posts);
+    $posts = FormSecurity::encodes($posts);
+    $returnURL = $context->getServer('REQUEST_URI');    
+    $password = trim($sessions['password']);
+    $id = $posts['id'];
+
+    if (empty($password)) {
+      $msg .= '관리자 로그인을 입력해주세요.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+    }
+    
+    $passwordHash = $context->getPasswordHash($password);
+    $adminPassword = $context->getAdminInfo('admin_pwd');
+    $adminPasswordHash = $context->getPasswordHash($adminPassword);
+    
+    $where = new QueryWhere();
+    $where->set('id', $id);
+    $this->model->select('board', 'password,filename', $where); 
+    $row = $this->model->getRow();    
+
+    if (($passwordHash == $row['password']) || ($passwordHash == $adminPasswordHash)) {
+      $delFileName = $row['filename'];
+
+      if(isset($delFileName) && $delFileName != '') {
+        $deletePath = $deletePath . $delFileName;
+
+        if(!@unlink($deletePath)) {
+          $resultYN = 'N';
+          $msg .= '파일삭제를 실패하였습니다.';
+        } 
+      }
+      
+      $where = new QueryWhere();
+      $where->set('id', $id);
+      $result = $this->model->delete('board', $where);
+
+      if (!isset($result)) {
+        $msg .= '글을 삭제하는데 실패했습니다.';
+        UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+        exit;
+      }
+    } else  {
+      $msg .= '비밀번호가 맞지 않습니다.';
+      UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
+      exit;
+      exit;
+    }
+
+    $data = array(  'url'=>$rootPath . $category,
+            'result'=>$resultYN,
+            'msg'=>$msg,
+            'delay'=>0);
+
+    $this->callback($data);
+  }
+
+  function insertGroupAdd() {
 
     $msg = '';
     $resultYN = 'Y';
@@ -13,6 +368,9 @@ class BoardAdminController extends Controller
     $context->setCookieVersion();
     $posts = $context->getPostAll(); 
     $returnURL = $context->getServer('REQUEST_URI');
+
+    $category = strtolower($posts['category']);
+    $posts['category'] = $category;
     
 
     /**
@@ -82,6 +440,13 @@ class BoardAdminController extends Controller
     if ($result) {
       $msg .= "게시판 생성을 완료하였습니다.<br>";
 
+       $id = $this->model->getInsertId();
+        $where = new QueryWhere();
+        $where->set('id', $id);
+
+        $this->model->select('board_group', '*', $where);
+        $dataObj = $this->model->getRows();
+
       // 라우트 키 저장 
       $routes = array();      
       $filePath = './files/caches/routes/board.cache.php';
@@ -147,7 +512,7 @@ class BoardAdminController extends Controller
     $this->callback($json);
   }
 
-  function updateModify() {
+  function updateGroupModify() {
 
     $dataObj = array();
     $resultYN = "Y";
@@ -252,7 +617,7 @@ class BoardAdminController extends Controller
     $this->callback($data);
   }
 
-  function deleteDelete() {
+  function deleteGroupDelete() {
 
     $context = Context::getInstance();
     $context->setCookieVersion();

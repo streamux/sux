@@ -7,6 +7,40 @@ class DocumentAdminView extends View
     $this->displayList();
   }
 
+  function getSkinList() {
+
+    $skinDir = _SUX_PATH_ . "modules/document/templates/";
+    $skinList = FileHandler::readDir($skinDir);
+
+    if (!$skinList) {
+      $msg = "스킨폴더가 존재하지 않습니다.";
+      $resultYN = "N";
+    }
+
+    $skinBuffer = array();
+    
+    foreach ($skinList as $key => $value) {
+      if (preg_match('/^(\w)+$/', $value['file_name'])) {
+        $skinBuffer[] = $value['file_name'];
+      }      
+    }
+
+    return $skinBuffer;
+  }
+
+  function displaySkinListJson() {
+
+    $resultYN = 'Y';
+    $msg = '';
+
+    $skinBuffer = $this->getSkinList();
+    $data = array(  "data"=>$skinBuffer,
+                            "result"=>$resultYN,
+                            "msg"=>$msg);
+
+    $this->callback($data);
+  }
+
   function displayList() {
 
     $context = Context::getInstance();

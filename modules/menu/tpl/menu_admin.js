@@ -59,8 +59,6 @@
     elid: '',
     currentItem: null,
     oldItem: null,
-    editState: false,
-
     dragModels: null,
     dragMinY: 0,
     dragItem$: null,
@@ -129,7 +127,7 @@
       searchMenu(parentModels);
       searchMenu = null;
 
-      this.deactivate(elCutitem);
+      //this.deactivate(elCutitem);
       this.setData(this.model);
       this.resizeSwiper();
       /*this.slideTo(1);*/
@@ -160,6 +158,7 @@
     selectMenu: function(id) {
 
       var self = this;
+      var reg = /(selected_menu_active)+/g;
 
       this.elId = this.id + ' > li';
       this.selectedId = id;
@@ -167,14 +166,18 @@
       var searchMenu = (function f(list) {
 
         for (var i=0; i<list.length; i++) {
+
           if (list[i].id == id) {
+            self.currentItem = $(self.elId).eq(i);
+
             if (self.oldItem)  {
               ListManager.removeClass(self.oldItem, 'selected_menu_active');
             }
 
-            self.currentItem = $(self.elId).eq(i);
-            ListManager.addClass(self.currentItem, 'selected_menu_active');
-
+            if (!self.currentItem.hasClass('selected_menu_active')) {
+              ListManager.addClass(self.currentItem, 'selected_menu_active');
+            }
+            
             self.oldItem = self.currentItem;
             self.selectedModels = list[i].sub;
             break;
@@ -515,6 +518,28 @@
       return this.model.length;
     },
 
+    searchTargetElement: function(target, loop, search) {
+
+      var parent$ = $(target);
+      var count = 0;
+      var loop = !loop ? 0 : loop; 
+      var search = !search ? search.toUpperCase() : 'DIV';
+      var reg = new RegExp(search, 'gi');
+      
+      do{
+
+        if (parent && (reg.test(parent$.data('type')) || reg.test(parent$[0].className) ||
+              reg.test(parent$[0].nodeName))) {
+          return true;
+        }
+
+        parent = parent$.parent();
+        count++;
+      }while(count<loop);
+
+      return false;
+    },
+
     //setData's method is defined in parent class
     initialize: function(data) {
       
@@ -528,10 +553,9 @@
 
         var el = e.target;
         var elName = self.getAttr(el, 'name');
+        var nodeName = el.nodeName.toUpperCase();
 
-        // 이름이 없거나, 'btn_drag' 이름이 아닌 경우 
-        var nodeName = el.nodeName.toUpperCase();        
-        if (!(nodeName === 'I' || nodeName === 'A' || nodeName === 'BUTTON')) {
+        if (self.searchTargetElement(e.target, 1, 'DIV|H1|INPUT|HEADER')) {
           self.unselectMenu();
           return;
         }
@@ -800,21 +824,21 @@
       var model = {        
         id:'',
         sid: '',
+        category: '',
         menu_name:'',
-        url:'',
-        url_target:'',
+        url:'#',
+        url_target:'_self',
         depth:1,        
         isClicked:false,        
         isModified:false,
         isDragging:false,
-        is_active: 0,
-        category: '',
+        is_active: 1,
         
         posy:0,
         state:'default',
         badge:0,
         sub:[],
-        top:'0px',
+        top: 0,
         
         date:''
       };
@@ -825,6 +849,13 @@
 
       if (!this.treeManager.hasItem(id)) {
         var menu = this.listManager.getItem(id);
+        this.treeManager.addItem(menu);
+        this.editableSelectedMenu();
+      }       
+    },
+    addCustomizeMenu: function(menu) {
+
+      if (!this.treeManager.hasItem(menu.id)) {
         this.treeManager.addItem(menu);
         this.editableSelectedMenu();
       }       
@@ -870,7 +901,7 @@
     },
     modifyMenuInfo: function(id) {
 
-      var item = this.listManager.getItem(id);
+      var item = this.treeManager.getItem(id);
       this.menuInfoView.showPanel();
       this.menuInfoView.update(item);
     },
@@ -884,19 +915,8 @@
 
       var params = this.menuInfoView.getModel();
 
-      this.listManager.updateItem(params);
       this.treeManager.updateItem(params);
       this.serviceManager.update(params);      
-    },
-    removeMenu: function(id) {
-
-       var params = {
-        _method: 'delete',
-        id: id
-      };
-
-      this.listManager.cutItem(id);      
-      this.serviceManager.delete(params);
     },
     saveJson: function() {
 
@@ -935,7 +955,7 @@
 
       return true;  
     },
-    createMenu: function( f ) {
+    createCustomizeMenu: function( f ) {
 
       var self = this,
             params = {},
@@ -957,34 +977,20 @@
       /*$.each(params, function( index, item ) {
         console.log(index + ' : ' + item);
       });*/
+      var date = new Date();
+      var model = self.getMenuModel();
+      model.id = date.getTime();
+      model.category = 'menu_' + date.getTime();
 
-      if (!f.action) {
-        alert('Not Exists URL');
-      }
-      url = f.action;
-
-      jsux.getJSON( url, params, function( e ) {
-
-        if (e.result.toUpperCase() === 'Y') {
-
-          if (e.data && e.data.length > 0) {
-            var data = e.data[0];
-            var model = self.getMenuModel();
-
-            $.each(model, function(key) {
-
-              if (data[key]) {
-                model[key] = data[key];
-              }            
-            });
-
-            self.listManager.addItem(model);           
-          } //end of if         
-        } else {
-
-          trace( e.msg );
-        } //end of if
+      $.each(model, function(key) {
+       
+        if (params[key]) {          
+          model[key] = params[key];
+        }            
       });
+
+      this.addCustomizeMenu(model); 
+      this.editableSelectedMenu();
     },
     setEvent: function() {
 
@@ -994,7 +1000,7 @@
         e.preventDefault();
 
         if (self.checkFormVal(this)) {
-          self.createMenu( e.target );
+          self.createCustomizeMenu( e.target );
         }
       });
 
@@ -1136,7 +1142,7 @@
 
         //console.log(e.event.data);
         switch(e.type) {
-          case ServiceManagerEvent.UPDATE_COMPLETE: 
+          case ServiceManagerEvent.UPDATE_COMPLETE:
             self.canceModifyMenu();
             break;
 

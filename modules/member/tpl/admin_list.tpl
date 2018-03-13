@@ -1,4 +1,4 @@
-    <div class="sx-content sx-admin-member">           
+    <div class="sx-content sx-admin-member-list">           
       <section class="section">
         <header class="header">
           <h1 class="title">회원 관리</h1>
@@ -15,13 +15,13 @@
                 </select>
                 <label for="find" class="sr-only">회원 정보 설정</label>
                 <select name="find" id="find" class="sx-form-control">
-                  <option value="user_id">아이디</option>
+                  <option value="user_id">아이디 </option>
                   <option value="nickname">닉네임</option>
                   <option value="email_address">이메일</option>
                 </select>
                 <label for="search" class="sr-only">검색어</label>
-                <input type="text" name="search" value="" class="sx-form-control">
-                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">
+                <input type="text" name="search" value="" class="sx-form-control" placeholder="검색어">
+                <input type="submit" name="btn_submit" value="검색" class="sx-btn" title="검색">              
                 <a href="{$rootPath}member-admin/group" class="sx-btn" title="그룹 목록">그룹 목록</a>
                 <a href="{$rootPath}member-admin/add" class="sx-btn sx-btn-info" title="회원추가">회원 추가</a>
               </div>            
