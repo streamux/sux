@@ -17,7 +17,7 @@
       </p>
       <p class="{if isset($contentData.is_img)}img_panel{/if} {$contentData.is_img}" style="max-width:{$contentData.is_img_width}"><img src="{$contentData.fileup_path}" width="100%" border="0"></p>
       <div class="content_text">
-        {$contentData.content}
+        {$contentData.content}  
       </div>
     </div> 
     <div class="btn_groups">    

@@ -14,7 +14,7 @@ jsux.fn.ckeditor = {
         { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Superscript', 'Subscript', 'Strike', 'RemoveFormat', 'CopyFormatting' ] },
         { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
         { name: 'align', items: [ 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock' ] },     
-        { name: 'insert', items: [ 'Image', 'Table' ] },
+        { name: 'insert', items: [ 'Image', '-', 'Youtube', '-', 'Table', '-', 'HorizontalRule' ] },
         { name: 'document', items: [ 'Print' ] },
         '/',        
         { name: 'styles', items: [ 'Format', 'Font', 'FontSize' ] },

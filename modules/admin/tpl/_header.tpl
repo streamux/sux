@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <title>{$title}</title>
+  <title>{$browserTitle}</title>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, height=device-height, maximum-scale=2.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css?20180109">
-  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css?20180109">
   
-  {if $documentData.module_code != ''}
+  {if $documentData.develop_mode !== true}
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">  
+  {else if}
+  <link rel="stylesheet" href="{$rootPath}common/css/api/xeicon.min.css">
+  <link rel="stylesheet" href="{$rootPath}common/css/api/swiper.min.css">
+  {/if}
+
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css?20180109">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css?20180109">  
+  
+  {if $documentData.module_code !== ''}
   <link rel="stylesheet" type="text/css" href="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.css?20180109_2">
   {/if}
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+  <script src="http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js">IE7_PNG_SUFFIX=".png";</script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+  <![endif]-->
+  
+</head>
 <body>
 <div class="sx-wrapper">
 
@@ -23,7 +38,6 @@
  
   <header class="sx-header">
     <div class="sx-bgcover"></div>
-
     <div class="sx-header-bar">
       <h1 class="sx-logo">
         <a href="{$rootPath}admin-admin"><img src="{$rootPath}common/images/sux_logo_white.svg" onerror='this.src="{$rootPath}common/images/sux_logo.png"' alt="streamxux"/><span class="sx-logo-title">Admin</span></a>
@@ -61,11 +75,14 @@
               </div>
             </li>
             <li>
-              <a href="{$rootPath}board-admin"><i class="xi-comment-o xi-fw"></i> 게시판 관리</a>
+              <a href="{$rootPath}board-admin"><i class="xi-comment-o xi-fw"></i> 게시글 관리</a>
               <div class="sx-sub-case">
                 <ul class="sx-drap-menu">
-                  <li><a href="{$rootPath}board-admin">게시판 목록</a></li>                  
-                  <li><a href="{$rootPath}board-admin/add">게시판 추가</a></li>                  
+                  <li><a href="{$rootPath}board-admin/list">게시글 목록</a></li>
+                  <li><a href="{$rootPath}board-admin/add">게시글 추가</a></li>                  
+                  <li class="divider"></li>
+                  <li><a href="{$rootPath}board-admin/group">게시 그룹 목록</a></li>                  
+                  <li><a href="{$rootPath}board-admin/group-add">게시판 추가</a></li>                  
                 </ul>
               </div>
             </li>
@@ -75,21 +92,6 @@
                 <ul class="sx-drap-menu">
                   <li><a href="{$rootPath}document-admin" >페이지 목록</a></li>
                   <li><a href="{$rootPath}document-admin/add">페이지 추가</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{$rootPath}popup-admin" >팝업 목록</a></li>
-                  <li><a href="{$rootPath}popup-admin/add">팝업 추가</a></li>
-                </ul>
-              </div>          
-            </li>
-            <li>
-              <a href="{$rootPath}document-admin"><i class="xi-chart-pie-o xi-fw"></i> 통계 관리</a>
-              <div class="sx-sub-case">
-                <ul class="sx-drap-menu">
-                  <li><a href="{$rootPath}analytics-admin/pageview" >페이지뷰 목록</a></li>
-                  <li><a href="{$rootPath}analytics-admin/pageview-add">페이지뷰 추가</a></li>
-                  <li class="divider"></li>
-                  <li><a href="{$rootPath}analytics-admin/connect-site" >접속경로 목록</a></li>
-                  <li><a href="{$rootPath}analytics-admin/connect-site-add">접속경로 추가</a></li>
                 </ul>
               </div>          
             </li>
@@ -105,7 +107,7 @@
 
       <!--  Login  -->
       {if isset($sessionData.admin_ok) && $sessionData.admin_ok}
-      <div class="sx-gnb-login-wrap">
+      <div id="sxGnbLoginWrap" class="sx-gnb-login-wrap">
         <a href="{$rootPath}member-admin/modify" class="sx-gnb-login" title="회원 정보" alt="회원 정보">
           <i class="xi-user xi-2x"></i>
         </a>

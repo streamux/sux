@@ -27,6 +27,11 @@ class MemberAdminView extends View {
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
+    $this->model->select('member_group', 'id');
+    $totalNum = $this->model->getNumRows();
+
+    $this->document_data['total_num'] = $totalNum;
+
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -371,8 +376,18 @@ class MemberAdminView extends View {
     }
 
     $where = new QueryWhere();
-    if (isset($search) && $search) {      
-      $where->set($find, $search, 'like');
+    if (isset($search) && $search) { 
+
+      if (preg_match('/,/', $find)) {
+        $findPieces = explode(',', $find);
+
+        for ($i=0; $i<count($findPieces); $i++) {
+          $findPiece = trim($findPieces[$i]);
+          $where->set($findPiece, $search, 'like', 'or');
+        }
+      } else {
+        $where->set($find, $search, 'like');
+      }
     }
 
     if (isset($category) && $category) {
@@ -414,7 +429,7 @@ class MemberAdminView extends View {
       $resultYN = 'N';
     }
 
-    //$msg .= Tracer::getInstance()->getMessage();
+    $msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);

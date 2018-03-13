@@ -84,13 +84,13 @@
       
       <!-- Admin setup -->      
       <div class="sx-admin-setup">
-      {if isset($sessionData.grade) && $sessionData.grade > 9}
+      {if $documentData.is_admin_login !== false}
         <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear.svg" onerror='this.src="{$rootPath}common/images/icon_gear.png"' alt="관리자 설정" /></a>
       {/if}
       </div>      
       
       <!--  Login  -->
-      <div class="sx-gnb-login-wrap">
+      <div id="sxGnbLoginWrap" class="sx-gnb-login-wrap">
       {if $sessionData.user_id || $sessionData.nickname}
         <a href="{$rootPath}login" class="sx-gnb-login" title="회원정보" alt="회원정보">
           <i class="xi-user-o xi-2x"></i>
@@ -128,7 +128,7 @@
           {/if}
           </span>
           <div class="sx-admin-setup">
-            {if isset($sessionData.grade) && $sessionData.grade > 9}
+            {if $documentData.is_admin_login !== false}
               <a href="{$rootPath}admin-admin" target="_blank"><img src="{$rootPath}common/images/icon_gear_white.svg" onerror='this.src="{$rootPath}common/images/icon_gear_white.png"' title="관리자 설정" alt="관리자 설정" /></a>
             {/if}
           </div>      

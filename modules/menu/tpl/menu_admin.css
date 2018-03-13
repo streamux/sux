@@ -320,7 +320,7 @@
   padding-bottom: 20px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 768px) {ㄹ
 
   .label_width{
     padding-right: 10px;
@@ -335,17 +335,22 @@
     vertical-align: top;
   }
   .sx_plugin_panel .sx_item_list{
-    margin-left: 30px;
-  }
-  .sx_plugin_panel .sx_draggable_list{
     margin-right: 30px;
   }
+  .sx_plugin_panel .sx_draggable_list{
+    margin-left: 30px;
+  }
   .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group{
+    position: relative;
     padding-right: 125px;
   }
   .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group .sx-control-label{
     position: absolute;
-    padding:5px 0;
+    top:50%;
+    margin-left: 5px;
+    -webkit-transform:translateY(-50%);
+    -o-transform:translateY(-50%);
+    transform:translateY(-50%);
   }
   .sx_plugin_panel .sx_draggable_list .sx_menu_info .sx-form-group .sx-form-control {
     margin-left:115px;

@@ -1,0 +1,125 @@
+/*
+ * Globals
+ */
+.blog-title,
+.starter_title,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+  margin-top: 0;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  color: #333;
+}
+
+/*
+ * Override Bootstrap's default container.
+ */
+
+@media (min-width: 1200px) {
+  .container-fluid {
+    width: 970px;
+  }
+}
+
+@media (min-width: 768px) {
+  
+  .sidebar-download{
+    margin: 45px 0 15px -15px;
+  }
+  .sidebar-module {
+    margin: 45px 0 15px -15px;
+  }
+}
+
+/*
+ * Main column and sidebar layout
+ */
+
+.blog-main {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Sidebar modules for boxing content */
+.sidebar-download{
+  margin: 45px 0 15px 0;
+  text-align:center;
+}
+.sidebar-download button{
+  padding:10px 0;
+  width:100%;
+  font-weight: 600;
+  border:1px solid #1D5293;
+  background-color: #207cca;
+}
+
+.sidebar-module {
+  padding: 15px;
+  margin: 45px 0 15px 0;
+}
+.sidebar-module-inset {
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+.sidebar-module-inset p:last-child,
+.sidebar-module-inset ul:last-child,
+.sidebar-module-inset ol:last-child {
+  margin-bottom: 0;
+}
+
+/*
+ * Blog posts
+ */
+
+.blog-post {
+  margin-top:45px;
+  margin-bottom: 60px;
+}
+.blog-post-title {
+  margin-bottom: 5px;
+  font-size: 40px;
+}
+.blog-post-meta {
+  margin-bottom: 20px;
+  color: #999;
+}
+.blog-post h3{
+  margin-top:35px;
+}
+.blog-post hr{
+  margin:45px 0;
+}
+.blog-post .server_requirements_body{
+  padding:30px 20px;
+  background-color: #f6f6f6;
+}
+.blog-post .server_requirements_body ul{
+  margin-left: 20px;
+}
+.blog-post .server_requirements_body ul li{
+  list-style: disc;
+}
+.blog-post .sx_release ul li .sx_version{
+  display: inline-block;
+  width:20%;
+}
+
+
+/*
+ * Footer
+ */
+
+.blog-footer {
+  padding: 40px 0;
+  color: #999;
+  text-align: center;
+  background-color: #f9f9f9;
+  border-top: 1px solid #e5e5e5;
+}
+.blog-footer p:last-child {
+  margin-bottom: 0;
+}

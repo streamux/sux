@@ -1240,6 +1240,59 @@ a.sx-label:hover, a.sx-label:focus {
   background-color: #c9302c;
 }
 
+.sx-callout {
+  padding: 20px;
+  margin: 20px 0;
+  border: 1px solid #eee;
+  border-left-width: 5px;
+  border-radius: 3px;
+}
+.sx-callout:empty {
+  display: none;
+}
+
+.sx-callout-default {
+  border-left-color: #ddd;
+}
+.sx-callout-default[href]:hover, .sx-callout-default[href]:focus {
+  border-left-color: #c4c4c4;
+}
+
+.sx-callout-primary {
+  border-left-color: #337ab7;
+}
+.sx-callout-primary[href]:hover, .sx-callout-primary[href]:focus {
+  border-left-color: #285f8f;
+}
+
+.sx-callout-success {
+  border-left-color: #21B72B;
+}
+.sx-callout-success[href]:hover, .sx-callout-success[href]:focus {
+  border-left-color: #198c21;
+}
+
+.sx-callout-info {
+  border-left-color: #2586C6;
+}
+.sx-callout-info[href]:hover, .sx-callout-info[href]:focus {
+  border-left-color: #1d699b;
+}
+
+.sx-callout-warning {
+  border-left-color: #aa6708;
+}
+.sx-callout-warning[href]:hover, .sx-callout-warning[href]:focus {
+  border-left-color: #794906;
+}
+
+.sx-callout-danger {
+  border-left-color: #ce4844;
+}
+.sx-callout-danger[href]:hover, .sx-callout-danger[href]:focus {
+  border-left-color: #b1322e;
+}
+
 .sx-clearfix:before, .sx-clearfix:after,
 .clearfix:before,
 .clearfix:after {

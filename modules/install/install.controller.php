@@ -56,13 +56,15 @@ class InstallController extends Controller
     $buffer = array('admin_info'=>array());
 
     foreach ($admin_info as $key => $value) {
+
       if (preg_match('/(admin_pwd)+/', $value)) {
-        $buffer['admin_info'][$value] = $context->getPasswordHash($posts[$value]);
-        $_SESSION[$value] = $context->getPasswordHash($posts[$value]);
+        $adminValue = $context->getPasswordHash($posts[$value]);
       } else {
-        $buffer['admin_info'][$value] = $posts[$value];
-        $_SESSION[$value] = $posts[$value];
-      }     
+        $adminValue = $posts[$value];
+      }
+
+      $buffer['admin_info'][$value] = $adminValue;
+      $context->setSession($value, $adminValue);
     }
 
     $result = CacheFile::writeFile($filePath, $buffer);
@@ -233,12 +235,12 @@ class InstallController extends Controller
                   if ($numrows < 1) {
                     $mColumns = array();
                     $mColumns['category'] = $category;
-                    $mColumns['user_id'] = $_SESSION['admin_id'];
-                    $mColumns['nickname'] = $_SESSION['admin_nickname'];
-                    $mColumns['user_name'] = $_SESSION['admin_nickname'];
-                    $mColumns['password'] = $_SESSION['admin_pwd'];
-                    $mColumns['email_address'] = $_SESSION['admin_email'];
-                    $mColumns['yoursite'] = $_SESSION['yourhome'];
+                    $mColumns['user_id'] = $context->getSession('admin_id');
+                    $mColumns['nickname'] = $context->getSession('admin_nickname');
+                    $mColumns['user_name'] = $context->getSession('admin_nickname');
+                    $mColumns['password'] = $context->getSession('admin_pwd');
+                    $mColumns['email_address'] = $context->getSession('admin_email');
+                    $mColumns['yoursite'] = $context->getSession('yourhome');
                     $mColumns['grade'] = '10';
                     $mColumns['ip'] = $context->getServer('REMOTE_ADDR');
                     $mColumns['date'] = 'now()';
@@ -309,13 +311,13 @@ class InstallController extends Controller
                 if ($module === 'board') {                  
                   $bColumns = array();
                   $bColumns['category'] = $category;
-                  $bColumns['user_id'] = $_SESSION['admin_id'];
-                  $bColumns['user_name'] = $_SESSION['admin_nickname'];
-                  $bColumns['nickname'] = $_SESSION['admin_nickname'];
-                  $bColumns['password'] = $_SESSION['admin_pwd'];
+                  $bColumns['user_id'] = $context->getSession('admin_id');
+                  $bColumns['user_name'] = $context->getSession('admin_nickname');
+                  $bColumns['nickname'] = $context->getSession('admin_nickname');
+                  $bColumns['password'] = $context->getSession('admin_pwd');
                   $bColumns['title'] = '게시판 설정 안내입니다.';
                   $bColumns['content'] = "SUX CMS 최초 설치 시 등록되는 게시판은 관리자 페이지에서 변경, 삭제가 가능합니다.<br>또한 귀하의 사이트 환경에 맞게 수정하려면 관리자 권한 로그인 후<br>우측 상단 톱니바퀴 아이콘을 클릭해서 대시보드로 이동한 후 게시판 관리 페이지를 이용해 주세요.";
-                  $bColumns['email_address'] = $_SESSION['admin_email'];
+                  $bColumns['email_address'] = $context->getSession('admin_email');
                   $bColumns['wall'] = 'a';
                   $bColumns['date'] = 'now()';
                   $bColumns['ip'] = $context->getServer('REMOTE_ADDR');

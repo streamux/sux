@@ -21,6 +21,31 @@
   line-height:20px;
   font-weight: normal; 
 }
+.sx-content .sx-service-config ul{
+  overflow:hidden;
+  width:100%;
+  clear: both;
+}
+.sx-content .sx-service-config ul li{
+  float: left;
+  padding: 10px;
+  width:50%;
+}
+.sx-content .sx-service-config ul li a{
+  color:#6e6e6e;
+  text-decoration: none;
+}
+.sx-content .sx-service-config ul li a:hover{
+  color:#2467BF;
+}
+.sx-content .sx-service-config ul li .xi_icon{
+  position: relative;
+  top:-2px;
+  font-size: 2em; 
+  vertical-align: middle;
+  color: #6e6e6e;
+}
+
 .sx-content .sx-box-content .table > tbody > tr:last-child > td{
   border-bottom: 1px dashed transparent;
 }
@@ -46,33 +71,29 @@
 .sx-content .table > tbody > tr:hover {
   background-color: #f9f9f9;
 }
-.sx-content .sx-service-config ul > li > span{
-  display: inline-block;
-  width: 50%;
-  line-height: 32px;
+
+/* event_news */
+.event_news .article{
+  padding:15px 15px;
 }
-.sx-content .sx-service-config ul > li .service_label{  
-  padding:5px 3px;
-  text-align: right;
+.event_news .event_news_list .news {
+  margin-left: 20px;
+  padding: 5px 0;
+  line-height: 26px;
+  list-style:disc;
 }
-.sx-content .sx-service-config ul > li .service_label .badge{
-  margin: 0 3px;
-}
-.sx-content .sx-service-config ul > li .view-type-icon{
-  padding: 0 23px;
-  border:1px;
-  width:40%;
-  font-size: 1em;
+.event_news .event_news_list .loading_msg,
+.event_news .event_news_list .sx-text-warning {
+  padding: 5px 0px;
+  line-height: 26px;
+  text-align: center;
+  list-style: none;
 }
 
 @media (min-width: 768px) {
   /* contents */
   .sx-content{
     position: relative;
-  }
-  .sx-content section{
-    float: left;
-    width:50%;    
   }
   .sx-content .connecter > li{
     float: left;
@@ -81,35 +102,21 @@
   .sx-content .connecter > li .view-type-textfield{
     min-width: 100px;
   }
-  .sx-content section.pageview{
-    clear: both;
+  .sx-content .content_container1,
+  .sx-content .content_container2{
+    float: left;
+    width:50%;
   }
-  .sx-content .member,
-  .sx-content .pageview{
+  .sx-content .content_container1{
     padding-right: 5px;
   }
-  .sx-content .board,
-  .sx-content .connect-path{
-   padding-left: 5px;
+  .sx-content .content_container2{
+    padding-left: 5px;
   }
-
+  .sx-content .content_container2{
+    /*clear:both;*/
+  }
   .sx-content .connect{
-    clear: both;
     width:100%;
-  }
-  .sx-content .service{
-    width:100%;
-  }
-  .sx-content .sx-service-config ul > li{
-    float: left;
-  }
-  .sx-content .sx-service-config ul > li > .view-type-icon{
-    width:auto;
-  }
-  .sx-content .sx-service-config ul > li > .service_label{
-    width:120px;
-  }
-  .sx-content .sx-service-config ul > li:last-child > .view-type-icon{
-    margin-right: 0;
   }
 }

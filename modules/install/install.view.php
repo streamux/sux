@@ -8,7 +8,7 @@ class InstallView extends View
     $context = Context::getInstance();
 
     // 관리자 로그인 없이 설치를 시도한 경우 
-    if ($context->installed() && $context->isAdminLogin() === false) {
+    if ($context->installed() && $context->isAdminLogin() !== true) {
       $uri = _SUX_ROOT_ . 'login-admin';
       header("Location: $uri");
       exit();
@@ -26,8 +26,8 @@ class InstallView extends View
 
     $this->skin_path_list['root'] = _SUX_ROOT_;
     $this->skin_path_list['header'] = _SUX_PATH_.'modules/install/tpl/_header.tpl';
-    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
     $this->skin_path_list['content'] = _SUX_PATH_ . 'modules/install/tpl/terms.tpl';
+    $this->skin_path_list['footer'] = _SUX_PATH_.'modules/install/tpl/_footer.tpl';
 
     $this->output();
   }

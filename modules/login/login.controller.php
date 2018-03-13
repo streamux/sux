@@ -5,6 +5,8 @@ class LoginController extends Controller
 
   function insertLogin() {
     
+    $msg = '로그인 성공';
+
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
     $postData = $context->getPostAll();
@@ -14,9 +16,7 @@ class LoginController extends Controller
     $userId = (isset($postData['user_id']) && $postData['user_id']) ?
                     $postData['user_id'] : $sessionData['user_id'];
     $userId = trim($userId);
-    $loginKeeper = trim($postData['login_keeper']);    
-    $returnURL = $context->getSession('return_url');
-    $context->unsetSession('return_url');
+    $loginKeeper = trim($postData['login_keeper']);
 
     if (empty($userId)) {
       UIError::alertToBack('아이디를 입력하세요.');     
@@ -87,9 +87,9 @@ class LoginController extends Controller
     }
 
     $data = array(
-      'msg'=>'로그인 성공',
+      'msg'=>$msg,
       'result'=>'Y',
-      'url'=>$returnURL
+      'url'=>$rootPath
     );
     
     $this->callback($data);
@@ -102,7 +102,7 @@ class LoginController extends Controller
     $rootPath = _SUX_ROOT_;
     $sessionData = $context->getSessionAll();
     foreach ($sessionData as $key => $value) {
-      $context->setSession($key, '');
+      $context->unsetSession($key, '');
     }
 
     $data = array(

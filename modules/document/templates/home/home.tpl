@@ -3,7 +3,7 @@
     <div class="swiper-wrapper">      
       <div class="swiper-slide swiper-slide-size slide_banner1">        
         <img data-src="modules/document/tpl/images/slider_img1.jpg" class="swiper-lazy">
-        <span class="title">FRIENDLY<small>FOR BEST STREAMUX WEBSITE</small></span>
+        <span class="title">TECHNOLOGY<small>FOR BEST STREAMUX WEBSITE</small></span>
         <div class="swiper-lazy-preloader swiper-lazy-preloader-white"></div>
       </div>
       <div class="swiper-slide swiper-slide-size slide_banner2">        
@@ -88,11 +88,8 @@
         </div>   
       </div>
     </div>
-    <br>
-    <br>
-    <br><br>
-  </div>            
-</div>
+  </div><!-- panel_userguide -->
+</div><!-- header-content -->
 
 <!-- 
   @var is_page

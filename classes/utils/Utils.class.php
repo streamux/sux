@@ -14,23 +14,46 @@ class Utils extends Object {
 
   // Alert
   ///////////////////////////////////////////////
-  
+  function alert( $msg ) {
+
+    $msg = preg_replace('/<br>/', '\n',$msg);   
+    $context = Context::getInstance();
+    if ($context->ajax()) {
+          
+      $data = array( 'msg'=>$msg,
+                              'result'=>'Y');
+
+      Object::callback($data);
+    } else {
+      $htmlUI = '';
+      $htmlUI .= '<script>';
+      $htmlUI .= '  alert(\'%s\');';
+      $htmlUI .= '</script>';
+
+      if ($useHtml === TRUE) {
+        $htmlUI = self::getHtmlLayout( $htmlUI );
+      }
+      printf($htmlUI, $msg, $url);
+    }
+  }
+
   function alertTo( $msg, $url) {
 
     $msg = preg_replace('/<br>/', '\n',$msg);   
     $context = Context::getInstance();
     if ($context->ajax()) {
           
-      $data = array(  'url'=>$url,
-              'msg'=>$msg,
-              'result'=>'Y');
+      $data = array( 'url'=>$url,
+                              'msg'=>$msg,
+                              'result'=>'Y' );
 
       Object::callback($data);
     } else {
-      $htmlUI = '<script>
-              alert(\'%s\');
-              location.href=\'%s\';
-            </script>';
+      $htmlUI = '';
+      $htmlUI .= '<script>';
+      $htmlUI .= '  alert(\'%s\');';
+      $htmlUI .= '  location.href=\'%s\';';
+      $htmlUI .= '</script>';
 
       if ($useHtml === TRUE) {
         $htmlUI = self::getHtmlLayout( $htmlUI );
@@ -245,6 +268,7 @@ class Utils extends Object {
             'msg'=>$msg);
 
     Object::callback($data);
+    exit;
   }
 
   //----- String
@@ -294,10 +318,37 @@ class Utils extends Object {
     return $resultStr;
   }
 
+  function stripBRInPreTag( $target ) {
+
+    $target = str_replace('$', '&#36;', $target);
+    $search = "(<pre[^>]*>)((.|\n)*?)(<.*pre[^>]*>)";
+    $replace = '"$1".preg_replace("/(<br[^>]*>\r\n|<br[^>]*>\n|<br[^>]*>)/", "\n", "$2")."$4"';
+    $target = preg_replace("/$search/ie", $replace, $target);
+    $target = str_replace("\\'", "'", $target);
+
+    return $target;
+  }
+
+  function br2nl( $str) {
+
+    return preg_replace('/<br(\s*)?\/?\>/i', "\n", $str);
+  }
+
   function getWallKey() {
 
     $wallWords = 'ABCDEFGHIJKLMNOPQRSTUVWXYG1234567890';
     return self::getRandomStr($wallWords, 6);
+  }
+
+  function getDomain($url){
+
+      $pieces = parse_url($url);
+      $domain = isset($pieces['host']) ? $pieces['host'] : '';
+      
+      if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)){
+          return $regs['domain'];
+      }
+      return FALSE;
   }
 
   //----- Time

@@ -57,8 +57,8 @@ class LoginAdminController extends Controller {
 
     $adminHash = $context->getPasswordHash($token);
     $context->setSession('admin_ok', $adminHash);
-
     $loginKeeper = strtoupper($loginKeeper);
+    
     if ($loginKeeper === 'ON') {
       $loginCookieId = $context->getCookieId('login_keeper');
       $context->setCookie($loginCookieId, date('Y-m-d H:i:s'), time() + 86400 * 30 * 12);

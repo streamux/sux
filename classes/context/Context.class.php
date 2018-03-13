@@ -14,7 +14,7 @@ class Context
   private $config_db_path = 'files/config/config.db.php';
   private $config_admin_path = 'files/config/config.admin.php';
   private $config_table_path = 'files/config/config.table.php';
-
+  private $session_scope = '';
   public $db_info = NULL;
 
   public static function &getInstance() {
@@ -44,16 +44,19 @@ class Context
     $this->loadDBInfo();
     $this->loadAdminInfo();
     $this->loadTableInfo();
+    $this->setSessionScope();
   }
 
   function startSession() {
     
     $keeperId = self::getCookieId('login_keeper');
     $keeperCookie = self::getCookie($keeperId);
+
     if (isset($keeperCookie) && $keeperCookie) {
-      session_set_cookie_params(0, _SUX_ROOT_);
+      session_set_cookie_params(12*3600, _SUX_ROOT_);
     }    
-    session_start();
+    
+    if ( ! session_id() ) @session_start();
   }
 
   function stopSession() {
@@ -444,26 +447,62 @@ class Context
     return $_FILES;
   }
 
+  function getSessionScope() {
+
+    return $this->session_scope;
+  }
+
+  function setSessionScope() {
+
+    $session_scope = _SUX_ROOT_;
+    $session_scope = str_replace('/', '',$session_scope);
+    $this->session_scope =  empty($session_scope) ? 'default' : $session_scope;
+  }
+
   function getSession($key) {
 
-    return $this->_getTrimRequestData($_SESSION[$key]);
+    $session_scope = $this->getSessionScope();
+
+    if (isset($_SESSION[$session_scope]) && $_SESSION[$session_scope]) {
+      if (isset($_SESSION[$session_scope][$key]) && $_SESSION[$session_scope][$key]) {
+         return $this->_getTrimRequestData($_SESSION[$session_scope][$key]);
+      }
+      
+      return null;
+    }    
   }
 
   function setSession($key, $value) {
 
-    $_SESSION[$key] = $value;
+    $session_id = $this->getSessionScope();
+
+    if (!(isset($_SESSION[$session_id]) && $_SESSION[$session_id])) {
+      $_SESSION[$session_id] = array();
+    }
+
+    $_SESSION[$session_id][$key] = $value; 
+  }
+
+  function getSessionAll() {
+    
+    $session_scope = $this->getSessionScope();
+
+    if (isset($_SESSION[$session_scope]) && $_SESSION[$session_scope]) {
+      return $this->_getTrimRequestData($_SESSION[$session_scope]);
+    }
+
+    return null;
   }
 
   function unsetSession($key) {
 
-    $_SESSION[$key] = '';
-    unset($_SESSION[$key]);
-  }
+    $session_id = $this->getSessionScope();
 
-  function getSessionAll() {
-
-    return $this->_getTrimRequestData($_SESSION);
-  }
+    if (isset($_SESSION[$session_id]) && $_SESSION[$session_id]) {
+      $_SESSION[$session_id][$key] = '';
+      unset($_SESSION[$session_id][$key]);
+    }
+  } 
 
   function getServer($key) {
 
@@ -553,6 +592,7 @@ class Context
     }
     
     $regURL = sprintf('/^(http(s)?\:\/\/)?(www.)?(%s)/', $ownerDomain);
+
     if (!preg_match($regURL, $prevDomain)) {
       return false;
     }
@@ -578,7 +618,8 @@ class Context
   function checkAdminPass() {
 
     $is_logged = false;
-    if ($this->getAdminInfo('admin_id') == $this->getSession('user_id')) {
+
+    if ($this->getAdminInfo('admin_id') == $this->getSession('user_id') && $this->getAdminInfo('admin_pwd') == $this->getSession('password')) {
       $is_logged = true;
     }
     return $is_logged;
@@ -587,7 +628,7 @@ class Context
   function isAdminLogin() {
 
     $admin_ok = $this->getSession('admin_ok');
-    return isset($admin_ok) && $admin_ok;
+    return isset($admin_ok) && $admin_ok && $this->checkAdminPass();
   }  
 }
 ?>
