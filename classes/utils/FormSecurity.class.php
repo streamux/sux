@@ -192,21 +192,21 @@ class FormSecurity extends Object {
     $output = trim($output);
     $output = stripslashes($output);
     $output = htmlspecialchars_decode($output);
-    $output = self::flameStripTags($output, self::$allowed_content_tags);
+    //$output = self::flameStripTags($output, self::$allowed_content_tags);
 
     //&lt;pre\s*class=\&quot;brush&amp;#58;
 
-    $regPrefix = "(&lt;pre\s*class=&quot;brush:)+";    
+    $regPrefix = "(&lt;pre class=&quot;brush:)+";    
     $regSurfix = "&lt;\/pre&gt;";
-    $tagPrefix = "&lt;pre\s*class=&quot;brush:";
+    $tagPrefix = "&lt;pre class=&quot;brush:";
     $replacePrefixStr = "<pre class=\"brush:";
     $replaceSurfixStr = "</pre>";
 
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
 
-    echo "<br><br><br><br><br>";
+    //echo "<br><br><br><br><br>";
     //echo $output;
-    echo count($matchList);
+    //echo count($matchList);
 
     //*/ pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
@@ -221,14 +221,16 @@ class FormSecurity extends Object {
           //echo $i . '==>'. $tagsMatches[0] . "<br>";
 
           if (count($tagsMatches) > 0) {
-            $tagsSplit = preg_split("/(&lt;\/pre&gt;)+/", $tags[$i]);
+            $tagsSplit = preg_split(sprintf("/(%s)+/", $regSurfix), $tags[$i]);
             $splitItem = $tagsSplit[0];
             $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
             $splitItem = preg_replace('/(<\s*\/?p[^>]*\s*>)+/m', '', $splitItem);
 
+            //echo $tagPrefix . $splitItem . $replaceSurfixStr ."<br><br>";
+
             //echo 'tagsSplit : ' . $i . '==>'. $tagsSplit[1]. "<br>";
 
-            $tags[$i] = $replacePrefixStr . $splitItem. $replaceSurfixStr . $tagsSplit[1];
+            $tags[$i] = $tagPrefix . $splitItem. $replaceSurfixStr . $tagsSplit[1];
           } else {
             //echo 'tags : ' . $i . '==>'. $tags[$i] . "<br>";
           }
@@ -236,9 +238,9 @@ class FormSecurity extends Object {
       }   // end of for
 
       $output = implode($tags);
+      $output = htmlspecialchars_decode($output); 
       $output = self::flameStripTags($output, self::$allowed_content_tags);
-      $output = htmlspecialchars_decode($output);
-    }
+    }    
 
     return $output;
   }
