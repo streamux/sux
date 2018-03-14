@@ -22,7 +22,7 @@ jsux.fn.ckeditor = {
         { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },    
         { name: 'editing', items: [ 'Scayt', '-' , 'Source' ] },
         { name: 'tools', items: [ 'Maximize' ] }
-      ],
+      ]
     };
 
     CKEDITOR.replace(id, editConfig); 

@@ -233,6 +233,8 @@ jsux.fn.groupModify = {
   },
   sendAndLoad: function() {
 
+    console.log('aaa');
+
     var params = {};
     var datas = $('form');
 
@@ -266,7 +268,8 @@ jsux.fn.groupModify = {
 
     var self = this;
 
-    $('form').on('submit', function( e ) {
+    $('form[name=f_member_modify]').on('submit', function( e ) {
+      
       e.preventDefault();
       self.sendAndLoad();    
     });

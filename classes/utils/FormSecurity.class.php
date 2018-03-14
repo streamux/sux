@@ -2,7 +2,7 @@
 
 class FormSecurity extends Object {
 
-  public static $allowed_content_tags = array('pre', 'strong', 'em', 'u', 'sup', 'sub', 's', 'span', 'img', 'iframe', 'hr', 'br', 'ul', 'li', 'div');
+  public static $allowed_content_tags = array('pre', 'strong', 'em', 'u', 'sup', 'sub', 's', 'span', 'img', 'iframe', 'hr', 'br', 'ul', 'li', 'div', 'p');
   public static $allowed_simple_tags = array('b', 'span','strong');
   public static $limitChars = array(
     array('special'=>'+', 'entity'=>'&#43'),
@@ -127,7 +127,7 @@ class FormSecurity extends Object {
     for ($i=0; $i<$len; $i++) {
       $special = self::$limitChars[$i]['special'];
       $entity = self::$limitChars[$i]['entity'];
-      $input = str_replace($special, $entity, $input);
+      str_replace($special, $entity, $input);
     }
 
     $input = trim($input);
@@ -186,7 +186,7 @@ class FormSecurity extends Object {
     for ($i=0; $i<$len; $i++) {
       $special = self::$limitChars[$i]['special'];
       $entity = self::$limitChars[$i]['entity'];
-      $output = str_replace($entity, $special, $output);
+      str_replace($entity, $special, $output);
     }
 
     $output = trim($output);
@@ -194,54 +194,51 @@ class FormSecurity extends Object {
     $output = htmlspecialchars_decode($output);
     $output = self::flameStripTags($output, self::$allowed_content_tags);
 
-    $regPrefix = "(&lt;pre class=&quot;brush:)+";
-    $tagsPrefix = "&lt;pre class=&quot;brush:";
+    //&lt;pre\s*class=\&quot;brush&amp;#58;
+
+    $regPrefix = "(&lt;pre\s*class=&quot;brush:)+";    
+    $regSurfix = "&lt;\/pre&gt;";
+    $tagPrefix = "&lt;pre\s*class=&quot;brush:";
+    $replacePrefixStr = "<pre class=\"brush:";
+    $replaceSurfixStr = "</pre>";
+
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
 
-    // pre.brush: 클래스를 가진 태그가 있다면 
+    echo "<br><br><br><br><br>";
+    //echo $output;
+    echo count($matchList);
+
+    //*/ pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
-      $output = preg_replace("/(\r\n)+/m", "<br />", $output);
       $tags = preg_split(sprintf('/%s/', $regPrefix), $output);
-      
 
       for ($i=0; $i<count($tags); $i++) {
         $tagsMatches = array();
 
         if (isset($tags[$i]) && $tags[$i]) { 
-          preg_match("/(.*)(&lt;\/pre&gt;)(.*)/", $tags[$i], $tagsMatches);
+          preg_match(sprintf("/(%s)+/m",$regSurfix), $tags[$i], $tagsMatches);
+
+          //echo $i . '==>'. $tagsMatches[0] . "<br>";
 
           if (count($tagsMatches) > 0) {
-            $tagsMatches[1] = preg_replace('/(<br[^>]*>)+/', "\n", $tagsMatches[1]);
-            $tags[$i] = $tagsPrefix . $tagsMatches[1] . $tagsMatches[2] . $tagsMatches[3];
+            $tagsSplit = preg_split("/(&lt;\/pre&gt;)+/", $tags[$i]);
+            $splitItem = $tagsSplit[0];
+            $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
+            $splitItem = preg_replace('/(<\s*\/?p[^>]*\s*>)+/m', '', $splitItem);
+
+            //echo 'tagsSplit : ' . $i . '==>'. $tagsSplit[1]. "<br>";
+
+            $tags[$i] = $replacePrefixStr . $splitItem. $replaceSurfixStr . $tagsSplit[1];
           } else {
-            $tags[$i] = preg_replace('/(<(\/?)p[^>]*>)+/', '',$tags[$i]);
+            //echo 'tags : ' . $i . '==>'. $tags[$i] . "<br>";
           }
-        }   // end of if
+        }  // end of if
       }   // end of for
 
       $output = implode($tags);
-      $regPrefix = "(&lt;pre class=&quot;brush:(\s+))([a-z0-9-_\s]+)(&quot;&gt;)+";
-      $replaceBody = '.*';
-      $matches = array();   
-      preg_match_all(sprintf("/(%s)/m", $regPrefix), $output, $matches);
-
-     if (count($matches) > 0 && isset($matches[4]) && $matches[4]) {
-        $regSearchSurfix = "&lt;\/pre&gt;";
-        $replaceSurfixStr = "</pre>";
-
-        for($i=0; $i<count($matches[4]); $i++) {
-          $lang = $matches[4][$i];
-          $regSearchPrefix = "&lt;pre class=&quot;brush: $lang&quot;&gt;";              
-          $replacePrefixStr = "<pre class=\"brush: $lang\">";
-
-          $output = preg_replace(sprintf("/%s/m", $regSearchPrefix), $replacePrefixStr, $output);
-          $output = preg_replace(sprintf("/%s/m", $regSearchSurfix), $replaceSurfixStr, $output);
-        }   // end of for
-      }   // end of if*/
-
-      //array_pop(self::$allowed_content_tags);
       $output = self::flameStripTags($output, self::$allowed_content_tags);
-    }   // end of if    
+      $output = htmlspecialchars_decode($output);
+    }
 
     return $output;
   }

@@ -57,7 +57,8 @@ module.exports = function(grunt) {
           'common/js/jsux_common.min.js':['common/js/jsux_common.js'],
           'common/js/jsux_app.min.js':['common/js/jsux_app.js'],
           'common/js/jsux_app_stage.min.js': ['common/js/app/jsux_app_stage.js'],
-          'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js']
+          'common/js/jsux_admin_app.min.js':['common/js/jsux_admin_app.js'],
+          'common/js/jsux_search_form.min.js':['common/js/app/jsux_search_form.js']
         }
       },
       'module-admin': {

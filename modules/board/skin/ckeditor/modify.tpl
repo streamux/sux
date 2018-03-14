@@ -49,7 +49,7 @@
         <div class="wall_key">
           <span>{$contentData.wallname}</span>
         </div>
-        <input type="text" name="wallname" id="wallKey" size="16" maxlength="20" value="aa" class="sx-form-control">
+        <input type="text" name="wallname" id="wallKey" size="16" maxlength="20" value="" class="sx-form-control">
         <p class="wall_key_comment">등록키를 입력해주세요.</p>
         <input type="hidden" name="wallok" value="{$contentData.wallname}">
         <input type="hidden" name="wall" value="{$contentData.wallkey}">

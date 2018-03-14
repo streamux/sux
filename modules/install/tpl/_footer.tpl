@@ -12,7 +12,7 @@
   jsux.rootPath = '{$rootPath}';
 </script>
 {if $requestData.action != ''}
-<script src="{$rootPath}modules/install/tpl/install.js"></script>
+<script src="{$rootPath}modules/install/tpl/install.min.js"></script>
 <script type="text/javascript">
   jsux.fn['{$requestData.action}'].init();
 </script>
