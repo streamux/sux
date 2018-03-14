@@ -237,12 +237,22 @@ class FormSecurity extends Object {
       }   // end of for
 
       $output = implode($tags);
-      //$output = htmlspecialchars_decode($output);
 
-      $regSearchPrefix = "&lt;pre class=&quot;brush: php&quot;&gt;";              
-      $replacePrefixStr = "<pre class=\"brush: php\">";
+      // pre 열림 노드 부분의 [ class="brush: 언어"]로 검색해서 언어와 매칭 된 값으로 치환 
+      $regPrefix = "(&lt;pre class=&quot;brush:(\s+))([a-z0-9-_\s]+)(&quot;&gt;)+";
+      $matches = array();   
+      preg_match_all(sprintf("/(%s)/m", $regPrefix), $output, $matches);
 
-      $output = preg_replace(sprintf("/%s/m", $regSearchPrefix), $replacePrefixStr, $output);
+     if (count($matches) > 0 && isset($matches[4]) && $matches[4]) {
+
+        for($i=0; $i<count($matches[4]); $i++) {
+          $lang = $matches[4][$i];
+          $regSearchPrefix = "&lt;pre\s*class=&quot;brush:\s*$lang&quot;&gt;";              
+          $replacePrefixStr = "<pre class=\"brush: $lang\">";
+
+          $output = preg_replace(sprintf("/%s/m", $regSearchPrefix), $replacePrefixStr, $output);
+        }   // end of for
+      }   // end of if
     }
     
 
