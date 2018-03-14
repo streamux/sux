@@ -127,7 +127,7 @@ class FormSecurity extends Object {
     for ($i=0; $i<$len; $i++) {
       $special = self::$limitChars[$i]['special'];
       $entity = self::$limitChars[$i]['entity'];
-      str_replace($special, $entity, $input);
+      $input = str_replace($special, $entity, $input);
     }
 
     $input = trim($input);
@@ -186,17 +186,17 @@ class FormSecurity extends Object {
     for ($i=0; $i<$len; $i++) {
       $special = self::$limitChars[$i]['special'];
       $entity = self::$limitChars[$i]['entity'];
-      str_replace($entity, $special, $output);
+      $output = str_replace($entity, $special, $output);
     }
 
     $output = trim($output);
     $output = stripslashes($output);
     $output = htmlspecialchars_decode($output);
-    //$output = self::flameStripTags($output, self::$allowed_content_tags);
+    $output = self::flameStripTags($output, self::$allowed_content_tags);
 
     //&lt;pre\s*class=\&quot;brush&amp;#58;
 
-    $regPrefix = "(&lt;pre class=&quot;brush:)+";    
+    $regPrefix = "(&lt;pre\s*class=&quot;brush:)+";    
     $regSurfix = "&lt;\/pre&gt;";
     $tagPrefix = "&lt;pre class=&quot;brush:";
     $replacePrefixStr = "<pre class=\"brush:";
@@ -204,9 +204,9 @@ class FormSecurity extends Object {
 
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
 
-    //echo "<br><br><br><br><br>";
+    echo "<br><br><br><br><br>";
     //echo $output;
-    //echo count($matchList);
+    echo count($matchList);
 
     //*/ pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
@@ -226,21 +226,21 @@ class FormSecurity extends Object {
             $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
             $splitItem = preg_replace('/(<\s*\/?p[^>]*\s*>)+/m', '', $splitItem);
 
-            //echo $tagPrefix . $splitItem . $replaceSurfixStr ."<br><br>";
-
+            echo 'splitItem : ' . $i . '==>'. $tagPrefix . $splitItem. $regSurfix . "<br><br>";
             //echo 'tagsSplit : ' . $i . '==>'. $tagsSplit[1]. "<br>";
 
-            $tags[$i] = $tagPrefix . $splitItem. $replaceSurfixStr . $tagsSplit[1];
+            $tags[$i] = $tagPrefix . $splitItem. $regSurfix . $tagsSplit[1];
           } else {
             //echo 'tags : ' . $i . '==>'. $tags[$i] . "<br>";
           }
-        }  // end of if
+        }   // end of if
       }   // end of for
 
       $output = implode($tags);
-      $output = htmlspecialchars_decode($output); 
-      $output = self::flameStripTags($output, self::$allowed_content_tags);
-    }    
+      $output = self::flameStripTags($output, self::$allowed_content_tags);    
+      //$output = htmlspecialchars_decode($output);  
+    }
+    
 
     return $output;
   }
