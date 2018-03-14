@@ -204,9 +204,9 @@ class FormSecurity extends Object {
 
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
 
-    echo "<br><br><br><br><br>";
+    //echo "<br><br><br><br><br>";
     //echo $output;
-    echo count($matchList);
+    //echo count($matchList);
 
     //*/ pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
