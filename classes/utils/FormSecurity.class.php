@@ -226,10 +226,10 @@ class FormSecurity extends Object {
             $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
             $splitItem = preg_replace('/(<\s*\/?p[^>]*\s*>)+/m', '', $splitItem);
 
-            echo 'splitItem : ' . $i . '==>'. $tagPrefix . $splitItem. $regSurfix . "<br><br>";
+            //echo 'splitItem : ' . $i . '==>'. $tagPrefix . $splitItem. $regSurfix . "<br><br>";
             //echo 'tagsSplit : ' . $i . '==>'. $tagsSplit[1]. "<br>";
 
-            $tags[$i] = $tagPrefix . $splitItem. $regSurfix . $tagsSplit[1];
+            $tags[$i] = $tagPrefix . $splitItem. $replaceSurfixStr . $tagsSplit[1];
           } else {
             //echo 'tags : ' . $i . '==>'. $tags[$i] . "<br>";
           }
@@ -237,8 +237,12 @@ class FormSecurity extends Object {
       }   // end of for
 
       $output = implode($tags);
-      $output = self::flameStripTags($output, self::$allowed_content_tags);    
-      //$output = htmlspecialchars_decode($output);  
+      //$output = htmlspecialchars_decode($output);
+
+      $regSearchPrefix = "&lt;pre class=&quot;brush: php&quot;&gt;";              
+      $replacePrefixStr = "<pre class=\"brush: php\">";
+
+      $output = preg_replace(sprintf("/%s/m", $regSearchPrefix), $replacePrefixStr, $output);
     }
     
 
