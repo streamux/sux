@@ -22,7 +22,7 @@ jsux.fn.ckeditor = {
         { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote' ] },    
         { name: 'editing', items: [ 'Scayt', '-' , 'Source' ] },
         { name: 'tools', items: [ 'Maximize' ] }
-      ],
+      ]
     };
 
     CKEDITOR.replace(id, editConfig); 
@@ -492,6 +492,13 @@ jsux.fn.modify = {
         return false;
       }
     });
+    
+    /*var contentValue = f.content.value;
+    contentValue = contentValue.replace(/[<]/gi, '&lt;');
+    contentValue = contentValue.replace(/[>]/gi, '&gt;');
+    contentValue = contentValue.replace(/["]/gi, '&quot;');
+    contentValue = contentValue.replace(/[']/gi, '&#039;');
+    f.content.value = contentValue;*/
 
     if (email && email.value && email.value.length > 0) {
       var mailFlag = jsux.utils.validateEmail(email.value);

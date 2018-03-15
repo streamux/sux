@@ -432,9 +432,16 @@ class InstallController extends Controller
     $query->setDB( $dbName );
     $result = $oDB->showTables($query);
 
+    $prefix = $context->getPrefix();
     $tables = array();
+    $regStr = sprintf('/^(%s)+/i', $prefix);
+
     while (($row = $oDB->getFetchArray($result)) !== false) {
-      $tables[] = $row[0];
+      preg_match($regStr, $row[0], $matched);
+
+      if (count($matched) > 0) {
+        $tables[] = $row[0];
+      }      
     }
 
     $query = new Query();
@@ -463,7 +470,7 @@ class InstallController extends Controller
         $this->deleteCaches();
         $this->deleteFiles();
         $this->deleteTables();
-        $returnURL = _SUX_ROOT_ . 'install';
+        $returnURL = _SUX_ROOT_ . 'uninstall_complete.php';
         break;
       
       default:

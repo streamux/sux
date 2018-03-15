@@ -2,7 +2,7 @@
         <section class="sx-member-panel">
           <h1 class="title">회원정보 수정</h1>
           <div class="sx-box-content">
-            <form action="{$rootPath}member-admin/modify" class="sx-form-horizontal">
+            <form action="{$rootPath}member-admin/modify" name="f_member_modify" method="post" class="sx-form-horizontal">
               <input type="hidden" name="_method" value="update">
               <input type="hidden" name="category" value="{$documentData.category}">
               <input type="hidden" name="user_id" value="{$documentData.user_id}">

@@ -1,23 +1,4 @@
-/**
- * write here  library and plugin
- */
-
-//document.write('<script src="' + jsux.rootPath +'libs/ckeditor/standard_20171127/ckeditor.js"><\/script>');
-///////////////////////////////////////////////
-
 jsux.fn = jsux.fn || {};
-jsux.fn.ckeditor = {
-
-  updateElement: function(id) {
-
-     //CKEDITOR.instances[id].updateElement();
-  },
-  replace: function(id) {
-
-    //CKEDITOR.replace(id);
-  }
-};
-
 jsux.fn.list = {
 
   checkSearchForm: function(f) {
@@ -353,8 +334,6 @@ jsux.fn.write = {
 
   checkDocumentForm: function (f) {
 
-    jsux.fn.ckeditor.updateElement('content');
-
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
     var checkList = ['nickname','password','title','content','wallname'];
     var email = f.email_address;
@@ -395,7 +374,6 @@ jsux.fn.write = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -408,8 +386,6 @@ jsux.fn.write = {
 jsux.fn.reply = {
 
   checkDocumentForm: function (f) {
-
-    jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
     var checkList = ['nickname','password','title','content','wallname'];
@@ -451,7 +427,6 @@ jsux.fn.reply = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -463,8 +438,6 @@ jsux.fn.reply = {
 jsux.fn.modify = {
 
   checkDocumentForm: function (f) {
-
-    jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
     var checkList = ['nickname','password','title','content','wallname'];
@@ -481,6 +454,8 @@ jsux.fn.modify = {
         return false;
       }
     });
+    
+    f.content.value = jsux.utils.specialCharToEntity(f.content.value);
 
     if (email && email.value && email.value.length > 0) {
       var mailFlag = jsux.utils.validateEmail(email.value);
@@ -499,14 +474,16 @@ jsux.fn.modify = {
     var self = this;
 
     $('form[name=f_board_modify]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {       
          e.preventDefault();
       }
     });
   },
-   setLayout: function() {
+  setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
+    var form = $('form[name=f_board_modify]');
+    var content = form[0].elements['content'];
   },
   init: function() {
 
@@ -535,6 +512,7 @@ jsux.fn.delete = {
     var self = this;
 
     $('form[name=f_board_delpass]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
