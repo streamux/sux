@@ -20,7 +20,7 @@
           $settings['charset']
         ),
         $settings['username'],
-        $settings['password']
+        $settings['password'] 
       );
 
     } catch( PDOException $e ) {
