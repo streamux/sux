@@ -179,6 +179,17 @@ class FormSecurity extends Object {
     return $input;
   }
 
+  private function swapToNl2br( $str ) {
+
+    preg_match('/(<\s*br[^>]*\s*>)+/m', $str, $matches);
+
+    if (isset($str) && $str && count($matches) == 0) {
+      $str = nl2br($str);
+    }
+
+    return $str;
+  }
+
   private function decodeSpecialchars($output) {
 
     $len = count(self::$limitChars);
@@ -188,13 +199,11 @@ class FormSecurity extends Object {
       $entity = self::$limitChars[$i]['entity'];
       $output = str_replace($entity, $special, $output);
     }
-
+    
     $output = trim($output);
     $output = stripslashes($output);
     $output = htmlspecialchars_decode($output);
     $output = self::flameStripTags($output, self::$allowed_content_tags);
-
-    //&lt;pre\s*class=\&quot;brush&amp;#58;
 
     $regPrefix = "(&lt;pre\s*class=&quot;brush:)+";    
     $regSurfix = "&lt;\/pre&gt;";
@@ -203,11 +212,7 @@ class FormSecurity extends Object {
     $replaceSurfixStr = "</pre>";
 
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
-
-    //echo "<br><br><br><br><br>";
-    //echo $output;
-    //echo count($matchList);
-
+    
     //*/ pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
       $tags = preg_split(sprintf('/%s/', $regPrefix), $output);
@@ -226,12 +231,11 @@ class FormSecurity extends Object {
             $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
             $splitItem = preg_replace('/(<\s*\/?p[^>]*\s*>)+/m', '', $splitItem);
 
-            //echo 'splitItem : ' . $i . '==>'. $tagPrefix . $splitItem. $regSurfix . "<br><br>";
-            //echo 'tagsSplit : ' . $i . '==>'. $tagsSplit[1]. "<br>";
-
+            $tagsSplit[1] = self::swapToNl2br($tagsSplit[1]);
             $tags[$i] = $tagPrefix . $splitItem. $replaceSurfixStr . $tagsSplit[1];
           } else {
-            //echo 'tags : ' . $i . '==>'. $tags[$i] . "<br>";
+
+            $tags[$i] = self::swapToNl2br($tags[$i]);
           }
         }   // end of if
       }   // end of for
@@ -254,7 +258,8 @@ class FormSecurity extends Object {
         }   // end of for
       }   // end of if
     }
-    
+
+    $output = self::swapToNl2br($output);
 
     return $output;
   }

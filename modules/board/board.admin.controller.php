@@ -185,6 +185,10 @@ class BoardAdminController extends Controller
     $wallname = $posts['wallname'];
     $wallok = $posts['wallok'];
 
+    if (empty($posts['summary'])) {
+      $posts['summary'] = $posts['board_name'];
+    }
+
     if ($wallname !== $wallok) {
       $msg = '경고! 잘못된 등록키입니다.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -371,7 +375,10 @@ class BoardAdminController extends Controller
 
     $category = strtolower($posts['category']);
     $posts['category'] = $category;
-    
+
+    if (empty($posts['summary'])) {
+      $posts['summary'] = $posts['board_name'];
+    }    
 
     /**
      * @cache's columns 
@@ -526,6 +533,10 @@ class BoardAdminController extends Controller
     $category = $posts['category'];
     $title = $posts['board_name'];
     $returnURL = $context->getServer('REQUEST_URI');
+
+    if (empty($posts['summary'])) {
+      $posts['summary'] = $posts['board_name'];
+    }    
 
     /**
      * @cache's columns 

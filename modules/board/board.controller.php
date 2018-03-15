@@ -167,7 +167,7 @@ class BoardController extends Controller
     
     Forms::validates($posts, $this->getFormCheckList());
     Forms::validateFile($files);
-    $posts = $this->setEncodeFormValue($posts);
+    $posts = $this->setEncodeFormValue($posts);    
 
     $returnURL = $context->getServer('REQUEST_URI');
     $category = $posts['category'];

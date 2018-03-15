@@ -3,7 +3,10 @@ module.exports = function(grunt) {
   "use strict";
 
   var banner = '/*! Copyright (C) StreamUX <http://www.streamux.com> */\n';
-  var banner_jsux_js = banner + '/**!\n * @concat jsux.js \n * project <%= pkg.name %>\n * date <%= grunt.template.today("dd-mm-yyyy") %>\n @brief jsux Common Javascript\n **/\n';
+  var banner_jsux_js = banner + '/**!\n * @concat jsux.js \n * project <%= pkg.name %>\n * date <%= grunt.template.today("dd-mm-yyyy") %>\n * @brief jsux Common Javascript\n **/\n';
+  var banner_jsux_common_js = banner + '/**!\n * @concat js in common \n * project <%= pkg.name %>\n * date <%= grunt.template.today("dd-mm-yyyy") %>\n * @brief jsux Common Javascript\n **/\n';
+  var banner_jsux_modules_js = banner + '/**!\n * @concat js in modules \n * project <%= pkg.name %>\n * date <%= grunt.template.today("dd-mm-yyyy") %>\n * @brief jsux Modules Javascript\n **/\n';
+  var banner_jsux_css = banner + '/**!\n * @concat jsux.css \n * project <%= pkg.name %>\n * date <%= grunt.template.today("dd-mm-yyyy") %>\n * @brief jsux Common CSS\n **/\n';
 
   grunt.file.defaultEncoding = 'utf8';
 
@@ -53,6 +56,9 @@ module.exports = function(grunt) {
         }
       },
       'common-apps': {
+        options: {
+          banner: banner_jsux_common_js
+        },
         files: {
           'common/js/jsux_common.min.js':['common/js/jsux_common.js'],
           'common/js/jsux_app.min.js':['common/js/jsux_app.js'],
@@ -62,6 +68,9 @@ module.exports = function(grunt) {
         }
       },
       'module-admin': {
+        options: {
+          banner: banner_jsux_modules_js
+        },
         files: {
           'modules/admin/tpl/admin_admin.min.js':['modules/admin/tpl/admin_admin.js'],
           'modules/analytics/tpl/analytics_admin.min.js':['modules/analytics/tpl/analytics_admin.js'],
@@ -78,6 +87,9 @@ module.exports = function(grunt) {
     },
     cssmin: {
       'common': {
+        options: {
+          banner: banner_jsux_css
+        },
         files: {
           'common/css/sux.min.css': ['common/css/sux.css'],     
           'common/css/sux_layout.min.css': ['common/css/sux_layout.css']

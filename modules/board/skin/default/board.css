@@ -223,7 +223,7 @@
 .board_read .body_panel .content .content_text{
   font-size: 1.0625em;  
   word-spacing: -2px;
-  line-height: 2em;
+  line-height: 1.875em;
 }
 .board_read .body_panel .content .content_text p{
   line-height: 1.125em;

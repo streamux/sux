@@ -454,6 +454,8 @@ jsux.fn.modify = {
         return false;
       }
     });
+    
+    f.content.value = jsux.utils.specialCharToEntity(f.content.value);
 
     if (email && email.value && email.value.length > 0) {
       var mailFlag = jsux.utils.validateEmail(email.value);
@@ -472,13 +474,16 @@ jsux.fn.modify = {
     var self = this;
 
     $('form[name=f_board_modify]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {       
          e.preventDefault();
       }
     });
   },
-   setLayout: function() {
+  setLayout: function() {
 
+    var form = $('form[name=f_board_modify]');
+    var content = form[0].elements['content'];
   },
   init: function() {
 
@@ -507,6 +512,7 @@ jsux.fn.delete = {
     var self = this;
 
     $('form[name=f_board_delpass]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
