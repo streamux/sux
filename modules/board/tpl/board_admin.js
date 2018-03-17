@@ -358,7 +358,7 @@ jsux.fn.groupAdd = {
          board_name = f.board_name.value.length;
 
     if ( category < 1 ) {
-      trace('게시판 테이블이름을 입력하세요.');
+      trace('게시글 그룹 테이블 이름을 입력하세요.');
       f.category.focus();
       return (false);
     }
@@ -370,7 +370,7 @@ jsux.fn.groupAdd = {
     }
 
     if ( board_name < 1) {
-      trace('게시판 이름을 입력하세요.');
+      trace('게시글 그룹 이름을 입력하세요.');
       f.board_name.focus();
       return (false);
     }
@@ -532,7 +532,7 @@ jsux.fn.groupModify = {
     var board_name = f.board_name.value.length;
 
     if ( board_name < 1) {
-      trace('게시판 이름을 입력하세요.');
+      trace('게시글 그룹 이름을 입력하세요.');
       f.board_name.focus();
       return (false);
     }

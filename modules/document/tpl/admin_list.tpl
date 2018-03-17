@@ -7,7 +7,7 @@
             <a href="{$rootPath}document-admin/add" class="sx-btn pull-right" title="페이지 추가">페이지 추가</a>
           </div>
         </header>
-        <article class="sx-box-content sx-member">
+        <article class="sx-member sx-box-content">
           <input type="hidden" name="list_json_path" value="{$rootPath}document-admin/list-json">
           
           <ul class="list_mobile_panel" id="dataMobileList">

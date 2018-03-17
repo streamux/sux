@@ -1,6 +1,6 @@
     <div class="sx-content sx-admin-main">
       <section class="sx-board-panel">
-        <h1 class="title">게시판 추가</h1>
+        <h1 class="title">게시글 그룹 추가</h1>
         <div class="sx-box-content">                    
           <form action="{$rootPath}board-admin/group-add" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="insert">
@@ -18,7 +18,7 @@
               <p class="text_caption">※ 반드시 영문으로 작성해주세요.</p>
             </div>
             <div class="sx-form-group">
-              <label for="groupName" class="sx-control-label label_width">* 게시판 이름</label>     
+              <label for="groupName" class="sx-control-label label_width">* 게시글 그룹 이름</label>     
               <input type="text" id="board_name" name="board_name" size="20" maxlength="120" class="sx-form-control">
             </div>
             <div class="sx-form-group">
@@ -168,7 +168,7 @@
               </div>
             </div>
             <div class="sx-form-inline">
-              <label for="emptyName" class="sx-control-label label_width">게시판 형식</label>          
+              <label for="emptyName" class="sx-control-label label_width">게시글 그룹 형식</label>          
               <div class="sx-input-group">
                 <input type="radio" id="boardTypeHtml" name="board_type" value="html" checked="checked">
                 <label for="boardTypeHtml" class="sx-control-label sx-text-normal">HTML</label>
