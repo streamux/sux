@@ -159,6 +159,7 @@ jsux.fn.main = {
         listManager.setMsg(data.msg);
       }
     };
+
     listManager.addEventListener('loaded', loadedHandler);
 
     if (pagin_option !== null) {
@@ -220,8 +221,12 @@ jsux.fn.main = {
     } catch(e) {}
 
     jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
-
-      self.setEventNews(e.data);
+      
+      if (e.result.toUpperCase() === 'Y') {
+        self.setEventNews(e.data);
+      } else {
+        console.log(e.msg);
+      }
     });
   },
   init: function() {

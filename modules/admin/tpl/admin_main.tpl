@@ -60,37 +60,6 @@
       </div>
 
       <div class="content_container2"> 
-        <section class="section board">
-          <h2>최근 게시물</h2>
-          <article class="article sx-board-latest sx-edgebox">
-            <table class="table" summary="최근 게시물 정보를 제공합니다.">
-              <caption class="sr-only">최근 게시물</caption>
-              <thead>
-                <tr>
-                  <th class="sx_title">제목</th>
-                  <th class="sx_date">날짜</th>
-                </tr>         
-              </thead>
-              <tbody id="latestCommentList">
-                <tr>
-                  <td colspan="3">데이타 로딩중...</td>
-                </tr>
-                <!--
-                @ jquery templete
-                @ name  hitAnalysisWarnMsg_tmpl, hitAnalysisList_tmpl
-                -->
-              </tbody>
-            </table>
-            <nav class="nav pagin_comment sx-pagination-group">
-              <a href="#none" class="sx-nav-prev sx-pagination-control unactive">이전</a>
-              <span id="latestCommentPaginList">
-                <a href="#" class="sx-pagination unactive">1</a>
-              </span>
-              <a href="#none" class="sx-nav-next sx-pagination-control unactive">다음</a>
-            </nav>
-          </article>
-        </section>
-
         <section class="section member">
           <h2>신규 회원가입</h2>
           <article class="article sx-newmember sx-edgebox">
@@ -120,7 +89,38 @@
                 <a href="#none" class="sx-nav-next sx-pagination-control unactive">다음</a>
               </nav>
           </article>
-        </section>        
+        </section> 
+
+        <section class="section board">
+          <h2>최근 게시물</h2>
+          <article class="article sx-board-latest sx-edgebox">
+            <table class="table" summary="최근 게시물 정보를 제공합니다.">
+              <caption class="sr-only">최근 게시물</caption>
+              <thead>
+                <tr>
+                  <th class="sx_title">제목</th>
+                  <th class="sx_date">날짜</th>
+                </tr>         
+              </thead>
+              <tbody id="latestCommentList">
+                <tr>
+                  <td colspan="3">데이타 로딩중...</td>
+                </tr>
+                <!--
+                @ jquery templete
+                @ name  hitAnalysisWarnMsg_tmpl, hitAnalysisList_tmpl
+                -->
+              </tbody>
+            </table>
+            <nav class="nav pagin_comment sx-pagination-group">
+              <a href="#none" class="sx-nav-prev sx-pagination-control unactive">이전</a>
+              <span id="latestCommentPaginList">
+                <a href="#" class="sx-pagination unactive">1</a>
+              </span>
+              <a href="#none" class="sx-nav-next sx-pagination-control unactive">다음</a>
+            </nav>
+          </article>
+        </section>       
       </div>
     </div>
 

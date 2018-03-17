@@ -4,10 +4,11 @@ class DB extends Object {
 
   private static $aInstance = NULL;
 
-  var $class_name = 'db_class';
+  var $pdo = null;
+  var $db_info = null;
   var $is_connected = FALSE;
   var $master_db = NULL;
-  var $query_result = NULL;
+  var $statement = NULL;
   var $errno = 0;
   var $errstr = '';
   var $tracer = null;
@@ -17,9 +18,7 @@ class DB extends Object {
     $this->tracer = Tracer::getInstance();
 
     $context = Context::getInstance();
-    $db_info = $context->getDBInfo();
-    $db_connect = $this->_connect($db_info);
-    $this->_selectDB($db_info, $db_connect);
+    $this->db_info = $context->getDBInfo();
   }
 
   public static function &getInstance() {
@@ -31,42 +30,68 @@ class DB extends Object {
     return self::$aInstance;
   }
 
-  function _connect($db_info) {
+  function _getMysqlDNS() {
 
-    $db_connect = @mysql_connect( $db_info['db_hostname'], $db_info['db_userid'], $db_info['db_password']);
-
-    if (!$db_connect) {
-      die('Cannot connect to DB');
-    }
-
-    if(mysql_error()) {
-      $this->setError( mysql_errno(), mysql_error());
-      return false;
-    }
-    $this->master_db = 'MYSQL';
-
-    return $db_connect;
+    return sprintf(
+          'mysql:host=%s;port=%s;charset=%s',
+          $this->db_info['db_hostname'],
+          $this->db_info['db_port'],
+          $this->db_info['db_charset']
+        );
   }
 
-  function _selectDB($db_info, $db_connect) {
+  function _getDBDNS() {
 
-    $select = @mysql_select_db($db_info['db_database'], $db_connect);
-    if (!$select) {
-      die('SUX cannot select DB');
+    return sprintf(
+          'mysql:host=%s;dbname=%s;port=%s;charset=%s',
+          $this->db_info['db_hostname'],
+          $this->db_info['db_database'],
+          $this->db_info['db_port'],
+          $this->db_info['db_charset']
+        );
+  }
+
+  function _connect() {
+
+    try {
+
+      $dsn = $this->_getDBDNS();
+
+      $charset = $this->db_info['db_charset'];
+      $collate = 'utf8_general_ci';
+      $options = array(
+        PDO::ATTR_PERSISTENT => false,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES $charset COLLATE $collate"
+      );
+
+      $this->pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password'], $options);
+      $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    } catch( PDOException $e ) {
+      
+      die('Cannot connect to DB : ' . $e->getMessage());
     }
-    mysql_set_charset("utf8");
 
-    return $select;
+    $this->master_db = 'MYSQL';
+
+    return true;
+  }
+
+  function getAttribute( $option ) {
+
+    return $this->pdo->getAttribute($option);
+  }
+
+  function connect() {
+
+    $this->is_connected = $this->_connect();
   }
 
   function isConnected() {
 
     return $this->master_db ? TRUE : FALSE;
-  }
-
-  function close($connection) {
-
-    @mysql_close();
   }
 
   function _selectSql($query=NULL) {
@@ -102,7 +127,7 @@ class DB extends Object {
     }
 
     $limit = $query->getLimit();
-    if ($limit != '') {
+    if ($limit !== '') {
       $limit = ' LIMIT ' . $limit;
     }
 
@@ -120,14 +145,17 @@ class DB extends Object {
 
     $tables = $query->getTable();
     $priority = $query->getPriority();
+
     if ($priority != '') {
       $priority .= ' ';
     }
 
     $keys = $query->getColumn('key');
+
     if ($keys != '') {
       $keys = ' (' . $keys . ')' ;
     }
+
     $values = $query->getColumn('value');
 
     return 'INSERT ' . $priority . 'INTO ' . $tables . $keys . ' VALUES (' . $values .')';
@@ -156,13 +184,6 @@ class DB extends Object {
     return  'DELETE ' . $priority . ' FROM ' . $tables . ' WHERE ' . $where;
   }
 
-  function _showSql($query) {
-
-    $db = $query->getDB();
-
-    return 'SHOW TABLES FROM ' . $db;
-  }
-
   function _createSql($query) {
 
     $tables = $query->getTable();
@@ -180,103 +201,243 @@ class DB extends Object {
 
   function _query($sql) {
 
-    return mysql_query($sql);
+    $this->statement = $this->pdo->prepare($sql);;
   }
 
-  function _fetchArray($result) {
+  function _showTables($query=NULL) {
 
-    return mysql_fetch_array($result);
+    $db = $query->getDBName();
+    $tableName = $query->getTable();
+
+    if ($tableName != '') {
+      $like = ' LIKE ' . '\'' . $tableName . '\'';
+    }
+
+    return 'SHOW TABLES FROM ' . $db . $like;
   }
 
-  function _numRows($result) {
+  function _createDatabase($dbname, $charset='utf8' , $collate='utf8_general_ci') {
 
-    return mysql_num_rows($result);
+    if (gettype($dbname) !== 'string' && empty($dbname)) {
+      $this->_setLogger('DB->createDatabase : \' dbname is not valid');
+      return false;
+    }
+
+    return "CREATE DATABASE `$dbname` CHARACTER SET `$charset` COLLATE `$collate`";
+  }
+
+  function _showDatabases($query=NULL) {
+
+    return 'SHOW DATABASES ';
+  }
+
+  function _setWhereBindValue( $values) {
+
+    if (count($values) === 0) {
+      return;
+    }
+
+    foreach ($values as $key => $value) {
+      $value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
+      $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
+      $this->statement->bindValue($key, $value);
+    }    
+  }
+
+  function _executeQuery() {
+
+    $this->statement->execute();
+
+    if (!$this->statement) {
+      $errorInfoes = $this->pdo->errorInfo();
+      $this->setError($errorInfoes[1], 'DB->select : ' + $errorInfoes[2]);
+
+      return false;
+    }
+
+    return true;
   }
 
   function select($query) {
 
     $sql = $this->_selectSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
+    $bindValue = $query->getWhereBindValue();
 
-    return $this->query_result;
+    $this->_setLogger($sql);
+    $this->_query($sql);    
+    $this->_setWhereBindValue($bindValue);
+    return $this->_executeQuery();
   }
 
   function insert($query) {
 
-    $sql = $this->_insertSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
+    $sql = $this->_insertSql($query);    
 
-    return $this->query_result;
+    $this->_setLogger($sql);
+    $this->_query($sql);    
+
+    return $this->_executeQuery();
   }
 
   function update($query) {
 
     $sql = $this->_updateSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
 
-    return $this->query_result;
+    $bindValue = $query->getWhereBindValue();
+
+    $this->_setLogger($sql);
+    $this->_query($sql);
+    $this->_setWhereBindValue($bindValue);        
+
+    return $this->_executeQuery();
   }
 
   function delete($query) {
 
     $sql = $this->_deleteSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
+    $bindValue = $query->getWhereBindValue();
 
-    return $this->query_result;
+    $this->_setLogger($sql);
+    $this->_query($sql);
+    $this->_setWhereBindValue($bindValue);    
+
+    return $this->_executeQuery();
   }
 
-  function getInsertId() {
+  function createDatabase($query) {
 
-    return mysql_insert_id();
+    if ($this->searchDatabase($query)) {
+      return;
+    }
+
+    $dbname = $query->getDBName();
+    $sql = $this->_createDatabase($dbname);
+    $dsn = $this->_getMysqlDNS();
+
+    try {
+      $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
+      $pdo->exec($sql) or die(print_r($pdo->errorInfo(), true));
+    } catch (PDOException $e) {
+        die("DB ERROR: ". $e->getMessage());
+    }
   }
 
-  function showTables($query) {
+  function showDatabases($query) {
 
-    $sql = $this->_showSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
+    if (isset($query) && $query) {
+      $dbname = $query->getDBName();
+    }
 
-    return $this->query_result;
+    $dbList = array();    
+    $sql = $this->_showDatabases();
+    $dsn = $this->_getMysqlDNS();
+
+    try {
+      $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
+      $dbs = $pdo->query($sql) or die(print_r($pdo->errorInfo(), true));
+
+      while(( $db = $dbs->fetchColumn( 0 )) !== false ) {
+
+        $dbList[] = $db;
+      }
+    } catch (PDOException $e) {
+        die("DB ERROR: ". $e->getMessage());
+    }
+
+    return $dbList;
+  }
+
+  function searchDatabase($query) {
+
+    if (isset($query) && $query) {
+      $dbname = $query->getDBName();
+    }
+
+    $dbList = array();
+    
+    $sql = $this->_showDatabases();
+    $dsn = $this->_getMysqlDNS();
+
+    try {
+      $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
+      $dbs = $pdo->query($sql) or die(print_r($pdo->errorInfo(), true));
+
+      while(( $db = $dbs->fetchColumn( 0 )) !== false ) {
+
+        if (isset($dbname) && $dbname && $db === $dbname) {
+          return true;
+        }
+      }
+    } catch (PDOException $e) {
+        die("DB ERROR: ". $e->getMessage());
+    }
+
+    return false;
   }
 
   function createTable($query) {
 
     $sql = $this->_createSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
 
-    return $this->query_result;
+    $this->_setLogger($sql);
+    $this->_query($sql);    
+
+    return $this->_executeQuery();
+  }
+
+  function showTables($query) {
+
+    $sql = $this->_showTables($query);
+
+    //$this->_setLogger($sql);
+    $this->_query($sql);    
+
+    return $this->_executeQuery();
   }
 
   function dropTable($query) {
 
     $sql = $this->_dropSql($query);
-    $this->setLogger($sql);
-    $this->query_result = $this->_query($sql);
 
-    return $this->query_result;
+    $this->_setLogger($sql);
+    $this->_query($sql);
+    
+    return $this->_executeQuery();
   }
 
-  function getFetchArray($result) {
+  function getInsertId() {
 
-    if (isset($result) && $result) {
-      $this->query_result = $result;
+    if (!$this->pod) {
+      $errorInfoes = $this->pdo->errorInfo();
+      $this->setError($errorInfoes[1], 'DB->getInsertId : ' + $errorInfoes[2]);
     }
 
-    return $this->_fetchArray($this->query_result);
+    return $this->pod->lastInsertId();
   }
 
-  function getNumRows($result) {
+  function getFetchArray() {
 
-    if (isset($result) && $result) {
-      $this->query_result = $result;
+    if (!$this->statement) {
+      $errorInfoes = $this->pdo->errorInfo();
+      $this->setError($errorInfoes[1], 'DB->getFetchArray : ' + $errorInfoes[2]);
     }
 
-    return $this->_numRows($this->query_result);
+    return $this->statement->fetch( PDO::FETCH_ASSOC );
+  }
+
+  function getNumRows() {
+
+    if (!$this->statement) {
+      $errorInfoes = $this->pdo->errorInfo();
+      $this->setError($errorInfoes[1], 'DB->getNumRows : ' + $errorInfoes[2]);
+    }
+
+    return $this->statement->rowCount();
+  }
+
+  function getError() {
+
+    return array('no'=>$this->errno, 'msg'=>$this->errstr);
   }
 
   function setError($errno = 0, $errstr = 'success') {
@@ -285,12 +446,7 @@ class DB extends Object {
     $this->errstr = $errstr;
   }
 
-  function getError() {
-
-    return array('no'=>$this->errno, 'msg'=>$this->errstr);
-  }
-
-  function setLogger($msg) {
+  function _setLogger($msg) {
 
     if (isset($this->tracer) && $this->tracer) {
       $this->tracer->setMessage($msg);

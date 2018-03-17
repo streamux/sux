@@ -1,4 +1,4 @@
-  <div class="sx-content">
+  <div class="sx_menu sx-content">
     <h1 class="title">메뉴 관리</h1>    
     <section class="sx-menu-panel">      
       <header class="header">          

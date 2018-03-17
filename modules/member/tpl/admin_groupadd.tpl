@@ -2,7 +2,7 @@
       <section class="sx-member-panel">
         <h1 class="title">회원그룹 추가</h1>
         <div class="sx-box-content">                    
-          <form action="{$rootPath}member-admin/group-add" class="sx-form-horizontal">
+          <form action="{$rootPath}member-admin/group-add" class="sx-form-horizontal" method="POST">
             <input type="hidden" name="_method" value="insert">
             <input type="hidden" name="id" value="{$documentData.id}">
             <input type="hidden" name="keyword" value="{$documentData.name}">

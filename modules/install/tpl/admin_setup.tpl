@@ -1,7 +1,9 @@
+
     <form name="f_setup_admin" action="{$rootPath}setup-admin" method="post">
-      <input type="hidden" name="_method" value="insert">
-      <div class="terms_box sx-edgebox">
-        <h1 class="admin_title">관리자 기본정보 설정</h1>
+      <input type="hidden" name="_method" value="insert">   
+
+      <div class="admin_setup sx-edgebox">
+        <h1 class="admin_title">관리자 기본정보 설정</h1>    
 
         <div class="sx-form-group">
           <label for="adminId" class="sx-control-label">관리자 아이디</label>

@@ -315,12 +315,12 @@
 }
 
 /* common */
-.sx-contents .sx-box-content .btn_group{
+.sx_menu .sx-box-content .btn_group{
   padding-top: 10px;
   padding-bottom: 20px;
 }
 
-@media (min-width: 768px) {ㄹ
+@media (min-width: 768px) {
 
   .label_width{
     padding-right: 10px;

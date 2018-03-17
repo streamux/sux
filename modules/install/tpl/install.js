@@ -3,46 +3,31 @@ jsux.fn.setupDb = {
 
   checkForm: function( f ) {
 
-    var mhost = f.db_hostname.value.length,
-      muser = f.db_userid.value.length,
-      mpwd = f.db_password.value.length,
-      mdb = f.db_database.value.length;
+    var inputs = jsux.forms.getFormElements(f.elements, 'type', 'hidden|text|password');
 
-    if ( mhost < 1 ) {
-      trace("호스트명을 입력하세요.");
-      f.db_hostname.focus();
-      return (false);
+    for (var i=0; i<inputs.length; i++) {
+
+      if (inputs[i] && inputs[i].value === '') {
+        trace('<input name="' + inputs[i].name + '"> 값이 필요합니다."');
+        inputs[i].focus();
+        return false;
+      }
     }
-    if ( muser < 1 ) {
-      trace("계정아이디을 입력하세요.");
-      f.db_userid.focus();
-      return (false);
-    }
-    if ( mpwd < 1 ) {
-      trace("계정비밀번호를 입력하세요.");
-      f.db_password.focus();
-      return (false);
-    }
-    if ( mdb < 1 ) {
-      trace("데이터베이스명을 입력하세요.");
-      f.db_database.focus();
-      return (false);
-    }
-    return (true);
+    
+    return true;
   },
   sendAndLoad: function( f ) {
 
     var self = this,
       isLoading = false,
-      params = {
-        _method: f._method.value,
-        db_hostname: f.db_hostname.value,
-        db_userid:f.db_userid.value,
-        db_password:f.db_password.value,
-        db_database:f.db_database.value,
-        db_table_prefix:f.db_table_prefix.value
-      },
+      params = {},
       url = '';
+
+    var inputs = jsux.forms.getFormElements(f.elements, 'type', 'hidden|text|password');
+
+    for (var i=0; i<inputs.length; i++) {
+      params[inputs[i].name] = inputs[i].value;
+    }
 
     url =  f.action;
     if (!url) {
@@ -67,11 +52,10 @@ jsux.fn.setupDb = {
 
     var self = this;
 
-    $("form").on("submit", function( e ) {
+    $("form[name=f_setup_db]").on("submit", function( e ) {
       e.preventDefault();
 
-      var bool = self.checkForm( e.target );
-      if ( bool === true) {
+      if ( self.checkForm( e.target ) === true) {
         self.sendAndLoad(e.target);
       }
     });   
@@ -116,8 +100,8 @@ jsux.fn.setupAdmin = {
     jsux.getJSON( jsux.rootPath + "create-table", params, function(e) {
 
       isLoading = false;
-      trace( e.msg  );      
-      jsux.goURL( jsux.rootPath);
+      trace(e.msg);
+      jsux.goURL( jsux.rootPath);  
     });
   },
   sendAndLoad: function( f ) {

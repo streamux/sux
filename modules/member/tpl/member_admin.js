@@ -395,9 +395,10 @@ jsux.fn.list = {
 
     var self = this;
 
+
     jsux.getJSON(url, params, function( e )  {
 
-      var data = e.data;
+      var data = e.data;      
 
       if (data && data.list && data.list.length > 0) {        
         // pagination start
