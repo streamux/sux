@@ -22,22 +22,20 @@ jsux.fn.login = {
   },
   sendJson: function(f) {
 
-    var inputs = $(f).find('input'),
+    var inputs = f.elements,
           normalFilter = /^(hidden|text|password)+$/,
           chkFilter = /^(checkbox)+$/,
           params = {},
-          url = '',
-          key = '';
+          url = '';
 
     for (var i=0; i<inputs.length; i++) {
+
       if (inputs[i] && inputs[i].type.match(normalFilter)) {
-        key = inputs[i].name;
-        params[key] = inputs[i].value;
+        params[ inputs[i].name ] = inputs[i].value;
       }
 
       if (inputs[i] && inputs[i].type.match(chkFilter)) {
-        key = inputs[i].name;
-        params[key] = inputs[i].checked;
+        params[ inputs[i].name ] = inputs[i].checked;
       }
     }
 

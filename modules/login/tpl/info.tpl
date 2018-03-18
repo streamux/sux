@@ -14,7 +14,7 @@
         <label for="emptyName" class="sx_label_with">적립포인트</label><span class="sx_char_colon">:</span><span>'{$sessionData.point}' Point</span>
       </div>
       <div class="sx-form-group">
-        <label for="emptyName" class="sx_label_with">방문횟수</label><span class="sx_char_colon">:</span><span>'{$sessionData.hit_count}' 번째</span>
+        <label for="emptyName" class="sx_label_with">방문횟수</label><span class="sx_char_colon">:</span><span>'{$sessionData.access_count}' 번째</span>
       </div>
       <div class="sx-form-group sx_login_btn">
         <a href="{$rootPath}logout?_method=insert" class="sx-btn sx-btn-block">로그아웃</a>

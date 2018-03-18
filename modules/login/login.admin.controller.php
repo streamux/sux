@@ -45,7 +45,7 @@ class LoginAdminController extends Controller {
     $row['automod1'] = 'yes';
     $row['IsAuthorized'] = 'ok';
     $row['chatip'] = $context->getServer('REMOTE_ADDR');
-    $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','hit_count','grade','automod1','chatip', 'IsAuthorized');
+    $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','access_count','grade','automod1','chatip', 'IsAuthorized');
 
     for ($i=0; $i<count($sessionList); $i++) {
       $key = $sessionList[$i];

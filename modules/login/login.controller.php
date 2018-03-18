@@ -6,6 +6,8 @@ class LoginController extends Controller
   function insertLogin() {
     
     $msg = '로그인 성공';
+    $resultYN = 'Y';
+    $url = '';
 
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
@@ -37,7 +39,7 @@ class LoginController extends Controller
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', '*', $where);
 
-    $rownum = $this->model->getNumRows();
+     $rownum = $this->model->getNumRows();
 
     if ($rownum == 0) {
       $msg .= $userId .' 아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다.';
@@ -58,13 +60,13 @@ class LoginController extends Controller
     $row['automod1'] = 'yes';
     $row['IsAuthorized'] = 'ok';
     $row['chatip'] = $context->getServer('REMOTE_ADDR');
-    $row['hit_count'] = $row['hit_count'] + 1;
+    $row['access_count'] = $row['access_count'] + 1;
 
     $columns = array();
-    $columns['hit'] = $row['hit_count'];
+    $columns['access_count'] = $row['access_count'];
     $this->model->update('member', $columns, $where);
 
-    $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','hit_count','grade','automod1','chatip', 'IsAuthorized');
+    $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','access_count','grade','automod1','chatip', 'IsAuthorized');
 
     foreach ($sessionList as $key => $value) {
       $context->setSession($value, $row[$value]);
@@ -88,7 +90,7 @@ class LoginController extends Controller
 
     $data = array(
       'msg'=>$msg,
-      'result'=>'Y',
+      'result'=>$resultYN,
       'url'=>$rootPath
     );
     
