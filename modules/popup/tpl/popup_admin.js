@@ -26,7 +26,7 @@ jsux.fn.list = {
   setLayout: function() {
 
     var self = this,
-          url = $('input[name=list_json_path').val(),
+          url = $('input[name=list_json_path').val(), 
           changeHandler = null,
           loadedHandler = null; 
 
