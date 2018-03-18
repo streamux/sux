@@ -43,7 +43,7 @@
 <script src="{$rootPath}common/js/jsux_admin_app.min.js?20180110_2"></script>
 
 {if $documentData.jscode != ''}
-<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.js?20180110"></script>
+<script type="text/javascript" src="{$rootPath}modules/{$documentData.module_code}/tpl/{$documentData.module_code}_admin.min.js?20180110"></script>
 
 <script type="text/javascript">
   jsux.fn['{$documentData.jscode}'].init();

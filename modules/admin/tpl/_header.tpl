@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{$rootPath}common/css/api/swiper.min.css">
   {/if}
 
-  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css?20180109">
+  <link rel="stylesheet" type="text/css" href="{$rootPath}common/css/sux.min.css?20180108">
   <link rel="stylesheet" type="text/css" href="{$rootPath}modules/admin/tpl/admin_layout.css?20180109">  
   
   {if $documentData.module_code !== ''}
