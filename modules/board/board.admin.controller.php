@@ -149,7 +149,7 @@ class BoardAdminController extends Controller
 
     /*Tracer::getInstance()->output();
     return;*/
-    $data = array(  'url'=>$rootPath . $category,
+    $data = array(  'url'=>$rootPath . 'board-admin/list',
             'result'=>$resultYN,
             'msg'=>$msg,
             'delay'=>0);
@@ -285,7 +285,6 @@ class BoardAdminController extends Controller
 
     /*Tracer::getInstance()->output();
     return;*/
-
     $data = array(  'url'=>$rootPath . 'board-admin/list',
                             'result'=>$resultYN,
                             'msg'=>$msg,

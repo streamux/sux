@@ -79,6 +79,34 @@
         </tr>
       </thead>
       <tbody>
+
+      {foreach from=$contentData.notice_list  item=$item}
+        {if isset($item)}
+        <tr class="sx-btn-active" style="border:1px solid #f00">       
+          <td class="subject">
+            {if $requestData.search != ''}
+              <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
+            {else}
+              <a href="{$routeURI}/{$item.subject.id}">
+            {/if}
+            <span class="link_area" style="padding-left:{$item.subject.space+25}px">
+              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
+              <span class="title">{$item.subject.title|nl2br}</span>
+              <span class="sx-badge">{$item.subject.comment_num}</span>
+              {if $item.subject.icon_img_name != ''}
+              <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
+              {/if}
+              <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
+              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
+            </span></a>
+          </td>
+          <td><span>{$item.name}</span></td>
+          <td><span>{$item.date}</span></td>
+          <td><span>{$item.hit}</span></td>
+        </tr>
+        {/if}
+      {/foreach}  
+
       {foreach from=$contentData.list  item=$item}
         {if isset($item)}
         <tr class="sx-btn-active">       

@@ -9,7 +9,7 @@
             </span>
             <div class="btn_group pull-right">
               <a href="{$rootPath}board-admin/group-list" class="sx-btn" title="글 추가">게시글 그룹 목록</a>
-              <a href="{$rootPath}board-admin/add" class="sx-btn sx-btn-info" title="글 추가">그룹 추가</a>
+              <a href="{$rootPath}board-admin/add" class="sx-btn sx-btn-info" title="글 추가">글 추가</a>
             </div>
           </div>
         </header>
