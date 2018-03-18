@@ -26,7 +26,7 @@ jsux.fn.connectSiteList = {
           loadedHandler = null;
 
     if (!url) {
-      trace('input[name=list_json_path] 경로값을 입력하세요');dd
+      trace('input[name=list_json_path] 경로값을 입력하세요');
       return;
     }
 
