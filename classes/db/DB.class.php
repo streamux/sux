@@ -233,9 +233,11 @@ class DB extends Object {
     }
 
     foreach ($values as $key => $value) {
-      $value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
-      $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
-      $this->statement->bindValue($key, $value);
+      //$value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
+
+      if ($key !== 'date') {
+        $this->statement->bindValue($key, $value);
+      }      
     }    
   }
 
@@ -245,7 +247,7 @@ class DB extends Object {
       return;
     }
 
-    foreach ($values as $key => $value) {
+    foreach ($values as $key => $value) {     
       $value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
       $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
       $this->statement->bindValue($key, $value);
@@ -285,9 +287,11 @@ class DB extends Object {
   function insert($query) {
 
     $sql = $this->_insertSql($query);    
+    $bindColumn = $query->getColumnBindValue();
 
     $this->_setLogger($sql);
-    $this->_query($sql);    
+    $this->_query($sql);
+    $this->_setColumnBindValue($bindColumn);
 
     return $this->_executeQuery();
   }

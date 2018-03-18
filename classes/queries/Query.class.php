@@ -136,11 +136,18 @@ class Query extends Object {
     $tempArr = array();
 
     foreach ($values as $key => $value) {
-      $bindField = ':' . $key;
-      $bindValue[$key] = $bindField;
-      $tempArr[] = $key . '=' . $bindField;
-      $this->setColumnBindValue( $key, $value);
 
+      $bindField = ':' . $key;
+
+      if (preg_match('/^now\(\)$/', trim($value))) {
+        $bindValue[$key] = $value;
+        $tempArr[] = $key . '=' . $value;
+      } else {
+        $bindValue[$key] = $bindField;
+        $tempArr[] = $key . '=' . $bindField;
+      }
+      
+      $this->setColumnBindValue( $key, $value);
       $count++;
     }
 
@@ -151,6 +158,32 @@ class Query extends Object {
     }
 
     $this->column_list = $this->convertToString($bindValue, ',');
+  }
+
+  function getColumnValues($obj) {
+
+    $temp_arr = array();
+
+    foreach ($obj as $key => $value) {
+      $temp_arr[] = $value;
+      //$temp_arr[] = $this->addQuotation($value);
+    }
+
+    return count($temp_arr) > 0 ? $this->convertToString($temp_arr) : '';
+  }
+
+  function getColumnKeys($obj) {
+
+    $temp_arr = array();
+
+    foreach ($obj as $key => $value) {
+
+      if (is_string($key)) {
+        $temp_arr[] = $key;
+      }
+    }
+
+    return count($temp_arr) > 0 ? $this->convertToString($temp_arr) : '';
   }
 
   function getColumnBindValue() {
@@ -178,7 +211,7 @@ class Query extends Object {
       $this->where = $values->get();
     } else {
 
-      if (is_array($values)) {        
+      if (is_array($values)) {
         $keyId = 0;
 
         foreach ($values as $key => $value) {
@@ -278,31 +311,6 @@ class Query extends Object {
     $this->schema = implode(',', $resultArr);
   }
 
-  function getColumnValues($obj) {
-
-    $temp_arr = array();
-
-    foreach ($obj as $key => $value) {
-      $temp_arr[] = $this->addQuotation($value);
-    }
-
-    return $this->convertToString($temp_arr);
-  }
-
-  function getColumnKeys($obj) {
-
-    $temp_arr = array();
-
-    foreach ($obj as $key => $value) {
-
-      if (is_string($key)) {
-        $temp_arr[] = $key;
-      }
-    }
-
-    return count($temp_arr) > 0 ? $this->convertToString($temp_arr) : '';
-  }
-
   function reset() {
 
     $this->tableId = '';
@@ -360,8 +368,8 @@ class Query extends Object {
 
     $temp_value = '';
 
-    if (is_string($value) && (preg_match('/\(\)+$/', $value) == false) &&
-        (preg_match('/[+|-|*]+/', $value) == false)) {
+    if (is_string($value) && (preg_match('/\(\)+$/', $value) !== true) &&
+        (preg_match('/[+|-|*]+/', $value) !== true)) {
 
       $temp_value = '\'' . $value. '\'';
     } else {    

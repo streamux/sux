@@ -28,9 +28,9 @@ jsux.fn.read = {
     }
     return (true);
   },
-  checkTailDocumentForm: function ( f ) {
+  checkTailDocumentForm: function ( f ) { 
 
-    var nickname = f.nickname.value.length,
+    var nickname = f.nickname.value.length, 
       pass = f.pass.value.length,
       comment = f.comment.value.length;
 
