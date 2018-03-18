@@ -18,7 +18,7 @@ jsux.fn.main = {
     }
 
     $('#'+label).empty();
-    $(markup).tmpl(data, func).appendTo('#'+label);dd
+    $(markup).tmpl(data, func).appendTo('#'+label);
   },
   setServiceConfig: function(data) {
 
