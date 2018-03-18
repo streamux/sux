@@ -23,7 +23,7 @@ jsux.fn.loginAdmin = {
   setEvent: function() {
 
     var self = this;
-    $('form[name=f_login_admin]').on('submit',function(e) {
+    $('form[name=f_login_admin]').on('submit',function(e) { d
 
       if (!self.checkForm(e.target)) {
         e.preventDefault();
