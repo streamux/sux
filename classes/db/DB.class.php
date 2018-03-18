@@ -199,11 +199,6 @@ class DB extends Object {
     return 'DROP TABLE ' . $tables;
   }
 
-  function _query($sql) {
-
-    $this->statement = $this->pdo->prepare($sql);;
-  }
-
   function _showTables($query=NULL) {
 
     $db = $query->getDBName();
@@ -231,6 +226,19 @@ class DB extends Object {
     return 'SHOW DATABASES ';
   }
 
+  function _setColumnBindValue( $values) {
+
+    if (count($values) === 0) {
+      return;
+    }
+
+    foreach ($values as $key => $value) {
+      $value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
+      $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
+      $this->statement->bindValue($key, $value);
+    }    
+  }
+
   function _setWhereBindValue( $values) {
 
     if (count($values) === 0) {
@@ -242,6 +250,11 @@ class DB extends Object {
       $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
       $this->statement->bindValue($key, $value);
     }    
+  }
+
+  function _query($sql) {
+
+    $this->statement = $this->pdo->prepare($sql);
   }
 
   function _executeQuery() {
@@ -261,11 +274,11 @@ class DB extends Object {
   function select($query) {
 
     $sql = $this->_selectSql($query);
-    $bindValue = $query->getWhereBindValue();
+    $bindWhere = $query->getWhereBindValue();
 
     $this->_setLogger($sql);
     $this->_query($sql);    
-    $this->_setWhereBindValue($bindValue);
+    $this->_setWhereBindValue($bindWhere);
     return $this->_executeQuery();
   }
 
@@ -283,11 +296,13 @@ class DB extends Object {
 
     $sql = $this->_updateSql($query);
 
-    $bindValue = $query->getWhereBindValue();
+    $bindColumn = $query->getColumnBindValue();
+    $bindWhere = $query->getWhereBindValue();
 
     $this->_setLogger($sql);
     $this->_query($sql);
-    $this->_setWhereBindValue($bindValue);        
+    $this->_setColumnBindValue($bindColumn);
+    $this->_setWhereBindValue($bindWhere);
 
     return $this->_executeQuery();
   }
@@ -295,11 +310,11 @@ class DB extends Object {
   function delete($query) {
 
     $sql = $this->_deleteSql($query);
-    $bindValue = $query->getWhereBindValue();
+    $bindWhere = $query->getWhereBindValue();
 
     $this->_setLogger($sql);
     $this->_query($sql);
-    $this->_setWhereBindValue($bindValue);    
+    $this->_setWhereBindValue($bindWhere);    
 
     return $this->_executeQuery();
   }

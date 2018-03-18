@@ -132,13 +132,35 @@ class Query extends Object {
 
   function setColumn($values) {
 
-    if (is_array($values)) {      
-      $this->column_keys = $this->getColumnKeys($values, ',');
-      $this->column_values = $this->getColumnValues($values, ',');
-      $values = $this->addQuotationToArray($values);
+    $bindValue = array();
+    $tempArr = array();
+
+    foreach ($values as $key => $value) {
+      $bindField = ':' . $key;
+      $bindValue[$key] = $bindField;
+      $tempArr[] = $key . '=' . $bindField;
+      $this->setColumnBindValue( $key, $value);
+
+      $count++;
     }
 
-    $this->column_list = $this->convertToString($values, ',');
+    if (is_array($values)) {
+      $this->column_keys = $this->getColumnKeys($bindValue, ',');
+      $this->column_values = $this->getColumnValues($bindValue, ',');
+      $bindValue = implode(',', $tempArr);
+    }
+
+    $this->column_list = $this->convertToString($bindValue, ',');
+  }
+
+  function getColumnBindValue() {
+
+    return $this->columnBindValues;
+  }
+
+  function setColumnBindValue( $key, $value) {
+
+    $this->columnBindValues[$key] = $value;;
   }
 
   function getWhere() {
@@ -180,7 +202,7 @@ class Query extends Object {
           $this->where = $splitItems[0] . ' LIKE \'% ' . ':' . $splitItems[0] . ' %\'';   
         } else {
            $splitItems = preg_split('/\s+=\s+/', $values);
-           $this->where = $splitItems[0] . ' = ' . ':' . $splitItems[0];
+           $this->where = $splitItems[0] . '=' . ':' . $splitItems[0];
         }
 
         $this->setWhereBindValue($splitItems[0], $splitItems[1]);         
@@ -188,7 +210,7 @@ class Query extends Object {
     }   // end of if is_a()
   }  
 
-   function getWhereBindValue() {
+  function getWhereBindValue() {
 
     return $this->whereBindValues;
   }
