@@ -35,45 +35,53 @@ class AdminAdminView extends View
     $msg = '';
 
     $connecterArr1 = $this->_getConnecterData();
-    if ($connecterArr1['resultYN'] === 'N') {
-      $resultYN = $connecterArr1['resultYN'];
+
+    if ($connecterArr1['result'] === 'N') {
+      $resultYN = $connecterArr1['result'];
       $msg .= $connecterArr1['msg'];
     }
 
     $connecterArr2 = $this->_getConnecterrealData();
-    if ($connecterArr2['resultYN'] === 'N') {
-      $resultYN = $connecterArr2['resultYN'];
+
+    if ($connecterArr2['result'] === 'N') {
+      $resultYN = $connecterArr2['result'];
       $msg .= $connecterArr2['msg'];
     }
+
     $connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
 
     $newMemberArr = $this->_getNewmemberData();
-    if ($newMemberArr['resultYN'] === 'N') {
-      $resultYN = $newMemberArr['resultYN'];
+
+    if ($newMemberArr['result'] === 'N') {
+      $resultYN = $newMemberArr['result'];
       $msg .= $newMemberArr['msg'];
     }
 
     $newCommentArr = $this->_getLatestcommentData();
-    if ($newCommentArr['resultYN'] === 'N') {
-      $resultYN = $newCommentArr['resultYN'];
+
+    if ($newCommentArr['result'] === 'N') {
+      $resultYN = $newCommentArr['result'];
       $msg .= $newCommentArr['msg'];
-    }
+    }    
 
     $pageviewArr = $this->_getPageviewData();
-    if ($pageviewArr['resultYN'] === 'N') {
-      $resultYN = $pageviewArr['resultYN'];
+
+    if ($pageviewArr['result'] === 'N') {
+      $resultYN = $pageviewArr['result'];
       $msg .= $pageviewArr['msg'];
     }
 
     $connectsiteArr = $this->_getConnectsiteData();
-    if ($connectsiteArr['resultYN'] === 'N') {
-      $resultYN = $connectsiteArr['resultYN'];
+
+    if ($connectsiteArr['result'] === 'N') {
+      $resultYN = $connectsiteArr['result'];
       $msg .= $connectsiteArr['msg'];
     }
 
     $serviceConfigArr = $this->_getServiceData();
-    if ($serviceConfigArr['resultYN'] === 'N') {
-      $resultYN = $serviceConfigArr['resultYN'];
+
+    if ($serviceConfigArr['result'] === 'N') {
+      $resultYN = $serviceConfigArr['result'];
       $msg .= $serviceConfigArr['msg'];
     }
 
@@ -85,8 +93,8 @@ class AdminAdminView extends View
               'serviceConfig'=>$serviceConfigArr['data']);
 
     $data = array(  'data'=>$dataObj,
-            'result'=>$resultYN,
-            'msg'=>$msg );
+                            'result'=>$resultYN,
+                            'msg'=>$msg );
     
     $this->callback($data);
   }
@@ -111,19 +119,11 @@ class AdminAdminView extends View
 
   function displayConnectdayJson() {
 
-    /*$context = Context::getInstance();
-    $passover = $context->getRequest('passover');
-    $limit = $context->getRequest('limit');*/
-
     $data = $this->_getConnectdayData();
     $this->callback($data);
   }
 
   function displayConnectsiteJson() {
-
-    /*$context = Context::getInstance();
-    $passover = $context->getRequest('passover');
-    $limit = $context->getRequest('limit');*/
 
     $data = $this->_getConnectsiteData();
     $this->callback($data);
@@ -154,12 +154,13 @@ class AdminAdminView extends View
     $connecterArr = array('today'=>0, 'yester'=>0,'total'=>0);
     
     $result = $this->model->select('connect_day', '*');
+
     if ($result) {
       $rows = $this->model->getRows();
 
       for ($i=0; $i<count($rows); $i++) {
         $connecterArr['total'] += (int) $rows[$i]['total_count'];
-      }     
+      }
 
       $where = new QueryWhere();
       $where->set('date', date('Y-m-d', time()-86400), '<');
@@ -172,6 +173,7 @@ class AdminAdminView extends View
 
       if ($result) {
         $today = $this->model->getNumRows();
+
         if (!$today) {
           $today = 0;
         }
@@ -203,7 +205,7 @@ class AdminAdminView extends View
       $resultYN = 'N';
     }
 
-    //Tracer::getInstance()->output();
+    //$msg .= Tracer::getInstance()->output();
     $data = array(  'data'=>$connecterArr,
             'result'=>$resultYN,
             'msg'=>$msg);
@@ -273,6 +275,7 @@ class AdminAdminView extends View
       $msg .= '실접속통계 테이블 접근을 실패하였습니다.';
       $resultYN = 'N';
     }
+
     //Tracer::getInstance()->output();
     $data = array(  'data'=>$connecterArr,
             'result'=>$resultYN,
@@ -562,6 +565,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['memberNum'] = $numrows;
       }
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select member' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('member_group', 'id');
@@ -572,6 +578,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['memberGroupNum'] = $numrows;
       }
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select board' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('board', 'id');
@@ -582,6 +591,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['boardNum']  = $numrows;
       } 
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select board' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('board_group', 'id');
@@ -592,6 +604,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['boardGoupNum']  = $numrows;
       } 
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select board_group' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('document', 'id');
@@ -602,11 +617,13 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['documentNum']  = $numrows;
       } 
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select document' . "<br>";
+      $resultYN = 'N';
     }
 
-
     $where = new QueryWhere();
-    $where->set('choice', 'y');    
+    $where->set('is_usable', 'y','=');    
     $result = $this->model->select('popup', 'id', $where);
 
     if ($result) {
@@ -615,6 +632,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['popupNum']  = $numrows;
       }
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select popup' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('pageview', 'id');
@@ -625,6 +645,9 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['pageviewNum'] = $numrows;
       }
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select pageview' . "<br>";
+      $resultYN = 'N';
     }
 
     $result = $this->model->select('connect_site', 'id');
@@ -635,12 +658,16 @@ class AdminAdminView extends View
       if ($numrows > 0) {
         $serviceConfig['analysisNum'] = $numrows;
       }
+    } else {
+      $msg .= 'AdminAminView->_getServiceData::It is failed to select connect_site' . "<br>";
+      $resultYN = 'N';
     }
-    //Tracer::getInstance()->output();
-    $data = array(  'data'=>$serviceConfig,
-            'result'=>$resultYN,
-            'msg'=>$msg);
 
-    return $data;
+    //$msg .= Tracer::getInstance()->getMessage();
+    return array( 
+      'data'=>$serviceConfig,
+      'result'=>$resultYN,
+      'msg'=>$msg
+    );
   }
 }

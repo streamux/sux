@@ -51,10 +51,6 @@ class InstallView extends View
 
     $this->checkInstall();
 
-    // DB 접속 테스트 
-    $oDB = DB::getInstance();
-    $oDB->close();
-
     $context = Context::getInstance();
     $this->request_data['action'] = 'setupAdmin';
 

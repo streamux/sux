@@ -8,8 +8,8 @@
               전체 글(<span class="total_num">0</span>)
             </span>
             <div class="btn_group pull-right">
-              <a href="{$rootPath}board-admin/group-list" class="sx-btn" title="글 추가">게시 그룹 목록</a>
-              <a href="{$rootPath}board-admin/add" class="sx-btn sx-btn-info" title="글 추가">글 추가</a>
+              <a href="{$rootPath}board-admin/group-list" class="sx-btn" title="글 추가">게시글 그룹 목록</a>
+              <a href="{$rootPath}board-admin/add" class="sx-btn sx-btn-info" title="글 추가">그룹 추가</a>
             </div>
           </div>
         </header>
@@ -28,7 +28,7 @@
             </li>
           </ul>
           <div class="list_pc_panel">
-            <table class="table" summary="게시판 리스트 정보를 제공합니다.">
+            <table class="table" summary="게시글 리스트 정보를 제공합니다.">
               <caption class="sr-only">게시글 목록</caption>
               <thead>
                 <tr>

@@ -35,5 +35,10 @@ class Tracer extends Object{
   function reset() {
     $this->message = '';
   }
+
+  function getString() {
+
+    return 'Tracer';
+  }
 }
 ?>

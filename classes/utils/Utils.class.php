@@ -261,7 +261,7 @@ class Utils extends Object {
   ///////////////////////////////////////////////
 
   function goURL( $url, $delay=0,$resultYN='Y',$msg='') {
-
+    
     $data = array(  'url'=>$url,
             'delay'=>$delay,
             'result'=>$resultYN,

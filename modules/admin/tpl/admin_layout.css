@@ -24,6 +24,7 @@
   position: relative;  
   margin: 0 auto;
   max-width: 1024px;
+  min-height:450px;
 }
 .sx-footer{
   position: relative;
@@ -183,6 +184,7 @@ nav{
   display: inline-block;
   padding-top:14px;
   height: 30px;
+  cursor: pointer;
 
   -webkit-transform: rotate(0deg);
   -o-transform: rotate(0deg);
@@ -191,7 +193,7 @@ nav{
   -webkit-transition: transform 0.7s ease-out;
   -o-transition: transform 0.7s ease-out;
   transition: transform 0.7s ease-out;
-  cursor: pointer;
+  
 }
 .sx-close-active{
   top:10px;
@@ -252,6 +254,7 @@ nav{
 }
 .sx-gnb a{ 
   text-decoration: none;
+
   -webkit-transition: background-color .2s ease-out;
           -o-transition: background-color .2s ease-out;
                transition: background-color .2s ease-out;
@@ -273,16 +276,18 @@ nav{
   margin-right: 5px;
   font-size:1.5em;
 }
-.sx-sub-case{
-  -webkit-transition: height .3s ease-out;
-  -o-transition: height .3s ease-out;
-  transition: height .3s ease-out;  
-  -webkit-transform-origin: top;
-  -o-transform-origin: top;
-  transform-origin: top;
+.sx-sub-case{  
   height:0;
   position: relative;
   overflow: hidden;
+
+  -webkit-transition: height .3s ease-out;
+  -o-transition: height .3s ease-out;
+  transition: height .3s ease-out;  
+
+  -webkit-transform-origin: top;
+  -o-transform-origin: top;
+  transform-origin: top;
 }
 .sx-sub-case.sx-slide-in{
   /*height:auto; control in javascript*/
@@ -293,9 +298,11 @@ nav{
 .sx-sub-case .sx-drap-menu{
   background-color: #fff;
   border: 1px solid #e3e3e3;
+
   -webkit-transition: -webkit-transform .3s ease-out;
           -o-transition: -o-transform .3s ease-out;
               transition: transform .3s ease-out;
+
   -webkit-transform: translateY(-100%);
           -o-transform: translateY(-100%);
               transform: translateY(-100%);
@@ -429,9 +436,11 @@ nav{
   .sx-gnb-case {
     position: absolute;
     background-color: #333;
+
     -webkit-transition: none;
     -o-transition: none;
     transition: none;
+    
     -webkit-transform: translateX(0);
     -o-transform: translateX(0);
     transform: translateX(0);

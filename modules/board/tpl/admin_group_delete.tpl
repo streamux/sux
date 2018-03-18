@@ -1,6 +1,6 @@
     <div class="sx-content sx-admin-main">
       <section class="sx-board-panel">
-        <h1 class="title">게시판 삭제</h1>
+        <h1 class="title">게시글 그룹 삭제</h1>
         <div class="sx-box-content">
           <form action="{$rootPath}board-admin/group-delete">
             <input type="hidden" name="_method" value="delete">

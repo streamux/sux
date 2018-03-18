@@ -183,7 +183,7 @@ class MenuAdminController extends Controller
     $columns = array();
     $menuArr = Utils::convertJsonToArray($jsonData);
 
-    if (count($menuArr['data']) > 0) {
+   if (count($menuArr['data']) > 0) {
       convertMultiToArray($menuArr['data']);
 
       // 동일한 값 합치기
@@ -192,15 +192,17 @@ class MenuAdminController extends Controller
 
       $where = new QueryWhere();
       foreach ($menuList as $key => $value) {
-        $where->set('id', $value, '=', 'or');
+        $where->set('id', $value, '=');
       }
+
       $columns['is_active'] = 1;
       $result = $this->model->update('menu', $columns, $where);
+
       if (!$result) {
         $msg .= '메뉴 수정을 실패하였습니다.';
         $resultYN = 'N';
       }
-    } // end of if
+    }   // end of if
       
     $data = json_decode($jsonData, true);
     $data['result'] = $resultYN;

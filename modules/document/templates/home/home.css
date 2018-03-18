@@ -99,7 +99,7 @@ h6, .h6 {
 .img_panel{
   overflow: hidden;
   position: relative;
-  height: 50vh;
+  height: 35vh;
   background-position: center center;
   background-repeat: no-repeat;
   -webkit-background-size:cover;
@@ -107,7 +107,7 @@ h6, .h6 {
 }
 .img_panel .title_panel .title {
   position: absolute;
-  top:54%;
+  top:50%;
   left:2%;
   padding-left:0;
   text-align: center;
@@ -199,8 +199,8 @@ h6, .h6 {
   
   .img_panel{
     overflow: visible;
-    height: 100vh;    
-    background-attachment: fixed;    
+    height: 45vh;    
+    background-attachment: fixed;  
   }
   .img_panel .title_panel{
     position: absolute;
@@ -215,7 +215,7 @@ h6, .h6 {
     display: inline-block;
     top:60%;
     font-size: 3em;
-    -webkit-transform: translateY(-50%);
+    /*-webkit-transform: translateY(-50%);
     -o-transform: translateY(-50%);
     transform: translateY(-50%);
 
@@ -227,7 +227,7 @@ h6, .h6 {
     -moz-opacity: 0;
     -khtml-opacity: 0;
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opactity=0)";
-    filter: "alpha(opacity=0)";
+    filter: "alpha(opacity=0)";*/
   }
   .img_panel .title_panel .title small{
     top: 55px;   

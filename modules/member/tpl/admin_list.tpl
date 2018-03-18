@@ -1,4 +1,4 @@
-    <div class="sx-content sx-admin-member-list">           
+    <div class="sx-content">           
       <section class="section">
         <header class="header">
           <h1 class="title">회원 관리</h1>

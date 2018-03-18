@@ -10,7 +10,7 @@ class InstallController extends Controller
     $context = Context::getInstance();
     $posts =$context->getPostAll();
 
-    $db_info = array('db_hostname', 'db_userid', 'db_password', 'db_database','db_table_prefix');
+    $db_info = array('db_hostname', 'db_database', 'db_port', 'db_charset', 'db_userid', 'db_password' ,'db_table_prefix');
     
     $resultYN = 'Y';
     $msg = '';
@@ -20,7 +20,7 @@ class InstallController extends Controller
 
     $buffer = array();
     foreach ($db_info as $key => $value) {
-      $buffer['db_info'][$value] = $posts[$value];
+      $buffer['db_info'][$value] = str_replace('-', '', $posts[$value]);
     }
 
     $context->makeFilesDir(false, $buffer['db_info']);
@@ -63,13 +63,14 @@ class InstallController extends Controller
         $adminValue = $posts[$value];
       }
 
+      $adminValue = preg_replace('/[-]/', '', $adminValue);
       $buffer['admin_info'][$value] = $adminValue;
       $context->setSession($value, $adminValue);
     }
 
     $result = CacheFile::writeFile($filePath, $buffer);
     if($result) {
-      $msg = "관리자계정 설정을 완료하였습니다.<br>";
+      $msg = "관리자 계정 설정을 완료하였습니다.<br>";
       $resultYN = 'Y';
     } else {
       $msg = "관리자 설정을 실패했습니다.";
@@ -112,8 +113,12 @@ class InstallController extends Controller
     $schemas = QuerySchema::getInstance();
     $cacheFile = CacheFile::getInstance();
 
+    $query->setDBName($context->getDBInfo('db_database'));
+
     // 반응이 없을 땐 DB계정 정보가 올바른지 확인한다.
-    $oDB = DB::getInstance();    
+    $oDB = DB::getInstance();
+    $oDB->createDatabase($query);
+    $oDB->connect();
     $moduleList = FileHandler::readDir('./modules');
 
     foreach ($moduleList as $key => $value) {
@@ -123,10 +128,10 @@ class InstallController extends Controller
       $shemasDir = './modules/' . $module . '/schemas';
       $schemasList = FileHandler::readDir($shemasDir);
 
-      foreach ($schemasList as $key => $value) {
+      for ($i=0; $i<count($schemasList); $i++) {
 
-        if (preg_match('/(.xml+)$/', $value['file_name'] )) {
-          $xmlPath = $shemasDir . '/' . $value['file_name'];
+        if (preg_match('/(.xml+)$/', $schemasList[$i]['file_name'] )) {
+          $xmlPath = $shemasDir . '/' . $schemasList[$i]['file_name'];
 
           if (file_exists($xmlPath)) {
             $query->resetSchema();
@@ -162,17 +167,22 @@ class InstallController extends Controller
             $keyName = (string) $tableXml['name'];  
             $tableList[$keyName] = $tableName;
 
-            $query->setSchema($schemas);
-            $result = $oDB->createTable($query);
+            $query->setSchema($schemas);            
+            $oDB->showTables($query);
+            $numrow = $oDB->getNumRows();
 
-            if (!$result) {
-              $resultYN = 'N';
-              $msg .= "@ create table->" . $tableName . " [ result : fail ] --- X" . PHP_EOL;
-            } else {                                
-              $msg .= "@ create table->" . $tableName . " [ result : success ] --- O" . PHP_EOL;
+            if ($numrow === 0) {
+              $result = $oDB->createTable($query);
+
+              if (!$result) {
+                $resultYN = 'N';
+                $msg .= "@ create table->" . $tableName . " [ result : fail ] --- X" . PHP_EOL;
+              } else {
+                $msg .= "@ create table->" . $tableName . " [ result : success ] --- O" . PHP_EOL;
+              }
             }
-          }
-        }
+          }   // end of  if file_exists
+        }   // end of if preg_match
       }  // end of foreach : schema
 
       /**
@@ -218,7 +228,7 @@ class InstallController extends Controller
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
 
-                  // Not yet register
+                  //Not yet register
                   if ($numrows < 1) {
                     $query->setColumn($columns);
                     $oDB->insert($query);
@@ -229,6 +239,7 @@ class InstallController extends Controller
                 if ($module === 'member' && preg_match('/^admin/i', $category) == true) {
                   $query->setTable($tablePrefix . 'member');
                   $query->setField('id');
+                  $query->setWhere(array('category'=>$category));
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
 
@@ -254,9 +265,8 @@ class InstallController extends Controller
                       $resultYN = "N";
                     }
                   } else {
-                    $msg .= '관리자 계정이 이미 존재합니다.' . PHP_EOL;
-                    $resultYN = "N";      
-                  } 
+                    $msg .= '관리자 계정이 이미 등록되어 있습니다.' . PHP_EOL;
+                  }
                 } // end of if : member
 
                 // Document : Create Template Files
@@ -308,28 +318,39 @@ class InstallController extends Controller
                   }               
                 }  // end of if : document                 
 
-                if ($module === 'board') {                  
-                  $bColumns = array();
-                  $bColumns['category'] = $category;
-                  $bColumns['user_id'] = $context->getSession('admin_id');
-                  $bColumns['user_name'] = $context->getSession('admin_nickname');
-                  $bColumns['nickname'] = $context->getSession('admin_nickname');
-                  $bColumns['password'] = $context->getSession('admin_pwd');
-                  $bColumns['title'] = '게시판 설정 안내입니다.';
-                  $bColumns['content'] = "SUX CMS 최초 설치 시 등록되는 게시판은 관리자 페이지에서 변경, 삭제가 가능합니다.<br>또한 귀하의 사이트 환경에 맞게 수정하려면 관리자 권한 로그인 후<br>우측 상단 톱니바퀴 아이콘을 클릭해서 대시보드로 이동한 후 게시판 관리 페이지를 이용해 주세요.";
-                  $bColumns['email_address'] = $context->getSession('admin_email');
-                  $bColumns['wall'] = 'a';
-                  $bColumns['date'] = 'now()';
-                  $bColumns['ip'] = $context->getServer('REMOTE_ADDR');
+                if ($module === 'board') {
 
                   $query->setTable($tablePrefix . 'board');
-                  $query->setField('');
-                  $query->setColumn($bColumns);
-                  $result = $oDB->insert($query);
+                  $query->setField('id');
+                  $query->setWhere(array('category'=>$category));
+                  $oDB->select($query);
+                  $numrows = $oDB->getNumRows();
 
-                  if (!$result) {
-                    $msg .= "시동 게시글 등록을 실패하였습니다.<br>";
-                    $resultYN = 'N';    
+                  if ($numrows < 1) {
+                    $bColumns = array();
+                    $bColumns['category'] = $category;
+                    $bColumns['user_id'] = $context->getSession('admin_id');
+                    $bColumns['user_name'] = $context->getSession('admin_nickname');
+                    $bColumns['nickname'] = $context->getSession('admin_nickname');
+                    $bColumns['password'] = $context->getSession('admin_pwd');
+                    $bColumns['title'] = '게시판 설정 안내입니다.';
+                    $bColumns['content'] = "SUX CMS 최초 설치 시 등록되는 게시판은 관리자 페이지에서 변경, 삭제가 가능합니다.<br>또한 귀하의 사이트 환경에 맞게 수정하려면 관리자 권한 로그인 후<br>우측 상단 톱니바퀴 아이콘을 클릭해서 대시보드로 이동한 후 게시판 관리 페이지를 이용해 주세요.";
+                    $bColumns['email_address'] = $context->getSession('admin_email');
+                    $bColumns['wall'] = 'a';
+                    $bColumns['date'] = 'now()';
+                    $bColumns['ip'] = $context->getServer('REMOTE_ADDR');
+
+                    $query->setTable($tablePrefix . 'board');
+                    $query->setField('');
+                    $query->setColumn($bColumns);
+                    $result = $oDB->insert($query);
+
+                    if (!$result) {
+                      $msg .= "설정 안내 게시글 등록을 실패하였습니다.<br>";
+                      $resultYN = 'N';    
+                    }
+                  } else {
+                    $msg .= '게시물이 이미 등록되어 있습니다.' . "<br>";
                   }
                 }                
 
@@ -409,7 +430,6 @@ class InstallController extends Controller
                             'url'=>$rootPath);
 
     $this->callback($data);
-    $oDB->close();
   }
 
   function deleteCaches() {

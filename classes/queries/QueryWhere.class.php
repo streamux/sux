@@ -5,6 +5,7 @@ class QueryWhere extends Object {
   public static $_instance = null;
   var $class_name = 'query_where';
   var $sql = '';
+  var $bindValues = array();
   var $counter = 0;
 
   function __construct() {}
@@ -26,9 +27,13 @@ class QueryWhere extends Object {
 
   function set($field,$value,$cond='=', $glue='and') {
 
+    $bindField = ':' . $field . '_' . $this->counter;
+    $this->setBindValue($bindField, $value);    
+
     $isNumber = is_numeric($value);
+
     if ($isNumber !== true) {
-     $value = mysql_real_escape_string($value);
+      $value = mysql_real_escape_string($value);
     }
 
     if ($glue !== '' && $this->counter > 0) {
@@ -36,12 +41,22 @@ class QueryWhere extends Object {
     }
 
     if (preg_match('/like/i', $cond)) {
-      $this->sql .= $field . ' LIKE \'%' . $value . '%\'';
+      $this->sql .= $field . ' LIKE % ' . $bindField . '%';
     } else {
-      $this->sql .= $field . $cond . '\'' . $value . '\'';
+      $this->sql .= $field . $cond . $bindField;
     }
 
     $this->counter++;
+  }
+
+  function getBindValue() {
+
+    return array_slice($this->bindValues, 0);
+  }
+
+  function setBindValue( $key, $value) {
+
+    $this->bindValues[$key] = $value;
   }
 
   function add($values) {
@@ -53,6 +68,7 @@ class QueryWhere extends Object {
 
     $this->sql = '';
     $this->counter = 0;
+    $this->bindValues = array();
   }
 }
 ?>

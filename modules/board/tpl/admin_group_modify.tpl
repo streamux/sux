@@ -1,6 +1,6 @@
     <div class="sx-content sx-admin-main">
       <section class="sx-board-panel">
-        <h1 class="title">게시판 수정</h1>
+        <h1 class="title">게시글 그룹 수정</h1>
         <div class="sx-box-content">                    
           <form action="{$rootPath}board-admin/group-modify" class="sx-form-horizontal">
             <input type="hidden" name="_method" value="update">
@@ -18,7 +18,7 @@
               <span class="sx-form-control" disabled="false">{$documentData.category}</span>
             </div>
             <div class="sx-form-group">
-              <label for="groupName" class="sx-control-label label_width">* 게시판 이름</label>     
+              <label for="groupName" class="sx-control-label label_width">* 게시글 그룹 이름</label>     
               <input type="text" id="groupName" name="board_name" size="20" maxlength="120" class="sx-form-control">
             </div>
             <div class="sx-form-group">
@@ -168,7 +168,7 @@
               </div>
             </div>
             <div class="sx-form-inline">
-              <label for="emptyName" class="sx-control-label label_width">게시판 형식</label>          
+              <label for="emptyName" class="sx-control-label label_width">게시글 그룹 형식</label>          
               <div class="sx-input-group">
                 <input type="radio" id="boardTypeHtml" name="board_type" value="html">
                 <label for="boardTypeHtml" class="sx-control-label">HTML</label>

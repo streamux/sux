@@ -387,10 +387,12 @@ class DocumentAdminView extends View
         $msg = "${category}는 생성할 수 있는 페이지입니다.";
         $resultYN = "Y";
       }
-    }   
+    }
+
+    $msg .= 'aaa';
 
     $data = array(  "result"=>$resultYN,
-            "msg"=>$msg);
+                            "msg"=>$msg);
 
     $this->callback($data);
   }

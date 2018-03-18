@@ -4,7 +4,6 @@ class Model extends Object {
 
   var $class_name = 'model';
   var $query_sql = '';
-  var $result = NULL;
   var $hashmap_params = array();
   var $db = NUll;
   var $fetchArrayList = NULL;
@@ -37,8 +36,7 @@ class Model extends Object {
       $query->setLimit($passover, $limit);
     }
 
-   $this->result = $this->db->select($query);
-    return $this->result;
+    return $this->db->select($query);
   }
 
   function insert( $table_name, $columns = null) {
@@ -51,8 +49,7 @@ class Model extends Object {
     $query->setTable($tableName);
     $query->setColumn($columns);
 
-    $this->result = $this->db->insert($query);
-    return $this->result;
+    return $this->db->insert($query);
   }
 
   function update( $table_name, $columns, $where = null) {
@@ -69,8 +66,7 @@ class Model extends Object {
       $query->setWhere($where);
     }
 
-    $this->result = $this->db->update($query);
-    return $this->result;
+    return $this->db->update($query);
   }
 
   function delete( $table_name, $where = null) {
@@ -86,8 +82,7 @@ class Model extends Object {
       $query->setWhere($where);
     }
 
-    $this->result = $this->db->delete($query);
-    return $this->result;
+    return $this->db->delete($query);
   }
 
   function showTables($query) {
@@ -103,42 +98,43 @@ class Model extends Object {
 
   function createTable($query) {
 
-    $this->result = $this->db->createTable($query);
-    return $this->result;
+    return $this->db->createTable($query);
   }
 
   function dropTable($query) {
 
-    $this->result = $this->db->dropTable($query);
-    return $this->result;
+    return $this->db->dropTable($query);
   }
 
-  function getMysqlFetchArray($result) {
+  function getMysqlFetchArray() {
 
-    return $this->db->getFetchArray($result);
+    return $this->db->getFetchArray();
   }
 
-  function getMysqlNumrows($result) {
+  function getMysqlNumrows() {
 
-    return $this->db->getNumRows($result);
+    return $this->db->getNumRows();
   }
 
   function getNumRows() {
 
-    return $this->db->getNumRows($this->result);
+    return $this->db->getNumRows();
   }
 
   function getRows() {
 
     $datas = array();
-    while($row = $this->db->getFetchArray($this->result)) {
+
+    while(($row = $this->db->getFetchArray()) !== false) {
       $fields = array();
 
       foreach ($row as $key => $value) {
+
         if (is_string($key) !== false) {
           $fields[$key] = $value;
         }       
       }
+      
       $datas[] = $fields;
     }
     
@@ -154,6 +150,7 @@ class Model extends Object {
   function getJson($ignore=TRUE) {
 
     $numrow = $this->getNumRows();
+
     if ($numrow > 1) {
       $str_data = $this->getRows();
     } else {

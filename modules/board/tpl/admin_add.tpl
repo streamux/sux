@@ -7,7 +7,7 @@
 
             <div class="head_panel">
               <div class="sx-form-group">
-                <label for="category" class="sx-control-label label_width">게시 그룹 선택</label>
+                <label for="category" class="sx-control-label label_width">게시글 그룹 선택</label>
                 <select id="category" name="category" class="sx-form-control">
                   {foreach from=$documentData.board_list item=$item}
                     <option value="{$item.category}">{$item.board_name}</option>

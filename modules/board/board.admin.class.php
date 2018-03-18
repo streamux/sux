@@ -7,5 +7,5 @@ class BoardAdmin
    */
   static $categories = array('board-admin');
   //static $action = array('list','add','modify','delete','list-json','modify-json','skin-json','check-board');
-  static $action = array('list','add','modify','delete','list-json','modify-json','group', 'group-list','group-add','group-modify','group-delete','group-list-json','group-modify-json','skin-json','check-board', 'news-list-json');
+  static $action = array('list','add','modify','delete','list-json','modify-json','group', 'group-list','group-add','group-modify','group-delete','group-list-json','group-modify-json','skin-json','check-board');
 }

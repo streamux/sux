@@ -371,11 +371,13 @@ class MemberAdminView extends View {
     if (!$limit) {
       $limit = 10;  
     }
+
     if (!$passover) {
       $passover = 0;
     }
 
     $where = new QueryWhere();
+
     if (isset($search) && $search) { 
 
       if (preg_match('/,/', $find)) {
@@ -399,23 +401,27 @@ class MemberAdminView extends View {
 
     if ($numrows > 0){        
       $a = $numrows - $passover;
-
       $result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
+
       if ($result) {
         $rows = $this->model->getRows();
+
         for ($i=0; $i<count($rows); $i++) {
           $obj = array();
           $obj['hp'] = '';
           $obj['no'] = $a;
+
           foreach ($rows[$i] as $key => $value) {
             $obj[$key] = $value;
           }
+
           if (isset($obj['hp1']) && $obj['hp1']) {
             $obj['hp'] =  $obj['hp1'] .' - '. $obj['hp2'] . ' - '. $obj['hp3'];
           }              
           $dataList[] = $obj;
           $a--;
         }
+
         $dataObj = array(
           'category'=>$category,
           'list'=>$dataList,
@@ -429,7 +435,7 @@ class MemberAdminView extends View {
       $resultYN = 'N';
     }
 
-    $msg .= Tracer::getInstance()->getMessage();
+    //$msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);

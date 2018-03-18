@@ -2,14 +2,14 @@
     <div class="sx-content sx-admin-main">          
       <section class="sx-board-panel">
         <header class="header">
-          <h1 class="title">게시판 관리</h1>
+          <h1 class="title">게시글 그룹 관리</h1>
           <div class="sx-row clearfix">
             <span class="search_title">
-              전체 게시판(<span class="total_num">0</span>)
+              전체 게시글 그룹(<span class="total_num">0</span>)
             </span>
             <div class="btn_group pull-right">
               <a href="{$rootPath}board-admin/list" class="sx-btn" title="글 목록">전체 글 목록</a>
-              <a href="{$rootPath}board-admin/group-add" class="sx-btn sx-btn-info" title="게시판 추가">게시판 추가</a>
+              <a href="{$rootPath}board-admin/group-add" class="sx-btn sx-btn-info" title="게시글 그룹 추가">게시글 그룹 추가</a>
             </div>            
           </div>
         </header>
@@ -28,12 +28,12 @@
             </li>
           </ul>
           <div class="list_pc_panel">
-            <table class="table" summary="게시판 리스트 정보를 제공합니다.">
-              <caption class="sr-only">게시판 목록</caption>
+            <table class="table" summary="게시글 그룹 리스트 정보를 제공합니다.">
+              <caption class="sr-only">그룹 목록</caption>
               <thead>
                 <tr>
                   <th class="sx_no">번호</th>
-                  <th class="sx_name">게시판 이름</th>
+                  <th class="sx_name">그룹 이름</th>
                   <th class="sx_summary">설명</th>
                   <th class="sx_skin">스킨</th>
                   <th class="sx_type">타입</th>
@@ -64,7 +64,7 @@
         <footer class="footer">
           <div class="btn_group pull-right">
               <a href="{$rootPath}board-admin/list" class="sx-btn" title="글 목록">전체 글 목록</a>
-              <a href="{$rootPath}board-admin/group-add" class="sx-btn sx-btn-info" title="게시판 추가">게시판 추가</a>
+              <a href="{$rootPath}board-admin/group-add" class="sx-btn sx-btn-info" title="게시글 그룹 추가">게시글 그룹 추가</a>
             </div>
         </footer>
       </section>
@@ -106,7 +106,7 @@
 {literal}
   <li>
     <a href="#">
-      <span class="title sx-text-warning">등록된 게시판 없음</span>
+      <span class="title sx-text-warning">등록된 게시글 그룹 없음</span>
       <span class="summary sx-text-warning">${msg}</span>
     </a>           
   </li>

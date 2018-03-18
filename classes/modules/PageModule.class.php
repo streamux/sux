@@ -28,9 +28,11 @@ class PageModule
     $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
     $classLowerName = strtolower($className);
 
-    if ($context->getDB() || strtolower($className) === 'install') {      
+    if ($context->getDB() || strtolower($className) === 'install') {    
+
       if ($classLowerName !== 'install') {
         $oDB = DB::getInstance();
+        $oDB->connect();
       }
 
       $ModelClass = ucfirst($className) . 'Model';
@@ -45,24 +47,25 @@ class PageModule
       $httpMethod = strtolower($httpMethod);
       $regMethod = '/^(insert|select|update|delete)+$/';
 
+      // Check admin login for Dashboard
+      $regAdmin = preg_match('/(admin)+$/i', $className);
+
+      if ($classLowerName !== 'loginadmin' && $regAdmin) {
+        $isAdminLogin = $context->isAdminLogin();
+
+        if (empty($isAdminLogin)) {
+          Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Admin Login is required');
+        }
+      }
+
       if (preg_match($regMethod, $httpMethod)) {
+
         if ($context->isCrossDomain() === false) {
           Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
         }
 
         $controller->{$httpMethod . ucfirst($action)}();
       } else {
-
-        // Check admin login for Dashboard
-        $regAdmin = preg_match('/(admin)+$/i', $className);
-
-        if ($classLowerName !== 'loginadmin' && $regAdmin) {
-          $isAdminLogin = $context->isAdminLogin();
-
-          if (empty($isAdminLogin)) {
-            Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Login is required');
-          }
-        }
 
         if (empty($category) && preg_match('/^(board|document)+/i', $className)) {
           if (empty($action)) {
@@ -86,10 +89,6 @@ class PageModule
         $context->setParameter('sid', $sid);
 
         $view->display($action, $category, $id, $sid);
-      }
-
-      if (isset($oDB) && $oDB) {
-        $oDB->close();
       }
     } else {
       Utils::goURL(_SUX_ROOT_ . 'install', 0, 'N', 'SUX cannot connect to DB');     
