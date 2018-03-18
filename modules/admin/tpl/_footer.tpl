@@ -22,7 +22,7 @@
 </script>
 
 <script type="text/jquery-templete" id="gnbSecondMenu">
-  <li class="sx-smenu" data-mid="" data-sid=""> dd
+  <li class="sx-smenu" data-mid="" data-sid="">
     <a href="#none"><span></span></a>
   </li>
 </script>
