@@ -178,7 +178,7 @@ class Query extends Object {
       $this->where = $values->get();
     } else {
 
-      if (is_array($values)) {        
+      if (is_array($values)) {
         $keyId = 0;
 
         foreach ($values as $key => $value) {

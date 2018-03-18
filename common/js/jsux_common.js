@@ -19,7 +19,7 @@ function getCookie( name ) {
       return unescape( document.cookie.substring( e, popendCookie ) );
     }
 
-    i = document.cookie.indexOf( ' ', i ) + 1; 
+    i = document.cookie.indexOf( ' ', i ) + 1;
     if ( i === 0 ) {      
       break;
     }

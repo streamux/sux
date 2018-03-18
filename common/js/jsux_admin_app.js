@@ -261,7 +261,8 @@ var SXAdminMobilePanel = function() {
 
     var self = this;
 
-    $('.sx-menu-btn').on('click', function() {
+    $('.sx-menu-btn').on('click', function(e) {
+      e.preventDefault();
 
       if (!isReadClickMenu) {
         return;
@@ -271,11 +272,13 @@ var SXAdminMobilePanel = function() {
       self.slideInGnbPanel();      
     });
 
-    $('.sx-bgcover').on('click', function() {
+    $('.sx-bgcover').on('click', function(e) {
+      e.preventDefault();
       self.slideOutGnbPanel();
     });
 
-    $('.sx-close-btn').on('click', function() {
+    $('.sx-close-btn').on('click', function(e) {
+      e.preventDefault();
       self.slideOutGnbPanel();
     });
 
