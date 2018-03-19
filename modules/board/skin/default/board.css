@@ -69,6 +69,20 @@
 .board_list {
   padding-bottom:20px;
 }
+.board_list .sx_notice_list,
+.board_list .list_pc_panel {
+  text-align: left;
+}
+.board_list .sx_notice_list{
+  font-weight: 600;
+  background-color: #f3f3f3;
+}
+.board_list .sx_notice_list{
+  border-bottom: 1px solid #e3e3e3;
+}
+.board_list .list_mobile_panel li:first-child{
+  border-top:1px solid #e3e3e3;
+}
 .board_list .list_mobile_panel li {
   padding: 0 15px;
 }
@@ -78,6 +92,7 @@
 .board_list .list_mobile_panel li .subject .prefix_icon{
   position: relative;
   top:-1px;
+  margin-right:5px;
 }
 .board_list .list_mobile_panel li .subject .title{
   position: relative;
@@ -85,12 +100,16 @@
 }
 .board_list .list_mobile_panel li .info{
   font-size: 0.875em;
+  font-weight: 300;
   color: #aeaeae;
 }
 .board_list .list_mobile_panel li p i{
   position: relative;
   top:-1px;
   vertical-align: middle;
+}
+.board_list .list_mobile_panel li p a:hover {
+  text-decoration: none;
 }
 
 .board_list .list_pc_panel {
@@ -101,7 +120,7 @@
   border-spacing: 0; 
   width: 100%;
 }
-.board_list .list_pc_panel table thead th {
+.board_list .list_pc_panel table thead tr th {
   height:50px;
   border-top: 1px solid #e3e3e3;
   border-bottom: 2px solid #e3e3e3;
@@ -111,35 +130,36 @@
 .board_list .list_pc_panel table tbody tr td{
   min-height:55px; 
   font-weight: normal;
-  text-align:center;
 }
-.board_list .list_pc_panel table tbody .sx-btn-activate:hover {
-   background-color: #f6f6f6;
+.board_list .list_pc_panel table thead tr th.subject{
+  padding:0 25px;
 }
-.board_list .list_pc_panel table thead .author {
+.board_list .list_pc_panel table thead tr th.author {
   width:140px;
 }
-.board_list .list_pc_panel table thead .date {
+.board_list .list_pc_panel table thead tr th.date {
   width:130px;
 }
-.board_list .list_pc_panel table thead .hit {
+.board_list .list_pc_panel table thead tr th.hit {
   width:90px;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area {
+.board_list .list_pc_panel table tbody tr.sx-btn-activate:hover {
+   background-color: #f6f6f6;
+}
+.board_list .list_pc_panel table tbody tr td.subject .link_area {
   display:inline-block;
   width:100%;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon{
+.board_list .list_pc_panel table tbody tr td.subject .link_area .prefix_icon{
   position: relative;
   top:-1px;
+  margin-right: 5px;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area .title {
+.board_list .list_pc_panel table tbody tr td.subject .link_area .title {
   position: relative;
   top:1px;
 }
-.board_list .list_mobile_panel li a:hover {
-  text-decoration: none;
-}
+
 .board_list .list_mobile_panel li,
 .board_list .list_pc_panel table tbody tr td {
   font-size: 1.125em;
@@ -148,7 +168,6 @@
 .board_list .list_pc_panel table tbody tr td {
   padding-top:20px;
   padding-bottom:20px;
-  text-align: left;
 }
 .board_list .list_mobile_panel li .subject .prefix_icon,
 .board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon {

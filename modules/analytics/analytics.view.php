@@ -23,6 +23,7 @@ class AnalyticsView extends View
     $where->set('date', $now,'=');
     $result = $this->model->select('connecter', 'id', $where);
 
+
     if ($result) {
       $today_num = $this->model->getNumRows();
     } else {
@@ -51,10 +52,10 @@ class AnalyticsView extends View
       }   
     } else {
       $msg .= "전체 접속자 선택을 실패하였습니다.\n";
-    }   
+    } 
 
     // 실 접속자 수 
-    $where->reset();
+  $where->reset();
     $where->set('date', $now,'=');
     $result = $this->model->select('connecter_real', 'id', $where);
 
