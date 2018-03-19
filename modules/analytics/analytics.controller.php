@@ -6,13 +6,14 @@ class AnalyticsController extends Controller
   function addCounter() {
 
     $context = Context::getInstance();
-
     $connectCheck = $context->getSession('connectcheck');
+
     if (empty($connectCheck)) {
 
       $ip = $context->getServer('REMOTE_ADDR');
       $now = date('Y-m-d');
       $delDate = date("Y-m-d", time() - 86400);
+
 
       // 총 접속수  
       $where = new QueryWhere();
@@ -38,7 +39,7 @@ class AnalyticsController extends Controller
       $where->set('date',$delDate,'<');
       $this->model->delete('connecter', $where);
 
-      $columns = array('', $ip, 'now()');
+      $columns = array('ip'=>$ip, 'date'=>'now()');
       $this->model->insert('connecter', $columns);
 
       // 실접속자 수
@@ -47,6 +48,7 @@ class AnalyticsController extends Controller
       $where->set('date',$now,'=','and');
       $this->model->select('connecter_real', '*', $where);
 
+
       $numrows = $this->model->getNumRows();
       if (!$numrows) {
 
@@ -54,7 +56,7 @@ class AnalyticsController extends Controller
         $where->set('date',$delDate,'<');
         $this->model->delete('connecter_real', $where);
 
-        $columns = array('', $ip, 'now()');
+        $columns = array('ip'=>$ip, 'date'=>'now()');
         $this->model->insert('connecter_real', $columns);
 
         // 전체 실접속자 수

@@ -34,15 +34,40 @@
   
   <!-- Mobile -->
   <ul class="list_mobile_panel">
+
+  <!-- Notice -->
+  {foreach from=$contentData.notice_list  item=$item}
+    {if isset($item)}
+    <li class="sx-btn-active sx_notice_list">
+      <p class="subject" style="padding-left:{$item.subject.space}px">
+        <a href="{$routeURI}/{$item.subject.id}">
+        <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>
+        <span class="title">{$item.subject.title|nl2br}</span>
+        <span class="sx-badge">{$item.subject.comment_num}</span>
+        {if $item.subject.icon_img_name != ''}
+        <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
+        {/if}
+        <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
+        <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>
+        </a>
+      </p>      
+      <p class="info" style="padding-left:{$item.subject.space}px">
+        <span class="sx-space-right">{$item.name}</span><i class="xi-clock sx-space-center"></i><span class="sx-space-right">{$item.date}</span><i class="xi-eye sx-space-center"></i>{$item.hit}
+      </p>      
+    </li>
+    {/if}
+  {/foreach} 
+
+  <!-- List -->
   {foreach from=$contentData.list item=$item}
     {if isset($item)}
     <li class="sx-btn-active">
-      {if $requestData.search != ''}
-      <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
-      {else}
-      <a href="{$routeURI}/{$item.subject.id}">
-      {/if}
-        <p class="subject" style="padding-left:{$item.subject.space}px">
+      <p class="subject" style="padding-left:{$item.subject.space}px">
+        {if $requestData.search != ''}
+        <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
+        {else}
+        <a href="{$routeURI}/{$item.subject.id}">
+        {/if}          
           <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>
           <span class="title">{$item.subject.title|nl2br}</span>
           <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -50,9 +75,9 @@
           <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
           {/if}
           <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-          <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>
-        </p>
-      </a>
+          <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>        
+        </a>
+      </p>
       <p class="info" style="padding-left:{$item.subject.space}px">
         <span class="sx-space-right">{$item.name}</span><i class="xi-clock sx-space-center"></i><span class="sx-space-right">{$item.date}</span><i class="xi-eye sx-space-center"></i>{$item.hit}
       </p>      
@@ -80,18 +105,15 @@
       </thead>
       <tbody>
 
+      <!-- Notice -->
       {foreach from=$contentData.notice_list  item=$item}
         {if isset($item)}
-        <tr class="sx-btn-active" style="border:1px solid #f00">       
+        <tr class="sx-btn-active sx_notice_list">       
           <td class="subject">
-            {if $requestData.search != ''}
-              <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
-            {else}
-              <a href="{$routeURI}/{$item.subject.id}">
-            {/if}
+            <a href="{$routeURI}/{$item.subject.id}">
             <span class="link_area" style="padding-left:{$item.subject.space+25}px">
-              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
-              <span class="title">{$item.subject.title|nl2br}</span>
+              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
+              <span class="title" style="font-weight:600;">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
               {if $item.subject.icon_img_name != ''}
               <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
@@ -100,13 +122,14 @@
               <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
             </span></a>
           </td>
-          <td><span>{$item.name}</span></td>
-          <td><span>{$item.date}</span></td>
-          <td><span>{$item.hit}</span></td>
+          <td><span style="font-weight:600;">{$item.name}</span></td>
+          <td><span style="font-weight:600;">{$item.date}</span></td>
+          <td><span style="font-weight:600;">{$item.hit}</span></td>
         </tr>
         {/if}
       {/foreach}  
-
+      
+      <!-- List -->
       {foreach from=$contentData.list  item=$item}
         {if isset($item)}
         <tr class="sx-btn-active">       

@@ -136,9 +136,6 @@ class BoardController extends Controller
       exit;
     }
 
-    /*echo $columns['content'];
-    return;*/
-
     $result = $this->model->insert('board', $columns);
     if (!isset($result)) {
       $resultYN = 'N';
@@ -536,8 +533,8 @@ class BoardController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $sessions = $context->getSessionAll();
-
     $sessionUserId = $sessions['user_id'];    
+
     if (empty($sessionUserId)) {
       $msg .= '로그인 후 이용해주세요.';
       UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -551,9 +548,10 @@ class BoardController extends Controller
     $rootPath = _SUX_ROOT_;    
     $checkLabel = array('내용을');
     $checkList = array('comment');
-
     $index = 0;
+
     foreach ($checkList as $key => $value) {      
+
       if (empty($posts[$value])) {
         $msg .= $checkLabel[$index] . ' 입력해주세요.';
         UIError::alertToBack($msg, true, array('url'=>$returnURL, 'delay'=>3));
@@ -604,7 +602,8 @@ class BoardController extends Controller
       $msg .= '댓글 입력을 실패하였습니다.';
     }    
 
-    //$msg .= Tracer::getInstance()->getMessage();
+    $msg .= Tracer::getInstance()->getMessage();
+    return;
     $data = array( 
             'data'=>$row,
             'url'=>$rootPath . $category . '/' . $id,

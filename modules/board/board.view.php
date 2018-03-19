@@ -145,13 +145,6 @@ class BoardView extends View
               $subject['prefix_icon_color'] = 'sx-bg-reply';
             }
 
-            //공지글 설정은 개발 예정 
-            /*if (isset($isNotice) && $isNotice != '') {
-              $subject['space'] = '10px';
-              $subject['prefix_icon'] = '공지';
-              $subject['prefix_icon_color'] = 'sx-bg-notice';
-            }*/
-
             if (isset($filename) && $filename){
               $imgname = '';
 
@@ -205,98 +198,103 @@ class BoardView extends View
     $where = new QueryWhere();
     $where->set('category', $category);
     $where->set('is_notice', 'y');
-    $this->model->select('board', '*', $where);
-
+    $this->model->select('board', '*', $where, 'id desc');
     $contentData['notce_list'] = $this->model->getRows();
 
-    for ($i=0; $i<count($contentData['notce_list']); $i++) {
+    if (count($contentData['notce_list']) > 0) {
 
-            $id = (int) $contentData['notce_list'][$i]['id'];
-            $user_id = FormSecurity::decodeWithoutTags($contentData['notce_list'][$i]['user_id']);          
-            $name = $contentData['notce_list'][$i]['nickname'] | $contentData['notce_list'][$i]['user_name'];
-            $name = FormSecurity::decodeWithoutTags($name); 
-            $title = FormSecurity::decodeWithSimpleTags($contentData['notce_list'][$i]['title']);
-            $content = FormSecurity::decodeToText($contentData['notce_list'][$i]['content']);
-            $progressStep = FormSecurity::decodeWithoutTags($contentData['notce_list'][$i]['progress_step']);
-            $hit = (int) $contentData['notce_list'][$i]['readed_count'];
-            $space = (int) $contentData['notce_list'][$i]['space_count'];
-            $filename = $contentData['notce_list'][$i]['filename'];
-            $filetype = $contentData['notce_list'][$i]['filetype'];
-            
-            $date =$contentData['notce_list'][$i]['date'];        
-            $compareDayArr = split(' ', $date);
-            $compareDay = $compareDayArr[0];
-            
-            $subject = array();
-            $subject['id'] = $id;
-            $subject['title'] = $title;         
-            $subject['icon_img_name'] = '';
-            $subject['progress_step_name'] = '';
+      for ($i=0; $i<count($contentData['notce_list']); $i++) {
 
-            // 'hide' in value is a class name of CSS
-            $subject['space'] = 0;
-            $subject['prefix_icon_label'] = '';
-            $subject['prefix_icon_type'] = 0;
+        $id = (int) $contentData['notce_list'][$i]['id'];
+        $user_id = FormSecurity::decodeWithoutTags($contentData['notce_list'][$i]['user_id']);
+        $isNotice = $contentData['notce_list'][$i]['is_notice'];          
+        $name = $contentData['notce_list'][$i]['nickname'] | $contentData['notce_list'][$i]['user_name'];
+        $name = FormSecurity::decodeWithoutTags($name); 
+        $title = FormSecurity::decodeWithSimpleTags($contentData['notce_list'][$i]['title']);
+        $content = FormSecurity::decodeToText($contentData['notce_list'][$i]['content']);
+        $progressStep = FormSecurity::decodeWithoutTags($contentData['notce_list'][$i]['progress_step']);
+        $hit = (int) $contentData['notce_list'][$i]['readed_count'];
+        $space = (int) $contentData['notce_list'][$i]['space_count'];
+        $filename = $contentData['notce_list'][$i]['filename'];
+        $filetype = $contentData['notce_list'][$i]['filetype'];
+        
+        $date =$contentData['notce_list'][$i]['date'];        
+        $compareDayArr = split(' ', $date);
+        $compareDay = $compareDayArr[0];
+        
+        $subject = array();
+        $subject['id'] = $id;
+        $subject['title'] = $title;         
+        $subject['icon_img_name'] = '';
+        $subject['progress_step_name'] = '';
 
-            $subject['icon_img'] = 'sx-hide';
-            $subject['comment_num'] = '';
-            $subject['icon_new'] = 'sx-hide';
-            $subject['icon_opkey'] = 'sx-hide';
+        // 'hide' in value is a class name of CSS
+        $subject['space'] = 0;
+        $subject['prefix_icon_label'] = '';
+        $subject['prefix_icon_type'] = 0;
 
-            if (isset($space) && $space) {
-              $subject['space'] = $space*10;
-              $subject['prefix_icon_label'] = '답변';
-              $subject['prefix_icon_color'] = 'sx-bg-reply';
-            }
+        $subject['icon_img'] = 'sx-hide';
+        $subject['comment_num'] = '';
+        $subject['icon_new'] = 'sx-hide';
+        $subject['icon_opkey'] = 'sx-hide';
 
-            //공지글 설정은 개발 예정 
-            /*if (isset($isNotice) && $isNotice != '') {
-              $subject['space'] = '10px';
-              $subject['prefix_icon'] = '공지';
-              $subject['prefix_icon_color'] = 'sx-bg-notice';
-            }*/
+        if (isset($space) && $space) {
+          $subject['space'] = $space*10;
+          $subject['prefix_icon_label'] = '답변';
+          $subject['prefix_icon_color'] = 'sx-bg-reply';
+        }
 
-            if (isset($filename) && $filename){
-              $imgname = '';
+        //공지글 설정은 개발 예정 
+        if (isset($isNotice) && $isNotice != '') {
+          $subject['space'] = '0';
+          $subject['prefix_icon'] = '공지';
+          $subject['prefix_icon_color'] = 'sx-bg-notice';
+        }
 
-              if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {             
-                $imgname = "icon_img.png";
-              } else if ($download === 'y'  && preg_match('/(application/x-zip-compressed|application/zip)+/', $filetype)) { 
-                $imgname = "icon_down.png";
-              }
+        if (isset($filename) && $filename){
+          $imgname = '';
 
-              if ($imgname !== '') {
-                $subject['icon_img'] = 'sx-show-inline';
-                $subject['icon_img_name'] = $imgname;
-              } 
-            }
-
-            $where->reset();
-            $where->set('content_id', $id, '=');
-            $this->model->select('comment', 'id', $where);
-            $commentNums = $this->model->getNumRows();
-
-            if ($commentNums > 0) {
-              $subject['comment_num'] = $commentNums;
-            }
-
-            if ($compareDay == $today){
-              $subject['icon_new'] = 'sx-show-inline';
-              $subject['icon_new_title'] = 'new';
-            }
-            
-            $subject['progress_step_name'] = ($progressStep === '초기화') ? '' : $progressStep;
-            $subject['icon_progress_color'] = 'sx-bg-progress';
-
-            $contentData['list'][$i]['name'] = $name;
-            $contentData['list'][$i]['hit'] = $hit;
-            $contentData['list'][$i]['space'] = $space;
-            $dateArr = split(' ', $date);
-            $contentData['list'][$i]['date'] = $dateArr[0];
-            $contentData['list'][$i]['subject'] = $subject;
-
-            $subject = null;
+          if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {             
+            $imgname = "icon_img.png";
+          } else if ($download === 'y'  && preg_match('/(application/x-zip-compressed|application/zip)+/', $filetype)) { 
+            $imgname = "icon_down.png";
           }
+
+          if ($imgname !== '') {
+            $subject['icon_img'] = 'sx-show-inline';
+            $subject['icon_img_name'] = $imgname;
+          } 
+        }
+
+        $where->reset();
+        $where->set('content_id', $id, '=');
+        $this->model->select('comment', 'id', $where);
+        $commentNums = $this->model->getNumRows();
+
+        if ($commentNums > 0) {
+          $subject['comment_num'] = $commentNums;
+        }
+
+        if ($compareDay == $today){
+          $subject['icon_new'] = 'sx-show-inline';
+          $subject['icon_new_title'] = 'new';
+        }
+        
+        $subject['progress_step_name'] = ($progressStep === '초기화') ? '' : $progressStep;
+        $subject['icon_progress_color'] = 'sx-bg-progress';
+
+        $contentData['notice_list'][$i]['name'] = $name;
+        $contentData['notice_list'][$i]['hit'] = $hit;
+        $contentData['notice_list'][$i]['space'] = $space;
+        $dateArr = split(' ', $date);
+        $contentData['notice_list'][$i]['date'] = $dateArr[0];
+        $contentData['notice_list'][$i]['subject'] = $subject;
+
+        $subject = null;
+      }
+    } else {
+      $contentData['notice_list'] = array();
+    }
 
     // navi logic
     $navi = New Navigator();

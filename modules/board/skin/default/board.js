@@ -197,6 +197,10 @@ jsux.fn.read = {
     jsux.getJSON( url, params, function( e ) {
       var models = [];
 
+      console.log(e.msg);
+
+      return;
+
       if (e.result.toUpperCase() === 'Y') {
         if (e.data) {
           var data = e.data;
@@ -206,6 +210,7 @@ jsux.fn.read = {
             var model = self.getCommentModel();
 
             $.each(model, function(key) {
+
               if (data[i][key]) {
                 model[key] = data[i][key];
               }            
