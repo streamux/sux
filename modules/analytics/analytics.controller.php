@@ -9,7 +9,7 @@ class AnalyticsController extends Controller
     $connectCheck = $context->getSession('connectcheck');
 
     if (empty($connectCheck)) {
-      /*$ip = $context->getServer('REMOTE_ADDR');
+     $ip = $context->getServer('REMOTE_ADDR');
       $now = date('Y-m-d');
       $delDate = date("Y-m-d", time() - 86400);
 
@@ -68,7 +68,7 @@ class AnalyticsController extends Controller
         $this->model->update('connect_day', $columns, $where);
       }
 
-      $context->setSession('connectcheck', 'yes');*/
+      $context->setSession('connectcheck', 'yes');
     }   
   }
 

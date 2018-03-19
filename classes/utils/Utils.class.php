@@ -318,6 +318,17 @@ class Utils extends Object {
     return $resultStr;
   }
 
+  function getRandomPassword($len=8) {
+
+    $words = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $words .=self::getMicrotimeInt();
+    $tempPassword = self::getRandomStr($words, $len-1);
+    $tempPassword .= '!';
+    $tempPassword = str_shuffle($tempPassword);
+
+    return $tempPassword;
+  }
+
   function stripBRInPreTag( $target ) {
 
     $target = str_replace('$', '&#36;', $target);

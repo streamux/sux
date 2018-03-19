@@ -4,7 +4,6 @@
     <p class="sx_subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</p>
      <div class="sx_login_box sx-edgebox-2px">
       <form action="{$rootPath}search-id" name="f_searchid" method="post">
-        <input type="hidden" name="_method" value="select">
 
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>

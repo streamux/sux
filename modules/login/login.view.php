@@ -201,8 +201,8 @@ class LoginView extends View
       $where->set('user_name',$userName);
       $where->set('email_address',$userEmail,'=','and');
       $this->model->select('member', 'user_id, email_address', $where);
-
       $row = $this->model->getRow();
+
       if (count($row) > 0) {
         $userId = $row['user_id'];
         $email = $row['email_address']; 
@@ -244,6 +244,7 @@ class LoginView extends View
 
     $context = Context::getInstance();
     $this->post_data = $context->getPostAll();
+    $adminInfo = $context->getAdminInfo();
     $userName = $this->post_data['user_name'];
     $userId = $this->post_data['user_id'];    
     $userEmail = $this->post_data['email_address'];
@@ -272,19 +273,23 @@ class LoginView extends View
     if (!is_readable($footerPath)) {
       $footerPath = $skinRealPath . "_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
-    }   
+    }
 
     if(isset($userId) && $userId) {
 
       $where = new QueryWhere();
-      $where->set('user_name',$userName);
+      $where->add('(');
+      $where->set('user_name',$userName, '=');
+      $where->set('nickname',$userName, '=', 'or');
+      $where->add(')');
       $where->set('user_id',$userId,'=','and');
       $where->set('email_address',$userEmail,'=','and');
-      $this->model->select('member', 'user_name, user_id, email_address', $where);
-
+      $this->model->select('member', 'id, user_name, nickname, user_id, email_address', $where);
       $row = $this->model->getRow();
+
       if (count($row) > 0) {
         $name = $row['user_name'];
+
         $id = $row['user_id']; 
         $email = $row['email_address'];        
 
@@ -310,26 +315,65 @@ class LoginView extends View
         $this->document_data['user_email'] = $email;
         $this->document_data['jscode'] = 'searchResult';
 
-        /*$email_skin_path = _SUX_PATH_ . 'modules/mail/member/mail_searchpwd_result.tpl';
-        if (!file_exists($email_skin_path)) {
-          UIError::alertToBack('이메일 스킨파일이 존재하지 않습니다.');
-          exit;
-        }
+        $email_skin_path = _SUX_PATH_ . 'modules/mails/templates/search_pwd.html';
+        $sendedMail = $context->getSession('sx_sended_mail');
 
-        $subject = '[ StreamUX ]에 문의하신 내용의 답변입니다.';
-        $additional_headers = 'From: ' . $adminName . '<' . $adminEmail . '>\n';
-        $additional_headers .= 'Reply-To : ' . $userEmail . '\n';
-        $additional_headers .= 'MIME-Version: 1.0\n';
-        $additional_headers .= 'Content-Type: text/html; charset=EUC-KR\n';
-        $contents = $mail_skin;
+        if (file_exists($email_skin_path) && $sendedMail !== 'ok') {
+           $contents = FileHandler::readFile($email_skin_path);
 
-        mail($adminEmail, $subject, $contents, $additional_headers);
-        mail($userEmail, $subject, $contents, $additional_headers);*/
+          $adminName = $adminInfo['admin_nickname'];
+          $adminHome = $adminInfo['yourhome'];
+          $adminDomain = Utils::getDomain($adminInfo['yourhome']);
+          $adminEmail = $adminInfo['admin_email'];
+
+          if (empty($adminDomain)) {
+            $adminDomain = $adminHome;
+          }
+
+          $tempPassword = Utils::getRandomPassword(12);
+
+          $subject = "[ " . $adminDomain . " ]에 문의하신 내용의 답변입니다.";
+          $additional_headers = "From: " . $adminName . " < " . $adminEmail . " >\n";
+          $additional_headers .= "Reply-To : " . $userEmail . "\n";
+          $additional_headers .= "MIME-Version: 1.0\n";
+          $additional_headers .= "Content-Type: text/html; charset=UTF-8\n";
+
+          $replaceList = array(
+            'yourhome'=>$adminHome,
+            'user_name'=>$userName,
+            'temp_password'=>$tempPassword
+          );
+
+          foreach ($replaceList as $key => $value) {
+            $reg = sprintf('{$%s}',$key);
+            $contents = str_replace($reg, $value, $contents);
+          }
+
+          $hashPassword = $context->getPasswordHash($tempPassword);
+          $id = $row['id'];
+          $where = new QueryWhere();
+          $where->set('id', $id);
+          $result = $this->model->update('member', array('password'=>$hashPassword), $where);
+
+          if (!$result) {
+            UIError::alertToBack("비밀번호 업데이트를 실패하였습니다.\n");
+            return;
+          }
+ 
+          mail($adminEmail, $subject, $contents, $additional_headers);
+          mail($userEmail, $subject, $contents, $additional_headers);
+
+          $context->setSession('sx_sended_mail', 'ok');      
+        } else {
+          UIError::alertToBack("스킨 파일이 존재하지 않습니다.\n");
+        }  
       } else {
-        UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.');
+        UIError::alertToBack("입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.");
         exit;
       }
-    }else{      
+    }else{
+      $context->setSession('sx_sended_mail', '');
+
       $this->model->select('member_group', '*');
       $this->document_data['group'] = $this->model->getRows();
 

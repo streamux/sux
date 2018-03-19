@@ -174,29 +174,14 @@ class MemberController extends Controller
       $key = $columnCaches[$i];
       $value = $posts[$key];
 
-      if (isset($value) && $value) {
-        if ($key === 'password') {
-          $value = $value;
-        }
-        $columns[] = $value;
-      } else {
-
-        switch ($key) {
-          case 'grade':
-            $columns[] = 1;
-            break;
-          case 'date':
-            $columns[] = 'now()';
-            break;
-          case 'ip':
-            $columns[] = $context->getServer('REMOTE_ADDR');
-            break;
-          default:
-            $columns[] = '';
-            break;
-        } 
-      }           
+      if (isset($value) && $value) {        
+        $columns[$key] = $value;
+      }        
     }
+
+    $columns['grade'] = 1;
+    $columns['date'] = 'now()';
+    $columns['ip'] = $context->getServer('REMOTE_ADDR');
 
     $result = $this->model->insert('member', $columns);
     if ($result) {
@@ -208,7 +193,7 @@ class MemberController extends Controller
     }
 
     //$msg .= Tracer::getInstance()->getMessage();    
-    $data = array(  'url'=>$rootPath . 'login',
+    $data = array( 'url'=>$rootPath . 'login',
             'result'=>$resultYN,
             'msg'=>$msg);
 

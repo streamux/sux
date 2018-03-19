@@ -197,10 +197,6 @@ jsux.fn.read = {
     jsux.getJSON( url, params, function( e ) {
       var models = [];
 
-      console.log(e.msg);
-
-      return;
-
       if (e.result.toUpperCase() === 'Y') {
         if (e.data) {
           var data = e.data;
