@@ -233,9 +233,9 @@ class DB extends Object {
     }
 
     foreach ($values as $key => $value) {
-      //$value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
+      
 
-      if ($key !== 'date') {
+      if ($value !== 'now()') {
         $this->statement->bindValue($key, $value);
       }      
     }    
@@ -247,9 +247,7 @@ class DB extends Object {
       return;
     }
 
-    foreach ($values as $key => $value) {     
-      $value = filter_var( $value, FILTER_SANITIZE_SPECIAL_CHARS);
-      $value = filter_var( $value, FILTER_SANITIZE_ENCODED);
+    foreach ($values as $key => $value) { 
       $this->statement->bindValue($key, $value);
     }    
   }
@@ -292,7 +290,6 @@ class DB extends Object {
     $this->_setLogger($sql);
     $this->_query($sql);
     $this->_setColumnBindValue($bindColumn);
-
     return $this->_executeQuery();
   }
 
@@ -426,12 +423,12 @@ class DB extends Object {
 
   function getInsertId() {
 
-    if (!$this->pod) {
+    if (!$this->pdo) {
       $errorInfoes = $this->pdo->errorInfo();
       $this->setError($errorInfoes[1], 'DB->getInsertId : ' + $errorInfoes[2]);
     }
 
-    return $this->pod->lastInsertId();
+    return $this->pdo->lastInsertId();
   }
 
   function getFetchArray() {

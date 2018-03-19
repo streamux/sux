@@ -187,27 +187,6 @@ jsux.fn.searchId = {
     }
     return true;
   },
-  sendJson: function(f) {
-
-    var params = '',
-          url = '';
-      
-    params = {
-      _method: f._method.value,
-      user_name: f.user_name.value,
-      email_address: f.email_address.value
-    };
-    
-    if (!f.action) {
-      alert('Not Exists URL');
-    }
-    url = f.action;
-
-    jsux.getJSON( url, params, function( e ) {
-      
-      jsux.goURL(jsux.rootPath + 'search-id');
-    });
-  },
   setEvent: function() {
 
     var self = this;
@@ -224,6 +203,7 @@ jsux.fn.searchId = {
     jsux.setAutoFocus();
   }
 };
+
 jsux.fn.searchPassword = {
 
   validateEmail: function(id) {

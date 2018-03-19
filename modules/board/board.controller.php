@@ -527,8 +527,10 @@ class BoardController extends Controller
 
   function insertComment() {
 
-    $msg = '';
+    $msg = 'test';
     $resultYN = 'Y';
+    $dataObj = array();
+    $url = '';
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
@@ -597,15 +599,13 @@ class BoardController extends Controller
 
       // 추가된 마지막 입력값 선택 
       $this->model->select('comment', '*', $where);
-      $row = $this->model->getRow();
+      $dataObj = $this->model->getRow();
     } else {
       $msg .= '댓글 입력을 실패하였습니다.';
-    }    
+    }
 
-    $msg .= Tracer::getInstance()->getMessage();
-    return;
     $data = array( 
-            'data'=>$row,
+            'data'=>$dataObj,
             'url'=>$rootPath . $category . '/' . $id,
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -627,15 +627,24 @@ class BoardController extends Controller
     $nickName = $sessions['nickname'];
     $ipaddress = $context->getServer('REMOTE_ADDR');
 
+    // check user
+    $where = QueryWhere::getInstance();
+    $where->set('id', $id);
+    $this->model->select('comment', '*', $where);
+    $cmtRow = $this->model->getRow();
+
     // insert voted_log
     $where = QueryWhere::getInstance();
     $where->set('comment_id', $id);
     $where->set('ipaddress', $ipaddress, '=', 'and'); 
-    $this->model->select('comment_voted_log', '*', $where);
+    $result = $this->model->select('comment_voted_log', '*', $where);
+    $row = $this->model->getRow();
     $logNum = (int) $this->model->getNumRows();
 
+    //$msg = $result . ' : ' . $row['user_id'] . ' !== ' . $userId;
+
     // 해당 댓글에 동일한 ip 값이 적용되어 있는지 검사 
-    if ($logNum === 0) {
+    if ($logNum === 0 && $cmtRow['user_id'] !== $userId) {
       $columns = array();
       $columns['comment_id'] = $id;
       $columns['user_id'] = $userId;

@@ -9,9 +9,9 @@
         <label for="emptyId" class="sx-control-label">조회 결과</label>
       </div>
       <div class="sx-form-group">
-        <p class="text-center">' {$documentData.user_name} '님의 이메일 주소</p>
+        <p class="text-center">' {$documentData.user_name} '님의</p>
         <p class="text-center"><span>' {$documentData.user_email} '</span></p>
-        <p class="text-center">(으)로 임시비밀번호가 발송되었습니다.</p>
+        <p class="text-center"> 이메일 주소로 임시비밀번호가 발송되었습니다.</p>
       </div>
 
       <div class="sx-form-group sx_login_btn">
