@@ -1,4 +1,4 @@
-    <form name="f_setup_db" action="{$rootPath}uninstall" method="post" class="sx-form-horizontal">
+    <form name="f_uninstall_db" action="{$rootPath}uninstall" method="post" class="sx-form-horizontal">
       <input type="hidden" name="_method" value="delete"> 
       
       <div class="uninstall_box sx-edgebox">
