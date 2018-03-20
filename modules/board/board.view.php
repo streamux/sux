@@ -140,7 +140,7 @@ class BoardView extends View
             $subject['icon_opkey'] = 'sx-hide';
 
             if (isset($space) && $space) {
-              $subject['space'] = $space*10;
+              $subject['space'] = $space*15;
               $subject['prefix_icon_label'] = '답변';
               $subject['prefix_icon_color'] = 'sx-bg-reply';
             }
