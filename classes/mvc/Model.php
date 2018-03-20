@@ -12,6 +12,7 @@ class Model extends Object {
   function __construct() {
 
     $this->db = DB::getInstance();
+    $this->db->connect();
   }
   
   function select( $table_name, $field = '*', $where = null, $orderby = null,
