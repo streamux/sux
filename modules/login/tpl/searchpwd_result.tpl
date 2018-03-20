@@ -4,17 +4,16 @@
     <p class="sx_subtitle">SUX Board 솔루션을 이용해 주셔서 진심으로 감사합니다.</p>
     
     <div class="sx_login_box sx-edgebox-2px">
-      <div class="sx-form-group">
+      <div class="sx_login_header sx-form-group">
         <i class="xi-info-o xi-2x"></i>
         <label for="emptyId" class="sx-control-label">조회 결과</label>
       </div>
-      <div class="sx-form-group">
-        <p class="text-center">' {$documentData.user_name} '님의</p>
+      <div class="sx_login_body sx-form-group">
         <p class="text-center"><span>' {$documentData.user_email} '</span></p>
-        <p class="text-center"> 이메일 주소로 임시비밀번호가 발송되었습니다.</p>
+        <p class="text-center"><strong>회원님 이메일</strong> 주소로<br><strong>임시 비밀번호</strong>가 발송되었습니다.</p>
       </div>
 
-      <div class="sx-form-group sx_login_btn">
+      <div class="sx_btn_group sx-form-group">
         <input type="button" name="btn_confirm" value="확 인" onclick="location.href='{$rootPath}login'" class="sx-btn sx-btn-block">
       </div>
       <div class="sx_login_footer">
