@@ -202,6 +202,11 @@ class DB extends Object {
   function _showTables($query=NULL) {
 
     $db = $query->getDBName();
+
+    if ($db !== '') {
+      $db = ' ' . $db;
+    }
+
     $tableName = $query->getTable();
 
     if ($tableName != '') {
@@ -221,6 +226,16 @@ class DB extends Object {
     return "CREATE DATABASE `$dbname` CHARACTER SET `$charset` COLLATE `$collate`";
   }
 
+  function _dropDatabase($dbname) {
+
+    if (gettype($dbname) !== 'string' && empty($dbname)) {
+      $this->_setLogger('DB->dropDatabase : \' dbname is not valid');
+      return false;
+    }
+
+    return "DROP DATABASE IF EXISTS " . $dbname ;
+  }
+
   function _showDatabases($query=NULL) {
 
     return 'SHOW DATABASES ';
@@ -233,12 +248,13 @@ class DB extends Object {
     }
 
     foreach ($values as $key => $value) {
-      
 
       if ($value !== 'now()') {
         $this->statement->bindValue($key, $value);
       }      
-    }    
+    } 
+
+    return $msg;   
   }
 
   function _setWhereBindValue( $values) {
@@ -290,6 +306,7 @@ class DB extends Object {
     $this->_setLogger($sql);
     $this->_query($sql);
     $this->_setColumnBindValue($bindColumn);
+
     return $this->_executeQuery();
   }
 
@@ -332,7 +349,21 @@ class DB extends Object {
 
     try {
       $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
-      $pdo->exec($sql) or die(print_r($pdo->errorInfo(), true));
+      $pdo->exec($sql);
+    } catch (PDOException $e) {
+        die("DB ERROR: ". $e->getMessage());
+    }
+  }
+
+  function dropDatabase($query) {
+
+    $dbName = $query->getDBName();
+    $sql = $this->_dropDatabase($dbName);
+    $dsn = $this->_getMysqlDNS();
+
+    try {
+      $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
+      $pdo->exec($sql);
     } catch (PDOException $e) {
         die("DB ERROR: ". $e->getMessage());
     }
@@ -350,7 +381,7 @@ class DB extends Object {
 
     try {
       $pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password']);
-      $dbs = $pdo->query($sql) or die(print_r($pdo->errorInfo(), true));
+      $dbs = $pdo->query($sql);
 
       while(( $db = $dbs->fetchColumn( 0 )) !== false ) {
 
@@ -405,7 +436,7 @@ class DB extends Object {
 
     $sql = $this->_showTables($query);
 
-    //$this->_setLogger($sql);
+    $this->_setLogger($sql);
     $this->_query($sql);    
 
     return $this->_executeQuery();
