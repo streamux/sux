@@ -243,6 +243,10 @@ class Context
 
     return trim($this->db_info['db_database']);
   }
+  function getDBName() {
+
+    return trim($this->db_info['db_database']);
+  }
 
   function getDBInfo($key) {
 
