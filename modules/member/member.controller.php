@@ -4,8 +4,8 @@ class MemberController extends Controller
 {
   function checkValidation( $post ) {
 
-    $labelList = array('아이디를','비밀번호를','닉네임을','이메일을');
-    $ckeckList = array('user_id','password','nickname','email_address');
+    $labelList = array('아이디를','이메일을','닉네임을','이름을','비밀번호를');
+    $ckeckList = array('user_id','email_address','nickname','user_name','password');
 
     foreach ($ckeckList as $key => $value) {
       if (empty($post[$value])) {
@@ -69,13 +69,11 @@ class MemberController extends Controller
     }
 
     $userId = trim($posts['user_id']);
-    if (empty($posts['user_name'])) {
-      $posts['user_name'] = trim($posts['nickname']);
-    }
-    $returnURL = $context->getServer('REQUEST_URI');
+    $nickname = trim($posts['nickname']);
 
-    // validation
+    $returnURL = $context->getServer('REQUEST_URI');
     $msg = $this->checkValidation($posts);
+
     if (isset($msg) && $msg) {
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
@@ -105,6 +103,7 @@ class MemberController extends Controller
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
+              'input_name'=>'email_address',
               'result'=>$resultYN,
               'msg'=>$msg);
 
@@ -117,8 +116,9 @@ class MemberController extends Controller
     $posts['email_address'] = $email;
     $posts['hobby'] = $hobby;
 
+    /* Check user_id*/
     $where = new QueryWhere();
-    $where->set('user_id', $user_id);
+    $where->set('user_id', $userId);
     $this->model->select('member', 'id', $where);
     $numrows = $this->model->getNumRows();
 
@@ -127,6 +127,7 @@ class MemberController extends Controller
       $resultYN = "N";
 
       $data = array(  'url'=>$returnURL,
+              'input_name'=>'user_id',
               'result'=>$resultYN,
               'msg'=>$msg);
 
@@ -145,6 +146,26 @@ class MemberController extends Controller
       $resultYN = "N";
 
       $data = array(  'url'=>$returnURL,
+              'input_name'=>'email_address',
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* check nickname */
+    $where->reset();
+    $where->set('nickname', $nickname);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "닉네임이 이미 존재합니다. 다른 닉네임을 등록하세요.";
+      $resultYN = "N";
+
+      $data = array( 'url'=>$returnURL,
+              'input_name'=>'nickname',
               'result'=>$resultYN,
               'msg'=>$msg);
 
@@ -207,7 +228,8 @@ class MemberController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $user_id = $posts['user_id']; 
+    $userId = $posts['user_id']; 
+    $nickname = $posts['nickname']; 
     $password = $posts['password'];
     $newpassword = $posts['new_password'];
     $email = $posts['email_address']; 
@@ -226,10 +248,50 @@ class MemberController extends Controller
 
     // email validation    
     $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
+
     if ($check_email != true) {
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    $where = QueryWhere::getInstance();
+    $where->set('user_id', $userId, '!=');
+    $where->set('email_address', $email);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "이미 사용된 이메일 입니다. 다른 이메일을 등록하세요.";
+      $resultYN = "N";
+
+      $data = array(  'url'=>$returnURL,
+              'input_name'=>'email_address',
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* check nickname */
+    $where->reset();
+    $where->set('user_id', $userId, '!=');
+    $where->set('nickname', $nickname);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "닉네임이 이미 존재합니다. 다른 닉네임을 등록하세요.";
+      $resultYN = "N";
+
+      $data = array( 'url'=>$returnURL,
+              'input_name'=>'nickname',
               'result'=>$resultYN,
               'msg'=>$msg);
 
@@ -251,10 +313,10 @@ class MemberController extends Controller
     $passwordHash = $context->getPasswordHash($password);
     if (isset($newpassword) && $newpassword) {
       $newpasswordHash = $context->getPasswordHash($newpassword);
-    }   
+    }
 
     $where = new QueryWhere();
-    $where->set('user_id', $user_id);
+    $where->set('user_id', $userId);
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', '*', $where);
     $rows = $this->model->getRow();
@@ -314,8 +376,8 @@ class MemberController extends Controller
     }
 
     $data = array(  'url'=>$returnURL,
-            'result'=>$resultYN,
-            'msg'=>$msg);
+                            'result'=>$resultYN,
+                            'msg'=>$msg);
 
     $this->callback($data);
   }
@@ -327,7 +389,7 @@ class MemberController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $user_id = $posts['user_id'];
+    $userId = $posts['user_id'];
     $password = $posts['password'];
 
     $returnURL = $context->getServer('REQUEST_URI');    
@@ -340,7 +402,7 @@ class MemberController extends Controller
     }
 
     $where = new QueryWhere();
-    $where->set('user_id', $user_id);
+    $where->set('user_id', $userId);
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', 'category,password', $where);    
     $row = $this->model->getRow();

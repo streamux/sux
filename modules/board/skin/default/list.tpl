@@ -94,7 +94,7 @@
 
   <!-- PC -->
   <div class="list_pc_panel">  
-    <table class="table-striped" summary="게시판 리스트입니다.">
+    <table class="table" summary="게시판 리스트입니다.">
       <thead>
         <tr>        
           <th class="subject">제목</th>
@@ -110,8 +110,7 @@
         {if isset($item)}
         <tr class="sx-btn-active sx_notice_list">       
           <td class="subject">
-            <a href="{$routeURI}/{$item.subject.id}">
-            <span class="link_area" style="padding-left:{$item.subject.space+25}px">
+            <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+25}px">
               <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
               <span class="title" style="font-weight:600;">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -119,8 +118,8 @@
               <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
               {/if}
               <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
-            </span></a>
+              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>
+            </a>
           </td>
           <td><span style="font-weight:600;">{$item.name}</span></td>
           <td><span style="font-weight:600;">{$item.date}</span></td>
@@ -135,11 +134,10 @@
         <tr class="sx-btn-active">       
           <td class="subject">
             {if $requestData.search != ''}
-              <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
+              <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}" class="link_area" style="padding-left:{$item.subject.space+25}px">
             {else}
-              <a href="{$routeURI}/{$item.subject.id}">
+              <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+25}px">
             {/if}
-            <span class="link_area" style="padding-left:{$item.subject.space+25}px">
               <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
               <span class="title">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -147,12 +145,12 @@
               <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
               {/if}
               <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>  
-            </span></a>
+              <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>
+            </a>
           </td>
           <td><span>{$item.name}</span></td>
           <td><span>{$item.date}</span></td>
-          <td><span>{$item.hit}</span></td>
+          <td class="hit"><span>{$item.hit}</span></td>
         </tr>
         {/if}
       {/foreach}

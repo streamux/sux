@@ -35,7 +35,7 @@
         </div>
         {/if}
         
-        <div class="sx-form-group sx_login_btn">
+        <div class="sx-form-group sx_btn_group">
           <input type="submit" class="sx-btn sx-btn-block" value="로그인" title="로그인">
         </div>
         <div class="sx_login_footer">

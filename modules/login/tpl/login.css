@@ -1,7 +1,6 @@
 
 /* admin login */
 .sx_login {
-  margin-top:5px;
   padding:30px 15px 20px 15px;
   word-break:keep-all;
   text-align: center;
@@ -16,9 +15,9 @@
 }
 .sx_login .sx_login_box {
   margin:0 auto;
-  margin-top:25px;
+  margin-top:35px;
   margin-bottom: 30px;
-  padding:35px 20px 20px 20px;
+  padding:20px;
   max-width: 356px;
 }
 .sx_login .sx_login_box label {
@@ -38,16 +37,17 @@
 .sx_login .sx_login_box .sx-form-group .label_login_keeper{
   font-size:1em;
 }
+.sx_login .sx_login_box .sx-form-group > p {
+  margin-top: 15px;
+  font-size: 1.0em;
+  line-height: 2em;
+}
 .sx_login .sx_login_box .sx-form-group span {
   position: relative;
-  top:-3px;
-  font-size: 1.250em;
+  font-size: 1.25em;
   font-weight: bold;
 }
-.sx_login .sx_login_box .sx-form-group p {
-  margin-top: 15px;
-  font-size: 1.250em;
-}
+
 .sx_login .sx_login_box .sx_char_colon {
   margin-left: 10px;
   margin-right: 10px;
@@ -56,7 +56,24 @@
 .sx_login .sx_login_box .sx-form-group {
   text-align: left;
 }
-.sx_login .sx_login_box .sx_login_btn{
+.sx_login .sx_login_box .sx_login_header{
+  padding-bottom: 5px;
+  border-bottom: 1px solid #ddd;
+}
+.sx_login .sx_login_box .sx_login_header > i{
+  font-size: 1.6125em;
+}
+.sx_login .sx_login_box .sx_login_body{
+  margin-top: 35px;
+}
+.sx_login .sx_login_box .sx_login_body .sx_output_box{
+  margin-top:15px;
+  padding:10px 10px;
+  color:#fff;
+  text-align: center;
+  background-color: #000;
+}
+.sx_login .sx_login_box .sx_btn_group{
   margin-top: 45px;
 }
 .sx_login .sx_login_box .submit_top_margin {

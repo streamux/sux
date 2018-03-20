@@ -52,8 +52,8 @@ jsux.fn.join = {
   },
   checkFormVal: function( f ) {
 
-    var labelList = ['아이디를','비밀번호를','비밀번호 확인을','닉네임을','이메일을'];
-    var inputList = ['user_id','password','password_conf','nickname','email_address'];
+    var labelList = ['아이디를','이메일을','닉네임을','이름을','비밀번호를','비밀번호 확인을'];
+    var inputList = ['user_id','email_address','nickname','user_name','password','password_conf'];
     var isValidForm = true;
     $.each( inputList, function( index, item) {
 
@@ -121,9 +121,12 @@ jsux.fn.join = {
 
     jsux.getJSON( url, params, function( e ) {
 
-      trace( e.msg );     
+      trace( e.msg );
+
       if (e.result == 'Y') {
         jsux.goURL( jsux.rootPath + 'login');
+      } else {
+        $('input[name=' + e.input_name + ']').focus();
       }
     });
   },
@@ -306,8 +309,8 @@ jsux.fn.modify = {
   },
   checkFormVal: function( f ) {
 
-    var labelList = ['아이디를','비밀번호를','닉네임을','이메일을'];
-    var checkList = ['user_id','password','nickname','email_address'];
+    var labelList = ['아이디를','이메일을','닉네임을','비밀번호를'];
+    var checkList = ['user_id','email_address','nickname','password'];
 
     $.each( checkList, function( index, item) {
 

@@ -317,9 +317,11 @@ class Query extends Object {
     $this->priority;
     $this->fields = '';
     $this->column_list = '';
-    $this->column_keys = array();
+    $this->column_keys = array();    
     $this->column_values = array();
+    $this->columnBindValues = array();    
     $this->where = null;  
+    $this->whereBindValues = array();
     $this->bindValues = array();
     $this->index_hint = '';
     $this->groupBy = '';

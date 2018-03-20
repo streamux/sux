@@ -208,7 +208,7 @@ class LoginView extends View
         $email = $row['email_address']; 
 
         if ($email !== $userEmail) {
-          UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
+          UIError::alertToBack('입력한 정보와 이메일이 일치하지 않습니다. \n이메일을 확인해주세요.');
           exit;
         }
 
@@ -218,7 +218,7 @@ class LoginView extends View
 
         $contentsPath = $skinRealPath . 'searchid_result.tpl';
       } else {
-        UIError::alertToBack('입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
+        UIError::alertToBack('입력한 정보와 일치하는 이름이 존재하지 않습니다.\n다시 입력해주세요.');
         exit;
       } 
     } else {
@@ -278,33 +278,31 @@ class LoginView extends View
     if(isset($userId) && $userId) {
 
       $where = new QueryWhere();
-      $where->add('(');
       $where->set('user_name',$userName, '=');
-      $where->set('nickname',$userName, '=', 'or');
-      $where->add(')');
-      $where->set('user_id',$userId,'=','and');
-      $where->set('email_address',$userEmail,'=','and');
-      $this->model->select('member', 'id, user_name, nickname, user_id, email_address', $where);
+      $where->set('user_id', $userId,'=','and');
+      $where->set('email_address', $userEmail,'=','and');
+      $this->model->select('member', 'id, user_name, user_id, email_address', $where);
       $row = $this->model->getRow();
 
       if (count($row) > 0) {
-        $name = $row['user_name'];
+
+        $rowName = $row['user_name'];
 
         $id = $row['user_id']; 
-        $email = $row['email_address'];        
+        $email = $row['email_address']; 
 
-        if ($name !== $userName) {
-          UIError::alertToBack('입력하신 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
+        if ($rowName !== $userName) {
+          UIError::alertToBack('입력한 정보와 이름이 일치하지 않습니다. \n이름을 다시 확인해주세요.');
           exit;
         }
 
         if ($id !== $userId) {
-          UIError::alertToBack('입력하신 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
+          UIError::alertToBack('입력한 정보와 아이디가 일치하지 않습니다. \n아이디를 다시 확인해주세요.');
           exit;
         }
 
         if ($email !== $userEmail) {
-          UIError::alertToBack('입력하신 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
+          UIError::alertToBack('입력한 정보와 이메일이 일치하지 않습니다. \n이메일을 다시 확인해주세요.');
           exit;
         }
 
@@ -356,19 +354,16 @@ class LoginView extends View
           $result = $this->model->update('member', array('password'=>$hashPassword), $where);
 
           if (!$result) {
-            UIError::alertToBack("비밀번호 업데이트를 실패하였습니다.\n");
+            UIError::alertToBack("비밀번호 업데이트를 실패하였습니다.");
             return;
           }
  
-          mail($adminEmail, $subject, $contents, $additional_headers);
           mail($userEmail, $subject, $contents, $additional_headers);
 
           $context->setSession('sx_sended_mail', 'ok');      
-        } else {
-          UIError::alertToBack("스킨 파일이 존재하지 않습니다.\n");
-        }  
+        }
       } else {
-        UIError::alertToBack("입력하신 정보와 일치하는 이름이 존재하지 않습니다.\n이름을 다시 확인해주세요.");
+        UIError::alertToBack('입력한 정보와 일치하는 이름이 존재하지 않습니다. \n이름을 다시 확인해주세요.');
         exit;
       }
     }else{

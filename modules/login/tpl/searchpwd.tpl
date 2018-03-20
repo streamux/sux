@@ -8,17 +8,17 @@
         <div class="sx-form-group">
           <i class="xi-user-o xi-2x"></i>
           <label for="userName" class="sx-control-label">이름</label>
-          <input type="text" name="user_name" id="userName" maxlength="22" value="tester" class="sx-form-control">
+          <input type="text" name="user_name" id="userName" maxlength="22" value="" class="sx-form-control">
         </div>
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>
           <label for="userId" class="sx-control-label">아이디</label>
-          <input type="text" name="user_id" id="userId" maxlength="34" value="test" class="sx-form-control">
+          <input type="text" name="user_id" id="userId" maxlength="34" value="" class="sx-form-control">
         </div>
         <div class="sx-form-group">
           <i class="xi-mail xi-2x"></i>
           <label for="emailAddress" class="sx-control-label">이메일 주소</label>
-          <input type="text" name="email_address" id="emailAddress" maxlength="34" value="streamux@naver.com" class="sx-form-control">
+          <input type="text" name="email_address" id="emailAddress" maxlength="34" value="" class="sx-form-control">
         </div>
         <div class="sx-form-inline text-center submit_top_margin">
           <div class="sx-input-group">

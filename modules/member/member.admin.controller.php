@@ -232,8 +232,10 @@ class MemberAdminController extends Controller
     $posts = $context->getPostAll();    
 
     $category = $posts['category'];
-    $user_id = $posts['user_id'];
+    $userId = $posts['user_id'];
+    $nickname = $posts['nickname'];
     $returnURL = $context->getServer('REQUEST_URI');
+
 
     // validation
     $msg = $this->checkValidation($posts);
@@ -259,29 +261,9 @@ class MemberAdminController extends Controller
       }     
     } 
 
-    // email validation
-    $email = $posts['email_address']; 
-    $check_email = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-    if ($check_email != true) {
-      $msg .= '잘못된 E-mail 주소입니다.';
-      $resultYN = 'N';
-      $data = array(  'url'=>$returnURL,
-                              'result'=>$resultYN,
-                              'msg'=>$msg);
-
-      $this->callback($data);
-      exit;
-    }
-
-    $passwordHash = $context->getPasswordHash($posts['password']);
-    $posts['password'] = $passwordHash;
-    $posts['email_address'] = $email;
-    $posts['hobby'] = $hobby;
-
-    /* check id */
+    /* Check user_id */
     $where = new QueryWhere();
-    $where->set('user_id', $user_id);
+    $where->set('user_id', $userId);
     $this->model->select('member', 'id', $where);
     $numrows = $this->model->getNumRows();
 
@@ -297,7 +279,22 @@ class MemberAdminController extends Controller
       exit;
     }
 
-    /* check email */
+    // Email validation
+    $email = $posts['email_address']; 
+    $check_email = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+    if ($check_email != true) {
+      $msg .= '잘못된 E-mail 주소입니다.';
+      $resultYN = 'N';
+      $data = array(  'url'=>$returnURL,
+                              'result'=>$resultYN,
+                              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* Check email */
     $where->reset();
     $where->set('email_address', $email);
     $this->model->select('member', 'id', $where);
@@ -314,6 +311,30 @@ class MemberAdminController extends Controller
       $this->callback($data);
       exit;
     }
+
+    /* Check nickname*/
+    $where = new QueryWhere();
+    $where->set('user_id', $userId, '!=');
+    $where->set('nickname', $nickname);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "닉네임이 이미 존재합니다.";
+      $resultYN = "N";
+
+      $data = array(  'url'=>$returnURL,
+                              'result'=>$resultYN,
+                              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    $passwordHash = $context->getPasswordHash($posts['password']);
+    $posts['password'] = $passwordHash;
+    $posts['email_address'] = $email;
+    $posts['hobby'] = $hobby;
     
     $cachePath = './files/caches/queries/member.getColumns.cache.php';
     $columnCaches = CacheFile::readFile($cachePath, 'columns');
@@ -370,7 +391,11 @@ class MemberAdminController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $id = $posts['id'];
+    $userId = $posts['user_id'];
     $nickname = $posts['nickname'];
+    $email = $posts['email_address']; 
+
+    $returnURL = $context->getServer('REQUEST_URI');
     $msg = $this->checkValidation($posts);
     $posts['password'] = $context->getPasswordHash($posts['password']);
 
@@ -399,13 +424,50 @@ class MemberAdminController extends Controller
       }     
     } 
 
-    // email validation
-    $email = $posts['email_address']; 
+    // email validation    
     $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
 
     if ($check_email != true) {
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
+
+      $data = array(  'url'=>$returnURL,
+                              'result'=>$resultYN,
+                              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* Check email */
+    $where = new QueryWhere();
+    $where->set('user_id', $userId, '!=');
+    $where->set('email_address', $email);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "이미 사용된 이메일 입니다. 다른 이메일을 등록하세요.";
+      $resultYN = "N";
+
+      $data = array(  'url'=>$returnURL,
+              'result'=>$resultYN,
+              'msg'=>$msg);
+
+      $this->callback($data);
+      exit;
+    }
+
+    /* Check nickname*/
+    $where->reset();
+    $where->set('user_id', $userId, '!=');
+    $where->set('nickname', $nickname);
+    $this->model->select('member', 'id', $where);
+    $numrows = $this->model->getNumRows();
+
+    if ($numrows > 0) {
+      $msg = "닉네임이 이미 존재합니다.";
+      $resultYN = "N";
 
       $data = array(  'url'=>$returnURL,
                               'result'=>$resultYN,

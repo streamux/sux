@@ -11,11 +11,11 @@
   height:13px;
   vertical-align: middle;
 }
-.sx_member .text_notice {
-  padding-top: 5px;
-  padding-bottom: 25px;
+.sx_member .sx_text_notice {
+  margin-top:35px;
+  margin-bottom: 25px;
 }
-.sx_member .label_width {
+.sx_member .sx_label_width {
   padding-right: 15px;
 }
 .sx_member .submit_top_margin {
@@ -27,9 +27,20 @@
 .sx_member .panel_newpassword {
   display:none;
 }
+.sx_member .submit_top_margin{
+  margin-top: 45px;
+}
+.sx_member .submit_top_margin > .sx-input-group > input.sx-btn{
+  width:100%;
+  padding:10px 25px;
+}
 
 @media (min-width: 768px) {
-  .sx_member .label_width {
+  .sx_member .sx_label_width {
     width:150px;
+  }
+  .sx_member .submit_top_margin > .sx-input-group > input.sx-btn{
+    width:120px;
+    padding:10px 25px;
   }
 }

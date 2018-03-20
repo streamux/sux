@@ -101,8 +101,7 @@ class InstallController extends Controller
     $rootPath = _SUX_ROOT_;
     $resultYN = 'Y';
     $msg = '';
-    
-    
+
     $context = Context::getInstance();
     $context->init();
 
@@ -217,7 +216,10 @@ class InstallController extends Controller
                 foreach ($queryColumns as $key => $value) {
                   $nodeValue = (string) $value;
                   $propValue = (string) $value['name'];
-                  $columns[$propValue] = $nodeValue;
+
+                  if (isset($nodeValue) && $nodeValue) {
+                    $columns[$propValue] = $nodeValue;
+                  }                  
                 }   // end of foreach : columns
 
                 $category = $columns['category'];
@@ -225,18 +227,22 @@ class InstallController extends Controller
                 $query->setWhere(array('category'=>$category));
 
                 if (isset($category) && $category) {                  
-                  $oDB->select($query);
-                  $numrows = $oDB->getNumRows();
+                  $result = $oDB->select($query);
 
-                  //Not yet register
-                  if ($numrows < 1) {
-                    $query->setColumn($columns);
-                    $oDB->insert($query);
-                  }
+                  if (isset($result) && $result) {
+                    $numrows = $oDB->getNumRows();
+
+                    //Not yet register
+                    if ($numrows == 0) {
+                      $query->setColumn($columns);
+                      $oDB->insert($query);
+                    }
+                  }                  
                 } 
                 
                 // Member Admin : Insert Into Member
                 if ($module === 'member' && preg_match('/^admin/i', $category) == true) {
+                  $query->reset();
                   $query->setTable($tablePrefix . 'member');
                   $query->setField('id');
                   $query->setWhere(array('category'=>$category));
@@ -256,7 +262,6 @@ class InstallController extends Controller
                     $mColumns['ip'] = $context->getServer('REMOTE_ADDR');
                     $mColumns['date'] = 'now()';
 
-                    $query->setField('');
                     $query->setColumn($mColumns);
                     $result = $oDB->insert($query);
 
@@ -319,7 +324,7 @@ class InstallController extends Controller
                 }  // end of if : document                 
 
                 if ($module === 'board') {
-
+                  $query->reset();
                   $query->setTable($tablePrefix . 'board');
                   $query->setField('id');
                   $query->setWhere(array('category'=>$category));
@@ -444,12 +449,14 @@ class InstallController extends Controller
 
   function deleteTables() {
 
+
     $context = Context::getInstance();
     $oDB = DB::getInstance();
+    $oDB->connect();
     $dbName = $context->getDB();
 
     $query = new Query();
-    $query->setDB( $dbName );
+    $query->setDBName( $dbName );
     $result = $oDB->showTables($query);
 
     $prefix = $context->getPrefix();
@@ -457,16 +464,21 @@ class InstallController extends Controller
     $regStr = sprintf('/^(%s)+/i', $prefix);
 
     while (($row = $oDB->getFetchArray($result)) !== false) {
-      preg_match($regStr, $row[0], $matched);
 
-      if (count($matched) > 0) {
-        $tables[] = $row[0];
+      foreach ($row as $key => $value) {
+        preg_match($regStr, $value, $matched);
+
+        if (count($matched) > 0) {
+          $tables[] = $value;
+        }      
       }      
     }
 
     $query = new Query();
+    $query->setDBName( $dbName );
     $query->setTable( implode(',', $tables) );
-    $result = $oDB->dropTable( $query );
+    $oDB->dropTable( $query );
+    $oDB->dropDatabase( $query );
   }
   
   function deleteUninstall() {
