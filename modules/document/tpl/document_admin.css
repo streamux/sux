@@ -34,6 +34,7 @@
 .sx-content .sx-box-content .table > tbody > tr > td{
   padding: 12px 5px;
   text-align: center;
+  border-top:0;
   border-bottom: 1px dashed #e3e3e3;
 }
 .sx-content .sx-box-content .table > tbody > tr > td.sx_summary{

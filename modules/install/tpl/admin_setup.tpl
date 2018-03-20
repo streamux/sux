@@ -7,23 +7,23 @@
 
         <div class="sx-form-group">
           <label for="adminId" class="sx-control-label">관리자 아이디</label>
-          <input type="text" id="adminId" name="admin_id" class="sx-form-control" value="" placeholder="ID">
+          <input type="text" id="adminId" name="admin_id" class="sx-form-control" value="admin" placeholder="ID">
         </div>
         <div class="sx-form-group">
           <label for="adminPwd" class="sx-control-label">관리자 비밀번호</label>
-          <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="" placeholder="Password">
+          <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="1234" placeholder="Password">
         </div>
         <div class="sx-form-group">
           <label for="adminNickname" class="sx-control-label">닉네임</label>
-          <input type="text" id="adminNickname" name="admin_nickname" class="sx-form-control" value="" placeholder="Nickname">
+          <input type="text" id="adminNickname" name="admin_nickname" class="sx-form-control" value="admin" placeholder="Nickname">
         </div>
         <div class="sx-form-group">
           <label for="adminEmail" class="sx-control-label">이메일</label>
-          <input type="text" id="adminEmail" name="admin_email" class="sx-form-control" value="" placeholder="E-Mail">
+          <input type="text" id="adminEmail" name="admin_email" class="sx-form-control" value="streamux@naver.com" placeholder="E-Mail">
         </div>
         <div class="sx-form-group">
           <label for="yourhomeUrl" class="sx-control-label">홈페이지 주소</label>
-          <input type="text" id="yourhomeUrl" name="yourhome" class="sx-form-control" value="" placeholder="Your Site">
+          <input type="text" id="yourhomeUrl" name="yourhome" class="sx-form-control" value="http://streamux.com/sux/" placeholder="Your Site">
         </div>
       </div>
       <input type="submit" value="다 음"" class="sx-btn">

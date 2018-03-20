@@ -36,144 +36,162 @@
   margin:0 auto;
 }
 
-.sx-container input::placeholder {
-  color: #bebebe;
-  font-style: italic;
-}
-.sx-container form {
+form[name=f_setup_db],
+form[name=f_setup_admin],
+form[name=f_uninstall_db] {
   position: relative;
   text-align: left;
 }
 
+.setup_db input::placeholder ,
+.admin_setup input::placeholder ,
+.uninstall_box input::placeholder {
+  color: #bebebe;
+  font-style: italic;
+}
+
 /* install */
-.sx-container .terms_box{  
+.terms_box{  
   text-align: left;  
   line-height: 1.875em;
 }
-.sx-container .terms_box ul.rules_header{
+.terms_box ul.rules_header{
   padding-left: 10px;
 }
-.sx-container .terms_box ul.rules_header li span.rules_header_title,
-.sx-container .terms_box ul.rules_header li span.rules_header_spec{
+.terms_box ul.rules_header li span.rules_header_title,
+.terms_box ul.rules_header li span.rules_header_spec{
   display: inline-block;  
   vertical-align: top;
 }
-.sx-container .terms_box ul.rules_header li span.rules_header_title{
+.terms_box ul.rules_header li span.rules_header_title{
   position: relative;  
   width:100px;
 }
-.sx-container .terms_box ul.rules_header li span.rules_header_name{
+.terms_box ul.rules_header li span.rules_header_name{
   letter-spacing: 3px;
 }
-.sx-container .terms_box ul.rules_header li span.rules_header_ver,
-.sx-container .terms_box ul.rules_header li span.rules_header_website{
+.terms_box ul.rules_header li span.rules_header_ver,
+.terms_box ul.rules_header li span.rules_header_website{
   letter-spacing: 8px;
 }
-.sx-container .terms_box ul.rules_header li span.rules_header_developer,
-.sx-container .terms_box ul.rules_header li span.rules_header_email{
+.terms_box ul.rules_header li span.rules_header_developer,
+.terms_box ul.rules_header li span.rules_header_email{
   letter-spacing: 18px;
 }
-.sx-container .terms_box ul.rules_body{
+.terms_box ul.rules_body{
   padding-left: 25px;
 }
-.sx-container .terms_box ul.rules_body li{
+.terms_box ul.rules_body li{
   padding:7px 10px 7px 10px;
   list-style: decimal;
 }
-.sx-container .terms_box ul.rules_body .text_danger{
+.terms_box ul.rules_body .text_danger{
   color: #d03;
 }
-.sx-container .terms_box,
-.sx-container .setup_db,
-.sx-container .admin_setup,
-.sx-container .uninstall_box{
+.terms_box,
+.setup_db,
+.admin_setup,
+.uninstall_box{
   margin-bottom:20px;
   padding:40px 25px;
   background-color:#fcfcfc;
   word-break: keep-all;
 }
-.sx-container .terms_box p{
+.terms_box p{
   padding-top:7px;
   padding-bottom:7px;
 }
 
-.sx-container .terms_box h1,
-.sx-container .setup_db h1,
-.sx-container .admin_setup h1,
-.sx-container .uninstall_box h1{
+.terms_box h1,
+.setup_db h1,
+.admin_setup h1,
+.uninstall_box h1{
   font-size: 2em;
   margin-bottom: 55px;
   font-weight: bold;
   text-align: center;
 }
-.sx-container .terms_box input.sx-form-control,
-.sx-container .setup_db input.sx-form-control,
-.sx-container .admin_setup input.sx-form-control{
+.terms_box input.sx-form-control,
+.setup_db input.sx-form-control,
+.admin_setup input.sx-form-control{
   width:100%;
 }
-.sx-container input.sx-btn{
-  margin-top:20px;
-  margin-left: 50%;
+a.sx-btn,
+input.sx-btn{
+  margin-top:20px;  
   padding:10px 0;
   width:100%;
-  -webkit-transform: translateX(-50%);
-  -o-transform: translateX(-50%);
-  transform: translateX(-50%);
 }
-.sx-container .uninstall_btn_group{
+.uninstall_btn_group{
   text-align: center;
 }
-.sx-container .uninstall_btn_group input.sx-btn,
-.sx-container .uninstall_btn_group a.sx-btn{
+.uninstall_btn_group input.sx-btn,
+.uninstall_btn_group a.sx-btn{
   padding:10px 0;
   width:100%;
 }
-.sx-container .uninstall_btn_group a.sx-btn{
+.uninstall_btn_group a.sx-btn{
   margin-top:3px;
 }
 
-.sx-container form[name=f_setup_db] {
+form[name=f_setup_db] {
   position: relative;
 }
-.sx-container .uninstall_box legend{
+.uninstall_box legend{
   font-size: 1.250em;
 }
-.sx-container .uninstall_box label{
+.uninstall_box label{
   font-weight: normal;
 }
-.sx-container .uninstall_box label span{
+.uninstall_box label span{
   color: #f00;
 }
-.sx-container .uninstall_box .btn_group_panel{
+.uninstall_box .btn_group_panel{
   text-align: center;
 }
-.sx-container .uninstall_box a[name=btn_cancel]{
+.uninstall_box a[name=btn_cancel]{
   margin-left: 5px;
 }
 
 @media (min-width: 768px) {
   
-  .sx-container .terms_box label.sx-control-label,
-  .sx-container .setup_db label.sx-control-label,
-  .sx-container .admin_setup label.sx-control-label{
+  .terms_box label.sx-control-label,
+  .setup_db label.sx-control-label,
+  .admin_setup label.sx-control-label{
     width: 25%;
   }
 
-  .sx-container .terms_box input.sx-form-control,
-  .sx-container .setup_db input.sx-form-control,
-  .sx-container .admin_setup input.sx-form-control{
+  .terms_box input.sx-form-control,
+  .setup_db input.sx-form-control,
+  .admin_setup input.sx-form-control{
     display: inline-block;
     margin-left: 10px;
     width: 50%;
   }
-  .sx-container  input.sx-btn {
+  a.sx-btn{
     width:100px;
   }
-  .sx-container .uninstall_btn_group input.sx-btn,
-  .sx-container .uninstall_btn_group a.sx-btn{
+  input.sx-btn {
+    margin-left: 50%;
+    -webkit-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    transform: translateX(-50%);
     width:100px;
   }
-  .sx-container .uninstall_btn_group a.sx-btn{
+  .uninstall_btn_group{
+    margin-top: 45px;
+  }
+  .uninstall_btn_group input.sx-btn,
+  .uninstall_btn_group a.sx-btn{
+    margin-top:0;  
+    margin-left: 0;    
+    width:100px;
+
+    -webkit-transform: translateX(0);
+    -o-transform: translateX(0);
+    transform: translateX(0);   
+  }
+  .uninstall_btn_group a.sx-btn{
     margin-top:0;
   }
 }

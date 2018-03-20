@@ -2,7 +2,7 @@
       <section class="sx-member-panel">
         <h1 class="title">회원 삭제</h1>
         <div class="sx-box-content">
-          <form action="{$rootPath}member-admin/group-delete" name="f_member_delete" method="POST">
+          <form action="{$rootPath}member-admin/delete" name="f_member_delete" method="POST">
             <input type="hidden" name="_method" value="delete">
             <input type="hidden" name="category" value="{$documentData.category}">
             <input type="hidden" name="id" value="{$documentData.id}">
