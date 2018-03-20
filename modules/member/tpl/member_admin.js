@@ -123,6 +123,7 @@ jsux.fn.groupAdd = {
   checkFormVal: function( f ) {
 
     var category = f.category.value.length;
+
     if ( category < 1 ) {
       trace('카테고리 영문 이름을 입력 하세요.');
       f.category.focus();
@@ -181,6 +182,7 @@ jsux.fn.groupAdd = {
     }
 
     jsux.getJSON( url, params, function( e )  {      
+
       if (e.result && e.result.toUpperCase() === 'Y') {        
         jsux.goURL( self.returnUrl());
       } else {
@@ -233,8 +235,6 @@ jsux.fn.groupModify = {
   },
   sendAndLoad: function() {
 
-    console.log('aaa');
-
     var params = {};
     var datas = $('form');
 
@@ -256,11 +256,11 @@ jsux.fn.groupModify = {
     }
 
     jsux.getJSON( url, params, function( e )  {
-     
+      
+      trace( e.msg );
+
       if (e.result && e.result.toUpperCase() == 'Y') {
         jsux.goURL( self.returnUrl() );
-      } else {
-         trace( e.msg );
       }
     });
   },
@@ -920,7 +920,12 @@ jsux.fn.modify = {
     }
     url = f.action;
 
-    jsux.getJSON( url, params, function( e ) {      
+    console.log(url);
+
+    jsux.getJSON( url, params, function( e ) {    
+
+      trace( e.msg );
+
       if (e.result && e.result.toUpperCase() == 'Y') {
         jsux.goURL( self.returnUrl());
       }
@@ -1051,7 +1056,7 @@ jsux.fn.delete = {
   returnUrl: function () {
 
     var id = $('input[name=id]').val(),
-         url = jsux.rootPath + 'member-admin/' + id + '/list';
+         url = jsux.rootPath + 'member-admin/list';
 
     return url;
   },
