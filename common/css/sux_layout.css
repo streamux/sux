@@ -35,6 +35,7 @@
 /* Skip */
 .sx-skip-menu{  
   position: absolute;
+  height: 1px;
 }
 .sx-skip-menu > a{
    position: relative;
