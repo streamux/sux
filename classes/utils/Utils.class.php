@@ -362,6 +362,11 @@ class Utils extends Object {
       return FALSE;
   }
 
+  function getBase64Encode( $str, $from_encode='UTF-8', $to_encode='EUC-KR') {
+
+    return "=?EUC-KR?B?".base64_encode(iconv( $from_encode, $to_encode, $str))."?=\r\n";
+  }
+
   //----- Time
   ///////////////////////////////////////////////
 
