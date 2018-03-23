@@ -1,4 +1,3 @@
-jsux.fn = jsux.fn || {};
 jsux.fn.content = {
 
   downloadSUXCMS: function() {
