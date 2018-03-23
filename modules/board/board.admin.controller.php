@@ -5,7 +5,7 @@ class BoardAdminController extends Controller
   // Form Value Validation && Security
   function getFormCheckList() {
 
-    return array(  array('key'=>'nickname', 'msg'=>'닉네임을'),
+    return array(  array('key'=>'user_name', 'msg'=>'이름을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
                           array('key'=>'content', 'msg'=>'내용을'));
@@ -147,8 +147,8 @@ class BoardAdminController extends Controller
       $msg .= '글을 저장하는데 실패했습니다.';
     }
 
-    /*Tracer::getInstance()->output();
-    return;*/
+    Tracer::getInstance()->output();
+    return;
     $data = array(  'url'=>$rootPath . 'board-admin/list',
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -446,12 +446,12 @@ class BoardAdminController extends Controller
     if ($result) {
       $msg .= "게시판 생성을 완료하였습니다.<br>";
 
-       $id = $this->model->getInsertId();
-        $where = new QueryWhere();
-        $where->set('id', $id);
+      $id = $this->model->getLastInsertId();
+      $where = new QueryWhere();
+      $where->set('id', $id);
 
-        $this->model->select('board_group', '*', $where);
-        $dataObj = $this->model->getRows();
+      $this->model->select('board_group', '*', $where);
+      $dataObj = $this->model->getRows();
 
       // 라우트 키 저장 
       $routes = array();      
