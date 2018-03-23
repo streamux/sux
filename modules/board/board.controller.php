@@ -6,7 +6,7 @@ class BoardController extends Controller
   // Form Value Validation && Security
   function getFormCheckList() {
 
-    return array(  array('key'=>'nickname', 'msg'=>'닉네임을'),
+    return array(  array('key'=>'user_name', 'msg'=>'이름을'),
                           array('key'=>'password', 'msg'=>'비밀번호를'),
                           array('key'=>'title', 'msg'=>'제목을'),
                           array('key'=>'content', 'msg'=>'내용을'));
@@ -41,7 +41,7 @@ class BoardController extends Controller
 
   function getUniqueId() {
 
-    return 'Guest' . Utils::getMicrotimeInt();
+    return 'Guest_' . Utils::getMicrotimeInt();
   }
 
   function insertWrite() {
@@ -60,12 +60,12 @@ class BoardController extends Controller
     Forms::validates($posts, $this->getFormCheckList());
     Forms::validateFile($files);
     $posts = $this->setEncodeFormValue($posts);
+    $category = $posts['category'];
+    $returnURL = $context->getServer('REQUEST_URI');
 
     $posts['user_id'] = empty($sessions['user_id']) ? $this->getUniqueId() : $sessions['user_id'];
     $posts['password'] = empty($sessions['password']) ?  $context->getPasswordHash($posts['password']) : $sessions['password'];
 
-    $returnURL = $context->getServer('REQUEST_URI');
-    $category = $posts['category']; 
     $wall = $posts['wall'];
     $wallname = $posts['wallname'];
     $wallok = $posts['wallok'];
@@ -143,7 +143,7 @@ class BoardController extends Controller
     }
 
     /*Tracer::getInstance()->output();
-    return;    */
+    return;   */ 
     $data = array(  'url'=>$rootPath . $category,
             'result'=>$resultYN,
             'msg'=>$msg,
@@ -336,7 +336,7 @@ class BoardController extends Controller
       $this->imageUpName = $imageUpName;
     } 
 
-    $columns = array('ssunseo_count' => '(ssunseo_count+1)');
+    $columns = array('ssunseo_count' => '+1');
 
     $where = new QueryWhere();
     $where->set('ssunseo_count', $ssunseo_count, '>');
@@ -592,7 +592,7 @@ class BoardController extends Controller
     $result = $this->model->insert('comment', $columns); 
 
     if ($result) {
-      $id = $this->model->getInsertId();
+      $id = $this->model->getLastInsertId();
       $where = new QueryWhere();
       $where->set('id', $id);
       $where->set('content_id', $cid, '=', 'and');

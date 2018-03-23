@@ -63,13 +63,14 @@ class BoardView extends View
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $where = new QueryWhere();    
+    $where = new QueryWhere();   
+    $where->set('category', $category, '=');
+
     if (isset($search) && $search) {
       $where->set($find, $search, 'like');
     }
 
-    // total rows from board
-    $where->set('category', $category, '=');
+    // total rows from board    
     $result = $this->model->select('board', '*', $where);
 
     if ($result) {      
@@ -93,7 +94,7 @@ class BoardView extends View
 
             $id = (int) $contentData['list'][$i]['id'];
             $user_id = FormSecurity::decodeWithoutTags($contentData['list'][$i]['user_id']);          
-            $name = $contentData['list'][$i]['nickname'] | $contentData['list'][$i]['user_name'];
+            $name = $contentData['list'][$i]['nickname'];
             $name = FormSecurity::decodeWithoutTags($name); 
             $title = FormSecurity::decodeWithSimpleTags($contentData['list'][$i]['title']);
             $content = FormSecurity::decodeToText($contentData['list'][$i]['content']);
@@ -208,7 +209,7 @@ class BoardView extends View
         $id = (int) $contentData['notce_list'][$i]['id'];
         $user_id = FormSecurity::decodeWithoutTags($contentData['notce_list'][$i]['user_id']);
         $isNotice = $contentData['notce_list'][$i]['is_notice'];          
-        $name = $contentData['notce_list'][$i]['nickname'] | $contentData['notce_list'][$i]['user_name'];
+        $name = $contentData['notce_list'][$i]['nickname'];
         $name = FormSecurity::decodeWithoutTags($name); 
         $title = FormSecurity::decodeWithSimpleTags($contentData['notce_list'][$i]['title']);
         $content = FormSecurity::decodeToText($contentData['notce_list'][$i]['content']);
@@ -339,7 +340,7 @@ class BoardView extends View
     $category = $context->getParameter('category');
     $id = $context->getParameter('id');     
     $grade = $sessionData['grade'];
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];    
 
     $where = new QueryWhere();
@@ -426,7 +427,7 @@ class BoardView extends View
     $this->model->select('board','*', $where);
 
     $contentData = $this->model->getRow();
-    $nickname = $contentData['nickname'] | $contentData['user_name'];
+    $nickname = $contentData['nickname'];
     $contentData['nickname'] = FormSecurity::decodeWithoutTags($nickname);
     $nickname = '';
     $contentData['title'] = FormSecurity::decodeWithSimpleTags($contentData['title']);    
@@ -546,7 +547,8 @@ class BoardView extends View
     $search = $requestData['search'];
     $category = $context->getParameter('category');
     $grade = $sessionData['grade'];
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $userName = $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
@@ -614,7 +616,7 @@ class BoardView extends View
       UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
       exit;
     }
-
+   
     $contentData = array();
     $contentData['wallname'] = Utils::getWallKey();
 
@@ -623,12 +625,15 @@ class BoardView extends View
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
       $contentData['nickname'] = $nickname;
+      $contentData['user_name'] = $userName;
       $contentData['user_password'] = $password;
     } else {
+      $uniqNickname = 'Guest_' . Utils::getMicrotimeInt();
+
       $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_pass_type'] = 'password';
-      $contentData['nickname'] = 'Guest';
+      $contentData['nickname'] = $uniqNickname;
       $contentData['user_password'] = '';
     }
 
@@ -665,7 +670,7 @@ class BoardView extends View
     $find = $requestData['find'];
     $search = $requestData['search'];    
     $grade = $sessionData['grade'];   
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $this->session_data['password'];  
 
     $where = new QueryWhere();
@@ -709,7 +714,7 @@ class BoardView extends View
 
     $contentData = $this->model->getRow();
     $contentData['user_name'] = $contentData['user_name'];
-    $contentData['nickname'] = $contentData['nickname'] | $contentData['user_name'];
+    $contentData['nickname'] = $contentData['nickname'];
     $contentData['title'] = $contentData['title'];
     $contentData['content'] = FormSecurity::decodeForForm($contentData['content']);
     
@@ -780,8 +785,8 @@ class BoardView extends View
     $category = $context->getParameter('category');
     $id = $context->getParameter('id');
     $grade = $sessionData['grade'];
-    $nonemember = $groupData['allow_nonmember'];
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $userName = $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];    
     $admin_pass = $context->checkAdminPass();
 
@@ -791,6 +796,7 @@ class BoardView extends View
 
     $groupData = $this->model->getRow();
     $is_progress_step = $groupData['is_progress_step'];
+    $noneMember = $groupData["allow_nonmember"];
     $grade_r = $groupData["grade_r"];
     $grade_re = $groupData["grade_re"];
     $is_repliable = $groupData["is_repliable"];
@@ -820,27 +826,11 @@ class BoardView extends View
 
     $where->reset();
     $where->set('id',$id,'=');
-    $this->model->select('board', '*', $where);
-
+    $this->model->select('board','igroup_count,space_count,ssunseo_count', $where);
     $contentData = $this->model->getRow();    
-    $contentData['nickname'] = empty($nickname) ? 'Guest' : $nickname;
-    $contentData['title'] = htmlspecialchars($contentData['title']);
-    $contentType = trim($contentData['conetents_type']);
-
-    $is_download = $contentData['is_download'];
-    $filename = $contentData['filename'];
-    $filetype = $contentData['filetype'];
-    
-    if ($contentType === 'html'){
-      $contentData['content'] = htmlspecialchars_decode($contentData['content']);
-    }else if ($contentType === 'text'){
-      $contentData['content'] = nl2br(htmlspecialchars($contentData['content']));
-    }
     
     // Create Wall Key
     $contentData['wallname'] = Utils::getWallKey();    
-    $contentType = $contentData['content_type'];
-    $contentData['content_type_' . $contentType] = 'checked';
     
     if (isset($grade) && $grade) {
       $level = $grade;
@@ -855,10 +845,10 @@ class BoardView extends View
     $returnURL = $rootPath . $category . $queryString;
 
     // 비회원 허용 유무 
-    if (strtolower($nonemember) !== 'y' && empty($nickname)) {      
+    if (strtolower($noneMember) !== 'y') {      
       $context->setSession('return_url', $returnURL);
-      $msg = '이곳은 회원 전용 게시판 입니다.<br>로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnToURL, 'delay'=>3));
+      $msg = '이곳은 회원 전용 게시판 입니다. 로그인을 먼저 하세요.';
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnURL, 'delay'=>3));
     }
 
     if ($level < $grade_re) {
@@ -879,12 +869,15 @@ class BoardView extends View
       $contentData['css_user_label'] = 'sx-hide';
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
+      $contentData['user_name'] = $userName;
       $contentData['nickname'] = $nickname;
       $contentData['user_password'] = $password;
     } else {
+      $uniqNickname = 'Guest_' . Utils::getMicrotimeInt();
       $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
-      $contentData['nickname'] = 'Guest';
+      $contentData['user_name'] = '';
+      $contentData['nickname'] = $uniqNickname;
       $contentData['user_pass_type'] = 'password';
       $contentData['user_password'] = '';
     }
