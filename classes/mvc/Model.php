@@ -92,9 +92,9 @@ class Model extends Object {
     return $this->result;
   }
 
-  function getInsertId() {
+  function getLastInsertId() {
 
-    return $this->db->getInsertId();
+    return $this->db->getLastInsertId();
   }
 
   function createTable($query) {
