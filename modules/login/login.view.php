@@ -9,7 +9,6 @@ class LoginView extends View
 
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
-
     $loginCookieId = $context->getCookieId('login_keeper');
     $loginKeeper = $context->getCookie($loginCookieId);
 
@@ -329,7 +328,7 @@ class LoginView extends View
 
           $tempPassword = Utils::getRandomPassword(12);
 
-          $subject = "[" . $adminDomain . "] 비밀번호 재등록 인증 메일입니다.";
+          $subject = Utils::getBase64Encode("[" . $adminDomain . "] 비밀번호 재등록 인증 메일입니다.");
           $additional_headers = "From: " . $adminName . " < " . $adminEmail . " >\n";
           $additional_headers .= "Reply-To : " . $userEmail . "\n";
           $additional_headers .= "MIME-Version: 1.0\n";

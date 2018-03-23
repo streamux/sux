@@ -235,7 +235,7 @@ class MemberController extends Controller
           $adminDomain = $adminHome;
         }
 
-        $subject = "[" . $adminDomain . "] " . $userName . "님의 회원가입을 환영합니다..";
+        $subject = Utils::getBase64Encode("[" . $adminDomain . "] " . $userName . "님의 회원가입을 환영합니다.");
         $additional_headers = "From: " . $adminDomain . " < " . $adminEmail . " >\n";
         $additional_headers .= "Reply-To : " . $userEmail . "\n";
         $additional_headers .= "MIME-Version: 1.0\n";

@@ -920,14 +920,12 @@ jsux.fn.modify = {
     }
     url = f.action;
 
-    console.log(url);
-
     jsux.getJSON( url, params, function( e ) {    
 
-      trace( e.msg );
-
-      if (e.result && e.result.toUpperCase() == 'Y') {
+      if (e.result && e.result.toUpperCase() === 'Y') {
         jsux.goURL( self.returnUrl());
+      } else {
+        trace( e.msg );
       }
     });
   },
