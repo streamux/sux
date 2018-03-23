@@ -62,6 +62,7 @@ class MemberController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();    
+    $adminInfo = $context->getAdminInfo();
     $category = trim($posts['category']);
 
     if (empty($category)) {
@@ -69,7 +70,7 @@ class MemberController extends Controller
     }
 
     $userId = trim($posts['user_id']);
-    $nickname = trim($posts['nickname']);
+    $userName = trim($posts['user_name']);
 
     $returnURL = $context->getServer('REQUEST_URI');
     $msg = $this->checkValidation($posts);
@@ -97,9 +98,9 @@ class MemberController extends Controller
 
     // email validation
     $email = $posts['email_address']; 
-    $check_email=filter_var($email, FILTER_VALIDATE_EMAIL);
+    $email=filter_var($email, FILTER_VALIDATE_EMAIL);
 
-    if ($check_email != true) {
+    if ($email != true) {
       $msg .= '잘못된 E-mail 주소입니다.';
       $resultYN = 'N';
       $data = array(  'url'=>$returnURL,
@@ -203,11 +204,60 @@ class MemberController extends Controller
     $columns['grade'] = 1;
     $columns['date'] = 'now()';
     $columns['ip'] = $context->getServer('REMOTE_ADDR');
-
     $result = $this->model->insert('member', $columns);
+
     if ($result) {
       $msg .= '신규회원 가입을 완료하였습니다.' . PHP_EOL;
       $resultYN = "Y";
+
+      $id = $this->model->getLastInsertId();
+      $where = QueryWhere::getInstance();
+      $where->set('id', $id);
+      $this->model->select('member', 'user_id,user_name,email_address,date', $where);
+      $row = $this->model->getRow();
+
+      $userId = $row['user_id'];
+      $userName = $row['user_name'];
+      $userEmail = $row['email_address'];
+      $joinDate = $row['date'];
+
+      $email_skin_path = _SUX_PATH_ . 'modules/mails/templates/member_join.html';
+      $sendedMail = $context->getSession('sx_sended_join_mail');
+
+      if (file_exists($email_skin_path) && $sendedMail !== 'ok') {
+         $contents = FileHandler::readFile($email_skin_path);
+
+        $adminHome = $adminInfo['yourhome'];
+        $adminDomain = Utils::getDomain($adminInfo['yourhome']);
+        $adminEmail = $adminInfo['admin_email'];
+
+        if (empty($adminDomain)) {
+          $adminDomain = $adminHome;
+        }
+
+        $subject = "[" . $adminDomain . "] " . $userName . "님의 회원가입을 환영합니다..";
+        $additional_headers = "From: " . $adminDomain . " < " . $adminEmail . " >\n";
+        $additional_headers .= "Reply-To : " . $userEmail . "\n";
+        $additional_headers .= "MIME-Version: 1.0\n";
+        $additional_headers .= "Content-Type: text/html; charset=UTF-8\n";
+
+        $replaceList = array(          
+          'join_date'=>$joinDate,
+          'user_id'=>$userId,
+          'user_name'=>$userName,
+          'email_address'=>$userEmail
+        );
+
+        foreach ($replaceList as $key => $value) {
+          $reg = sprintf('{$%s}',$key);
+          $contents = str_replace($reg, $value, $contents);
+        }
+
+        mail($adminEmail, $subject, $contents, $additional_headers);
+        mail($userEmail, $subject, $contents, $additional_headers);
+
+        $context->setSession('sx_sended_join_mail', 'ok');      
+      }
     }  else {
       $msg .= '신규회원 가입을 실패하였습니다.' . PHP_EOL;
       $resultYN = "N";      
