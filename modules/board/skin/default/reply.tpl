@@ -5,9 +5,10 @@
 
 </div>
 <div class="board_write" style="width:{$groupData.width}">
-  <form action="{$routeURI}/{$contentData.id}/reply" method="post"  name="f_board_reply" enctype="multipart/form-data" class="sx-form-horizontal">
+  <form action="{$routeURI}/{$documentData.id}/reply" method="post"  name="f_board_reply" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
     <input type="hidden" name="category" value="{$documentData.category}">
+    <input type="hidden" name="nickname" value="{$contentData.nickname}">
     <input type="hidden" name="igroup_count" value="{$contentData.igroup_count}">
     <input type="hidden" name="space_count" value="{$contentData.space_count}">
     <input type="hidden" name="ssunseo_count" value="{$contentData.ssunseo_count}">
@@ -15,7 +16,7 @@
     <div class="head_panel">
       <div class="sx-form-group">
         <label for="userName" class="sx-control-label label_width {$contentData.css_user_label}">이름</label>
-        <input type="{$contentData.user_name_type}" name="nickname" id="userName" maxlength="20" value="{$contentData.nickname}" class="sx-form-control">
+        <input type="{$contentData.user_name_type}" name="user_name" id="userName" maxlength="20" value="{$contentData.user_name}" class="sx-form-control">
       </div>
       <div class="sx-form-group">
         <label for="password" class="sx-control-label label_width {$contentData.css_user_label}">비밀번호</label>

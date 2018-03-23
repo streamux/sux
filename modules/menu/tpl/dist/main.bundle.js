@@ -483,6 +483,7 @@ var MenusComponent = (function () {
     MenusComponent.prototype.ngAfterViewInit = function () {
         this.loadPages();
         this.loadMenus();
+        this.checkLoadedData();
     };
     MenusComponent.prototype.defaultMenuHeight = function () {
         var _this = this;
@@ -571,6 +572,12 @@ var MenusComponent = (function () {
     MenusComponent.prototype.setupGnbMenus = function (list) {
         this.gnbMenus = this.cloneMultyArray(list);
         this.gnbOriginMenus = this.cloneMultyArray(list);
+    };
+    MenusComponent.prototype.checkLoadedData = function () {
+        if (this.isPageLoaded !== true && this.isMenuLoaded !== true) {
+            var timer = setTimeout(this.checkLoadedData, 30);
+            return;
+        }
         this.checkDisabledMenu();
     };
     MenusComponent.prototype.checkDisabledMenu = function () {
@@ -580,7 +587,7 @@ var MenusComponent = (function () {
                 for (var i = 0; i < _this.gnbMenus.length; i++) {
                     var isDisabled = true;
                     for (var k = 0; k < _this.pageMenus.length; k++) {
-                        if ((_this.gnbMenus[i].menu_name === _this.pageMenus[k].menu_name) &&
+                        if ((_this.gnbMenus[i].category === _this.pageMenus[k].category) &&
                             _this.gnbMenus[i].module_name !== 'customize') {
                             isDisabled = false;
                             break;

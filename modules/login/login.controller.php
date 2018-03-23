@@ -5,9 +5,10 @@ class LoginController extends Controller
 
   function insertLogin() {
     
-    $msg = '로그인 성공';
+    $msg = '';
     $resultYN = 'Y';
     $url = '';
+    $hasReAuth = false;
 
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
@@ -34,15 +35,40 @@ class LoginController extends Controller
       exit;
     } 
 
-    $where = new QueryWhere();    
+    $hasReAnthKey = $context->getCookie('sx_sended_anth_key');
+
+    if (isset($hasReAnthKey) && $hasReAnthKey && ($hasReAnthKey === $passwordHash)) {
+      $hasReAuth = true;
+      $context->setCookie('sx_sended_anth_key');
+      $msg .= "로그인 재인증 성공하였습니다. 새로운 비밀번호로 재등록하세요.<br>";
+
+      $where = new QueryWhere();
+      $where->set('user_id', $userId);
+      $result = $this->model->update('member', array('password'=>$passwordHash), $where);
+
+      if (!$result) {
+        UIError::alertToBack("비밀번호 업데이트를 실패하였습니다.");
+        exit;
+      }   
+    }
+
+    $hasAnthMail = $context->getSession('sx_sended_anth_mail'); 
+
+    if ($hasAnthMail === 'ok' && empty($hasReAnthKey)) {
+      $hasReAuth = true;
+      $context->setSession('sx_sended_anth_mail', null); 
+      UIError::alertToBack("인증 시간이 만료되었습니다. 다시 시도해 주세요.");
+      exit;
+    }
+
+    $where = new QueryWhere(); 
     $where->set('user_id', $userId);
     $where->set('password', $passwordHash, '=', 'and');
     $this->model->select('member', '*', $where);
-
-     $rownum = $this->model->getNumRows();
+    $rownum = $this->model->getNumRows();
 
     if ($rownum == 0) {
-      $msg .= $userId .' 아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호를 잘못입력하였습니다.';
+      $msg .= $userId .' 아이디가 등록되어 있지 않거나, 아이디 또는 비밀번호가 맞지 않습니다.';
       UIError::alertTo($msg, $rootPath . 'login-fail');
       exit;
     }
@@ -66,6 +92,7 @@ class LoginController extends Controller
     $columns['access_count'] = $row['access_count'];
     $this->model->update('member', $columns, $where);
 
+    $context->setSession('sx_sended_anth_mail', null);
     $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','access_count','grade','automod1','chatip', 'IsAuthorized');
 
     foreach ($sessionList as $key => $value) {
@@ -73,12 +100,14 @@ class LoginController extends Controller
     }
 
     $grade = (int) $row['grade'];
+
     if ($row['category'] === 'administrator' && $grade === 10) {
       $adminHash = $context->getPasswordHash($token);
       $context->setSession('admin_ok', $adminHash);
     }
 
     $loginKeeper = strtoupper($loginKeeper);
+
     if ($loginKeeper === 'TRUE') {
       $loginCookieId = $context->getCookieId('login_keeper');
       $loginKeeperVal = Utils::getMicrotimeInt();
@@ -90,6 +119,7 @@ class LoginController extends Controller
 
     $data = array(
       'msg'=>$msg,
+      'has_reauth'=>$hasReAuth,
       'result'=>$resultYN,
       'url'=>$rootPath
     );

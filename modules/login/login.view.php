@@ -287,7 +287,6 @@ class LoginView extends View
       if (count($row) > 0) {
 
         $rowName = $row['user_name'];
-
         $id = $row['user_id']; 
         $email = $row['email_address']; 
 
@@ -314,7 +313,7 @@ class LoginView extends View
         $this->document_data['jscode'] = 'searchResult';
 
         $email_skin_path = _SUX_PATH_ . 'modules/mails/templates/search_pwd.html';
-        $sendedMail = $context->getSession('sx_sended_mail');
+        $sendedMail = $context->getSession('sx_sended_anth_mail');
 
         if (file_exists($email_skin_path) && $sendedMail !== 'ok') {
            $contents = FileHandler::readFile($email_skin_path);
@@ -330,7 +329,7 @@ class LoginView extends View
 
           $tempPassword = Utils::getRandomPassword(12);
 
-          $subject = "[ " . $adminDomain . " ]에 문의하신 내용의 답변입니다.";
+          $subject = "[" . $adminDomain . "] 비밀번호 재등록 인증 메일입니다.";
           $additional_headers = "From: " . $adminName . " < " . $adminEmail . " >\n";
           $additional_headers .= "Reply-To : " . $userEmail . "\n";
           $additional_headers .= "MIME-Version: 1.0\n";
@@ -347,27 +346,19 @@ class LoginView extends View
             $contents = str_replace($reg, $value, $contents);
           }
 
-          $hashPassword = $context->getPasswordHash($tempPassword);
-          $id = $row['id'];
-          $where = new QueryWhere();
-          $where->set('id', $id);
-          $result = $this->model->update('member', array('password'=>$hashPassword), $where);
-
-          if (!$result) {
-            UIError::alertToBack("비밀번호 업데이트를 실패하였습니다.");
-            return;
-          }
+          $hashPassword = $context->getPasswordHash($tempPassword); 
  
           mail($userEmail, $subject, $contents, $additional_headers);
 
-          $context->setSession('sx_sended_mail', 'ok');      
+          $context->setCookie('sx_sended_anth_key', $hashPassword, time() + 180);
+          $context->setSession('sx_sended_anth_mail', 'ok');  
         }
       } else {
         UIError::alertToBack('입력한 정보와 일치하는 이름이 존재하지 않습니다. \n이름을 다시 확인해주세요.');
         exit;
       }
     }else{
-      $context->setSession('sx_sended_mail', '');
+      $context->setSession('sx_sended_anth_mail', null);
 
       $this->model->select('member_group', '*');
       $this->document_data['group'] = $this->model->getRows();

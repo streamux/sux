@@ -31,46 +31,55 @@ class Query extends Object {
   function setSQL($obj=NULL) {
 
     $table =$obj['table'];
+
     if ($table !== '') {
       $this->setTable($table);
     }
 
-    $priority =$obj['priority'];    
+    $priority =$obj['priority'];
+
     if ($priority !== '') {
       $this->setPriority($priority);
     }
 
     $column =$obj['column'];
+
     if ($column !== '') {
       $this->setColumn($column);
     }
 
     $index_hint = $obj['indexhint'];
+
     if ($index_hint !== '') {
       $this->setIndexHintList($index_hint);
     }
 
     $where =$obj['where'];
+
     if ($where !== '') {
       $this->setWhere($where);
     }
 
     $groupBy =$obj['groupBy'];
+
     if ($groupBy !=='') {
       $this->setGroupBy($groupBy);
     }
 
     $orderBy =$obj['orderBy'];
+
     if ($orderBy !== '') {
       $this->setOrderBy($orderBy);
     }
 
     $passover = (int) $obj['passover'];
+
     if (!(isset($passover) && $passover)) {
       $passover = 0;
     }
 
     $limit = (int) $obj['limit'];
+
     if ($limit > 0) {
       $this->setLimit($passover , $limit);
     }
@@ -118,72 +127,85 @@ class Query extends Object {
 
   function getColumn($type) {
 
-    $result = '';
+    switch ($type) {
+      case 'key':
+        $result = $this->column_keys;
+        break;
 
-    if ($type == 'key') {
-      $result = $this->column_keys;     
-    } else if ($type == 'value') {
-      $result = $this->column_values;
-    } else {
-      $result = $this->column_list;     
+      case 'value':
+        $result = $this->column_values;
+        break;   
+
+      default:
+        $result = $this->column_list; 
+        break;
     }
+
     return $result; 
   }
 
   function setColumn($values) {
 
     $bindValue = array();
-    $tempArr = array();
+    $columnArr = array();
 
     foreach ($values as $key => $value) {
 
       $bindField = ':' . $key;
 
+      // contain sql date in param
       if (preg_match('/^now\(\)$/', trim($value))) {
         $bindValue[$key] = $value;
-        $tempArr[] = $key . '=' . $value;
+        $columnArr[] = $key . '=' . $value;
       } else {
-        $bindValue[$key] = $bindField;
-        $tempArr[] = $key . '=' . $bindField;
+
+        // check update
+        if (preg_match('/[+|-|*|%]/', $value)) {
+          $bindValue[$key] = $bindField;
+          $columnArr[] = $key . '=' . $key . '+' . $bindField;
+          $tempValues = preg_split('/[+|-|*|%]/', $value);
+          $value = $tempValues[1];
+        } else {
+          $bindValue[$key] = $bindField;
+          $columnArr[] = $key . '=' . $bindField;
+        }       
       }
       
-      $this->setColumnBindValue( $key, $value);
-      $count++;
+      $this->setColumnBindValue($bindField, $value);
     }
 
     if (is_array($values)) {
       $this->column_keys = $this->getColumnKeys($bindValue, ',');
       $this->column_values = $this->getColumnValues($bindValue, ',');
-      $bindValue = implode(',', $tempArr);
+      $bindValue = implode(',', $columnArr);
     }
 
     $this->column_list = $this->convertToString($bindValue, ',');
   }
 
-  function getColumnValues($obj) {
+  function getColumnValues( $values ) {
 
     $temp_arr = array();
 
-    foreach ($obj as $key => $value) {
+    foreach ($values as $key => $value) {
       $temp_arr[] = $value;
-      //$temp_arr[] = $this->addQuotation($value);
     }
 
-    return count($temp_arr) > 0 ? $this->convertToString($temp_arr) : '';
+    return $this->convertToString($temp_arr);
   }
 
-  function getColumnKeys($obj) {
+  function getColumnKeys( $values ) {
 
     $temp_arr = array();
 
-    foreach ($obj as $key => $value) {
+    foreach ($values as $key => $value) {
 
       if (is_string($key)) {
         $temp_arr[] = $key;
       }
     }
 
-    return count($temp_arr) > 0 ? $this->convertToString($temp_arr) : '';
+    return $this->convertToString($temp_arr);
   }
 
   function getColumnBindValue() {
@@ -193,7 +215,7 @@ class Query extends Object {
 
   function setColumnBindValue( $key, $value) {
 
-    $this->columnBindValues[$key] = $value;;
+    $this->columnBindValues[$key] = $value;
   }
 
   function getWhere() {
@@ -202,7 +224,7 @@ class Query extends Object {
   }
 
   function setWhere( $values, $cond="=", $glue='and') {
-
+    
     $tempArr = null;
     $glue = trim($glue);
 
@@ -218,7 +240,7 @@ class Query extends Object {
           $bindField = ':' . $key . '_' . $keyId;
           $this->setWhereBindValue($bindField, $value);
 
-          if (preg_match('/like/i', $cond)) {
+          if (preg_match('/like/i', $cond)) {            
             $tempArr[] = $key . ' LIKE \'% ' . $bindField . ' %\'';
           } else {
             $tempArr[] = $key . $cond . $bindField;
@@ -292,7 +314,7 @@ class Query extends Object {
     return $this->limit;
   }
 
-  function setLimit($passover, $limit) {
+  function setLimit($passover, $limit = 0) {
 
     $_limit = (int) $limit;
 
@@ -335,21 +357,16 @@ class Query extends Object {
     $this->schema = '';
   }
 
-  function convertToString($arr, $glue=',') {
+  function convertToString( $value, $glue=' , ') {
 
-    $glue = ' ' . $glue . ' ';
-    $tempArr = NULL;
-
-    if (is_array($arr)) {
-      $tempArr = implode($glue, $arr);
-    } else {
-      $tempArr = $arr;
+    if (is_array($value)) {
+      return implode($glue, $value);
     }
 
-    return $tempArr;
+    return $value;
   }
 
-  function addQuotationToArray($obj, $cond='=') {
+  function addQuotationToArray( $obj, $cond='=') {
 
     $temp_arr = array();
 
@@ -371,7 +388,7 @@ class Query extends Object {
     $temp_value = '';
 
     if (is_string($value) && (preg_match('/\(\)+$/', $value) !== true) &&
-        (preg_match('/[+|-|*]+/', $value) !== true)) {
+        (preg_match('/[+|-|*|%]+/', $value) !== true)) {
 
       $temp_value = '\'' . $value. '\'';
     } else {    

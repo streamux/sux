@@ -14,6 +14,8 @@ class MemberView extends View {
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
 
+    $context->setSession('sx_sended_join_mail', '');
+
     /**
      * css, js file path handler
      */

@@ -35,7 +35,7 @@ class BoardAdminView extends View
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
     $category = $context->getParameter('category');
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];
     $admin_pass = $context->checkAdminPass();
 
@@ -97,7 +97,7 @@ class BoardAdminView extends View
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
     $id = $context->getParameter('id');
-    $nickname = $sessionData['nickname'] | $sessionData['user_name'];
+    $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];
     $admin_pass = $context->checkAdminPass();
 

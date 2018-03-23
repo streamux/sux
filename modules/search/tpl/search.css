@@ -14,7 +14,14 @@
   margin-bottom: 5px;
 }
 .form_search_panel .sx-input-group button.sx-btn{
+  position: relative;
+  padding-left: 32px;
   width:100%;  
+}
+.form_search_panel .sx-input-group button.sx-btn i{
+  position: absolute;
+  left:7px;
+  font-size:1.6125em
 }
 .form_search_panel .sx-input-group a.sx-btn{
   display: none;

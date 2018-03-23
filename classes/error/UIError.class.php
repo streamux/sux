@@ -102,11 +102,16 @@ class UIError extends Object {
 
 		$url = isset($options['url']) ? $options['url'] : null;
 		$delay = isset($options['delay']) ? $options['delay'] : 3;
+		$has_reauth = isset($options['has_reauth']) ? $options['has_reauth'] : false;
 
 		$context = Context::getInstance();
 		if ($context->ajax()) {
-			$data = array(	'result'=>'N',
-							'msg'=>$msg);
+			$data = array(
+				'url'=>$url,
+				'result'=>'N',
+				'msg'=>$msg,
+				'has_reauth'=>$has_reauth
+			);
 
 			Object::callback($data);
 		} else {
@@ -122,6 +127,7 @@ class UIError extends Object {
 						</noscript>';
 
 			$html = $script;
+
 			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;
@@ -134,13 +140,16 @@ class UIError extends Object {
 	static function alertTo( $msg, $useHtml=true, $options=null) {
 		
 		$url = isset($options['url']) ? $options['url'] : null;
-		$delay = isset($options['delay']) ? $options['delay'] : 3;
-		
+		$delay = isset($options['delay']) ? $options['delay'] : 3;		
 		$context = Context::getInstance();
+
 		if ($context->ajax()) {
-			$data = array(	'alertTo'=>$url,
-							'result'=>'N',
-							'msg'=>$msg);
+			$data = array(
+				'url'=>$url,
+				'result'=>'N',
+				'msg'=>$msg
+			);
+
 			Object::callback($data);
 		} else {
 			$msg = preg_replace('/<br>/', '\n',$msg);

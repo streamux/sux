@@ -13,15 +13,14 @@
     {assign var=params value=''}
   {/if}
   <div class="form_search_panel">
-    <form action="{$routeURI}" method="post" name="f_board_list_search" class="sx-form-horizontal">
-      <input type="hidden" name="_method" value="select">
+    <form action="{$routeURI}" name="f_board_list_search" method="POST" class="sx-form-horizontal">
         <div class="sx-form-inline">
           <div class="sx-input-group">
             <label for="find" class="sr-only">검색 분류</label>
             <select name="find" class="sx-form-control form_control_width">
               <option value='title'>제 목</option>
-              <option value='name'>작성자</option>
-              <option value='comment'>내 용</option>
+              <option value='user_name'>작성자</option>
+              <option value='content'>내 용</option>
             </select>
             <label for="search" class="sr-only">검색</label>
             <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
@@ -110,7 +109,7 @@
         {if isset($item)}
         <tr class="sx-btn-active sx_notice_list">       
           <td class="subject">
-            <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+25}px">
+            <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
               <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
               <span class="title" style="font-weight:600;">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -121,7 +120,7 @@
               <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>
             </a>
           </td>
-          <td><span style="font-weight:600;">{$item.name}</span></td>
+          <td class="author"><span style="font-weight:600;">{$item.name}</span></td>
           <td><span style="font-weight:600;">{$item.date}</span></td>
           <td><span style="font-weight:600;">{$item.hit}</span></td>
         </tr>
@@ -136,7 +135,7 @@
             {if $requestData.search != ''}
               <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}" class="link_area" style="padding-left:{$item.subject.space+25}px">
             {else}
-              <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+25}px">
+              <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
             {/if}
               <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
               <span class="title">{$item.subject.title|nl2br}</span>
@@ -148,7 +147,7 @@
               <span class="sx-label sx-label-primary {$item.subject.icon_progress_color}">{$item.subject.progress_step_name}</span>
             </a>
           </td>
-          <td><span>{$item.name}</span></td>
+          <td class="author"><span>{$item.name}</span></td>
           <td><span>{$item.date}</span></td>
           <td class="hit"><span>{$item.hit}</span></td>
         </tr>

@@ -45,14 +45,21 @@ jsux.fn.login = {
     url = f.action;
 
     jsux.getJSON( url, params, function( e ) {
-      
-      if (e.result.toLowerCase() == 'y') {
+
+      if (e.result.toUpperCase() === 'Y') {
+
+        if (e.has_reauth == true) {
+          trace(e.msg);
+        }
+
         if (e.url) {
           jsux.goURL(e.url);
         } else {
           jsux.goURL(jsux.rootPath);
         }        
       } else {
+        trace(e.msg);
+
         jsux.goURL(jsux.rootPath + 'login-fail');
       }
     });

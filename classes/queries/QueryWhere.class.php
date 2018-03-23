@@ -25,7 +25,7 @@ class QueryWhere extends Object {
     return $this->sql;
   }
 
-  function set($field,$value,$cond='=', $glue='and') {
+  function set( $field, $value, $cond='=', $glue='and') {
 
     $bindField = ':' . $field . '_' . $this->counter;
     $this->setBindValue($bindField, $value);    
@@ -41,7 +41,7 @@ class QueryWhere extends Object {
     }
 
     if (preg_match('/like/i', $cond)) {
-      $this->sql .= $field . ' LIKE % ' . $bindField . '%';
+     $this->sql .= $field . " LIKE CONCAT('%', " . $bindField . ", '%')";
     } else {
       $this->sql .= $field . $cond . $bindField;
     }
@@ -51,7 +51,7 @@ class QueryWhere extends Object {
 
   function getBindValue() {
 
-    return array_slice($this->bindValues, 0);
+    return $this->bindValues;
   }
 
   function setBindValue( $key, $value) {

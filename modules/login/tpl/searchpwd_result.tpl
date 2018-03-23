@@ -10,7 +10,7 @@
       </div>
       <div class="sx_login_body sx-form-group">
         <p class="text-center"><span>' {$documentData.user_email} '</span></p>
-        <p class="text-center"><strong>회원님 이메일</strong> 주소로<br><strong>임시 비밀번호</strong>가 발송되었습니다.</p>
+        <p class="text-center"><strong>이메일</strong> 주소로<br><strong>임시 비밀번호</strong>가 발송되었습니다.</p>
       </div>
 
       <div class="sx_btn_group sx-form-group">

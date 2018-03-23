@@ -32,10 +32,12 @@ jsux.fn.join = {
   },
   validateEmail: function(id) {
 
-    var value = $('input:text[name=email_address]').val();
+    var email$ = $('input:text[name=email_address]');
+    var value = email$.val();
     var isEmail =jsux.utils.validateEmail(value);
     if (!isEmail) {
       trace('이메일이 올바르지 않습니다.');
+      email$.focus();
       return false;
     }
     return true;

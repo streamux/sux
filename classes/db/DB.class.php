@@ -295,6 +295,7 @@ class DB extends Object {
     $this->_setLogger($sql);
     $this->_query($sql);    
     $this->_setWhereBindValue($bindWhere);
+
     return $this->_executeQuery();
   }
 
@@ -452,11 +453,11 @@ class DB extends Object {
     return $this->_executeQuery();
   }
 
-  function getInsertId() {
+  function getLastInsertId() {
 
     if (!$this->pdo) {
       $errorInfoes = $this->pdo->errorInfo();
-      $this->setError($errorInfoes[1], 'DB->getInsertId : ' + $errorInfoes[2]);
+      $this->setError($errorInfoes[1], 'DB->getLastInsertId : ' + $errorInfoes[2]);
     }
 
     return $this->pdo->lastInsertId();
