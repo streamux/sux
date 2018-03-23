@@ -201,7 +201,13 @@ class MemberAdminController extends Controller
     $this->model->select('member_group', 'category', $where);
 
     $row = $this->model->getRow();
-    $category = $row['category'];
+    $category = trim($row['category']);
+
+    if (preg_match('/^administrator$/', $category)) {
+      UIError::alertToBack("관리자 그룹은 삭제할 수 없습니다.");
+      exit;
+    }
+
     $result = $this->model->delete('member_group', $where);
 
     if (!$result) {
@@ -391,9 +397,10 @@ class MemberAdminController extends Controller
     $context = Context::getInstance();
     $posts = $context->getPostAll();
     $id = $posts['id'];
+    $category = $posts['category'];
     $userId = $posts['user_id'];
     $nickname = $posts['nickname'];
-    $email = $posts['email_address']; 
+    $email = $posts['email_address'];
 
     $returnURL = $context->getServer('REQUEST_URI');
     $msg = $this->checkValidation($posts);
@@ -401,7 +408,23 @@ class MemberAdminController extends Controller
 
     if (isset($posts['new_password']) && $posts['new_password']) {
       $newPassword = $context->getPasswordHash($posts['new_password']);
-    } 
+    }
+
+    // impossible to change amin's category
+    $where = QueryWhere::getInstance();
+    $where->set('user_id', $userId);
+    $where->set('nickname', $nickname);
+    $where->set('email_address', $email);
+    $this->model->select('member', 'category', $where);
+    $numrow = $this->model->getNumrows();
+
+    if ($numrow > 0) {
+      $row = $this->model->getRow();
+
+      if ($category !== $row['category']) {
+        $msg .= '최초 설치 관리자는 일반회원으로 전환이 불가합니다.';
+      }      
+    }
 
     if (isset($msg) && $msg) {
       $resultYN = 'N';
@@ -524,6 +547,7 @@ class MemberAdminController extends Controller
         }
 
         $result = $this->model->update('member', $columns, $where);
+
         if (!$result) {
           $msg .= "'${nickname}' 님의 회원정보 수정을 실패하였습니다." . PHP_EOL;
           $resultYN = "N";  
@@ -557,6 +581,20 @@ class MemberAdminController extends Controller
 
     $where = new QueryWhere();
     $where->set('id', $id);
+    $this->model->select('member', 'category', $where);
+    $numrow = $this->model->getNumrows();
+
+    if ($numrow > 0) {
+      $row = $this->model->getRow();
+
+      if (preg_match('/^administrator$/', $row['category'])) {
+        UIError::alertToBack("관리자 계정입니다. 일반 회원 전환 후 탈퇴 가능합니다.");
+        exit;
+      }
+    }
+
+    
+
     $result = $this->model->delete('member', $where);
     if ($result) {
 
