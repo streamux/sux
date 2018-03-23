@@ -117,11 +117,19 @@ class LoginController extends Controller
       $context->setCookie($loginCookieId, '', -1);
     }
 
+    $returnURL = $context->getSession( 'return_url');
+
+    if (isset($returnURL) && $returnURL) {
+      $url = $returnURL;
+    } else {
+      $url = $rootPath;
+    }
+
     $data = array(
       'msg'=>$msg,
       'has_reauth'=>$hasReAuth,
       'result'=>$resultYN,
-      'url'=>$rootPath
+      'url'=>$url
     );
     
     $this->callback($data);
