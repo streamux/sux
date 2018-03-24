@@ -45,17 +45,18 @@
                 <input type="text" id="nickName" name="nickname" class="sx-form-control">
               </div>
               <div class="sx-form-group">
+
+              <div class="sx-form-group">
+                <label for="userName" class="sx-control label_width">이름 *</label>
+                <input type="text" id="userName" name="user_name" class="sx-form-control">
+              </div>   
                 <label for="emailAddress" class="sx-control label_width">이메일 *</label>
                 <input type="text" id="emailAddress" name="email_address" class="sx-form-control">
               </div>
               <p class="text_notice">
                 <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
                 <span>아래 내용은 선택사항입니다.</span>
-              </p>
-              <div class="sx-form-group">
-                <label for="userName" class="sx-control label_width">이름</label>
-                <input type="text" id="userName" name="user_name" class="sx-form-control">
-              </div>               
+              </p>            
               <div class="sx-form-group">
                 <label for="hp" class="sx-control label_width">휴대폰 번호</label>
                 <input type="text" id="hp" name="hp" class="sx-form-control">

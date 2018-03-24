@@ -22,6 +22,7 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'FileHandler'=>'classes/file/FileHandler.class.php',
 	'Forms'=>'classes/utils/Forms.class.php',
 	'FormSecurity'=>'classes/utils/FormSecurity.class.php',
+	'Mail'=>'classes/utils/Mail.class.php',
 	'ModuleHandler'=>'classes/modules/ModuleHandler.class.php',
 	'RouterModule'=>'classes/modules/RouterModule.class.php',
 	'PageModule'=>'classes/modules/PageModule.class.php',

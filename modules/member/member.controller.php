@@ -213,7 +213,7 @@ class MemberController extends Controller
       $id = $this->model->getLastInsertId();
       $where = QueryWhere::getInstance();
       $where->set('id', $id);
-      $this->model->select('member', 'user_id,user_name,email_address,date', $where);
+      $this->model->select('member', 'user_id, user_name, email_address, date', $where);
       $row = $this->model->getRow();
 
       $userId = $row['user_id'];
@@ -221,12 +221,15 @@ class MemberController extends Controller
       $userEmail = $row['email_address'];
       $joinDate = $row['date'];
 
-      $email_skin_path = _SUX_PATH_ . 'modules/mails/templates/member_join.html';
+      $emailSkinPath = _SUX_PATH_ . 'modules/mails/templates/member_join.html';
+      $emailLogoPath = _SUX_PATH_ . 'common/images/sux_logo.svg';
       $sendedMail = $context->getSession('sx_sended_join_mail');
 
-      if (file_exists($email_skin_path) && $sendedMail !== 'ok') {
-         $contents = FileHandler::readFile($email_skin_path);
+      if (file_exists($emailSkinPath) && $sendedMail !== 'ok') {
+        $messages = FileHandler::readFile($emailSkinPath);
+        $mailLogo = FileHandler::readFileToBase64($emailLogoPath);
 
+        $adminName = $adminInfo['admin_name'];
         $adminHome = $adminInfo['yourhome'];
         $adminDomain = Utils::getDomain($adminInfo['yourhome']);
         $adminEmail = $adminInfo['admin_email'];
@@ -235,26 +238,25 @@ class MemberController extends Controller
           $adminDomain = $adminHome;
         }
 
-        $subject = "[" . $adminDomain . "] " . $userName . "님의 회원가입을 환영합니다..";
-        $additional_headers = "From: " . $adminDomain . " < " . $adminEmail . " >\n";
-        $additional_headers .= "Reply-To : " . $userEmail . "\n";
-        $additional_headers .= "MIME-Version: 1.0\n";
-        $additional_headers .= "Content-Type: text/html; charset=UTF-8\n";
-
         $replaceList = array(          
           'join_date'=>$joinDate,
           'user_id'=>$userId,
           'user_name'=>$userName,
-          'email_address'=>$userEmail
+          'email_address'=>$userEmail,
+          'mail_logo'=>$mailLogo
         );
 
         foreach ($replaceList as $key => $value) {
           $reg = sprintf('{$%s}',$key);
-          $contents = str_replace($reg, $value, $contents);
+          $messages = str_replace($reg, $value, $messages);
         }
 
-        mail($adminEmail, $subject, $contents, $additional_headers);
-        mail($userEmail, $subject, $contents, $additional_headers);
+        $to = "${userName}<${userEmail}>";
+        $from = "${adminName}<${adminEmail}>";
+        $subject = "[${adminDomain}] ${userName}님의 회원가입을 환영합니다.";
+
+        Mail::send($adminEmail, $subject, $messages, $from, $reply);
+        Mail::send($to, $subject, $messages, $from, $reply);
 
         $context->setSession('sx_sended_join_mail', 'ok');      
       }

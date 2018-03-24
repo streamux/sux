@@ -11,7 +11,7 @@
   <column name="is_writable" type="char" size="1" default="y" notnull="not null"/>  
   <column name="is_modifiable" type="char" size="1" default="y" notnull="not null"/>
   <column name="is_repliable" type="char" size="1" default="y" notnull="not null"/>
-  <column name="grade_r" type="int" size="1" default="1" notnull="not null"/>
+  <column name="grade_r" type="int" size="1" default="0" notnull="not null"/>
   <column name="grade_w" type="int" size="1" default="1" notnull="not null"/> 
   <column name="grade_m" type="int" size="1" default="1" notnull="not null"/>
   <column name="grade_re" type="int" size="1" default="1" notnull="not null"/>

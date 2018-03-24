@@ -9,7 +9,6 @@ class LoginView extends View
 
     $UIError = UIError::getInstance();
     $context = Context::getInstance();
-
     $loginCookieId = $context->getCookieId('login_keeper');
     $loginKeeper = $context->getCookie($loginCookieId);
 
@@ -305,20 +304,20 @@ class LoginView extends View
           exit;
         }
 
-        $contentsPath = $skinRealPath . 'searchpwd_result.tpl';       
-
         $this->document_data['user_id'] = $userId;
         $this->document_data['user_name'] = $userName;
         $this->document_data['user_email'] = $email;
         $this->document_data['jscode'] = 'searchResult';
 
-        $email_skin_path = _SUX_PATH_ . 'modules/mails/templates/search_pwd.html';
+        $emailSkinPath = _SUX_PATH_ . 'modules/mails/templates/search_pwd.html';
+        $emailLogoPath = _SUX_PATH_ . 'common/images/sux_logo.svg';
         $sendedMail = $context->getSession('sx_sended_anth_mail');
 
-        if (file_exists($email_skin_path) && $sendedMail !== 'ok') {
-           $contents = FileHandler::readFile($email_skin_path);
+        if (file_exists($emailSkinPath) && $sendedMail !== 'ok') {
+          $messages = FileHandler::readFile($emailSkinPath);
+          $mailLogo = FileHandler::readFileToBase64($emailLogoPath);
 
-          $adminName = $adminInfo['admin_nickname'];
+          $adminName = $adminInfo['admin_name'];
           $adminHome = $adminInfo['yourhome'];
           $adminDomain = Utils::getDomain($adminInfo['yourhome']);
           $adminEmail = $adminInfo['admin_email'];
@@ -328,30 +327,30 @@ class LoginView extends View
           }
 
           $tempPassword = Utils::getRandomPassword(12);
+          $hashPassword = $context->getPasswordHash($tempPassword); 
 
-          $subject = "[" . $adminDomain . "] 비밀번호 재등록 인증 메일입니다.";
-          $additional_headers = "From: " . $adminName . " < " . $adminEmail . " >\n";
-          $additional_headers .= "Reply-To : " . $userEmail . "\n";
-          $additional_headers .= "MIME-Version: 1.0\n";
-          $additional_headers .= "Content-Type: text/html; charset=UTF-8\n";
+          $to = "${userName}<${userEmail}>";
+          $from = "${adminName}<${adminEmail}>";
+          $subject = "[${adminDomain}] 비밀번호 재등록 인증 메일입니다.";          
 
           $replaceList = array(
             'yourhome'=>$adminHome,
             'user_name'=>$userName,
-            'temp_password'=>$tempPassword
+            'temp_password'=>$tempPassword,
+            'mail_logo'=>$mailLogo
           );
 
           foreach ($replaceList as $key => $value) {
             $reg = sprintf('{$%s}',$key);
-            $contents = str_replace($reg, $value, $contents);
+            $messages = str_replace($reg, $value, $messages);
           }
 
-          $hashPassword = $context->getPasswordHash($tempPassword); 
- 
-          mail($userEmail, $subject, $contents, $additional_headers);
+          Mail::send($to, $subject, $messages, $from);
 
           $context->setCookie('sx_sended_anth_key', $hashPassword, time() + 180);
-          $context->setSession('sx_sended_anth_mail', 'ok');  
+          $context->setSession('sx_sended_anth_mail', 'ok');
+
+          $contentsPath = $skinRealPath . 'searchpwd_result.tpl';  
         }
       } else {
         UIError::alertToBack('입력한 정보와 일치하는 이름이 존재하지 않습니다. \n이름을 다시 확인해주세요.');

@@ -341,7 +341,8 @@ class BoardView extends View
     $id = $context->getParameter('id');     
     $grade = $sessionData['grade'];
     $nickname = $sessionData['nickname'];
-    $password = $sessionData['password'];    
+    $userId = $sessionData['user_id'];
+    $password = $sessionData['password'];
 
     $where = new QueryWhere();
     $where->set('category',$category,'=');
@@ -349,8 +350,17 @@ class BoardView extends View
 
     $groupData = $this->model->getRow();
     $nonmember = strtolower($groupData['allow_nonmember']);
+
     $grade_r = strtolower($groupData['grade_r']);
+    $grade_w = strtolower($groupData['grade_w']);
+    $grade_m = strtolower($groupData['grade_m']);
+    $grade_re= strtolower($groupData['grade_re']);
+
     $is_readable = strtolower($groupData['is_readable']);
+    $is_writable = strtolower($groupData['is_writable']);
+    $is_modifiable = strtolower($groupData['is_modifiable']);
+    $is_repliable = strtolower($groupData['is_repliable']);
+
     $is_download = strtolower($groupData['is_download']);
     $is_comment = strtolower($groupData['is_comment']);
     $is_progress_step = strtolower($groupData['is_progress_step']);
@@ -419,9 +429,32 @@ class BoardView extends View
     // read panel
     $where->reset();
     $where->set('id',$id,'=');
-    $this->model->select('board', 'readed_count', $where);
-
+    $this->model->select('board', 'user_id, readed_count', $where);
     $row = $this->model->getRow();
+
+    // Control Button UI
+    $isWritable = false;
+    $isRepliable = fasle;
+    $isModifiable = fasle;
+    $isDelelable = false;
+
+    if  ($is_writable === 'y' && $grade_w <= $level) {
+      $isWritable = true;
+    }
+
+    if  ($is_repliable === 'y' && $grade_re <= $level) {
+      $isRepliable = true;
+    }
+
+    if  ($context->checkAdminPass() || ($is_modifiable === 'y' && $grade_m <= $level &&
+          $userId === $row['user_id'])) {
+      $isModifiable = true;
+    }
+
+    if ($context->checkAdminPass() || $userId === $row['user_id']) {
+      $isDelelable = true;
+    }
+
     $hit = $row['readed_count']+1;
     $this->model->update('board', array('readed_count'=>$hit), $where);
     $this->model->select('board','*', $where);
@@ -516,6 +549,11 @@ class BoardView extends View
     $this->document_data['module_code'] = 'board';
     $this->document_data['module_name'] = '게시판 읽기';
     $this->document_data['module_type'] = 'board';
+    
+    $this->document_data['is_writable'] = $isWritable;    
+    $this->document_data['is_repliable'] = $isRepliable;
+    $this->document_data['is_modifiable'] = $isModifiable;
+    $this->document_data['is_delelable'] = $isDelelable;
 
     $this->document_data['category'] = $category;
     $this->document_data['id'] = $id;
@@ -595,7 +633,7 @@ class BoardView extends View
     if (isset($search) && $search) {
       $queryString = "?find=${find}&search=${search}";
     }
-    $returnURL = $rootPath . $category . $queryString;
+    $returnURL = $rootPath . $category . '/write' . $queryString ;
     
     if (strtolower($nonemember) !== 'y' && empty($nickname)) {      
       $context->setSession( 'return_url', $returnURL);
@@ -733,7 +771,7 @@ class BoardView extends View
     if (isset($search) && $search) {
       $queryString = "?find=${find}&search=${search}";
     }
-    $returnURL = $rootPath . $category . $queryString;
+    $returnURL = $rootPath . $category . "/$id" . '/modify' . $queryString;
 
     if (strtolower($nonemember) !== 'y' && empty($nickname)) {
       $context->setSession('return_url', $returnURL);
@@ -744,7 +782,7 @@ class BoardView extends View
     if ($level < $grade_m) {
       $context->setSession('return_url', $returnURL);
       $msg = '수정권한이 없습니다.';
-      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
       exit;
     }
 
@@ -752,7 +790,7 @@ class BoardView extends View
     if (strtolower($is_modifiable) !== 'y' && $admin_pass === false) {
       $context->setSession('return_url', $returnURL);
       $msg = '이곳은 관리자 전용 게시판입니다.';
-      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
     }
 
     $this->document_data['jscode'] = 'modify';
@@ -842,26 +880,26 @@ class BoardView extends View
     if (isset($search) && $search) {
       $queryString = "?find=${find}&search=${search}";
     }
-    $returnURL = $rootPath . $category . $queryString;
+    $returnURL = $rootPath . $category . "/$id" . '/reply' . $queryString;
 
     // 비회원 허용 유무 
     if (strtolower($noneMember) !== 'y') {      
       $context->setSession('return_url', $returnURL);
       $msg = '이곳은 회원 전용 게시판 입니다. 로그인을 먼저 하세요.';
-      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login?return_url=' . $returnURL, 'delay'=>3));
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
     }
 
     if ($level < $grade_re) {
       $context->setSession('return_url', $returnURL);
       $msg = '답변권한이 없습니다.';
-      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
       exit;
     }
 
     if (strtolower($is_repliable) !== 'y' && $admin_pass === false) {
       $context->setSession('return_url', $returnURL);
       $msg = '이곳은 관리지 전용게시판입니다.';
-      UIError::alertTo( $msg, true, array('url'=>$returnURL, 'delay'=>3));
+      UIError::alertTo( $msg, true, array('url'=>$rootPath . 'login', 'delay'=>3));
       exit;
     }
 

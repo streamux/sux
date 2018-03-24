@@ -121,6 +121,22 @@ class FileHandler
   }
 
   /**
+   * @param @path
+   */
+  function readFileToBase64($path) {
+
+    $contents = self::readFile($path);
+    $pathInfo = pathinfo($path);
+
+    $type = $pathInfo['extension'];
+    if ($type === 'svg') {
+      $type = 'svg+xml';
+    }
+
+    return 'data:image/' . $type . ';base64,' . chunk_split(base64_encode($contents), 64, "\n");
+  }
+  
+  /**
    *@param $directory
    *@param $empty 폴더 삭제 유무
    */

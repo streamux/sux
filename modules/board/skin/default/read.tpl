@@ -21,11 +21,19 @@
       </div>
     </div> 
     <div class="btn_groups">    
-      <a href="{$routeURI}{$params}" class="sx-btn">목록</a>
+      <a href="{$routeURI}{$params}" class="sx-btn">목록</a>      
+      {if $documentData.is_writable === true}
       <a href="{$routeURI}/write{$params}" class="sx-btn">글쓰기</a>
+      {/if}      
+      {if $documentData.is_repliable === true}
       <a href="{$routeURI}/{$contentData.id}/reply{$params}" class="sx-btn">답변</a>
+      {/if}
+      {if $documentData.is_modifiable === true}
       <a href="{$routeURI}/{$contentData.id}/modify{$params}" class="sx-btn">수정</a>
+      {/if}
+      {if $documentData.is_delelable === true}
       <a href="{$routeURI}/{$contentData.id}/delete{$params}" class="sx-btn">삭제</a>
+      {/if}
     </div>   
   </div>   
 </div>

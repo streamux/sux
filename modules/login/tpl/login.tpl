@@ -9,7 +9,7 @@
         <div class="sx-form-group">
           <i class="xi-user xi-2x"></i>
           <label for="userId" class="sx-control-label">아이디</label>
-          <input type="text" name="user_id" maxlength="22" value="test" class="sx-form-control">
+          <input type="text" name="user_id" maxlength="22" value="" class="sx-form-control">
         </div>
         <div class="sx-form-group">
           <i class="xi-lock-o xi-2x"></i>
