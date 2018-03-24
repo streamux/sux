@@ -14,8 +14,12 @@
           <input type="password" id="adminPwd" name="admin_pwd" class="sx-form-control" value="1234" placeholder="Password">
         </div>
         <div class="sx-form-group">
+          <label for="adminName" class="sx-control-label">이름</label>
+          <input type="text" id="adminName" name="admin_name" class="sx-form-control" value="스트림유엑스" placeholder="Name">
+        </div>
+        <div class="sx-form-group">
           <label for="adminNickname" class="sx-control-label">닉네임</label>
-          <input type="text" id="adminNickname" name="admin_nickname" class="sx-form-control" value="admin" placeholder="Nickname">
+          <input type="text" id="adminNickname" name="admin_nickname" class="sx-form-control" value="관리자" placeholder="Nickname">
         </div>
         <div class="sx-form-group">
           <label for="adminEmail" class="sx-control-label">이메일</label>

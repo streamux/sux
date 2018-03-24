@@ -7,7 +7,7 @@ class Mail {
         $subject = "=?EUC-KR?B?".base64_encode(iconv( 'UTF-8', 'EUC-KR', $subject))."?=\r\n";
 
         $headers = "From: " . $from . "\n";
-        $headers .= "Reply-To : " . $to . "\n";
+        $headers .= "Reply-To : " . $from . "\n";
         $headers .= "MIME-Version: 1.0\n";
         $headers .= "Content-Type: text/html; charset=UTF-8\n";
 

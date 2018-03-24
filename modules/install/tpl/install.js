@@ -70,8 +70,8 @@ jsux.fn.setupAdmin = {
 
   checkForm: function ( f ) {
 
-    var idList = ['admin_id', 'admin_pwd', 'admin_nickname','admin_email', 'yourhome'],
-          msgList = ['관리자 아이디를', '관리자 비밀번호를', '관리자 닉네임을', '관리자 이메일을', '사이트 주소를'];
+    var idList = ['admin_id', 'admin_pwd', 'admin_name', 'admin_nickname','admin_email', 'yourhome'],
+          msgList = ['아이디를', '비밀번호를', '이름을', '닉네임을', '이메일을', '사이트 주소를'];
 
     for(var i=0; i<idList.length; i++) {
       var el = f[idList[i]];      
@@ -112,6 +112,7 @@ jsux.fn.setupAdmin = {
         _method: f._method.value,
         admin_id: f.admin_id.value,
         admin_pwd: f.admin_pwd.value,
+        admin_name: f.admin_name.value,
         admin_nickname: f.admin_nickname.value,
         admin_email: f.admin_email.value,       
         yourhome: f.yourhome.value

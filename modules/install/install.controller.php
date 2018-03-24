@@ -46,7 +46,7 @@ class InstallController extends Controller
 
     $context = Context::getInstance();
     $posts =$context->getPostAll();
-    $admin_info = array('admin_id','admin_pwd','admin_nickname','admin_email','yourhome');
+    $admin_info = array('admin_id','admin_pwd','admin_name','admin_nickname','admin_email','yourhome');
 
     $resultYN = 'Y';
     $msg = '';
