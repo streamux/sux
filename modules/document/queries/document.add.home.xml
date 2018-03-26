@@ -11,6 +11,7 @@
     <column name="document_width"><![CDATA[100%]]></column>
     <column name="header_path"><![CDATA[common/_header.tpl]]></column>
     <column name="template_type"><![CDATA[home]]></column>
+    <column name="template_mode">p</column>
     <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
     <column name="date"><![CDATA[now()]]></column>        
   </columns>
