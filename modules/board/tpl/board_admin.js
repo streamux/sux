@@ -253,6 +253,7 @@ jsux.fn.modify = {
 jsux.fn.delete = {
 
   returnUrl: function() {
+    
     var backUrl = $('input[name=location_back]').val();
     if (!backUrl) {
       trace('input[name=location_back] 경로값을 확인해주세요.');
@@ -288,7 +289,7 @@ jsux.fn.delete = {
 
     var self = this;
 
-    $('#btnConfirm').on('click', function( e ) {
+    $('form[name=f_admin_board_delete]').on('submit', function( e ) {
       e.preventDefault();
       self.sendJson();
     });

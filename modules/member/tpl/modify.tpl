@@ -13,6 +13,18 @@
       <span class="sx-form-control" disabled>{$sessionData.user_id}</span>
     </div>
     <div class="sx-form-group">
+      <label for="nickName" class="sx-control-label sx_label_width">닉네임 *</label>
+      <input type="text" id="nickName" name="nickname" maxlength="12"  value="{$contentData.nickname}" class="sx-form-control">
+    </div>     
+    <div class="sx-form-group">
+      <label for="userName" class="sx-control-label sx_label_width">이름 *</label>
+      <input type="text" name="user_name" id="userName" maxlength="12" value="{$contentData.user_name}" class="sx-form-control">
+    </div>
+    <div class="sx-form-group">
+      <label for="emailAddress" class="sx-control-label sx_label_width">이메일 *</label>
+      <input type="text" id="emailAddress" name="email_address" value="{$contentData.email_address}" class="sx-form-control">
+    </div>
+    <div class="sx-form-group">
       <label for="password" class="sx-control-label sx_label_width">비밀번호 *</label>
       <input type="password" id="password" name="password" maxlength="23" class="sx-form-control">
       <input type="button" name="check_newpassword" value="비밀번호 변경하기" class="sx-btn sx-btn-block">
@@ -27,18 +39,6 @@
         <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
       </div>
     </div>
-    <div class="sx-form-group">
-      <label for="nickName" class="sx-control-label sx_label_width">닉네임 *</label>
-      <input type="text" id="nickName" name="nickname" maxlength="12"  value="{$contentData.nickname}" class="sx-form-control">
-    </div>     
-    <div class="sx-form-group">
-      <label for="userName" class="sx-control-label sx_label_width">이름 *</label>
-      <input type="text" name="user_name" id="userName" maxlength="12" value="{$contentData.user_name}" class="sx-form-control">
-    </div>
-    <div class="sx-form-group">
-      <label for="emailAddress" class="sx-control-label sx_label_width">이메일 *</label>
-      <input type="text" id="emailAddress" name="email_address" value="{$contentData.email_address}" class="sx-form-control">
-    </div>    
     <p class="sx_text_notice">
       <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">
       <span>아래 내용은 선택사항입니다.</span>
