@@ -3,7 +3,6 @@
     <table name="document"></table>
   </tables>
   <columns>
-    <column name="id"></column>
     <column name="category">home</column>
     <column name="document_name"><![CDATA[홈]]></column>
     <column name="summary"><![CDATA[메인페이지 입니다.]]></column>
@@ -13,6 +12,6 @@
     <column name="template_type"><![CDATA[home]]></column>
     <column name="template_mode">p</column>
     <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
-    <column name="date"><![CDATA[now()]]></column>        
+    <column name="date"><![CDATA[now()]]></column>
   </columns>
 </query>

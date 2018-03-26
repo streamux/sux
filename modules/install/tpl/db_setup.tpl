@@ -10,7 +10,6 @@
         </div>
         <div class="sx-form-group">
           <label for="dbDatabase" class="sx-control-label">데이터베이스 이름</label>
-          <input type="text" id="dbDatabase" name="db_database" class="sx-form-control" value="test_sux" placeholder="Database Name">
         </div>
         <div class="sx-form-group">
           <label for="dbPort" class="sx-control-label">포트 번호</label>
@@ -22,16 +21,16 @@
         </div>
         <div class="sx-form-group">
           <label for="dbUserid" class="sx-control-label">아이디</label>
-          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="root" placeholder="ID">
+          <input type="text" id="dbUserid" name="db_userid" class="sx-form-control" value="streamuxcom" placeholder="ID">
         </div>
         <div class="sx-form-group">
           <label for="dbPassword" class="sx-control-label">비밀번호</label>
-          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="root" placeholder="Password">
+          <input type="password" id="dbPassword" name="db_password" class="sx-form-control" value="!27522752n" placeholder="Password">
         </div>
         
         <div class="sx-form-group">
           <label for="dbTablePrefix" class="sx-control-label">테이블 접두사</label>
-          <input type="text" id="dbTablePrefix" name="db_table_prefix" value="sux_test_" class="sx-form-control">
+          <input type="text" id="dbTablePrefix" name="db_table_prefix" value="test_" class="sx-form-control">
         </div>
       </div>
       <input type="submit" value='다 음 ' class="sx-btn">     

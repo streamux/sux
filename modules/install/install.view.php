@@ -64,7 +64,7 @@ class InstallView extends View
 
   function displayUninstall() {
 
-    $this->checkInstall();
+    //$this->checkInstall();
 
     $context = Context::getInstance();
     $this->request_data['action'] = 'uninstall';
