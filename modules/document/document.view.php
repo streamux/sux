@@ -39,6 +39,7 @@ class DocumentView extends View
      * @descripttion
      * smarty include 상대경로 접근 방식이 달라서 convertAbsolutePath()함수를 이용해 절대경로 처리 함.
      */   
+
     $headerPath = Utils::convertAbsolutePath($headerPath, $realPath);
     $templateRealPath = Utils::convertAbsolutePath($templatePath, $realPath);
     $footerPath = Utils::convertAbsolutePath($footerPath, $realPath);
@@ -49,6 +50,7 @@ class DocumentView extends View
     }
 
     if (!is_readable($footerPath)) {
+
       $footerPath = $realPath . "modules/document/tpl/_footer.tpl";
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
