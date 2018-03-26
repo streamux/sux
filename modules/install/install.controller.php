@@ -215,10 +215,10 @@ class InstallController extends Controller
 
                 foreach ($queryColumns as $key => $value) {
                   $nodeValue = (string) $value;
-                  $propValue = (string) $value['name'];
+                  $propName = (string) $value['name'];
 
                   if (isset($nodeValue) && $nodeValue) {
-                    $columns[$propValue] = $nodeValue;
+                    $columns[$propName] = $nodeValue;
                   }                  
                 }   // end of foreach : columns
 
@@ -478,7 +478,6 @@ class InstallController extends Controller
     $query->setDBName( $dbName );
     $query->setTable( implode(',', $tables) );
     $oDB->dropTable( $query );
-    $oDB->dropDatabase( $query );
   }
   
   function deleteUninstall() {
