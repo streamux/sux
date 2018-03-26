@@ -220,14 +220,16 @@ jsux.fn.main = {
       document.getElementById('sxGnbLoginWrap').appendChild(_img);
     } catch(e) {}
 
-    jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
-      
-      if (e.result.toUpperCase() === 'Y') {
-        self.setEventNews(e.data);
-      } else {
-        console.log(e.msg);
-      }
-    });
+    try {
+      jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
+        
+        if (e.result.toUpperCase() === 'Y') {
+          self.setEventNews(e.data);
+        } else {
+          console.log(e.msg);
+        }
+      });
+    } catch(e) {}
   },
   init: function() {
 

@@ -84,6 +84,11 @@ class DB extends Object {
     return $this->pdo->getAttribute($option);
   }
 
+  function getPDO() {
+
+    return $this->pdo;
+  }
+
   function connect() {
 
     $this->is_connected = $this->_connect();
@@ -251,7 +256,7 @@ class DB extends Object {
 
       if ($value !== 'now()') {
         $this->statement->bindValue($key, $value);
-      }      
+      }
     } 
 
     return $msg;   

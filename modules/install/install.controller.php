@@ -97,6 +97,8 @@ class InstallController extends Controller
    */
   function insertCreateTable() {
 
+    header('Content-Type: text/html; charset=utf-8');
+
     $realPath = _SUX_PATH_;
     $rootPath = _SUX_ROOT_;
     $resultYN = 'Y';
@@ -193,6 +195,7 @@ class InstallController extends Controller
       $queryList = FileHandler::readDir($queryDir);
 
       if ($queryList) {
+
         foreach ($queryList as $key => $value) {
 
           if (preg_match('/(.xml+)$/', $value['file_name'] )) {
@@ -215,11 +218,9 @@ class InstallController extends Controller
 
                 foreach ($queryColumns as $key => $value) {
                   $nodeValue = (string) $value;
-                  $propValue = (string) $value['name'];
+                  $propName = (string) $value['name'];
 
-                  if (isset($nodeValue) && $nodeValue) {
-                    $columns[$propValue] = $nodeValue;
-                  }                  
+                  $columns[$propName] = $nodeValue;
                 }   // end of foreach : columns
 
                 $category = $columns['category'];
@@ -236,7 +237,7 @@ class InstallController extends Controller
                     if ($numrows == 0) {
                       $query->setColumn($columns);
                       $oDB->insert($query);
-                    }
+                    }                    
                   }                  
                 } 
                 
@@ -430,11 +431,11 @@ class InstallController extends Controller
       $resultYN = 'N';
     }
 
-    $data = array(  'msg'=>$msg,
+    /*$data = array(  'msg'=>$msg,
                             'result'=>$resultYN,
                             'url'=>$rootPath);
 
-    $this->callback($data);
+    $this->callback($data);*/
   }
 
   function deleteCaches() {
@@ -478,7 +479,6 @@ class InstallController extends Controller
     $query->setDBName( $dbName );
     $query->setTable( implode(',', $tables) );
     $oDB->dropTable( $query );
-    $oDB->dropDatabase( $query );
   }
   
   function deleteUninstall() {

@@ -8,6 +8,6 @@
   <column name="header_path" type="varchar" size="50"/>
   <column name="template_type" type="varchar" size="50"/>
   <column name="template_mode" type="char" size="1" default="p" notnull="not null"/>
-  <column name="footer_path" type="varchar" size="50"/> 
+  <column name="footer_path" type="varchar" size="50"/>
   <column name="date" type="datetime"/>
 </table>

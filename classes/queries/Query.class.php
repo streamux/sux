@@ -160,10 +160,10 @@ class Query extends Object {
       } else {
 
         // check update
-        if (preg_match('/[+|-|*|%]/', $value)) {
+        if (preg_match('/[+|-|*]/', $value)) {
           $bindValue[$key] = $bindField;
           $columnArr[] = $key . '=' . $key . '+' . $bindField;
-          $tempValues = preg_split('/[+|-|*|%]/', $value);
+          $tempValues = preg_split('/[+|-|*]/', $value);
           $value = $tempValues[1];
         } else {
           $bindValue[$key] = $bindField;
