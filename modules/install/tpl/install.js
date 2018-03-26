@@ -97,15 +97,11 @@ jsux.fn.setupAdmin = {
     }
 
     isLoading = true;
-
-    console.log(jsux.rootPath + "create-table");
     jsux.getJSON( jsux.rootPath + "create-table", params, function(e) {
 
       isLoading = false;
       trace(e.msg);
-
-      return;
-      //jsux.goURL( jsux.rootPath);  
+      jsux.goURL( jsux.rootPath);  
     });
   },
   sendAndLoad: function( f ) {
@@ -147,10 +143,10 @@ jsux.fn.setupAdmin = {
     var self = this;
 
     $('form[name=f_setup_admin]').on('submit',function( e ) {
-      //e.preventDefault();
+      e.preventDefault();
 
       if (self.checkForm( e.target )) {
-        //self.sendAndLoad( e.target );
+        self.sendAndLoad( e.target );
       }
     });
   },
