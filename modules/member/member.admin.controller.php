@@ -547,8 +547,26 @@ class MemberAdminController extends Controller
         }
 
         $result = $this->model->update('member', $columns, $where);
-
         if (!$result) {
+          $this->model->select('member', 'user_id,password,user_name,nickname,email_address,yoursite',$where);
+          $row = $this->model->getRow();
+
+          $buffer = array();
+          $buffer['admin_info'] = array();
+          $buffer['admin_info']['admin_id'] = $row['user_id'];
+          $buffer['admin_info']['admin_pwd'] = $row['password'];
+          $buffer['admin_info']['admin_name'] = $row['user_name'];
+          $buffer['admin_info']['admin_nickname'] = $row['nickname'];
+          $buffer['admin_info']['admin_email'] = $row['email_address'];
+          $buffer['admin_info']['yourhome'] = $row['yoursite'];
+
+          $filePath = 'files/config/config.admin.php';
+          CacheFile::writeFile($filePath, $buffer);
+
+          foreach ($buffer['admin_info'] as $key => $value) {
+            $context->setSession($key, $value);
+          }
+          
           $msg .= "'${nickname}' 님의 회원정보 수정을 실패하였습니다." . PHP_EOL;
           $resultYN = "N";  
         }

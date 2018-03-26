@@ -414,11 +414,26 @@ class MemberController extends Controller
         }       
       }
 
-      $result = $this->model->update('member', $columns, $where);
-      //$msg .= Tracer::getInstance()->getMessage();
-
+      $result = $this->model->update('member', $columns, $where);      
       if ($result) {
-        $context->setSession('password', $posts['password']);
+        $this->model->select('member', 'user_id,password,user_name,nickname,email_address,yoursite',$where);
+        $row = $this->model->getRow();
+        $buffer = array();
+        $buffer['admin_info'] = array();
+        $buffer['admin_info']['admin_id'] = $row['user_id'];
+        $buffer['admin_info']['admin_pwd'] = $row['password'];
+        $buffer['admin_info']['admin_name'] = $row['user_name'];
+        $buffer['admin_info']['admin_nickname'] = $row['nickname'];
+        $buffer['admin_info']['admin_email'] = $row['email_address'];
+        $buffer['admin_info']['yourhome'] = $row['yoursite'];
+
+        $filePath = 'files/config/config.admin.php';
+        CacheFile::writeFile($filePath, $buffer);
+
+        foreach ($columns as $key => $value) {
+          $context->setSession($key, $value);
+        }
+
         $msg .= '회원정보를 수정하였습니다.';
         $resultYN = "Y";
       } else {
@@ -427,6 +442,7 @@ class MemberController extends Controller
       }
     }
 
+    //$msg .= Tracer::getInstance()->getMessage();
     $data = array(  'url'=>$returnURL,
                             'result'=>$resultYN,
                             'msg'=>$msg);

@@ -24,6 +24,18 @@
               <div class="sx-form-group">
                 <label for="" class="sx-control-label label_width">아이디</label>
                 <span class="sx-form-control" disabled="disabled">{$documentData.user_id}</span>
+              </div>              
+              <div class="sx-form-group">
+                <label for="nickName" class="sx-control label_width">닉네임 *</label>
+                <input type="text" id="nickName" name="nickname" class="sx-form-control">
+              </div>
+              <div class="sx-form-group">
+                <label for="userName" class="sx-control label_width">이름 *</label>
+                <input type="text" id="userName" name="user_name" class="sx-form-control">
+              </div>  
+              <div class="sx-form-group">               
+                <label for="emailAddress" class="sx-control label_width">이메일 *</label>
+                <input type="text" id="emailAddress" name="email_address" class="sx-form-control">
               </div>
               <div class="sx-form-group">
                 <label for="password" class="sx-control-label label_width">비밀번호 *</label>
@@ -39,19 +51,6 @@
                   <label for="newPasswordConf" class="sx-control-label label_width">신규 비밀번호 확인 *</label>
                   <input type="password" id="newPasswordConf" name="new_password_conf" maxlength="23" class="sx-form-control">
                 </div>
-              </div>
-              <div class="sx-form-group">
-                <label for="nickName" class="sx-control label_width">닉네임 *</label>
-                <input type="text" id="nickName" name="nickname" class="sx-form-control">
-              </div>
-              <div class="sx-form-group">
-
-              <div class="sx-form-group">
-                <label for="userName" class="sx-control label_width">이름 *</label>
-                <input type="text" id="userName" name="user_name" class="sx-form-control">
-              </div>   
-                <label for="emailAddress" class="sx-control label_width">이메일 *</label>
-                <input type="text" id="emailAddress" name="email_address" class="sx-form-control">
               </div>
               <p class="text_notice">
                 <img src="{$rootPath}modules/admin/tpl/images/icon_notice.gif" class="icon_notice">

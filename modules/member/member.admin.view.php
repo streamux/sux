@@ -295,14 +295,14 @@ class MemberAdminView extends View {
       $where->set('category', $category);
       $where->set('user_id', $userId);
     }    
-    $this->model->select('member', 'category, user_id, user_name', $where);
+    $this->model->select('member', 'id, category, user_id, user_name', $where);
     $row = $this->model->getRow();
 
     $this->document_data['category'] = $row['category'];
     $this->document_data['categories'] = $categories;
     $this->document_data['user_id'] = $row['user_id'];
     $this->document_data['user_name'] = $row['user_name'];
-    $this->document_data['id'] = $id;    
+    $this->document_data['id'] = $row['id'];
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";

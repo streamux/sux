@@ -15,6 +15,9 @@
   float: left;
   width:50%;
 }
+.sx-admin-main .row{
+  margin:0;
+}
 .list_pc_panel{
   display: none;
 }
