@@ -223,8 +223,6 @@ class FormSecurity extends Object {
         if (isset($tags[$i]) && $tags[$i]) { 
           preg_match(sprintf("/(%s)+/m",$regSurfix), $tags[$i], $tagsMatches);
 
-          //echo $i . '==>'. $tagsMatches[0] . "<br>";
-
           if (count($tagsMatches) > 0) {
             $tagsSplit = preg_split(sprintf("/(%s)+/", $regSurfix), $tags[$i]);
             $splitItem = $tagsSplit[0];

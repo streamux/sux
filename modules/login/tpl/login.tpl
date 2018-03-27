@@ -14,7 +14,7 @@
         <div class="sx-form-group">
           <i class="xi-lock-o xi-2x"></i>
           <label for="userPassword" class="sx-control-label">비밀번호</label>
-          <input type="password" name="password" id="userPassword" maxlength="22" class="sx-form-control">
+          <input type="password" name="password" id="userPassword" maxlength="22" value="" class="sx-form-control">
         </div>
         <div class="sx-form-group">          
           <label for="loginKeeper" class="label_login_keeper sx-control-label">

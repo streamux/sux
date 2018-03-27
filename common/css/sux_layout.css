@@ -405,7 +405,7 @@ button.sx-btn-close{
 }
 .mobile-gnb-case-active{
   display: block;
-  left:0;
+  top:0;  left:0;
 }
 .mobile-gnb-case-inactive{
   display: none;

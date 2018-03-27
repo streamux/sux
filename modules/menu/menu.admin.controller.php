@@ -139,7 +139,7 @@ class MenuAdminController extends Controller
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-    $jsonData = $posts['data'];
+    $jsonData = stripslashes($posts['data']);
 
     $callback = $context->getRequest('callback');
     $strcallback = strtolower($callback);
