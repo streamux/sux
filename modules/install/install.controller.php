@@ -97,7 +97,7 @@ class InstallController extends Controller
    */
   function insertCreateTable() {
 
-    //header('Content-Type: text/html; charset=utf-8');
+    header('Content-Type: text/html; charset=utf-8');
 
     $realPath = _SUX_PATH_;
     $rootPath = _SUX_ROOT_;

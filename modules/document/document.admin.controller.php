@@ -109,7 +109,7 @@ class DocumentAdminController extends Controller
       }
 
       foreach ($buffers as $key => $value) {
-        $buffers[$key] = $posts['content_' . $key];
+        $buffers[$key] = stripslashes($posts['content_' . $key]);
 
         if (empty($buffers[$key])) {
           $buffers[$key] = $key . ' 내용을 입력해주세요';
@@ -117,7 +117,6 @@ class DocumentAdminController extends Controller
       }
 
       $buffer = $posts['content'];
-
       if (!empty($buffer)) {
           $buffers['tpl'] = $buffer;
       }
@@ -244,7 +243,8 @@ class DocumentAdminController extends Controller
         $buffers['js'] = '';
 
         foreach ($buffers as $key => $value) {
-          $buffers[$key] = $posts['content_' . $key];
+          $buffers[$key] = stripslashes($posts['content_' . $key]);
+
           if (empty($buffers[$key])) {
             $buffers[$key] = $key . ' 내용을 입력해주세요';
           }

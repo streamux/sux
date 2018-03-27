@@ -37,7 +37,7 @@ class Forms extends Object {
       foreach ($check_list as $key => $value) {
 
         if (empty($input[$value['key']])) {
-          $msg .= $value['msg'] . ' 입력해주세요';
+          $msg .= $value['msg'] . ' 입력하세요';
           UIError::alertToBack($msg, true, array('url'=>$return_url, 'delay'=>3));
           $bool = false;
           exit;

@@ -76,7 +76,7 @@ class LoginController extends Controller
     $row = $this->model->getRow();
     $password = $row['password'];
 
-    if ($password !== $passwordHash) {
+   if ($password !== $passwordHash) {
       $msg .= '비밀번호가 일치하지 않습니다.';
       UIError::alertTo($msg, $rootPath . 'login-fail');
       exit;
@@ -90,8 +90,7 @@ class LoginController extends Controller
 
     $columns = array();
     $columns['access_count'] = $row['access_count'];
-    $this->model->update('member', $columns, $where);
-
+    $msg .= $this->model->update('member', $columns, $where);
     $context->setSession('sx_sended_anth_mail', null);
     $sessionList = array('category','user_id','password','user_name','nickname','email_address','is_writable','point','access_count','grade','automod1','chatip', 'IsAuthorized');
 
@@ -101,7 +100,7 @@ class LoginController extends Controller
 
     $grade = (int) $row['grade'];
 
-    if ($row['category'] === 'administrator' && $grade === 10) {
+     if ($row['category'] === 'administrator' && $grade === 10) {
       $adminHash = $context->getPasswordHash($token);
       $context->setSession('admin_ok', $adminHash);
     }

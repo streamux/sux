@@ -259,7 +259,6 @@ class Context
   
   function getPost($key) {
 
-
     $post = $this->_getTrimRequestData($_POST[$key]);
     if (empty($post)) {
 

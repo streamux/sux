@@ -146,41 +146,33 @@ class Query extends Object {
 
   function setColumn($values) {
 
-    $bindValue = array();
-    $columnArr = array();
+    $columns = array();
+    $columnUpdate = array();    
 
     foreach ($values as $key => $value) {
 
-      $bindField = ':' . $key;
-
-      // contain sql date in param
       if (preg_match('/^now\(\)$/', trim($value))) {
-        $bindValue[$key] = $value;
-        $columnArr[] = $key . '=' . $value;
+        $columns[$key] = $value;
+        $columnUpdate[] = $key . '=' . $value;
       } else {
 
         // check update
-        if (preg_match('/[+|-|*]/', $value)) {
-          $bindValue[$key] = $bindField;
-          $columnArr[] = $key . '=' . $key . '+' . $bindField;
-          $tempValues = preg_split('/[+|-|*]/', $value);
-          $value = $tempValues[1];
+        if (preg_match('/([+|-|*])+/', $value, $matches)) {
+          $columns[$key] = $key . $matches[1] . $value; 
+          $columnUpdate[] = $key . '=' . $key . $matches[1] . $value;            
         } else {
-          $bindValue[$key] = $bindField;
-          $columnArr[] = $key . '=' . $bindField;
+          $columns[$key] = $this->addQuotation( $value );
+          $columnUpdate[] = $key . '=' . $this->addQuotation( $value );
         }       
-      }
-      
-      $this->setColumnBindValue($bindField, $value);
+      }      
     }
 
     if (is_array($values)) {
-      $this->column_keys = $this->getColumnKeys($bindValue, ',');
-      $this->column_values = $this->getColumnValues($bindValue, ',');
-      $bindValue = implode(',', $columnArr);
+      $this->column_keys = $this->getColumnKeys($columns, ',');
+      $this->column_values = $this->getColumnValues($columns, ',');
     }
 
-    $this->column_list = $this->convertToString($bindValue, ',');
+    $this->column_list = $this->convertToString($columnUpdate, ',');
   }
 
   function getColumnValues( $values ) {
