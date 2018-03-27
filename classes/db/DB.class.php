@@ -307,11 +307,9 @@ class DB extends Object {
   function insert($query) {
 
     $sql = $this->_insertSql($query);    
-    $bindColumn = $query->getColumnBindValue();
 
     $this->_setLogger($sql);
     $this->_query($sql);
-    $this->_setColumnBindValue($bindColumn);
 
     return $this->_executeQuery();
   }
@@ -320,12 +318,11 @@ class DB extends Object {
 
     $sql = $this->_updateSql($query);
 
-    $bindColumn = $query->getColumnBindValue();
     $bindWhere = $query->getWhereBindValue();
+
 
     $this->_setLogger($sql);
     $this->_query($sql);
-    $this->_setColumnBindValue($bindColumn);
     $this->_setWhereBindValue($bindWhere);
 
     return $this->_executeQuery();
