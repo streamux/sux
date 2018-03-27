@@ -5,4 +5,4 @@ $context = Context::getInstance();
 $context->init();
 
 $moduleHandler = ModuleHandler::getInstance(); 
-$moduleHandler->init();
+$moduleHandler->init(); 
