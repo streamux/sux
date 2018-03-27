@@ -500,10 +500,10 @@ jsux.fn.modify = {
 
     jsux.getJSON(url, params, function( e ) {
 
+      trace( e.msg );     
+
       if (e.result && e.result.toUpperCase() === 'Y') {
         jsux.goURL(self.returnUrl());
-      } else {
-        trace( e.msg );     
       }
     });
   },
