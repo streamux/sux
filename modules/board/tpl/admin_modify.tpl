@@ -28,7 +28,7 @@
               </div>
               <div class="sx-form-group">
                 <label for="userName" class="sx-control-label label_width {$contentData.css_user_label}">이름</label>
-                <input type="{$contentData.user_name_type}" name="nickname" id="userName" maxlength="20" value="" class="sx-form-control">
+                <input type="{$contentData.user_name_type}" name="user_name" id="userName" maxlength="20" value="" class="sx-form-control">
               </div>
               <div class="sx-form-group">
                 <label for="userPassword" class="sx-control-label label_width {$contentData.css_user_label}">비번</label>

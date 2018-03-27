@@ -147,8 +147,8 @@ class BoardAdminController extends Controller
       $msg .= '글을 저장하는데 실패했습니다.';
     }
 
-    Tracer::getInstance()->output();
-    return;
+    /*Tracer::getInstance()->output();
+    return;*/
     $data = array(  'url'=>$rootPath . 'board-admin/list',
             'result'=>$resultYN,
             'msg'=>$msg,

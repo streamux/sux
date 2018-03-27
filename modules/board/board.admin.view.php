@@ -35,6 +35,7 @@ class BoardAdminView extends View
     $context = Context::getInstance();
     $sessionData = $context->getSessionAll();
     $category = $context->getParameter('category');
+    $userName = $sessionData['user_name'];
     $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];
     $admin_pass = $context->checkAdminPass();
@@ -63,13 +64,16 @@ class BoardAdminView extends View
       $contentData['css_user_label'] = 'sx-hide';
       $contentData['user_name_type'] = 'hidden';
       $contentData['user_pass_type'] = 'hidden';
+      $contentData['user_name'] = $userName;
       $contentData['nickname'] = $nickname;
       $contentData['user_password'] = $password;
     } else {
+      $uniqNickname = 'Guest_' . Utils::getMicrotimeInt();
       $contentData['css_user_label'] = 'sx-show-inline';      
       $contentData['user_name_type'] = 'text';
       $contentData['user_pass_type'] = 'password';
-      $contentData['nickname'] = 'Guest';
+      $contentData['user_name'] = $uniqNickname;
+      $contentData['nickname'] = $uniqNickname;
       $contentData['user_password'] = '';
     }
 
