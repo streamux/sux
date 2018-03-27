@@ -1,4 +1,3 @@
-@@ -1,733 +0,0 @@
 /** 
  * used class 'jsux.fn.listManager'
  * path 'common/js/app/jsux_list_manager.js'

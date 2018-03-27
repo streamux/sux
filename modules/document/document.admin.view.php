@@ -389,8 +389,6 @@ class DocumentAdminView extends View
       }
     }
 
-    $msg .= 'aaa';
-
     $data = array(  "result"=>$resultYN,
                             "msg"=>$msg);
 
