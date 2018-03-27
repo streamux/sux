@@ -1009,6 +1009,7 @@ var MenusComponent = (function () {
                                 this.dragStartX = clientX - this.textIndent;
                             }
                             this.gnbMenus[k].state = 'up';
+                            console.log('up');
                             break;
                         }
                     }
@@ -1052,6 +1053,7 @@ var MenusComponent = (function () {
                     for (var k = this.gnbMenus.length - 1; k >= 0; k--) {
                         if (this.dragIndex > k && this.gnbMenus[k].isDragging !== true) {
                             this.gnbMenus[k].state = 'down';
+                            console.log('down');
                             break;
                         }
                     } // end of for 
@@ -1116,7 +1118,6 @@ var MenusComponent = (function () {
     MenusComponent.prototype.cancelJson = function () {
         this.isEditing = false;
         this.gnbMenus = this.cloneSingleArray(this.gnbOriginMenus);
-        this.checkDisabledMenu();
     };
     MenusComponent.prototype.saveJson = function () {
         var _this = this;
@@ -1276,31 +1277,19 @@ MenusComponent = __decorate([
         template: __webpack_require__("./src/app/menus/menus.component.html"),
         styles: [__webpack_require__("./src/app/menus/menus.component.css")],
         animations: [
-            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["j" /* trigger */])('menuState', [
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* state */])('default', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({
+            Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* trigger */])('menuState', [
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["f" /* state */])('default', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* style */])({
                     top: '0'
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* state */])('up', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["f" /* state */])('up', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* style */])({
                     top: '0'
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* state */])('down', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["f" /* state */])('down', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* style */])({
                     top: '0'
                 })),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* transition */])('void => *', [
-                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({ top: '0' })
-                ]),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* transition */])('* => down', [
-                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({ top: '48px' }),
-                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])('200ms ease-out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({
-                        top: '0'
-                    }))
-                ]),
-                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["i" /* transition */])('* => up', [
-                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({ top: '-48px' }),
-                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["e" /* animate */])('200ms ease-out', Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* style */])({
-                        top: '0'
-                    }))
-                ]),
+                Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["h" /* transition */])('void => *', [
+                    Object(__WEBPACK_IMPORTED_MODULE_2__angular_animations__["g" /* style */])({ top: '0' })
+                ])
             ])
         ]
     }),

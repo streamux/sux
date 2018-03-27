@@ -39,6 +39,7 @@ jsux.gnb.Menu = jsux.View.create();
 
       _data = value;
     };
+    
     this.resetUI = function() {
 
       this.setUI();
@@ -390,7 +391,19 @@ jsux.mobileGnb.Menu.include({
   _targetPosX: 52,
   _isMobile: false,
   _isPc: false,
+  _swiper: null,
 
+  setSwiper: function(swiper) {
+
+    this._swiper = swiper;
+  },
+  onResize: function() {
+
+    if (this._swiper) {
+      this._swiper.update();
+      this._swiper.onResize();
+    }
+  },
   addClass: function(parent, target) {
 
     if (!$(parent).hasClass(target)) {
@@ -525,6 +538,7 @@ jsux.mobileGnb.Menu.include({
       self.openSlide();
       self.hideMobileMenu();
       self.jumpFocus('.sx-gnb-login');
+      self.onResize();      
 
       self._isClick = true;
     });
