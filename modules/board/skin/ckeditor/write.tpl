@@ -5,12 +5,13 @@
 
   <form action="{$routeURI}/write" method="post"  name="f_board_write" enctype="multipart/form-data" class="sx-form-horizontal">
     <input type="hidden" name="_method" value="insert">
-    <input type="hidden" name="category" id="category" maxlength="20" value="{$documentData.category}">
+    <input type="hidden" name="category" maxlength="20" value="{$documentData.category}">
+    <input type="hidden" name="nickname" value="{$contentData.nickname}">
     
     <div class="head_panel">
       <div class="sx-form-group">
         <label for="userName" class="sx-control-label label_width {$contentData.css_user_label}">이름</label>
-        <input type="{$contentData.user_name_type}" name="nickname" id="userName" maxlength="20" value="{$contentData.nickname}" class="sx-form-control">
+        <input type="{$contentData.user_name_type}" id="userName" name="user_name" maxlength="20" value="{$contentData.user_name}" class="sx-form-control">
       </div>
       <div class="sx-form-group">
         <label for="userPassword" class="sx-control-label label_width {$contentData.css_user_label}">비번</label>
