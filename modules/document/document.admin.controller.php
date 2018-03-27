@@ -109,7 +109,7 @@ class DocumentAdminController extends Controller
       }
 
       foreach ($buffers as $key => $value) {
-        $buffers[$key] = $posts['content_' . $key];
+        $buffers[$key] = stripslashes($posts['content_' . $key]);
 
         if (empty($buffers[$key])) {
           $buffers[$key] = $key . ' 내용을 입력해주세요';
