@@ -84,7 +84,7 @@
 <script>jsux.cookieVersion = "{$cookieVersion}";</script>
 <script src="{$rootPath}common/js/jsux_common.min.js?20180202"></script>
 <script src="{$rootPath}common/js/jsux_app.min.js?20180202"></script>
-<script src="{$rootPath}common/js/app/jsux_app_stage.js?20180202"></script>
+<script src="{$rootPath}common/js/app/jsux_app_stage.min.js?20180202"></script>
 <script src="{$rootPath}common/js/jsux_search_form.min.js?20180202"></script>
 
 {if $documentData.module_code && $documentData.jscode}
