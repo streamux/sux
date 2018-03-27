@@ -27,7 +27,7 @@ jsux.fn.main = {
     var list = $('.sx-content .sx-service-config .view-type-textfield');
 
     $(list).each(function( index ) {
-      self.convertJsonToObj( markup, this.id, data[this.id], {
+      self.convertJsonToObj( markup, this.id, data[this.id], {ddd
 
         getUnit: function(label) {
           return label;
