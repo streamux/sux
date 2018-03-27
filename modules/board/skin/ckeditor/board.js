@@ -29,6 +29,7 @@ jsux.fn.ckeditor = {
   }
 };
 
+jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 
   checkSearchForm: function(f) {
@@ -65,8 +66,6 @@ jsux.fn.list = {
     this.setEvent();
   }
 };
-
-jsux.fn.read = jsux.fn.read || {};
 
 //-- CommentListManager
 (function(app, $) {
@@ -236,6 +235,7 @@ jsux.fn.read = {
             var model = self.getCommentModel();
 
             $.each(model, function(key) {
+
               if (data[i][key]) {
                 model[key] = data[i][key];
               }            
@@ -367,7 +367,7 @@ jsux.fn.write = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -406,7 +406,6 @@ jsux.fn.write = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -423,7 +422,7 @@ jsux.fn.reply = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -462,7 +461,6 @@ jsux.fn.reply = {
   },
   setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -478,7 +476,7 @@ jsux.fn.modify = {
     jsux.fn.ckeditor.updateElement('content');
 
     var labelList = ['이름을','비밀번호를','제목을','내용을','등록키를'];
-    var checkList = ['nickname','password','title','content','wallname'];
+    var checkList = ['user_name','password','title','content','wallname'];
     var email = f.email_address;
     var result = true;
 
@@ -493,12 +491,7 @@ jsux.fn.modify = {
       }
     });
     
-    /*var contentValue = f.content.value;
-    contentValue = contentValue.replace(/[<]/gi, '&lt;');
-    contentValue = contentValue.replace(/[>]/gi, '&gt;');
-    contentValue = contentValue.replace(/["]/gi, '&quot;');
-    contentValue = contentValue.replace(/[']/gi, '&#039;');
-    f.content.value = contentValue;*/
+    f.content.value = jsux.utils.specialCharToEntity(f.content.value);
 
     if (email && email.value && email.value.length > 0) {
       var mailFlag = jsux.utils.validateEmail(email.value);
@@ -517,14 +510,16 @@ jsux.fn.modify = {
     var self = this;
 
     $('form[name=f_board_modify]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {       
          e.preventDefault();
       }
     });
   },
-   setLayout: function() {
+  setLayout: function() {
 
-    jsux.fn.ckeditor.replace('content');
+    var form = $('form[name=f_board_modify]');
+    var content = form[0].elements['content'];
   },
   init: function() {
 
@@ -553,6 +548,7 @@ jsux.fn.delete = {
     var self = this;
 
     $('form[name=f_board_delpass]').on('submit', function(e) {
+
       if (!self.checkDocumentForm(e.target)) {
         e.preventDefault();
       }
