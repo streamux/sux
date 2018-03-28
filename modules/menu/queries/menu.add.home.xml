@@ -4,6 +4,7 @@
   </tables>
   <columns>
     <column name="id"></column>
+    <column name="module_name">document</column>
     <column name="category">home</column>
     <column name="menu_name"><![CDATA[Welcome To StreamUX]]></column>
     <column name="url">home</column>
