@@ -435,7 +435,7 @@ class BoardAdminController extends Controller
     foreach ($columnCaches as $index => $key) {
       $value = $posts[$key];
 
-      if (isset($value) && $value) {
+      if (isset($value) && $value || is_numeric($value)) {
         $columns[$key] = $value;
       }
     } //end of foreach
@@ -554,7 +554,7 @@ class BoardAdminController extends Controller
     $columns = array();
     foreach ($columnCaches as $key => $value) {
       if (!preg_match($filters, $value)) {
-        if (isset($posts[$value]) && $posts[$value]) {
+        if (isset($posts[$value]) && $posts[$value] || is_numeric($posts[$value])) {
           $columns[$value] = $posts[$value];
         } else {
           $columns[$value] =  '';
