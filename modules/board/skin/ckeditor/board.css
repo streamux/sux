@@ -69,86 +69,112 @@
 .board_list {
   padding-bottom:20px;
 }
+.board_list .sx_notice_list{
+  font-weight: 600;
+  background-color: #fbfbfb;
+}
+.board_list .sx_notice_list{
+  text-align: left;
+  border-bottom: 1px solid #e3e3e3;
+}
+.board_list .list_mobile_panel li,
+.board_list .list_pc_panel table tbody tr td {
+  font-size: 1.125em;
+}
 .board_list .list_mobile_panel li {
-  padding: 0 15px;
+  padding: 5px 15px;
 }
-.board_list .list_mobile_panel li .subject{
-  margin-bottom: 10px;
+.board_list .list_mobile_panel li:first-child{
+  border-top:1px solid #e3e3e3;
 }
-.board_list .list_mobile_panel li .subject .prefix_icon{
+.board_list .list_mobile_panel li > p.subject span.prefix_icon{
   position: relative;
   top:-1px;
+  margin-right:5px;
 }
-.board_list .list_mobile_panel li .subject .title{
+.board_list .list_mobile_panel li > p.subject span.title{
   position: relative;
   top:1px;
 }
-.board_list .list_mobile_panel li .info{
+.board_list .list_mobile_panel li > p.subject > a{
+  display: inline-block;
+  padding-top:10px;
+  padding-bottom: 10px;
+  width: 100%;
+  text-decoration: none;
+}
+.board_list .list_mobile_panel li > p.info{
+  padding-bottom: 10px;
   font-size: 0.875em;
+  font-weight: 300;
   color: #aeaeae;
 }
-.board_list .list_mobile_panel li p i{
+.board_list .list_mobile_panel li > p.info > i{
   position: relative;
   top:-1px;
   vertical-align: middle;
 }
-
 .board_list .list_pc_panel {
   display: none; 
+  text-align: left;
 }
 .board_list .list_pc_panel table {  
   border-collapse:collapse;
   border-spacing: 0; 
   width: 100%;
 }
-.board_list .list_pc_panel table thead th {
+.board_list .list_pc_panel table thead tr th {
   height:50px;
   border-top: 1px solid #e3e3e3;
   border-bottom: 2px solid #e3e3e3;
   font-size: 1.250em;
 }
-.board_list .list_pc_panel table thead th,
-.board_list .list_pc_panel table tbody tr td{
-  min-height:55px; 
+.board_list .list_pc_panel table thead tr th{
+  padding: 10px 20px;
   font-weight: normal;
-  text-align:center;
+  vertical-align: middle;
 }
-.board_list .list_pc_panel table tbody .sx-btn-activate:hover {
-   background-color: #f6f6f6;
+.board_list .list_pc_panel table thead tr th.subject{
+  padding:0 25px;
 }
-.board_list .list_pc_panel table thead .author {
+.board_list .list_pc_panel table thead tr th.author {
   width:140px;
 }
-.board_list .list_pc_panel table thead .date {
+.board_list .list_pc_panel table thead tr th.date {
   width:130px;
 }
-.board_list .list_pc_panel table thead .hit {
+.board_list .list_pc_panel table thead tr th.hit,
+.board_list .list_pc_panel table tbody tr td.hit {
   width:90px;
+  text-align: center;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area {
+.board_list .list_pc_panel table tbody tr.sx-btn-activate:hover {
+   background-color: #f6f6f6;
+}
+.board_list .list_pc_panel table tbody tr td {
+  padding: 0 20px;
+  border-top: 0;
+  border-bottom: 1px dashed #ddd;
+}
+.board_list .list_pc_panel table tbody tr td.subject .link_area {
   display:inline-block;
   width:100%;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon{
+.board_list .list_pc_panel table tbody tr td.subject .link_area .prefix_icon{
   position: relative;
   top:-1px;
+  margin-right: 5px;
 }
-.board_list .list_pc_panel table tbody tr .subject .link_area .title {
+.board_list .list_pc_panel table tbody tr td.subject .link_area .title {
   position: relative;
   top:1px;
 }
-.board_list .list_mobile_panel li a:hover {
-  text-decoration: none;
-}
-.board_list .list_mobile_panel li,
-.board_list .list_pc_panel table tbody tr td {
-  font-size: 1.125em;
-}
-.board_list .list_mobile_panel li,
-.board_list .list_pc_panel table tbody tr td {
-  padding-top:20px;
-  padding-bottom:20px;
-  text-align: left;
+.board_list .list_pc_panel table tbody tr td > span,
+.board_list .list_pc_panel table tbody tr td > a{
+  display: inline-block;
+  padding-top:15px;
+  padding-bottom:15px;
+  width: 100%;
 }
 .board_list .list_mobile_panel li .subject .prefix_icon,
 .board_list .list_pc_panel table tbody tr .subject .link_area .prefix_icon {
@@ -223,11 +249,10 @@
 .board_read .body_panel .content .content_text{
   font-size: 1.0625em;  
   word-spacing: -2px;
-  line-height: 1.8125em;
+  line-height: 1.875em;
 }
-/* ckediter 사용 시 p 태그  top 위치값 적용 */
-.board_read .body_panel .content .content_text p:not(:first-child){
-  margin-top:20px;
+.board_read .body_panel .content .content_text p{
+  line-height: 1.125em;
 }
 .board_read .body_panel .content .content_text ul {
   margin-left: 25px;

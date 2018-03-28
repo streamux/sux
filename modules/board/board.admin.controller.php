@@ -495,6 +495,7 @@ class BoardAdminController extends Controller
       }
 
       $columns = array();
+      $columns['module_name'] = 'board';
       $columns['category'] = $category;
       $columns['menu_name'] = $board_name;
       $columns['url'] = $category;
