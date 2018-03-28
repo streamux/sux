@@ -212,8 +212,17 @@ class FormSecurity extends Object {
     $replaceSurfixStr = "</pre>";
 
     preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
+
+    // Match 검색 문자열 인코딩 타입 체크
+    $regPrefixDefault = "(<pre\s*class=\"brush:)+";
+    preg_match(sprintf('/%s/', $regPrefixDefault), $output, $matchListDefault);
+
+    if (count($matchListDefault) > 0) {
+      $output = htmlspecialchars($output);
+      preg_match(sprintf('/%s/', $regPrefix), $output, $matchList);
+    }
     
-    //*/ pre.brush: 클래스를 가진 태그가 있다면 
+    // pre.brush: 클래스를 가진 태그가 있다면 
     if (count($matchList) > 0) {
       $tags = preg_split(sprintf('/%s/', $regPrefix), $output);
 
@@ -224,6 +233,7 @@ class FormSecurity extends Object {
           preg_match(sprintf("/(%s)+/m",$regSurfix), $tags[$i], $tagsMatches);
 
           if (count($tagsMatches) > 0) {
+
             $tagsSplit = preg_split(sprintf("/(%s)+/", $regSurfix), $tags[$i]);
             $splitItem = $tagsSplit[0];
             $splitItem = preg_replace('/(<\s*br[^>]*\s*>)+/m', '', $splitItem);
@@ -232,7 +242,6 @@ class FormSecurity extends Object {
             $tagsSplit[1] = self::swapToNl2br($tagsSplit[1]);
             $tags[$i] = $tagPrefix . $splitItem. $replaceSurfixStr . $tagsSplit[1];
           } else {
-
             $tags[$i] = self::swapToNl2br($tags[$i]);
           }
         }   // end of if
@@ -255,9 +264,9 @@ class FormSecurity extends Object {
           $output = preg_replace(sprintf("/%s/m", $regSearchPrefix), $replacePrefixStr, $output);
         }   // end of for
       }   // end of if
-    }
-
-    $output = self::swapToNl2br($output);
+    } else {
+      $output = self::swapToNl2br($output);
+    }    
 
     return $output;
   }

@@ -29,7 +29,6 @@ jsux.fn.ckeditor = {
   }
 };
 
-jsux.fn = jsux.fn || {};
 jsux.fn.list = {
 
   checkSearchForm: function(f) {
@@ -405,7 +404,7 @@ jsux.fn.write = {
     });
   },
   setLayout: function() {
-
+    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -460,7 +459,7 @@ jsux.fn.reply = {
     });
   },
   setLayout: function() {
-
+    jsux.fn.ckeditor.replace('content');
   },
   init: function() {
 
@@ -517,6 +516,7 @@ jsux.fn.modify = {
     });
   },
   setLayout: function() {
+    jsux.fn.ckeditor.replace('content');
 
     var form = $('form[name=f_board_modify]');
     var content = form[0].elements['content'];
