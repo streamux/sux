@@ -235,7 +235,7 @@ class BoardAdminController extends Controller
         if (!$columnCaches) {
           $msg .= "QueryCacheFile Do Not Exists<br>";
         } else {
-          $regFilters = '/^(category|id|password|user_id|user_name)+$/';
+          $regFilters = '/^(id|password|user_id|user_name)+$/';
           $columns = array();
 
           for($i=0; $i<count($columnCaches); $i++) {

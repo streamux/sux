@@ -252,7 +252,7 @@
   line-height: 1.875em;
 }
 .board_read .body_panel .content .content_text p{
-  line-height: 1.125em;
+  margin-top:17px;
 }
 .board_read .body_panel .content .content_text ul {
   margin-left: 25px;
