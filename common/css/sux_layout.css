@@ -78,6 +78,7 @@
 .sx-container{
   overflow:hidden;
   margin-top:60px;
+  word-wrap: break-word;
 }
 
 /* Footer */

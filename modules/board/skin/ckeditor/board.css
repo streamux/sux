@@ -249,10 +249,10 @@
 .board_read .body_panel .content .content_text{
   font-size: 1.0625em;  
   word-spacing: -2px;
-  line-height: 1.875em;
+  line-height: 1.625em;
 }
 .board_read .body_panel .content .content_text p{
-  line-height: 1.125em;
+  margin-top:17px;
 }
 .board_read .body_panel .content .content_text ul {
   margin-left: 25px;

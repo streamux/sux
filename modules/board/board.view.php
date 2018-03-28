@@ -197,7 +197,6 @@ class BoardView extends View
 
     // notice 
     $where = new QueryWhere();
-    $where->set('category', $category);
     $where->set('is_notice', 'y');
     $this->model->select('board', '*', $where, 'id desc');
     $contentData['notce_list'] = $this->model->getRows();

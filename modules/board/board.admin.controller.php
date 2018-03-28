@@ -235,7 +235,7 @@ class BoardAdminController extends Controller
         if (!$columnCaches) {
           $msg .= "QueryCacheFile Do Not Exists<br>";
         } else {
-          $regFilters = '/^(category|id|password|user_id|user_name)+$/';
+          $regFilters = '/^(id|password|user_id|user_name)+$/';
           $columns = array();
 
           for($i=0; $i<count($columnCaches); $i++) {
@@ -435,7 +435,7 @@ class BoardAdminController extends Controller
     foreach ($columnCaches as $index => $key) {
       $value = $posts[$key];
 
-      if (isset($value) && $value) {
+      if (isset($value) && $value || is_numeric($value)) {
         $columns[$key] = $value;
       }
     } //end of foreach
@@ -554,7 +554,7 @@ class BoardAdminController extends Controller
     $columns = array();
     foreach ($columnCaches as $key => $value) {
       if (!preg_match($filters, $value)) {
-        if (isset($posts[$value]) && $posts[$value]) {
+        if (isset($posts[$value]) && $posts[$value] || is_numeric($posts[$value])) {
           $columns[$value] = $posts[$value];
         } else {
           $columns[$value] =  '';
