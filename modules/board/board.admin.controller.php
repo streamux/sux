@@ -658,10 +658,6 @@ class BoardAdminController extends Controller
     }
 
     $result = $this->model->delete('comment', $where);
-    if (!$result) {
-      $msg .= "답글 삭제를 실패했습니다.<br>";
-      $resultYN = "N";
-    }
 
     $where->reset();
     $where->set('category', $category);

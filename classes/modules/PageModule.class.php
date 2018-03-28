@@ -54,6 +54,7 @@ class PageModule
         $isAdminLogin = $context->isAdminLogin();
 
         if (empty($isAdminLogin)) {
+          $context->setSession('return_url', $returnURL);
           Utils::goURL(_SUX_ROOT_ . 'login-admin', 0, 'N', 'Admin Login is required');
         }
       }
