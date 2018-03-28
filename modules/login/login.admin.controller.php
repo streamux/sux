@@ -67,10 +67,15 @@ class LoginAdminController extends Controller {
       $context->setCookie($loginCookieId, '', -1);
     }
 
+    $returnURL = $context->getSession('return_url');
+    if (empty($returnURL)) {
+      $returnURL = $rootPath . 'admin';
+    }
+
     $data = array(  'token'=>$adminHash,
             'msg'=>'로그인 성공',
             'result'=>'Y',
-            'url'=>$rootPath . 'admin',
+            'url'=>$returnURL,
             'delay'=>0);
       
     $this->callback($data);
