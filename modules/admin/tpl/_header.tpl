@@ -22,7 +22,7 @@
   {/if}
 
   {if $documentData.module_code === 'menu'}
-  <base href="/sux/">
+  <base href="{$rootPath}">
   <script type="text/javascript">
     var sux_resource_url = '{$rootPath}';
   </script>

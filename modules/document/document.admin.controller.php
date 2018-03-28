@@ -157,6 +157,7 @@ class DocumentAdminController extends Controller
 
       // insert into menu
       $columns = array();
+      $columns['category'] = 'Document';
       $columns['category'] = $posts['category'];
       $columns['menu_name'] = $posts['document_name'];
       $columns['url'] = $posts['category'];
