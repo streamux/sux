@@ -80,7 +80,7 @@ class AnalyticsController extends Controller
     if (isset($keyword) && $keyword) {
       $where = new QueryWhere();
       $where->set('name', $keyword);
-      $result = $this->model->select('connect_site', '*', $where);
+      $result = $this->model->select('connect_site', 'date', $where);
 
       if ($result) {
         $rownum = $this->model->getNumRows();
