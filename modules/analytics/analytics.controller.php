@@ -107,7 +107,7 @@ class AnalyticsController extends Controller
             $key = $columnCaches[$i];
             $value = $queryDataes[$key];
 
-            if (isset($value) && $value) {
+            if (isset($value) && $value || is_numeric($value)) {
               $columns[$key] = $value;
             }
           }
@@ -129,7 +129,7 @@ class AnalyticsController extends Controller
     if (isset($keyword) && $keyword) {
       $where = new QueryWhere();
       $where->set('name', $keyword, '=');
-      $result = $this->model->select('pageview', '*', $where);
+      $result = $this->model->select('pageview', 'date', $where);
 
       if ($result) {
         $rownum = $this->model->getNumRows();
@@ -156,7 +156,7 @@ class AnalyticsController extends Controller
             $key = $columnCaches[$i];
             $value = $queryDataes[$key];
 
-            if (isset($value) && $value) {
+            if (isset($value) && $value || is_numeric($value)) {
               $columns[$key] = $value;
             }         
           }

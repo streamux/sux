@@ -21,7 +21,7 @@ class AnalyticsView extends View
     //  오늘 접속자 수 
     $where = new QueryWhere();
     $where->set('date', $now,'=');
-    $result = $this->model->select('connecter', 'id', $where);
+    $result = $this->model->select('connecter', '*', $where);
 
 
     if ($result) {
@@ -33,7 +33,7 @@ class AnalyticsView extends View
     // 어제 접속자 수 
     $where->reset();
     $where->set('date', $now,'<');
-    $result = $this->model->select('connecter', 'id', $where);
+    $result = $this->model->select('connecter', '*', $where);
 
     if ($result) {
       $yesterday_num = $this->model->getNumRows();
@@ -57,7 +57,7 @@ class AnalyticsView extends View
     // 실 접속자 수 
   $where->reset();
     $where->set('date', $now,'=');
-    $result = $this->model->select('connecter_real', 'id', $where);
+    $result = $this->model->select('connecter_real', '*', $where);
 
     if (!$result) {
       $msg .= "오늘 실접속자 수 선택을 실패하였습니다.\n";
@@ -66,7 +66,7 @@ class AnalyticsView extends View
 
     $where->reset();
     $where->set('date',$now,'<');
-    $result = $this->model->select('connecter_real', 'id', $where);
+    $result = $this->model->select('connecter_real', '*', $where);
 
     if (!$result) {
       $msg .= "어제 실접속자 수 선택을 실패하였습니다.\n";
@@ -84,7 +84,7 @@ class AnalyticsView extends View
       }
     } else {
       $msg .= "전체 실접속자 수 선택을 실패하였습니다.\n";
-    }   
+    } 
 
     echo 'today : ' . $today_num . ', ' . 'yester : ' . $yesterday_num . ', ' . 'total : ' . $total_num . '<br>real_today : ' . $real_today_num . ', ' . 'real_yester : ' . $real_yesterday_num . ', ' . 'real total : ' . $real_total_num . '<br>';
   }
