@@ -169,7 +169,7 @@ class AdminAdminView extends View
       // today
       $where->reset();
       $where->set('date', date('Y-m-d'), '=');
-      $result = $this->model->select('connecter', 'id', $where);
+      $result = $this->model->select('connecter', '*', $where);
 
       if ($result) {
         $today = $this->model->getNumRows();
@@ -186,7 +186,7 @@ class AdminAdminView extends View
       // yester day
       $where->reset();
       $where->set('date', date('Y-m-d', time()-86400), '=');
-      $result = $this->model->select('connecter', 'id', $where);
+      $result = $this->model->select('connecter', '*', $where);
 
       if ($result) {
         $yesterday = $this->model->getNumRows();
@@ -239,7 +239,7 @@ class AdminAdminView extends View
       // today
       $where->reset();
       $where->set('date', date('Y-m-d'), '=');
-      $result = $this->model->select('connecter_real', 'id', $where);
+      $result = $this->model->select('connecter_real', '*', $where);
 
       if ($result) {
         $real_totay = $this->model->getNumRows();
@@ -257,7 +257,7 @@ class AdminAdminView extends View
       // yester day
       $where->reset();
       $where->set('date', date('Y-m-d', time()-86400), '=');
-      $result = $this->model->select('connecter_real', 'id', $where);
+      $result = $this->model->select('connecter_real', '*', $where);
 
       if ($result) {
         $real_yester = $this->model->getNumRows();
