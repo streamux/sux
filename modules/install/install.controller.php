@@ -516,3 +516,4 @@ class InstallController extends Controller
     $this->callback($data);
   }
 }
+?>
