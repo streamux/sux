@@ -246,32 +246,34 @@ class InstallController extends Controller
                   $query->reset();
                   $query->setTable($tablePrefix . 'member');
                   $query->setField('id');
-                  $query->setWhere(array('category'=>$category));
+                  $query->setWhere(array('category'=>$category, 'user_id'=>$context->getSession('admin_id')));
                   $oDB->select($query);
                   $numrows = $oDB->getNumRows();
 
-                  if ($numrows < 1) {
-                    $mColumns = array();
-                    $mColumns['category'] = $category;
-                    $mColumns['user_id'] = $context->getSession('admin_id');
-                    $mColumns['nickname'] = $context->getSession('admin_nickname');
-                    $mColumns['user_name'] = $context->getSession('admin_nickname');
-                    $mColumns['password'] = $context->getSession('admin_pwd');
-                    $mColumns['email_address'] = $context->getSession('admin_email');
-                    $mColumns['yoursite'] = $context->getSession('yourhome');
-                    $mColumns['grade'] = '10';
-                    $mColumns['ip'] = $context->getServer('REMOTE_ADDR');
-                    $mColumns['date'] = 'now()';
+                  $mColumns = array();
+                  $mColumns['category'] = $category;
+                  $mColumns['user_id'] = $context->getSession('admin_id');
+                  $mColumns['nickname'] = $context->getSession('admin_nickname');
+                  $mColumns['user_name'] = $context->getSession('admin_nickname');
+                  $mColumns['password'] = $context->getSession('admin_pwd');
+                  $mColumns['email_address'] = $context->getSession('admin_email');
+                  $mColumns['yoursite'] = $context->getSession('yourhome');
+                  $mColumns['grade'] = '10';
+                  $mColumns['ip'] = $context->getServer('REMOTE_ADDR');
+                  $mColumns['date'] = 'now()';
 
-                    $query->setColumn($mColumns);
-                    $result = $oDB->insert($query);
+                  $query->setField('');
+                  $query->setColumn($mColumns);
 
-                    if (!$result) {
-                      $msg .= '관리자 계정 등록을 실패하였습니다.' . PHP_EOL;
-                      $resultYN = "N";
-                    }
+                  if ($numrows < 1) {                    
+                    $result = $oDB->insert($query);                    
                   } else {
-                    $msg .= '관리자 계정이 이미 등록되어 있습니다.' . PHP_EOL;
+                    $result = $oDB->update($query);
+                  }
+
+                  if (!$result) {
+                    $msg .= '관리자 계정 등록을 실패하였습니다.' . PHP_EOL;
+                    $resultYN = "N";
                   }
                 } // end of if : member
 
@@ -355,8 +357,6 @@ class InstallController extends Controller
                       $msg .= "설정 안내 게시글 등록을 실패하였습니다.<br>";
                       $resultYN = 'N';    
                     }
-                  } else {
-                    $msg .= '게시물이 이미 등록되어 있습니다.' . "<br>";
                   }
                 }                
 

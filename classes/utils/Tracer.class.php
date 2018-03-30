@@ -23,6 +23,13 @@ class Tracer extends Object{
     return $this->message;
   }
 
+  function debugging() {
+
+    $msg = $this->getMessage();
+    parent::callback(array('result'=>'N', 'msg'=>$msg));
+    exit;
+  }
+
   function output( $msg='' ) {
 
     if ($msg === '') {

@@ -218,7 +218,7 @@ class Query extends Object {
   function setWhere( $values, $cond="=", $glue='and') {
     
     $tempArr = null;
-    $glue = trim($glue);
+    $glue = ' ' . trim($glue) . ' ';
 
     if (is_a($values, 'QueryWhere')) {
       $this->whereBindValues = $values->getBindValue();
