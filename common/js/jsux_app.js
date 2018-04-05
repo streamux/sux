@@ -18,7 +18,6 @@ jsux.gnb.Menu = jsux.View.create();
           _m = m,
           _activateIds = '',
           _timer = -1,
-
           _oldItem$ = null;
 
     this.addClass = function(target, className ) {
@@ -39,7 +38,6 @@ jsux.gnb.Menu = jsux.View.create();
 
       _data = value;
     };
-    
     this.resetUI = function() {
 
       this.setUI();
@@ -83,7 +81,7 @@ jsux.gnb.Menu = jsux.View.create();
         });
 
         // 1뎁스 메뉴 생성 후 정렬을 먼저 실행 
-        if (depth === 0) self.alignUI();
+        //if (depth === 0) self.alignUI();
 
         for (var i=0; i<data.length; i++) {
 
@@ -219,17 +217,20 @@ jsux.gnb.Menu = jsux.View.create();
       switch(type) {
 
         case 'mouseover' :
-          
+
           var activeManager = (function f(el$) {
 
             var list$ = el$.find('> .sx-menu');
+
             list$.each(function(index) {
-
               var that$ = $(this);
-              if (that$.data('id') == idList[depth]) {
 
+              if (that$.data('id') == idList[depth]) {
                 self.addClass(that$.find('> a'), 'active');
-                self.addClass(that$.find('> .sub_mask'), 'sub_mask_active');
+
+                if (that$.find('> .sub_mask > ul').children().length > 0) {
+                  self.addClass(that$.find('> .sub_mask'), 'sub_mask_active');
+                }                
 
                 if (_oldItem$ && that$.data('depth') < _oldItem$.data('depth')) {
                   self.removeClass(_oldItem$.find('> a'), 'active');
@@ -237,7 +238,6 @@ jsux.gnb.Menu = jsux.View.create();
                 }
                 _oldItem$ = that$;
               } else {
-
                 self.removeClass(that$.find('a'), 'active');
                 self.removeClass(that$.find('.sub_mask'), 'sub_mask_active');
               }
@@ -253,7 +253,6 @@ jsux.gnb.Menu = jsux.View.create();
           break;
 
         case 'mouseout':
-
           self.removeClass(menuStage$.find('a'), 'active');
           self.removeClass(menuStage$.find('.sub_mask'), 'sub_mask_active');
           break;
@@ -393,17 +392,6 @@ jsux.mobileGnb.Menu.include({
   _isPc: false,
   _swiper: null,
 
-  setSwiper: function(swiper) {
-
-    this._swiper = swiper;
-  },
-  onResize: function() {
-
-    if (this._swiper) {
-      this._swiper.update();
-      this._swiper.onResize();
-    }
-  },
   addClass: function(parent, target) {
 
     if (!$(parent).hasClass(target)) {
@@ -450,12 +438,27 @@ jsux.mobileGnb.Menu.include({
     this._startPosX  = tw;
   },
   resetUI: function() {
-
+    
+     this.setSwiper(); 
   },
   defaultSetting: function() {
 
     this._path = jsux.mobileGnb.Menu.path;
     this._m = jsux.mobileGnb.Menu.m;
+  },
+  setSwiper: function() {
+
+    if (this._swiper === null && this._isMobile === true) {
+      this._swiper = new Swiper('.swiper-container-mobilegnb', {
+        scrollbar: '.swiper-scrollbar-mobilegnb',
+        direction: 'vertical',
+        slidesPerView: 'auto',
+        mousewheelControl: true,
+        freeMode: true
+      });
+
+      this._swiper.onResize();
+    }    
   },
   setUI: function() {
 
@@ -538,7 +541,7 @@ jsux.mobileGnb.Menu.include({
       self.openSlide();
       self.hideMobileMenu();
       self.jumpFocus('.sx-gnb-login');
-      self.onResize();      
+      self.setSwiper();
 
       self._isClick = true;
     });
@@ -745,3 +748,141 @@ jsux.app = jsux.app || {};
     }
   });
 })(jsux.app, jQuery);
+
+/*jsux.logger.isConsole = false;*/
+/*jsux.logger.logLevel = jsux.LogLevel.WARN;*/
+
+(function(app, $, tweener) {
+  var SearchForm = app.View.create();
+  SearchForm.include({
+
+    $el: null,
+    $inputGroup: null,
+    $closeX: null,
+
+    update: function(info) {
+      // write code
+    },
+    tween: function( target, time, op ) {
+      tweener.to(target, time, op);
+    },
+    killTween: function( target ) {
+      tweener.killTweensOf( target );
+    },
+    hideSearchFormPanel: function() {
+
+      if (this.$el.hasClass('active')) {
+        this.$el.removeClass('active');
+      }
+    },
+    hideSearchForm: function() {
+
+      this.$el.find('input[name=search]').val('');
+      this.killTween(this.$inputGroup);
+      this.tween(this.$inputGroup, 21, {x: '0%', opacity:0, ease: Quad.easeOut, useFrames:true});
+    },
+    showSearchForm: function() {
+
+      if (!this.$el.hasClass('active')) {
+        this.$el.addClass('active');
+      }
+      this.killTween(this.$inputGroup);
+      this.tween(this.$inputGroup, 31, {x: '-20%', opacity:1, ease: Quad.easeOut, useFrames:true});
+      this.$el.find('input[name=search]').focus();
+    },
+    hideCloseX: function() {
+
+      var self = this;
+
+      this.killTween(this.$btnClase);
+      this.killTween(this.$closeX);
+      this.tween(this.$btnClase, 17, {opacity:0, useFrames:true, onComplete: $.proxy(self.hideSearchFormPanel, self)});
+      this.tween(this.$closeX, 65, {rotation:0, useFrames:true});
+
+      this.tween(this.$inputGroup, 31, {x: '0', opacity:0, ease: Quad.easeOut, useFrames:true});
+    },
+    showCloseX: function() {
+
+      this.killTween(this.$btnClase);
+      this.killTween(this.$closeX);
+      this.tween(this.$btnClase, 13, {opacity:1, ease: Quad.easeOut, useFrames:true});
+      this.tween(this.$closeX, 65, {rotation:360, useFrames:true});    
+    },
+    show: function() {
+
+      this.setEvent();      
+      this.showSearchForm();
+      this.showCloseX();
+    },
+    setEvent: function() {
+
+      var self = this;
+      var $btnClose = $(this.$el).find('.sx-btn-close');
+
+      $btnClose.on('click', function() {
+        self.hideCloseX();
+        self.hideSearchForm();
+      });
+    },
+    init: function(id) {
+
+      this.$el = $(id);
+      if (!this.$el) {
+        jsux.logger.warn(id + ' 마크업을 확인해주세요.', 'jsux_search_form.js', 61);
+      }
+      this.$inputGroup = $(id).find('.sx-form-inline');
+      this.$btnClase = $(id).find('.sx-btn-close');
+      this.$closeX = $(id).find('.sx-h-3stick');    
+    }
+  });
+
+  SearchForm.extend({
+
+    checkValidation: function(f) {
+
+      var itemFilter = {
+        search : {
+          validate: {
+            ignore: true,
+            msg: '검색어를 입력해주세요.'  
+          },
+          pattern: {
+            value: '^[a-zA-Z0-9_ㄱ-ㅎㅏ-ㅏ가-힣]+$',
+            msg: '검색어는 한글, 영문, 숫자, _(언더라인)만 입력가능합니다.'
+          }
+        }
+      };
+
+      return jsux.utils.validateForm(f, itemFilter, 'input', 'text');
+    },
+    create: function( id ) {
+
+      var markup = '';
+
+      if ($(id).length<1) {
+        markup = '<div id="gnbSearchForm" class="sx-search-form">' + id + ' 마크업을 확인하세요.</div>';
+        $( document.body ).append( markup );
+        id = '#gnbSearchForm';
+      }
+
+      return new SearchForm(id);
+    }
+  });
+
+  app.searchForm = SearchForm.create('#gnbSearchForm');
+
+  $('#btnShowSearchForm').on('click', function() {
+    app.searchForm.show();
+  });
+
+  $('form[name=gnb_form_search]').submit(function(e) {
+
+    if (!SearchForm.checkValidation(this)) {
+       e.preventDefault();
+    }
+  });
+
+})(jsux, jQuery, TweenMax);
+
+
+

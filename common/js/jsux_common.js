@@ -418,7 +418,7 @@ jsux.app = jsux.app || {};
       this.isLoading = true;
       jsux.getJSON( url, params, function( e )  {
         
-        //self.setData(e.data.list);
+        self.setData(e.data.list);
         self.dispatchEvent({type:'loaded', target: this, data: e.data});
         self.isLoading = false;
       });
@@ -692,7 +692,11 @@ jsux.app = jsux.app || {};
       if ( this.el.hasClass("sx-hide")) {
         this.el.removeClass("sx-hide");
       }
-      this.el.addClass("sx-show");
+
+      if (!this.el.hasClass("sx-show")) {
+        this.el.addClass("sx-show");
+      }
+      
       this.liLists = this.el.find("a");
 
       this.currentPage = { prev: startNum, next: len-1};

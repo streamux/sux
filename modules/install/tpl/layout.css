@@ -158,6 +158,7 @@ form[name=f_setup_db] {
   .terms_box label.sx-control-label,
   .setup_db label.sx-control-label,
   .admin_setup label.sx-control-label{
+    text-align: right;
     width: 25%;
   }
 
