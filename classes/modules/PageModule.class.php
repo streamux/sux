@@ -62,7 +62,7 @@ class PageModule
       if (preg_match($regMethod, $httpMethod)) {
 
         if ($context->isCrossDomain() === false) {
-          Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
+          //Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
         }
 
         $controller->{$httpMethod . ucfirst($action)}();

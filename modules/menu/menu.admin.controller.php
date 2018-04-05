@@ -37,7 +37,7 @@ class MenuAdminController extends Controller
 
         $result = $this->model->insert('menu', $columns);
 
-        $msg .= Tracer::getInstance()->getMessage();
+        //$msg .= Tracer::getInstance()->getMessage();
         if ($result) {
           $msg .= "메뉴 등록을 완료하였습니다.";
           $resultYN = 'Y';
@@ -146,7 +146,7 @@ class MenuAdminController extends Controller
 
     //$contents_path = '/assets/data/gnb.php';
     $realPath = _SUX_PATH_ ;
-    $contents_path = '/files/gnb/gnb.json';
+    $contents_path = '/files/menu/gnb.json';
     $filePath = Utils::convertAbsolutePath($contents_path, $realPath);
     
     $result = FileHandler::writeFile($filePath, $jsonData);

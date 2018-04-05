@@ -116,7 +116,7 @@ class MenuAdminView extends View
     $resultYN = 'Y';
     $json = array('data'=>array());
 
-    $gnburl = './files/gnb/gnb.json';
+    $gnburl = './files/menu/gnb.json';
     $gnburl = FileHandler::getRealPath($gnburl);
     $jsonList = FileHandler::readFile($gnburl);
     $list = json_decode($jsonList);

@@ -3,15 +3,15 @@
     <table name="document"></table>
   </tables>
   <columns>
+    <column name="id"></column>
     <column name="category">home</column>
-    <column name="document_name"><![CDATA[홈]]></column>
+    <column name="document_name"><![CDATA[Welcome To StreamUX]]></column>
     <column name="summary"><![CDATA[메인페이지 입니다.]]></column>
     <column name="is_readable">y</column>
     <column name="document_width"><![CDATA[100%]]></column>
     <column name="header_path"><![CDATA[common/_header.tpl]]></column>
     <column name="template_type"><![CDATA[home]]></column>
-    <column name="template_mode">p</column>
     <column name="footer_path"><![CDATA[common/_footer.tpl]]></column>
-    <column name="date"><![CDATA[now()]]></column>
+    <column name="date"><![CDATA[now()]]></column>        
   </columns>
 </query>
