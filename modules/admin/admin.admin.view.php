@@ -315,7 +315,7 @@ class AdminAdminView extends View
           $passover = 0;
         }
 
-        $result = $this->model->select('pageview', 'name, hit_count, date', null, 'id desc', $passover, $limit);
+        $result = $this->model->select('pageview', '*', null, 'id desc', $passover, $limit);
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -361,7 +361,7 @@ class AdminAdminView extends View
     $context = Context::getInstance();
     $limit = $context->getRequest('limit');
     $passover = $context->getRequest('passover');
-    $result = $this->model->select('connect_site', 'id');
+    $result = $this->model->select('connect_site', '*');
 
     if ($result) {      
       $numrows = $this->model->getNumRows();
@@ -382,7 +382,7 @@ class AdminAdminView extends View
           $passover = 0;
         }
 
-        $result = $this->model->select('connect_site', 'name, hit_count, date', null, 'id desc', $passover, $limit);
+        $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
         if ($result) {
           $a = $numrows - $passover;
           $rows_limit = $this->model->getRows();
@@ -637,7 +637,7 @@ class AdminAdminView extends View
       $resultYN = 'N';
     }
 
-    $result = $this->model->select('pageview', 'id');
+    $result = $this->model->select('pageview', '*');
 
     if ($result) {
       $numrows = $this->model->getNumRows();
@@ -650,7 +650,7 @@ class AdminAdminView extends View
       $resultYN = 'N';
     }
 
-    $result = $this->model->select('connect_site', 'id');
+    $result = $this->model->select('connect_site', '*');
 
     if ($result) {
       $numrows = $this->model->getNumRows();

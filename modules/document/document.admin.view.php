@@ -248,11 +248,12 @@ class DocumentAdminView extends View
 
     $where = new QueryWhere();
     $where->set('id', $id);
-    $this->model->select('document', '*', $where);
-    
+    $result = $this->model->select('document', '*', $where);
     $rows = $this->model->getRows();
+
     if (count($rows) > 0) {
       $dataObj['list'][0] = array();
+
       foreach ($rows[0] as $key => $value) {
         $dataObj['list'][0][$key] = $value;
       }
@@ -268,12 +269,13 @@ class DocumentAdminView extends View
       $readDir = $readFileDir[$templateMode];
             
       $templatePathList = array();
-      $templatePathList['content_tpl'] = $readDir . $templateName . '/' . $templateName . '.tpl'; 
-      $templatePathList['content_css'] = $readDir . $templateName . '/' . $templateName . '.css'; 
-      $templatePathList['content_js'] = $readDir . $templateName . '/' . $templateName . '.js'; 
+      $templatePathList['content_tpl'] = $readDir . $templateName . '/default.tpl'; 
+      $templatePathList['content_css'] = $readDir . $templateName . '/default.css'; 
+      $templatePathList['content_js'] = $readDir . $templateName . '/default.js'; 
 
       foreach ($templatePathList as $key => $path) {
         $readTemplatePath = Utils::convertAbsolutePath($path, _SUX_PATH_);
+
         if (file_exists($readTemplatePath)) {
           $dataObj['list'][0][$key] = FileHandler::readFile($readTemplatePath);
         }
@@ -309,9 +311,9 @@ class DocumentAdminView extends View
     }
 
     $readFilePath = $readFileDir[$templateMode];    
-    $templatePathList['content_tpl'] = $readFilePath . $template . '/' . $template . '.tpl'; 
-    $templatePathList['content_css'] = $readFilePath . $template . '/' . $template . '.css'; 
-    $templatePathList['content_js'] = $readFilePath . $template . '/' . $template . '.js'; 
+    $templatePathList['content_tpl'] = $readFilePath . $template . '/default.tpl'; 
+    $templatePathList['content_css'] = $readFilePath . $template . '/default.css'; 
+    $templatePathList['content_js'] = $readFilePath . $template . '/default.js'; 
 
     $dataObj = array();
     foreach ($templatePathList as $key => $value) {

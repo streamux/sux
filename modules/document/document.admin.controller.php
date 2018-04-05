@@ -83,9 +83,9 @@ class DocumentAdminController extends Controller
       $readTemplatePath = Utils::convertAbsolutePath($readPath, $realPath);
 
       $readTemplateList = array();
-      $readTemplateList['tpl'] = $readTemplatePath . '/' . $templateType . '.tpl';
-      $readTemplateList['css'] = $readTemplatePath . '/' . $templateType . '.css';
-      $readTemplateList['js'] = $readTemplatePath . '/' . $templateType . '.js';
+      $readTemplateList['tpl'] = $readTemplatePath . '/default.tpl';
+      $readTemplateList['css'] = $readTemplatePath . '/default.css';
+      $readTemplateList['js'] = $readTemplatePath . '/default.js';
 
       $buffers = array();
       $buffers['tpl'] = '';
@@ -123,9 +123,9 @@ class DocumentAdminController extends Controller
 
       // Save Info Files
       $saveTemplateList = array();
-      $saveTemplateList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
-      $saveTemplateList['css'] = $saveFileRealDir . '/' . $category . '.css';
-      $saveTemplateList['js'] = $saveFileRealDir . '/' . $category . '.js';
+      $saveTemplateList['tpl'] = $saveFileRealDir . '/default.tpl';
+      $saveTemplateList['css'] = $saveFileRealDir . '/default.css';
+      $saveTemplateList['js'] = $saveFileRealDir . '/default.js';
 
       foreach ($saveTemplateList as $key => $value) {
         if (isset($buffers[$key]) && $buffers[$key]) {          
@@ -258,9 +258,9 @@ class DocumentAdminController extends Controller
         }
 
         $saveTemplatePathList = array();
-        $saveTemplatePathList['tpl'] = $saveTemplatePath . '/' . $category . '.tpl';
-        $saveTemplatePathList['css'] = $saveTemplatePath . '/' . $category . '.css';
-        $saveTemplatePathList['js'] = $saveTemplatePath . '/' . $category . '.js';
+        $saveTemplatePathList['tpl'] = $saveTemplatePath . '/default.tpl';
+        $saveTemplatePathList['css'] = $saveTemplatePath . '/default.css';
+        $saveTemplatePathList['js'] = $saveTemplatePath . '/default.js';
 
         foreach ($saveTemplatePathList as $key => $value) {
           if (isset($buffers[$key]) && $buffers[$key]) {
@@ -338,7 +338,9 @@ class DocumentAdminController extends Controller
       $result = $this->model->select('document', '*', $where);
       if ($result) {
         $dataObj['list'] = $this->model->getRows();
-      } 
+      }
+      $msg .= "$category 페이지 수정을 완료하였습니다.";
+      $resultYN = "Y";  
     } else {
       $msg .= "$category 페이지 수정을 실패하였습니다.";
       $resultYN = "N";  

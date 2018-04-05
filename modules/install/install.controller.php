@@ -289,9 +289,9 @@ class InstallController extends Controller
                   // read files of template to module's directory      
                   $readtemplatePath = _SUX_PATH_ . 'modules/document/templates/' . $templateName;
                   $readtemplatePathList = array();
-                  $readtemplatePathList['tpl'] = $readtemplatePath . '/' . $templateName . '.tpl';
-                  $readtemplatePathList['css'] = $readtemplatePath . '/' . $templateName . '.css';
-                  $readtemplatePathList['js'] = $readtemplatePath . '/' . $templateName . '.js';
+                  $readtemplatePathList['tpl'] = $readtemplatePath . '/default.tpl';
+                  $readtemplatePathList['css'] = $readtemplatePath . '/default.css';
+                  $readtemplatePathList['js'] = $readtemplatePath . '/default.js';
 
                   $buffers = array();
                   $buffers['tpl'] = '';
@@ -311,9 +311,9 @@ class InstallController extends Controller
 
                   // Save files of skin to files's directory
                   $saveTemplatePathList = array();
-                  $saveTemplatePathList['tpl'] = $saveFileRealDir . '/' . $category . '.tpl';
-                  $saveTemplatePathList['css'] = $saveFileRealDir . '/' . $category . '.css';
-                  $saveTemplatePathList['js'] = $saveFileRealDir . '/' . $category . '.js';
+                  $saveTemplatePathList['tpl'] = $saveFileRealDir . '/default.tpl';
+                  $saveTemplatePathList['css'] = $saveFileRealDir . '/default.css';
+                  $saveTemplatePathList['js'] = $saveFileRealDir . '/default.js';
 
                   foreach ($saveTemplatePathList as $key => $value) {
                     if (isset($buffers[$key]) && $buffers[$key]) {
@@ -386,7 +386,7 @@ class InstallController extends Controller
     }  // end of foreach : modules
 
     // Make Json File of GNB
-    $gnbPath = 'files/gnb/gnb.json';
+    $gnbPath = 'files/menu/gnb.json';
     $gnbFilePath = Utils::convertAbsolutePath($gnbPath, $realPath);
 
     if (!file_exists($gnbFilePath)) {

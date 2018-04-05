@@ -78,7 +78,7 @@ class Context
       './files/cookie',
       './files/board',
       './files/document',
-      './files/gnb'
+      './files/menu'
     );
 
     $msg = '';

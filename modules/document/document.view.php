@@ -30,7 +30,7 @@ class DocumentView extends View
     $templatePath = $templateDir[$templateMode] . $templateName . '/';
 
     $this->document_data['jscode'] = 'content';
-    $this->document_data['module_code'] = $templateName;
+    $this->document_data['module_code'] = 'default';
     $this->document_data['module_name'] = $groupData['document_name'];
     $this->document_data['module_type'] = 'document';
 
@@ -55,7 +55,7 @@ class DocumentView extends View
       $UIError->add("하단 파일경로가 올바르지 않습니다.");
     }
 
-    $templateRealPath = $templateRealPath . $templateName . '.tpl';
+    $templateRealPath = $templateRealPath . 'default.tpl';
 
     //$msg .= Tracer::getInstance()->getMessage() . "<br>";
     $this->document_data['group'] = $groupData;
