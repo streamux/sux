@@ -15,7 +15,7 @@
 }
 .sx-content .connecter > li .view-type-textfield, d
 .sx-content .connecter > li .sx-label{ 
-  display: inline-block;
+  display: inline-block; 
   padding:5px 15px;
   font-size: 0.875em;
   line-height:20px;
