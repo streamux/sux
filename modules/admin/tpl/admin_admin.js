@@ -242,7 +242,7 @@ jsux.fn.login = {
   checkForm: function( f ) {
 
     var id = f.user_id.value.length,
-      pwd = f.user_pass.value.length;d
+      pwd = f.user_pass.value.length;
 
     if ( id < 1) {
       trace("관리자 아이디를 입력하세요.");
