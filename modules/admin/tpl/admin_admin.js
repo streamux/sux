@@ -224,7 +224,7 @@ jsux.fn.main = {
       jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
         
         if (e.result.toUpperCase() === 'Y') {
-          self.setEventNews(e.data);
+          self.setEventNews(e.data);dd
         } else {
           console.log(e.msg);
         }
