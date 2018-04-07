@@ -16,7 +16,7 @@ jsux.fn.list = {
       }
     };
 
-    return jsux.utils.validateForm(f, itemFilter, 'input', 'text');
+    return jsux.forms.validateForm(f, itemFilter, 'input', 'text');
   },
   setEvent: function() {
 
@@ -350,7 +350,7 @@ jsux.fn.write = {
     });
 
     if (email && email.value && email.value.length > 0) {
-      var mailFlag = jsux.utils.validateEmail(email.value);
+      var mailFlag = jsux.forms.validateEmail(email.value);
 
       if (!mailFlag) {
         trace('이메일 주소가 잘못되었습니다.');
@@ -403,7 +403,7 @@ jsux.fn.reply = {
     });
 
     if (email && email.value && email.value.length > 0) {
-      var mailFlag = jsux.utils.validateEmail(email.value);
+      var mailFlag = jsux.forms.validateEmail(email.value);
 
       if (!mailFlag) {
         trace('이메일 주소가 잘못되었습니다.');
@@ -457,7 +457,7 @@ jsux.fn.modify = {
     f.content.value = jsux.utils.specialCharToEntity(f.content.value);
 
     if (email && email.value && email.value.length > 0) {
-      var mailFlag = jsux.utils.validateEmail(email.value);
+      var mailFlag = jsux.forms.validateEmail(email.value);
 
       if (!mailFlag) {
         trace('이메일 주소가 잘못되었습니다.');

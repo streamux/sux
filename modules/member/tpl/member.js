@@ -34,7 +34,7 @@ jsux.fn.join = {
 
     var email$ = $('input:text[name=email_address]');
     var value = email$.val();
-    var isEmail =jsux.utils.validateEmail(value);
+    var isEmail =jsux.forms.validateEmail(value);
     if (!isEmail) {
       trace('이메일이 올바르지 않습니다.');
       email$.focus();
@@ -45,7 +45,7 @@ jsux.fn.join = {
   validateHp: function(e) {    
     var value = e.target.value;
 
-    var hpNum = jsux.utils.validateHp(value);
+    var hpNum = jsux.forms.validateHp(value);
     if (!hpNum) {
       return false;
     }
@@ -292,7 +292,7 @@ jsux.fn.modify = {
   validateEmail: function(id) {
 
     var value = $('input:text[name=email_address]').val();
-    var isEmail =jsux.utils.validateEmail(value);
+    var isEmail =jsux.forms.validateEmail(value);
     if (!isEmail) {
       trace('이메일이 올바르지 않습니다.');
       return false;
@@ -302,7 +302,7 @@ jsux.fn.modify = {
   validateHp: function(e) {    
     var value = e.target.value;
 
-    var hpNum = jsux.utils.validateHp(value);
+    var hpNum = jsux.forms.validateHp(value);
     if (!hpNum) {
       return false;
     }

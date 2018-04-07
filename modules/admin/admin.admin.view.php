@@ -438,7 +438,7 @@ class AdminAdminView extends View
     }
 
     if (isset($limit) && $limit){
-      $result = $this->model->select('connect_day', '*', null, 'id desc', $passover, $limit);
+      $result = $this->model->select('connect_day', '*', null, 'date desc', $passover, $limit);
     } else {
       $result = $this->model->select('connect_day', '*');
     }

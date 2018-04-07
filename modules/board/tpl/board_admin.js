@@ -161,7 +161,7 @@ jsux.fn.add = {
     });
 
     if (email && email.value && email.value.length > 0) {
-      var mailFlag = jsux.utils.validateEmail(email.value);
+      var mailFlag = jsux.forms.validateEmail(email.value);
 
       if (!mailFlag) {
         trace('이메일 주소가 잘못되었습니다.');
@@ -217,7 +217,7 @@ jsux.fn.modify = {
     });
 
     if (email && email.value && email.value.length > 0) {
-      var mailFlag = jsux.utils.validateEmail(email.value);
+      var mailFlag = jsux.forms.validateEmail(email.value);
 
       if (!mailFlag) {
         trace('이메일 주소가 잘못되었습니다.');
