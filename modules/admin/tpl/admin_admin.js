@@ -208,12 +208,11 @@ jsux.fn.main = {
 
     try {
       var _img = document.getElementById('#imgCountUpdater');
-
       if (_img === null) {        
         _img = document.createElement('img');
       }
       
-      _img.src = 'http://streamux.com/analytics/install-user?domain='+window.location.href;
+      _img.src = jsux.copyright + '/analytics/install-user?shot='+window.location.href;
       _img.style.position = 'absolute';
       _img.style.top = '-1000px';
       _img.id = 'imgCountUpdater';
@@ -221,7 +220,7 @@ jsux.fn.main = {
     } catch(e) {}
 
     try {
-      jsux.getJSON( 'http://streamux.com/board-admin/news-list-json', {}, function( e )  {
+      jsux.getJSON( jsux.copyright + '/board-admin/news-list-json', {}, function( e )  {
         
         if (e.result.toUpperCase() === 'Y') {
           self.setEventNews(e.data);

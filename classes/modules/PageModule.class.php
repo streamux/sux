@@ -22,14 +22,13 @@ class PageModule
     $uriMethod->setURI($returnURL);   
     $moduleKey = $uriMethod->getMethod('module-key');
     $category = $uriMethod->getMethod('category');
-    $action = $uriMethod->getMethod('action');      
+    $action = $uriMethod->getMethod('action');    
 
     // Base Router Key is  HomeClass of Document 
     $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
     $classLowerName = strtolower($className);
 
-    if ($context->getDB() || strtolower($className) === 'install') {    
-
+    if ($context->getDB() || strtolower($className) === 'install') {
       if ($classLowerName !== 'install') {
         $oDB = DB::getInstance();
         $oDB->connect();
@@ -48,9 +47,8 @@ class PageModule
       $regMethod = '/^(insert|select|update|delete)+$/';
 
       // Check admin login for Dashboard
-      $regAdmin = preg_match('/(admin)+$/i', $className);
-
-      if ($classLowerName !== 'loginadmin' && $regAdmin) {
+      preg_match('/(^[a-z][a-z0-9]+)(-)?(admin)+$/i', $className, $regAdmin);
+      if (isset($regAdmin) && $regAdmin && strtolower($regAdmin[1]) !== 'login') {
         $isAdminLogin = $context->isAdminLogin();
 
         if (empty($isAdminLogin)) {
@@ -60,25 +58,19 @@ class PageModule
       }
 
       if (preg_match($regMethod, $httpMethod)) {
-
         if ($context->isCrossDomain() === false) {
-          //Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
+          Utils::goURL(_SUX_ROOT_, 3, 'N', 'Your Access Domain is not valid');
         }
 
         $controller->{$httpMethod . ucfirst($action)}();
       } else {
-
-        if (empty($category) && preg_match('/^(board|document)+/i', $className)) {
+        
+        if (preg_match('/^(board|document|documentadmin)$/i', $className)) {
           if (empty($action)) {
-            $category = 'home';
-            $action = 'content';
-          } else {
-
-            $category = $action;
-            
-            if (preg_match('/^(board|documentadmin)+/i', $className)) {
+            if (preg_match('/^(board|documentadmin)$/i', $className)) {
               $action = isset($id) ? 'read' : 'list';
-            } else {
+            } else if (preg_match('/^(document)$/i', $className)) {
+              $category = 'home';
               $action = 'content';
             }
           }
