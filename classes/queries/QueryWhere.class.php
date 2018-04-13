@@ -25,15 +25,14 @@ class QueryWhere extends Object {
     return $this->sql;
   }
 
-  function set( $field, $value, $cond='=', $glue='and') {
+  function set( $field, $value='', $cond='=', $glue='and') {
 
     $bindField = ':' . $field . '_' . $this->counter;
-    $this->setBindValue($bindField, $value);    
-
+    $this->setBindValue($bindField, $value);
     $isNumber = is_numeric($value);
 
     if ($isNumber !== true) {
-      $value = mysql_real_escape_string($value);
+      $value = Utils::mysql_real_escape_string($value);
     }
 
     if ($glue !== '' && $this->counter > 0) {

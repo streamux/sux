@@ -160,6 +160,7 @@ class Context
     if (is_readable($filename)) {
       $result = include $filename; 
       $this->db_info = $result['db_info'];
+
       unset($result);
     }   
   }
@@ -223,14 +224,16 @@ class Context
   }
 
   function getModule( $key ) {
+
     return $this->module_list[$key];
   }
 
   function setModule( $key, $value) {
+
     $this->module_list[$key] = $value;
   }
 
-  function getAdminInfo($key) {
+  function getAdminInfo($key=NULL) {
 
     if (isset($key) && $key) {
       return trim($this->admin_info[$key]);
@@ -239,7 +242,7 @@ class Context
     }
   }
 
-  function getDB($key='') {
+  function getDB($key=NULL) {
 
     return trim($this->db_info['db_database']);
   }
@@ -248,9 +251,9 @@ class Context
     return trim($this->db_info['db_database']);
   }
 
-  function getDBInfo($key) {
+  function getDBInfo($key=NULL) {
 
-    if (isset($key)) {
+    if (isset($key) && $key) {
       return trim($this->db_info[$key]);
     } else {
       return $this->db_info;

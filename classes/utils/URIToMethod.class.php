@@ -36,13 +36,9 @@ class URIToMethod
       }      
     }
 
-    $this->lists['module-key'] = $arr[0];    
+    $this->lists['module-key'] = $arr[0];
     $this->lists['category'] = empty($arr[1]) ?  null : $arr[0]; 
     $this->lists['action'] =  empty($arr[1]) ?  $this->replaceHyphenToCamel($arr[0]) : $this->replaceHyphenToCamel($arr[1]);
-
-    if (empty($this->lists['category'])) {
-      $this->lists['category'] = empty($arr[1]) ? $arr[0] : $arr[1];
-    }
   }
 
   function replaceHyphenToCamel( $action ) {

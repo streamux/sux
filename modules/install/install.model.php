@@ -2,5 +2,5 @@
 
 class InstallModel
 {
-  // code
+  function __construct() {}
 }

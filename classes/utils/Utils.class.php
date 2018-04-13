@@ -376,4 +376,16 @@ class Utils extends Object {
 
     return ((float)$usec + (float)$sec) * 100;
   }
+
+  //----- Method Version Branch 
+  ///////////////////////////////////////////////
+
+  function mysql_real_escape_string($value) {
+
+    if (version_compare(PHP_VERSION, '7.0.0') >= 0) {
+      return mysqli_real_escape_string($value);
+    } else {
+      return mysql_real_escape_string($value);
+    }
+  }
 }

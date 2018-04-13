@@ -13,18 +13,17 @@ class DB extends Object {
   var $errstr = '';
   var $tracer = null;
 
-  function DB() {
+  function __construct() {
 
     $this->tracer = Tracer::getInstance();
-
     $context = Context::getInstance();
     $this->db_info = $context->getDBInfo();
   }
 
   public static function &getInstance() {
 
-    if (empty(self::$aInstance)) {
-      self::$aInstance = new DB();
+    if (self::$aInstance === null) {
+      self::$aInstance = new self();
     }
 
     return self::$aInstance;
@@ -54,9 +53,7 @@ class DB extends Object {
   function _connect() {
 
     try {
-
       $dsn = $this->_getDBDNS();
-
       $charset = $this->db_info['db_charset'];
       $collate = 'utf8_general_ci';
       $options = array(
@@ -68,7 +65,6 @@ class DB extends Object {
 
       $this->pdo = new PDO( $dsn, $this->db_info['db_userid'], $this->db_info['db_password'], $options);
       $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
     } catch( PDOException $e ) {
       
       die('Cannot connect to DB : ' . $e->getMessage());
@@ -317,9 +313,7 @@ class DB extends Object {
   function update($query) {
 
     $sql = $this->_updateSql($query);
-
     $bindWhere = $query->getWhereBindValue();
-
 
     $this->_setLogger($sql);
     $this->_query($sql);

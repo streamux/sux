@@ -13,7 +13,8 @@
         "pear/console_table": "^1.3",
         "pear/pear_exception": "^1.0",
         "smarty/smarty":"^3.1.31",
-        "jmathai/epiphany": "dev-master"
+        "jmathai/epiphany": "dev-master",
+        "slim/slim": "^3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0"

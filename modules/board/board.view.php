@@ -105,7 +105,7 @@ class BoardView extends View
             $filetype = $contentData['list'][$i]['filetype'];
             
             $date =$contentData['list'][$i]['date'];        
-            $compareDayArr = split(' ', $date);
+            $compareDayArr = preg_split(' ', $date);
             $compareDay = $compareDayArr[0];
             
             if (isset($search) && $search != '') {
@@ -181,7 +181,7 @@ class BoardView extends View
             $contentData['list'][$i]['name'] = $name;
             $contentData['list'][$i]['hit'] = $hit;
             $contentData['list'][$i]['space'] = $space;
-            $dateArr = split(' ', $date);
+            $dateArr = preg_split(' ', $date);
             $contentData['list'][$i]['date'] = $dateArr[0];
             $contentData['list'][$i]['subject'] = $subject;
 
@@ -219,7 +219,7 @@ class BoardView extends View
         $filetype = $contentData['notce_list'][$i]['filetype'];
         
         $date =$contentData['notce_list'][$i]['date'];        
-        $compareDayArr = split(' ', $date);
+        $compareDayArr = preg_split(' ', $date);
         $compareDay = $compareDayArr[0];
         
         $subject = array();
@@ -286,7 +286,7 @@ class BoardView extends View
         $contentData['notice_list'][$i]['name'] = $name;
         $contentData['notice_list'][$i]['hit'] = $hit;
         $contentData['notice_list'][$i]['space'] = $space;
-        $dateArr = split(' ', $date);
+        $dateArr = preg_split(' ', $date);
         $contentData['notice_list'][$i]['date'] = $dateArr[0];
         $contentData['notice_list'][$i]['subject'] = $subject;
 
@@ -337,7 +337,7 @@ class BoardView extends View
     $search = $requestData['search'];
 
     $category = $context->getParameter('category');
-    $id = $context->getParameter('id');     
+    $id = $context->getParameter('id');
     $grade = $sessionData['grade'];
     $nickname = $sessionData['nickname'];
     $userId = $sessionData['user_id'];
@@ -346,7 +346,6 @@ class BoardView extends View
     $where = new QueryWhere();
     $where->set('category',$category,'=');
     $this->model->select('board_group', '*', $where);
-
     $groupData = $this->model->getRow();
     $nonmember = strtolower($groupData['allow_nonmember']);
 

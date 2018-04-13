@@ -12,7 +12,7 @@ class JsonEncoder {
   private $json_data = array("msg"=>"데이터가 존재하지 않습니다.");
   private static $je_instance = NULL;
 
-  public static function getInstance() {
+  public static function &getInstance() {
 
     if (empty(self::$je_instance)) {
       self::$je_instance = new self;

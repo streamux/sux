@@ -1,11 +1,10 @@
 <?php
-
 /**
 *  @class ModuleHandler
 */
 class PageModule
 {
-  function display( $id, $sid)
+  static public function display($id=null, $sid=null)
   {
     $context = Context::getInstance();
     $returnURL = $context->getServer('REQUEST_URI');
@@ -22,7 +21,7 @@ class PageModule
     $uriMethod->setURI($returnURL);   
     $moduleKey = $uriMethod->getMethod('module-key');
     $category = $uriMethod->getMethod('category');
-    $action = $uriMethod->getMethod('action');    
+    $action = $uriMethod->getMethod('action'); 
 
     // Base Router Key is  HomeClass of Document 
     $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
@@ -33,7 +32,7 @@ class PageModule
         $oDB = DB::getInstance();
         $oDB->connect();
       }
-
+      
       $ModelClass = ucfirst($className) . 'Model';
       $ControllerClass = ucfirst($className) . 'Controller';      
       $ViewClass = ucfirst($className) . 'View';
@@ -66,7 +65,10 @@ class PageModule
       } else {
         
         if (preg_match('/^(board|document|documentadmin)$/i', $className)) {
-          if (empty($action)) {
+          
+          if (empty($category)) {
+            $category = $action;
+
             if (preg_match('/^(board|documentadmin)$/i', $className)) {
               $action = isset($id) ? 'read' : 'list';
             } else if (preg_match('/^(document)$/i', $className)) {
