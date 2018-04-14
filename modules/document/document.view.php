@@ -8,7 +8,7 @@ class DocumentView extends View
     $category = $context->getParameter('category');
 
     $where = new QueryWhere();
-    $where->set('category',$category,'=');    
+    $where->set('category', $category, '=');    
     $this->model->select('document', '*', $where);    
     $groupData = $this->model->getRow();
 
@@ -68,7 +68,7 @@ class DocumentView extends View
     $this->skin_path_list['header'] = $headerPath;
     $this->skin_path_list['content'] = $templateRealPath;
     $this->skin_path_list['footer'] = $footerPath;
-
+    
     $this->output();
   }
 }

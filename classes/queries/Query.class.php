@@ -125,7 +125,7 @@ class Query extends Object {
     $this->fields = $values;
   }
 
-  function getColumn($type) {
+  function getColumn($type=NULL) {
 
     switch ($type) {
       case 'key':

@@ -30,8 +30,9 @@ class View extends Object {
   }
 
   function display( $methodName, $category=null, $mid=-1, $id=-1) {
-    
+
     $methodName = 'display' . ucfirst($methodName);
+
     $this->defaultSetting();
     $this->{$methodName}( $category, $mid, $id);
   }

@@ -2,7 +2,6 @@
 
 class InstallView extends View
 {
-
   function checkInstall() {
 
     $context = Context::getInstance();

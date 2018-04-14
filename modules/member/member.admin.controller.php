@@ -80,7 +80,7 @@ class MemberAdminController extends Controller
 
     $where->set('category', $category);
     $this->model->select('member_group', '*', $where);
-    $rows = $this->model->getRows();   
+    $rows = $this->model->getRows();
 
     $json['msg'] = $msg;
     $json['result'] = $resultYN;

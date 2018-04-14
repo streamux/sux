@@ -16,7 +16,7 @@ class ModuleHandler
   }
 
   public function init()
-  {    
+  {
     $context = Context::getInstance();
     $isEqual = $context->equalCookieVersion();
 
@@ -26,10 +26,11 @@ class ModuleHandler
     }
     
     $router = RouterModule::getInstance();
+    
     if ($context->installed()) {
-      $router->init();
+      $router->init(); 
     } else {
       $router->install(); 
-    }   
+    }    
   }
 }

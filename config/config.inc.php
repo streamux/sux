@@ -2,7 +2,6 @@
 define(_SUX_PATH_, str_replace('config/config.inc.php', '', str_replace('\\','/', __FILE__)));
 define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
-
 /**
  * 참고 : Composer 1.0.3는 PHP 5.3.2 지원  이후 버전은 PHP 5.6 이상 지원 
  * Composer version 1.2.4
@@ -10,6 +9,9 @@ define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
  *
  * require _SUX_PATH_ . 'vendor/autoload.php';
  */
+
+// Slim - Fast Route
+require _SUX_PATH_ . 'libs/nikic/fast-route/src/bootstrap.php';
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'CacheFile'=>'classes/caches/CacheFile.class.php',
@@ -42,7 +44,6 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	Location : ./classes/modules/RouterModule.class.php
 	description : Epi::setPath('base', 'libs/epiphan/src');
 	*/
-	'Epi'=>'libs/jmathai/epiphany/src/Epi.php',
 	'Smarty'=>'libs/smarty/smarty/libs/Smarty.class.php'
 ), CASE_LOWER);
 
@@ -51,7 +52,7 @@ function __sux_autoload($class_name) {
 	$classLowerName = strtolower($class_name);
 
 	if (isset($GLOBALS['__sux_autoload_file_map'][$classLowerName])) {
-		//echo $classLowerName . "<br>";
+		//echo $GLOBALS['__sux_autoload_file_map'][$classLowerName] . "<br>";
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][$classLowerName];
 		
 	} else if (preg_match('/(^[a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {

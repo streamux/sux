@@ -4,7 +4,6 @@
  */
 class InstallController extends Controller
 {
-
   function insertSetupDb() {
 
     $context = Context::getInstance();
@@ -397,18 +396,40 @@ class InstallController extends Controller
       $result = $oDB->select($query);
       $jsonData = array();
       $jsonData['data'] = array();
-      $sunseo = array();
-
+      
       while($row = $oDB->getFetchArray($result)) {
-        $jsonData['data'][] = array('id'=>$row['id'],'sid'=>0,'menu_name'=>$row['menu_name'],'url'=>$row['category'],'depth'=>1,'isClicked'=>false,'isModified'=>false,'isDragging'=>false,'state'=>'default','badge'=>0,'sub'=>array(),'posy'=>0,'top'=>'0', 'sunseo'=>$row['sunseo']);
-      }
+        $jsonData['data'][] = array(
+          'id'=>$row['id'],
+          'module_name'=>$row['module_name'],
+          'category'=>$row['category'],
+          'menu_name'=>$row['menu_name'],
+          'url'=>$row['category'],
+          'url_target'=>$row['url_target'],
+          'sunseo'=>$row['sunseo'],
+          'is_active'=>$row['is_active'],
 
-      foreach ($jsonData['data'] as $key => $row) {
-        $sunseo[$key] = $row['sunseo'];
+          'top'=>0,
+          'posy'=>0,
+          'height'=>0,
+          'depth'=>1,
+          'margin_left'=>0,
+          'padding_left'=>0,
+          'isDragging'=>false,
+          'isChecked'=>false,
+          'isPanelInfo'=>false,
+          'disabled'=>false,
+          'state'=>'default',          
+          'sub'=>null
+        );
+      };
+
+      // sort menu number
+      $sunseo = array();
+      foreach ($jsonData['data'] as $indexKey => $row) {
+        $sunseo[$indexKey] = $row['sunseo'];
       }
 
       array_multisort($sunseo, SORT_ASC, SORT_NUMERIC,$jsonData['data']);
-
       $jsonData = JsonEncoder::parse($jsonData);
       $result = FileHandler::writeFile($gnbFilePath, $jsonData);
 
@@ -450,7 +471,6 @@ class InstallController extends Controller
 
   function deleteTables() {
 
-
     $context = Context::getInstance();
     $oDB = DB::getInstance();
     $oDB->connect();
@@ -465,7 +485,6 @@ class InstallController extends Controller
     $regStr = sprintf('/^(%s)+/i', $prefix);
 
     while (($row = $oDB->getFetchArray($result)) !== false) {
-
       foreach ($row as $key => $value) {
         preg_match($regStr, $value, $matched);
 

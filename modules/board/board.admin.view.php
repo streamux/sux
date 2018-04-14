@@ -250,6 +250,7 @@ class BoardAdminView extends View
       $msg = "게시글이 존재하지 않습니다.";
       $resultYN = "N";
     }
+
     //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,

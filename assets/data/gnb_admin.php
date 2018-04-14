@@ -1,7 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
 
-$data = array(
-  'data'=>array(
+$data = array('data'=>array(
     array('id'=>1,'sid'=>0, 'name'=>'메뉴 관리','router_link'=>'menus','sub'=>null),
     array('id'=>2,'sid'=>0, 'name'=>'회원 관리','router_link'=>'member-group','sub'=>null),
     array('id'=>3,'sid'=>0, 'name'=>'게시판 관리','router_link'=>'board-group','sub'=>null),
