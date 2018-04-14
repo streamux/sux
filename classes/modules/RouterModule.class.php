@@ -3,9 +3,9 @@ class RouterModule
 {
   private static $aInstance = null;
   private static $cache_data = null;
-  private $router = null;
-  private $baseUrl = '/';
-  private $explodingMethod = '';
+  var $router = null;
+  var $baseUrl = '/';
+  var $explodingMethod = '';
 
   public static function &getInstance()
   {
@@ -15,13 +15,13 @@ class RouterModule
     return self::$aInstance;
   }
 
-  public function init() 
+  function init() 
   {
     $this->$explodingMethod = 'setupRoute';
     $this->initRoute();
   }
 
-  public function install()
+  function install()
   {
     $this->$explodingMethod = 'setupInstallRoute';
     $this->initRoute();

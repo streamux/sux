@@ -1,8 +1,7 @@
 <?php
 
-class View extends Object {
-
-  var $class_name = 'base_view';
+class View extends Object
+{
   var $model = NULL;
   var $controller = NULL;
   var $copyright_path = '';
@@ -13,32 +12,32 @@ class View extends Object {
   var $document_data = array();
   var $cookie_version = '';
 
-  function __construct($m=NULL, $c=NULL) {
-
+  function __construct($m=NULL, $c=NULL)
+  {
     $this->model = $m;
     $this->controller = $c;
   }
 
-  function getModel() {
-
+  function getModel()
+  {
     return $this->model;
   }
 
-  function getController() {
-
+  function getController()
+  {
     return $this->controller;
   }
 
-  function display( $methodName, $category=null, $mid=-1, $id=-1) {
-
+  function display( $methodName, $category=null, $mid=-1, $id=-1)
+  {
     $methodName = 'display' . ucfirst($methodName);
 
     $this->defaultSetting();
     $this->{$methodName}( $category, $mid, $id);
   }
 
-  function defaultSetting() {
-
+  function defaultSetting()
+  {
     $context = Context::getInstance();
     $this->session_data = $context->getSessionAll();
     $this->request_data = $context->getRequestAll();
@@ -50,7 +49,8 @@ class View extends Object {
     $this->document_data['is_admin_login'] = $context->isAdminLogin();
   }
 
-  function output() {
+  function output()
+  {
 
     $UIError = UIError::getInstance();    
 

@@ -5,7 +5,7 @@
 */
 class ModuleHandler
 {
-  static $aInstance = null;
+  private static $aInstance = null;
 
   public static function &getInstance()
   {
@@ -15,18 +15,16 @@ class ModuleHandler
     return self::$aInstance;
   }
 
-  public function init()
+  function init()
   {
     $context = Context::getInstance();
     $isEqual = $context->equalCookieVersion();
-
     if (!$isEqual) {
       $context->setCookieVersion();
       $context->makeRouteCaches();
     }
     
-    $router = RouterModule::getInstance();
-    
+    $router = RouterModule::getInstance();    
     if ($context->installed()) {
       $router->init(); 
     } else {
