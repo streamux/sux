@@ -39,11 +39,6 @@ $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'URIToMethod'=>'classes/utils/URIToMethod.class.php',
 	'Utils'=>'classes/utils/Utils.class.php',
 	'UtilsString'=>'classes/utils/UtilsString.class.php',
-
-	/*
-	Location : ./classes/modules/RouterModule.class.php
-	description : Epi::setPath('base', 'libs/epiphan/src');
-	*/
 	'Smarty'=>'libs/smarty/smarty/libs/Smarty.class.php'
 ), CASE_LOWER);
 
@@ -52,7 +47,7 @@ function __sux_autoload($class_name) {
 	$classLowerName = strtolower($class_name);
 
 	if (isset($GLOBALS['__sux_autoload_file_map'][$classLowerName])) {
-		//echo $GLOBALS['__sux_autoload_file_map'][$classLowerName] . "<br>";
+		//echo classLowerName . "<br>";
 		require _SUX_PATH_ . $GLOBALS['__sux_autoload_file_map'][$classLowerName];
 		
 	} else if (preg_match('/(^[a-zA-Z0-9_]+?)(Admin)?(View|Controller|Model|Api|Wap|Mobile)?$/', $class_name, $matches)) {

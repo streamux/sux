@@ -23,7 +23,7 @@ class PageModule
     $category = $uriMethod->getMethod('category');
     $action = $uriMethod->getMethod('action'); 
 
-    // Base Router Key is  HomeClass of Document 
+    // Base Router Key is  HomeClass of Document Module
     $className = ($action === null) ? 'Document' : $context->getModule($moduleKey);
     $classLowerName = strtolower($className);
 
@@ -36,7 +36,6 @@ class PageModule
       $ModelClass = ucfirst($className) . 'Model';
       $ControllerClass = ucfirst($className) . 'Controller';      
       $ViewClass = ucfirst($className) . 'View';
-
       $model = new $ModelClass();
       $controller = new $ControllerClass($model);
       $view = new $ViewClass( $model, $controller);
@@ -64,8 +63,7 @@ class PageModule
         $controller->{$httpMethod . ucfirst($action)}();
       } else {
         
-        if (preg_match('/^(board|document|documentadmin)$/i', $className)) {
-          
+        if (preg_match('/^(board|document|documentadmin)$/i', $className)) {          
           if (empty($category)) {
             $category = $action;
 
