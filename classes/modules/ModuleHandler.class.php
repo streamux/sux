@@ -26,6 +26,11 @@ class ModuleHandler
     }
     
     $router = RouterModule::getInstance();
-    $router->init(); 
+    
+    if ($context->installed()) {
+      $router->init(); 
+    } else {
+      $router->install(); 
+    }    
   }
 }

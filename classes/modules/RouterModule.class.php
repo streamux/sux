@@ -1,14 +1,15 @@
 <?php
 class RouterModule
 {
-  static $aInstance = null;
-  static $cache_data = null;
-  var $router = null;
-  var $baseUrl = '/sux/';
+  private static $aInstance = null;
+  private static $cache_data = null;
+  private $router = null;
+  private $baseUrl = '/';
+  private $explodingMethod = '';
 
   public static function &getInstance()
   {
-    if (empty(self::$aInstance)) {
+    if (empty(self::$aInstance)) {      
       self::$aInstance = new self;      
     }
     return self::$aInstance;
@@ -16,18 +17,28 @@ class RouterModule
 
   public function init() 
   {
+    $this->$explodingMethod = 'setupRoute';
     $this->initRoute();
   }
 
-  private function initRoute() {
+  public function install()
+  {
+    $this->$explodingMethod = 'setupInstallRoute';
+    $this->initRoute();
+  }
+
+  private function initRoute()
+  {
+    $this->baseUrl = _SUX_ROOT_;
 
     if (preg_match('/\/$/', $this->baseUrl)) {
       $this->baseUrl = preg_replace('/\/$/', '', $this->baseUrl);
     }
 
-    $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+    $dispatcher = FastRoute\simpleDispatcher( function( FastRoute\RouteCollector $r ) {
       $this->router = $r;
-      $this->setupRoute();
+      $this->addRoute('/', array('PageModule','display'));   
+      $this->{$this->$explodingMethod}();
     });
 
     $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -41,30 +52,41 @@ class RouterModule
     $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
     switch ($routeInfo[0]) {
-    case FastRoute\Dispatcher::NOT_FOUND:
-        // ... 404 Not Found
-        echo '404 Not Found';
-        break;
 
-    case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-        $allowedMethods = $routeInfo[1];
-        // ... 405 Method Not Allowed
-        echo '405 Method Not Allowed';
-        break;
+      case FastRoute\Dispatcher::NOT_FOUND:
+          // ... 404 Not Found
+          echo '404 Not Found';
+          break;
 
-    case FastRoute\Dispatcher::FOUND:
-        $handler = $routeInfo[1];
-        $vars = $routeInfo[2];        
-        list($class, $method) = explode("/", $handler, 2);
-        call_user_func_array(array('PageModule', 'display'), $vars);
-        // ... call $handler with $vars
-        break;
+      case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
+          $allowedMethods = $routeInfo[1];
+          // ... 405 Method Not Allowed
+          echo '405 Method Not Allowed';
+          break;
+
+      case FastRoute\Dispatcher::FOUND:
+          $handler = $routeInfo[1];
+          $vars = $routeInfo[2];        
+          list($class, $method) = explode("/", $handler, 2);
+          call_user_func_array(array('PageModule', 'display'), $vars);
+          // ... call $handler with $vars
+          break;
     }
   }
 
-  public function setupRoute() {
+  private function setupInstallRoute()
+  {
+    $context = Context::getInstance(); 
+    $actionList = Install::$action;
+    for ($k=0; $k<count($actionList); $k++) {
+      $mAction = (string) $actionList[$k];
+      $context->setModule($mAction, 'Install');
+      $this->addSingleKeyRoute($mAction);
+    }
+  }
 
-    $this->addRoute('/', array('PageModule','display'));
+  private function setupRoute() 
+  {
     $context = Context::getInstance(); 
     $moduleList = Utils::readDir('modules');
     $classList = array();
@@ -91,12 +113,14 @@ class RouterModule
         $actionList = $this->getRouteKey('action');
 
         if (isset($categoryList) && $categoryList && count($categoryList) > 0) {
+
           for ($j=0; $j<count($categoryList); $j++) {            
             $mCategory = (string) $categoryList[$j];
             $context->setModule($mCategory, $mClass);
             $this->addSingleKeyRoute($categoryList[$j]);
 
             if (isset($actionList) && $actionList && count($actionList)) {
+
               for ($k=0; $k<count($actionList); $k++) {      
                 $mAction = (string) $actionList[$k];
                 $context->setModule($mAction, $mClass);
@@ -107,6 +131,7 @@ class RouterModule
         } else {
 
           if (isset($actionList) && $actionList && count($actionList)) {
+
               for ($k=0; $k<count($actionList); $k++) {
                 $mAction = (string) $actionList[$k];
                 $context->setModule($mAction, $mClass);
@@ -118,14 +143,14 @@ class RouterModule
     }   // end of foreach : module list
   }
 
-  private function addSingleKeyRoute( $action) {
-
+  private function addSingleKeyRoute( $action)
+  {
     $this->addRoute( sprintf('/%s', $action), array( 'PageModule', 'display'));
     $this->addRoute( sprintf('/%s/{id:\d+}', $action), array( 'PageModule', 'display'));
   }
 
-  private function addMultiKeyRoute( $category, $action) {
-
+  private function addMultiKeyRoute( $category, $action)
+  {
     $this->addRoute( sprintf('/%s/%s', $category, $action), array( 'PageModule', 'display'));
     $this->addRoute( sprintf('/%s/%s/{id:\d+}', $category, $action), array( 'PageModule', 'display'));
     $this->addRoute( sprintf('/%s/{id:\d+}/%s', $category, $action), array( 'PageModule', 'display'));
@@ -141,14 +166,14 @@ class RouterModule
     $this->router->addRoute(['GET', 'POST'], $route, $class);
   }
 
-  private function loadCacheFile($path) {
-
+  private function loadCacheFile( $path)
+  {
     $filename = $this->getRealPath($path);
     $pathinfo = pathinfo($file);
     $this->cache_data = array('categories'=>null, 'action'=>null);
 
     if (file_exists($filename)) {
-      include "$filename";
+      include $filename;
 
       foreach ($this->cache_data as $key => $value) {
         $this->cache_data[$key] = ${$key};
@@ -159,13 +184,13 @@ class RouterModule
     }   
   }
 
-  private function getRouteKey($key) {
-    
+  private function getRouteKey($key)
+  {    
     return $this->cache_data[$key];
   }
 
-  private function getRealPath($path) {
-
+  private function getRealPath($path)
+  {
     if(strlen($path) >= 2 && substr_compare($path, './', 0, 2) === 0) {
       return _SUX_PATH_ . substr($path, 2);
     }

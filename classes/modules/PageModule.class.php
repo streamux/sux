@@ -14,7 +14,7 @@ class PageModule
      * in ModuleRouter Class
      * @route uri's construct
      * - /action/:id
-     * - /category/:id/action /:id
+     * - /category/:id/action /:sid
      */
 
     $uriMethod = URIToMethod::getInstance();

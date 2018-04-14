@@ -618,7 +618,7 @@ class Context
 
   function installed() {
 
-    return isset($this->db_info['db_database']) == true && isset($this->admin_info) == true;
+    return isset($this->db_info['db_database']) && $this->db_info['db_database'] && isset($this->admin_info) && $this->admin_info;
   }
 
   function checkAdminPass() {
