@@ -70,24 +70,25 @@ class SearchView extends View
       $where->set('category', $menuRows[$i]['category'],'=', 'or');
     }
     $where->add(')');
-    $where->add('and');
-    $where->add('(');
-    $where->set('user_name', $search, 'like', '');
-    $where->set('title', $search, 'like', 'or');
-    $where->set('content', $search, 'like', 'or');
-    $where->add(')');    
-    
-    $result = $this->model->select('board', '*', $where);
-    $numrows = $this->model->getNumRows();
 
-    //echo "<br><br><br><br><br><br>". Tracer::getInstance()->getMessage();
+    if (isset($search) && $search) {
+      $where->add('and');
+      $where->add('(');
+      $where->set('user_name', $search, 'like', '');
+      $where->set('title', $search, 'like', 'or');
+      $where->set('content', $search, 'like', 'or');
+      $where->add(')'); 
+    }
+
+    $result = $this->model->select('board', '*', $where);    
+    $numrows = $this->model->getNumRows();
+    
     $result = $this->model->select('board', '*', $where, 'id desc', $passover, $limit);    
     if ($result) {
       $contentData['list'] = $this->model->getRows();
       $today = date("Y-m-d");
 
       for ($i=0; $i<count($contentData['list']); $i++) {
-
         $category = $contentData['list'][$i]['category'];
         $id = $contentData['list'][$i]['id'];
         $user_id = $contentData['list'][$i]['user_id'];
@@ -105,7 +106,7 @@ class SearchView extends View
         $filetype = trim($contentData['list'][$i]['filetype']);
         
         $date =$contentData['list'][$i]['date'];        
-        $compareDayArr = split(' ', $date);
+        $compareDayArr = preg_split(' ', $date);
         $compareDay = $compareDayArr[0];
         
         $subject = array();
@@ -163,7 +164,7 @@ class SearchView extends View
         $contentData['list'][$i]['content'] = $contents;
         $contentData['list'][$i]['hit'] = $hit;
         $contentData['list'][$i]['space'] = $space;
-        $dateArr = split(' ', $date);
+        $dateArr = preg_split(' ', $date);
         $contentData['list'][$i]['date'] = $dateArr[0];
         $contentData['list'][$i]['subject'] = $subject;
 
