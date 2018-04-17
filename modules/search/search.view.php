@@ -45,7 +45,6 @@ class SearchView extends View
     $headerPath = 'common/_header.tpl';
     $footerPath = 'common/_footer.tpl';
 
-
     /**
      * @var headerPath
      * @descripttion
@@ -62,6 +61,10 @@ class SearchView extends View
     $this->model->select('board_group', '*');
     $rows = $this->model->getRows();
     $groupData = $rows[0];
+<<<<<<< HEAD
+=======
+
+>>>>>>> develop-php-7.1.12-test
     $where->reset();
     $where->add('(');
 
@@ -70,6 +73,7 @@ class SearchView extends View
     }
 
     $where->add(')');
+<<<<<<< HEAD
     $where->add('and');
     $where->add('(');
     $where->set('user_name', $search, 'like', '');
@@ -78,6 +82,19 @@ class SearchView extends View
     $where->add(')');    
     
     $result = $this->model->select('board', '*', $where);
+=======
+
+    if (isset($search) && $search) {
+      $where->add('and');
+      $where->add('(');
+      $where->set('user_name', $search, 'like', '');
+      $where->set('title', $search, 'like', 'or');
+      $where->set('content', $search, 'like', 'or');
+      $where->add(')'); 
+    }
+
+    $result = $this->model->select('board', '*', $where);    
+>>>>>>> develop-php-7.1.12-test
     $numrows = $this->model->getNumRows();
     $result = $this->model->select('board', '*', $where, 'id desc', $passover, $limit);    
 
@@ -101,7 +118,7 @@ class SearchView extends View
         $filename = $contentData['list'][$i]['filename'];
         $filetype = trim($contentData['list'][$i]['filetype']);
         $date =$contentData['list'][$i]['date'];        
-        $compareDayArr = split(' ', $date);
+        $compareDayArr = preg_split(' ', $date);
         $compareDay = $compareDayArr[0];
         
         $subject = array();
@@ -152,10 +169,9 @@ class SearchView extends View
         $contentData['list'][$i]['content'] = $contents;
         $contentData['list'][$i]['hit'] = $hit;
         $contentData['list'][$i]['space'] = $space;
-        $dateArr = split(' ', $date);
+        $dateArr = preg_split(' ', $date);
         $contentData['list'][$i]['date'] = $dateArr[0];
         $contentData['list'][$i]['subject'] = $subject;
-
         $subject = null;
       }
     } else {
@@ -169,7 +185,6 @@ class SearchView extends View
     $navi->total = $numrows;
     $navi->init();
 
-
     $this->request_data = $requestData;
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
@@ -178,7 +193,11 @@ class SearchView extends View
     $this->document_data['categories'] = $categories;
     $this->document_data['total_num'] = $numrows;
     $this->document_data['domain'] = $domain;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> develop-php-7.1.12-test
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
