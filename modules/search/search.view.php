@@ -62,13 +62,13 @@ class SearchView extends View
     $this->model->select('board_group', '*');
     $rows = $this->model->getRows();
     $groupData = $rows[0];
-
-
     $where->reset();
     $where->add('(');
+
     for ($i=0; $i < count($menuRows); $i++) { 
       $where->set('category', $menuRows[$i]['category'],'=', 'or');
     }
+
     $where->add(')');
     $where->add('and');
     $where->add('(');
@@ -79,21 +79,18 @@ class SearchView extends View
     
     $result = $this->model->select('board', '*', $where);
     $numrows = $this->model->getNumRows();
-
-    //echo "<br><br><br><br><br><br>". Tracer::getInstance()->getMessage();
     $result = $this->model->select('board', '*', $where, 'id desc', $passover, $limit);    
+
     if ($result) {
       $contentData['list'] = $this->model->getRows();
       $today = date("Y-m-d");
 
       for ($i=0; $i<count($contentData['list']); $i++) {
-
         $category = $contentData['list'][$i]['category'];
         $id = $contentData['list'][$i]['id'];
         $user_id = $contentData['list'][$i]['user_id'];
         $name =htmlspecialchars($contentData['list'][$i]['user_name']); 
         $title = trim(htmlspecialchars($contentData['list'][$i]['title']));
-
         $contents = trim(htmlspecialchars($contentData['list'][$i]['content']));
         $contents = Utils::ignoreNewline($contents);
         $contents = Utils::trimText($contents, 120, '..');
@@ -103,7 +100,6 @@ class SearchView extends View
         $space = $contentData['list'][$i]['space_count'];
         $filename = $contentData['list'][$i]['filename'];
         $filetype = trim($contentData['list'][$i]['filetype']);
-        
         $date =$contentData['list'][$i]['date'];        
         $compareDayArr = split(' ', $date);
         $compareDay = $compareDayArr[0];
@@ -130,13 +126,6 @@ class SearchView extends View
           $subject['prefix_icon'] = '답변';
           $subject['prefix_icon_color'] = 'sx-bg-replay';
         }
-
-        //공지글 설정은 개발 예정 
-        /*if (isset($isNotice) && $isNotice != '') {
-          $subject['space'] = '10px';
-          $subject['prefix_icon'] = '공지';
-          $subject['prefix_icon_color'] = 'sx-bg-notice';
-        }*/
 
         if (isset($filename) && $filename){
           if (preg_match('/(image\/gif|image\/jpeg|image\/x-png|image\/bmp)+/', $filetype)) {             
@@ -190,7 +179,6 @@ class SearchView extends View
     $this->document_data['total_num'] = $numrows;
     $this->document_data['domain'] = $domain;
 
-    
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['path'] = $skinPath;
     $this->skin_path_list['realPath'] = $skinRealPath;
