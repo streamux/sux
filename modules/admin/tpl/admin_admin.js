@@ -42,6 +42,7 @@ jsux.fn.main = {
       var value = parseInt(data[id]);
       if (value > 0) {
         var $icon = $(this);
+        
         if ($icon.hasClass('sx-label-default')) {
           $icon.removeClass('sx-label-default');
         }
