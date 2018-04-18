@@ -7,34 +7,27 @@ class RouterModule
   var $baseUrl = '/';
   var $explodingMethod = '';
 
-  public static function &getInstance()
-  {
+  public static function &getInstance() {
+
     if (empty(self::$aInstance)) {      
       self::$aInstance = new self;      
     }
     return self::$aInstance;
   }
 
-  function init() 
-  {
+  function init()  {
+
     $this->explodingMethod = 'setupRoute';
     $this->initRoute();
   }
 
-  function install()
-  {
-    echo 'aaa';
+  function install() {
+
     $this->explodingMethod = 'setupInstallRoute';
-     echo 'aaa';
     $this->initRoute();
-     echo 'aaa';
   }
 
-  private function initRoute()
-  {
-
-    echo "<br>";
-    echo PHP_VERSION ;
+  private function initRoute() {
 
     if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
       $this->setFastRoute();
@@ -49,10 +42,13 @@ class RouterModule
    */
   private function setEpiRoute() {
 
+    echo $this->explodingMethod . ' -> Epi';
+
     Epi::setPath('base', _SUX_PATH_ . 'libs/jmathai/epiphany/src');
     Epi::setSetting('exceptions', false);
     Epi::init('route'); 
     getRoute()->get('/', array( 'PageModule', 'display')); 
+    $this->{$this->explodingMethod}();
 
     // Epi::init('base','cache','session');
     // Epi::init('base','cache-apc','session-apc');
@@ -74,7 +70,7 @@ class RouterModule
     $dispatcher = FastRoute\simpleDispatcher( function( FastRoute\RouteCollector $r ) {
       $this->router = $r;
       $this->addRoute('/', array('PageModule','display'));   
-      $this->{$this->$explodingMethod}();
+      $this->{$this->explodingMethod}();
     });
 
     $httpMethod = $_SERVER['REQUEST_METHOD'];
@@ -113,10 +109,15 @@ class RouterModule
   {
     $context = Context::getInstance(); 
     $actionList = Install::$action;
+
     for ($k=0; $k<count($actionList); $k++) {
       $mAction = (string) $actionList[$k];
       $context->setModule($mAction, 'Install');
       $this->addSingleKeyRoute($mAction);
+    }
+
+    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
+      echo 'aa';
     }
   }
 
@@ -148,14 +149,12 @@ class RouterModule
         $actionList = $this->getRouteKey('action');
 
         if (isset($categoryList) && $categoryList && count($categoryList) > 0) {
-
           for ($j=0; $j<count($categoryList); $j++) {            
             $mCategory = (string) $categoryList[$j];
             $context->setModule($mCategory, $mClass);
             $this->addSingleKeyRoute($categoryList[$j]);
 
             if (isset($actionList) && $actionList && count($actionList)) {
-
               for ($k=0; $k<count($actionList); $k++) {      
                 $mAction = (string) $actionList[$k];
                 $context->setModule($mAction, $mClass);
@@ -166,7 +165,6 @@ class RouterModule
         } else {
 
           if (isset($actionList) && $actionList && count($actionList)) {
-
               for ($k=0; $k<count($actionList); $k++) {
                 $mAction = (string) $actionList[$k];
                 $context->setModule($mAction, $mClass);
@@ -178,31 +176,49 @@ class RouterModule
     }   // end of foreach : module list
   }
 
-  private function addSingleKeyRoute( $action)
-  {
+  private function getRouteIdReg() {
+
+    return (version_compare(PHP_VERSION, '5.4.0') >= 0) ? '{id:\d+}' : '(\d+)';
+  }
+
+  private function getRouteSidReg() {
+
+    return (version_compare(PHP_VERSION, '5.4.0') >= 0) ? '{sid:\d+}' : '(\d+)';
+  }
+
+  private function addSingleKeyRoute( $action) {
+
+    $idReg = $this->getRouteIdReg();
     $this->addRoute( sprintf('/%s', $action), array( 'PageModule', 'display'));
-    $this->addRoute( sprintf('/%s/{id:\d+}', $action), array( 'PageModule', 'display'));
+    $this->addRoute( sprintf('/%s/%s', $action, $idReg), array( 'PageModule', 'display'));
   }
 
-  private function addMultiKeyRoute( $category, $action)
-  {
+  private function addMultiKeyRoute( $category, $action) {
+
+    $idReg = $this->getRouteIdReg();
+    $sidReg = $this->getRouteSidReg();
     $this->addRoute( sprintf('/%s/%s', $category, $action), array( 'PageModule', 'display'));
-    $this->addRoute( sprintf('/%s/%s/{id:\d+}', $category, $action), array( 'PageModule', 'display'));
-    $this->addRoute( sprintf('/%s/{id:\d+}/%s', $category, $action), array( 'PageModule', 'display'));
-    $this->addRoute( sprintf('/%s/{id:\d+}/%s/{sid:\d+}', $category, $action), array( 'PageModule', 'display'));
+    $this->addRoute( sprintf('/%s/%s/%s', $category, $action, $idReg), array( 'PageModule', 'display'));
+    $this->addRoute( sprintf('/%s/%s/%s', $category, $idReg, $action), array( 'PageModule', 'display'));
+    $this->addRoute( sprintf('/%s/%s/%s/%s', $category, $idReg, $action, $sidReg), array( 'PageModule', 'display'));
   }
 
-  private function addRoute( $route, $class)
-  {
-    if (!preg_match(sprintf('/^(\%s)(\/)?$/', $this->baseUrl), $route)) {
-      $route = $this->baseUrl . $route;
+  private function addRoute( $route, $class) {
+
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+      if (!preg_match(sprintf('/^(\%s)(\/)?$/', $this->baseUrl), $route)) {
+        $route = $this->baseUrl . $route;
+      }
+      
+      //$this->router->addRoute(['GET', 'POST'], $route, $class);
+    } else {
+      getRoute()->get( $route, $class);
+      getRoute()->post( $route, $class);
     }
-
-    //$this->router->addRoute(['GET', 'POST'], $route, $class);
   }
 
-  private function loadCacheFile( $path)
-  {
+  private function loadCacheFile( $path) {
+
     $filename = $this->getRealPath($path);
     $pathinfo = pathinfo($file);
     $this->cache_data = array('categories'=>null, 'action'=>null);
@@ -219,13 +235,13 @@ class RouterModule
     }   
   }
 
-  private function getRouteKey($key)
-  {    
+  private function getRouteKey($key) {
+
     return $this->cache_data[$key];
   }
 
-  private function getRealPath($path)
-  {
+  private function getRealPath($path) {
+
     if(strlen($path) >= 2 && substr_compare($path, './', 0, 2) === 0) {
       return _SUX_PATH_ . substr($path, 2);
     }
