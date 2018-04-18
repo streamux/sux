@@ -12,7 +12,6 @@ define(_SUX_ROOT_, str_replace($_SERVER['DOCUMENT_ROOT'], '', _SUX_PATH_));
 
 // Slim - Fast Route
 require _SUX_PATH_ . 'libs/nikic/fast-route/src/bootstrap.php';
-require _SUX_PATH_ . 'libs/jmathai/epiphany/src/Epi.php';
 
 $GLOBALS['__sux_autoload_file_map'] = array_change_key_case(array(
 	'CacheFile'=>'classes/caches/CacheFile.class.php',
