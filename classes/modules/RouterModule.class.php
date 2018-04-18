@@ -42,13 +42,12 @@ class RouterModule
    */
   private function setEpiRoute() {
 
-    echo $this->explodingMethod . ' -> Epi';
-
     Epi::setPath('base', _SUX_PATH_ . 'libs/jmathai/epiphany/src');
     Epi::setSetting('exceptions', false);
     Epi::init('route'); 
     getRoute()->get('/', array( 'PageModule', 'display')); 
     $this->{$this->explodingMethod}();
+    getRoute()->run();
 
     // Epi::init('base','cache','session');
     // Epi::init('base','cache-apc','session-apc');
@@ -114,10 +113,6 @@ class RouterModule
       $mAction = (string) $actionList[$k];
       $context->setModule($mAction, 'Install');
       $this->addSingleKeyRoute($mAction);
-    }
-
-    if (version_compare(PHP_VERSION, '5.4.0') < 0) {
-      echo 'aa';
     }
   }
 
