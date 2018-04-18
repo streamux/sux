@@ -17,18 +17,54 @@ class RouterModule
 
   function init() 
   {
-    $this->$explodingMethod = 'setupRoute';
+    $this->explodingMethod = 'setupRoute';
     $this->initRoute();
   }
 
   function install()
   {
-    $this->$explodingMethod = 'setupInstallRoute';
+    echo 'aaa';
+    $this->explodingMethod = 'setupInstallRoute';
+     echo 'aaa';
     $this->initRoute();
+     echo 'aaa';
   }
 
   private function initRoute()
   {
+
+    echo "<br>";
+    echo PHP_VERSION ;
+
+    if (version_compare(PHP_VERSION, '5.4.0') >= 0) {
+      $this->setFastRoute();
+    } else {
+      $this->setEpiRoute();
+    }   
+  }
+
+  /*
+   * @ method setEpiRoute
+   * @ description php 5.3.29 이상 ~ 5.6.39 이하 지원 라우터 
+   */
+  private function setEpiRoute() {
+
+    Epi::setPath('base', _SUX_PATH_ . 'libs/jmathai/epiphany/src');
+    Epi::setSetting('exceptions', false);
+    Epi::init('route'); 
+    getRoute()->get('/', array( 'PageModule', 'display')); 
+
+    // Epi::init('base','cache','session');
+    // Epi::init('base','cache-apc','session-apc');
+    // Epi::init('base','cache-memcached','session-apc');
+  }
+
+  /*
+   * @ method setEpiRoute
+   * @ description php 5.34.0 이상 지원 라우터 
+   */
+  private function setFastRoute() {
+
     $this->baseUrl = _SUX_ROOT_;
 
     if (preg_match('/\/$/', $this->baseUrl)) {
@@ -52,7 +88,6 @@ class RouterModule
     $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
     switch ($routeInfo[0]) {
-
       case FastRoute\Dispatcher::NOT_FOUND:
           // ... 404 Not Found
           echo '404 Not Found';
@@ -163,7 +198,7 @@ class RouterModule
       $route = $this->baseUrl . $route;
     }
 
-    $this->router->addRoute(['GET', 'POST'], $route, $class);
+    //$this->router->addRoute(['GET', 'POST'], $route, $class);
   }
 
   private function loadCacheFile( $path)
