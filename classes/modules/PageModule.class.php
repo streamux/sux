@@ -1,6 +1,6 @@
 <?php
 /**
-*  @class ModuleHandler
+*  @ class ModuleHandler
 */
 class PageModule
 {
@@ -16,7 +16,6 @@ class PageModule
      * - /action/:id
      * - /category/:id/action /:sid
      */
-
     $uriMethod = URIToMethod::getInstance();
     $uriMethod->setURI($returnURL);   
     $moduleKey = $uriMethod->getMethod('module-key');
