@@ -1,4 +1,5 @@
 <?php
+
 class RouterModule
 {
   private static $aInstance = null;
@@ -205,7 +206,7 @@ class RouterModule
         $route = $this->baseUrl . $route;
       }
       
-      //$this->router->addRoute(['GET', 'POST'], $route, $class);
+      $this->router->addRoute(array('GET', 'POST'), $route, $class);
     } else {
       getRoute()->get( $route, $class);
       getRoute()->post( $route, $class);
