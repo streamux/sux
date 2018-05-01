@@ -78,11 +78,11 @@ class View extends Basic
     $__template->assign('cookieVersion', $this->cookie_version);
     $__template->assign('browserTitle', $this->document_data['module_name']);
     $__template->assign('skinPathList', $this->skin_path_list);
+    $__template->assign('htmlHeader', $this->skin_path_list['header']);
     $__template->assign('contentPath', $this->skin_path_list['content']);
-
+    $__template->assign('htmlFooter', $this->skin_path_list['footer']);
 
     $this->skin_path_list['layout'] = 'layouts/default/layout.tpl';
-
     if (is_readable($this->skin_path_list['layout'])) {
       $__template->display( $this->skin_path_list['layout'] );  
     } else {

@@ -24,14 +24,16 @@
 {if $documentData.module_type === 'document' || $documentData.module_type === 'board'}
 <script src="{$rootPath}common/plugins/syntaxhighlighter/scripts/shCore.js"></script>
 <script src="{$rootPath}common/plugins/syntaxhighlighter/scripts/shAutoloader.js"></script>
+
 <script type="text/javascript">
 
   function getSyntaxhighlightPath() {
   
     var args = arguments, result = [];
 
-    for (var i=0; i<args.length; i++)
+    for (var i=0; i<args.length; i++) {
       result.push(args[i].replace("@", "{$rootPath}common/plugins/syntaxhighlighter/scripts/"));
+    }
 
     return result
   }

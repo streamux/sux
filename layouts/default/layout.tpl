@@ -1,4 +1,3 @@
-<!-- HTML Header -->
 {include file="$htmlHeader"}
 
 <div class="sx-wrapper">
@@ -11,12 +10,12 @@
 
   <!-- Header --> 
   <header id="sxHeader" class="header">
-    {include file="{$realPath}layouts/default/header.tpl"}
+    {include file="./header.tpl"}
   </header>
 
   <!-- Nav -->
   <div id="nav" class="sx-gnb">
-    {include file="{$realPath}layouts/default/nav.tpl"}
+    {include file="./nav.tpl"}
   </div>
 
   <!-- Container -->
@@ -30,5 +29,4 @@
   </footer>  
 </div>
 
-<!-- HTML Footer -->
 {include file="$htmlFooter"}
