@@ -1,11 +1,10 @@
 <?php
+
 class Object {
 
   var $class_name = 'object';
 
-  function __construct() {}
-
-  function output( $msg) {
+  function output($msg) {
 
     echo $msg . "<br>";
   } 
@@ -20,7 +19,7 @@ class Object {
     return $this->class_name;
   }
 
-  function tester( $item) {
+  function tester($item) {
 
     $msg = '';
 
