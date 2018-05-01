@@ -1,5 +1,5 @@
 <?php
-class UIError extends Object {
+class UIError extends Basic {
 
 	static $uierror_instance = null;	
 	private $msg_list = '';

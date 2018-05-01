@@ -1,6 +1,6 @@
 <?php
 
-class QuerySchema extends Object {
+class QuerySchema extends Basic {
   
   public static $aInstance = null;
   var $class_name = 'query_schema';

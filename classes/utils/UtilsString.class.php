@@ -1,6 +1,6 @@
 <?php
 
-class UtilsString extends Object {
+class UtilsString extends Basic {
   
   public static function digit( $num ) {
 

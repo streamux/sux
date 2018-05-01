@@ -1,6 +1,6 @@
 <?php
 
-class Tracer extends Object{
+class Tracer extends Basic{
   
   static $otInstance = null;
   var $message = '';

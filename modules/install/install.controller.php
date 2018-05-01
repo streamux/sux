@@ -55,7 +55,6 @@ class InstallController extends Controller
     $buffer = array('admin_info'=>array());
 
     foreach ($admin_info as $key => $value) {
-
       if (preg_match('/(admin_pwd)+/', $value)) {
         $adminValue = $context->getPasswordHash($posts[$value]);
       } else {
@@ -129,7 +128,6 @@ class InstallController extends Controller
       $schemasList = FileHandler::readDir($shemasDir);
 
       for ($i=0; $i<count($schemasList); $i++) {
-
         if (preg_match('/(.xml+)$/', $schemasList[$i]['file_name'] )) {
           $xmlPath = $shemasDir . '/' . $schemasList[$i]['file_name'];
 
@@ -194,9 +192,7 @@ class InstallController extends Controller
       $queryList = FileHandler::readDir($queryDir);
 
       if ($queryList) {
-
         foreach ($queryList as $key => $value) {
-
           if (preg_match('/(.xml+)$/', $value['file_name'] )) {
             $xmlPath = $queryDir . '/' . $value['file_name'];
 

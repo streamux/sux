@@ -1,10 +1,3 @@
-  </div><!-- end of container -->
-  
-  <footer id="sxfooter" class="footer">
-    {include file="$copyrightPath"}
-  </footer>  
-</div>
-
 <img src="{$rootPath}analytics/counter" class="sx-hide">
 
 <!-- template start -->

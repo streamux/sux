@@ -1,6 +1,6 @@
 <?php
 
-class Query extends Object {
+class Query extends Basic {
 
   private static $aInstance = NULL;
 

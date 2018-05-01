@@ -1,6 +1,6 @@
 <?php
 
-class Forms extends Object {
+class Forms extends Basic {
 
   // validate
   ///////////////////////////////////////////////

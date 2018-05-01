@@ -1,6 +1,6 @@
 <?php
 
-class DB extends Object {
+class DB extends Basic {
 
   private static $aInstance = NULL;
 

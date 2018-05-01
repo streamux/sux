@@ -1,6 +1,6 @@
 <?php
 
-class FormSecurity extends Object {
+class FormSecurity extends Basic {
 
   public static $allowed_content_tags = array('pre', 'strong', 'em', 'u', 'sup', 'sub', 's', 'span', 'img', 'iframe', 'hr', 'br', 'ul', 'li', 'div', 'p','a');
   public static $allowed_simple_tags = array('b', 'span','strong');

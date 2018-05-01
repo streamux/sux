@@ -30,7 +30,7 @@
  ----------------------------------------------------------------
  source path : /modules/board/skin/default/_navi.tpl
  */
-class Navigator extends Object {
+class Navigator extends Basic {
 
   var $passover = 0;
   var $limit = 10;

@@ -1,6 +1,6 @@
 <?php
 
-class Model extends Object
+class Model extends Basic
 {
   var $query_sql = '';
   var $hashmap_params = array();

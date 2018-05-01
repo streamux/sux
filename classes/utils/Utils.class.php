@@ -1,6 +1,6 @@
 <?php
 
-class Utils extends Object {
+class Utils extends Basic {
 
   private static $aInstance = NULL;
 

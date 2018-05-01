@@ -1,6 +1,6 @@
 <?php
 
-class View extends Object
+class View extends Basic
 {
   var $model = NULL;
   var $controller = NULL;
@@ -58,12 +58,12 @@ class View extends Object
      * @class Template
      * @brief Template is a Wrapper Class based on Smarty
      */
-
     $routeURI = $this->skin_path_list['root'] . $this->document_data['category'];
     $__template = new Template();
     $__template->assign('baseUri', str_replace('/', '', _SUX_ROOT_));
     $__template->assign('copyrightPath', $this->copyright_path);
 
+    $__template->assign('realPath', _SUX_PATH_);
     $__template->assign('rootPath', $this->skin_path_list['root']);
     $__template->assign('skinPath', $this->skin_path_list['path']);
     $__template->assign('skinRealPath', $this->skin_path_list['realPath']);
@@ -78,27 +78,18 @@ class View extends Object
     $__template->assign('cookieVersion', $this->cookie_version);
     $__template->assign('browserTitle', $this->document_data['module_name']);
     $__template->assign('skinPathList', $this->skin_path_list);
+    $__template->assign('contentPath', $this->skin_path_list['content']);
 
-    if (is_readable($this->skin_path_list['header'])) {
-      $__template->display( $this->skin_path_list['header'] );  
+
+    $this->skin_path_list['layout'] = 'layouts/default/layout.tpl';
+
+    if (is_readable($this->skin_path_list['layout'])) {
+      $__template->display( $this->skin_path_list['layout'] );  
     } else {
-      $UIError->add('_header.tpl 스킨 파일경로가 올바르지 않습니다.');
+      $UIError->add('layout.tpl 레이아웃 파일경로가 올바르지 않습니다.');
       $UIError->useHtml = TRUE;
     }
 
-    if (is_readable($this->skin_path_list['content'])) {
-      $__template->display( $this->skin_path_list['content'] );  
-    } else {
-      $UIError->add('스킨 파일경로가 올바르지 않습니다.');
-      $UIError->useHtml = TRUE;
-    }
-
-    if (is_readable($this->skin_path_list['footer'])) {
-      $__template->display( $this->skin_path_list['footer'] );  
-    } else {
-      $UIError->add('_footer.tpl 스킨 파일경로가 올바르지 않습니다.');
-      $UIError->useHtml = TRUE;
-    } 
     $UIError->output(); 
   } 
 }

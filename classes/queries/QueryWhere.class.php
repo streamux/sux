@@ -1,6 +1,6 @@
 <?php
 
-class QueryWhere extends Object {
+class QueryWhere extends Basic {
   
   public static $_instance = null;
   var $class_name = 'query_where';
