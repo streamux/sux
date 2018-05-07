@@ -11,14 +11,12 @@ class DocumentAdminView extends View
 
     $skinDir = _SUX_PATH_ . "modules/document/templates/";
     $skinList = FileHandler::readDir($skinDir);
-
     if (!$skinList) {
       $msg = "스킨폴더가 존재하지 않습니다.";
       $resultYN = "N";
     }
 
-    $skinBuffer = array();
-    
+    $skinBuffer = array();    
     foreach ($skinList as $key => $value) {
       if (preg_match('/^(\w)+$/', $value['file_name'])) {
         $skinBuffer[] = $value['file_name'];
@@ -43,14 +41,12 @@ class DocumentAdminView extends View
 
   function displayList() {
 
-    $context = Context::getInstance();
-
-    $this->document_data['jscode'] = 'list';
-    $this->document_data['module_code'] = 'document';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/document/tpl";
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'document';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -62,12 +58,6 @@ class DocumentAdminView extends View
   }
 
   function displayAdd() {
-
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'add';
-    $this->document_data['module_code'] = 'document';
 
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
@@ -88,6 +78,8 @@ class DocumentAdminView extends View
     }
 
     $this->document_data['skinList'] = $skinBuffer;
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'document';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -99,17 +91,14 @@ class DocumentAdminView extends View
 
   function displayModify() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id'); 
-
-    $this->document_data['jscode'] = 'modify';
-    $this->document_data['module_code'] = 'document';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/document/tpl";    
-    $skinLocalDir = _SUX_PATH_ . "modules/document/templates/";
+    $skinPath = _SUX_PATH_ . "modules/document/tpl";   
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id'); 
+     
+    $skinLocalDir = _SUX_PATH_ . "modules/document/templates/";
     $skinTempList = FileHandler::readDir($skinLocalDir);
     if (!$skinTempList) {
       $msg .= "'modules/document/templates/' 스킨폴더가 존재하지 않습니다.";
@@ -122,17 +111,18 @@ class DocumentAdminView extends View
         $skinBuffer[] = $value['file_name'];
       }      
     }
-
     $this->document_data['skinList'] = $skinBuffer;
 
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('document', '*', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
-    }  
+    }
+
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'document';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -144,24 +134,23 @@ class DocumentAdminView extends View
 
   function displayDelete() {
 
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/document/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'delete';
-    $this->document_data['module_code'] = 'document';
     
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('document', 'id, category', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
 
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/document/tpl";
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'document';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -184,9 +173,10 @@ class DocumentAdminView extends View
     $limit = $context->getRequest('limit');
     $passover = $context->getRequest('passover');
 
-     if (empty($limit)) {
+    if (empty($limit)) {
       $limit = 10;
-    }       
+    }
+
     if (empty($passover)) {
       $passover = 0;
     }
@@ -202,16 +192,13 @@ class DocumentAdminView extends View
     }
 
     if ($result) {
-
       $numrows = $this->model->getNumRows();
       if ($numrows > 0){
-
-        $dataObj['total_num'] = $totalNum;
-        
+        $dataObj['total_num'] = $totalNum;        
         $a = $numrows;
         $rows = $this->model->getRows();
-        foreach ($rows as $key => $row) {
 
+        foreach ($rows as $key => $row) {
           $fields = array('no'=>$a);
           foreach ($row as $key => $value) {
             $fields[$key] = $value;
@@ -228,7 +215,6 @@ class DocumentAdminView extends View
       }
     }
     
-    //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);
@@ -250,10 +236,8 @@ class DocumentAdminView extends View
     $where->set('id', $id);
     $result = $this->model->select('document', '*', $where);
     $rows = $this->model->getRows();
-
     if (count($rows) > 0) {
       $dataObj['list'][0] = array();
-
       foreach ($rows[0] as $key => $value) {
         $dataObj['list'][0][$key] = $value;
       }
@@ -275,14 +259,12 @@ class DocumentAdminView extends View
 
       foreach ($templatePathList as $key => $path) {
         $readTemplatePath = Utils::convertAbsolutePath($path, _SUX_PATH_);
-
         if (file_exists($readTemplatePath)) {
           $dataObj['list'][0][$key] = FileHandler::readFile($readTemplatePath);
         }
       }
     }
 
-    //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);
@@ -340,20 +322,16 @@ class DocumentAdminView extends View
 
   function displayCheckPage() {
 
-    $context = Context::getInstance();
-    $category = $context->getPost('category');
-
     $dataObj  = "";
     $msg = "";
     $resultYN = "Y";
 
+    $context = Context::getInstance();
+    $category = $context->getPost('category');
     $msg = "추가 생성 페이지 : ".$category."\n";
-
     if (empty($category)) {
-
       $msg = "카테고리명을 넣고 중복체크를 하십시오.";
       $resultYN = "N";
-
       $data = array(  "result"=>$resultYN,
               "msg"=>$msg);
 
@@ -362,9 +340,7 @@ class DocumentAdminView extends View
     }
 
     if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{3,12}$/i', $category)) {
-
       $msg = "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
-
       $data = array(  "msg"=>$msg);     
       $this->callback($data);
       exit;
@@ -373,14 +349,12 @@ class DocumentAdminView extends View
     $where = new QueryWhere();
     $where->set('category', $category);
     $this->model->select('document', 'id', $where);
-
     $numrows = $this->model->getNumRows();
     if ($numrows> 0) {
       $msg = "${category}는 이미 존재하는 페이지입니다.";
       $resultYN = "N";
     } else {
       $this->model->select('board_group', 'id', $where);
-
       $numrows = $this->model->getNumRows();
       if ($numrows> 0) {
         $msg = "${category}는 게시판에서 이미 사용하고 있습니다.";

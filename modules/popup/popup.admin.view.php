@@ -10,15 +10,12 @@ class PopupAdminView extends View
 
   function displayList() {
 
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'list';
-    $this->document_data['module_code'] = 'popup';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/popup/tpl";
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'popup';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -31,12 +28,6 @@ class PopupAdminView extends View
 
   function displayAdd() {
 
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'add';
-    $this->document_data['module_code'] = 'popup';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/popup/tpl";
@@ -45,8 +36,11 @@ class PopupAdminView extends View
     $skinList = Utils::readDir($path);
     if (!$skinList) {
       $skinList['file_name'] = 'not exists';
-    }   
+    }
+
     $this->document_data['skin_list'] = $skinList;
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'popup';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -59,23 +53,23 @@ class PopupAdminView extends View
 
   function displayModify() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'modify';
-    $this->document_data['module_code'] = 'popup';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/popup/tpl";
+
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
 
     $path = _SUX_PATH_ . "modules/popup/skin/";
     $skinList = Utils::readDir($path);
     if (!$skinList) {
       $skinList['file_name'] = 'not exists';
     }
+
     $this->document_data['id'] = $id;
     $this->document_data['skin_list'] = $skinList;
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'popup';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -88,24 +82,22 @@ class PopupAdminView extends View
 
   function displayDelete() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'delete';
-    $this->document_data['module_code'] = 'popup';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/popup/tpl";
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('popup', 'id, popup_name', $where);
-
     $rows = $this->model->getRows();
     foreach ($rows[0] as $key => $value) {
       $this->document_data[$key] = $value;
-    }   
+    }
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'popup';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -129,7 +121,8 @@ class PopupAdminView extends View
 
     if (empty($limit)) {
       $limit = 10;
-    }       
+    }
+
     if (empty($passover)) {
       $passover = 0;
     }
@@ -147,17 +140,15 @@ class PopupAdminView extends View
     if ($result){
       $numrow = $this->model->getNumRows();
       if ($numrow > 0) {
-
         $dataObj['list'] = array();
         $dataObj['total_num'] = $totalNum;
-
         $rows = $this->model->getRows();
-        for ($i=0; $i<$numrow; $i++) {
 
+        for ($i=0; $i<$numrow; $i++) {
           $timeList = array();
           $dataList = array('no'=>($numrow - $i));
-          foreach ($rows[$i] as $key => $value) {
 
+          foreach ($rows[$i] as $key => $value) {
             if (preg_match('/(time+)/i', $key)) {
               $timeList[$key] = UtilsString::digit($value);
             } else {
@@ -174,7 +165,6 @@ class PopupAdminView extends View
       }
     } 
 
-    //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);
@@ -204,7 +194,6 @@ class PopupAdminView extends View
       $resultYN = "N";
     }
 
-    //$msg = Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);

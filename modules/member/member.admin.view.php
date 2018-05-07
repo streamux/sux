@@ -16,21 +16,15 @@ class MemberAdminView extends View {
 
   function displayGroup() {
 
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $action = $this->request_data['action'];
-    $this->document_data['jscode'] = 'groupList';
-    $this->document_data['module_code'] = 'member';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
     $this->model->select('member_group', 'id');
     $totalNum = $this->model->getNumRows();
-
     $this->document_data['total_num'] = $totalNum;
+    $this->document_data['jscode'] = 'groupList';
+    $this->document_data['module_code'] = 'member';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -43,16 +37,12 @@ class MemberAdminView extends View {
 
   function displayGroupAdd() {
     
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $action = $this->request_data['action'];
-    $this->document_data['jscode'] = 'groupAdd';
-    $this->document_data['module_code'] = 'member';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+    $this->document_data['jscode'] = 'groupAdd';
+    $this->document_data['module_code'] = 'member';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -65,24 +55,23 @@ class MemberAdminView extends View {
 
   function displayGroupModify() {
 
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'groupModify';
-    $this->document_data['module_code'] = 'member';
 
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('member_group', '*', $where);
     $row = $this->model->getRow();
-
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
 
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+    $this->document_data['jscode'] = 'groupModify';
+    $this->document_data['module_code'] = 'member';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -95,20 +84,20 @@ class MemberAdminView extends View {
 
   function displayGroupDelete() {
     
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'groupDelete';
-    $this->document_data['module_code'] = 'member';
     
     $where = QueryWhere::getInstance();
     $where->set('id', $id);
     $this->model->select('member_group', 'group_name', $where);
     $row = $this->model->getRow();
 
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+    $this->document_data['jscode'] = 'groupDelete';
+    $this->document_data['module_code'] = 'member';
 
     $this->request_data['id'] = $id;           
     $this->document_data['content'] = $row;    
@@ -130,7 +119,8 @@ class MemberAdminView extends View {
 
     if (empty($limit)) {
       $limit = 10;
-    }       
+    }
+
     if (empty($passover)) {
       $passover = 0;
     }
@@ -151,21 +141,20 @@ class MemberAdminView extends View {
     
     if ($result){
       $numrow = $this->model->getNumRows();
-      if ($numrow > 0) {
 
+      if ($numrow > 0) {
         $where = new QueryWhere();
         $dataObj['list'] = array();
         $dataObj['total_num'] = $totalNum;
-
         $rows = $this->model->getRows();
-        foreach ( $rows as $key => $row) {
 
+        foreach ( $rows as $key => $row) {
           $where->reset();
           $where->set('category', $row['category']);
           $this->model->select('member', 'id', $where);
           $dataList['member_num'] = $this->model->getNumRows();
-
           $dataList['no'] = (int) $key+1;
+
           foreach ($row as $key => $value) {
             $dataList[$key] = $value;
           }
@@ -191,18 +180,16 @@ class MemberAdminView extends View {
     $resultYN = "Y";
 
     $context = Context::getInstance();
-   $requests = $context->getRequestAll();
+    $requests = $context->getRequestAll();
     $id = $requests['id'];
 
     $where = new QueryWhere();
     $where->set('id', $id);
-
     $result = $this->model->select('member_group', '*', $where);    
     if ($result){
       $dataObj = $this->model->getRow();
     } 
 
-    //$msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
                             'result'=>$resultYN,
                             'msg'=>$msg); 
@@ -212,9 +199,12 @@ class MemberAdminView extends View {
 
   function displayList() {
     
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
     $context = Context::getInstance();
     $groupId = $context->getParameter('id');
-
     if (isset($groupId) && $groupId) {
       $where = new QueryWhere();
       $where->set('id', $groupId);
@@ -223,21 +213,15 @@ class MemberAdminView extends View {
     }
 
     $this->model->select('member_group', 'category');
-    $categoryList = $this->model->getRows();    
-
+    $categoryList = $this->model->getRows(); 
     $this->model->select('member', '*');
     $totalNum = $this->model->getNumRows();
 
     $this->document_data['categories'] = $categoryList; 
     $this->document_data['total_num'] = $totalNum;
-
     $this->document_data['category'] = $row['category'];
     $this->document_data['jscode'] = 'list';
     $this->document_data['module_code'] = 'member';
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -250,20 +234,15 @@ class MemberAdminView extends View {
 
   function displayAdd() {
     
-    $context = Context::getInstance();
-    $requests = $context->getRequestAll();
-
-    $this->model->select('member_group', 'category');
-    $group = $this->model->getRows();    
-    
-    $this->request_data = $requests;
-    $this->document_data['jscode'] = 'add';
-    $this->document_data['module_code'] = 'member';
-    $this->document_data['group'] = $group; 
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
+    $this->model->select('member_group', 'category');
+    $group = $this->model->getRows(); 
+    $this->document_data['group'] = $group; 
+    $this->document_data['jscode'] = 'add';
+    $this->document_data['module_code'] = 'member';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -276,18 +255,18 @@ class MemberAdminView extends View {
 
   function displayModify() {
     
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
     $context = Context::getInstance();    
     $sessions = $context->getSessionAll();
     $id = $context->getParameter('id');
     $category = $sessions['category'];
     $userId = $sessions['user_id'];
 
-    $this->document_data['jscode'] = 'modify';
-    $this->document_data['module_code'] = 'member';
-
     $this->model->select('member_group', 'category');
     $categories = $this->model->getRows();
-
     $where = new QueryWhere();
     if (isset($id) && $id) {
       $where->set('id', $id);
@@ -303,10 +282,8 @@ class MemberAdminView extends View {
     $this->document_data['user_id'] = $row['user_id'];
     $this->document_data['user_name'] = $row['user_name'];
     $this->document_data['id'] = $row['id'];
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+    $this->document_data['jscode'] = 'modify';
+    $this->document_data['module_code'] = 'member';    
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -319,11 +296,12 @@ class MemberAdminView extends View {
 
   function displayDelete() {
     
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'delete';
-    $this->document_data['module_code'] = 'member';
 
     $where = new QueryWhere();
     $where->set('id', $id);
@@ -332,11 +310,9 @@ class MemberAdminView extends View {
 
     $this->document_data['user_id'] = $row['user_id'];
     $this->document_data['category'] = $row['category'];
-    $this->document_data['id'] = $id;    
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/member/tpl";
+    $this->document_data['id'] = $id;
+    $this->document_data['jscode'] = 'delete';
+    $this->document_data['module_code'] = 'member';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -356,12 +332,11 @@ class MemberAdminView extends View {
 
     $context = Context::getInstance();
     $posts = $context->getPostAll();
-
     $category = $posts['category'];
     $passover = $posts['passover'];
     $limit = $posts['limit'];
-
     $findGroup = $posts['find_group'];
+
     if (isset($findGroup) && $findGroup) {
       $category = $findGroup;
     }
@@ -377,9 +352,7 @@ class MemberAdminView extends View {
     }
 
     $where = new QueryWhere();
-
     if (isset($search) && $search) { 
-
       if (preg_match('/,/', $find)) {
         $findPieces = explode(',', $find);
 
@@ -398,7 +371,6 @@ class MemberAdminView extends View {
 
     $this->model->select('member', '*', $where);      
     $numrows = $this->model->getNumRows();
-
     if ($numrows > 0){        
       $a = $numrows - $passover;
       $result = $this->model->select('member', '*', $where, 'id desc', $passover, $limit);
@@ -422,20 +394,14 @@ class MemberAdminView extends View {
           $a--;
         }
 
-        $dataObj = array(
-          'category'=>$category,
-          'list'=>$dataList,
-          'total_num'=>$numrows
-        );
+        $dataObj = array( 'category'=>$category, 'list'=>$dataList, 'total_num'=>$numrows);
       }       
     } else {
-
       $dataObj = array('category'=>$category, 'list'=>$dataList);
       $msg .= '현재 등록된 회원이 존재하지 않습니다.';
       $resultYN = 'N';
     }
 
-    //$msg .= Tracer::getInstance()->getMessage();
     $json = array(  'data'=>$dataObj,
             'result'=>$resultYN,
             'msg'=>$msg);
@@ -445,18 +411,17 @@ class MemberAdminView extends View {
 
   function displayModifyJson() {
     
+    $dataObj = array();
+    $msg = "";
+    $resultYN = "Y";
+
     $context = Context::getInstance();
     $sessions = $context->getSessionAll();
     $category = $sessions['category'];
     $userId = $sessions['user_id'];
     $id = $context->getPost('id');
 
-    $dataObj = array();
-    $msg = "";
-    $resultYN = "Y";
-
     $where = new QueryWhere();
-
     if (isset($id) && $id) {
       $where->set('id', $id);
     } else {
@@ -465,7 +430,6 @@ class MemberAdminView extends View {
     }
 
     $result = $this->model->select('member', '*', $where);
-
     if ($result) {
       $row = $this->model->getRow();
       foreach ($row as $key => $value) {

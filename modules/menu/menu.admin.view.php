@@ -9,9 +9,6 @@ class MenuAdminView extends View
 
   function displayList() {
 
-    $context = Context::getInstance();
-    $requestData = $context->getRequestAll();
-    
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinRealPath = _SUX_PATH_."modules/menu/tpl";
@@ -19,7 +16,6 @@ class MenuAdminView extends View
     $this->document_data['jscode'] = 'list';
     $this->document_data['module_code'] = 'menu';
 
-    $this->request_data = $requestData;
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -31,9 +27,6 @@ class MenuAdminView extends View
 
   function displayAdd() {
 
-    $context = Context::getInstance();
-    $requestData = $context->getRequestAll();
-    
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinRealPath = _SUX_PATH_."modules/menu/tpl";
@@ -41,7 +34,6 @@ class MenuAdminView extends View
     $this->document_data['jscode'] = 'add';
     $this->document_data['module_code'] = 'menu';
 
-    $this->request_data = $requestData;
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
     $this->skin_path_list['header'] = "{$adminSkinPath}/_header.tpl";
@@ -53,13 +45,12 @@ class MenuAdminView extends View
 
   function displayModify() {
 
-    $context = Context::getInstance();
-    $requestData = $context->getRequestAll();
-    $id = $context->getParameter('id'); 
-    
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinRealPath = _SUX_PATH_."modules/menu/tpl";
+
+    $context = Context::getInstance();
+    $id = $context->getParameter('id'); 
 
     $where = new QueryWhere();
     $where->set('id', $id);
@@ -69,7 +60,6 @@ class MenuAdminView extends View
     $this->document_data['content'] = $row;
     $this->document_data['jscode'] = 'modify';
     $this->document_data['module_code'] = 'menu';
-    $this->request_data = $requestData;
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinRealPath'] = $skinRealPath;
@@ -87,10 +77,8 @@ class MenuAdminView extends View
     $json = array('data'=>array());
 
     $context = Context::getInstance();
-
     $id = $context->getRequest('id');
     $where = null;
-
     if (isset($id) && $id) {
         $where = QueryWhere::getInstance();
         $where->set('id', $id);

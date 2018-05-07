@@ -9,14 +9,15 @@ class SearchView extends View
 
   function displayList() {
 
+    $rootPath = _SUX_ROOT_;
+    $skinPath = _SUX_ROOT_ . "modules/search/tpl/";
+    $skinRealPath = _SUX_PATH_ . "modules/search/tpl/"; 
+
     $msg = '';
     $resultYN = 'Y';
     $json = array('data'=>array());
 
     $context = Context::getInstance();
-    $requestData = $context->getRequestAll(); 
-    $this->session_data = $context->getSessionAll();
-
     $returnURL = $context->getServer('REQUEST_URI'); 
     $domain = $context->getServer('HTTP_HOST'); 
     $search = $context->getRequest('search');
@@ -34,13 +35,6 @@ class SearchView extends View
     $this->document_data['jscode'] = '';
     $this->document_data['module_code'] = 'search';
     $this->document_data['module_name'] = '검색 목록';      
-
-    /**
-     * css, js file path handler
-     */
-    $rootPath = _SUX_ROOT_;
-    $skinPath = _SUX_ROOT_ . "modules/search/tpl/";
-    $skinRealPath = _SUX_PATH_ . "modules/search/tpl/"; 
 
     $headerPath = 'common/_header.tpl';
     $footerPath = 'common/_footer.tpl';
@@ -64,7 +58,6 @@ class SearchView extends View
 
     $where->reset();
     $where->add('(');
-
     for ($i=0; $i < count($menuRows); $i++) { 
       $where->set('category', $menuRows[$i]['category'],'=', 'or');
     }
@@ -178,7 +171,6 @@ class SearchView extends View
     $navi->total = $numrows;
     $navi->init();
 
-    $this->request_data = $requestData;
     $this->document_data['pagination'] = $navi->get();
     $this->document_data['group'] = $groupData;
     $this->document_data['content'] = $contentData;

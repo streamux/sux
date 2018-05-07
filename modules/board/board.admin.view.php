@@ -10,8 +10,6 @@ class BoardAdminView extends View
 
   function displayList() {
 
-    $context = Context::getInstance();
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/board/tpl";
@@ -30,6 +28,10 @@ class BoardAdminView extends View
 
   function displayAdd() {
 
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
     $msg = '';
 
     $context = Context::getInstance();
@@ -39,11 +41,6 @@ class BoardAdminView extends View
     $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];
     $admin_pass = $context->checkAdminPass();
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/board/tpl";
-
     $returnURL = $rootPath . $category;
     
     if ($admin_pass === FALSE) {
@@ -55,7 +52,6 @@ class BoardAdminView extends View
 
     $this->model->select('board_group','category, board_name');
     $board_list = $this->model->getRows();
-
 
     $contentData = array();
     $contentData['wallname'] = Utils::getWallKey();
@@ -96,6 +92,10 @@ class BoardAdminView extends View
 
   function displayModify() {
 
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
     $msg = '';
 
     $context = Context::getInstance();
@@ -104,11 +104,6 @@ class BoardAdminView extends View
     $nickname = $sessionData['nickname'];
     $password = $sessionData['password'];
     $admin_pass = $context->checkAdminPass();
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/board/tpl";
-
     $returnURL = $rootPath . $category;
     
     if ($admin_pass === FALSE) {
@@ -167,6 +162,10 @@ class BoardAdminView extends View
 
   function displayDelete() {
 
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
     
@@ -174,14 +173,9 @@ class BoardAdminView extends View
     $where->set('id', $id);
     $this->model->select('board', 'id, title', $where);
     $row = $this->model->getRow();
-
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
-
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/board/tpl";
 
     $this->document_data['jscode'] = 'delete';
     $this->document_data['module_code'] = 'board';
@@ -227,16 +221,15 @@ class BoardAdminView extends View
     
     $numrows = $this->model->getNumRows();
     if ($numrows > 0){
-
       $dataObj['list'] = array();
       $dataObj['total_num'] = $totalNum;
       $dataList = array();
-
       $a = $numrows;
       $rows = $this->model->getRows();
-      foreach ($rows as $key => $row) {
 
+      foreach ($rows as $key => $row) {
         $fields = array('no'=>$a);
+
         foreach ($row as $key => $value) {
           $fields[$key] = $value;
         }
@@ -275,15 +268,16 @@ class BoardAdminView extends View
     $numrows = $this->model->getNumRows();
     if ($numrows > 0) {
       $row = $this->model->getRow();
+
       foreach ($row as $key => $value) {
         $dataObj[$key] = $value;
-        //$msg .= $key . " : " . $value . "<br>";
       }
       $resultYN = "Y";
     } else {
       $resultYN = "N";
       $msg = '게시판이 존재하지 않습니다.';
     }
+
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);
@@ -298,15 +292,12 @@ class BoardAdminView extends View
 
   function displayGroupList() {
 
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'list';
-    $this->document_data['module_code'] = 'board';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $this->document_data['jscode'] = 'list';
+    $this->document_data['module_code'] = 'board';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -319,12 +310,6 @@ class BoardAdminView extends View
 
   function displayGroupAdd() {
 
-    $context = Context::getInstance();
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'groupAdd';
-    $this->document_data['module_code'] = 'board';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/board/tpl";
@@ -336,6 +321,8 @@ class BoardAdminView extends View
       $resultYN = "N";
     }
     $this->document_data['skin_list'] = $skinList;
+    $this->document_data['jscode'] = 'groupAdd';
+    $this->document_data['module_code'] = 'board';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -348,16 +335,12 @@ class BoardAdminView extends View
 
   function displayGroupModify() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');   
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'groupModify';
-    $this->document_data['module_code'] = 'board';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');      
 
     $where = new QueryWhere();
     $where->set('id', $id);
@@ -375,6 +358,8 @@ class BoardAdminView extends View
       $resultYN = "N";
     }
     $this->document_data['skin_list'] = $skinList;
+    $this->document_data['jscode'] = 'groupModify';
+    $this->document_data['module_code'] = 'board';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -387,26 +372,23 @@ class BoardAdminView extends View
 
   function displayGroupDelete() {
 
-    
+    $rootPath = _SUX_ROOT_;
+    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
+    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+
     $context = Context::getInstance();
     $id = $context->getParameter('id');
-    $this->request_data = $context->getRequestAll();
-
-    $this->document_data['jscode'] = 'groupDelete';
-    $this->document_data['module_code'] = 'board';
     
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('board_group', 'id, category', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
 
-    $rootPath = _SUX_ROOT_;
-    $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
-    $skinPath = _SUX_PATH_ . "modules/board/tpl";
+    $this->document_data['jscode'] = 'groupDelete';
+    $this->document_data['module_code'] = 'board';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -448,16 +430,14 @@ class BoardAdminView extends View
     
     $numrows = $this->model->getNumRows();
     if ($numrows > 0){
-
       $dataObj['list'] = array();
       $dataObj['total_num'] = $totalNum;
       $dataList = array();
-
       $a = $numrows;
       $rows = $this->model->getRows();
       foreach ($rows as $key => $row) {
-
         $fields = array('no'=>$a);
+
         foreach ($row as $key => $value) {
           $fields[$key] = $value;
         }
@@ -471,7 +451,7 @@ class BoardAdminView extends View
       $msg = "게시판이 존재하지 않습니다.";
       $resultYN = "N";
     }
-    //$msg = Tracer::getInstance()->getMessage();
+
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,
             "msg"=>$msg);
@@ -497,7 +477,6 @@ class BoardAdminView extends View
       $row = $this->model->getRow();
       foreach ($row as $key => $value) {
         $dataObj[$key] = $value;
-        //$msg .= $key . " : " . $value . "<br>";
       }
       $resultYN = "Y";
     } else {
@@ -521,12 +500,9 @@ class BoardAdminView extends View
     $resultYN = "Y";
 
     $msg = "추가 생성 게시판 : ".$category."\n";
-
     if (empty($category)) {
-
       $msg = "카테고리명을 넣고 중복체크를 하십시오.";
       $resultYN = "N";
-
       $data = array(  "result"=>$resultYN,
               "msg"=>$msg);
 
@@ -535,9 +511,7 @@ class BoardAdminView extends View
     }
 
     if (!preg_match('/^[a-zA-Z_][a-zA-Z0-9_]{2,}$/i', $category)) {
-
       $msg .= "카테고리명은 영문+숫자+특수문자('_')로 조합된 단어만 사용가능\n첫글자가 영문 또는 특수문자로 시작되는 4글자 이상 사용하세요.";
-
       $data = array(  "msg"=>$msg);     
       $this->callback($data);
       exit;
@@ -546,7 +520,6 @@ class BoardAdminView extends View
     $where = new QueryWhere();
     $where->set('category', $category);
     $this->model->select('board_group','id', $where);
-
     $numrows = $this->model->getNumRows();
     if ($numrows> 0) {
       $msg = "${category}는 이미 존재하는 게시판입니다.";
@@ -556,6 +529,7 @@ class BoardAdminView extends View
       $where->set('category', $category);
       $this->model->select('document','id', $where);
       $numrows = $this->model->getNumRows();
+
       if ($numrows> 0) {
         $msg = "${category} 이름은 페이지관리에서 이미 사용하고 있습니다.<br>다른 이름을 사용해주세요.";
         $resultYN = "N";
@@ -573,8 +547,7 @@ class BoardAdminView extends View
 
   function displaySkinJson() {
 
-    $skinDir = _SUX_PATH_ . "modules/board/skin/";
-    
+    $skinDir = _SUX_PATH_ . "modules/board/skin/";    
     $msg = "";
     $resultYN = "Y";
 

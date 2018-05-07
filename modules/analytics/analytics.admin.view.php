@@ -14,14 +14,12 @@ class AnalyticsAdminView extends View
 
   function displayConnectSiteList() {
 
-    $context = Context::getInstance();    
-
-    $this->document_data['jscode'] = 'connectSiteList';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+    $this->document_data['jscode'] = 'connectSiteList';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -34,14 +32,12 @@ class AnalyticsAdminView extends View
 
   function displayConnectSiteAdd() {
 
-    $context = Context::getInstance();
-
-    $this->document_data['jscode'] = 'connectSiteAdd';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+    $this->document_data['jscode'] = 'connectSiteAdd';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -54,24 +50,23 @@ class AnalyticsAdminView extends View
 
   function displayConnectSiteReset() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] ='connectSiteReset';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('connect_site', 'id, name', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
+
+    $this->document_data['jscode'] ='connectSiteReset';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -84,30 +79,23 @@ class AnalyticsAdminView extends View
 
   function displayConnectSiteDelete() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'connectSiteDelete';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $result = $this->model->select('connect_site', 'id, name', $where); 
-
-    /*while($rows = $this->model->getMySqlFetchArray($result)) {
-      foreach ($rows as $key => $value) {
-        echo $key . ' : ' . $value;
-      }
-    }*/
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
+
+    $this->document_data['jscode'] = 'connectSiteDelete';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -146,33 +134,29 @@ class AnalyticsAdminView extends View
       $this->model->select('connect_site', 'id');
       $totalNum = $this->model->getNumRows();
       $result = $this->model->select('connect_site', '*', null, 'id desc', $passover, $limit);
-    }    
+    }
+
     if ($result){
-
       $numrows = $this->model->getNumRows();
-      if ($numrows > 0){
 
+      if ($numrows > 0){
         $a = $totalNum - $passover;
         $rows = $this->model->getRows();
+
         for($i=0; $i<count($rows); $i++) {
-
           $fields = array('no'=>$a);
-          foreach ($rows[$i] as $key => $value) {
 
+          foreach ($rows[$i] as $key => $value) {
             $fields[$key] = $value;
+
             if (preg_match('/^(date+)$/i', $key) && empty($value)) {
               $fields[$key] = '0000-00-00';
             }            
           }
-
           $dataList[] = $fields;
           $a--;
         }
-
-        $dataObj = array(
-          "list"=>$dataList,
-          'total_num'=>$totalNum
-          );
+        $dataObj = array( "list"=>$dataList, 'total_num'=>$totalNum);
       } else {
         $msg .= "등록된 접속키워드가 존재하지 않습니다.";
         $resultYN = "N";
@@ -197,15 +181,12 @@ class AnalyticsAdminView extends View
 
   function displayPageviewList() {
 
-    $context = Context::getInstance();
-
-
-    $this->document_data['jscode'] = 'pageviewList';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+    $this->document_data['jscode'] = 'pageviewList';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -218,14 +199,12 @@ class AnalyticsAdminView extends View
 
   function displayPageviewAdd() {
 
-    $context = Context::getInstance();
-
-    $this->document_data['jscode'] = 'pageviewAdd';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
+
+    $this->document_data['jscode'] = 'pageviewAdd';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -238,24 +217,23 @@ class AnalyticsAdminView extends View
 
   function displayPageviewReset() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'pageviewReset';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('pageview', 'id, name', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
+
+    $this->document_data['jscode'] = 'pageviewReset';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -268,24 +246,23 @@ class AnalyticsAdminView extends View
 
   function displayPageviewDelete() {
 
-    $context = Context::getInstance();
-    $id = $context->getParameter('id');
-
-    $this->document_data['jscode'] = 'pageviewDelete';
-    $this->document_data['module_code'] = 'analytics';
-
     $rootPath = _SUX_ROOT_;
     $adminSkinPath = _SUX_PATH_ . "modules/admin/tpl";
     $skinPath = _SUX_PATH_ . "modules/analytics/tpl";
 
+    $context = Context::getInstance();
+    $id = $context->getParameter('id');
+
     $where = new QueryWhere();
     $where->set('id', $id);
     $this->model->select('pageview', 'id, name', $where);
-
     $row = $this->model->getRow();
     foreach ($row as $key => $value) {
       $this->document_data[$key] = $value;
     }
+
+    $this->document_data['jscode'] = 'pageviewDelete';
+    $this->document_data['module_code'] = 'analytics';
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = '';
@@ -310,7 +287,8 @@ class AnalyticsAdminView extends View
 
     if (empty($limit)) {
       $limit = 10;
-    }       
+    }
+
     if (empty($passover)) {
       $passover = 0;
     }
@@ -327,14 +305,15 @@ class AnalyticsAdminView extends View
 
     if ($result){
       $numrows = $this->model->getNumRows();
+
       if ($numrows > 0){
-
-         $a = $totalNum - $passover;
+        $a = $totalNum - $passover;
         $rows = $this->model->getRows();
-        for($i=0; $i<count($rows); $i++) {
 
+        for($i=0; $i<count($rows); $i++) {
           $fields = array('no'=>$a);
           $row = $rows[$i];
+
           foreach ($row as $key => $value) {
             $fields[$key] = $value;
           }
@@ -343,15 +322,13 @@ class AnalyticsAdminView extends View
           $a--;
         }
 
-        $dataObj = array(
-          "list"=>$dataList,
-          'total_num'=>$totalNum
-        );
+        $dataObj = array( "list"=>$dataList, 'total_num'=>$totalNum);
       } else {
         $msg = "등록된 페이지뷰가 존재하지 않습니다.";
         $resultYN = "N";
       }
     }
+    
     //$msg .= Tracer::getInstance()->getMessage();
     $data = array(  "data"=>$dataObj,
             "result"=>$resultYN,

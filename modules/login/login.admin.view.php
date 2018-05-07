@@ -6,15 +6,12 @@ class LoginAdminView extends View {
 
   function displayLoginAdmin() {
 
+    $rootPath = _SUX_ROOT_;
+    $skinPath = _SUX_PATH_ . "modules/login/tpl"; 
+
     $context = Context::getInstance();
     $loginCookieId = $context->getCookieId('login_keeper');
     $loginKeeper = $context->getCookie($loginCookieId);
-
-    /**
-     * skin directory path
-     */
-    $rootPath = _SUX_ROOT_;
-    $skinPath = _SUX_PATH_ . "modules/login/tpl"; 
 
     $this->document_data['jscode'] = 'loginAdmin';
     $this->document_data['module_code'] = 'login';
@@ -37,21 +34,13 @@ class LoginAdminView extends View {
   
   function displayRegisterAdmin() {
 
-    $context = Context::getInstance();    
-
-    $this->session_data = $context->getSessionAll();
-    $this->request_data = $context->getRequestAll();
+    $rootPath = _SUX_ROOT_;
+    $skinPath = _SUX_PATH_ . "modules/login/tpl"; 
 
     $this->document_data['jscode'] = 'registerAdmin';
     $this->document_data['module_code'] = 'register';
     $this->document_data['module_name'] = '관리자 등록';
     
-    /**
-     * skin directory path
-     */
-    $rootPath = _SUX_ROOT_;
-    $skinPath = _SUX_PATH_ . "modules/login/tpl"; 
-
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['dir'] = $skinPath;
     $this->skin_path_list['header'] = "{$skinPath}/_header_admin.tpl";
