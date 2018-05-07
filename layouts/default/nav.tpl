@@ -27,6 +27,7 @@
           </ul>
         </div>
       </div>
+
       <div class="sx-body-panel">
         <div class="swiper-container swiper-container-mobilegnb">
           <div class="swiper-wrapper">
@@ -38,7 +39,8 @@
           </div>
           <div class="swiper-scrollbar swiper-scrollbar-mobilegnb"></div>
         </div>
-      </div>      
+      </div>
+
       <button class="menu-btn-close sx-btn-close" title="메뉴 닫기" alt="메뉴 닫기">
         <ul class="sx-h-3stick">
           <li class="sx-hline1"></li>

@@ -82,7 +82,13 @@ class View extends Basic
     $__template->assign('contentPath', $this->skin_path_list['content']);
     $__template->assign('htmlFooter', $this->skin_path_list['footer']);
 
-    $this->skin_path_list['layout'] = 'layouts/default/layout.tpl';
+    $className = get_class($this);
+    if (preg_match('/(AdminView)+$/', $className)) {
+      $this->skin_path_list['layout'] = 'modules/admin/tpl/_layout.tpl';
+    } else {
+      $this->skin_path_list['layout'] = 'layouts/default/layout.tpl';
+    }
+
     if (is_readable($this->skin_path_list['layout'])) {
       $__template->display( $this->skin_path_list['layout'] );  
     } else {

@@ -9,15 +9,12 @@ class AdminAdminView extends View
 
   function displayMain() {
 
-    $context = Context::getInstance();
-    $action = $this->request_data['action'];
+    $rootPath = _SUX_ROOT_;
+    $skinPath = _SUX_ROOT_ . "modules/admin/tpl/";
+    $skinRealPath = _SUX_PATH_ . "modules/admin/tpl/";
 
     $this->document_data['jscode'] = 'main';
     $this->document_data['module_code'] = 'admin';
-
-    $rootPath = _SUX_ROOT_;
-    $skinPath = _SUX_ROOT_ . "modules/admin/tpl/";
-    $skinRealPath = _SUX_PATH_."modules/admin/tpl/";
 
     $this->skin_path_list['root'] = $rootPath;
     $this->skin_path_list['skinPath'] = $skinPath;
@@ -35,51 +32,43 @@ class AdminAdminView extends View
     $msg = '';
 
     $connecterArr1 = $this->_getConnecterData();
-
     if ($connecterArr1['result'] === 'N') {
       $resultYN = $connecterArr1['result'];
       $msg .= $connecterArr1['msg'];
     }
 
     $connecterArr2 = $this->_getConnecterrealData();
-
     if ($connecterArr2['result'] === 'N') {
       $resultYN = $connecterArr2['result'];
       $msg .= $connecterArr2['msg'];
-    }
-
+    }    
     $connecterArr = array_merge($connecterArr1['data'], $connecterArr2['data']);
 
     $newMemberArr = $this->_getNewmemberData();
-
     if ($newMemberArr['result'] === 'N') {
       $resultYN = $newMemberArr['result'];
       $msg .= $newMemberArr['msg'];
     }
 
     $newCommentArr = $this->_getLatestcommentData();
-
     if ($newCommentArr['result'] === 'N') {
       $resultYN = $newCommentArr['result'];
       $msg .= $newCommentArr['msg'];
     }    
 
     $pageviewArr = $this->_getPageviewData();
-
     if ($pageviewArr['result'] === 'N') {
       $resultYN = $pageviewArr['result'];
       $msg .= $pageviewArr['msg'];
     }
 
     $connectsiteArr = $this->_getConnectsiteData();
-
     if ($connectsiteArr['result'] === 'N') {
       $resultYN = $connectsiteArr['result'];
       $msg .= $connectsiteArr['msg'];
     }
 
     $serviceConfigArr = $this->_getServiceData();
-
     if ($serviceConfigArr['result'] === 'N') {
       $resultYN = $serviceConfigArr['result'];
       $msg .= $serviceConfigArr['msg'];

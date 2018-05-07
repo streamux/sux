@@ -1,11 +1,3 @@
-  </div><!-- end of container -->
-  <footer>
-    <div class="sx-footer">
-      <span>{include file="$copyrightPath"}</span>
-    </div>    
-  </footer>
-</div>
-
 <script type="text/javascript">
   var is_page = 'admin_main';
 </script>
