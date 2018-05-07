@@ -69,7 +69,10 @@ class PageModule
             if (preg_match('/^(board|documentadmin)$/i', $className)) {
               $action = isset($id) ? 'read' : 'list';
             } else if (preg_match('/^(document)$/i', $className)) {
-              $category = 'home';
+
+              if (empty($category)) {
+                $category = 'home';
+              }
               $action = 'content';
             }
           }
