@@ -696,6 +696,9 @@ jsux.mobileGnb.Menu.include({
   },
   menuOff: function() {
 
+  },
+  activate: function(id) {
+
   }
 });
 

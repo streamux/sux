@@ -30,7 +30,7 @@ module.exports = function(grunt) {
       },
       'common-admin-app': {
         src: [
-          'common/js/app/jsux_admin_constructor.js',
+          'common/js/app/jsux_admin_app_stage.js',
           'common/js/app/jsux_admin_gnb.js',
           'common/js/app/jsux_admin_mobile_gnb.js',
           '!*.back*'
