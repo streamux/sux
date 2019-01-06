@@ -16,7 +16,7 @@ module.exports = function(grunt) {
     clean: {
       minify: [
         'common/js/jsux*.js'
-      ]     
+      ]
     },
     concat: {
       'common-js': {
@@ -31,17 +31,17 @@ module.exports = function(grunt) {
       'common-admin-app': {
         src: [
           'common/js/app/jsux_admin_constructor.js',
-          'common/js/app/jsux_admin_menu.js',
-          'common/js/app/jsux_admin_mobile_panel.js',
+          'common/js/app/jsux_admin_gnb.js',
+          'common/js/app/jsux_admin_mobile_gnb.js',
           '!*.back*'
         ],
         dest: 'common/js/jsux_admin_app.js'
       },
       'common-app': {
-        src: [          
-          'common/js/app/jsux_gnb_*.js',
-          'common/js/app/jsux_mobile_gnb.js',       
-          'common/js/app/jsux_visual.js'    
+        src: [
+          'common/js/app/jsux_gnb*.js',
+          'common/js/app/jsux_mobile_gnb.js',
+          'common/js/app/jsux_visual.js'
         ],
         dest: 'common/js/jsux_app.js'
       }
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
           banner: banner_jsux_css
         },
         files: {
-          'common/css/sux.min.css': ['common/css/sux.css'],     
+          'common/css/sux.min.css': ['common/css/sux.css'],
           'common/css/sux_layout.min.css': ['common/css/sux_layout.css']
         }
       }
@@ -103,11 +103,11 @@ module.exports = function(grunt) {
         'modules/**/tpl/js/*.js',
         'modules/**/skin/**/js/*.js'
       ],
-      options: {        
+      options: {
         // options here to override JSHint defaults
         globals: {
           jQuery: true,
-          console: true,  
+          console: true,
           module: true,
           document: true
         },
@@ -140,14 +140,14 @@ module.exports = function(grunt) {
           'box-sizing' : false,
           'compatible-vendor-prefixes' : false
         },
-        src: [          
-          'common/css/*.css',   
+        src: [
+          'common/css/*.css',
           'modules/**/tpl/css/*.css',
           '!common/css/*.min.css',
           '!common/css/swiper*.css' ,
           '!common/css/api/*.css'
         ]
-      }     
+      }
     },
     phplint: {
       default: {
@@ -178,5 +178,5 @@ module.exports = function(grunt) {
 
   grunt.registerTask('default', ['jshint', 'csslint']);
   grunt.registerTask('lint', ['jshint','csslint','phplint']);
-  grunt.registerTask('minify', ['jshint','clean','concat','uglify','cssmin']);  
+  grunt.registerTask('minify', ['jshint','clean','concat','uglify','cssmin']);
 };

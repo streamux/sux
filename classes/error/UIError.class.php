@@ -1,7 +1,7 @@
 <?php
 class UIError extends Basic {
 
-	static $uierror_instance = null;	
+	static $uierror_instance = null;
 	private $msg_list = '';
 	private $useHtml = FALSE;
 
@@ -35,7 +35,7 @@ class UIError extends Basic {
 
 	public function output() {
 
-		
+
 
 		if (strtolower($this->useHtml) == true) {
 			$htmlUI = $this->htmlHeader();
@@ -78,7 +78,7 @@ class UIError extends Basic {
 		if ($context->ajax()) {
 			$data = array(	'result'=>'N',
 							'msg'=>$msg);
-			Object::callback($data);
+			Basic::callback($data);
 		} else {
 			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script = 	'<script>
@@ -95,7 +95,7 @@ class UIError extends Basic {
 				$html .= self::htmlFooter();
 			}
 			printf($html, $msg, $msg);
-		}		
+		}
 	}
 
 	static function alertToBack( $msg, $useHtml=true, $options=null) {
@@ -113,7 +113,7 @@ class UIError extends Basic {
 				'has_reauth'=>$has_reauth
 			);
 
-			Object::callback($data);
+			Basic::callback($data);
 		} else {
 			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script =	'<script>
@@ -138,9 +138,9 @@ class UIError extends Basic {
 	}
 
 	static function alertTo( $msg, $useHtml=true, $options=null) {
-		
+
 		$url = isset($options['url']) ? $options['url'] : null;
-		$delay = isset($options['delay']) ? $options['delay'] : 3;		
+		$delay = isset($options['delay']) ? $options['delay'] : 3;
 		$context = Context::getInstance();
 
 		if ($context->ajax()) {
@@ -150,7 +150,7 @@ class UIError extends Basic {
 				'msg'=>$msg
 			);
 
-			Object::callback($data);
+			Basic::callback($data);
 		} else {
 			$msg = preg_replace('/<br>/', '\n',$msg);
 			$script ='<script>
@@ -163,7 +163,7 @@ class UIError extends Basic {
 						<meta http-equiv="Refresh" content="%s; URL=%s">
 					</noscript>';
 
-			$html = $script;	
+			$html = $script;
 			if (strtolower($useHtml) == true) {
 				$html = self::htmlHeader();
 				$html .= $script;

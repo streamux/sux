@@ -196,14 +196,14 @@ var SXAdminMobilePanel = function() {
     $('.sx-menu-btn .sx-menu > li:last-child').animate(option, duration, easing);
   };
 
-  this.hideCloseBtn = function() {    
+  this.hideCloseBtn = function() {
     this.removeClass('.sx-close-btn', 'sx-close-inactive');
     this.removeClass('.sx-header', 'sx-header-active');
     this.removeClass('.sx-bgcover', 'sx-bgcover-active');
   };
 
   this.showCloseBtn = function() {
-    this.addClass('.sx-close-btn', 'sx-close-active');    
+    this.addClass('.sx-close-btn', 'sx-close-active');
   };
 
   this.slideInGnbPanel = function() {
@@ -261,14 +261,16 @@ var SXAdminMobilePanel = function() {
 
     var self = this;
 
-    $('.sx-menu-btn').on('click', function() {
+    $('.sx-menu-btn').on('click', function(e) {
+
+      e.preventDefault();
 
       if (!isReadClickMenu) {
         return;
       }
 
       self.showNavPanel();
-      self.slideInGnbPanel();      
+      self.slideInGnbPanel();
     });
 
     $('.sx-bgcover').on('click', function() {
@@ -305,5 +307,5 @@ var SXAdminMobilePanel = function() {
 
   this.init = function() {
     this.setEvent();
-  }; 
+  };
 };
