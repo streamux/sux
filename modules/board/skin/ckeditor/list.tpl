@@ -26,11 +26,11 @@
             <input type="text" name="search" size="25" class="sx-form-control" placeholder="검색어를 입력하세">
             <button type="submit" class="sx-btn"><i class="xi-search"></i>검색</button>
             <a href="{$routeURI}/write{$params}" class="sx-btn"><i class="xi-pen-o xi-2x"><span class="sr-only">글쓰기</span></i></a>
-        </div> 
-      </div>          
-    </form> 
+        </div>
+      </div>
+    </form>
   </div>
-  
+
   <!-- Mobile -->
   <ul class="list_mobile_panel">
 
@@ -49,13 +49,13 @@
         <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
         <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>
         </a>
-      </p>      
+      </p>
       <p class="info" style="padding-left:{$item.subject.space}px">
         <span class="sx-space-right">{$item.name}</span><i class="xi-clock sx-space-center"></i><span class="sx-space-right">{$item.date}</span><i class="xi-eye sx-space-center"></i>{$item.hit}
-      </p>      
+      </p>
     </li>
     {/if}
-  {/foreach} 
+  {/foreach}
 
   <!-- List -->
   {foreach from=$contentData.list item=$item}
@@ -66,7 +66,7 @@
         <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}">
         {else}
         <a href="{$routeURI}/{$item.subject.id}">
-        {/if}          
+        {/if}
           <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>
           <span class="title">{$item.subject.title|nl2br}</span>
           <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -74,12 +74,12 @@
           <img src="{$skinPath}/images/{$item.subject.icon_img_name}" class="{$item.subject.icon_img}">
           {/if}
           <img src="{$skinPath}/images/icon_new_1.gif" class="{$item.subject.icon_new}"  title="{$item.subject.icon_new_title}">
-          <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>        
+          <span class="sx-label sx-label-primary">{$item.subject.progress_step_name}</span>
         </a>
       </p>
       <p class="info" style="padding-left:{$item.subject.space}px">
         <span class="sx-space-right">{$item.name}</span><i class="xi-clock sx-space-center"></i><span class="sx-space-right">{$item.date}</span><i class="xi-eye sx-space-center"></i>{$item.hit}
-      </p>      
+      </p>
     </li>
     {/if}
   {/foreach}
@@ -92,10 +92,10 @@
   <!-- end -->
 
   <!-- PC -->
-  <div class="list_pc_panel">  
+  <div class="list_pc_panel">
     <table class="table" summary="게시판 리스트입니다.">
       <thead>
-        <tr>        
+        <tr>
           <th class="subject">제목</th>
           <th class="author">작성자</th>
           <th class="date">작성일</th>
@@ -107,10 +107,10 @@
       <!-- Notice -->
       {foreach from=$contentData.notice_list  item=$item}
         {if isset($item)}
-        <tr class="sx-btn-active sx_notice_list">       
+        <tr class="sx-btn-active sx_notice_list">
           <td class="subject">
-            <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
-              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>            
+            <a href="{$rootPath}{$item.category}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
+              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>
               <span class="title" style="font-weight:600;">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
               {if $item.subject.icon_img_name != ''}
@@ -122,22 +122,22 @@
           </td>
           <td class="author"><span style="font-weight:600;">{$item.name}</span></td>
           <td><span style="font-weight:600;">{$item.date}</span></td>
-          <td><span style="font-weight:600;">{$item.hit}</span></td>
+          <td class="hit"><span style="font-weight:600;">{$item.hit}</span></td>
         </tr>
         {/if}
-      {/foreach}  
-      
+      {/foreach}
+
       <!-- List -->
       {foreach from=$contentData.list  item=$item}
         {if isset($item)}
-        <tr class="sx-btn-active">       
+        <tr class="sx-btn-active">
           <td class="subject">
             {if $requestData.search != ''}
               <a href="{$routeURI}/{$item.subject.id}?find={$requestData.find}&search={$requestData.search}" class="link_area" style="padding-left:{$item.subject.space+25}px">
             {else}
               <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
             {/if}
-              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>            
+              <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon_label}</span>
               <span class="title">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
               {if $item.subject.icon_img_name != ''}
@@ -175,6 +175,6 @@
       {if $naviSkinPath != ''}
         {include file="$naviSkinPath"}
       {/if}
-    </div>  
+    </div>
   </div>
 </div>
