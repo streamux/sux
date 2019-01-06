@@ -16,14 +16,14 @@ class Utils extends Basic {
   ///////////////////////////////////////////////
   function alert( $msg ) {
 
-    $msg = preg_replace('/<br>/', '\n',$msg);   
+    $msg = preg_replace('/<br>/', '\n',$msg);
     $context = Context::getInstance();
     if ($context->ajax()) {
-          
+
       $data = array( 'msg'=>$msg,
                               'result'=>'Y');
 
-      Object::callback($data);
+      Basic::callback($data);
     } else {
       $htmlUI = '';
       $htmlUI .= '<script>';
@@ -39,15 +39,15 @@ class Utils extends Basic {
 
   function alertTo( $msg, $url) {
 
-    $msg = preg_replace('/<br>/', '\n',$msg);   
+    $msg = preg_replace('/<br>/', '\n',$msg);
     $context = Context::getInstance();
     if ($context->ajax()) {
-          
+
       $data = array( 'url'=>$url,
                               'msg'=>$msg,
                               'result'=>'Y' );
 
-      Object::callback($data);
+      Basic::callback($data);
     } else {
       $htmlUI = '';
       $htmlUI .= '<script>';
@@ -100,10 +100,10 @@ class Utils extends Basic {
   * @param array $json
   */
   function convertArrayToObject($arr) {
-    
+
     if (empty($arr) || count($arr) === 0) {
       return null;
-    }    
+    }
 
     if (!is_array($arr)) {
       return null;
@@ -111,13 +111,13 @@ class Utils extends Basic {
 
     $lists = array();
     $dataes = $arr;
-    
+
     for ($i=0; $i<count($dataes); $i++) {
       $lists[$i] = array();
 
       foreach ($dataes[$i] as $key => $value) {
         $lists[$i][$key] = $value;
-      } 
+      }
     } // end of key type
 
     return $lists;
@@ -158,7 +158,7 @@ class Utils extends Basic {
           break;
         }
         $dir[] = $realSplits[$i];
-      }     
+      }
     }
     $realPath = '/' . implode('/', $dir) . '/' . $path;
 
@@ -184,21 +184,21 @@ class Utils extends Basic {
     $directory = dir($path);
 
     return false;
-    
-    while(($entry = $directory->read()) !== false) { 
-      
-      if ($entry != "." && $entry != "..") { 
-        
-        if (is_dir($path."/".$entry)) { 
-          deleteDir($path."/".$entry); 
-        } else { 
+
+    while(($entry = $directory->read()) !== false) {
+
+      if ($entry != "." && $entry != "..") {
+
+        if (is_dir($path."/".$entry)) {
+          deleteDir($path."/".$entry);
+        } else {
           @chmod($path."/".$entry,0777);
-          @UnLink ($path."/".$entry); 
+          @UnLink ($path."/".$entry);
         }
-      } 
-    } 
-    
-    $directory->close(); 
+      }
+    }
+
+    $directory->close();
     @rmdir($path);
 
     return true;
@@ -213,20 +213,20 @@ class Utils extends Basic {
     @chmod($path,0777);
     @UnLink ($path);
 
-    return true; 
+    return true;
   }
 
   function readDir( $dir ) {
 
     $temArr = array();
-    if ($handle = opendir($dir)) { 
-      while (false !== ($file = readdir($handle))) { 
+    if ($handle = opendir($dir)) {
+      while (false !== ($file = readdir($handle))) {
 
           if ($file != "." && $file != "..") {
-            array_push($temArr, array("file_name"=>$file));       
-          } 
-      } 
-      closedir($handle); 
+            array_push($temArr, array("file_name"=>$file));
+          }
+      }
+      closedir($handle);
 
       return $temArr;
     }  else {
@@ -261,13 +261,13 @@ class Utils extends Basic {
   ///////////////////////////////////////////////
 
   function goURL( $url, $delay=0,$resultYN='Y',$msg='') {
-    
+
     $data = array(  'url'=>$url,
             'delay'=>$delay,
             'result'=>$resultYN,
             'msg'=>$msg);
 
-    Object::callback($data);
+    Basic::callback($data);
     exit;
   }
 
@@ -282,12 +282,12 @@ class Utils extends Basic {
     return $num;
   }
 
-  function trimText( $text, $size, $etcstr='..') { 
+  function trimText( $text, $size, $etcstr='..') {
 
     $resultStr = '';
     $len = strlen($text);
     $resultStr = iconv_substr($text, 0, $size, "utf-8");
-    
+
     if ($size < $len) {
       $resultStr .= $etcstr;
     }
@@ -306,7 +306,7 @@ class Utils extends Basic {
     }
 
     $resultStr = '';
-    $maxLen = mb_strlen($str)-1;    
+    $maxLen = mb_strlen($str)-1;
     $i =0;
 
     while ($i<$str_len) {
@@ -355,7 +355,7 @@ class Utils extends Basic {
 
       $pieces = parse_url($url);
       $domain = isset($pieces['host']) ? $pieces['host'] : '';
-      
+
       if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $regs)){
           return $regs['domain'];
       }
@@ -377,7 +377,7 @@ class Utils extends Basic {
     return ((float)$usec + (float)$sec) * 100;
   }
 
-  //----- Method Version Branch 
+  //----- Method Version Branch
   ///////////////////////////////////////////////
 
   function mysql_real_escape_string($value) {
