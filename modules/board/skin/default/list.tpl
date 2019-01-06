@@ -39,7 +39,7 @@
     {if isset($item)}
     <li class="sx-btn-active sx_notice_list">
       <p class="subject" style="padding-left:{$item.subject.space}px">
-        <a href="{$routeURI}/{$item.subject.id}">
+        <a href="{$rootPath}{$item.category}/{$item.subject.id}">
         <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>
         <span class="title">{$item.subject.title|nl2br}</span>
         <span class="sx-badge">{$item.subject.comment_num}</span>
@@ -109,7 +109,7 @@
         {if isset($item)}
         <tr class="sx-btn-active sx_notice_list">
           <td class="subject">
-            <a href="{$routeURI}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
+            <a href="{$rootPath}{$item.category}/{$item.subject.id}" class="link_area" style="padding-left:{$item.subject.space+5}px">
               <span class="prefix_icon sx-label {$item.subject.prefix_icon_color}">{$item.subject.prefix_icon}</span>
               <span class="title" style="font-weight:600;">{$item.subject.title|nl2br}</span>
               <span class="sx-badge">{$item.subject.comment_num}</span>
